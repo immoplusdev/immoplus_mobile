@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44" fill="none">
+  <!-- Cercle externe du marqueur -->
+  <circle cx="22" cy="15" r="8" stroke="#888888" stroke-width="2" fill="none" />
+  <!-- Point central -->
+  <circle cx="22" cy="15" r="3" fill="#888888" />
+  <!-- Base stylisée -->
+  <path d="M14 30 L30 30 C32 30 34 28 34 26 L34 24 C34 22 32 20 30 20 L14 20 C12 20 10 22 10 24 L10 26 C10 28 12 30 14 30 Z" 
+        stroke="#888888" stroke-width="2" fill="none" />
+</svg>

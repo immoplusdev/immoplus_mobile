@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1003203724496",
+    "project_id": "immo-plus",
+    "storage_bucket": "immo-plus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003203724496:android:1d6fb3e4fd780698458ad5",
+        "android_client_info": {
+          "package_name": "com.immoplus.ci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003203724496-br99l0jttjpcl7k6fae4g8navk795s4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003203724496-br99l0jttjpcl7k6fae4g8navk795s4f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1003203724496-9kb4rqk3rp6bbnd7dvb9r9pcjn482c7i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.monimmoci.monImmo2"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

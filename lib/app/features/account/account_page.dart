@@ -1,0 +1,405 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/account/pages/change_password.dart';
+import 'package:immoplus/app/features/account/pages/edit_account.dart';
+import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
+import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
+import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
+import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
+import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
+import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/screens/splash_screen.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
+
+class AccountPage extends StatelessWidget {
+  AccountPage({super.key});
+  static String name = 'ACCOUNT_PAGE';
+  final sessionManager = getIt<SessionManager>();
+  @override
+  Widget build(BuildContext context) {
+    return sessionManager.currentUser == null
+        ? const LoginPage()
+        : Scaffold(
+            backgroundColor: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: CustomScrollView(
+                slivers: [
+                  // Header Section
+                  const SliverGap(45),
+                  const ProfileHearder(),
+                  const SliverGap(18),
+                  // List Sections
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                              20,
+                            ),
+                            topRight: Radius.circular(20)),
+                      ),
+                      tileColor: AppColors.scafold,
+                      onTap: () {
+                        context.pushNamed(EditAccountPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: Icon(
+                        CupertinoIcons.person,
+                        color: Colors.amber.shade800,
+                      ),
+                      title: const Text('Information personnelles '),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      tileColor: AppColors.scafold,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(
+                            20,
+                          ),
+                          bottomLeft: Radius.circular(
+                            20,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        context.pushNamed(ChangePassword.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.lock,
+                        color: Colors.blue,
+                        size: 20,
+                      ),
+                      title: const Text('Changer mon mot de passe'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  //
+                  const SliverGap(10),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                              20,
+                            ),
+                            topRight: Radius.circular(20)),
+                      ),
+                      tileColor: AppColors.scafold,
+                      onTap: () {
+                        showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          showDragHandle: true,
+                          context: context,
+                          builder: (context) => const FractionallySizedBox(
+                              heightFactor: 0.9, child: GeneralConditionPage()),
+                        );
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        CupertinoIcons.text_alignleft,
+                        color: Colors.black,
+                      ),
+
+                      // Icon(
+                      //   FontAwesomeIcons.key,
+                      //   color: AppColors.primary,
+                      //   size: 20,
+                      // ),
+                      title: const Text('Termes et conditions'),
+
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      tileColor: AppColors.scafold,
+                      onTap: () {
+                        //context.pushNamed(EstatesPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: Icon(
+                        FontAwesomeIcons.gears,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                      title: const Text('Permissions'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      tileColor: AppColors.scafold,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(
+                            20,
+                          ),
+                          bottomLeft: Radius.circular(
+                            20,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        //context.pushNamed(EstatesPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.bell,
+                        color: Colors.orange,
+                        size: 20,
+                      ),
+                      title: const Text('Notification'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  //
+                  const SliverGap(10),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                              20,
+                            ),
+                            topRight: Radius.circular(20)),
+                      ),
+                      tileColor: AppColors.scafold,
+                      onTap: () {
+                        context.pushNamed(BookingHistoryPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.doorOpen,
+                        color: Colors.deepPurpleAccent,
+                        size: 20,
+                      ),
+                      title: const Text('Historique réservations'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      tileColor: AppColors.scafold,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(
+                            20,
+                          ),
+                          bottomLeft: Radius.circular(
+                            20,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        context.pushNamed(VisitHistoryPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.personWalkingLuggage,
+                        color: Colors.purple,
+                      ),
+                      title: const Text('Historique visites'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  //
+                  const SliverGap(10),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      tileColor: AppColors.scafold,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      onTap: () {
+                        context.pushNamed(PaymentHistoryPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.moneyBills,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                      title: const Text('Paiements'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+
+                  const SliverGap(15),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      tileColor: AppColors.scafold,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      onTap: () {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return CupertinoAlertDialog(
+                              title: const SizedBox(
+                                child: Center(
+                                  child: Icon(
+                                    Icons.exit_to_app_rounded,
+                                    size: 60,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              content: const Text(
+                                  'Souhaitez vous vous déconnecter ?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text(
+                                    'Annuler',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text(
+                                    'Se déconnecté',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                  onPressed: () async {
+                                    await sessionManager.clearSession().then(
+                                      (value) {
+                                        AppRouter.router
+                                            .goNamed(SplashScreen.name);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.rightFromBracket,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                      title: const Text('Se déconnecter'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                  const SliverGap(20),
+                  SliverToBoxAdapter(
+                    child: ListTile(
+                      //tileColor: AppColors.scafold,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      onTap: () {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return CupertinoAlertDialog(
+                              title: const SizedBox(
+                                child: Center(
+                                  child: Icon(
+                                    Icons.exit_to_app_rounded,
+                                    size: 60,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              content: const Text(
+                                  'Souhaitez vous vous déconnecter ?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text(
+                                    'Annuler',
+                                    style: TextStyle(color: Colors.blue),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text(
+                                    'Se déconnecté',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                  onPressed: () async {
+                                    await sessionManager.clearSession().then(
+                                      (value) {
+                                        AppRouter.router
+                                            .goNamed(SplashScreen.name);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      horizontalTitleGap: 0,
+                      leading: const Icon(
+                        FontAwesomeIcons.rightFromBracket,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                      title: const Text('Supprimer mon compte'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+  }
+}

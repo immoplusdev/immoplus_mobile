@@ -1,0 +1,45 @@
+import 'package:dio/dio.dart' hide Headers;
+import 'package:retrofit/retrofit.dart';
+
+import '../models/remote/residence/residence_creation_model.dart';
+import '../models/remote/residence/residence_response.dart';
+import '../models/remote/residence/residences_collection.dart';
+
+part 'residence_provider.g.dart';
+
+@RestApi(
+  baseUrl: null,
+)
+abstract class ResidenceProvider {
+  factory ResidenceProvider(Dio dio, {String baseUrl}) = _ResidenceProvider;
+
+  //@GET("https://www.npoint.io/docs/5af09fdcad3bdbbbc610")
+  @GET("/residences/data/public/{id}")
+  Future<ResidenceResponse> getResidence(@Path() String id);
+
+  @GET("/residences/data/public")
+  Future<ResidencesCollection> getResidences(
+      @Query("_search") String? search,
+      @Queries() Map<String, dynamic>? where,
+      @Query("_page") int page,
+      @Query("_order_by") String? orderBy,
+      @Query("_order_dir") String? orderDir);
+
+  @GET("/residences/data/public/geolocalized")
+  Future<ResidencesCollection> getResidencesGeolocalized(
+      @Query("lat") double? lat,
+      @Query("long") double? long,
+      @Query("_search") String? search,
+      @Query('_where') List<Map<String, dynamic>>? where,
+      @Query("_page") int? page,
+      @Query("_order_by") String? orderBy,
+      @Query("_order_dir") String? orderDir);
+
+  @POST("/residences")
+  Future<ResidenceResponse> createResidence(
+      @Body() ResidenceCreationModel residenceCreationModel);
+
+  @PATCH("/residences/{id}")
+  Future<ResidenceResponse> update(
+      @Path() String id, @Body() Map<String, dynamic> data);
+}
