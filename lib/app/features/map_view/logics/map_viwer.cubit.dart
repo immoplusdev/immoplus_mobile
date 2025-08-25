@@ -21,13 +21,17 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
     emit(MapViwerCubitState(searchIsFocus: focusState, markers: datas));
   }
 
-  getMapDataAll(LatLng center) async {
+  getMapDataAll(
+      {required LatLng center, double? radius, int? perPage, int? page}) async {
     emit(MapViwerCubitState(isLoading: true, markers: datas));
 
     ResidencesCollection residencesCollection =
         await ResidenceRepository().getResidencesLocalized(
       lat: center.latitude,
       long: center.longitude,
+      radius: radius,
+      perPage: perPage,
+      page: page,
     );
     BienImmobilierCollection bienImmobilierCollection =
         await BienImmobilierRepository()
@@ -49,8 +53,8 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
           icon: BitmapDescriptor.defaultMarker,
           markerId: MarkerId(element.id),
           position: LatLng(
-            element.position.coordinates.last,
-            element.position.coordinates.first,
+            element.position.coordinates!.last,
+            element.position.coordinates!.first,
           ),
           onTap: () {
             showModalBottomSheet(
@@ -109,8 +113,8 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
           icon: BitmapDescriptor.defaultMarker,
           markerId: MarkerId(element.id),
           position: LatLng(
-            element.position.coordinates.last,
-            element.position.coordinates.first,
+            element.position.coordinates!.last,
+            element.position.coordinates!.first,
           ),
           onTap: () {
             showModalBottomSheet(

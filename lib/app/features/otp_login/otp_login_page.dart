@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
+import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
 import 'package:immoplus/app/features/otp_login/pages/phone_number_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -20,20 +21,26 @@ class _OTPLoginPageState extends State<OTPLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      controller: _pageController,
-
-      physics:
-          const NeverScrollableScrollPhysics(), // Empêche de swiper manuellement
-      children: [
-        PhoneNumberPage(
-          rootPageController: widget.rootPageController,
-          pageController: _pageController,
-        ),
-        OTPPage(
-          pageController: _pageController,
-        ),
-      ],
+    return PhoneNumberPage(
+      rootPageController: widget.rootPageController,
+      pageController: _pageController,
     );
+    // PageView(
+    //   controller: _pageController,
+
+    // physics:
+    //     const NeverScrollableScrollPhysics(), // Empêche de swiper manuellement
+    // children: [
+    //   PhoneNumberPage(
+    //     rootPageController: widget.rootPageController,
+    //     pageController: _pageController,
+    // ),
+    // OTPPage(
+    //   pageController: _pageController,
+    // ),
+
+    //     OtpPageTest()
+    //   ],
+    // );
   }
 }

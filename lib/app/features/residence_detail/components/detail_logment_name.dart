@@ -57,6 +57,7 @@ class DetailLogmentName extends StatelessWidget {
                 text:
                     "${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F",
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
                     ),

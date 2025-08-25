@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gif/gif.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
+import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key});
@@ -61,6 +64,18 @@ class _LoadingPageState extends State<LoadingPage>
             ),
           ),
         ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     context.goNamed(
+        //       OperatorsSelectorPage.name,
+        //       extra: PaymentPageAdapter(
+        //         itemId: "498ce7f9-f17c-4cc6-8c38-0751d42029ec",
+        //         collection: "reservations",
+        //         amount: 100,
+        //       ),
+        //     );
+        //   },
+        // ),
       ),
     );
   }

@@ -21,7 +21,8 @@ PositionModel _$PositionModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$PositionModel {
   String get type => throw _privateConstructorUsedError;
-  List<double> get coordinates => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: listToDouble)
+  List<double>? get coordinates => throw _privateConstructorUsedError;
 
   /// Serializes this PositionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,9 @@ abstract class $PositionModelCopyWith<$Res> {
           PositionModel value, $Res Function(PositionModel) then) =
       _$PositionModelCopyWithImpl<$Res, PositionModel>;
   @useResult
-  $Res call({String type, List<double> coordinates});
+  $Res call(
+      {String type,
+      @JsonKey(fromJson: listToDouble) List<double>? coordinates});
 }
 
 /// @nodoc
@@ -58,17 +61,17 @@ class _$PositionModelCopyWithImpl<$Res, $Val extends PositionModel>
   @override
   $Res call({
     Object? type = null,
-    Object? coordinates = null,
+    Object? coordinates = freezed,
   }) {
     return _then(_value.copyWith(
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      coordinates: null == coordinates
+      coordinates: freezed == coordinates
           ? _value.coordinates
           : coordinates // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+              as List<double>?,
     ) as $Val);
   }
 }
@@ -81,7 +84,9 @@ abstract class _$$PositionModelImplCopyWith<$Res>
       __$$PositionModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String type, List<double> coordinates});
+  $Res call(
+      {String type,
+      @JsonKey(fromJson: listToDouble) List<double>? coordinates});
 }
 
 /// @nodoc
@@ -98,17 +103,17 @@ class __$$PositionModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? type = null,
-    Object? coordinates = null,
+    Object? coordinates = freezed,
   }) {
     return _then(_$PositionModelImpl(
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      coordinates: null == coordinates
+      coordinates: freezed == coordinates
           ? _value._coordinates
           : coordinates // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+              as List<double>?,
     ));
   }
 }
@@ -117,7 +122,9 @@ class __$$PositionModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PositionModelImpl implements _PositionModel {
   const _$PositionModelImpl(
-      {this.type = 'Point', final List<double> coordinates = const []})
+      {this.type = 'Point',
+      @JsonKey(fromJson: listToDouble)
+      final List<double>? coordinates = const []})
       : _coordinates = coordinates;
 
   factory _$PositionModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -126,13 +133,15 @@ class _$PositionModelImpl implements _PositionModel {
   @override
   @JsonKey()
   final String type;
-  final List<double> _coordinates;
+  final List<double>? _coordinates;
   @override
-  @JsonKey()
-  List<double> get coordinates {
+  @JsonKey(fromJson: listToDouble)
+  List<double>? get coordinates {
+    final value = _coordinates;
+    if (value == null) return null;
     if (_coordinates is EqualUnmodifiableListView) return _coordinates;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_coordinates);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -173,8 +182,9 @@ class _$PositionModelImpl implements _PositionModel {
 
 abstract class _PositionModel implements PositionModel {
   const factory _PositionModel(
-      {final String type,
-      final List<double> coordinates}) = _$PositionModelImpl;
+          {final String type,
+          @JsonKey(fromJson: listToDouble) final List<double>? coordinates}) =
+      _$PositionModelImpl;
 
   factory _PositionModel.fromJson(Map<String, dynamic> json) =
       _$PositionModelImpl.fromJson;
@@ -182,7 +192,8 @@ abstract class _PositionModel implements PositionModel {
   @override
   String get type;
   @override
-  List<double> get coordinates;
+  @JsonKey(fromJson: listToDouble)
+  List<double>? get coordinates;
 
   /// Create a copy of PositionModel
   /// with the given fields replaced by the non-null parameter values.

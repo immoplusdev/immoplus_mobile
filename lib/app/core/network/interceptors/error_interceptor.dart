@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:toastification/toastification.dart';
 
@@ -15,24 +17,25 @@ class ErrorInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    inspect(err);
-    if (err.response != null) {
+    try {
       if (err.response?.statusCode == 401) {
-        //AppRouter.router.goNamed(LoginPage.name);
-      } else {
-        toastification.show(
-          type: ToastificationType.error,
-          context: NavigationService.navigatorKey
-              .currentContext, // optional if you use ToastificationWrapper
-          title: const Text("Oops, quelque chose s'est mal passé."),
-          description: Text(_manageResponse(err.response!)),
-          autoCloseDuration: const Duration(seconds: 5),
-
-          showProgressBar: false,
-          alignment: Alignment.bottomCenter,
-          style: ToastificationStyle.flatColored,
-        );
+        AppRouter.router.goNamed(LoginPage.name);
       }
+      toastification.show(
+        type: ToastificationType.error,
+        context: NavigationService.navigatorKey
+            .currentContext, // optional if you use ToastificationWrapper
+        title: const Text("Oops, quelque chose s'est mal passé."),
+        description: Text(_manageResponse(err.response!)),
+        autoCloseDuration: const Duration(seconds: 5),
+
+        showProgressBar: false,
+        alignment: Alignment.bottomCenter,
+        style: ToastificationStyle.flatColored,
+      );
+    } catch (e) {
+      log(e.toString(), name: 'ERROR');
+      inspect(e);
     }
 
     super.onError(err, handler);

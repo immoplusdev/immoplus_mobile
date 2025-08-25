@@ -122,11 +122,28 @@ class ResidenceRepository {
     String? orderDir,
     Map<String, dynamic>? where,
     String? search,
+    double? lat,
+    double? long,
+    int? perPage,
+    double? radius,
+    String? startDate,
+    String? endDate,
   }) async {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
-      final response = await ResidenceProvider(dioClient)
-          .getResidences(search, where, page, orderBy, orderDir);
+      final response = await ResidenceProvider(dioClient).getResidences(
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        where: where,
+        search: search,
+        lat: lat,
+        long: long,
+        perPage: perPage,
+        radius: radius,
+        startDate: startDate,
+        endDate: endDate,
+      );
 
       return response;
     } on DioException catch (dioError) {
@@ -145,6 +162,8 @@ class ResidenceRepository {
     int? page,
     required double lat,
     required double long,
+    double? radius,
+    int? perPage,
     String? orderBy,
     String? orderDir,
     List<Map<String, dynamic>>? where,
@@ -152,9 +171,18 @@ class ResidenceRepository {
   }) async {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
-      final response = await ResidenceProvider(dioClient)
-          .getResidencesGeolocalized(
-              lat, long, search, where, page, orderBy, orderDir);
+      final response =
+          await ResidenceProvider(dioClient).getResidencesGeolocalized(
+        lat: lat,
+        long: long,
+        search: search,
+        where: where,
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        radius: radius,
+        perPage: perPage,
+      );
 
       return response;
     } on DioException catch (dioError) {

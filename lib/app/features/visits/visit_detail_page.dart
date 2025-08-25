@@ -210,9 +210,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                     .data.bienImmobilier!.nom,
                                 destination: Coords(
                                   state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates[1],
+                                      .bienImmobilier!.position.coordinates![1],
                                   state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates[0],
+                                      .bienImmobilier!.position.coordinates![0],
                                 ),
                                 directionsMode: DirectionsMode.driving,
                                 mapType: MapType.google,
@@ -226,9 +226,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                     .data.bienImmobilier!.nom,
                                 destination: Coords(
                                   state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates[1],
+                                      .bienImmobilier!.position.coordinates![1],
                                   state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates[0],
+                                      .bienImmobilier!.position.coordinates![0],
                                 ),
                                 directionsMode: DirectionsMode.driving,
                               );

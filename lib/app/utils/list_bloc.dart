@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart';
+import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
@@ -28,7 +29,7 @@ class AppBlocs {
       create: (context) => HomePageCubit(),
     ),
     BlocProvider<BookingCubit>(
-      create: (context) => BookingCubit(),
+      create: (context) => getIt<BookingCubit>(),
     ),
     BlocProvider<VisitCubit>(
       create: (context) => VisitCubit(),
@@ -47,6 +48,9 @@ class AppBlocs {
     ),
     BlocProvider<PaymentCubit>(
       create: (context) => PaymentCubit(),
+    ),
+    BlocProvider<FilterCubit>(
+      create: (context) => FilterCubit(),
     ),
     // BlocProvider<MapViewerCubit>(
     //   create: (context) => MapViewerCubit(),

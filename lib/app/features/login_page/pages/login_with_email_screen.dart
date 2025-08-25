@@ -69,6 +69,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
             children: [
               const Gap(40),
               CustomTextField(
+                fillColor: Colors.white,
                 controller: _formController.email,
                 labelText: 'Email',
                 textInputType: TextInputType.emailAddress,
@@ -85,6 +86,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                   valueListenable: _passwordNotifier,
                   builder: (BuildContext context, bool value, child) {
                     return CustomTextField(
+                      fillColor: Colors.white,
                       controller: _formController.password,
                       obscureText: !_passwordNotifier.value,
                       prefixIcon: const Icon(CupertinoIcons.lock),

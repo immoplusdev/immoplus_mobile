@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
+import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 
 import 'package:retrofit/retrofit.dart';
 
@@ -55,4 +56,7 @@ abstract class AuthProvider {
   @PATCH('/users/{id}')
   Future<UpdateUserResponseModel> updateUser(
       @Path() String id, @Body() UpdateUserDto updateUserDto);
+
+  @GET('/configs')
+  Future<ConfigModel> getCongig();
 }

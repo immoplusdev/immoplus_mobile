@@ -9,10 +9,9 @@ part of 'position_model.dart';
 _$PositionModelImpl _$$PositionModelImplFromJson(Map<String, dynamic> json) =>
     _$PositionModelImpl(
       type: json['type'] as String? ?? 'Point',
-      coordinates: (json['coordinates'] as List<dynamic>?)
-              ?.map((e) => (e as num).toDouble())
-              .toList() ??
-          const [],
+      coordinates: json['coordinates'] == null
+          ? const []
+          : listToDouble(json['coordinates']),
     );
 
 Map<String, dynamic> _$$PositionModelImplToJson(_$PositionModelImpl instance) =>

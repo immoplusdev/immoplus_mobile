@@ -14,9 +14,9 @@ _$BienImmobilierCollectionImpl _$$BienImmobilierCollectionImplFromJson(
                   BienImmobilierModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      currentPage: (json['currentPage'] as num?)?.toInt() ?? 0,
-      totalPages: (json['totalPages'] as num?)?.toInt() ?? 0,
-      pageSize: (json['pageSize'] as num?)?.toInt() ?? 0,
+      currentPage: toInt(json['currentPage']),
+      totalPages: toInt(json['totalPages']),
+      pageSize: toInt(json['pageSize']),
       hasNext: json['hasNext'] as bool? ?? false,
       hasPrevious: json['hasPrevious'] as bool? ?? false,
     );

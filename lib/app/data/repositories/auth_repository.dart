@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
 import 'package:immoplus/app/data/models/auth/update_user_response_model.dart';
+import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/auth/account_creation_response.dart';
@@ -150,6 +151,26 @@ class AuthRepository {
       {required String userId, required UpdateUserDto body}) async {
     try {
       final response = await AuthProvider(dioClient).updateUser(userId, body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
+  Future<ConfigModel> getConfig() async {
+    try {
+      final response = await AuthProvider(dioClient).getCongig();
       inspect(response);
       return response;
     } on DioException catch (dioError) {

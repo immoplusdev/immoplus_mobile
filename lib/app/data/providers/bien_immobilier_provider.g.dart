@@ -55,17 +55,29 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<BienImmobilierCollection> getImmobiliers(
-    int page,
-    int perPage,
+  Future<BienImmobilierCollection> getImmobiliers({
+    String? search,
     Map<String, dynamic>? where,
+    double? lat,
+    double? long,
+    int? perPage,
+    int? page,
+    double? radius,
+    String? startDate,
+    String? endDate,
     String? orderBy,
     String? orderDir,
-  ) async {
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'_page': page,
+      r'_search': search,
+      r'_lat': lat,
+      r'_long': long,
       r'_per_page': perPage,
+      r'_page': page,
+      r'_radius': radius,
+      r'_start_date': startDate,
+      r'_end_date': endDate,
       r'_order_by': orderBy,
       r'_order_dir': orderDir,
     };
@@ -80,7 +92,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     )
         .compose(
           _dio.options,
-          '/biens-immobiliers/data/public',
+          '/biens-immobiliers/data/filter/public',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -101,22 +113,26 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<BienImmobilierCollection> getBienImmobilierGeolocalized(
+  Future<BienImmobilierCollection> getBienImmobilierGeolocalized({
     double? lat,
     double? long,
-    String? search,
-    String? where,
+    double? radius,
+    int? perPage,
     int? page,
+    String? search,
+    List<Map<String, dynamic>>? where,
     String? orderBy,
     String? orderDir,
-  ) async {
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'lat': lat,
-      r'long': long,
+      r'_lat': lat,
+      r'_long': long,
+      r'_radius': radius,
+      r'_per_page': perPage,
+      r'_page': page,
       r'_search': search,
       r'_where': where,
-      r'_page': page,
       r'_order_by': orderBy,
       r'_order_dir': orderDir,
     };

@@ -112,7 +112,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                 const Gap(10),
                 VisitListTileAction(
                   backgroundImage: const AssetImage('assets/icon/express.webp'),
-                  price: '150',
+                  price: sessionManager.configModel!.data!.normalVisitPrice
+                      .toString(),
                   title: 'Visite Express',
                   subTiltle:
                       "Vous serez programmé le plus vite possible voire le même jour pour la visite et un véhicule sera mis à votre disposition pour le transport.",
@@ -159,7 +160,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                   backgroundImage: const AssetImage(
                     'assets/icon/normal.png',
                   ),
-                  price: "100",
+                  price: sessionManager.configModel!.data!.expressVisitPrice
+                      .toString(),
                   title: 'Visite normal',
                   subTiltle:
                       "Vous serez programmé pour la visite et nous vous notifierons le jour et l'heure de votre passage.",

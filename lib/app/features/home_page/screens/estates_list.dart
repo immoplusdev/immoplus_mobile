@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/components/empty_elements_indicator.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/utils/residence_filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -17,13 +20,16 @@ class EstatesList extends StatefulWidget {
 class _EstatesListState extends State<EstatesList> {
   Future<void> loadPage(int page) async {
     BienImmobilierRepository()
-        .getBiensImmobiliers(page: page, perPage: 5, where: {
-      '_where': [
-        '{"_field": "bienImmobilierDisponible", "_op": "eq", "_val": true}',
-        '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
-        '{"_field": "aLouer", "_op": "eq", "_val": true}'
-      ],
-    }).then((value) {
+        .getBiensImmobiliers(
+      page: page,
+      search: FilterHandler.search,
+      lat: FilterHandler.lat,
+      long: FilterHandler.long,
+      startDate: FilterHandler.startDate,
+      endDate: FilterHandler.endDate,
+      radius: (FilterHandler.lat != null) ? 100 : null,
+    )
+        .then((value) {
       if (value.hasNext == true) {
         HomePageState.pagingControllerEstate
             .appendPage(value.data ?? [], (value.currentPage)! + 1);
@@ -32,6 +38,8 @@ class _EstatesListState extends State<EstatesList> {
       }
       //change(value, status: RxStatus.success());
     }).onError((error, stackTrace) {
+      // inspect(error);
+      // inspect(stackTrace);
       HomePageState.pagingControllerEstate.error = error.toString();
     });
   }

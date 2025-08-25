@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -25,7 +26,7 @@ class CustomLoadingButtom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: 50,
+        height: 60,
         //padding: EdgeInsets.only(left: 30, right: 30),
         width: double.infinity,
         child: ElevatedButton(
@@ -38,7 +39,7 @@ class CustomLoadingButtom extends StatelessWidget {
                     : color
                 : Colors.grey[400],
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
           onPressed: (isLoading) ? null : onClick,
           child: (isLoading)
@@ -47,7 +48,7 @@ class CustomLoadingButtom extends StatelessWidget {
                 )
               : Text(
                   text,
-                  style: GoogleFonts.inter(
+                  style: context.textTheme.titleLarge!.copyWith(
                       color: Colors
                           .white, //(textColor == null) ? textColor : null,
                       fontWeight: FontWeight.w500,

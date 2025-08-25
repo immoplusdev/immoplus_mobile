@@ -1,0 +1,2 @@
+/Users/macpro/WORKSPACE/ci/android/app/.cxx/RelWithDebInfo/201g2u26/x86_64/CMakeFiles/edit_cache.dir
+/Users/macpro/WORKSPACE/ci/android/app/.cxx/RelWithDebInfo/201g2u26/x86_64/CMakeFiles/rebuild_cache.dir

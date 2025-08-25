@@ -33,7 +33,7 @@ class PlacesApiRepository {
           input: input,
           key: dotenv.env['GOOGLE_API_KEY']!,
           sessiontoken: sessionToken);
-      return compute(_parsePlacesAutocompleteResponse, response);
+      return _parsePlacesAutocompleteResponse(response);
     } on DioException catch (dioException) {
       throw DioClientException(dioException);
     }

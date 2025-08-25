@@ -18,6 +18,7 @@ import 'package:immoplus/app/data/models/remote/reservations/reservation_request
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
+import 'package:immoplus/app/features/booking/logic/booking_services.dart';
 import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
 import 'package:immoplus/app/modules/country_phone_number/country_phone_number.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -71,7 +72,6 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   ValueNotifier<bool> testNotifier = ValueNotifier<bool>(false);
   ValueNotifier<List<DateTime>> userDatesNotifier =
       ValueNotifier<List<DateTime>>([]);
-  late Dio _dio;
 // Fonction personnalisée pour vérifier la présence d'une date dans la liste en fonction du jour et du mois
   bool _containsDateInList(DateTime searchDate, List<DateTime?> list) {
     for (DateTime? date in list) {
@@ -84,22 +84,22 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
     return false;
   }
 
-  int calculBookingprice({required int price, required int nbDay}) {
-    return ((price * nbDay)).round();
-    //return ((price * nbDay) * 0.1).round();
-  }
+  // int calculBookingprice({required int price, required int nbDay}) {
+  //   return ((price * nbDay)).round();
+  //   //return ((price * nbDay) * 0.1).round();
+  // }
 
-  Future<bool> getDateBooked() async {
-    Response rp = await _dio.get(
-        "${RequestPath.baseUrl}/reservations/data/residence/occupied-dates/${widget.residenceModel.id}");
-    List data = rp.data['data']['dates'];
-    inspect(data);
-    for (var e in data) {
-      unselectagleDates.add(DateTime.parse(e['date']));
-    }
+  // Future<bool> getDateBooked() async {
+  //   Response rp = await dio.get(
+  //       "${RequestPath.baseUrl}/reservations/data/residence/occupied-dates/${widget.residenceModel.id}");
+  //   List data = rp.data['data']['dates'];
+  //   inspect(data);
+  //   for (var e in data) {
+  //     unselectagleDates.add(DateTime.parse(e['date']));
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   Map<DateTime?, List<dynamic>> _generateEvents(Set<DateTime> days) {
     Map<DateTime?, List<dynamic>> events = {};
@@ -111,6 +111,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
     return events;
   }
 
+  final bookingServices = getIt<BookingServices>();
   @override
   void initState() {
     _formController = FormController(
@@ -231,7 +232,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                   ),
                   //color: Colors.amber,
                   child: FutureBuilder(
-                      future: getDateBooked(),
+                      future: bookingServices.getDateBooked(
+                          residenceId: widget.residenceModel.id),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return Text(snapshot.error.toString());
@@ -256,27 +258,32 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                   onDisplayedMonthChanged: null,
                                   value: markedDates,
                                   onValueChanged: (value) {
-                                    setState(() {
-                                      markedDates.clear();
-                                      markedDates.addAll(value);
-                                      if (markedDates.length >= 2) {
-                                        selectedDates.clear();
-                                        selectedDates.addAll(datesBetween(
-                                            markedDates.first!,
-                                            markedDates.last!));
-                                      } else if (markedDates.length == 1) {
-                                        selectedDates.clear();
-                                        selectedDates.addAll(markedDates);
+                                    markedDates.clear();
+                                    markedDates.addAll(value);
+                                    if (markedDates.length >= 2) {
+                                      selectedDates.clear();
+                                      selectedDates.addAll(datesBetween(
+                                          markedDates.first!,
+                                          markedDates.last!));
+                                    } else if (markedDates.length == 1) {
+                                      selectedDates.clear();
+                                      selectedDates.addAll(markedDates);
+                                    }
+                                    if (selectedDates.isNotEmpty) {
+                                      inspect(markedDates);
+                                      _formController.dates!.clear();
+                                      for (var element in selectedDates) {
+                                        _formController.addDate(
+                                            date: element!.toIso8601String());
                                       }
-                                      if (selectedDates.isNotEmpty) {
-                                        inspect(markedDates);
-                                        _formController.dates!.clear();
-                                        for (var element in selectedDates) {
-                                          _formController.addDate(
-                                              date: element!.toIso8601String());
-                                        }
-                                      }
-                                    });
+                                    }
+                                    log(selectedDates.toString());
+                                    context.read<BookingCubit>().estimatePrice(
+                                        residenceId: widget.residenceModel.id,
+                                        dates: selectedDates
+                                            .map((e) => e!)
+                                            .toList());
+                                    setState(() {});
                                   },
                                 );
                               });
@@ -334,34 +341,67 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                   ),
                 ),
                 const Gap(10),
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ListTile(
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    tileColor: const Color.fromRGBO(255, 255, 255, 1),
-                    subtitle: Text(
-                      Utils.formatCurrency(calculBookingprice(
-                        nbDay: selectedDates.length,
-                        price: widget.residenceModel.prixReservation,
-                      )),
-                    ),
-                    title: const Text('Prix de la réservation'),
-                    subtitleTextStyle: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: AppColors.primary),
-                    horizontalTitleGap: 2,
-                    trailing: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: Icon(
-                          FontAwesomeIcons.moneyBill,
-                          color: Colors.green,
-                        )),
-                  ),
+                BlocBuilder<BookingCubit, BookingRequestState>(
+                  builder: (context, state) {
+                    return Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: (state is RECEIVE_ESTIMATION)
+                          ? ListTile(
+                              enabled: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              tileColor: const Color.fromRGBO(255, 255, 255, 1),
+                              subtitle: Text(
+                                Utils.formatCurrency(
+                                  state.estimation.data!.montantTotalReservation
+                                      .toInt(),
+                                ),
+                              ),
+                              title: const Text('Prix de la réservation'),
+                              subtitleTextStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: AppColors.primary),
+                              horizontalTitleGap: 2,
+                              trailing: const CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child: Icon(
+                                    FontAwesomeIcons.moneyBill,
+                                    color: Colors.green,
+                                  )),
+                            )
+                          : (state is LOADING_BOOKING)
+                              ? const Center(
+                                  child: SizedBox(
+                                      height: 59,
+                                      child: CupertinoActivityIndicator()),
+                                )
+                              : ListTile(
+                                  enabled: true,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  tileColor:
+                                      const Color.fromRGBO(255, 255, 255, 1),
+                                  subtitle: Text(
+                                    '••••••••',
+                                  ),
+                                  title: const Text('Prix de la réservation'),
+                                  subtitleTextStyle: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(color: AppColors.primary),
+                                  horizontalTitleGap: 2,
+                                  trailing: const CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: Icon(
+                                        FontAwesomeIcons.moneyBill,
+                                        color: Colors.green,
+                                      )),
+                                ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -373,59 +413,64 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
         color: AppColors.scafold,
         height: 90,
         padding:
-            const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 10),
+            const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 20),
         child: BlocBuilder<BookingCubit, BookingRequestState>(
           builder: (context, state) => CustomLoadingButtom(
             textColor: Colors.white,
             text: 'RESERVER',
             isLoading: state is LOADING_BOOKING,
-            onClick: () {
-              // FormUtils.showPayment(context: context);
-              // ContactUtils().showDialog(context: context);
-              if (_formKey.currentState!.validate()) {
-                if (selectedDates.isEmpty) {
-                  EasyLoading.showToast("Aucun jour de réservation sélectionné",
-                      toastPosition: EasyLoadingToastPosition.bottom);
-                } else {
-                  showCupertinoModalPopup<void>(
-                    context: context,
-                    builder: (BuildContext context) => CupertinoAlertDialog(
-                      //title: const Text('Alert'),
-                      content: Text(
-                          'Confirmez-vous cette demande de réservation pour ${selectedDates.length} jours?'),
-                      actions: <CupertinoDialogAction>[
-                        CupertinoDialogAction(
-                          isDefaultAction: false,
-                          isDestructiveAction: true,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Annuer'),
-                        ),
-                        CupertinoDialogAction(
-                          isDefaultAction: true,
-                          isDestructiveAction: false,
-                          onPressed: () {
-                            context.read<BookingCubit>().orderBooking(
-                                body: ReservationRequestBody(
-                                    residence: widget.residenceModel.id,
-                                    datesReservation: selectedDates
-                                        .map(
-                                          (e) => DatesReservationModel(date: e),
-                                        )
-                                        .toList(),
-                                    clientPhoneNumber:
-                                        _formController.phoneNumber!.text));
-                            context.pop();
-                          },
-                          child: const Text('Confirmer'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              }
-            },
+            onClick: (state is INITIAL_BOOKING)
+                ? null
+                : () {
+                    // FormUtils.showPayment(context: context);
+                    // ContactUtils().showDialog(context: context);
+                    if (_formKey.currentState!.validate()) {
+                      if (selectedDates.isEmpty) {
+                        EasyLoading.showToast(
+                            "Aucun jour de réservation sélectionné",
+                            toastPosition: EasyLoadingToastPosition.bottom);
+                      } else {
+                        showCupertinoModalPopup<void>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              CupertinoAlertDialog(
+                            //title: const Text('Alert'),
+                            content: Text(
+                                'Confirmez-vous cette demande de réservation pour ${selectedDates.length} jours?'),
+                            actions: <CupertinoDialogAction>[
+                              CupertinoDialogAction(
+                                isDefaultAction: false,
+                                isDestructiveAction: true,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Annuer'),
+                              ),
+                              CupertinoDialogAction(
+                                isDefaultAction: true,
+                                isDestructiveAction: false,
+                                onPressed: () {
+                                  context.read<BookingCubit>().orderBooking(
+                                      body: ReservationRequestBody(
+                                          residence: widget.residenceModel.id,
+                                          datesReservation: selectedDates
+                                              .map(
+                                                (e) => DatesReservationModel(
+                                                    date: e),
+                                              )
+                                              .toList(),
+                                          clientPhoneNumber: _formController
+                                              .phoneNumber!.text));
+                                  context.pop();
+                                },
+                                child: const Text('Confirmer'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }
+                  },
           ),
         ),
       ),

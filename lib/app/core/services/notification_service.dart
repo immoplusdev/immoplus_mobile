@@ -14,9 +14,9 @@ class NotificationService {
   NotificationService(this.sessionManager);
 
   initConfig() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    // await Firebase.initializeApp(
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    // );
     //Remove this method to stop OneSignal Debugging
     if (kDebugMode) {
       OneSignal.Debug.setLogLevel(OSLogLevel.verbose);

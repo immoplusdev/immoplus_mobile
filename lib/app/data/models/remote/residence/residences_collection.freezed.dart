@@ -21,8 +21,11 @@ ResidencesCollection _$ResidencesCollectionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ResidencesCollection {
   List<ResidenceModel>? get data => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
   int? get currentPage => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
   int? get totalPages => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
   int? get pageSize => throw _privateConstructorUsedError;
   bool? get hasNext => throw _privateConstructorUsedError;
   bool? get hasPrevious => throw _privateConstructorUsedError;
@@ -45,9 +48,9 @@ abstract class $ResidencesCollectionCopyWith<$Res> {
   @useResult
   $Res call(
       {List<ResidenceModel>? data,
-      int? currentPage,
-      int? totalPages,
-      int? pageSize,
+      @JsonKey(fromJson: toInt) int? currentPage,
+      @JsonKey(fromJson: toInt) int? totalPages,
+      @JsonKey(fromJson: toInt) int? pageSize,
       bool? hasNext,
       bool? hasPrevious});
 }
@@ -114,9 +117,9 @@ abstract class _$$ResidencesCollectionImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<ResidenceModel>? data,
-      int? currentPage,
-      int? totalPages,
-      int? pageSize,
+      @JsonKey(fromJson: toInt) int? currentPage,
+      @JsonKey(fromJson: toInt) int? totalPages,
+      @JsonKey(fromJson: toInt) int? pageSize,
       bool? hasNext,
       bool? hasPrevious});
 }
@@ -175,9 +178,9 @@ class __$$ResidencesCollectionImplCopyWithImpl<$Res>
 class _$ResidencesCollectionImpl implements _ResidencesCollection {
   _$ResidencesCollectionImpl(
       {final List<ResidenceModel>? data = const [],
-      this.currentPage = 0,
-      this.totalPages = 0,
-      this.pageSize = 0,
+      @JsonKey(fromJson: toInt) this.currentPage,
+      @JsonKey(fromJson: toInt) this.totalPages,
+      @JsonKey(fromJson: toInt) this.pageSize,
       this.hasNext = false,
       this.hasPrevious = false})
       : _data = data;
@@ -197,13 +200,13 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
   }
 
   @override
-  @JsonKey()
+  @JsonKey(fromJson: toInt)
   final int? currentPage;
   @override
-  @JsonKey()
+  @JsonKey(fromJson: toInt)
   final int? totalPages;
   @override
-  @JsonKey()
+  @JsonKey(fromJson: toInt)
   final int? pageSize;
   @override
   @JsonKey()
@@ -266,9 +269,9 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
 abstract class _ResidencesCollection implements ResidencesCollection {
   factory _ResidencesCollection(
       {final List<ResidenceModel>? data,
-      final int? currentPage,
-      final int? totalPages,
-      final int? pageSize,
+      @JsonKey(fromJson: toInt) final int? currentPage,
+      @JsonKey(fromJson: toInt) final int? totalPages,
+      @JsonKey(fromJson: toInt) final int? pageSize,
       final bool? hasNext,
       final bool? hasPrevious}) = _$ResidencesCollectionImpl;
 
@@ -278,10 +281,13 @@ abstract class _ResidencesCollection implements ResidencesCollection {
   @override
   List<ResidenceModel>? get data;
   @override
+  @JsonKey(fromJson: toInt)
   int? get currentPage;
   @override
+  @JsonKey(fromJson: toInt)
   int? get totalPages;
   @override
+  @JsonKey(fromJson: toInt)
   int? get pageSize;
   @override
   bool? get hasNext;

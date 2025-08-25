@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/filter/components/filter_range_price.dart';
+import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
+import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/residence_filter_handler.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class FilterPage extends StatefulWidget {
@@ -131,6 +135,10 @@ class _FilterPageState extends State<FilterPage> {
                       markedDates.clear();
                       markedDates.addAll(value);
                       inspect(markedDates);
+                      FilterHandler.startDate = value.first.toIso8601String();
+                      FilterHandler.endDate = value.length > 1
+                          ? value.last.toIso8601String()
+                          : null;
                     });
                   },
                 ),
@@ -138,24 +146,47 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ),
           const SliverToBoxAdapter(child: FilterRangePrice()),
-          SliverToBoxAdapter(
-            child: Center(
-              child: TextButton(
-                  onPressed: () {}, child: const Text('Annuler le filtre')),
-            ),
-          ),
           const SliverGap(50),
         ],
       ),
       bottomSheet: Container(
-        height: 80,
+        height: 120,
         padding:
             const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 10),
-        child: CustomButtom(
-            text: 'Appliquer le filtre',
-            onClick: () {
-              context.pop();
-            }),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomButtom(
+                text: 'Appliquer le filtre',
+                onClick: () {
+                  if (currentAddress != null) {
+                    FilterHandler.locationName = currentAddress!
+                                .description!.length >
+                            20
+                        ? '${currentAddress!.description!.substring(0, 20)}…'
+                        : currentAddress!.description;
+                    FilterHandler.lat = currentAddress!.latitude;
+                    FilterHandler.long = currentAddress!.longitude;
+                  }
+
+                  HomePageState.pagingControllerResidence.refresh();
+                  HomePageState.pagingControllerEstate.refresh();
+                  context.read<FilterCubit>().refresh(FilterHandler());
+                  context.pop();
+                }),
+            TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  textStyle: Theme.of(context).textTheme.titleMedium,
+                ),
+                onPressed: () {
+                  setState(() {
+                    FilterHandler.cleanParameters();
+                  });
+                },
+                child: const Text('Annuler les filtres')),
+          ],
+        ),
       ),
     );
   }

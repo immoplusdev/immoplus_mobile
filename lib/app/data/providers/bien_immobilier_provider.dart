@@ -27,23 +27,32 @@ abstract class BienImmobilierProvider {
   @GET("/biens-immobiliers/{id}")
   Future<BienImmobilierSingle> getImmobilier(@Path() String id);
 
-  @GET("/biens-immobiliers/data/public")
-  Future<BienImmobilierCollection> getImmobiliers(
-      @Query("_page") int page,
-      @Query("_per_page") int perPage,
-      @Queries() Map<String, dynamic>? where,
-      @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir);
-
+  @GET("/biens-immobiliers/data/filter/public")
+  Future<BienImmobilierCollection> getImmobiliers({
+    @Query("_search") String? search,
+    @Queries() Map<String, dynamic>? where,
+    @Query("_lat") double? lat,
+    @Query("_long") double? long,
+    @Query("_per_page") int? perPage,
+    @Query("_page") int? page,
+    @Query("_radius") double? radius,
+    @Query("_start_date") String? startDate,
+    @Query("_end_date") String? endDate,
+    @Query("_order_by") String? orderBy,
+    @Query("_order_dir") String? orderDir,
+  });
+  //* end point de la map
   @GET("/biens-immobiliers/data/public/geolocalized")
   Future<BienImmobilierCollection> getBienImmobilierGeolocalized(
-      @Query("lat") double? lat,
-      @Query("long") double? long,
-      @Query("_search") String? search,
-      @Query('_where') String? where,
+      {@Query("_lat") double? lat,
+      @Query("_long") double? long,
+      @Query("_radius") double? radius,
+      @Query("_per_page") int? perPage,
       @Query("_page") int? page,
+      @Query("_search") String? search,
+      @Query('_where') List<Map<String, dynamic>>? where,
       @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir);
+      @Query("_order_dir") String? orderDir});
 
   @POST("/biens-immobiliers")
   Future<BienImmobilierSingle> createBienImmobilier(

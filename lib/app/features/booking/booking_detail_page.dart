@@ -272,9 +272,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                     .reservationResponse.data.residence.nom,
                                 destination: Coords(
                                   state.reservationResponse.data.residence
-                                      .position.coordinates[1],
+                                      .position.coordinates![1],
                                   state.reservationResponse.data.residence
-                                      .position.coordinates[0],
+                                      .position.coordinates![0],
                                 ),
                                 directionsMode: DirectionsMode.driving,
                                 mapType: MapType.google,
@@ -288,9 +288,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                     .reservationResponse.data.residence.nom,
                                 destination: Coords(
                                   state.reservationResponse.data.residence
-                                      .position.coordinates[1],
+                                      .position.coordinates![1],
                                   state.reservationResponse.data.residence
-                                      .position.coordinates[0],
+                                      .position.coordinates![0],
                                 ),
                                 directionsMode: DirectionsMode.driving,
                               );

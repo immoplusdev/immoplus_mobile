@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/features/payment_module/components/orange/orange_phone_number_page.dart';
@@ -8,6 +9,7 @@ import 'package:immoplus/app/features/payment_module/services/payment_services.d
 import 'package:immoplus/app/features/payment_module/utils/orange_payment_router.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/lottie_assets.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
@@ -53,14 +55,28 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
                     "Une fois le code OTP validé, veuillez patienter quelques instants. Vous serez notifié du statut de votre paiement, puis celui de votre demande par ImmoPlus.",
                     textAlign: TextAlign.center,
                   ),
-                  CupertinoActionSheetAction(
-                    isDestructiveAction: false,
+                  Gap(8),
+                  TextButton.icon(
+                    iconAlignment: IconAlignment.end,
+                    icon: Icon(FontAwesomeIcons.circleArrowRight,
+                        color: AppColors.primary, size: 20),
+                    // isDestructiveAction: false,
                     onPressed: () {
                       AppRouter.router.go(
-                          "/order/${PaymentData.of(context)!.orderID}/${PaymentData.of(context)!.productType}");
+                          "/payment/${PaymentData.of(context)!.productType}/${PaymentData.of(context)!.orderID}");
                     },
-                    child: const Text(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    label: Text(
                       "Voir les détails de la réservation",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(color: AppColors.primary),
                     ),
                   ),
                 ],

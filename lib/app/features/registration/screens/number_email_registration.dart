@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/core/services/navigation_service.dart';
 import 'package:immoplus/app/data/models/auth/customer_registration_body.dart';
 import 'package:immoplus/app/data/models/remote/files/file_data_model.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
@@ -38,6 +39,22 @@ class NumberEmailRegistration extends StatelessWidget {
       child: Column(
         children: [
           const Gap(50),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Flexible(
+          //       flex: 1,
+          //       child: FileUploader(
+          //         width: 150,
+          //         height: 130,
+          //         fileUploaderController: fileUploaderControllerPhotoIdentite,
+          //         title: "Photo de profile",
+          //         iconPlaceholder: FontAwesomeIcons.idBadge,
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // const Gap(20),
           CustomTextField(
             controller: formController.email,
             prefixIcon: const Icon(CupertinoIcons.mail),
@@ -62,22 +79,6 @@ class NumberEmailRegistration extends StatelessWidget {
                   FormUtils.numberValidator(number: value),
             ),
           ),
-          const Gap(20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 1,
-                child: FileUploader(
-                  width: 150,
-                  height: 130,
-                  fileUploaderController: fileUploaderControllerPhotoIdentite,
-                  title: "Photo de profile",
-                  iconPlaceholder: FontAwesomeIcons.idBadge,
-                ),
-              ),
-            ],
-          ),
           const Gap(10),
           ValueListenableBuilder<bool>(
             valueListenable: _cguNotifier,
@@ -98,12 +99,16 @@ class NumberEmailRegistration extends StatelessWidget {
                   const Text("j'approuve les"),
                   TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const GeneralConditionPage(),
-                            ));
+                        showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          showDragHandle: true,
+                          context: context,
+                          builder: (context) => const FractionallySizedBox(
+                              heightFactor: 0.9, child: GeneralConditionPage()),
+                        );
                       },
                       child: Text(
                         'Termes & conditions',
@@ -135,14 +140,18 @@ class NumberEmailRegistration extends StatelessWidget {
                                       EasyLoadingToastPosition.bottom);
                             } else {
                               String? fileId;
-                              if (fileUploaderControllerPhotoIdentite.file !=
-                                  null) {
-                                CustomPopup.showLoagingToast(
-                                    text: "Envoi de l'image...");
-                                FileDataModel fileDataModel =
-                                    await fileUploaderControllerPhotoIdentite
-                                        .upladFile();
-                                fileId = fileDataModel.data!.id;
+                              try {
+                                if (fileUploaderControllerPhotoIdentite.file !=
+                                    null) {
+                                  CustomPopup.showLoagingToast(
+                                      text: "Envoi de l'image...");
+                                  FileDataModel fileDataModel =
+                                      await fileUploaderControllerPhotoIdentite
+                                          .upladFile();
+                                  fileId = fileDataModel.data!.id;
+                                  EasyLoading.dismiss();
+                                }
+                              } catch (e) {
                                 EasyLoading.dismiss();
                               }
 
@@ -162,6 +171,7 @@ class NumberEmailRegistration extends StatelessWidget {
                                   .read<RgistrationCubitCubit>()
                                   .createCustomerAccount(
                                     customerRegistrationBody: body,
+                                    //fileID: fileId,
                                   );
                             }
                           }

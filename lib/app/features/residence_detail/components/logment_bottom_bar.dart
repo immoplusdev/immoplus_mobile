@@ -30,40 +30,6 @@ class LogmentBottomBar extends StatelessWidget {
         },
         child: const Text('Réserver'),
       ),
-      //color: Colors.red,
-      // child: Row(
-      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //   children: [
-      //     Flexible(
-      //         flex: 2,
-      //         child: RichText(
-      //             text: TextSpan(children: [
-      //           TextSpan(
-      //               text:
-      //                   " ${CurrencyFormatter().format(residenceModel.prixReservation.toString())} Fcfa",
-      //               style: Theme.of(context).textTheme.headlineSmall),
-      //           TextSpan(
-      //               text: ' par jours',
-      //               style: TextStyle(color: Colors.grey.shade700))
-      //         ]))),
-      //     Flexible(
-      //       child: CustomButtom(
-      //         onClick: () {
-      //           if (sessionManager.currentUser == null) {
-      //             Utils.authentificationPopup(context: context);
-      //           } else {
-      //             Navigator.push(
-      //                 context,
-      //                 CupertinoPageRoute(
-      //                     builder: (context) => BookingFormularAction(
-      //                         residenceModel: residenceModel)));
-      //           }
-      //         },
-      //         text: 'RÉSERVER',
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

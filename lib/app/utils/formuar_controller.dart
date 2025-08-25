@@ -4,6 +4,7 @@ class FormController {
   int? productId;
   String? logmentID;
   TextEditingController? firstName;
+
   TextEditingController? lastName;
   TextEditingController? email;
   TextEditingController? phoneNumber;
@@ -21,12 +22,13 @@ class FormController {
   TextEditingController? address;
   TextEditingController? address2;
   TextEditingController? paymentType;
+  TextEditingController? passwordConfirm;
   String? serviceOption;
   List<String>? dates;
 
   int? city;
   int? state;
-  void set setServiceOption(String service) {
+  set setServiceOption(String service) {
     serviceOption = service;
   }
 
@@ -54,57 +56,53 @@ class FormController {
     this.stateName,
     this.dates,
     this.logmentID,
+    this.passwordConfirm,
   });
-  set setCityCode(int cit) => this.city = cit;
-  set setStateCode(int st) => this.state = st;
+  set setCityCode(int cit) => city = cit;
+  set setStateCode(int st) => state = st;
   addDate({required String date}) {
     dates!.add(date);
   }
 
   Map<String, dynamic> toJsonForOrder() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['product_id'] = this.productId;
-    data['service_option'] = this.serviceOption;
-    data['note'] = (note != null) ? this.note!.text : '';
-    data['customer_last_name'] = (lastName != null) ? this.lastName!.text : '';
-    data['customer_first_name'] =
-        (firstName != null) ? this.firstName!.text : '';
-    data['first_name'] = (firstName != null) ? this.firstName!.text : '';
-    data['last_name'] = (lastName != null) ? this.lastName!.text : '';
-    data['email'] = (email != null) ? this.email!.text : '';
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['product_id'] = productId;
+    data['service_option'] = serviceOption;
+    data['note'] = (note != null) ? note!.text : '';
+    data['customer_last_name'] = (lastName != null) ? lastName!.text : '';
+    data['customer_first_name'] = (firstName != null) ? firstName!.text : '';
+    data['first_name'] = (firstName != null) ? firstName!.text : '';
+    data['last_name'] = (lastName != null) ? lastName!.text : '';
+    data['email'] = (email != null) ? email!.text : '';
     data['customer_phone_number'] =
-        (phoneNumber != null) ? this.phoneNumber!.text : '';
-    data['phone_number'] = (phoneNumber != null) ? this.phoneNumber!.text : '';
+        (phoneNumber != null) ? phoneNumber!.text : '';
+    data['phone_number'] = (phoneNumber != null) ? phoneNumber!.text : '';
     //data['password'] = (password != null) ? this.password!.text : '';
-    data['customer_email'] = (email != null) ? this.email!.text : '';
-    data['username'] = (email != null) ? this.email!.text : '';
+    data['customer_email'] = (email != null) ? email!.text : '';
+    data['username'] = (email != null) ? email!.text : '';
     data['customer_country_id'] = 54;
     data['customer_state_id'] = state;
     data['customer_city_id'] = city;
-    data['customer_address'] = (address != null) ? this.address!.text : '';
-    data['customer_address_2'] = (address2 != null) ? this.address2!.text : '';
-    data['payment_type'] =
-        (this.payementType != null) ? this.payementType!.text : '';
-    data['password'] = (this.password != null) ? this.password!.text : '';
-    data['newPassword'] =
-        (this.newPassword != null) ? this.newPassword!.text : '';
-    data['city'] = this.city;
-    data['dates'] = this.dates;
-    data['visit_type'] = this.serviceOption ?? 'normal';
-    data['type_visite'] = this.serviceOption ?? 'normal';
+    data['customer_address'] = (address != null) ? address!.text : '';
+    data['customer_address_2'] = (address2 != null) ? address2!.text : '';
+    data['payment_type'] = (payementType != null) ? payementType!.text : '';
+    data['password'] = (password != null) ? password!.text : '';
+    data['newPassword'] = (newPassword != null) ? newPassword!.text : '';
+    data['city'] = city;
+    data['dates'] = dates;
+    data['visit_type'] = serviceOption ?? 'normal';
+    data['type_visite'] = serviceOption ?? 'normal';
     data['logement'] = logmentID ?? ''; //dates_reservation
     data['notes'] = 'note';
-    data['service_dates'] = (this.dates != null)
-        ? this
-            .dates!
+    data['service_dates'] = (dates != null)
+        ? dates!
             .map((e) => {
                   "date": e,
                 })
             .toList()
         : [];
-    data['dates_reservation'] = (this.dates != null)
-        ? this
-            .dates!
+    data['dates_reservation'] = (dates != null)
+        ? dates!
             .map((e) => {
                   "date": e,
                 })
@@ -126,11 +124,10 @@ class FormController {
     };
 
     data["service_metadata"] = {
-      "customer_first_name": (firstName != null) ? this.firstName!.text : '',
-      "customer_last_name": (lastName != null) ? this.lastName!.text : '',
-      "customer_phone_number":
-          (phoneNumber != null) ? this.phoneNumber!.text : '',
-      "customer_email": (email != null) ? this.email!.text : '',
+      "customer_first_name": (firstName != null) ? firstName!.text : '',
+      "customer_last_name": (lastName != null) ? lastName!.text : '',
+      "customer_phone_number": (phoneNumber != null) ? phoneNumber!.text : '',
+      "customer_email": (email != null) ? email!.text : '',
     };
     return data;
   }

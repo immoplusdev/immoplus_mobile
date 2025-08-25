@@ -6,6 +6,8 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
+import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
+import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
@@ -24,10 +26,12 @@ class _SplashScreenState extends State<SplashScreen> {
   final dio = getIt<Dio>();
 
   Future<void> _getData({required BuildContext context}) async {
+    ConfigModel configModel = await AuthRepository().getConfig();
+    sessionManager.configModel = configModel;
     await sessionManager.getCurrentUser();
 
     if (sessionManager.currentUser == null) {
-      AppRouter.router.goNamed(LoadingPage.name);
+      AppRouter.router.goNamed(HomePage.name);
     } else {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';

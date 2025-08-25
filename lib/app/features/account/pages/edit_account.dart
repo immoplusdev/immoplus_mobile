@@ -112,65 +112,71 @@ class _EditAccountPageState extends State<EditAccountPage> {
           centerTitle: true,
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: const EdgeInsets.only(left: 25, right: 25),
-            child: SizedBox(
-              width: double.infinity,
-              //color: Theme.of(context).colorScheme.primary,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    FileUploader(
-                      fileUploaderController: fileUploaderController,
-                      title: "photo de profil",
-                      placeholderImageId: sessionManager.currentUser!.avatar,
+          child: BlocBuilder<LoginCubit, LoginCubitState>(
+            builder: (context, state) {
+              return SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(left: 25, right: 25),
+                child: SizedBox(
+                  width: double.infinity,
+                  //color: Theme.of(context).colorScheme.primary,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FileUploader(
+                          fileUploaderController: fileUploaderController,
+                          title: "photo de profil",
+                          placeholderImageId:
+                              sessionManager.currentUser!.avatar,
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        CustomTextField(
+                          controller: _formController.firstName,
+                          prefixIcon: const Icon(CupertinoIcons.person),
+                          labelText: 'Nom',
+                          validator: (String? value) =>
+                              FormUtils.fieldValidator(value: value),
+                        ),
+                        CustomTextField(
+                          controller: _formController.lastName,
+                          prefixIcon: const Icon(CupertinoIcons.person),
+                          labelText: 'Prénom',
+                          validator: (String? value) =>
+                              FormUtils.fieldValidator(value: value),
+                        ),
+                        InternationalPhoneInput(
+                          initialPhoneNumber:
+                              sessionManager.currentUser!.phoneNumber,
+                          onValidPhoneNumber: (value) {
+                            phoneNumber = value;
+                            // Le numéro valide est traité ici si nécessaire
+                            // print(phoneNumber);
+                          },
+                          onInputValidated: onInputValidated,
+                        ),
+                        const Gap(10),
+                        CustomTextField(
+                          controller: _formController.email,
+                          prefixIcon: const Icon(CupertinoIcons.mail),
+                          labelText: 'Email',
+                          textInputType: TextInputType.emailAddress,
+                          validator: (String? value) =>
+                              FormUtils.emailValidator(email: value),
+                        ),
+                        const SizedBox(
+                          height: 300,
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    CustomTextField(
-                      controller: _formController.firstName,
-                      prefixIcon: const Icon(CupertinoIcons.person),
-                      labelText: 'Nom',
-                      validator: (String? value) =>
-                          FormUtils.fieldValidator(value: value),
-                    ),
-                    CustomTextField(
-                      controller: _formController.lastName,
-                      prefixIcon: const Icon(CupertinoIcons.person),
-                      labelText: 'Prénom',
-                      validator: (String? value) =>
-                          FormUtils.fieldValidator(value: value),
-                    ),
-                    InternationalPhoneInput(
-                      initialPhoneNumber:
-                          sessionManager.currentUser!.phoneNumber,
-                      onValidPhoneNumber: (value) {
-                        phoneNumber = value;
-                        // Le numéro valide est traité ici si nécessaire
-                        // print(phoneNumber);
-                      },
-                      onInputValidated: onInputValidated,
-                    ),
-                    const Gap(10),
-                    CustomTextField(
-                      controller: _formController.email,
-                      prefixIcon: const Icon(CupertinoIcons.mail),
-                      labelText: 'Email',
-                      textInputType: TextInputType.emailAddress,
-                      validator: (String? value) =>
-                          FormUtils.emailValidator(email: value),
-                    ),
-                    const SizedBox(
-                      height: 300,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
         bottomNavigationBar: Container(

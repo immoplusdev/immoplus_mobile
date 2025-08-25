@@ -120,11 +120,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
           //focusColor: Colors.white,
           suffixIcon: widget.sufixIcon,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none,
           ),
         ),

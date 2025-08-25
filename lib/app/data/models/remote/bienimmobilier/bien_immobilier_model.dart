@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 
 import '../residence/commodite_model.dart';
 import '../residence/piece_model.dart';
@@ -33,6 +34,11 @@ class BienImmobilierModel with _$BienImmobilierModel {
     @Default('') String? commune,
     @Default('') String? video,
     @Default(false) bool aLouer,
+    // 🔥 Ces champs manquants
+    @JsonKey(fromJson: toDouble) double? latitude,
+    @JsonKey(fromJson: toDouble) double? longitude,
+    @JsonKey(fromJson: toInt) int? nombreMaxOccupants,
+    @JsonKey(defaultValue: false) bool? fetesAutorises,
   }) = _BienImmobilierModel;
 
   factory BienImmobilierModel.fromJson(Map<String, dynamic> json) =>

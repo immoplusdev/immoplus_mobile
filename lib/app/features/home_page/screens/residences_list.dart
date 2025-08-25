@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/utils/residence_filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -20,13 +21,18 @@ class _ResidencesListState extends State<ResidencesList> {
   Future<void> loadPage(int page) async {
     ResidenceRepository()
         .getResidences(
-      search: HistoryPageState.search,
-      where: {
-        '_where': [
-          '{"_field": "residenceDisponible", "_op": "eq", "_val": true}',
-          '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
-        ],
-      },
+      search: FilterHandler.search,
+      lat: FilterHandler.lat,
+      long: FilterHandler.long,
+      startDate: FilterHandler.startDate,
+      endDate: FilterHandler.endDate,
+      radius: (FilterHandler.lat != null) ? 100 : null,
+      // where: {
+      //   '_where': [
+      //     '{"_field": "residenceDisponible", "_op": "eq", "_val": true}',
+      //     '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
+      //   ],
+      // },
       page: page,
     )
         .then((value) {

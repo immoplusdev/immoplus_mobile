@@ -76,6 +76,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     showModalBottomSheet(
                       isDismissible: false,
                       isScrollControlled: true,
+                      enableDrag: false,
                       useSafeArea: true,
                       useRootNavigator: true,
                       backgroundColor: AppColors.scafold,
@@ -84,7 +85,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      showDragHandle: true,
+                      //showDragHandle: true,
                       context: context,
                       builder: (context) {
                         if (OrderPaymentController.selectedOperator.value ==

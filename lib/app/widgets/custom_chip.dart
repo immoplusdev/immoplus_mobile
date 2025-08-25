@@ -6,11 +6,14 @@ class CustomChip extends StatelessWidget {
   final Color iconColor;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry trainlingPadding;
   final IconData? icon;
   final double iconSize;
   final String label;
   final TextStyle? labelStyle;
   final EdgeInsetsGeometry iconPadding;
+  final Widget? trailing;
+  final void Function()? onTap;
 
   const CustomChip({
     super.key,
@@ -23,36 +26,50 @@ class CustomChip extends StatelessWidget {
     this.label = '',
     this.labelStyle,
     this.iconPadding = const EdgeInsets.only(right: 2),
+    this.trailing,
+    this.trainlingPadding = const EdgeInsets.only(left: 2),
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: padding,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: borderRadius,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Visibility(
-            visible: icon != null,
-            child: Padding(
-              padding: iconPadding,
-              child: Icon(
-                icon,
-                size: iconSize,
-                color: iconColor,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: padding,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: borderRadius,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Visibility(
+              visible: icon != null,
+              child: Padding(
+                padding: iconPadding,
+                child: Icon(
+                  icon,
+                  size: iconSize,
+                  color: iconColor,
+                ),
               ),
             ),
-          ),
-          AutoSizeText(
-            label,
-            maxLines: 1,
-            style: labelStyle ?? Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
+            Text(
+              label,
+              maxLines: 1,
+              style: labelStyle ?? Theme.of(context).textTheme.bodyMedium,
+            ),
+            Visibility(
+              visible: trailing != null,
+              child: Padding(
+                padding: trainlingPadding,
+                child: trailing,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

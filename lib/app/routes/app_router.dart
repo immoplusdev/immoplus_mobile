@@ -14,11 +14,13 @@ import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
+import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/features/test/test_wave_web_view.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
@@ -83,6 +85,13 @@ class AppRouter {
         path: '/visites-history',
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
+      ),
+      GoRoute(
+        path: '/otp-confirm',
+        name: OtpPageTest.name,
+        builder: (context, state) => OtpPageTest(
+          currentPhoneNumber: state.extra as String,
+        ),
       ),
       ShellRoute(
         navigatorKey: _rootNavigatorKey,

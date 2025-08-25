@@ -8,7 +8,7 @@ class HistoryPageState {
 
   HistoryPageState({required this.indexPage});
 
-  static String? search;
+  // static String? search;
 
   static PagingController<int, ReservationModel> pagingControllerResidence =
       PagingController(firstPageKey: 1);

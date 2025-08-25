@@ -1,9 +1,11 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
@@ -26,7 +28,7 @@ class _MapViewerState extends State<MapViewer> {
   void initState() {
     context
         .read<MapViwerCubit>()
-        .getMapDataAll(const LatLng(5.365162, -4.000802));
+        .getMapDataAll(center: LatLng(5.365162, -4.000802));
     super.initState();
   }
 
@@ -35,6 +37,37 @@ class _MapViewerState extends State<MapViewer> {
       CameraUpdate.newLatLngZoom(position, 14.0),
     );
     // Vous pouvez également ajouter un marqueur ici si nécessaire
+  }
+
+  double zoomToRadiusKm(double zoom) {
+    // Tu peux affiner la formule selon ton besoin
+    return 40075 / (2 * pow(2, zoom - 1));
+  }
+
+  int getPerPage(double zoom) {
+    if (zoom < 5) {
+      return 20; // continent
+    } else if (zoom < 10) {
+      return 50; // pays
+    } else if (zoom < 14) {
+      return 1000; // ville
+    } else {
+      return 300; // quartier
+    }
+  }
+
+  Future<void> fetchMapData(CameraPosition cameraPosition) async {
+    final zoom = cameraPosition.zoom;
+    final center = cameraPosition.target;
+    final radius = zoomToRadiusKm(zoom);
+    final perPage = getPerPage(zoom);
+
+    await context.read<MapViwerCubit>().getMapDataAll(
+          center: center,
+          radius: radius * 1000, // Convertir km en mètres
+          perPage: perPage,
+          page: 1, // tu peux gérer le paging plus tard
+        );
   }
 
   @override
@@ -61,14 +94,24 @@ class _MapViewerState extends State<MapViewer> {
               onTap: (LatLng point) {
                 print(point);
               },
+              //   onCameraMove: (CameraPosition cameraPosition) {
+              //     EasyDebounce.debounce(
+              //       'map_bouncer',
+              //       const Duration(milliseconds: 300),
+              //       () {
+              //         context
+              //             .read<MapViwerCubit>()
+              //             .getMapDataAll(center: cameraPosition.target);
+              //       },
+              //     );
+              //   },
+              // ),
               onCameraMove: (CameraPosition cameraPosition) {
                 EasyDebounce.debounce(
                   'map_bouncer',
                   const Duration(milliseconds: 300),
                   () {
-                    context
-                        .read<MapViwerCubit>()
-                        .getMapDataAll(cameraPosition.target);
+                    fetchMapData(cameraPosition);
                   },
                 );
               },

@@ -3,13 +3,19 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/features/booking/data/estimate_price_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
+import 'package:immoplus/app/features/booking/logic/booking_services.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class BookingCubit extends Cubit<BookingRequestState> {
-  BookingCubit() : super(const BookingRequestState.initial());
+  BookingServices bookingServices;
+  BookingCubit(this.bookingServices)
+      : super(const BookingRequestState.initial());
 
   // getBookings() async {
   //   emit(const LOADING_BOOKING_LIST());
@@ -31,6 +37,19 @@ class BookingCubit extends Cubit<BookingRequestState> {
           await ResidenceRepository().getReservation(id: id);
       emit(BookingRequestState.receiveBooking(reservationModel));
     } catch (e) {
+      emit(BookingRequestState.error(e.toString()));
+    }
+  }
+
+  estimatePrice(
+      {required String residenceId, required List<DateTime> dates}) async {
+    emit(const LOADING_BOOKING());
+    try {
+      EstimatePriceModel reservationModel = await bookingServices.estimerPrix(
+          residenceId: residenceId, dates: dates);
+      emit(BookingRequestState.receiveEstimation(reservationModel));
+    } catch (e) {
+      emit(INITIAL_BOOKING());
       emit(BookingRequestState.error(e.toString()));
     }
   }

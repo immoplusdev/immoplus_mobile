@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/residence_filter_handler.dart';
 import 'package:intl/intl.dart';
 
 class FilterRangePrice extends StatefulWidget {
@@ -10,8 +11,6 @@ class FilterRangePrice extends StatefulWidget {
 }
 
 class _FilterRangePriceState extends State<FilterRangePrice> {
-  double _minPrice = 10000;
-  double _maxPrice = 300000;
   final double _priceStep = 5000;
   final double _maxPriceLimit = 3000000;
 
@@ -45,24 +44,27 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
               child: Column(
                 children: [
                   RangeSlider(
-                    values: RangeValues(_minPrice, _maxPrice),
+                    values: RangeValues(FilterHandler.minPrice.toDouble(),
+                        FilterHandler.maxPrice.toDouble()),
                     min: 5000,
                     max: _maxPriceLimit,
                     divisions: ((_maxPriceLimit - 5000) / _priceStep).round(),
                     activeColor: Colors.blue,
                     inactiveColor: Colors.grey.shade300,
                     labels: RangeLabels(
-                      '${_format.format(_minPrice.toInt())} F',
-                      _maxPrice >= _maxPriceLimit
+                      '${_format.format(FilterHandler.minPrice)} F',
+                      FilterHandler.maxPrice >= _maxPriceLimit
                           ? '3,000,000+ F'
-                          : '${_format.format(_maxPrice.toInt())} F',
+                          : '${_format.format(FilterHandler.minPrice)} F',
                     ),
                     onChanged: (values) {
                       setState(() {
-                        _minPrice =
-                            (values.start / _priceStep).round() * _priceStep;
-                        _maxPrice =
-                            (values.end / _priceStep).round() * _priceStep;
+                        FilterHandler.minPrice =
+                            ((values.start / _priceStep).round() * _priceStep)
+                                .toInt();
+                        FilterHandler.maxPrice =
+                            ((values.end / _priceStep).round() * _priceStep)
+                                .toInt();
                       });
                     },
                   ),
@@ -90,7 +92,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              '${_format.format(_minPrice.toInt())} F',
+                              '${_format.format(FilterHandler.minPrice)} F',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -119,9 +121,9 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              _maxPrice >= _maxPriceLimit
+                              FilterHandler.maxPrice >= _maxPriceLimit
                                   ? '3,000,000+ F'
-                                  : '${_format.format(_maxPrice.toInt())} F',
+                                  : '${_format.format(FilterHandler.maxPrice)} F',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

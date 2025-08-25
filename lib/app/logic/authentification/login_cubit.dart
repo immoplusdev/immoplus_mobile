@@ -25,6 +25,7 @@ import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:injectable/injectable.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:toastification/toastification.dart';
 
 @injectable
 class LoginCubit extends Cubit<LoginCubitState> {
@@ -153,7 +154,19 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await sessionManager.getCurrentUser();
 
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
+      toastification.show(
+        type: ToastificationType.success,
+        context: NavigationService.navigatorKey
+            .currentContext, // optional if you use ToastificationWrapper
+
+        title: Text(
+            "Vos informations personnelles ont été mises à jour avec succès"),
+        autoCloseDuration: const Duration(seconds: 5),
+
+        showProgressBar: false,
+        alignment: Alignment.bottomCenter,
+        style: ToastificationStyle.flatColored,
+      );
     } catch (e) {
       emit(const LoginCubitState.initial());
     }

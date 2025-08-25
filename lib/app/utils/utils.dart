@@ -420,10 +420,10 @@ class Utils {
     // Séparer la partie entière et la partie décimale
     List<String> parts = amountString.split('.');
 
-    // Formater la partie entière avec le séparateur de milliers
+    // Formater la partie entière avec des espaces comme séparateur de milliers
     String formattedAmount = parts[0].replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match match) => '${match[1]},',
+      (Match match) => '${match[1]} ',
     );
 
     // Ajouter la partie décimale si elle existe
@@ -431,8 +431,8 @@ class Utils {
       formattedAmount += '.${parts[1]}';
     }
 
-    // Ajouter le symbole de la monnaie
-    formattedAmount += ' FCFA';
+    // Ajouter le symbole de la monnaie XOF
+    formattedAmount += ' XOF';
 
     return formattedAmount;
   }

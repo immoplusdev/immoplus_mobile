@@ -18,16 +18,34 @@ import '../models/remote/bienimmobilier/visit_programmer_body.dart';
 class BienImmobilierRepository {
   final dioClient = getIt<Dio>();
 
-  Future<BienImmobilierCollection> getBiensImmobiliers(
-      {required int page,
-      required int perPage,
-      required Map<String, dynamic>? where,
-      String? orderBy,
-      String? orderDir}) async {
+  Future<BienImmobilierCollection> getBiensImmobiliers({
+    required int page,
+    String? orderBy,
+    String? orderDir,
+    Map<String, dynamic>? where,
+    String? search,
+    double? lat,
+    double? long,
+    int? perPage,
+    double? radius,
+    String? startDate,
+    String? endDate,
+  }) async {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
-      final response = await BienImmobilierProvider(dioClient)
-          .getImmobiliers(page, perPage, where, orderBy, orderDir);
+      final response = await BienImmobilierProvider(dioClient).getImmobiliers(
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        where: where,
+        search: search,
+        lat: lat,
+        long: long,
+        perPage: perPage,
+        radius: radius,
+        startDate: startDate,
+        endDate: endDate,
+      );
       inspect(response);
       return response;
     } on DioException catch (dioError) {
@@ -37,6 +55,7 @@ class BienImmobilierRepository {
       throw Exception('Failed to load users: ${dioError.message}');
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
+      inspect(error);
       log('Error: $error');
       throw Exception('Failed to load users: $error');
     }
@@ -183,16 +202,27 @@ class BienImmobilierRepository {
     int? page,
     required double lat,
     required double long,
+    double? radius,
+    int? perPage,
     String? orderBy,
     String? orderDir,
-    String? where,
+    List<Map<String, dynamic>>? where,
     String? search,
   }) async {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
-      final response = await BienImmobilierProvider(dioClient)
-          .getBienImmobilierGeolocalized(
-              lat, long, search, where, page, orderBy, orderDir);
+      final response =
+          await BienImmobilierProvider(dioClient).getBienImmobilierGeolocalized(
+        lat: lat,
+        long: long,
+        search: search,
+        where: where,
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        radius: radius,
+        perPage: perPage,
+      );
 
       return response;
     } on DioException catch (dioError) {

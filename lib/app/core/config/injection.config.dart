@@ -24,6 +24,10 @@ import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
+import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
+    as _i237;
+import 'package:immoplus/app/features/booking/logic/booking_services.dart'
+    as _i946;
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
     as _i374;
 import 'package:immoplus/app/logic/authentification/login_cubit.dart' as _i888;
@@ -66,15 +70,20 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i1023.ErrorInterceptor>(),
           gh<_i358.RequestInterceptor>(),
         ));
+    gh.factory<_i946.BookingServices>(
+        () => _i946.BookingServices(gh<_i361.Dio>()));
     gh.factory<_i783.RgistrationCubitCubit>(() => _i783.RgistrationCubitCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
+          gh<_i640.NotificationService>(),
         ));
     gh.factory<_i888.LoginCubit>(() => _i888.LoginCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
           gh<_i640.NotificationService>(),
         ));
+    gh.factory<_i237.BookingCubit>(
+        () => _i237.BookingCubit(gh<_i946.BookingServices>()));
     return this;
   }
 }

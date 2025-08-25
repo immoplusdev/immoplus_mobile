@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
   );
+
 }

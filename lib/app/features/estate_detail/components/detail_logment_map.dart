@@ -27,8 +27,8 @@ class _DetailEstateMapState extends State<DetailEstateMap> {
       marker: Marker(
         markerId: const MarkerId('residenceMarker'),
         position: LatLng(
-          widget.bienImmobilier.position.coordinates.last,
-          widget.bienImmobilier.position.coordinates.first,
+          widget.bienImmobilier.position.coordinates!.last,
+          widget.bienImmobilier.position.coordinates!.first,
         ),
         onTap: () async {
           if (await MPL.MapLauncher.isMapAvailable(MPL.MapType.google) ??
@@ -36,8 +36,8 @@ class _DetailEstateMapState extends State<DetailEstateMap> {
             MPL.MapLauncher.showDirections(
               destinationTitle: widget.bienImmobilier.nom,
               destination: MPL.Coords(
-                widget.bienImmobilier.position.coordinates[1],
-                widget.bienImmobilier.position.coordinates[0],
+                widget.bienImmobilier.position.coordinates![1],
+                widget.bienImmobilier.position.coordinates![0],
               ),
               directionsMode: MPL.DirectionsMode.driving,
               mapType: MPL.MapType.google,
@@ -48,8 +48,8 @@ class _DetailEstateMapState extends State<DetailEstateMap> {
             await availableMaps.first.showDirections(
               destinationTitle: widget.bienImmobilier.nom,
               destination: MPL.Coords(
-                widget.bienImmobilier.position.coordinates[1],
-                widget.bienImmobilier.position.coordinates[0],
+                widget.bienImmobilier.position.coordinates![1],
+                widget.bienImmobilier.position.coordinates![0],
               ),
               directionsMode: MPL.DirectionsMode.driving,
             );
@@ -79,8 +79,8 @@ class _DetailEstateMapState extends State<DetailEstateMap> {
                 markers: _markers,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
-                    widget.bienImmobilier.position.coordinates.last,
-                    widget.bienImmobilier.position.coordinates.first,
+                    widget.bienImmobilier.position.coordinates!.last,
+                    widget.bienImmobilier.position.coordinates!.first,
                   ),
                   zoom: 12.4,
                 ),

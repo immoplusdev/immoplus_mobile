@@ -22,8 +22,11 @@ BienImmobilierCollection _$BienImmobilierCollectionFromJson(
 /// @nodoc
 mixin _$BienImmobilierCollection {
   List<BienImmobilierModel>? get data => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
   int? get currentPage => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
   int? get totalPages => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
   int? get pageSize => throw _privateConstructorUsedError;
   bool? get hasNext => throw _privateConstructorUsedError;
   bool? get hasPrevious => throw _privateConstructorUsedError;
@@ -46,9 +49,9 @@ abstract class $BienImmobilierCollectionCopyWith<$Res> {
   @useResult
   $Res call(
       {List<BienImmobilierModel>? data,
-      int? currentPage,
-      int? totalPages,
-      int? pageSize,
+      @JsonKey(fromJson: toInt) int? currentPage,
+      @JsonKey(fromJson: toInt) int? totalPages,
+      @JsonKey(fromJson: toInt) int? pageSize,
       bool? hasNext,
       bool? hasPrevious});
 }
@@ -116,9 +119,9 @@ abstract class _$$BienImmobilierCollectionImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<BienImmobilierModel>? data,
-      int? currentPage,
-      int? totalPages,
-      int? pageSize,
+      @JsonKey(fromJson: toInt) int? currentPage,
+      @JsonKey(fromJson: toInt) int? totalPages,
+      @JsonKey(fromJson: toInt) int? pageSize,
       bool? hasNext,
       bool? hasPrevious});
 }
@@ -179,9 +182,9 @@ class __$$BienImmobilierCollectionImplCopyWithImpl<$Res>
 class _$BienImmobilierCollectionImpl implements _BienImmobilierCollection {
   _$BienImmobilierCollectionImpl(
       {final List<BienImmobilierModel>? data = const [],
-      this.currentPage = 0,
-      this.totalPages = 0,
-      this.pageSize = 0,
+      @JsonKey(fromJson: toInt) this.currentPage,
+      @JsonKey(fromJson: toInt) this.totalPages,
+      @JsonKey(fromJson: toInt) this.pageSize,
       this.hasNext = false,
       this.hasPrevious = false})
       : _data = data;
@@ -201,13 +204,13 @@ class _$BienImmobilierCollectionImpl implements _BienImmobilierCollection {
   }
 
   @override
-  @JsonKey()
+  @JsonKey(fromJson: toInt)
   final int? currentPage;
   @override
-  @JsonKey()
+  @JsonKey(fromJson: toInt)
   final int? totalPages;
   @override
-  @JsonKey()
+  @JsonKey(fromJson: toInt)
   final int? pageSize;
   @override
   @JsonKey()
@@ -269,9 +272,9 @@ class _$BienImmobilierCollectionImpl implements _BienImmobilierCollection {
 abstract class _BienImmobilierCollection implements BienImmobilierCollection {
   factory _BienImmobilierCollection(
       {final List<BienImmobilierModel>? data,
-      final int? currentPage,
-      final int? totalPages,
-      final int? pageSize,
+      @JsonKey(fromJson: toInt) final int? currentPage,
+      @JsonKey(fromJson: toInt) final int? totalPages,
+      @JsonKey(fromJson: toInt) final int? pageSize,
       final bool? hasNext,
       final bool? hasPrevious}) = _$BienImmobilierCollectionImpl;
 
@@ -281,10 +284,13 @@ abstract class _BienImmobilierCollection implements BienImmobilierCollection {
   @override
   List<BienImmobilierModel>? get data;
   @override
+  @JsonKey(fromJson: toInt)
   int? get currentPage;
   @override
+  @JsonKey(fromJson: toInt)
   int? get totalPages;
   @override
+  @JsonKey(fromJson: toInt)
   int? get pageSize;
   @override
   bool? get hasNext;

@@ -52,6 +52,10 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
       commune: json['commune'] as String? ?? '',
       video: json['video'] as String? ?? '',
       aLouer: json['aLouer'] as bool? ?? false,
+      latitude: toDouble(json['latitude']),
+      longitude: toDouble(json['longitude']),
+      nombreMaxOccupants: toInt(json['nombreMaxOccupants']),
+      fetesAutorises: json['fetesAutorises'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$BienImmobilierModelImplToJson(
@@ -80,4 +84,8 @@ Map<String, dynamic> _$$BienImmobilierModelImplToJson(
       'commune': instance.commune,
       'video': instance.video,
       'aLouer': instance.aLouer,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'nombreMaxOccupants': instance.nombreMaxOccupants,
+      'fetesAutorises': instance.fetesAutorises,
     };

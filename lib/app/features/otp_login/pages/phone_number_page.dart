@@ -12,6 +12,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
+import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
@@ -50,7 +51,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.primaryLite,
           borderRadius: BorderRadius.circular(30),
         ),
         // padding: const EdgeInsets.all(16.0),
@@ -63,6 +64,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             SizedBox(
               height: 80,
               child: InternationalPhoneInput(
+                backgroundColor: AppColors.primaryLite,
                 onValidPhoneNumber: (value) {
                   phoneNumber = value;
                   OTPState.phoneNumber = phoneNumber;
@@ -116,13 +118,15 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                                             phoneNumber)));
                             if (StatusCodeHandler.isSuccess(
                                 response.response.statusCode)) {
-                              FocusScope.of(context).unfocus();
+                              // FocusScope.of(context).unfocus();
 
-                              OTPState.phoneNumber = phoneNumber;
-                              widget.pageController.nextPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                              );
+                              // OTPState.phoneNumber = phoneNumber;
+                              // widget.pageController.nextPage(
+                              //   duration: const Duration(milliseconds: 300),
+                              //   curve: Curves.easeInOut,
+                              // );
+                              context.pushNamed(OtpPageTest.name,
+                                  extra: phoneNumber);
                             } else {
                               CustomPopup.showErrorToast(
                                   text:

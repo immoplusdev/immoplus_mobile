@@ -42,7 +42,16 @@ mixin _$BienImmobilierModel {
   String? get ville => throw _privateConstructorUsedError;
   String? get commune => throw _privateConstructorUsedError;
   String? get video => throw _privateConstructorUsedError;
-  bool get aLouer => throw _privateConstructorUsedError;
+  bool get aLouer =>
+      throw _privateConstructorUsedError; // 🔥 Ces champs manquants
+  @JsonKey(fromJson: toDouble)
+  double? get latitude => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toDouble)
+  double? get longitude => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: toInt)
+  int? get nombreMaxOccupants => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: false)
+  bool? get fetesAutorises => throw _privateConstructorUsedError;
 
   /// Serializes this BienImmobilierModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -83,7 +92,11 @@ abstract class $BienImmobilierModelCopyWith<$Res> {
       String? ville,
       String? commune,
       String? video,
-      bool aLouer});
+      bool aLouer,
+      @JsonKey(fromJson: toDouble) double? latitude,
+      @JsonKey(fromJson: toDouble) double? longitude,
+      @JsonKey(fromJson: toInt) int? nombreMaxOccupants,
+      @JsonKey(defaultValue: false) bool? fetesAutorises});
 
   $PositionModelCopyWith<$Res> get position;
 }
@@ -126,6 +139,10 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
     Object? commune = freezed,
     Object? video = freezed,
     Object? aLouer = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
+    Object? nombreMaxOccupants = freezed,
+    Object? fetesAutorises = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -220,6 +237,22 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.aLouer
           : aLouer // ignore: cast_nullable_to_non_nullable
               as bool,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      nombreMaxOccupants: freezed == nombreMaxOccupants
+          ? _value.nombreMaxOccupants
+          : nombreMaxOccupants // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fetesAutorises: freezed == fetesAutorises
+          ? _value.fetesAutorises
+          : fetesAutorises // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 
@@ -265,7 +298,11 @@ abstract class _$$BienImmobilierModelImplCopyWith<$Res>
       String? ville,
       String? commune,
       String? video,
-      bool aLouer});
+      bool aLouer,
+      @JsonKey(fromJson: toDouble) double? latitude,
+      @JsonKey(fromJson: toDouble) double? longitude,
+      @JsonKey(fromJson: toInt) int? nombreMaxOccupants,
+      @JsonKey(defaultValue: false) bool? fetesAutorises});
 
   @override
   $PositionModelCopyWith<$Res> get position;
@@ -307,6 +344,10 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
     Object? commune = freezed,
     Object? video = freezed,
     Object? aLouer = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
+    Object? nombreMaxOccupants = freezed,
+    Object? fetesAutorises = freezed,
   }) {
     return _then(_$BienImmobilierModelImpl(
       id: null == id
@@ -401,6 +442,22 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.aLouer
           : aLouer // ignore: cast_nullable_to_non_nullable
               as bool,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      nombreMaxOccupants: freezed == nombreMaxOccupants
+          ? _value.nombreMaxOccupants
+          : nombreMaxOccupants // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fetesAutorises: freezed == fetesAutorises
+          ? _value.fetesAutorises
+          : fetesAutorises // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -431,7 +488,11 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
       this.ville = '',
       this.commune = '',
       this.video = '',
-      this.aLouer = false})
+      this.aLouer = false,
+      @JsonKey(fromJson: toDouble) this.latitude,
+      @JsonKey(fromJson: toDouble) this.longitude,
+      @JsonKey(fromJson: toInt) this.nombreMaxOccupants,
+      @JsonKey(defaultValue: false) this.fetesAutorises})
       : _amentities = amentities,
         _tags = tags,
         _images = images,
@@ -530,10 +591,23 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
   @override
   @JsonKey()
   final bool aLouer;
+// 🔥 Ces champs manquants
+  @override
+  @JsonKey(fromJson: toDouble)
+  final double? latitude;
+  @override
+  @JsonKey(fromJson: toDouble)
+  final double? longitude;
+  @override
+  @JsonKey(fromJson: toInt)
+  final int? nombreMaxOccupants;
+  @override
+  @JsonKey(defaultValue: false)
+  final bool? fetesAutorises;
 
   @override
   String toString() {
-    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, video: $video, aLouer: $aLouer)';
+    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, video: $video, aLouer: $aLouer, latitude: $latitude, longitude: $longitude, nombreMaxOccupants: $nombreMaxOccupants, fetesAutorises: $fetesAutorises)';
   }
 
   @override
@@ -576,7 +650,15 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
             (identical(other.ville, ville) || other.ville == ville) &&
             (identical(other.commune, commune) || other.commune == commune) &&
             (identical(other.video, video) || other.video == video) &&
-            (identical(other.aLouer, aLouer) || other.aLouer == aLouer));
+            (identical(other.aLouer, aLouer) || other.aLouer == aLouer) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
+            (identical(other.nombreMaxOccupants, nombreMaxOccupants) ||
+                other.nombreMaxOccupants == nombreMaxOccupants) &&
+            (identical(other.fetesAutorises, fetesAutorises) ||
+                other.fetesAutorises == fetesAutorises));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -605,7 +687,11 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
         ville,
         commune,
         video,
-        aLouer
+        aLouer,
+        latitude,
+        longitude,
+        nombreMaxOccupants,
+        fetesAutorises
       ]);
 
   /// Create a copy of BienImmobilierModel
@@ -627,29 +713,34 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
 
 abstract class _BienImmobilierModel implements BienImmobilierModel {
   factory _BienImmobilierModel(
-      {final String id,
-      final String nom,
-      final String typeBienImmobilier,
-      final String typeLocation,
-      final String description,
-      final List<CommoditeModel> amentities,
-      final List<String> tags,
-      final List<String> images,
-      final String adresse,
-      final PositionModel position,
-      final String statusValidation,
-      final int prix,
-      final bool featured,
-      final bool bienImmobilierDisponible,
-      final DateTime? createdAt,
-      final DateTime? updatedAt,
-      final DateTime? deletedAt,
-      final String miniatureId,
-      final List<PieceModel> pieces,
-      final String? ville,
-      final String? commune,
-      final String? video,
-      final bool aLouer}) = _$BienImmobilierModelImpl;
+          {final String id,
+          final String nom,
+          final String typeBienImmobilier,
+          final String typeLocation,
+          final String description,
+          final List<CommoditeModel> amentities,
+          final List<String> tags,
+          final List<String> images,
+          final String adresse,
+          final PositionModel position,
+          final String statusValidation,
+          final int prix,
+          final bool featured,
+          final bool bienImmobilierDisponible,
+          final DateTime? createdAt,
+          final DateTime? updatedAt,
+          final DateTime? deletedAt,
+          final String miniatureId,
+          final List<PieceModel> pieces,
+          final String? ville,
+          final String? commune,
+          final String? video,
+          final bool aLouer,
+          @JsonKey(fromJson: toDouble) final double? latitude,
+          @JsonKey(fromJson: toDouble) final double? longitude,
+          @JsonKey(fromJson: toInt) final int? nombreMaxOccupants,
+          @JsonKey(defaultValue: false) final bool? fetesAutorises}) =
+      _$BienImmobilierModelImpl;
 
   factory _BienImmobilierModel.fromJson(Map<String, dynamic> json) =
       _$BienImmobilierModelImpl.fromJson;
@@ -699,7 +790,19 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   @override
   String? get video;
   @override
-  bool get aLouer;
+  bool get aLouer; // 🔥 Ces champs manquants
+  @override
+  @JsonKey(fromJson: toDouble)
+  double? get latitude;
+  @override
+  @JsonKey(fromJson: toDouble)
+  double? get longitude;
+  @override
+  @JsonKey(fromJson: toInt)
+  int? get nombreMaxOccupants;
+  @override
+  @JsonKey(defaultValue: false)
+  bool? get fetesAutorises;
 
   /// Create a copy of BienImmobilierModel
   /// with the given fields replaced by the non-null parameter values.

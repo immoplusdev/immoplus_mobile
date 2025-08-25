@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/svgs_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactUtils {
   static showContact({String? id}) => showModalBottomSheet(
@@ -43,7 +46,11 @@ class ContactUtils {
                       color: Colors.green,
                     ),
                     onTap: () async {
-                      Utils.whatsapp(phoneNumber: "+2250701710065");
+                      Utils.whatsapp(
+                          phoneNumber: getIt<SessionManager>()
+                              .configModel!
+                              .data!
+                              .contactPhoneNumber);
                     },
                   ),
                 ),
@@ -71,7 +78,10 @@ class ContactUtils {
                       color: Colors.black,
                     ),
                     onTap: () async {
-                      // Utils.call();
+                      Utils.makePhoneCall(getIt<SessionManager>()
+                          .configModel!
+                          .data!
+                          .contactPhoneNumber);
                     },
                   ),
                 ),
@@ -99,9 +109,15 @@ class ContactUtils {
                       color: Colors.red,
                     ),
                     onTap: () async {
-                      if (id != null) {
-                        Utils.bookingMail(id: id);
-                      }
+                      final Uri emailLaunchUri = Uri(
+                        scheme: 'mailto',
+                        path: getIt<SessionManager>()
+                            .configModel!
+                            .data!
+                            .contactPhoneNumber,
+                      );
+
+                      await launchUrl(emailLaunchUri);
                     },
                   ),
                 ),

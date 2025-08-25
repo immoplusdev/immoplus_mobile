@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/features/login_page/pages/login_with_email_screen.dart';
 import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocProvider(
       create: (context) => getIt<LoginCubit>(),
       child: Scaffold(
-        backgroundColor: HexColor("#121224"),
+        backgroundColor: AppColors.primaryLite, //HexColor("#121224"),
 
         body: CustomScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -33,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
           physics: const NeverScrollableScrollPhysics(),
           slivers: [
             SliverAppBar(
-              backgroundColor: HexColor("#121224"),
+              backgroundColor: AppColors.primaryLite,
               leadingWidth: 35,
               // leading: Padding(
               //   padding: const EdgeInsets.only(left: 5),
@@ -54,24 +56,22 @@ class _LoginPageState extends State<LoginPage> {
               //         color: Colors.black,
               //       )),
               // ),
-              actions: [
-                SvgPicture.asset(
-                  'assets/icons/logo_immo.svg',
-                  color: HexColor('#2072ca'),
-                  width: 50,
-                ),
-                const Gap(20),
-              ],
+              // actions: [
+              //   SvgPicture.asset(
+              //     'assets/icons/logo_immo.svg',
+              //     color: HexColor('#2072ca'),
+              //     width: 50,
+              //   ),
+              //   const Gap(20),
+              // ],
             ),
             const SliverGap(30),
             SliverToBoxAdapter(
               child: Center(
                 child: Text(
                   "Connexion",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(color: Colors.white),
+                  style: context.textTheme.headlineMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -84,10 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                     maxLines: 1,
                     "Inscrivez-vous si vous n'avez pas de compte",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
               ),
@@ -95,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
             const SliverGap(50),
             SliverFillRemaining(
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLite,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30)),
