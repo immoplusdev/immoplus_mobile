@@ -43,3 +43,15 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+android/app/.cxx/
+
+# VS Code settings
+.vscode/
+.fvm/
+**/.fvm/
+**/.fvm/**
+
+ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+ios/Runner.xcworkspace/xcshareddata/swiftpm/
+ios/Runner.xcodeproj/project.pbxproj
+ios/Podfile.lock

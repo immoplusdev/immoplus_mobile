@@ -7,6 +7,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
+import 'package:immoplus/app/features/account/pages/permission_page.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
@@ -16,11 +17,54 @@ import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   AccountPage({super.key});
   static String name = 'ACCOUNT_PAGE';
+
+  @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
   final sessionManager = getIt<SessionManager>();
+
+  openSetting() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Voulez-vous ouvrir les paramètres ?'),
+        content:
+            Text("Pour voir les permissions veuillez ouvrir les paramètres"),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            // isDestructiveAction: true,
+            isDefaultAction: false,
+            onPressed: () {
+              context.pop();
+            },
+            child: const Text('Retour'),
+          ),
+          CupertinoDialogAction(
+            /// This parameter indicates the action would perform
+            /// a destructive action such as deletion, and turns
+            /// the action's text color to red.
+            isDefaultAction: true,
+            onPressed: () {
+              context.pop();
+              openAppSettings();
+            },
+            child: const Text('Paramètre'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return sessionManager.currentUser == null
@@ -139,9 +183,7 @@ class AccountPage extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: ListTile(
                       tileColor: AppColors.scafold,
-                      onTap: () {
-                        //context.pushNamed(EstatesPage.name);
-                      },
+                      onTap: openSetting,
                       horizontalTitleGap: 0,
                       leading: Icon(
                         FontAwesomeIcons.gears,

@@ -76,7 +76,7 @@ dependencies:
   flutter_svg: ^2.0.17
   vibration: ^3.1.2
   flutter_widget_from_html: ^0.15.3
-  fluttertoast: ^8.2.10
+  fluttertoast: ^8.2.12
   font_awesome_flutter: ^10.8.0
   gap: ^3.0.1
   geojson_vi: ^2.2.5

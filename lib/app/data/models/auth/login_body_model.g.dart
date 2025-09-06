@@ -10,6 +10,7 @@ _$LoginBodyModelImpl _$$LoginBodyModelImplFromJson(Map<String, dynamic> json) =>
     _$LoginBodyModelImpl(
       username: json['username'] as String?,
       password: json['password'] as String?,
+      source: json['source'] as String,
     );
 
 Map<String, dynamic> _$$LoginBodyModelImplToJson(
@@ -17,4 +18,5 @@ Map<String, dynamic> _$$LoginBodyModelImplToJson(
     <String, dynamic>{
       'username': instance.username,
       'password': instance.password,
+      'source': instance.source,
     };

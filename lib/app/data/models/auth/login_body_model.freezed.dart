@@ -22,6 +22,7 @@ LoginBodyModel _$LoginBodyModelFromJson(Map<String, dynamic> json) {
 mixin _$LoginBodyModel {
   String? get username => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
+  String get source => throw _privateConstructorUsedError;
 
   /// Serializes this LoginBodyModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,7 @@ abstract class $LoginBodyModelCopyWith<$Res> {
           LoginBodyModel value, $Res Function(LoginBodyModel) then) =
       _$LoginBodyModelCopyWithImpl<$Res, LoginBodyModel>;
   @useResult
-  $Res call({String? username, String? password});
+  $Res call({String? username, String? password, String source});
 }
 
 /// @nodoc
@@ -59,6 +60,7 @@ class _$LoginBodyModelCopyWithImpl<$Res, $Val extends LoginBodyModel>
   $Res call({
     Object? username = freezed,
     Object? password = freezed,
+    Object? source = null,
   }) {
     return _then(_value.copyWith(
       username: freezed == username
@@ -69,6 +71,10 @@ class _$LoginBodyModelCopyWithImpl<$Res, $Val extends LoginBodyModel>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String?,
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -81,7 +87,7 @@ abstract class _$$LoginBodyModelImplCopyWith<$Res>
       __$$LoginBodyModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? username, String? password});
+  $Res call({String? username, String? password, String source});
 }
 
 /// @nodoc
@@ -99,6 +105,7 @@ class __$$LoginBodyModelImplCopyWithImpl<$Res>
   $Res call({
     Object? username = freezed,
     Object? password = freezed,
+    Object? source = null,
   }) {
     return _then(_$LoginBodyModelImpl(
       username: freezed == username
@@ -109,6 +116,10 @@ class __$$LoginBodyModelImplCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String?,
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -116,7 +127,7 @@ class __$$LoginBodyModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginBodyModelImpl implements _LoginBodyModel {
-  _$LoginBodyModelImpl({this.username, this.password});
+  _$LoginBodyModelImpl({this.username, this.password, required this.source});
 
   factory _$LoginBodyModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginBodyModelImplFromJson(json);
@@ -125,10 +136,12 @@ class _$LoginBodyModelImpl implements _LoginBodyModel {
   final String? username;
   @override
   final String? password;
+  @override
+  final String source;
 
   @override
   String toString() {
-    return 'LoginBodyModel(username: $username, password: $password)';
+    return 'LoginBodyModel(username: $username, password: $password, source: $source)';
   }
 
   @override
@@ -139,12 +152,13 @@ class _$LoginBodyModelImpl implements _LoginBodyModel {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.password, password) ||
-                other.password == password));
+                other.password == password) &&
+            (identical(other.source, source) || other.source == source));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, username, password);
+  int get hashCode => Object.hash(runtimeType, username, password, source);
 
   /// Create a copy of LoginBodyModel
   /// with the given fields replaced by the non-null parameter values.
@@ -164,8 +178,10 @@ class _$LoginBodyModelImpl implements _LoginBodyModel {
 }
 
 abstract class _LoginBodyModel implements LoginBodyModel {
-  factory _LoginBodyModel({final String? username, final String? password}) =
-      _$LoginBodyModelImpl;
+  factory _LoginBodyModel(
+      {final String? username,
+      final String? password,
+      required final String source}) = _$LoginBodyModelImpl;
 
   factory _LoginBodyModel.fromJson(Map<String, dynamic> json) =
       _$LoginBodyModelImpl.fromJson;
@@ -174,6 +190,8 @@ abstract class _LoginBodyModel implements LoginBodyModel {
   String? get username;
   @override
   String? get password;
+  @override
+  String get source;
 
   /// Create a copy of LoginBodyModel
   /// with the given fields replaced by the non-null parameter values.

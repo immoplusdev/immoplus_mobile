@@ -6,6 +6,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
+import 'package:immoplus/app/features/account/pages/permission_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -217,6 +218,13 @@ class AppRouter {
         name: CustomerRegistration.name,
         builder: (BuildContext context, GoRouterState state) {
           return const CustomerRegistration();
+        },
+      ),
+      GoRoute(
+        path: '/${PermissionPage.name}',
+        name: PermissionPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PermissionPage();
         },
       ),
     ],
