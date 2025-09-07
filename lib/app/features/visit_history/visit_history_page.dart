@@ -22,15 +22,13 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
 
   Future<void> loadPage(int page) async {
     BienImmobilierRepository()
-        .getVisites(
-      page: page,
-      perPage: 5,
-      // where: {
-      //   '_where': [
-      //     '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
-      //   ],
-      // },
-    )
+        .getVisites(page: page, perPage: 5, orderBy: 'updatedAt'
+            // where: {
+            //   '_where': [
+            //     '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+            //   ],
+            // },
+            )
         .then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(value.data ?? [], (value.currentPage) + 1);
