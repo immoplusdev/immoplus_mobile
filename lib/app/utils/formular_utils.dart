@@ -39,6 +39,11 @@ class FormUtils {
     );
   }
 
+  static bool isValidEmail(String? email) {
+    if (email == null || email.trim().isEmpty) return false;
+    return RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
+  }
+
   static String? emailValidator({String? email}) {
     if (email == null || email.isEmpty) {
       return 'Aucune adresse mail';

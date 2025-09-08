@@ -183,6 +183,10 @@ class _FilterPageState extends State<FilterPage> {
                   setState(() {
                     FilterHandler.cleanParameters();
                   });
+                  HomePageState.pagingControllerResidence.refresh();
+                  HomePageState.pagingControllerEstate.refresh();
+                  context.read<FilterCubit>().refresh(FilterHandler());
+                  context.pop();
                 },
                 child: const Text('Annuler les filtres')),
           ],

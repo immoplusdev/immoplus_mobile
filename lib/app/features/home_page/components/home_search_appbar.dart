@@ -11,7 +11,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
-import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';

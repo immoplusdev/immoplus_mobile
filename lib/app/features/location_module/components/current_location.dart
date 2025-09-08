@@ -19,9 +19,7 @@ class CurrentLocationSection extends GetView<LocationController> {
                   borderRadius: BorderRadius.circular(20)),
               backgroundColor: AppColors.primaryLite,
             ),
-            onPressed: () => controller.getCurrentPosition(
-                latitude: currentPosition.value.latitude ?? 0,
-                longitude: currentPosition.value.longitude ?? 0),
+            onPressed: () => controller.getCurrentPosition(),
             icon:
                 const Icon(FontAwesomeIcons.locationArrow, color: Colors.black),
             label: Text(

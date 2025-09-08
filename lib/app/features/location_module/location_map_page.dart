@@ -32,8 +32,7 @@ class LocationMapPage extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           GoogleMap(
-            initialCameraPosition:
-                const CameraPosition(target: LatLng(5.30966, -4.01266)),
+            initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
             myLocationButtonEnabled: false,
             onMapCreated: controller.onMapCreated,
             onTap: (argument) => controller.moveToLocation(argument),

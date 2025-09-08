@@ -20,6 +20,7 @@ import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart'
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/test/test_wave_web_view.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
@@ -225,6 +226,13 @@ class AppRouter {
         name: PermissionPage.name,
         builder: (BuildContext context, GoRouterState state) {
           return const PermissionPage();
+        },
+      ),
+      GoRoute(
+        path: '/reset-password',
+        name: ResetPasswordPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ResetPasswordPage();
         },
       ),
     ],
