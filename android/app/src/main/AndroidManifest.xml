@@ -18,6 +18,7 @@
         android:label="ImmoPLus"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
+        android:usesCleartextTraffic="true"
         >
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAbgTH8ePamGZiP3DutyAkMupCeJzTrfqE"/>
         <activity

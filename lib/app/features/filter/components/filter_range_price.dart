@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/residence_filter_handler.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:intl/intl.dart';
 
 class FilterRangePrice extends StatefulWidget {
