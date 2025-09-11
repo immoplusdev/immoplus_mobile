@@ -2,13 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
-import 'package:immoplus/app/features/payment_module/components/moov/moov_page.dart';
-import 'package:immoplus/app/features/payment_module/components/mtn/mtn_page.dart';
-import 'package:immoplus/app/features/payment_module/components/orange/orange_page.dart';
-import 'package:immoplus/app/features/payment_module/components/wave/wave_page.dart';
+import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/routes/app_router.dart';
@@ -36,6 +34,9 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
             backgroundColor: AppColors.scafold,
             title: const Text('Moyen de paiement'),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
+            leading: BackButton(
+              color: Colors.black,
+            ),
             actions: const [],
           ),
           SliverToBoxAdapter(
@@ -73,74 +74,49 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                           OrderPaymentController.retraitOperatorsItems[index];
                     });
 
-                    showModalBottomSheet(
-                      isDismissible: false,
-                      isScrollControlled: true,
-                      enableDrag: false,
-                      useSafeArea: true,
-                      useRootNavigator: true,
-                      backgroundColor: AppColors.scafold,
-                      scrollControlDisabledMaxHeightRatio:
-                          BorderSide.strokeAlignCenter,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      //showDragHandle: true,
-                      context: context,
-                      builder: (context) {
-                        if (OrderPaymentController.selectedOperator.value ==
-                            OPERATOR_NAME.Orange.name.toLowerCase()) {
-                          return OrangePage(
-                            amount: widget.paymentPageAdapter.amount,
-                            orderID: widget.paymentPageAdapter.itemId,
-                            productType: widget.paymentPageAdapter.collection,
+                    if (OrderPaymentController.selectedOperator.value ==
+                        OPERATOR_NAME.visa.name.toLowerCase()) {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        // enableDrag: false,
+                        // isDismissible: false,
+
+                        useSafeArea: true,
+                        useRootNavigator: true,
+                        backgroundColor: AppColors.scafold,
+                        scrollControlDisabledMaxHeightRatio:
+                            BorderSide.strokeAlignCenter,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        //showDragHandle: true,
+                        context: context,
+                        builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15)
+                                .copyWith(bottom: 30),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  FontAwesomeIcons.moneyBill,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                                Text(
+                                  "Le paiement par ${OrderPaymentController.selectedOperator.name} n'est pas disponible pour le moment. Veuillez si possible essayer un autre moyen de paiement ou contacter notre service client.",
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
                           );
-                        } else if (OrderPaymentController
-                                .selectedOperator.value ==
-                            OPERATOR_NAME.Wave.name.toLowerCase()) {
-                          return WavePage(
-                            amount: widget.paymentPageAdapter.amount,
-                            orderID: widget.paymentPageAdapter.itemId,
-                            productType: widget.paymentPageAdapter.collection,
-                          );
-                        } else if (OrderPaymentController
-                                .selectedOperator.value ==
-                            OPERATOR_NAME.Moov.name.toLowerCase()) {
-                          return MoovPage(
-                            amount: widget.paymentPageAdapter.amount,
-                            orderID: widget.paymentPageAdapter.itemId,
-                            productType: widget.paymentPageAdapter.collection,
-                          );
-                        } else if (OrderPaymentController
-                                .selectedOperator.value ==
-                            OPERATOR_NAME.MTN.name.toLowerCase()) {
-                          return MtnPage(
-                            amount: widget.paymentPageAdapter.amount,
-                            orderID: widget.paymentPageAdapter.itemId,
-                            productType: widget.paymentPageAdapter.collection,
-                          );
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15)
-                              .copyWith(bottom: 30),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.moneyBill,
-                                size: 50,
-                                color: Colors.grey,
-                              ),
-                              Text(
-                                "Le paiement par ${OrderPaymentController.selectedOperator.name} n'est pas disponible pour le moment. Veuillez si possible essayer un autre moyen de paiement ou contacter notre service client.",
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                        },
+                      );
+                    } else {
+                      context.pushNamed(PaiementStatusPage.name,
+                          extra: widget.paymentPageAdapter);
+                    }
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

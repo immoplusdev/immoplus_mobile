@@ -400,7 +400,7 @@ class _AccountPageState extends State<AccountPage> {
                                 ),
                               ),
                               content: const Text(
-                                  'Souhaitez vous vous déconnecter ?'),
+                                  'Souhaitez vous vraiment supprimer votre compte ? cette action est irréversible'),
                               actions: <Widget>[
                                 TextButton(
                                   child: const Text(
@@ -413,7 +413,7 @@ class _AccountPageState extends State<AccountPage> {
                                 ),
                                 TextButton(
                                   child: const Text(
-                                    'Se déconnecté',
+                                    'Supprimer mon compte',
                                     style: TextStyle(color: Colors.red),
                                   ),
                                   onPressed: () async {

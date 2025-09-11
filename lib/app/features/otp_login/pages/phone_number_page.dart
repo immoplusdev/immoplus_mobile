@@ -14,6 +14,7 @@ import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -155,6 +156,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                       //     MaterialPageRoute(
                       //       builder: (context) => ResetPassword(),
                       //     ));
+                      context.pushNamed(ResetPasswordPage.name);
                     },
                     child: Text(
                       'Mot de passe oublié',

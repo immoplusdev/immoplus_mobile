@@ -22,7 +22,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   final navigationHandler = getIt<NavigationHandler>();
 
   void _onItemTapped({required int index, required PageState pageState}) {
-    if (index == 2 && pageState == PageState.explore) {
+    if (index == 2 && pageState == PageState.home) {
       _showFilterDialog();
     } else if (index != 2) {
       _selectedIndex = index;

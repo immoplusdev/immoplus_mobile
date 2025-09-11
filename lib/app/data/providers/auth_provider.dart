@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
+import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
+import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 
 import 'package:retrofit/retrofit.dart';
@@ -59,4 +61,11 @@ abstract class AuthProvider {
 
   @GET('/configs')
   Future<ConfigModel> getCongig();
+
+  @POST('/auth/send-email-otp')
+  Future<HttpResponse> sendEmailOtp(@Body() SendEmailOtpBody sendEmailOtpBody);
+
+  @POST('/auth/reset-password')
+  Future<HttpResponse> resetPassword(
+      @Body() ResetPasswordBody resetPasswordBody);
 }

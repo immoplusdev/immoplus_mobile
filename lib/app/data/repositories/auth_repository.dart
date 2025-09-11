@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
+import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
+import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -185,6 +187,44 @@ class AuthRepository {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
       throw Exception('Failed to load users: $error');
+    }
+  }
+
+  // Étape 1: Envoyer l'OTP par email
+  Future<HttpResponse> sendEmailOtp({required SendEmailOtpBody body}) async {
+    try {
+      final response = await AuthProvider(dioClient).sendEmailOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send email OTP: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to send email OTP: $error');
+    }
+  }
+
+  // Étape 2: Réinitialiser le mot de passe
+  Future<HttpResponse> resetPassword({required ResetPasswordBody body}) async {
+    try {
+      final response = await AuthProvider(dioClient).resetPassword(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to reset password: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to reset password: $error');
     }
   }
 }

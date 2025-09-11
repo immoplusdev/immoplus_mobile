@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.immoplus.ci",
+            "sha256_cert_fingerprints": [
+                "4E:31:FF:0B:50:FC:FC:8E:74:78:CB:50:61:EA:A1:AB:C4:8F:8B:C9:4A:FF:2B:7F:60:05:3D:9D:CE:3B:8F:99"
+            ]
+        }
+    }
+]

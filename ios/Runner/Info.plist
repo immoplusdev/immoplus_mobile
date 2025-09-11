@@ -51,6 +51,35 @@
 		<string>tmap</string>
 		<string>szn-mapy</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>yourdomain.com</key>
+            <dict>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                <false/>
+            </dict>
+       </dict>
+    </dict>
+	<!-- Deeplink fix redirect -->
+	<key>FlutterDeepLinkingEnabled</key>
+    <false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>https</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -124,8 +153,8 @@
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
-	<key>FlutterDeepLinkingEnabled</key>
-	<true/>
+	<!-- <key>FlutterDeepLinkingEnabled</key>
+	<true/> -->
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Nous avons besoin du microphone pour enregistrer des voix pour les appels audio.</string>
 </dict>

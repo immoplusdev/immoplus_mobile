@@ -11,6 +11,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_body_model.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -118,6 +119,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                         //     MaterialPageRoute(
                         //       builder: (context) => ResetPassword(),
                         //     ));
+                        context.pushNamed(ResetPasswordPage.name);
                       },
                       child: Text(
                         'Mot de passe oublié',

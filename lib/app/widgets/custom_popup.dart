@@ -10,6 +10,10 @@ class CustomPopup {
     );
   }
 
+  static hideLoadingToast() {
+    EasyLoading.dismiss();
+  }
+
   static showErrorToast(
       {String? text, Color? color, Widget? errorWidget, bool? dismissOnTap}) {
     EasyLoading.instance

@@ -38,6 +38,8 @@ class _DetailLogmentMapState extends State<DetailLogmentMap> {
                       child: GoogleMap(
                         mapType: MapType.normal,
                         // markers: _markers,
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
                         initialCameraPosition: CameraPosition(
                           target: LatLng(
                             widget.residence.position.coordinates!.last,
