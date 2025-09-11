@@ -149,7 +149,7 @@ class ErrorInterceptor extends Interceptor {
       case 503:
         return "Service indisponible : Le serveur est temporairement indisponible.";
       default:
-        return "Une erreur inconnue ($statusCode) s'est produite. ";
+        return "Une erreur inconnue ${statusCode != null ? "($statusCode)" : ""}) s'est produite. ";
     }
   }
 }

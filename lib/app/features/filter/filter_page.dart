@@ -27,6 +27,25 @@ class FilterPage extends StatefulWidget {
 class _FilterPageState extends State<FilterPage> {
   final List<DateTime?> markedDates = [];
   Address? currentAddress;
+
+  @override
+  void initState() {
+    if (FilterHandler.locationName != null) {
+      currentAddress = Address(
+        latitude: FilterHandler.lat ?? 0,
+        longitude: FilterHandler.long ?? 0,
+        description: FilterHandler.locationName!,
+      );
+    }
+    if (FilterHandler.startDate != null && FilterHandler.endDate != null) {
+      try {
+        markedDates.add(DateTime.parse(FilterHandler.startDate!));
+        markedDates.add(DateTime.parse(FilterHandler.endDate!));
+      } catch (e) {}
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomePageCubit, HomePageState>(builder: (context, state) {
@@ -56,9 +75,7 @@ class _FilterPageState extends State<FilterPage> {
                         FontAwesomeIcons.locationDot,
                         color: AppColors.primary,
                       )),
-                  tileColor: (currentAddress != null)
-                      ? AppColors.scafold
-                      : AppColors.scafold,
+                  tileColor: AppColors.scafold,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   title: Text((currentAddress == null)
@@ -162,14 +179,11 @@ class _FilterPageState extends State<FilterPage> {
                   text: 'Appliquer le filtre',
                   onClick: () {
                     if (currentAddress != null) {
-                      FilterHandler.locationName = currentAddress!
-                                  .description!.length >
-                              20
-                          ? '${currentAddress!.description!.substring(0, 20)}…'
-                          : currentAddress!.description;
+                      FilterHandler.locationName = currentAddress!.description;
                       FilterHandler.lat = currentAddress!.latitude;
                       FilterHandler.long = currentAddress!.longitude;
                     }
+                    FilterHandler.notifyChange();
 
                     HomePageState.getPageListController(state.indexPage)
                         .refresh();

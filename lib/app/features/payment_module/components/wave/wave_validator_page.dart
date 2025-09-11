@@ -35,6 +35,8 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
   bool paymentValidate = false;
   int rep = 0;
   Timer? _timer;
+  bool _urlLaunched = false;
+
   Future<PaymentItentModel> getStatus(Timer timer) async {
     PaymentItentModel paymentDetailModel =
         await PaymentRepository().getPayment(widget.paymentIntentModel.id);
@@ -44,15 +46,18 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
     //   timer.cancel();
     //   print('Le timer a été arrêté.');
     // }
-    if (paymentDetailModel.data.paymentStatus == PaymentStatus.paye.name) {
+    if (paymentDetailModel.data.paymentStatus ==
+        PaymentStatus.successful.name) {
       timer.cancel();
       setState(() {
         paymentValidate = true;
         _paymentIntentModel = paymentDetailModel;
       });
-    } else if (paymentDetailModel.data.hub2NextAction!.data.url.isNotEmpty) {
-      timer.cancel();
-      print('Le timer a été arrêté.');
+    } else if (paymentDetailModel.data.hub2NextAction!.data.url.isNotEmpty &&
+        !_urlLaunched) {
+      // timer.cancel();
+      // print('Le timer a été arrêté.');
+      _urlLaunched = true;
       _paymentIntentModel = paymentDetailModel;
       _launchUrl(_paymentIntentModel!.data.hub2NextAction!.data.url);
       // Arrêter le timer
@@ -73,7 +78,7 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
     // TODO: implement initState
     super.initState();
     _timer = Timer.periodic(
-      const Duration(seconds: 2),
+      const Duration(seconds: 4),
       (timer) {
         // Votre logique ici
         getStatus(timer);
@@ -185,22 +190,22 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Flexible(
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: IconButton(
-                          icon: const Icon(
-                            CupertinoIcons.chevron_back,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            OrangePaymentRouter.router
-                                .goNamed(WaveNumberPage.name);
-                          },
-                        ),
-                        titleTextStyle: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
+                    // Flexible(
+                    //   child: ListTile(
+                    //     contentPadding: EdgeInsets.zero,
+                    //     leading: IconButton(
+                    //       icon: const Icon(
+                    //         CupertinoIcons.chevron_back,
+                    //         color: Colors.black,
+                    //       ),
+                    //       onPressed: () {
+                    //         OrangePaymentRouter.router
+                    //             .goNamed(WaveNumberPage.name);
+                    //       },
+                    //     ),
+                    //     titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                    //   ),
+                    // ),
                     Flexible(
                       child: SizedBox(
                         width: 100,
@@ -273,22 +278,22 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
                       textAlign: TextAlign.center,
                     ),
                     const Gap(10),
-                    CupertinoActionSheetAction(
-                      isDestructiveAction: true,
-                      onPressed: () {
-                        AppDialog.confirm(
-                            context: context,
-                            content:
-                                "Voulez vous vraiment annuler le paiement ?",
-                            rollback: () {
-                              AppRouter.router.pop();
-                              AppRouter.router.pop();
-                            });
-                      },
-                      child: const Text(
-                        "Annuler le paiement",
-                      ),
-                    ),
+                    // CupertinoActionSheetAction(
+                    //   isDestructiveAction: true,
+                    //   onPressed: () {
+                    //     AppDialog.confirm(
+                    //         context: context,
+                    //         content:
+                    //             "Voulez vous vraiment annuler le paiement ?",
+                    //         rollback: () {
+                    //           AppRouter.router.pop();
+                    //           AppRouter.router.pop();
+                    //         });
+                    //   },
+                    //   child: const Text(
+                    //     "Annuler le paiement",
+                    //   ),
+                    // ),
                     // Gap(MediaQuery.viewInsetsOf(context).bottom)
                   ],
                 ),

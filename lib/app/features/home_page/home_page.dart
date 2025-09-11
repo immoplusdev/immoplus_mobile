@@ -80,12 +80,30 @@ class _HomePageState extends State<HomePage>
                   currentIndex: state.indexPage,
                   controller: _tabController,
                 ),
-                FilterHandler.hasActiveFilters
-                    ? SliverToBoxAdapter(
-                        child:
-                            Text(FilterHandler.getActiveFiltersDescription()),
-                      )
-                    : SliverToBoxAdapter(),
+                ValueListenableBuilder<int>(
+                  valueListenable: FilterHandler.notifier,
+                  builder: (context, _, child) {
+                    return FilterHandler.hasActiveFilters
+                        ? SliverToBoxAdapter(
+                            child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Row(
+                                spacing: 8,
+                                children: FilterHandler.getActiveFiltersChips(
+                                  onRefresh: () async {
+                                    HomePageState.getPageListController(
+                                            state.indexPage)
+                                        .refresh();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ))
+                        : const SliverToBoxAdapter();
+                  },
+                ),
                 CupertinoSliverRefreshControl(
                   //      backgroundColor: Colors.white,
                   // color: Theme.of(context).colorScheme.primary,

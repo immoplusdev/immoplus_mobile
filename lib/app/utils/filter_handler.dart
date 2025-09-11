@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 enum PropertyType {
   residence,
@@ -23,6 +25,13 @@ class FilterHandler {
   static int maxPrice = maxPriceLimit;
   static String? locationName;
 
+  static final ValueNotifier<int> _notifier = ValueNotifier<int>(0);
+  static ValueNotifier<int> get notifier => _notifier;
+
+  static void notifyChange() {
+    _notifier.value += 1;
+  }
+
   static cleanParameters() {
     search = null;
     lat = null;
@@ -33,6 +42,8 @@ class FilterHandler {
 
     minPrice = minPriceLimit;
     maxPrice = maxPriceLimit;
+
+    notifyChange();
   }
 
   // Mapping des champs par type de propriété
@@ -102,33 +113,83 @@ class FilterHandler {
         maxPrice < maxPriceLimit;
   }
 
-  // Méthode pour obtenir un résumé des filtres actifs
-  static String getActiveFiltersDescription() {
-    final List<String> descriptions = [];
+  static List<Widget> getActiveFiltersChips({VoidCallback? onRefresh}) {
+    final List<Widget> chips = [];
 
     if (search != null && search!.isNotEmpty) {
-      descriptions.add('Recherche: "$search"');
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text('Recherche: "$search"'),
+          deleteIcon: const Icon(Icons.close, size: 18),
+          onDeleted: () {
+            search = null;
+            notifyChange();
+            onRefresh?.call();
+          },
+        ),
+      );
     }
 
     if (locationName != null) {
-      descriptions.add('Lieu: $locationName');
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text('Lieu: $locationName'),
+          deleteIcon: const Icon(Icons.close, size: 18),
+          onDeleted: () {
+            lat = null;
+            long = null;
+            locationName = null;
+            notifyChange();
+            onRefresh?.call();
+          },
+        ),
+      );
     }
 
     if (startDate != null || endDate != null) {
+      String dateText;
       if (startDate != null && endDate != null) {
-        descriptions.add(
-            'Dates: ${startDate!.split('T')[0]} - ${endDate!.split('T')[0]}');
+        dateText =
+            'Dates: ${startDate!.split('T')[0]} - ${endDate!.split('T')[0]}';
       } else if (startDate != null) {
-        descriptions.add('À partir du: ${startDate!.split('T')[0]}');
+        dateText = 'À partir du: ${startDate!.split('T')[0]}';
       } else {
-        descriptions.add('Jusqu\'au: ${endDate!.split('T')[0]}');
+        dateText = 'Jusqu\'au: ${endDate!.split('T')[0]}';
       }
+
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text(dateText),
+          deleteIcon: const Icon(Icons.close, size: 18),
+          onDeleted: () {
+            startDate = null;
+            endDate = null;
+            notifyChange();
+            onRefresh?.call();
+          },
+        ),
+      );
     }
 
     if (minPrice > minPriceLimit || maxPrice < maxPriceLimit) {
-      descriptions.add('Prix: $minPrice€ - $maxPrice€');
+      chips.add(
+        Chip(
+          backgroundColor: Colors.grey.shade300,
+          label: Text('Prix: $minPrice F - $maxPrice F'),
+          deleteIcon: const Icon(Icons.close, size: 18),
+          onDeleted: () {
+            minPrice = minPriceLimit;
+            maxPrice = maxPriceLimit;
+            notifyChange();
+            onRefresh?.call();
+          },
+        ),
+      );
     }
 
-    return descriptions.join(' • ');
+    return chips;
   }
 }
