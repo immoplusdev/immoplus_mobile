@@ -3,7 +3,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';

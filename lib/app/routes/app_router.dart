@@ -6,6 +6,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
+import 'package:immoplus/app/features/account/pages/permission_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -13,12 +14,15 @@ import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
+import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
+import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/test/test_wave_web_view.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
@@ -68,6 +72,13 @@ class AppRouter {
         path: '/operetors_selector',
         name: OperatorsSelectorPage.name,
         builder: (context, state) => OperatorsSelectorPage(
+          paymentPageAdapter: state.extra as PaymentPageAdapter,
+        ),
+      ),
+      GoRoute(
+        path: '/${PaiementStatusPage.name}',
+        name: PaiementStatusPage.name,
+        builder: (context, state) => PaiementStatusPage(
           paymentPageAdapter: state.extra as PaymentPageAdapter,
         ),
       ),
@@ -150,19 +161,25 @@ class AppRouter {
       ),
       GoRoute(
         path: '/payment/reservations/:idProduct',
-        builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Réservation'),
-            leading: IconButton(
-              onPressed: () {
-                context.goNamed(SplashScreen.name);
-              },
-              icon: const Icon(FontAwesomeIcons.circleArrowLeft),
+        builder: (context, state) => WillPopScope(
+          onWillPop: () async {
+            context.goNamed(SplashScreen.name);
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Réservation'),
+              leading: IconButton(
+                onPressed: () {
+                  context.goNamed(SplashScreen.name);
+                },
+                icon: const Icon(FontAwesomeIcons.circleArrowLeft),
+              ),
             ),
-          ),
-          body: BookingDetailPage(
-            id: state.pathParameters['idProduct'] ?? '',
-            // bienImmobilierModel: state.extra as BienImmobilierModel,
+            body: BookingDetailPage(
+              id: state.pathParameters['idProduct'] ?? '',
+              // bienImmobilierModel: state.extra as BienImmobilierModel,
+            ),
           ),
         ),
       ),
@@ -217,6 +234,27 @@ class AppRouter {
         name: CustomerRegistration.name,
         builder: (BuildContext context, GoRouterState state) {
           return const CustomerRegistration();
+        },
+      ),
+      GoRoute(
+        path: '/${NotificationsPage.name}',
+        name: NotificationsPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const NotificationsPage();
+        },
+      ),
+      GoRoute(
+        path: '/${PermissionPage.name}',
+        name: PermissionPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PermissionPage();
+        },
+      ),
+      GoRoute(
+        path: '/reset-password',
+        name: ResetPasswordPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ResetPasswordPage();
         },
       ),
     ],

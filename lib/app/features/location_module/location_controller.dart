@@ -99,22 +99,21 @@ class LocationController extends GetxController
     placeAutocompleteList.addAll(previousAddresses);
   }
 
-  getCurrentPosition(
-      {required double latitude, required double longitude}) async {
+  getCurrentPosition() async {
     change(state, status: RxStatus.loading());
-
-    Address position = currentPosition.value.copyWith();
 
     try {
       CustomPopup.showLoagingToast();
-      LocationService()
-          .getCurrentPosition()
+      final position = await LocationService.getCurrentPosition()
           .onError((error, stackTrace) => throw AddressException());
+
       final locationAdreess = await _getAddressFromGeocodingApi(
-          latitude: latitude, longitude: longitude);
+          latitude: position.latitude, longitude: position.longitude);
+
       EasyLoading.dismiss();
       AppRouter.router.pop(locationAdreess);
     } catch (e) {
+      CustomPopup.hideLoadingToast();
       change(state, status: RxStatus.error(e.toString()));
       return;
     }
@@ -142,8 +141,8 @@ class LocationController extends GetxController
 
   onMapCreated(GoogleMapController controller) async {
     mapController = controller;
-    moveToLocation(LatLng(currentPosition.value.latitude ?? 0,
-        currentPosition.value.longitude ?? 0));
+    final me = await getLatLngPosition();
+    moveToLocation(me);
   }
 
   moveToLocation(LatLng latLng) async {
@@ -153,49 +152,6 @@ class LocationController extends GetxController
 
   onCameraIdle() {
     change(state, status: RxStatus.loading());
-
-    // final geocodingApi = GeocodingApi.values.firstWhereOrNull((element) =>
-    //     element.name ==
-    //     settings
-    //         .firstWhereOrNull(
-    //             (element) => element.name == SettingName.geocodingApi.name)
-    //         ?.value);
-    // switch (geocodingApi) {
-    //   case GeocodingApi.devicePlatform:
-    //     _getAddressFromPlacemark(
-    //             latitude: cameraAddress.value.latitude ?? 0,
-    //             longitude: cameraAddress.value.longitude ?? 0)
-    //         .then((value) {
-    //       cameraAddress(value);
-    //       change(state, status: RxStatus.success());
-    //     }).onError((error, stackTrace) {
-    //       change(state, status: RxStatus.error(error.toString()));
-    //     });
-    //     break;
-
-    //   case GeocodingApi.googleMapsPlatform:
-    //     _getAddressFromGeocodingApi(
-    //             latitude: cameraAddress.value.latitude ?? 0,
-    //             longitude: cameraAddress.value.longitude ?? 0)
-    //         .then((value) {
-    //       cameraAddress(value);
-    //       change(state, status: RxStatus.success());
-    //     }).onError((error, stackTrace) {
-    //       change(state, status: RxStatus.error(error.toString()));
-    //     });
-    //     break;
-
-    //   default:
-    //     _getAddressFromPlacemark(
-    //             latitude: cameraAddress.value.latitude ?? 0,
-    //             longitude: cameraAddress.value.longitude ?? 0)
-    //         .then((value) {
-    //       cameraAddress(value);
-    //       change(state, status: RxStatus.success());
-    //     }).onError((error, stackTrace) {
-    //       change(state, status: RxStatus.error(error.toString()));
-    //     });
-    // }
   }
 
   onCameraMove(CameraPosition position) async {
@@ -307,6 +263,16 @@ class LocationController extends GetxController
       return Future.value(address);
     } catch (e) {
       return Future.error(e.toString());
+    }
+  }
+
+  Future<LatLng> getLatLngPosition() async {
+    try {
+      final position = await LocationService.getCurrentPosition()
+          .onError((error, stackTrace) => throw AddressException());
+      return LatLng(position.latitude, position.longitude);
+    } catch (e) {
+      return LatLng(5.30966, -4.01266);
     }
   }
 

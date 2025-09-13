@@ -15,14 +15,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
-enum OPERATOR_NAME {
-  Orange,
-  MTN,
-  Moov,
-  Ecobank,
-  Wave,
-  Cash,
-}
+enum OPERATOR_NAME { Orange, MTN, Moov, Ecobank, Wave, Cash, visa }
 
 extension StringExtension on String {
   String capitalize() {

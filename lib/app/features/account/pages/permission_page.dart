@@ -5,6 +5,7 @@ import 'package:immoplus/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionPage extends StatefulWidget {
+  static const name = 'permission_page';
   const PermissionPage({super.key});
 
   @override

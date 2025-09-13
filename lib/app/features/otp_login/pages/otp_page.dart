@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
@@ -145,6 +146,7 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
                                           PhoneNumberHandler.formatPhoneNumber(
                                               OTPState.phoneNumber),
                                       otp: otpCode,
+                                      source: AccountSource.customerApp.value,
                                     ),
                                   );
                             }

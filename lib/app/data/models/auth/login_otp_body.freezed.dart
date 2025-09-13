@@ -22,6 +22,7 @@ LoginOtpBody _$LoginOtpBodyFromJson(Map<String, dynamic> json) {
 mixin _$LoginOtpBody {
   String get phoneNumber => throw _privateConstructorUsedError;
   String get otp => throw _privateConstructorUsedError;
+  String get source => throw _privateConstructorUsedError;
 
   /// Serializes this LoginOtpBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,7 @@ abstract class $LoginOtpBodyCopyWith<$Res> {
           LoginOtpBody value, $Res Function(LoginOtpBody) then) =
       _$LoginOtpBodyCopyWithImpl<$Res, LoginOtpBody>;
   @useResult
-  $Res call({String phoneNumber, String otp});
+  $Res call({String phoneNumber, String otp, String source});
 }
 
 /// @nodoc
@@ -59,6 +60,7 @@ class _$LoginOtpBodyCopyWithImpl<$Res, $Val extends LoginOtpBody>
   $Res call({
     Object? phoneNumber = null,
     Object? otp = null,
+    Object? source = null,
   }) {
     return _then(_value.copyWith(
       phoneNumber: null == phoneNumber
@@ -68,6 +70,10 @@ class _$LoginOtpBodyCopyWithImpl<$Res, $Val extends LoginOtpBody>
       otp: null == otp
           ? _value.otp
           : otp // ignore: cast_nullable_to_non_nullable
+              as String,
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -81,7 +87,7 @@ abstract class _$$LoginOtpBodyImplCopyWith<$Res>
       __$$LoginOtpBodyImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String phoneNumber, String otp});
+  $Res call({String phoneNumber, String otp, String source});
 }
 
 /// @nodoc
@@ -99,6 +105,7 @@ class __$$LoginOtpBodyImplCopyWithImpl<$Res>
   $Res call({
     Object? phoneNumber = null,
     Object? otp = null,
+    Object? source = null,
   }) {
     return _then(_$LoginOtpBodyImpl(
       phoneNumber: null == phoneNumber
@@ -109,6 +116,10 @@ class __$$LoginOtpBodyImplCopyWithImpl<$Res>
           ? _value.otp
           : otp // ignore: cast_nullable_to_non_nullable
               as String,
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -116,7 +127,8 @@ class __$$LoginOtpBodyImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginOtpBodyImpl implements _LoginOtpBody {
-  const _$LoginOtpBodyImpl({required this.phoneNumber, required this.otp});
+  const _$LoginOtpBodyImpl(
+      {required this.phoneNumber, required this.otp, required this.source});
 
   factory _$LoginOtpBodyImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginOtpBodyImplFromJson(json);
@@ -125,10 +137,12 @@ class _$LoginOtpBodyImpl implements _LoginOtpBody {
   final String phoneNumber;
   @override
   final String otp;
+  @override
+  final String source;
 
   @override
   String toString() {
-    return 'LoginOtpBody(phoneNumber: $phoneNumber, otp: $otp)';
+    return 'LoginOtpBody(phoneNumber: $phoneNumber, otp: $otp, source: $source)';
   }
 
   @override
@@ -138,12 +152,13 @@ class _$LoginOtpBodyImpl implements _LoginOtpBody {
             other is _$LoginOtpBodyImpl &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            (identical(other.otp, otp) || other.otp == otp));
+            (identical(other.otp, otp) || other.otp == otp) &&
+            (identical(other.source, source) || other.source == source));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, phoneNumber, otp);
+  int get hashCode => Object.hash(runtimeType, phoneNumber, otp, source);
 
   /// Create a copy of LoginOtpBody
   /// with the given fields replaced by the non-null parameter values.
@@ -164,7 +179,8 @@ class _$LoginOtpBodyImpl implements _LoginOtpBody {
 abstract class _LoginOtpBody implements LoginOtpBody {
   const factory _LoginOtpBody(
       {required final String phoneNumber,
-      required final String otp}) = _$LoginOtpBodyImpl;
+      required final String otp,
+      required final String source}) = _$LoginOtpBodyImpl;
 
   factory _LoginOtpBody.fromJson(Map<String, dynamic> json) =
       _$LoginOtpBodyImpl.fromJson;
@@ -173,6 +189,8 @@ abstract class _LoginOtpBody implements LoginOtpBody {
   String get phoneNumber;
   @override
   String get otp;
+  @override
+  String get source;
 
   /// Create a copy of LoginOtpBody
   /// with the given fields replaced by the non-null parameter values.

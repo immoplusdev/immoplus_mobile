@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/residence_filter_handler.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:intl/intl.dart';
 
 class FilterRangePrice extends StatefulWidget {
@@ -11,8 +14,9 @@ class FilterRangePrice extends StatefulWidget {
 }
 
 class _FilterRangePriceState extends State<FilterRangePrice> {
-  final double _priceStep = 5000;
-  final double _maxPriceLimit = 3000000;
+  final double _priceStep = 10;
+  final double _minPriceLimit = minPriceLimit.toDouble();
+  final double _maxPriceLimit = maxPriceLimit.toDouble();
 
   final NumberFormat _format = NumberFormat.decimalPattern('fr_FR');
 
@@ -46,16 +50,16 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                   RangeSlider(
                     values: RangeValues(FilterHandler.minPrice.toDouble(),
                         FilterHandler.maxPrice.toDouble()),
-                    min: 5000,
+                    min: _minPriceLimit,
                     max: _maxPriceLimit,
-                    divisions: ((_maxPriceLimit - 5000) / _priceStep).round(),
+                    divisions: _maxPriceLimit.toInt(),
                     activeColor: Colors.blue,
                     inactiveColor: Colors.grey.shade300,
                     labels: RangeLabels(
                       '${_format.format(FilterHandler.minPrice)} F',
                       FilterHandler.maxPrice >= _maxPriceLimit
-                          ? '3,000,000+ F'
-                          : '${_format.format(FilterHandler.minPrice)} F',
+                          ? '${_format.format(_maxPriceLimit.toInt())}+ F'
+                          : '${_format.format(FilterHandler.maxPrice)} F', // Correction du bug : affichage de maxPrice au lieu de minPrice
                     ),
                     onChanged: (values) {
                       setState(() {
@@ -122,7 +126,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                             ),
                             child: Text(
                               FilterHandler.maxPrice >= _maxPriceLimit
-                                  ? '3,000,000+ F'
+                                  ? '${_format.format(_maxPriceLimit.toInt())}+ F'
                                   : '${_format.format(FilterHandler.maxPrice)} F',
                               style: const TextStyle(
                                 fontSize: 16,

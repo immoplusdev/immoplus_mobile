@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
+import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
@@ -218,6 +219,8 @@ class _OtpPageTestState extends State<OtpPageTest> {
                       toastPosition: EasyLoadingToastPosition.bottom,
                       text: "Envoi de OTP code échoué, veuillez réessayer",
                     );
+                  } finally {
+                    EasyLoading.dismiss();
                   }
                 },
                 child: Text(
@@ -252,6 +255,7 @@ class _OtpPageTestState extends State<OtpPageTest> {
                                     PhoneNumberHandler.formatPhoneNumber(
                                         widget.currentPhoneNumber),
                                 otp: pinController.text,
+                                source: AccountSource.customerApp.value,
                               ),
                             );
                       }

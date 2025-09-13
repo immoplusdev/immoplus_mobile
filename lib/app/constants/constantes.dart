@@ -161,3 +161,6 @@ List<double> listToDouble(dynamic value) {
   }
   return [];
 }
+
+const maxPriceLimit = 3000000;
+const minPriceLimit = 100;

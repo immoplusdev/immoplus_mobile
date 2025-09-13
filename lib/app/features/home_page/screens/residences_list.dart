@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
-import 'package:immoplus/app/utils/residence_filter_handler.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -19,6 +19,7 @@ class ResidencesList extends StatefulWidget {
 
 class _ResidencesListState extends State<ResidencesList> {
   Future<void> loadPage(int page) async {
+    final whereFilters = FilterHandler.getAllFilters(PropertyType.residence);
     ResidenceRepository()
         .getResidences(
       search: FilterHandler.search,
@@ -27,12 +28,7 @@ class _ResidencesListState extends State<ResidencesList> {
       startDate: FilterHandler.startDate,
       endDate: FilterHandler.endDate,
       radius: (FilterHandler.lat != null) ? 100 : null,
-      // where: {
-      //   '_where': [
-      //     '{"_field": "residenceDisponible", "_op": "eq", "_val": true}',
-      //     '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
-      //   ],
-      // },
+      where: whereFilters,
       page: page,
     )
         .then((value) {

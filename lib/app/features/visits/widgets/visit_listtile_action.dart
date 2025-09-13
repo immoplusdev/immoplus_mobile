@@ -50,12 +50,12 @@ class VisitListTileAction extends StatelessWidget {
             text: title,
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
-              fontSize: 19,
+              fontSize: 15,
               color: Colors.black,
             ),
           ),
           TextSpan(
-              text: ' $price Fcfa',
+              text: '  $price Fcfa',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
@@ -71,7 +71,10 @@ class VisitListTileAction extends StatelessWidget {
           fontSize: 12,
           color: Colors.grey,
         ),
-        subtitle: Text(subTiltle),
+        subtitle: Container(
+          padding: EdgeInsets.only(top: 5),
+          child: Text(subTiltle),
+        ),
         trailing: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

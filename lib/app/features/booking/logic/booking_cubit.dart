@@ -61,7 +61,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
           await ResidenceRepository().createBooking(model: body);
       emit(BookingRequestState.receiveBooking(reservationResponse));
 
-      NavigationService.navigatorKey.currentContext!.goNamed(
+      NavigationService.navigatorKey.currentContext!.pushNamed(
         OperatorsSelectorPage.name,
         extra: PaymentPageAdapter(
           itemId: reservationResponse.data.id,

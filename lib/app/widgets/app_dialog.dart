@@ -9,9 +9,11 @@ class AppDialog {
           {required String content,
           required Widget icon,
           void Function()? rollback,
+          bool barrierDismissible = false,
+          bool isDestructiveAction = false,
           String? textButton}) async =>
       showCupertinoModalPopup(
-        barrierDismissible: false,
+        barrierDismissible: barrierDismissible,
         context: NavigationService.navigatorKey.currentContext!,
         builder: (context) => CupertinoAlertDialog(
           title: icon,
@@ -24,7 +26,7 @@ class AppDialog {
           ),
           actions: [
             CupertinoDialogAction(
-              isDestructiveAction: false,
+              isDestructiveAction: isDestructiveAction,
               onPressed: rollback ??
                   () {
                     Navigator.pop(context);
@@ -40,9 +42,11 @@ class AppDialog {
   static Future confirm(
           {required BuildContext context,
           required String content,
+          bool barrierDismissible = false,
+          bool isDestructiveAction = false,
           void Function()? rollback}) async =>
       showCupertinoModalPopup(
-        barrierDismissible: false,
+        barrierDismissible: barrierDismissible,
         context: context,
         builder: (context) => CupertinoAlertDialog(
           title: Icon(
@@ -59,6 +63,7 @@ class AppDialog {
             ),
             CupertinoDialogAction(
               child: Text('Confirmer'),
+              isDestructiveAction: isDestructiveAction,
               onPressed: rollback ??
                   () {
                     context.pop();

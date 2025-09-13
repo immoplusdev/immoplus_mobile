@@ -66,7 +66,7 @@ class LocationService {
     return currentPosition;
   }
 
-  Future<GeoJSONFeature?> getCurrentPosition() async {
+  Future<GeoJSONFeature?> getCurrentgeoJson() async {
     // Demande de permission d'accès à la position
     LocationPermission locationPermission = await Geolocator.checkPermission();
     if (locationPermission == LocationPermission.denied) {
@@ -89,6 +89,30 @@ class LocationService {
     );
 
     return feature;
+  }
+
+  static Future<Position> getCurrentPosition() async {
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationServiceEnabled) {
+      throw Exception('Location services are disabled.');
+    }
+
+    LocationPermission locationPermission = await Geolocator.checkPermission();
+    if (locationPermission == LocationPermission.denied ||
+        locationPermission == LocationPermission.deniedForever) {
+      locationPermission = await Geolocator.requestPermission();
+    }
+    if ([
+      LocationPermission.always,
+      LocationPermission.whileInUse,
+    ].any((element) => element == locationPermission)) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      return position;
+    } else {
+      throw Exception('Location permissions are denied.');
+    }
   }
 
   /// Fonction pour obtenir le nom de la position à partir des coordonnées

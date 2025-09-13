@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
@@ -20,12 +19,11 @@ import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:injectable/injectable.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:toastification/toastification.dart';
 
 @injectable
 class LoginCubit extends Cubit<LoginCubitState> {
@@ -154,18 +152,8 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await sessionManager.getCurrentUser();
 
       emit(const LoginCubitState.success());
-      toastification.show(
-        type: ToastificationType.success,
-        context: NavigationService.navigatorKey
-            .currentContext, // optional if you use ToastificationWrapper
-
-        title: Text(
-            "Vos informations personnelles ont été mises à jour avec succès"),
-        autoCloseDuration: const Duration(seconds: 5),
-
-        showProgressBar: false,
-        alignment: Alignment.bottomCenter,
-        style: ToastificationStyle.flatColored,
+      ToastUtils.success(
+        "Vos informations personnelles ont été mises à jour avec succès",
       );
     } catch (e) {
       emit(const LoginCubitState.initial());
@@ -181,34 +169,15 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await sessionManager.getCurrentUser();
       if (response.response.statusCode! >= 200 &&
           response.response.statusCode! < 300) {
-        AppDialog.info(
-            content: 'Mot de passe modifié avec succès',
-            icon: const Icon(
-              FontAwesomeIcons.circleCheck,
-              color: Colors.green,
-            ));
+        ToastUtils.success(
+          'Votre mot de passe a bien été modifié',
+        );
         emit(const LoginCubitState.success());
-        NavigationService.navigatorKey.currentContext!
-            .goNamed(SplashScreen.name);
+        NavigationService.navigatorKey.currentContext?.pop(SplashScreen.name);
       } else {
-        AppDialog.info(
-            content: 'Erreur lors de la modification du mot de passe',
-            icon: const Icon(
-              FontAwesomeIcons.circleXmark,
-              color: Colors.red,
-            ));
         emit(const LoginCubitState.initial());
       }
-
-      emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
     } catch (e) {
-      AppDialog.info(
-          content: 'Erreur lors de la modification du mot de passe',
-          icon: const Icon(
-            FontAwesomeIcons.circleXmark,
-            color: Colors.red,
-          ));
       emit(const LoginCubitState.initial());
     }
   }

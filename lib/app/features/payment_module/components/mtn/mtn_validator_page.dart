@@ -65,21 +65,21 @@ class _MtnValidatorPageState extends State<MtnValidatorPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: IconButton(
-                      icon: const Icon(
-                        CupertinoIcons.chevron_back,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        OrangePaymentRouter.router.goNamed(MtnNumberPage.name);
-                      },
-                    ),
-                    titleTextStyle: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
+                // Flexible(
+                //   child: ListTile(
+                //     contentPadding: EdgeInsets.zero,
+                //     leading: IconButton(
+                //       icon: const Icon(
+                //         CupertinoIcons.chevron_back,
+                //         color: Colors.black,
+                //       ),
+                //       onPressed: () {
+                //         OrangePaymentRouter.router.goNamed(MtnNumberPage.name);
+                //       },
+                //     ),
+                //     titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                //   ),
+                // ),
                 Flexible(
                   child: SizedBox(
                     width: 100,
@@ -140,21 +140,21 @@ class _MtnValidatorPageState extends State<MtnValidatorPage> {
                   textAlign: TextAlign.center,
                 ),
                 const Gap(10),
-                CupertinoActionSheetAction(
-                  isDestructiveAction: true,
-                  onPressed: () {
-                    AppDialog.confirm(
-                        context: context,
-                        content: "Voulez vous vraiment annuler le paiement ?",
-                        rollback: () {
-                          AppRouter.router.pop();
-                          AppRouter.router.pop();
-                        });
-                  },
-                  child: const Text(
-                    "Annuler le paiement",
-                  ),
-                ),
+                // CupertinoActionSheetAction(
+                //   isDestructiveAction: true,
+                //   onPressed: () {
+                //     AppDialog.confirm(
+                //         context: context,
+                //         content: "Voulez vous vraiment annuler le paiement ?",
+                //         rollback: () {
+                //           AppRouter.router.pop();
+                //           AppRouter.router.pop();
+                //         });
+                //   },
+                //   child: const Text(
+                //     "Annuler le paiement",
+                //   ),
+                // ),
                 Gap(MediaQuery.viewInsetsOf(context).bottom)
               ],
             ),

@@ -1,9 +1,6 @@
 import 'dart:developer';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -17,94 +14,233 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
-  String? _localVideoPath;
   bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _downloadAndPlayVideo();
+    _initializeAndPlayVideo();
   }
 
-  Future<void> _downloadAndPlayVideo() async {
-    log("https://api-v2.immoplus.ci/files/raw/public/${widget.videoID}.mp4");
+  Future<void> _initializeAndPlayVideo() async {
+    final String videoUrl =
+        "https://api-v2.immoplus.ci/files/videos/raw/public/${widget.videoID}";
+    log('Tentative de chargement de la vidéo: $videoUrl');
+
     try {
-      // Télécharger la vidéo depuis l'URL et la stocker localement
-      final http.Response response = await http.get(Uri.parse(
-          "https://api-v2.immoplus.ci/files/raw/public/${widget.videoID}.mp4"));
-      if (response.statusCode == 200) {
-        final Directory tempDir = await getTemporaryDirectory();
-        final String tempPath = tempDir.path;
-        final File videoFile = File('$tempPath/temp_video.mp4');
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
 
-        // Écrire les données vidéo dans un fichier local
-        await videoFile.writeAsBytes(response.bodyBytes);
+      // Créer le contrôleur vidéo
+      _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(videoUrl),
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
 
-        // Initialiser VideoPlayerController avec le fichier local
-        _videoPlayerController = VideoPlayerController.file(videoFile)
-          ..initialize().then((_) {
-            setState(() {
-              _isLoading = false;
-              _localVideoPath = videoFile.path;
+      // Initialiser avec timeout et gestion d'erreur
+      await _videoPlayerController!.initialize().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception('Timeout: La vidéo prend trop de temps à charger');
+        },
+      );
 
-              // Initialiser ChewieController
-              _chewieController = ChewieController(
-                videoPlayerController: _videoPlayerController,
-                autoPlay: false,
-                looping: false,
-              );
-            });
-          });
-      } else {
-        throw Exception('Erreur lors du téléchargement de la vidéo');
+      // Vérifier si le widget est toujours monté
+      if (!mounted) return;
+
+      // Vérifier si la vidéo a bien une durée (indicateur qu'elle est valide)
+      if (_videoPlayerController!.value.duration == Duration.zero) {
+        throw Exception('Vidéo invalide ou corrompue');
       }
+
+      // Initialiser ChewieController seulement après succès
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController!,
+        autoPlay: false,
+        looping: false,
+        allowFullScreen: true,
+        allowMuting: true,
+        showControls: true,
+        materialProgressColors: ChewieProgressColors(
+          playedColor: Theme.of(context).primaryColor,
+          handleColor: Theme.of(context).primaryColor,
+          // backgroundColor: Colors.red,
+          bufferedColor: Colors.lightGreen,
+        ),
+        placeholder: Container(
+          // color: Colors.grey.shade200,
+          child: const Center(
+            child: Icon(
+              Icons.play_circle_outline,
+              size: 80,
+              // color: Colors.grey,
+            ),
+          ),
+        ),
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Erreur de lecture vidéo',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  errorMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      log('Vidéo initialisée avec succès');
+
+      // Optionnel: Afficher un SnackBar de succès
+      // if (mounted) {
+      //   ToastUtils.success('Vidéo chargée avec succès');
+      // }
     } catch (e) {
-      log(_videoPlayerController.value.errorDescription!);
-      print('Erreur: $e');
+      log('Erreur lors de la lecture de la vidéo : $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString();
+        });
+      }
     }
   }
 
   @override
   void dispose() {
-    // Supprimer la vidéo locale si elle a été téléchargée
-    if (_localVideoPath != null) {
-      final File videoFile = File(_localVideoPath!);
-      if (videoFile.existsSync()) {
-        videoFile.deleteSync();
-        print('Vidéo supprimée : $_localVideoPath');
-      }
-    }
-    _chewieController!.pause();
-    // Nettoyer les contrôleurs
+    // Nettoyer les contrôleurs dans le bon ordre
     _chewieController?.dispose();
-    _videoPlayerController.dispose();
+    _videoPlayerController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? _buildShimmerEffect() // Affiche l'effet Shimmer pendant le chargement
-        : SizedBox(height: 320, child: Chewie(controller: _chewieController!));
+    if (_isLoading) {
+      return _buildShimmerEffect();
+    }
+
+    if (_errorMessage != null) {
+      return _buildErrorWidget();
+    }
+
+    if (_chewieController != null &&
+        _videoPlayerController!.value.isInitialized) {
+      return SizedBox(
+        height: 300,
+        child: Chewie(controller: _chewieController!),
+      );
+    }
+
+    return _buildErrorWidget();
   }
 
-  // Simuler un effet Shimmer avec des containers en gradients
+  // Widget d'erreur amélioré
+  Widget _buildErrorWidget() {
+    return Container(
+      width: double.infinity,
+      height: 250.0,
+      decoration: BoxDecoration(
+        // color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.videocam_off,
+            size: 60,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Impossible de lire la vidéo',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8),
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: _initializeAndPlayVideo,
+            icon: const Icon(Icons.refresh),
+            label: const Text('Réessayer'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Effet Shimmer amélioré
   Widget _buildShimmerEffect() {
     return Container(
       width: double.infinity,
       height: 250.0,
-      decoration: const BoxDecoration(color: Colors.black),
-      child: const Stack(
-        alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: 80,
-            height: 80,
-            child: CupertinoActivityIndicator(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+            ),
+          ),
+          SizedBox(height: 18),
+          Text(
+            'Chargement de la vidéo...',
+            style: TextStyle(
               color: Colors.white,
-              radius: 30,
+              fontSize: 12,
             ),
           ),
         ],

@@ -1,6 +1,8 @@
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
+import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,8 +29,8 @@ class SessionManager {
       "proximityRadius": null,
       "standardShippingPrice": null,
       "flashShippingPrice": null,
-      "contactEmail": null,
-      "contactPhoneNumber": null,
+      "contactEmail": "support@afriqsolus.ci",
+      "contactPhoneNumber": "2250707293637",
       "createdAt": "2024-08-19T16:16:50.682Z",
       "updatedAt": "2024-08-27T11:08:45.420Z",
       "deletedAt": null,
@@ -62,6 +64,12 @@ class SessionManager {
       await isarConfig.instance.userModelSchemas.put(user);
     });
     currentUser = user;
+  }
+
+  /// logout user clear session and navigate to login page
+  Future<void> logout() async {
+    await clearSession();
+    AppRouter.router.goNamed(LoginPage.name);
   }
 
   Future<UserModelSchema?> getCurrentUser() async {

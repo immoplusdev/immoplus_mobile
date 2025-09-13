@@ -14,7 +14,9 @@ import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.d
 import 'package:shimmer/shimmer.dart';
 
 class FavoriteCard extends StatefulWidget {
-  const FavoriteCard({super.key, required this.favotiteModel});
+  final bool isSelect;
+  const FavoriteCard(
+      {super.key, required this.favotiteModel, required this.isSelect});
   final FovoriteModel favotiteModel;
   @override
   State<FavoriteCard> createState() => _FavoriteCardState();
@@ -34,6 +36,10 @@ class _FavoriteCardState extends State<FavoriteCard> {
         height: 150,
         decoration: BoxDecoration(
           color: AppColors.scafold,
+          border: widget.isSelect
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.primary, width: 2)
+              : null,
           borderRadius: BorderRadius.circular(30),
           // boxShadow: [
           //   BoxShadow(

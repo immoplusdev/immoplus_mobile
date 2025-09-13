@@ -8,6 +8,7 @@ class LoginBodyModel with _$LoginBodyModel {
   factory LoginBodyModel({
     String? username,
     String? password,
+    required String source,
   }) = _LoginBodyModel;
 
   factory LoginBodyModel.fromJson(Map<String, dynamic> json) =>

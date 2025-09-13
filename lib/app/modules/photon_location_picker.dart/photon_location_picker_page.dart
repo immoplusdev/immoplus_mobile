@@ -138,7 +138,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                   tileColor: Colors.white,
                   onTap: () async {
                     isloading = true;
-                    final a = await LocationService().getCurrentPosition();
+                    final a = await LocationService().getCurrentgeoJson();
                     isloading = false;
                     inspect(a);
                     widget.onCurrentPositionSelected!(a);
