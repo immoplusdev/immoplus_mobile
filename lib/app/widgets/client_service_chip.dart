@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/utils/contact_utils.dart';
 
 class ClientServiceChip extends StatelessWidget {
   const ClientServiceChip({super.key});
@@ -10,8 +11,7 @@ class ClientServiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputChip(
       onPressed: () {
-        // ContactUtils(productDetailModel: ProductDetailModel())
-        //     .showDialog(context: context);
+        ContactUtils.showContact();
       },
       backgroundColor: Colors.white,
       avatar: Icon(

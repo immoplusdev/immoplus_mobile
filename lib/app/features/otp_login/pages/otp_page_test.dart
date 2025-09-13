@@ -219,6 +219,8 @@ class _OtpPageTestState extends State<OtpPageTest> {
                       toastPosition: EasyLoadingToastPosition.bottom,
                       text: "Envoi de OTP code échoué, veuillez réessayer",
                     );
+                  } finally {
+                    EasyLoading.dismiss();
                   }
                 },
                 child: Text(

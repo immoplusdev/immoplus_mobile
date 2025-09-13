@@ -12,6 +12,7 @@ import 'package:immoplus/app/features/account/widgets/general_condition_page.dar
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
@@ -212,7 +213,7 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                       ),
                       onTap: () {
-                        //context.pushNamed(EstatesPage.name);
+                        context.pushNamed(NotificationsPage.name);
                       },
                       horizontalTitleGap: 0,
                       leading: const Icon(
@@ -353,8 +354,7 @@ class _AccountPageState extends State<AccountPage> {
                                   onPressed: () async {
                                     await sessionManager.clearSession().then(
                                       (value) {
-                                        AppRouter.router
-                                            .goNamed(SplashScreen.name);
+                                        context.goNamed(SplashScreen.name);
                                       },
                                     );
                                   },
@@ -419,8 +419,7 @@ class _AccountPageState extends State<AccountPage> {
                                   onPressed: () async {
                                     await sessionManager.clearSession().then(
                                       (value) {
-                                        AppRouter.router
-                                            .goNamed(SplashScreen.name);
+                                        context.goNamed(SplashScreen.name);
                                       },
                                     );
                                   },

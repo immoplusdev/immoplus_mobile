@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/features/for_me/components/empty_indicator.dart';
 import 'package:immoplus/app/features/for_me/components/favorite_card.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:isar/isar.dart';
 
 class FavoritePage extends StatefulWidget {
@@ -199,34 +202,16 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   void _showDeleteDialog(List<FovoriteModel> favorites) {
-    final selectedFavorites =
-        favorites.where((f) => _selectedItems.contains(f.id)).toList();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmer la suppression'),
-          content: Text(
+    AppDialog.confirm(
+        context: context,
+        content:
             'Voulez-vous vraiment supprimer ${_selectedItems.length} favori(s) ?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Annuler'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await _deleteSelectedFavorites();
-              },
-              child:
-                  const Text('Supprimer', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
+        barrierDismissible: true,
+        isDestructiveAction: true,
+        rollback: () async {
+          context.pop();
+          await _deleteSelectedFavorites();
+        });
   }
 
   Future<void> _deleteSelectedFavorites() async {
