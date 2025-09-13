@@ -5,6 +5,7 @@ import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
+import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart';
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart';
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart';
@@ -16,6 +17,7 @@ class AppBlocs {
     BlocProvider<LoginCubit>(
       create: (context) => getIt<LoginCubit>(),
     ),
+
     // BlocProvider<GalleryCubit>(
     //   create: (context) => GalleryCubit(),
     // ),
@@ -55,5 +57,8 @@ class AppBlocs {
     // BlocProvider<MapViewerCubit>(
     //   create: (context) => MapViewerCubit(),
     // ),
+    BlocProvider<NotificationCubit>(
+      create: (context) => NotificationCubit(),
+    ),
   ];
 }
