@@ -10,6 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
@@ -36,6 +37,49 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
   void initState() {
     super.initState();
     context.read<VisitCubit>().getVisit(id: widget.id);
+  }
+
+  /// verifier si la demande de visite contient des dates
+  bool hasDateVisite(DemandeVisitResponse demandeVisitResponse) {
+    return demandeVisitResponse.data.datesDemandeVisite.isNotEmpty;
+  }
+
+  /// verifier si la demande de visite est payé
+  bool hasPaid(DemandeVisitResponse demandeVisitResponse) {
+    return demandeVisitResponse.data.statusFacture.toString() ==
+        PaymentStatus.paye.name;
+  }
+
+  bool hasNotPaid(DemandeVisitResponse demandeVisitResponse) {
+    return demandeVisitResponse.data.statusFacture.toString() ==
+        PaymentStatus.non_paye.name;
+  }
+
+  /// verifier si la demande de visite contient une facture
+  bool hasExpress(DemandeVisitResponse demandeVisitResponse) {
+    return demandeVisitResponse.data.typeDemandeVisite.toString() == "express";
+  }
+
+  /// Getter pour determiner si on doit afficher le bouton de paiement
+  bool shouldShowPaymentButton(DemandeVisitResponse demandeVisitResponse) {
+    // Cas 1: Express - afficher si pas payé ET qu'il y a des dates de visite
+    if (hasExpress(demandeVisitResponse)) {
+      return hasNotPaid(demandeVisitResponse) &&
+          hasDateVisite(demandeVisitResponse);
+    }
+    return false;
+  }
+
+  /// Getter pour determiner si on doit afficher le numéro du propriétaire
+  bool shouldShowOwnerPhone(DemandeVisitResponse demandeVisitResponse) {
+    // Cas 1: Express - afficher si on a payé
+    if (hasExpress(demandeVisitResponse)) {
+      return hasPaid(demandeVisitResponse);
+    }
+    // Cas 2: Normal (pas express) - afficher si une date existe
+    else {
+      return hasDateVisite(demandeVisitResponse);
+    }
   }
 
   @override
@@ -241,52 +285,53 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                   const SliverToBoxAdapter(
                     child: Divider(),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: const CircleAvatar(
-                            //backgroundColor: Colors.white,
-                            child: Icon(
-                              FontAwesomeIcons.userTie,
-                              //color: Colors.green,
+                  if (shouldShowOwnerPhone(state.demandeVisitResponse))
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)
+                            .copyWith(bottom: 10),
+                        child: Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            enabled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                          title: const Text("Propriétaire"),
-                          subtitle: Text(state.demandeVisitResponse.data
-                              .proprietaire!.phoneNumber
-                              .split('-')
-                              .last
-                              .toString()),
-                          titleTextStyle:
-                              Theme.of(context).textTheme.bodyMedium,
-                          trailing: Icon(
-                            FontAwesomeIcons.phoneVolume,
-                            color: AppColors.primary,
-                          ),
-                          subtitleTextStyle: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: AppColors.primary),
-                          onTap: () async {
-                            final phone = state.demandeVisitResponse.data
+                            leading: const CircleAvatar(
+                              //backgroundColor: Colors.white,
+                              child: Icon(
+                                FontAwesomeIcons.userTie,
+                                //color: Colors.green,
+                              ),
+                            ),
+                            title: const Text("Propriétaire"),
+                            subtitle: Text(state.demandeVisitResponse.data
                                 .proprietaire!.phoneNumber
-                                .split('-');
-                            Utils.makePhoneCall(phone.last);
-                          },
+                                .split('-')
+                                .last
+                                .toString()),
+                            titleTextStyle:
+                                Theme.of(context).textTheme.bodyMedium,
+                            trailing: Icon(
+                              FontAwesomeIcons.phoneVolume,
+                              color: AppColors.primary,
+                            ),
+                            subtitleTextStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: AppColors.primary),
+                            onTap: () async {
+                              final phone = state.demandeVisitResponse.data
+                                  .proprietaire!.phoneNumber
+                                  .split('-');
+                              Utils.makePhoneCall(phone.last);
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -294,8 +339,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10)
                   .copyWith(bottom: 20),
               child: Visibility(
-                visible: state.demandeVisitResponse.data.statusFacture ==
-                    PaymentStatus.non_paye.name,
+                visible: shouldShowPaymentButton(state.demandeVisitResponse),
                 child: ListTile(
                   tileColor: Colors.red.shade400,
                   onTap: () {
