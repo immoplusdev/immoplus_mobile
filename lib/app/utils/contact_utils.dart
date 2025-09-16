@@ -114,7 +114,7 @@ class ContactUtils {
                         path: getIt<SessionManager>()
                             .configModel!
                             .data!
-                            .contactPhoneNumber,
+                            .contactEmail,
                       );
 
                       await launchUrl(emailLaunchUri);

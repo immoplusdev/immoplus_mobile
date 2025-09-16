@@ -7,11 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/core/services/navigation_service.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_request_body.dart';
-import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
-import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart';
 import 'package:immoplus/app/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus/app/features/visits/widgets/product_info.dart';
@@ -46,7 +43,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
       lastName:
           TextEditingController(text: sessionManager.currentUser!.lastName),
       phoneNumber:
-          TextEditingController(text: sessionManager.currentUser!.phoneNumber),
+          TextEditingController(text: sessionManager.currentUser!.number),
       email: TextEditingController(text: sessionManager.currentUser!.email),
       placeLoading: TextEditingController(),
       placeUnloading: TextEditingController(),
@@ -55,6 +52,10 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
       address: TextEditingController(text: ''),
       payementType: TextEditingController(text: 'cash'),
     );
+  }
+
+  String get phoneNumberWithCountryCode {
+    return "225${_formController.phoneNumber?.text}";
   }
 
   @override
@@ -79,14 +80,16 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
             // Afficher un message de succès
 
             ToastUtils.success('Demande de visite envoyée');
-            context.pushNamed(
-              OperatorsSelectorPage.name,
-              extra: PaymentPageAdapter(
-                itemId: data.id,
-                collection: "demandes_visites",
-                amount: data.montantTotalDemandeVisite.toInt(),
-              ),
-            );
+            context.pop();
+            context.pop();
+            // context.pushNamed(
+            //   OperatorsSelectorPage.name,
+            //   extra: PaymentPageAdapter(
+            //     itemId: data.id,
+            //     collection: "demandes_visites",
+            //     amount: data.montantTotalDemandeVisite.toInt(),
+            //   ),
+            // );
           },
           error: (message) {
             // Fermer la popup
@@ -187,8 +190,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                                               widget.bienImmoModel.id,
                                           typeDemandeVisite:
                                               TypeDemandeVisite.express.name,
-                                          clientPhoneNumber: _formController
-                                              .phoneNumber!.text));
+                                          clientPhoneNumber:
+                                              phoneNumberWithCountryCode));
                                 },
                                 child: const Text('Confirmer'),
                               ),
@@ -239,8 +242,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                                               widget.bienImmoModel.id,
                                           typeDemandeVisite:
                                               TypeDemandeVisite.normal.name,
-                                          clientPhoneNumber: _formController
-                                              .phoneNumber!.text));
+                                          clientPhoneNumber:
+                                              phoneNumberWithCountryCode));
                                 },
                                 child: const Text('Confirmer'),
                               ),
