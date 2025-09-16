@@ -79,6 +79,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
                         initial: () {},
                         sendingEmailOtp: () {},
                         emailOtpSent: (message) {
+                          // next only if step is one
                           widget.pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
