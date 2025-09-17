@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
@@ -102,7 +103,11 @@ late PagingController<int, PaymentItentData> _pagingController;
 Future<void> loadPage(int page) async {
   PaymentRepository()
       .getPayments(
-          page: page, perPage: 5, orderBy: 'updatedAt', orderDir: 'desc')
+    page: page,
+    perPage: 5,
+    orderBy: OrderByField.updatedAt.value,
+    orderDir: OrderDir.desc.value,
+  )
       .then((value) {
     if (value.hasNext == true) {
       _pagingController.appendPage(value.data ?? [], (value.currentPage)! + 1);

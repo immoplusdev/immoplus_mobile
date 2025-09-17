@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
+import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/providers/notification_provider.dart';
 import 'package:immoplus/app/features/notification/model/notifications_response.dart';
 import 'package:retrofit/retrofit.dart';
@@ -15,8 +16,12 @@ class NotificationRepository {
     int pageSize = 10,
   }) async {
     try {
-      final response = await NotificationProvider(dioClient)
-          .getNotifications(page: page, pageSize: pageSize);
+      final response = await NotificationProvider(dioClient).getNotifications(
+        page: page,
+        pageSize: pageSize,
+        orderBy: OrderByField.createdAt.value,
+        orderDir: OrderDir.desc.value,
+      );
       inspect(response);
       return response;
     } on DioException catch (dioError) {

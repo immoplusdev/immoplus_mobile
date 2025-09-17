@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_history_card.dart';
@@ -27,8 +28,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
         .getReservations(
       page: page,
       perPage: 5,
-      orderBy: 'createdAt',
-      orderDir: 'desc',
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
       //where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
     )
         .then((value) {
