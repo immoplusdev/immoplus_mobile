@@ -24,7 +24,7 @@ class _MoovPageState extends State<MoovPage> {
     return PaymentData(
       productType: widget.productType,
       orderID: widget.orderID,
-      amount: getAmountithFee(widget.amount),
+      amount: widget.amount,
       child: ValueListenableBuilder(
           valueListenable: MoovPaymentRouter.pageStateNotifier,
           builder: (context, value, child) {

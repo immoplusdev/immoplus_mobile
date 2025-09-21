@@ -97,7 +97,7 @@ class VisitHistoryCard extends StatelessWidget {
                         size: 15,
                       ),
                       const Gap(5),
-                      Text("+${demandeVisiteModel.clientPhoneNumber}")
+                      Text("Touchez pour voir plus")
                     ],
                   ),
                   AutoSizeText(

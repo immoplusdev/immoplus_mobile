@@ -24,7 +24,7 @@ class _MtnPageState extends State<MtnPage> {
     return PaymentData(
       productType: widget.productType,
       orderID: widget.orderID,
-      amount: getAmountithFee(widget.amount),
+      amount: widget.amount,
       child: ValueListenableBuilder(
           valueListenable: MtnPaymentRouter.pageStateNotifier,
           builder: (context, value, child) {

@@ -92,7 +92,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
               controller: _formController.phoneNumber,
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              labelText: 'Numéro de telephone orange',
+              labelText: 'Numéro de téléphone valide',
               prefixIcon: const Icon(CupertinoIcons.phone),
               validator: (String? value) => PaymentUtils.numberValidator(
                   number: value!.replaceAll(' ', ''),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/location_module/components/error_indicator.dart';
 import 'package:immoplus/app/features/location_module/location_controller.dart';
+import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 
 class MapBottomSheet extends GetView<LocationController> {
   const MapBottomSheet({super.key});
@@ -27,6 +28,7 @@ class MapBottomSheet extends GetView<LocationController> {
               maxLines: 1,
             ),
           ),
+          LocationPermissionBanner(showAction: false),
           controller.obx(
             (state) => const SizedBox(),
             onLoading: const SizedBox(),
