@@ -63,6 +63,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
                 child: Stack(
                   children: [
                     CachedNetworkImage(
+                      width: double.infinity,
                       imageUrl: Utils.getImagePath(
                           id: widget.favotiteModel.images!.first),
                       placeholder: (context, url) => Shimmer.fromColors(

@@ -10,10 +10,11 @@ abstract class NotificationProvider {
       _NotificationProvider;
 
   @GET('/notifications')
-  Future<NotificationsResponse> getNotifications({
-    @Query('page') int page = 1,
-    @Query('pageSize') int pageSize = 10,
-  });
+  Future<NotificationsResponse> getNotifications(
+      {@Query('page') int page = 1,
+      @Query('pageSize') int pageSize = 10,
+      @Query("_order_by") String? orderBy,
+      @Query("_order_dir") String? orderDir});
 
   @PUT('/notifications/{id}/read')
   Future<HttpResponse> markAsRead(@Path() String id);

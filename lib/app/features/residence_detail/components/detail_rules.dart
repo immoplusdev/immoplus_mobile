@@ -15,13 +15,13 @@ class DetailLogmentRules extends StatelessWidget {
             horizontalTitleGap: 0,
             leading: const Icon(Icons.access_time),
             title:
-                Text("Heur d'arrivé a partir de: ${logmentModel.heureEntree}"),
+                Text("Heure d'arrivé a partir de: ${logmentModel.heureEntree}"),
           ),
         ),
         ListTile(
           horizontalTitleGap: 0,
           leading: const Icon(Icons.access_time),
-          title: Text("Heur de départ avant : ${logmentModel.heureDepart}"),
+          title: Text("Heure de départ avant : ${logmentModel.heureDepart}"),
         ),
         Visibility(
           visible: !logmentModel.animauxAutorises,

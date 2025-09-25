@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
+import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 import 'package:immoplus/app/features/map_view/widgets/map_search_text_field.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -156,26 +157,31 @@ class _MapViewerState extends State<MapViewer> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25)
                     .copyWith(top: 80),
-                child: PlaceAutocompleteWidget(
-                  focusNode: focusNode,
-                  onPlaceSelected: (p0) => _onPlaceSelected(p0),
-                  googleApiKey: dotenv.get('GOOGLE_API_KEY'),
-                  onFocusChange: (isFocused) {
-                    // if (isFocused = true) {
-                    //   Future.delayed(const Duration(microseconds: 500), () {
-                    //     focusNode.requestFocus();
-                    //   });
-                    // }
-                    context
-                        .read<MapViwerCubit>()
-                        .onChangeSearchFocus(isFocused);
+                child: Column(
+                  children: [
+                    PlaceAutocompleteWidget(
+                      focusNode: focusNode,
+                      onPlaceSelected: (p0) => _onPlaceSelected(p0),
+                      googleApiKey: dotenv.get('GOOGLE_API_KEY'),
+                      onFocusChange: (isFocused) {
+                        // if (isFocused = true) {
+                        //   Future.delayed(const Duration(microseconds: 500), () {
+                        //     focusNode.requestFocus();
+                        //   });
+                        // }
+                        context
+                            .read<MapViwerCubit>()
+                            .onChangeSearchFocus(isFocused);
 
-                    // if (isFocused) {
-                    //   print('Le champ a le focus');
-                    // } else {
-                    //   print('Le champ a perdu le focus');
-                    // }
-                  },
+                        // if (isFocused) {
+                        //   print('Le champ a le focus');
+                        // } else {
+                        //   print('Le champ a perdu le focus');
+                        // }
+                      },
+                    ),
+                    LocationPermissionBanner(),
+                  ],
                 ),
               ),
             ),

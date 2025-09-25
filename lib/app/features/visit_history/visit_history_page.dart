@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_loading_card.dart';
@@ -22,13 +23,17 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
 
   Future<void> loadPage(int page) async {
     BienImmobilierRepository()
-        .getVisites(page: page, perPage: 5, orderBy: 'updatedAt'
-            // where: {
-            //   '_where': [
-            //     '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
-            //   ],
-            // },
-            )
+        .getVisites(
+      page: page,
+      perPage: 5,
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
+      // where: {
+      //   '_where': [
+      //     '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+      //   ],
+      // },
+    )
         .then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(value.data ?? [], (value.currentPage) + 1);

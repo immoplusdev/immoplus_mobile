@@ -323,7 +323,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           ),
                           title: const Text("Propriétaire"),
                           subtitle: Text(state
-                              .reservationResponse.data.clientPhoneNumber
+                              .reservationResponse.data.proprietaire.phoneNumber
                               .split('-')
                               .last
                               .toString()),
@@ -338,8 +338,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                               .titleMedium!
                               .copyWith(color: AppColors.primary),
                           onTap: () async {
-                            final phone = state
-                                .reservationResponse.data.clientPhoneNumber
+                            final phone = state.reservationResponse.data
+                                .proprietaire.phoneNumber
                                 .split('-');
                             Utils.makePhoneCall(phone.last);
                           },

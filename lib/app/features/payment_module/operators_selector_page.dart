@@ -114,6 +114,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                         },
                       );
                     } else {
+                      // TODO
                       context.pushNamed(PaiementStatusPage.name,
                           extra: widget.paymentPageAdapter);
                     }
@@ -133,8 +134,8 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                       fontSize: 16),
-                  subtitle: Text(
-                      '${OrderPaymentController.retraitOperatorsItems[index].fee}% de frais'),
+                  // subtitle: Text(
+                  //     '${OrderPaymentController.retraitOperatorsItems[index].fee}% de frais'),
                   trailing:
                       const Icon(CupertinoIcons.chevron_right_circle_fill),
                 ),

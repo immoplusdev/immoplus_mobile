@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -65,7 +66,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
         OperatorsSelectorPage.name,
         extra: PaymentPageAdapter(
           itemId: reservationResponse.data.id,
-          collection: "reservations",
+          collection: ProductType.reservations.name,
           amount: reservationResponse.data.montantTotalReservation.toInt(),
         ),
       );

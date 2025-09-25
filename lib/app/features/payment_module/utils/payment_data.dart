@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
-getAmountithFee(int amount) =>
-    ((amount + (amount * OrderPaymentController.selectedOperator.fee!) / 100))
-        .ceil();
+// getAmountithFee(int amount) =>
+//     ((amount + (amount * OrderPaymentController.selectedOperator.fee!) / 100))
+//         .ceil();
 
 class PaymentData extends InheritedWidget {
   const PaymentData({

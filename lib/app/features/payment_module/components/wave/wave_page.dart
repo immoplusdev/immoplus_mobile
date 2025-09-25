@@ -24,7 +24,7 @@ class _WavePageState extends State<WavePage> {
     return PaymentData(
       productType: widget.productType,
       orderID: widget.orderID,
-      amount: getAmountithFee(widget.amount),
+      amount: widget.amount,
       child: ValueListenableBuilder(
           valueListenable: WavePaymentRouter.pageStateNotifier,
           builder: (context, value, child) {
