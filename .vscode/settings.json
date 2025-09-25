@@ -1,4 +1,4 @@
 {
-  "cmake.sourceDirectory": "/Users/macpro/TEMPS/ci/linux",
+  "cmake.sourceDirectory": "/Users/macpro/WORKSPACE/ci/windows/runner",
   "dart.flutterSdkPath": ".fvm/versions/3.29.2"
 }

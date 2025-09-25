@@ -57,38 +57,43 @@ const UserModelSchemaSchema = CollectionSchema(
       name: r'nomEntreprise',
       type: IsarType.string,
     ),
-    r'phoneNumber': PropertySchema(
+    r'number': PropertySchema(
       id: 8,
+      name: r'number',
+      type: IsarType.string,
+    ),
+    r'phoneNumber': PropertySchema(
+      id: 9,
       name: r'phoneNumber',
       type: IsarType.string,
     ),
     r'photoIdentite': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'photoIdentite',
       type: IsarType.string,
     ),
     r'pieceIdentite': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'pieceIdentite',
       type: IsarType.string,
     ),
     r'refreshToken': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'refreshToken',
       type: IsarType.string,
     ),
     r'role': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'role',
       type: IsarType.string,
     ),
     r'roleName': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'roleName',
       type: IsarType.string,
     ),
     r'userId': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'userId',
       type: IsarType.string,
     )
@@ -189,6 +194,12 @@ int _userModelSchemaEstimateSize(
     }
   }
   {
+    final value = object.number;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.phoneNumber;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -247,13 +258,14 @@ void _userModelSchemaSerialize(
   writer.writeString(offsets[5], object.firstName);
   writer.writeString(offsets[6], object.lastName);
   writer.writeString(offsets[7], object.nomEntreprise);
-  writer.writeString(offsets[8], object.phoneNumber);
-  writer.writeString(offsets[9], object.photoIdentite);
-  writer.writeString(offsets[10], object.pieceIdentite);
-  writer.writeString(offsets[11], object.refreshToken);
-  writer.writeString(offsets[12], object.role);
-  writer.writeString(offsets[13], object.roleName);
-  writer.writeString(offsets[14], object.userId);
+  writer.writeString(offsets[8], object.number);
+  writer.writeString(offsets[9], object.phoneNumber);
+  writer.writeString(offsets[10], object.photoIdentite);
+  writer.writeString(offsets[11], object.pieceIdentite);
+  writer.writeString(offsets[12], object.refreshToken);
+  writer.writeString(offsets[13], object.role);
+  writer.writeString(offsets[14], object.roleName);
+  writer.writeString(offsets[15], object.userId);
 }
 
 UserModelSchema _userModelSchemaDeserialize(
@@ -272,13 +284,13 @@ UserModelSchema _userModelSchemaDeserialize(
   object.id = id;
   object.lastName = reader.readStringOrNull(offsets[6]);
   object.nomEntreprise = reader.readStringOrNull(offsets[7]);
-  object.phoneNumber = reader.readStringOrNull(offsets[8]);
-  object.photoIdentite = reader.readStringOrNull(offsets[9]);
-  object.pieceIdentite = reader.readStringOrNull(offsets[10]);
-  object.refreshToken = reader.readStringOrNull(offsets[11]);
-  object.role = reader.readStringOrNull(offsets[12]);
-  object.roleName = reader.readStringOrNull(offsets[13]);
-  object.userId = reader.readStringOrNull(offsets[14]);
+  object.phoneNumber = reader.readStringOrNull(offsets[9]);
+  object.photoIdentite = reader.readStringOrNull(offsets[10]);
+  object.pieceIdentite = reader.readStringOrNull(offsets[11]);
+  object.refreshToken = reader.readStringOrNull(offsets[12]);
+  object.role = reader.readStringOrNull(offsets[13]);
+  object.roleName = reader.readStringOrNull(offsets[14]);
+  object.userId = reader.readStringOrNull(offsets[15]);
   return object;
 }
 
@@ -318,6 +330,8 @@ P _userModelSchemaDeserializeProp<P>(
     case 13:
       return (reader.readStringOrNull(offset)) as P;
     case 14:
+      return (reader.readStringOrNull(offset)) as P;
+    case 15:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1950,6 +1964,160 @@ extension UserModelSchemaQueryFilter
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'number',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'number',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'number',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'number',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'number',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'number',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'number',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'number',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'number',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'number',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'number',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numberIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'number',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
       phoneNumberIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3146,6 +3314,19 @@ extension UserModelSchemaQuerySortBy
     });
   }
 
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy> sortByNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'number', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByNumberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'number', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       sortByPhoneNumber() {
     return QueryBuilder.apply(this, (query) {
@@ -3367,6 +3548,19 @@ extension UserModelSchemaQuerySortThenBy
     });
   }
 
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy> thenByNumber() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'number', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByNumberDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'number', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       thenByPhoneNumber() {
     return QueryBuilder.apply(this, (query) {
@@ -3524,6 +3718,13 @@ extension UserModelSchemaQueryWhereDistinct
     });
   }
 
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct> distinctByNumber(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'number', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
       distinctByPhoneNumber({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -3632,6 +3833,12 @@ extension UserModelSchemaQueryProperty
       nomEntrepriseProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'nomEntreprise');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations> numberProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'number');
     });
   }
 
