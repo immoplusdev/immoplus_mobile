@@ -10,6 +10,7 @@ import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart';
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
+import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 
 class AppBlocs {
@@ -24,6 +25,9 @@ class AppBlocs {
     // BlocProvider<ProductCubit>(
     //   create: (context) => ProductCubit(),
     // ),
+    BlocProvider<RgistrationCubitCubit>(
+      create: (context) => getIt<RgistrationCubitCubit>(),
+    ),
     BlocProvider<NavigationCubit>(
       create: (context) => NavigationCubit(),
     ),

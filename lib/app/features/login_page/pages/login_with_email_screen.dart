@@ -11,6 +11,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_body_model.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
@@ -127,7 +128,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                       )),
                   TextButton(
                       onPressed: () {
-                        context.pushNamed(CustomerRegistration.name);
+                        context.pushNamed(SendEmailOptPage.name);
                       },
                       child: Text(
                         'S\'inscrire',

@@ -55,3 +55,30 @@ ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 ios/Runner.xcworkspace/xcshareddata/swiftpm/
 ios/Runner.xcodeproj/project.pbxproj
 ios/Podfile.lock
+
+
+# Flutter/Dart/Pub stuff
+.dart_tool/
+.packages
+.pub-cache/
+build/
+
+# Generated files
+**/*.g.dart
+**/*.freezed.dart
+**/*.config.dart
+**/*.gr.dart
+**/*.graphql.dart
+**/*.injectable.dart
+
+# iOS
+ios/Pods/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+android/.gradle/
+android/app/key.properties
+android/local.properties

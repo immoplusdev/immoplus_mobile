@@ -24,8 +24,13 @@ import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
 
 class CustomerRegistration extends StatefulWidget {
-  const CustomerRegistration({super.key});
+  const CustomerRegistration(
+      {super.key, required this.email, required this.token});
+  final String email;
+  final String token;
+
   static String name = "customer_Registration";
+
   @override
   State<CustomerRegistration> createState() => _CustomerRegistrationState();
 }
@@ -54,7 +59,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
         firstName: TextEditingController(text: ''),
         lastName: TextEditingController(text: ''),
         phoneNumber: TextEditingController(text: ''),
-        email: TextEditingController(text: ''),
+        email: TextEditingController(text: widget.email),
         password: TextEditingController(text: ''));
 
     super.initState();
@@ -124,6 +129,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 sliver: SliverToBoxAdapter(
                   child: CustomTextField(
+                    isEnabled: false,
                     fillColor: Colors.white,
                     controller: _formController.email,
                     prefixIcon: const Icon(CupertinoIcons.mail),
@@ -325,6 +331,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                                           _formController.firstName!.text,
                                       lastName: _formController.lastName!.text,
                                       email: _formController.email!.text,
+                                      token: widget.token,
                                       phoneNumber:
                                           PhoneNumberHandler.formatPhoneNumber(
                                               _formController.phoneNumber!.text

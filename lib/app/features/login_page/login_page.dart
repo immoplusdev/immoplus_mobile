@@ -1,12 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/features/login_page/pages/login_with_email_screen.dart';
 import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
