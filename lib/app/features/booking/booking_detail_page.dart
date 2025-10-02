@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
@@ -37,6 +38,12 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
   void initState() {
     super.initState();
     context.read<BookingCubit>().getBooking(id: widget.id);
+  }
+
+  /// verifier si la demande de visite est payé
+  bool hasPaid(ReservationResponse reservationResponse) {
+    return reservationResponse.data.statusFacture.toString() ==
+        PaymentStatus.paye.name;
   }
 
   @override
@@ -300,53 +307,53 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ),
                   ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: const CircleAvatar(
-                            //backgroundColor: Colors.white,
-                            child: Icon(
-                              FontAwesomeIcons.userTie,
-                              //color: Colors.green,
+                  if (hasPaid(state.reservationResponse))
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)
+                            .copyWith(bottom: 10),
+                        child: Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            enabled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                          title: const Text("Propriétaire"),
-                          subtitle: Text(state
-                              .reservationResponse.data.proprietaire.phoneNumber
-                              .split('-')
-                              .last
-                              .toString()),
-                          titleTextStyle:
-                              Theme.of(context).textTheme.bodyMedium,
-                          trailing: Icon(
-                            FontAwesomeIcons.phoneVolume,
-                            color: AppColors.primary,
-                          ),
-                          subtitleTextStyle: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: AppColors.primary),
-                          onTap: () async {
-                            final phone = state.reservationResponse.data
+                            leading: const CircleAvatar(
+                              //backgroundColor: Colors.white,
+                              child: Icon(
+                                FontAwesomeIcons.userTie,
+                                //color: Colors.green,
+                              ),
+                            ),
+                            title: const Text("Propriétaire"),
+                            subtitle: Text(state.reservationResponse.data
                                 .proprietaire.phoneNumber
-                                .split('-');
-                            Utils.makePhoneCall(phone.last);
-                          },
+                                .split('-')
+                                .last
+                                .toString()),
+                            titleTextStyle:
+                                Theme.of(context).textTheme.bodyMedium,
+                            trailing: Icon(
+                              FontAwesomeIcons.phoneVolume,
+                              color: AppColors.primary,
+                            ),
+                            subtitleTextStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: AppColors.primary),
+                            onTap: () async {
+                              final phone = state.reservationResponse.data
+                                  .proprietaire.phoneNumber
+                                  .split('-');
+                              Utils.makePhoneCall(phone.last);
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

@@ -101,6 +101,83 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   //   return true;
   // }
 
+  /// Convertit une heure au format String (ex: "09:00" ou "09h00") en TimeOfDay
+  TimeOfDay _parseTime(String timeString) {
+    try {
+      // Nettoyer la chaîne
+      String cleaned = timeString.trim().toUpperCase();
+
+      // Vérifier si c'est un format AM/PM
+      bool isPM = cleaned.contains('PM');
+      bool isAM = cleaned.contains('AM');
+
+      // Extraire la partie numérique
+      String timePart =
+          cleaned.replaceAll('AM', '').replaceAll('PM', '').trim();
+
+      List<String> parts = timePart.split(':');
+      int hour = int.parse(parts[0]);
+      int minute = parts.length > 1 ? int.parse(parts[1]) : 0;
+
+      // Conversion du format 12h au format 24h
+      if (isPM && hour != 12) {
+        hour += 12; // 1 PM = 13h, 2 PM = 14h, etc.
+      } else if (isAM && hour == 12) {
+        hour = 0; // 12 AM = 00h (minuit)
+      }
+
+      return TimeOfDay(hour: hour, minute: minute);
+    } catch (e) {
+      log('Erreur lors du parsing de l\'heure: $timeString - $e');
+      // Valeur par défaut si parsing échoue
+      return const TimeOfDay(hour: 12, minute: 0);
+    }
+  }
+
+  /// Applique l'heure d'entrée à la date de début et l'heure de départ à la date de fin
+  List<DateTime> _applyResidenceTimesToDates(List<DateTime?> dates) {
+    if (dates.isEmpty) return [];
+
+    List<DateTime> datesWithTime = [];
+
+    // Parser les heures depuis le modèle de résidence
+    TimeOfDay entryTime = _parseTime(widget.residenceModel.heureEntree);
+    TimeOfDay exitTime = _parseTime(widget.residenceModel.heureDepart);
+
+    for (int i = 0; i < dates.length; i++) {
+      if (dates[i] == null) continue;
+
+      DateTime currentDate = dates[i]!;
+
+      // Première date = date d'entrée avec heureEntree
+      if (i == 0) {
+        datesWithTime.add(DateTime(
+          currentDate.year,
+          currentDate.month,
+          currentDate.day,
+          entryTime.hour,
+          entryTime.minute,
+        ));
+      }
+      // Dernière date = date de sortie avec heureDepart
+      else if (i == dates.length - 1) {
+        datesWithTime.add(DateTime(
+          currentDate.year,
+          currentDate.month,
+          currentDate.day,
+          exitTime.hour,
+          exitTime.minute,
+        ));
+      }
+      // Dates intermédiaires = garder l'heure par défaut (00:00)
+      else {
+        datesWithTime.add(currentDate);
+      }
+    }
+
+    return datesWithTime;
+  }
+
   Map<DateTime?, List<dynamic>> _generateEvents(Set<DateTime> days) {
     Map<DateTime?, List<dynamic>> events = {};
 
@@ -271,7 +348,18 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                     }
                                     if (selectedDates.isNotEmpty) {
                                       inspect(markedDates);
+
+                                      // ✨ Appliquer les heures de résidence à selectedDates
+                                      List<DateTime> datesWithHours =
+                                          _applyResidenceTimesToDates(
+                                              selectedDates);
+
+                                      // ✨ Mettre à jour selectedDates avec les nouvelles dates (avec heures)
+                                      selectedDates.clear();
+                                      selectedDates.addAll(datesWithHours);
+
                                       _formController.dates!.clear();
+
                                       for (var element in selectedDates) {
                                         _formController.addDate(
                                             date: element!.toIso8601String());

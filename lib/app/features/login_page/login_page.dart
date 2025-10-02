@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
         //     height: 50,
         //     child: Center(
         //       child: Text(
-        //         '©AfriqueSolus',
+        //        "©Afriq' Solus",
         //         style: TextStyle(color: Color.fromARGB(255, 182, 181, 181)),
         //       ),
         //     )),

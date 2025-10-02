@@ -118,7 +118,7 @@ class _AccountPageState extends State<AccountPage> {
                         CupertinoIcons.person,
                         color: Colors.amber.shade800,
                       ),
-                      title: const Text('Information personnelles '),
+                      title: const Text('Informations personnelles '),
                       trailing: Icon(
                         FontAwesomeIcons.circleChevronRight,
                         size: 15,
@@ -269,7 +269,7 @@ class _AccountPageState extends State<AccountPage> {
                         color: Colors.deepPurpleAccent,
                         size: 20,
                       ),
-                      title: const Text('Historique réservations'),
+                      title: const Text('Historiques des réservations'),
                       trailing: Icon(
                         FontAwesomeIcons.circleChevronRight,
                         size: 15,
@@ -299,7 +299,7 @@ class _AccountPageState extends State<AccountPage> {
                         FontAwesomeIcons.personWalkingLuggage,
                         color: Colors.purple,
                       ),
-                      title: const Text('Historique visites'),
+                      title: const Text('Historiques des visites'),
                       trailing: Icon(
                         FontAwesomeIcons.circleChevronRight,
                         size: 15,
