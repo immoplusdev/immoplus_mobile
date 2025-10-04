@@ -79,7 +79,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
       //     backgroundColor: Colors.green,
       //   ),
       // );
-      context.goNamed(CustomerRegistration.name,
+      context.pushReplacementNamed(CustomerRegistration.name,
           extra: DataRouterRegistration(
               email: resp.data.email.toString(),
               token: resp.data.token.toString()));

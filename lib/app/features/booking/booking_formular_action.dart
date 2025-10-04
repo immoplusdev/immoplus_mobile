@@ -67,7 +67,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
     return datesList;
   }
 
-  DateFormat formatDate = DateFormat('d MMMM yyyy');
+  DateFormat formatDate = DateFormat('d MMMM yyyy - HH:mm');
   List<DateTime> userDates = [];
   ValueNotifier<bool> testNotifier = ValueNotifier<bool>(false);
   ValueNotifier<List<DateTime>> userDatesNotifier =
@@ -101,39 +101,6 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   //   return true;
   // }
 
-  /// Convertit une heure au format String (ex: "09:00" ou "09h00") en TimeOfDay
-  TimeOfDay _parseTime(String timeString) {
-    try {
-      // Nettoyer la chaîne
-      String cleaned = timeString.trim().toUpperCase();
-
-      // Vérifier si c'est un format AM/PM
-      bool isPM = cleaned.contains('PM');
-      bool isAM = cleaned.contains('AM');
-
-      // Extraire la partie numérique
-      String timePart =
-          cleaned.replaceAll('AM', '').replaceAll('PM', '').trim();
-
-      List<String> parts = timePart.split(':');
-      int hour = int.parse(parts[0]);
-      int minute = parts.length > 1 ? int.parse(parts[1]) : 0;
-
-      // Conversion du format 12h au format 24h
-      if (isPM && hour != 12) {
-        hour += 12; // 1 PM = 13h, 2 PM = 14h, etc.
-      } else if (isAM && hour == 12) {
-        hour = 0; // 12 AM = 00h (minuit)
-      }
-
-      return TimeOfDay(hour: hour, minute: minute);
-    } catch (e) {
-      log('Erreur lors du parsing de l\'heure: $timeString - $e');
-      // Valeur par défaut si parsing échoue
-      return const TimeOfDay(hour: 12, minute: 0);
-    }
-  }
-
   /// Applique l'heure d'entrée à la date de début et l'heure de départ à la date de fin
   List<DateTime> _applyResidenceTimesToDates(List<DateTime?> dates) {
     if (dates.isEmpty) return [];
@@ -141,8 +108,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
     List<DateTime> datesWithTime = [];
 
     // Parser les heures depuis le modèle de résidence
-    TimeOfDay entryTime = _parseTime(widget.residenceModel.heureEntree);
-    TimeOfDay exitTime = _parseTime(widget.residenceModel.heureDepart);
+    TimeOfDay entryTime = Utils().parseTime(widget.residenceModel.heureEntree);
+    TimeOfDay exitTime = Utils().parseTime(widget.residenceModel.heureDepart);
 
     for (int i = 0; i < dates.length; i++) {
       if (dates[i] == null) continue;
@@ -176,6 +143,24 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
     }
 
     return datesWithTime;
+  }
+
+  /// Fusionne une date, une heure et ajoute x jours
+  /// Exemple: (2025-10-23, 14:30, 2) -> 2025-10-25 14:30:00
+  static DateTime mergeDateTimeAndAddDays(
+    DateTime date,
+    TimeOfDay time,
+    int daysToAdd,
+  ) {
+    final merged = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    return merged.add(Duration(days: daysToAdd));
   }
 
   Map<DateTime?, List<dynamic>> _generateEvents(Set<DateTime> days) {
@@ -405,7 +390,11 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                         titleTextStyle: GoogleFonts.inter(
                             fontWeight: FontWeight.bold, color: Colors.black),
                         subtitle: (markedDates.isNotEmpty)
-                            ? Text(formatDate.format(markedDates.first!))
+                            ? Text(formatDate.format(mergeDateTimeAndAddDays(
+                                markedDates.first!,
+                                Utils().parseTime(
+                                    widget.residenceModel.heureEntree),
+                                0)))
                             : null,
                       )),
                       const VerticalDivider(
@@ -420,7 +409,11 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                             fontWeight: FontWeight.bold, color: Colors.black),
                         subtitle: (markedDates.isNotEmpty)
                             ? AutoSizeText(
-                                formatDate.format(markedDates.last!),
+                                formatDate.format(mergeDateTimeAndAddDays(
+                                    markedDates.last!,
+                                    Utils().parseTime(
+                                        widget.residenceModel.heureDepart),
+                                    1)),
                                 maxLines: 1,
                               )
                             : null,

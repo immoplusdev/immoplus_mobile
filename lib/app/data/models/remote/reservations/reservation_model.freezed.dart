@@ -24,6 +24,8 @@ mixin _$ReservationModel {
   String get statusReservation => throw _privateConstructorUsedError;
   List<DatesReservationModel> get datesReservation =>
       throw _privateConstructorUsedError;
+  String get dateDebut => throw _privateConstructorUsedError;
+  String get dateFin => throw _privateConstructorUsedError;
   String get statusFacture => throw _privateConstructorUsedError;
   bool get retraitProEffectue => throw _privateConstructorUsedError;
   double get montantTotalReservation => throw _privateConstructorUsedError;
@@ -57,6 +59,8 @@ abstract class $ReservationModelCopyWith<$Res> {
       {String id,
       String statusReservation,
       List<DatesReservationModel> datesReservation,
+      String dateDebut,
+      String dateFin,
       String statusFacture,
       bool retraitProEffectue,
       double montantTotalReservation,
@@ -92,6 +96,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     Object? id = null,
     Object? statusReservation = null,
     Object? datesReservation = null,
+    Object? dateDebut = null,
+    Object? dateFin = null,
     Object? statusFacture = null,
     Object? retraitProEffectue = null,
     Object? montantTotalReservation = null,
@@ -117,6 +123,14 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
           ? _value.datesReservation
           : datesReservation // ignore: cast_nullable_to_non_nullable
               as List<DatesReservationModel>,
+      dateDebut: null == dateDebut
+          ? _value.dateDebut
+          : dateDebut // ignore: cast_nullable_to_non_nullable
+              as String,
+      dateFin: null == dateFin
+          ? _value.dateFin
+          : dateFin // ignore: cast_nullable_to_non_nullable
+              as String,
       statusFacture: null == statusFacture
           ? _value.statusFacture
           : statusFacture // ignore: cast_nullable_to_non_nullable
@@ -207,6 +221,8 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
       {String id,
       String statusReservation,
       List<DatesReservationModel> datesReservation,
+      String dateDebut,
+      String dateFin,
       String statusFacture,
       bool retraitProEffectue,
       double montantTotalReservation,
@@ -243,6 +259,8 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? statusReservation = null,
     Object? datesReservation = null,
+    Object? dateDebut = null,
+    Object? dateFin = null,
     Object? statusFacture = null,
     Object? retraitProEffectue = null,
     Object? montantTotalReservation = null,
@@ -268,6 +286,14 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
           ? _value._datesReservation
           : datesReservation // ignore: cast_nullable_to_non_nullable
               as List<DatesReservationModel>,
+      dateDebut: null == dateDebut
+          ? _value.dateDebut
+          : dateDebut // ignore: cast_nullable_to_non_nullable
+              as String,
+      dateFin: null == dateFin
+          ? _value.dateFin
+          : dateFin // ignore: cast_nullable_to_non_nullable
+              as String,
       statusFacture: null == statusFacture
           ? _value.statusFacture
           : statusFacture // ignore: cast_nullable_to_non_nullable
@@ -323,6 +349,8 @@ class _$ReservationModelImpl implements _ReservationModel {
       {this.id = '',
       this.statusReservation = '',
       final List<DatesReservationModel> datesReservation = const [],
+      this.dateDebut = '',
+      this.dateFin = '',
       this.statusFacture = '',
       this.retraitProEffectue = false,
       this.montantTotalReservation = 0,
@@ -355,6 +383,12 @@ class _$ReservationModelImpl implements _ReservationModel {
     return EqualUnmodifiableListView(_datesReservation);
   }
 
+  @override
+  @JsonKey()
+  final String dateDebut;
+  @override
+  @JsonKey()
+  final String dateFin;
   @override
   @JsonKey()
   final String statusFacture;
@@ -391,7 +425,7 @@ class _$ReservationModelImpl implements _ReservationModel {
 
   @override
   String toString() {
-    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, residence: $residence, client: $client, proprietaire: $proprietaire)';
+    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, residence: $residence, client: $client, proprietaire: $proprietaire)';
   }
 
   @override
@@ -404,6 +438,9 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.statusReservation == statusReservation) &&
             const DeepCollectionEquality()
                 .equals(other._datesReservation, _datesReservation) &&
+            (identical(other.dateDebut, dateDebut) ||
+                other.dateDebut == dateDebut) &&
+            (identical(other.dateFin, dateFin) || other.dateFin == dateFin) &&
             (identical(other.statusFacture, statusFacture) ||
                 other.statusFacture == statusFacture) &&
             (identical(other.retraitProEffectue, retraitProEffectue) ||
@@ -436,6 +473,8 @@ class _$ReservationModelImpl implements _ReservationModel {
       id,
       statusReservation,
       const DeepCollectionEquality().hash(_datesReservation),
+      dateDebut,
+      dateFin,
       statusFacture,
       retraitProEffectue,
       montantTotalReservation,
@@ -470,6 +509,8 @@ abstract class _ReservationModel implements ReservationModel {
       {final String id,
       final String statusReservation,
       final List<DatesReservationModel> datesReservation,
+      final String dateDebut,
+      final String dateFin,
       final String statusFacture,
       final bool retraitProEffectue,
       final double montantTotalReservation,
@@ -491,6 +532,10 @@ abstract class _ReservationModel implements ReservationModel {
   String get statusReservation;
   @override
   List<DatesReservationModel> get datesReservation;
+  @override
+  String get dateDebut;
+  @override
+  String get dateFin;
   @override
   String get statusFacture;
   @override

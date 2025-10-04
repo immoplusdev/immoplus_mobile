@@ -16,6 +16,8 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
                   DatesReservationModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      dateDebut: json['dateDebut'] as String? ?? '',
+      dateFin: json['dateFin'] as String? ?? '',
       statusFacture: json['statusFacture'] as String? ?? '',
       retraitProEffectue: json['retraitProEffectue'] as bool? ?? false,
       montantTotalReservation:
@@ -44,6 +46,8 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
       'id': instance.id,
       'statusReservation': instance.statusReservation,
       'datesReservation': instance.datesReservation,
+      'dateDebut': instance.dateDebut,
+      'dateFin': instance.dateFin,
       'statusFacture': instance.statusFacture,
       'retraitProEffectue': instance.retraitProEffectue,
       'montantTotalReservation': instance.montantTotalReservation,

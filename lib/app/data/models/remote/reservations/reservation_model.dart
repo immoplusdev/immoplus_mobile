@@ -12,6 +12,8 @@ class ReservationModel with _$ReservationModel {
     @Default('') String id,
     @Default('') String statusReservation,
     @Default([]) List<DatesReservationModel> datesReservation,
+    @Default('') String dateDebut,
+    @Default('') String dateFin,
     @Default('') String statusFacture,
     @Default(false) bool retraitProEffectue,
     @Default(0) double montantTotalReservation,

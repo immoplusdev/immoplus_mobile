@@ -142,7 +142,7 @@ class BookingHistoryCard extends StatelessWidget {
                           ),
                           AutoSizeText(
                               maxLines: 1,
-                              "${formatDate.format(reservationModel.datesReservation.first.date!)} à ${reservationModel.residence.heureEntree}")
+                              "${formatDate.format(Utils.toDateTime(reservationModel.dateDebut))} à ${reservationModel.residence.heureEntree}")
                         ],
                       ),
                     ),
@@ -162,7 +162,7 @@ class BookingHistoryCard extends StatelessWidget {
                           ),
                           AutoSizeText(
                             maxLines: 1,
-                            "${formatDate.format(reservationModel.datesReservation.last.date!)} avant ${reservationModel.residence.heureDepart} ",
+                            "${formatDate.format(Utils.toDateTime(reservationModel.dateFin))} avant ${reservationModel.residence.heureDepart} ",
                           )
                         ],
                       ),
