@@ -186,7 +186,7 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/payment/demandes-visites/:idProduct',
+        path: '/payment/demandes_visites/:idProduct',
         builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: const Text('Demande de visite'),
