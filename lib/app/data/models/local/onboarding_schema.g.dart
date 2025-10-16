@@ -17,9 +17,14 @@ const OnboardingSchemaSchema = CollectionSchema(
   name: r'OnboardingSchema',
   id: 7369044416931993817,
   properties: {
-    r'date': PropertySchema(
+    r'hasReadOnboarding': PropertySchema(
       id: 0,
-      name: r'date',
+      name: r'hasReadOnboarding',
+      type: IsarType.bool,
+    ),
+    r'readAt': PropertySchema(
+      id: 1,
+      name: r'readAt',
       type: IsarType.dateTime,
     )
   },
@@ -52,7 +57,8 @@ void _onboardingSchemaSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.date);
+  writer.writeBool(offsets[0], object.hasReadOnboarding);
+  writer.writeDateTime(offsets[1], object.readAt);
 }
 
 OnboardingSchema _onboardingSchemaDeserialize(
@@ -62,8 +68,9 @@ OnboardingSchema _onboardingSchemaDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = OnboardingSchema();
-  object.date = reader.readDateTimeOrNull(offsets[0]);
+  object.hasReadOnboarding = reader.readBool(offsets[0]);
   object.id = id;
+  object.readAt = reader.readDateTimeOrNull(offsets[1]);
   return object;
 }
 
@@ -75,6 +82,8 @@ P _onboardingSchemaDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readBool(offset)) as P;
+    case 1:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -176,75 +185,11 @@ extension OnboardingSchemaQueryWhere
 extension OnboardingSchemaQueryFilter
     on QueryBuilder<OnboardingSchema, OnboardingSchema, QFilterCondition> {
   QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
-      dateIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'date',
-      ));
-    });
-  }
-
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
-      dateIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'date',
-      ));
-    });
-  }
-
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
-      dateEqualTo(DateTime? value) {
+      hasReadOnboardingEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'date',
+        property: r'hasReadOnboarding',
         value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
-      dateGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'date',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
-      dateLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'date',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
-      dateBetween(
-    DateTime? lower,
-    DateTime? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'date',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
       ));
     });
   }
@@ -304,6 +249,80 @@ extension OnboardingSchemaQueryFilter
       ));
     });
   }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      readAtIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'readAt',
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      readAtIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'readAt',
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      readAtEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'readAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      readAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'readAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      readAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'readAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      readAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'readAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension OnboardingSchemaQueryObject
@@ -314,32 +333,48 @@ extension OnboardingSchemaQueryLinks
 
 extension OnboardingSchemaQuerySortBy
     on QueryBuilder<OnboardingSchema, OnboardingSchema, QSortBy> {
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy> sortByDate() {
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      sortByHasReadOnboarding() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'date', Sort.asc);
+      return query.addSortBy(r'hasReadOnboarding', Sort.asc);
     });
   }
 
   QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
-      sortByDateDesc() {
+      sortByHasReadOnboardingDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'date', Sort.desc);
+      return query.addSortBy(r'hasReadOnboarding', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      sortByReadAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      sortByReadAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readAt', Sort.desc);
     });
   }
 }
 
 extension OnboardingSchemaQuerySortThenBy
     on QueryBuilder<OnboardingSchema, OnboardingSchema, QSortThenBy> {
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy> thenByDate() {
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      thenByHasReadOnboarding() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'date', Sort.asc);
+      return query.addSortBy(r'hasReadOnboarding', Sort.asc);
     });
   }
 
   QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
-      thenByDateDesc() {
+      thenByHasReadOnboardingDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'date', Sort.desc);
+      return query.addSortBy(r'hasReadOnboarding', Sort.desc);
     });
   }
 
@@ -355,13 +390,35 @@ extension OnboardingSchemaQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      thenByReadAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      thenByReadAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readAt', Sort.desc);
+    });
+  }
 }
 
 extension OnboardingSchemaQueryWhereDistinct
     on QueryBuilder<OnboardingSchema, OnboardingSchema, QDistinct> {
-  QueryBuilder<OnboardingSchema, OnboardingSchema, QDistinct> distinctByDate() {
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QDistinct>
+      distinctByHasReadOnboarding() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'date');
+      return query.addDistinctBy(r'hasReadOnboarding');
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QDistinct>
+      distinctByReadAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'readAt');
     });
   }
 }
@@ -374,9 +431,16 @@ extension OnboardingSchemaQueryProperty
     });
   }
 
-  QueryBuilder<OnboardingSchema, DateTime?, QQueryOperations> dateProperty() {
+  QueryBuilder<OnboardingSchema, bool, QQueryOperations>
+      hasReadOnboardingProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'date');
+      return query.addPropertyName(r'hasReadOnboarding');
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, DateTime?, QQueryOperations> readAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'readAt');
     });
   }
 }

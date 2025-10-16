@@ -5,6 +5,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class OnboardingNewPage extends StatefulWidget {
@@ -19,6 +20,14 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
 
   final PageController _pageController = PageController();
   int _currentPage = 0;
+
+  /// Navigation vers la page d'accueil après avoir marqué l'onboarding comme lu
+  Future<void> _navigateToHome() async {
+    await sessionManager.markOnboardingAsRead();
+    if (mounted) {
+      context.goNamed(HomePage.name);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +53,21 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                     title: "BIENVENUE SUR IMMOPLUS",
                     content:
                         "Votre application tout en  un est disponible, découvrons nos offres.",
+                    image: "assets/img/onb_1.jpeg",
                   ),
                   _buildPage(
                     color: Colors.greenAccent,
                     title: "RESERVATION",
                     content:
                         "Plus besoins de se promener ou se déplacer pour faire une réservation de bien immobilier, immoplus s’en occupe.",
+                    image: "assets/img/onb_2.jpeg",
                   ),
                   _buildPage(
                     color: Colors.orangeAccent,
                     title: "DEMENAGEMENT",
                     content:
                         "Immoplus vous permet de gérer vos déménagement en un seul clic.",
+                    image: "assets/img/onb_3.jpeg",
                   ),
                 ],
               ),
@@ -94,16 +106,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                       curve: Curves.easeInOut,
                     );
                   } else {
-                    // Action when onboarding is complete
-                    // Navigate to home or another screen
-                    print("Onboarding terminé !");
-
-                    await sessionManager.setOpended().then(
-                      (value) {
-                        AppRouter.showOnboarding = false;
-                        context.goNamed(HomePage.name);
-                      },
-                    );
+                    await _navigateToHome();
                   }
                 },
               ),
@@ -113,14 +116,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomButtom(
                 text: 'Passer',
-                onClick: () async {
-                  await sessionManager.setOpended().then(
-                    (value) {
-                      AppRouter.showOnboarding = false;
-                      context.goNamed(HomePage.name);
-                    },
-                  );
-                },
+                onClick: _navigateToHome,
                 color: Colors.white,
                 textColor: Colors.black,
               ),
@@ -132,7 +128,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
   }
 
   Widget _buildPage(
-      {required Color color, required String title, required String content}) {
+      {required Color color,
+      required String title,
+      required String content,
+      required String image}) {
     return Container(
       //color: color,
       child: Center(
@@ -151,9 +150,9 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                   borderRadius: BorderRadius.circular(
                       20), // Applique les bords arrondis à l'image
                   child: Image.asset(
-                    'assets/img/visit.jpg', // Chemin de l'image locale
-                    width: 280,
-                    height: 380,
+                    image, // Chemin de l'image locale
+                    width: 300,
+                    height: 400,
                     fit: BoxFit
                         .cover, // Ajuste l'image pour remplir le conteneur
                   ),
@@ -166,10 +165,9 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.lightBlue),
                     ),
                     const SizedBox(height: 20),
                     Padding(

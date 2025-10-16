@@ -9,6 +9,7 @@ import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
+import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/services/connectivity_service.dart';
 
@@ -29,6 +30,16 @@ class _SplashScreenState extends State<SplashScreen> {
     sessionManager.configModel = configModel;
     await sessionManager.getCurrentUser();
 
+    // Vérification si l'onboarding a été vu
+    // await sessionManager.resetOnboarding();
+    final hasSeenOnboarding = await sessionManager.hasReadOnboarding();
+
+    if (!hasSeenOnboarding) {
+      // Redirection vers l'onboarding si pas encore vu
+      AppRouter.router.goNamed(OnboardingNewPage.name);
+      return;
+    }
+
     if (sessionManager.currentUser == null) {
       AppRouter.router.goNamed(HomePage.name);
     } else {
@@ -37,28 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
       notificationService.suscribeCurrentUser();
       AppRouter.router.goNamed(HomePage.name);
     }
-    // if (sessionManager.currentUser != null) {
-    //   print(sessionManager.currentUser!.userId);
-    //   OneSignal.login(sessionManager.currentUser!.userId ?? '');
-    // }
-    // try {
-    //   await sessionManager.getCurrentUser();
-    //   final info = await sessionManager.getOpenedInfo();
-    //   if (info == null) {
-    //     AppRouter.router.goNamed(OnboardingNewPage.name);
-    //   } else {
-    //     DioClient.token = sessionManager.currentUser!.accessToken;
-    //     DioClient().dio.options.headers['Authorization'] =
-    //         'Bearer ${sessionManager.currentUser!.accessToken}';
-
-    //     AppRouter.router.goNamed(HomePage.name);
-    //   }
-    // } catch (e) {
-    //   if (kDebugMode) {
-    //     log(e.toString());
-    //   }
-    //   AppRouter.router.goNamed(HomePage.name);
-    // }
   }
 
   @override
