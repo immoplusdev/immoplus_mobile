@@ -132,8 +132,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           "Total pour ${state.reservationResponse.data.datesReservation.length} ${(state.reservationResponse.data.datesReservation.length >= 1) ? 'Jour' : 'Jours'}",
                         ),
                         trailing: Text(
-                          Utils.formatCurrency(state.reservationResponse.data
-                              .montantTotalReservation),
+                          Utils.formatCurrency(
+                              state.reservationResponse.data.montantPaye),
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -354,6 +354,18 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         ),
                       ),
                     ),
+                  if (hasPaid(state.reservationResponse))
+                    _customTile(
+                      icon: Icons.label_rounded,
+                      trailingIcon: Icons.content_copy_rounded,
+                      title:
+                          "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
+                      onTap: () {
+                        Utils.copyToClipboard(
+                            state.reservationResponse.data.codeReservation);
+                      },
+                    ),
+                  SliverGap(50)
                 ],
               ),
             ),
@@ -371,8 +383,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       extra: PaymentPageAdapter(
                           itemId: state.reservationResponse.data.id,
                           collection: ProductType.reservations.name,
-                          amount: state
-                              .reservationResponse.data.montantTotalReservation
+                          amount: state.reservationResponse.data.montantPaye
                               .toInt()),
                     );
                   },
@@ -389,7 +400,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   horizontalTitleGap: 3,
                   dense: true,
                   title: Text(
-                      'Payer maintenant  ${state.reservationResponse.data.montantTotalReservation} Fcfa'),
+                      'Payer maintenant  ${state.reservationResponse.data.montantPaye} Fcfa'),
                   titleTextStyle: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -446,6 +457,44 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         }
         return const LoadingPage();
       },
+    );
+  }
+
+  Widget _customTile(
+      {IconData? icon,
+      required String title,
+      IconData? trailingIcon,
+      VoidCallback? onTap}) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
+        child: Material(
+          elevation: 2,
+          borderRadius: BorderRadius.circular(20),
+          child: ListTile(
+            tileColor: Colors.white,
+            enabled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            leading: Icon(
+              icon,
+              color: AppColors.primary,
+            ),
+            title: Text(title),
+            titleTextStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColors.primary, fontSize: 15),
+            trailing: Icon(
+              trailingIcon,
+              color: AppColors.primary,
+            ),
+            onTap: onTap,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -112,8 +112,7 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
                   AutoSizeText(
                     maxLines: 1,
-                    Utils.formatCurrency(
-                        reservationModel.montantTotalReservation),
+                    Utils.formatCurrency(reservationModel.montantPaye),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!

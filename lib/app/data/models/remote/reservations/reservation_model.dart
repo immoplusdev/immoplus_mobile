@@ -18,6 +18,8 @@ class ReservationModel with _$ReservationModel {
     @Default(false) bool retraitProEffectue,
     @Default(0) double montantTotalReservation,
     @Default(0) double montantReservationSansCommission,
+    @Default(0) int montantPaye,
+    @Default('') String codeReservation,
     @Default('') String notes,
     @Default('') String clientPhoneNumber,
     @Default('') String createdAt,

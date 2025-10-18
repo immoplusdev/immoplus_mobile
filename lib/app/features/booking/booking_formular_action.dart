@@ -16,6 +16,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/reservations/dates_reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/features/booking/data/estimate_cost_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
 import 'package:immoplus/app/features/booking/logic/booking_services.dart';
@@ -23,7 +24,7 @@ import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
 import 'package:immoplus/app/modules/country_phone_number/country_phone_number.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/utils/request_path.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:intl/intl.dart';
@@ -41,6 +42,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
 
   late FormController _formController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  EstimateCostData? estimateCost;
 
   String time = '';
   List<DateTime?> markedDates = [
@@ -209,6 +212,16 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
     // });
   }
 
+  DateTime get startDateCalculated => mergeDateTimeAndAddDays(
+      markedDates.first!,
+      Utils().parseTime(widget.residenceModel.heureEntree),
+      0);
+
+  DateTime get endDateCalculated => mergeDateTimeAndAddDays(markedDates.last!,
+      Utils().parseTime(widget.residenceModel.heureDepart), 1);
+
+  int get totalDays => selectedDates.length;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,9 +240,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
               children: [
                 Text(
                   selectedDates.isNotEmpty
-                      ? (selectedDates.length == 1)
-                          ? '${selectedDates.length} jour sélectionné'
-                          : '${selectedDates.length} jours sélectionnés'
+                      ? (totalDays == 1)
+                          ? '$totalDays jour sélectionné'
+                          : '$totalDays jours sélectionnés'
                       : "aucun jours sélectionnés",
                   style: GoogleFonts.inter(
                       fontSize: 15,
@@ -351,11 +364,17 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                       }
                                     }
                                     log(selectedDates.toString());
-                                    context.read<BookingCubit>().estimatePrice(
-                                        residenceId: widget.residenceModel.id,
-                                        dates: selectedDates
-                                            .map((e) => e!)
-                                            .toList());
+                                    // context.read<BookingCubit>().estimatePrice(
+                                    //     residenceId: widget.residenceModel.id,
+                                    //     dates: selectedDates
+                                    //         .map((e) => e!)
+                                    //         .toList());
+                                    context.read<BookingCubit>().estimateCost(
+                                          residenceId: widget.residenceModel.id,
+                                          dateDebut: startDateCalculated,
+                                          dateFin: endDateCalculated,
+                                          // paymentMethod: 'moov',
+                                        );
                                     setState(() {});
                                   },
                                 );
@@ -390,11 +409,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                         titleTextStyle: GoogleFonts.inter(
                             fontWeight: FontWeight.bold, color: Colors.black),
                         subtitle: (markedDates.isNotEmpty)
-                            ? Text(formatDate.format(mergeDateTimeAndAddDays(
-                                markedDates.first!,
-                                Utils().parseTime(
-                                    widget.residenceModel.heureEntree),
-                                0)))
+                            ? Text(formatDate.format(startDateCalculated))
                             : null,
                       )),
                       const VerticalDivider(
@@ -409,11 +424,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                             fontWeight: FontWeight.bold, color: Colors.black),
                         subtitle: (markedDates.isNotEmpty)
                             ? AutoSizeText(
-                                formatDate.format(mergeDateTimeAndAddDays(
-                                    markedDates.last!,
-                                    Utils().parseTime(
-                                        widget.residenceModel.heureDepart),
-                                    1)),
+                                formatDate.format(endDateCalculated),
                                 maxLines: 1,
                               )
                             : null,
@@ -422,68 +433,66 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                   ),
                 ),
                 const Gap(10),
-                BlocBuilder<BookingCubit, BookingRequestState>(
+                BlocConsumer<BookingCubit, BookingRequestState>(
                   builder: (context, state) {
                     return Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: (state is RECEIVE_ESTIMATION)
-                          ? ListTile(
-                              enabled: true,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              tileColor: const Color.fromRGBO(255, 255, 255, 1),
-                              subtitle: Text(
-                                Utils.formatCurrency(
-                                  state.estimation.data!.montantTotalReservation
-                                      .toInt(),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          enabled: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          tileColor: const Color.fromRGBO(255, 255, 255, 1),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Gap(5),
+                              if (estimateCost != null)
+                                Text(
+                                  "Montant ${Utils.formatCurrency(
+                                    estimateCost!.montant.toInt(),
+                                  )} + Frais ${Utils.formatCurrency(
+                                    estimateCost!.frais.toInt(),
+                                  )} ",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey.shade600),
                                 ),
+                              Gap(12),
+                              Text(
+                                estimateCost == null
+                                    ? "••••••••"
+                                    : "Montant Total : ${Utils.formatCurrency(
+                                        estimateCost!.total.toInt(),
+                                      )}",
                               ),
-                              title: const Text('Prix de la réservation'),
-                              subtitleTextStyle: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(color: AppColors.primary),
-                              horizontalTitleGap: 2,
-                              trailing: const CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  child: Icon(
-                                    FontAwesomeIcons.moneyBill,
-                                    color: Colors.green,
-                                  )),
-                            )
-                          : (state is LOADING_BOOKING)
-                              ? const Center(
-                                  child: SizedBox(
-                                      height: 59,
-                                      child: CupertinoActivityIndicator()),
-                                )
-                              : ListTile(
-                                  enabled: true,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  tileColor:
-                                      const Color.fromRGBO(255, 255, 255, 1),
-                                  subtitle: Text(
-                                    '••••••••',
-                                  ),
-                                  title: const Text('Prix de la réservation'),
-                                  subtitleTextStyle: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(color: AppColors.primary),
-                                  horizontalTitleGap: 2,
-                                  trailing: const CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: Icon(
-                                        FontAwesomeIcons.moneyBill,
-                                        color: Colors.green,
-                                      )),
-                                ),
-                    );
+                            ],
+                          ),
+                          title: const Text('Prix de la réservation'),
+                          subtitleTextStyle: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(color: AppColors.primary),
+                          horizontalTitleGap: 2,
+                          trailing: const CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                FontAwesomeIcons.moneyBill,
+                                color: Colors.green,
+                              )),
+                        ));
                   },
-                ),
+                  listener: (context, state) {
+                    if (state is RECEIVE_ESTIMATE_COST) {
+                      setState(() {
+                        estimateCost = state.estimateCost.data;
+                      });
+                    }
+                  },
+                )
               ],
             ),
           ),
@@ -503,6 +512,18 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
             onClick: (state is INITIAL_BOOKING)
                 ? null
                 : () {
+                    if (totalDays < widget.residenceModel.dureeMinSejour) {
+                      ToastUtils.showError(
+                          description:
+                              "La durée minimale de séjour pour cette residence est de  ${widget.residenceModel.dureeMinSejour} jours");
+                      return;
+                    }
+                    if (totalDays > widget.residenceModel.dureeMaxSejour) {
+                      ToastUtils.showError(
+                          description:
+                              "La durée maximale de séjour pour cette residence est de  ${widget.residenceModel.dureeMinSejour} jours");
+                      return;
+                    }
                     // FormUtils.showPayment(context: context);
                     // ContactUtils().showDialog(context: context);
                     if (_formKey.currentState!.validate()) {
@@ -517,7 +538,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                               CupertinoAlertDialog(
                             //title: const Text('Alert'),
                             content: Text(
-                                'Confirmez-vous cette demande de réservation pour ${selectedDates.length} jours?'),
+                                'Confirmez-vous cette demande de réservation pour $totalDays jours?'),
                             actions: <CupertinoDialogAction>[
                               CupertinoDialogAction(
                                 isDefaultAction: false,
@@ -531,7 +552,14 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                 isDefaultAction: true,
                                 isDestructiveAction: false,
                                 onPressed: () {
+                                  if (estimateCost == null) {
+                                    ToastUtils.showSuccess(
+                                        description:
+                                            "Veuillez choisir une date");
+                                    return;
+                                  }
                                   context.read<BookingCubit>().orderBooking(
+                                      amount: estimateCost!.total.toInt(),
                                       body: ReservationRequestBody(
                                           residence: widget.residenceModel.id,
                                           datesReservation: selectedDates

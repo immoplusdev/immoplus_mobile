@@ -55,7 +55,29 @@ class BookingCubit extends Cubit<BookingRequestState> {
     }
   }
 
-  orderBooking({required ReservationRequestBody body}) async {
+  estimateCost({
+    required String residenceId,
+    required DateTime dateDebut,
+    required DateTime dateFin,
+    // String paymentMethod = 'moov',
+  }) async {
+    emit(const LOADING_BOOKING());
+    try {
+      final estimation = await bookingServices.estimateCost(
+        residenceId: residenceId,
+        dateDebut: dateDebut,
+        dateFin: dateFin,
+        // paymentMethod: paymentMethod,
+      );
+      emit(BookingRequestState.receiveEstimateCost(estimation));
+    } catch (e) {
+      emit(const INITIAL_BOOKING());
+      emit(BookingRequestState.error(e.toString()));
+    }
+  }
+
+  orderBooking(
+      {required ReservationRequestBody body, required int amount}) async {
     emit(const LOADING_BOOKING());
     try {
       ReservationResponse reservationResponse =
@@ -67,7 +89,9 @@ class BookingCubit extends Cubit<BookingRequestState> {
         extra: PaymentPageAdapter(
           itemId: reservationResponse.data.id,
           collection: ProductType.reservations.name,
-          amount: reservationResponse.data.montantTotalReservation.toInt(),
+          amount: amount,
+
+          // amount: reservationResponse.data.montantTotalReservation.toInt(),
         ),
       );
     } catch (e) {

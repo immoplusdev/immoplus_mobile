@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -515,5 +516,9 @@ class Utils {
       // Valeur par défaut si parsing échoue
       return const TimeOfDay(hour: 12, minute: 0);
     }
+  }
+
+  static copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
   }
 }
