@@ -77,4 +77,7 @@ abstract class AuthProvider {
   @POST('/users/verify-otp')
   Future<VerifyEmailResponse> verifyOtp(
       @Body() VerifyEmailOtp sendEmailOtpBody);
+
+  @DELETE('/users/{id}')
+  Future<HttpResponse> deleteAccount(@Path() String id);
 }

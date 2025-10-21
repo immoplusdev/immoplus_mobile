@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,8 @@ import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
+import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart';
+import 'package:immoplus/app/logic/authentification/delete_account_cubit_state.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -404,53 +407,56 @@ class _AccountPageState extends State<AccountPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       onTap: () {
-                        showDialog<void>(
+                        showCupertinoDialog(
                           context: context,
-                          barrierDismissible: false, // user must tap button!
-                          builder: (BuildContext context) {
-                            return CupertinoAlertDialog(
-                              title: const SizedBox(
-                                child: Center(
-                                  child: Icon(
-                                    Icons.exit_to_app_rounded,
-                                    size: 60,
-                                    color: Colors.red,
-                                  ),
-                                ),
+                          builder: (BuildContext dialogContext) {
+                            return BlocProvider(
+                              create: (context) => DeleteAccountCubit(),
+                              child: BlocConsumer<DeleteAccountCubit,
+                                  DeleteAccountState>(
+                                listener: (context, state) {},
+                                builder: (context, state) {
+                                  return CupertinoAlertDialog(
+                                    title: const Text('Suppression de compte'),
+                                    content: const Text(
+                                      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+                                    ),
+                                    actions: <Widget>[
+                                      CupertinoDialogAction(
+                                        isDefaultAction: true,
+                                        onPressed: () {
+                                          Navigator.of(dialogContext).pop();
+                                        },
+                                        child: const Text('Annuler'),
+                                      ),
+                                      CupertinoDialogAction(
+                                        isDestructiveAction: true,
+                                        onPressed: state.maybeWhen(
+                                          loading: () => null,
+                                          orElse: () => () {
+                                            context
+                                                .read<DeleteAccountCubit>()
+                                                .deleteAccount();
+                                          },
+                                        ),
+                                        child: state.maybeWhen(
+                                          loading: () =>
+                                              const CupertinoActivityIndicator(),
+                                          orElse: () =>
+                                              const Text('Oui, supprimer'),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
-                              content: const Text(
-                                  'Souhaitez vous vraiment supprimer votre compte ? cette action est irréversible'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text(
-                                    'Annuler',
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text(
-                                    'Supprimer mon compte',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                  onPressed: () async {
-                                    await sessionManager.clearSession().then(
-                                      (value) {
-                                        context.goNamed(SplashScreen.name);
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
                             );
                           },
                         );
                       },
                       horizontalTitleGap: 0,
                       leading: const Icon(
-                        FontAwesomeIcons.rightFromBracket,
+                        FontAwesomeIcons.userXmark,
                         color: Colors.red,
                         size: 20,
                       ),
