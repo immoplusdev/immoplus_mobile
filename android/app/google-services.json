@@ -12,12 +12,7 @@
           "package_name": "com.immoplus.ci"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1003203724496-br99l0jttjpcl7k6fae4g8navk795s4f.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU"
@@ -25,55 +20,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1003203724496-br99l0jttjpcl7k6fae4g8navk795s4f.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "1003203724496-olqbqpv9hblsm3uv688lr17ih9ka9hh2.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "monimmoci.monImmo"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1003203724496:android:d45c4df5d54e8ca7458ad5",
-        "android_client_info": {
-          "package_name": "com.immoplus_pro.ci"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1003203724496-br99l0jttjpcl7k6fae4g8navk795s4f.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1003203724496-br99l0jttjpcl7k6fae4g8navk795s4f.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "1003203724496-olqbqpv9hblsm3uv688lr17ih9ka9hh2.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "monimmoci.monImmo"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
