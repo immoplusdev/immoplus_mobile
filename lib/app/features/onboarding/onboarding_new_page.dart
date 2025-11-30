@@ -25,25 +25,25 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
     OnBoardingItem(
       title: "Bienvenue sur Immo Plus",
       content: "Trouvez, réservez et installez-vous facilement.",
-      image: "assets/img/onb_1.jpeg",
+      image: "assets/img/onboarding/1.png",
     ),
     OnBoardingItem(
       title: "Trouvez votre bien en un clic.",
       content:
           "Trouvez facilement des logements proches de chez vous grâce à la carte.",
-      image: "assets/img/onb_2.jpeg",
+      image: "assets/img/onboarding/2.png",
     ),
     OnBoardingItem(
       title: "Réservez et achetez en toute sécurité",
       content:
           "Profitez d'un processus simple, sécurisé et garanti pour trouver votre logement idéal.",
-      image: "assets/img/onb_3.jpeg",
+      image: "assets/img/onboarding/3.png",
     ),
     OnBoardingItem(
       title: "Louez votre futur chez-vous en un clic",
       content:
           "Trouvez et réservez facilement le logement qui vous correspond.",
-      image: "assets/img/onb_3.jpeg",
+      image: "assets/img/onboarding/4.png",
     ),
   ];
 
