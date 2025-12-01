@@ -19,7 +19,13 @@ class ToastUtils {
       type: ToastificationType.error,
       context: NavigationService.navigatorKey.currentContext,
       title: title != null ? Text(title) : null,
-      description: description != null ? Text(description) : null,
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,
@@ -40,7 +46,13 @@ class ToastUtils {
       type: ToastificationType.success,
       context: NavigationService.navigatorKey.currentContext,
       title: title != null ? Text(title) : null,
-      description: description != null ? Text(description) : null,
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,
@@ -61,7 +73,13 @@ class ToastUtils {
       type: ToastificationType.info,
       context: NavigationService.navigatorKey.currentContext,
       title: Text(title),
-      description: description != null ? Text(description) : null,
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,
@@ -82,7 +100,13 @@ class ToastUtils {
       type: ToastificationType.warning,
       context: NavigationService.navigatorKey.currentContext,
       title: Text(title),
-      description: description != null ? Text(description) : null,
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,

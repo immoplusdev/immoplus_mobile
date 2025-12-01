@@ -1,27 +1,30 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileHearder extends StatelessWidget {
-  const ProfileHearder({super.key});
+  final UserModelSchema? currentUser;
+  const ProfileHearder({super.key, this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
       pinned: true, // Garde le header en haut lors du scroll
       floating: false,
-      delegate: _HeaderDelegate(),
+      delegate: _HeaderDelegate(currentUser: currentUser),
     );
   }
 }
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
-  final sessionManager = getIt<SessionManager>();
+  final UserModelSchema? currentUser;
+
+  _HeaderDelegate({this.currentUser});
+
   @override
   double get minExtent => 80; // Hauteur minimale
   @override
@@ -45,9 +48,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(60),
               child: CachedNetworkImage(
-                imageUrl: (sessionManager.currentUser!.avatar != null)
-                    ? Utils.getImagePath(
-                        id: sessionManager.currentUser!.avatar!)
+                imageUrl: (currentUser!.avatar != null)
+                    ? Utils.getImagePath(id: currentUser!.avatar!)
                     : "https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg",
                 placeholder: (context, url) => Shimmer.fromColors(
                   baseColor: Colors.grey.shade300,
@@ -71,7 +73,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  sessionManager.currentUser!.firstName.toString(),
+                  currentUser!.firstName.toString(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -79,7 +81,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   ),
                 ),
                 Text(
-                  sessionManager.currentUser!.lastName.toString(),
+                  currentUser!.lastName.toString(),
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey.shade600,

@@ -6,12 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/data/models/auth/account_creation_response.dart';
+import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
+import 'package:immoplus/app/data/models/auth/verify_email_otp.dart';
+import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
-import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
-import 'package:immoplus/app/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:injectable/injectable.dart';
 
@@ -42,6 +43,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..lastName = response.data.user.lastName
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
@@ -65,6 +67,47 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       log(e.toString(), name: "ERROR BLOC");
 
       emit(const RegistrationCubitState.initial());
+    }
+  }
+
+  Future<bool> sendEmailOTP({required String email}) async {
+    emit(const RegistrationCubitState.loading());
+    try {
+      final response = await AuthRepository()
+          .sendEmailOTP(body: SendEmailOtpBody(email: email));
+      emit(RegistrationCubitState.initial());
+      if ([200, 201].contains(response.response.statusCode)) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      emit(RegistrationCubitState.initial());
+      return false;
+    } catch (error) {
+      log('Error: $error');
+      emit(RegistrationCubitState.initial());
+      return false;
+    }
+  }
+
+  Future<VerifyEmailResponse?> verifyOtp(
+      {required String email, required String otp}) async {
+    emit(const RegistrationCubitState.loading());
+    try {
+      final response = await AuthRepository()
+          .verifyOtp(body: VerifyEmailOtp(email: email, otp: otp));
+      emit(RegistrationCubitState.initial());
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      emit(RegistrationCubitState.initial());
+      return null;
+    } catch (error) {
+      log('Error: $error');
+      emit(RegistrationCubitState.initial());
+      return null;
     }
   }
 }

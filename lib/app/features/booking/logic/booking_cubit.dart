@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -54,7 +55,29 @@ class BookingCubit extends Cubit<BookingRequestState> {
     }
   }
 
-  orderBooking({required ReservationRequestBody body}) async {
+  estimateCost({
+    required String residenceId,
+    required DateTime dateDebut,
+    required DateTime dateFin,
+    // String paymentMethod = 'moov',
+  }) async {
+    emit(const LOADING_BOOKING());
+    try {
+      final estimation = await bookingServices.estimateCost(
+        residenceId: residenceId,
+        dateDebut: dateDebut,
+        dateFin: dateFin,
+        // paymentMethod: paymentMethod,
+      );
+      emit(BookingRequestState.receiveEstimateCost(estimation));
+    } catch (e) {
+      emit(const INITIAL_BOOKING());
+      emit(BookingRequestState.error(e.toString()));
+    }
+  }
+
+  orderBooking(
+      {required ReservationRequestBody body, required int amount}) async {
     emit(const LOADING_BOOKING());
     try {
       ReservationResponse reservationResponse =
@@ -65,8 +88,10 @@ class BookingCubit extends Cubit<BookingRequestState> {
         OperatorsSelectorPage.name,
         extra: PaymentPageAdapter(
           itemId: reservationResponse.data.id,
-          collection: "reservations",
-          amount: reservationResponse.data.montantTotalReservation.toInt(),
+          collection: ProductType.reservations.name,
+          amount: amount,
+
+          // amount: reservationResponse.data.montantTotalReservation.toInt(),
         ),
       );
     } catch (e) {

@@ -95,7 +95,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
             // Fermer la popup
             context.pop();
             // Afficher le message d'erreur
-            ToastUtils.error(message);
+            // ToastUtils.error(message);
           },
           receiveId: (data) {},
         );

@@ -165,7 +165,7 @@ class _ResidencePageState extends State<ResidencePage> {
                 ),
 
                 const DetailLogmentTitleCentered(
-                    title: 'Où se situe le logement'),
+                    title: 'Où se situe le logement ?'),
                 const SliverGap(20),
                 DetailLogmentMap(residence: state.data),
                 const DetailDivider(),

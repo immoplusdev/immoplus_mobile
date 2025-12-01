@@ -158,12 +158,14 @@ class _EditAccountPageState extends State<EditAccountPage> {
                             // print(phoneNumber);
                           },
                           onInputValidated: onInputValidated,
+                          isEnabled: false,
                         ),
                         const Gap(10),
                         CustomTextField(
                           controller: _formController.email,
                           prefixIcon: const Icon(CupertinoIcons.mail),
                           labelText: 'Email',
+                          isEnabled: false,
                           textInputType: TextInputType.emailAddress,
                           validator: (String? value) =>
                               FormUtils.emailValidator(email: value),

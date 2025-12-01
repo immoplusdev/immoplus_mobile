@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/appli/widgets/date_creation_widget.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -80,7 +81,9 @@ class VisitHistoryCard extends StatelessWidget {
                     ),
                 ],
               ),
-              const Gap(5),
+              DateCreationWidget(
+                createdAt: demandeVisiteModel.createdAt,
+              ),
               if (demandeVisiteModel.bienImmobilier != null)
                 Text("📍 ${demandeVisiteModel.bienImmobilier!.adresse}"),
               const Gap(10),
@@ -94,7 +97,7 @@ class VisitHistoryCard extends StatelessWidget {
                         size: 15,
                       ),
                       const Gap(5),
-                      Text("+${demandeVisiteModel.clientPhoneNumber}")
+                      Text("Touchez pour voir plus")
                     ],
                   ),
                   AutoSizeText(
@@ -142,20 +145,26 @@ class VisitHistoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (demandeVisiteModel.datesDemandeVisite.isNotEmpty)
-                    Chip(
-                      avatar: Icon(
-                        color: AppColors.primary,
-                        FontAwesomeIcons.triangleExclamation,
-                        size: 15,
-                      ),
-                      backgroundColor: AppColors.scafold,
-                      label: Text(Utils.formatDatOnly(
-                          dateTime: demandeVisiteModel
-                              .datesDemandeVisite.first.date!)),
-                      labelStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: AppColors.primary,
-                              ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Date de la visite"),
+                        Chip(
+                          avatar: Icon(
+                            color: AppColors.primary,
+                            FontAwesomeIcons.triangleExclamation,
+                            size: 15,
+                          ),
+                          backgroundColor: AppColors.scafold,
+                          label: Text(Utils.formatDatOnly(
+                              dateTime: demandeVisiteModel
+                                  .datesDemandeVisite.first.date!)),
+                          labelStyle:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                        ),
+                      ],
                     ),
                   if (demandeVisiteModel.datesDemandeVisite.isNotEmpty)
                     AutoSizeText(

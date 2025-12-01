@@ -22,6 +22,8 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
+import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/test/test_wave_web_view.dart';
@@ -184,7 +186,7 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/payment/demandes-visites/:idProduct',
+        path: '/payment/demandes_visites/:idProduct',
         builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: const Text('Demande de visite'),
@@ -230,10 +232,27 @@ class AppRouter {
       //       );
       //     }),
       GoRoute(
+        path: '/send-email-otp',
+        name: SendEmailOptPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SendEmailOptPage();
+        },
+      ),
+      GoRoute(
+        path: '/verify-email-otp',
+        name: VerifyEmailOtpPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return VerifyEmailOtpPage(email: state.extra as String);
+        },
+      ),
+      GoRoute(
         path: '/registration',
         name: CustomerRegistration.name,
         builder: (BuildContext context, GoRouterState state) {
-          return const CustomerRegistration();
+          return CustomerRegistration(
+            email: (state.extra as DataRouterRegistration).email,
+            token: (state.extra as DataRouterRegistration).token,
+          );
         },
       ),
       GoRoute(

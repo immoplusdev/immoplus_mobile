@@ -16,12 +16,16 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
                   DatesReservationModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      dateDebut: json['dateDebut'] as String? ?? '',
+      dateFin: json['dateFin'] as String? ?? '',
       statusFacture: json['statusFacture'] as String? ?? '',
       retraitProEffectue: json['retraitProEffectue'] as bool? ?? false,
       montantTotalReservation:
           (json['montantTotalReservation'] as num?)?.toDouble() ?? 0,
       montantReservationSansCommission:
           (json['montantReservationSansCommission'] as num?)?.toDouble() ?? 0,
+      montantPaye: (json['montantPaye'] as num?)?.toInt() ?? 0,
+      codeReservation: json['codeReservation'] as String? ?? '',
       notes: json['notes'] as String? ?? '',
       clientPhoneNumber: json['clientPhoneNumber'] as String? ?? '',
       createdAt: json['createdAt'] as String? ?? '',
@@ -44,11 +48,15 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
       'id': instance.id,
       'statusReservation': instance.statusReservation,
       'datesReservation': instance.datesReservation,
+      'dateDebut': instance.dateDebut,
+      'dateFin': instance.dateFin,
       'statusFacture': instance.statusFacture,
       'retraitProEffectue': instance.retraitProEffectue,
       'montantTotalReservation': instance.montantTotalReservation,
       'montantReservationSansCommission':
           instance.montantReservationSansCommission,
+      'montantPaye': instance.montantPaye,
+      'codeReservation': instance.codeReservation,
       'notes': instance.notes,
       'clientPhoneNumber': instance.clientPhoneNumber,
       'createdAt': instance.createdAt,

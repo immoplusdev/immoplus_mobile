@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
@@ -37,6 +38,12 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
   void initState() {
     super.initState();
     context.read<BookingCubit>().getBooking(id: widget.id);
+  }
+
+  /// verifier si la demande de visite est payé
+  bool hasPaid(ReservationResponse reservationResponse) {
+    return reservationResponse.data.statusFacture.toString() ==
+        PaymentStatus.paye.name;
   }
 
   @override
@@ -125,8 +132,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           "Total pour ${state.reservationResponse.data.datesReservation.length} ${(state.reservationResponse.data.datesReservation.length >= 1) ? 'Jour' : 'Jours'}",
                         ),
                         trailing: Text(
-                          Utils.formatCurrency(state.reservationResponse.data
-                              .montantTotalReservation),
+                          Utils.formatCurrency(
+                              state.reservationResponse.data.montantPaye),
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -300,53 +307,65 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ),
                   ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: const CircleAvatar(
-                            //backgroundColor: Colors.white,
-                            child: Icon(
-                              FontAwesomeIcons.userTie,
-                              //color: Colors.green,
+                  if (hasPaid(state.reservationResponse))
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)
+                            .copyWith(bottom: 10),
+                        child: Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            enabled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
+                            leading: const CircleAvatar(
+                              //backgroundColor: Colors.white,
+                              child: Icon(
+                                FontAwesomeIcons.userTie,
+                                //color: Colors.green,
+                              ),
+                            ),
+                            title: const Text("Propriétaire"),
+                            subtitle: Text(state.reservationResponse.data
+                                .proprietaire.phoneNumber
+                                .split('-')
+                                .last
+                                .toString()),
+                            titleTextStyle:
+                                Theme.of(context).textTheme.bodyMedium,
+                            trailing: Icon(
+                              FontAwesomeIcons.phoneVolume,
+                              color: AppColors.primary,
+                            ),
+                            subtitleTextStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: AppColors.primary),
+                            onTap: () async {
+                              final phone = state.reservationResponse.data
+                                  .proprietaire.phoneNumber
+                                  .split('-');
+                              Utils.makePhoneCall(phone.last);
+                            },
                           ),
-                          title: const Text("Propriétaire"),
-                          subtitle: Text(state
-                              .reservationResponse.data.clientPhoneNumber
-                              .split('-')
-                              .last
-                              .toString()),
-                          titleTextStyle:
-                              Theme.of(context).textTheme.bodyMedium,
-                          trailing: Icon(
-                            FontAwesomeIcons.phoneVolume,
-                            color: AppColors.primary,
-                          ),
-                          subtitleTextStyle: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: AppColors.primary),
-                          onTap: () async {
-                            final phone = state
-                                .reservationResponse.data.clientPhoneNumber
-                                .split('-');
-                            Utils.makePhoneCall(phone.last);
-                          },
                         ),
                       ),
                     ),
-                  ),
+                  if (hasPaid(state.reservationResponse))
+                    _customTile(
+                      icon: Icons.label_rounded,
+                      trailingIcon: Icons.content_copy_rounded,
+                      title:
+                          "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
+                      onTap: () {
+                        Utils.copyToClipboard(
+                            state.reservationResponse.data.codeReservation);
+                      },
+                    ),
+                  SliverGap(50)
                 ],
               ),
             ),
@@ -364,8 +383,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       extra: PaymentPageAdapter(
                           itemId: state.reservationResponse.data.id,
                           collection: ProductType.reservations.name,
-                          amount: state
-                              .reservationResponse.data.montantTotalReservation
+                          amount: state.reservationResponse.data.montantPaye
                               .toInt()),
                     );
                   },
@@ -382,7 +400,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   horizontalTitleGap: 3,
                   dense: true,
                   title: Text(
-                      'Payer maintenant  ${state.reservationResponse.data.montantTotalReservation} Fcfa'),
+                      'Payer maintenant  ${state.reservationResponse.data.montantPaye} Fcfa'),
                   titleTextStyle: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -439,6 +457,44 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         }
         return const LoadingPage();
       },
+    );
+  }
+
+  Widget _customTile(
+      {IconData? icon,
+      required String title,
+      IconData? trailingIcon,
+      VoidCallback? onTap}) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
+        child: Material(
+          elevation: 2,
+          borderRadius: BorderRadius.circular(20),
+          child: ListTile(
+            tileColor: Colors.white,
+            enabled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            leading: Icon(
+              icon,
+              color: AppColors.primary,
+            ),
+            title: Text(title),
+            titleTextStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: AppColors.primary, fontSize: 15),
+            trailing: Icon(
+              trailingIcon,
+              color: AppColors.primary,
+            ),
+            onTap: onTap,
+          ),
+        ),
+      ),
     );
   }
 }

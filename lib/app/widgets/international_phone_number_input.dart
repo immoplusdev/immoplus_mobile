@@ -11,6 +11,8 @@ class InternationalPhoneInput extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(bool)? onInputValidated;
   final Color? backgroundColor;
+  final bool isEnabled;
+
   const InternationalPhoneInput({
     super.key,
     this.onValidPhoneNumber,
@@ -19,6 +21,7 @@ class InternationalPhoneInput extends StatefulWidget {
     this.onInputValidated, // Default to Côte d’Ivoire
     this.initialPhoneNumber,
     this.backgroundColor,
+    this.isEnabled = true,
   });
 
   @override
@@ -59,6 +62,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               borderRadius: BorderRadius.circular(20),
             ),
             title: InternationalPhoneNumberInput(
+              isEnabled: widget.isEnabled,
               onInputChanged: (PhoneNumber number) {
                 _phoneNumber = number;
               },

@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,6 +55,15 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1003203724496',
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyD4OuOwQMgSTGAqG0zpXnvNVDNqNjh7x7g',
+    appId: '1:1003203724496:ios:17e2ae70617c78c0458ad5',
+    messagingSenderId: '1003203724496',
+    projectId: 'immo-plus',
+    storageBucket: 'immo-plus.firebasestorage.app',
+    iosBundleId: 'com.immoplus.ci',
   );
 
 }

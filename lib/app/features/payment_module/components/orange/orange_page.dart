@@ -23,7 +23,7 @@ class _OrangePageState extends State<OrangePage> {
     return PaymentData(
       productType: widget.productType,
       orderID: widget.orderID,
-      amount: getAmountithFee(widget.amount),
+      amount: widget.amount,
       child: ValueListenableBuilder(
           valueListenable: OrangePaymentRouter.pageStateNotifier,
           builder: (context, value, child) {

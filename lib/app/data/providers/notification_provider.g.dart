@@ -25,12 +25,17 @@ class _NotificationProvider implements NotificationProvider {
   Future<NotificationsResponse> getNotifications({
     int page = 1,
     int pageSize = 10,
+    String? orderBy,
+    String? orderDir,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
       r'pageSize': pageSize,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<NotificationsResponse>(Options(

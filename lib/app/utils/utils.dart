@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -473,5 +475,50 @@ class Utils {
       (Match m) => '${m[1]}-${m[2]}',
     );
     print(formattedNumber); // Affiche : 225-0701710065
+  }
+
+  static DateTime toDateTime(String? dateString) {
+    try {
+      return DateTime.parse(dateString!);
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
+  /// Convertit une heure au format String (ex: "09:00" ou "09h00") en TimeOfDay
+  TimeOfDay parseTime(String timeString) {
+    try {
+      // Nettoyer la chaîne
+      String cleaned = timeString.trim().toUpperCase();
+
+      // Vérifier si c'est un format AM/PM
+      bool isPM = cleaned.contains('PM');
+      bool isAM = cleaned.contains('AM');
+
+      // Extraire la partie numérique
+      String timePart =
+          cleaned.replaceAll('AM', '').replaceAll('PM', '').trim();
+
+      List<String> parts = timePart.split(':');
+      int hour = int.parse(parts[0]);
+      int minute = parts.length > 1 ? int.parse(parts[1]) : 0;
+
+      // Conversion du format 12h au format 24h
+      if (isPM && hour != 12) {
+        hour += 12; // 1 PM = 13h, 2 PM = 14h, etc.
+      } else if (isAM && hour == 12) {
+        hour = 0; // 12 AM = 00h (minuit)
+      }
+
+      return TimeOfDay(hour: hour, minute: minute);
+    } catch (e) {
+      log('Erreur lors du parsing de l\'heure: $timeString - $e');
+      // Valeur par défaut si parsing échoue
+      return const TimeOfDay(hour: 12, minute: 0);
+    }
+  }
+
+  static copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
   }
 }

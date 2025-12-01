@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/appli/widgets/date_creation_widget.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_history_payment_status.dart';
@@ -62,6 +63,9 @@ class BookingHistoryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              DateCreationWidget(
+                title: "DATE DE RESERVATION: ",
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -108,8 +112,7 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
                   AutoSizeText(
                     maxLines: 1,
-                    Utils.formatCurrency(
-                        reservationModel.montantTotalReservation),
+                    Utils.formatCurrency(reservationModel.montantPaye),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
@@ -138,7 +141,7 @@ class BookingHistoryCard extends StatelessWidget {
                           ),
                           AutoSizeText(
                               maxLines: 1,
-                              "${formatDate.format(reservationModel.datesReservation.first.date!)} à ${reservationModel.residence.heureEntree}")
+                              "${formatDate.format(Utils.toDateTime(reservationModel.dateDebut))} à ${reservationModel.residence.heureEntree}")
                         ],
                       ),
                     ),
@@ -158,7 +161,7 @@ class BookingHistoryCard extends StatelessWidget {
                           ),
                           AutoSizeText(
                             maxLines: 1,
-                            "${formatDate.format(reservationModel.datesReservation.last.date!)} avant ${reservationModel.residence.heureDepart} ",
+                            "${formatDate.format(Utils.toDateTime(reservationModel.dateFin))} avant ${reservationModel.residence.heureDepart} ",
                           )
                         ],
                       ),

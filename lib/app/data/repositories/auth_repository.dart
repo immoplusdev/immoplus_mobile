@@ -9,6 +9,8 @@ import 'package:immoplus/app/core/network/exceptions/request_response_exeption.d
 import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
 import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/update_user_response_model.dart';
+import 'package:immoplus/app/data/models/auth/verify_email_otp.dart';
+import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -209,6 +211,24 @@ class AuthRepository {
     }
   }
 
+  Future<HttpResponse> sendEmailOTP({required SendEmailOtpBody body}) async {
+    try {
+      final response = await AuthProvider(dioClient).sendEmailOTP(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send email OTP: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to send email OTP: $error');
+    }
+  }
+
   // Étape 2: Réinitialiser le mot de passe
   Future<HttpResponse> resetPassword({required ResetPasswordBody body}) async {
     try {
@@ -225,6 +245,42 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to reset password: $error');
+    }
+  }
+
+  Future<VerifyEmailResponse?> verifyOtp({required VerifyEmailOtp body}) async {
+    try {
+      final response = await AuthProvider(dioClient).verifyOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send email OTP: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to send email OTP: $error');
+    }
+  }
+
+  Future<HttpResponse> deleteAccount({required String userId}) async {
+    try {
+      final response = await AuthProvider(dioClient).deleteAccount(userId);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to delete account: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to delete account: $error');
     }
   }
 }

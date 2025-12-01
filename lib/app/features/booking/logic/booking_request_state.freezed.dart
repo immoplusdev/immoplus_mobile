@@ -24,6 +24,8 @@ mixin _$BookingRequestState {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -36,6 +38,7 @@ mixin _$BookingRequestState {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) =>
@@ -47,6 +50,7 @@ mixin _$BookingRequestState {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -59,6 +63,7 @@ mixin _$BookingRequestState {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) =>
@@ -70,6 +75,7 @@ mixin _$BookingRequestState {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) =>
@@ -81,6 +87,7 @@ mixin _$BookingRequestState {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -156,6 +163,8 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -171,6 +180,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -185,6 +195,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -203,6 +214,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -217,6 +229,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -231,6 +244,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -293,6 +307,8 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -308,6 +324,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -322,6 +339,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -340,6 +358,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -354,6 +373,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -368,6 +388,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -431,6 +452,8 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -446,6 +469,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -460,6 +484,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -478,6 +503,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -492,6 +518,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -506,6 +533,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -610,6 +638,8 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -625,6 +655,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -639,6 +670,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -657,6 +689,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -671,6 +704,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -685,6 +719,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -798,6 +833,8 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -813,6 +850,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -827,6 +865,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -845,6 +884,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -859,6 +899,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -873,6 +914,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -895,6 +937,201 @@ abstract class RECEIVE_ESTIMATION implements BookingRequestState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RECEIVE_ESTIMATIONImplCopyWith<_$RECEIVE_ESTIMATIONImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RECEIVE_ESTIMATE_COSTImplCopyWith<$Res> {
+  factory _$$RECEIVE_ESTIMATE_COSTImplCopyWith(
+          _$RECEIVE_ESTIMATE_COSTImpl value,
+          $Res Function(_$RECEIVE_ESTIMATE_COSTImpl) then) =
+      __$$RECEIVE_ESTIMATE_COSTImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({EstimateCostModel estimateCost});
+
+  $EstimateCostModelCopyWith<$Res> get estimateCost;
+}
+
+/// @nodoc
+class __$$RECEIVE_ESTIMATE_COSTImplCopyWithImpl<$Res>
+    extends _$BookingRequestStateCopyWithImpl<$Res, _$RECEIVE_ESTIMATE_COSTImpl>
+    implements _$$RECEIVE_ESTIMATE_COSTImplCopyWith<$Res> {
+  __$$RECEIVE_ESTIMATE_COSTImplCopyWithImpl(_$RECEIVE_ESTIMATE_COSTImpl _value,
+      $Res Function(_$RECEIVE_ESTIMATE_COSTImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? estimateCost = null,
+  }) {
+    return _then(_$RECEIVE_ESTIMATE_COSTImpl(
+      null == estimateCost
+          ? _value.estimateCost
+          : estimateCost // ignore: cast_nullable_to_non_nullable
+              as EstimateCostModel,
+    ));
+  }
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $EstimateCostModelCopyWith<$Res> get estimateCost {
+    return $EstimateCostModelCopyWith<$Res>(_value.estimateCost, (value) {
+      return _then(_value.copyWith(estimateCost: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
+  const _$RECEIVE_ESTIMATE_COSTImpl(this.estimateCost);
+
+  @override
+  final EstimateCostModel estimateCost;
+
+  @override
+  String toString() {
+    return 'BookingRequestState.receiveEstimateCost(estimateCost: $estimateCost)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RECEIVE_ESTIMATE_COSTImpl &&
+            (identical(other.estimateCost, estimateCost) ||
+                other.estimateCost == estimateCost));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, estimateCost);
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RECEIVE_ESTIMATE_COSTImplCopyWith<_$RECEIVE_ESTIMATE_COSTImpl>
+      get copyWith => __$$RECEIVE_ESTIMATE_COSTImplCopyWithImpl<
+          _$RECEIVE_ESTIMATE_COSTImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() loadingList,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
+    required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
+    required TResult Function(ReservationResponse reservationResponse)
+        receiveBooking,
+    required TResult Function(String message) error,
+  }) {
+    return receiveEstimateCost(estimateCost);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? loadingList,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
+    TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
+    TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(String message)? error,
+  }) {
+    return receiveEstimateCost?.call(estimateCost);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? loadingList,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
+    TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
+    TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (receiveEstimateCost != null) {
+      return receiveEstimateCost(estimateCost);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(INITIAL_BOOKING value) initial,
+    required TResult Function(LOADING_BOOKING value) loading,
+    required TResult Function(LOADING_BOOKING_LIST value) loadingList,
+    required TResult Function(RECEIVE_BOOKINGS value) receive,
+    required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
+    required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(Error_BOOKINGS value) error,
+  }) {
+    return receiveEstimateCost(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(INITIAL_BOOKING value)? initial,
+    TResult? Function(LOADING_BOOKING value)? loading,
+    TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
+    TResult? Function(RECEIVE_BOOKINGS value)? receive,
+    TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
+    TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(Error_BOOKINGS value)? error,
+  }) {
+    return receiveEstimateCost?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(INITIAL_BOOKING value)? initial,
+    TResult Function(LOADING_BOOKING value)? loading,
+    TResult Function(LOADING_BOOKING_LIST value)? loadingList,
+    TResult Function(RECEIVE_BOOKINGS value)? receive,
+    TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
+    TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(Error_BOOKINGS value)? error,
+    required TResult orElse(),
+  }) {
+    if (receiveEstimateCost != null) {
+      return receiveEstimateCost(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RECEIVE_ESTIMATE_COST implements BookingRequestState {
+  const factory RECEIVE_ESTIMATE_COST(final EstimateCostModel estimateCost) =
+      _$RECEIVE_ESTIMATE_COSTImpl;
+
+  EstimateCostModel get estimateCost;
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RECEIVE_ESTIMATE_COSTImplCopyWith<_$RECEIVE_ESTIMATE_COSTImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -986,6 +1223,8 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -1001,6 +1240,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -1015,6 +1255,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -1033,6 +1274,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -1047,6 +1289,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -1061,6 +1304,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
@@ -1160,6 +1404,8 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     required TResult Function(ReservationsCollection reservationResponse)
         receive,
     required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
     required TResult Function(String message) error,
@@ -1175,6 +1421,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult? Function()? loadingList,
     TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult? Function(String message)? error,
   }) {
@@ -1189,6 +1436,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult Function()? loadingList,
     TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -1207,6 +1455,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     required TResult Function(LOADING_BOOKING_LIST value) loadingList,
     required TResult Function(RECEIVE_BOOKINGS value) receive,
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
@@ -1221,6 +1470,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult? Function(RECEIVE_BOOKINGS value)? receive,
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
@@ -1235,6 +1485,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult Function(LOADING_BOOKING_LIST value)? loadingList,
     TResult Function(RECEIVE_BOOKINGS value)? receive,
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),

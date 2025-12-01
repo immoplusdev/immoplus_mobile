@@ -14,6 +14,7 @@ import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
@@ -164,7 +165,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                     )),
                 TextButton(
                     onPressed: () {
-                      context.pushNamed(CustomerRegistration.name);
+                      context.pushNamed(SendEmailOptPage.name);
                     },
                     child: Text(
                       'S\'inscrire',

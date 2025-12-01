@@ -92,7 +92,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
               controller: _formController.phoneNumber,
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              labelText: 'Numéro de telephone orange',
+              labelText: 'Numéro de téléphone valide',
               prefixIcon: const Icon(CupertinoIcons.phone),
               validator: (String? value) => PaymentUtils.numberValidator(
                   number: value!.replaceAll(' ', ''),
@@ -120,8 +120,10 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
                     context: context,
                     number:
                         _formController.phoneNumber!.text.replaceAll(' ', ''),
-                    collection: ProductType.booking.name,
-                    itemID: "38c16b58-74a5-47ec-b404-8ebf6a7b3dcc",
+                    collection: PaymentData.of(context)?.productType ??
+                        ProductType.booking.name,
+                    itemID: PaymentData.of(context)?.orderID ??
+                        "38c16b58-74a5-47ec-b404-8ebf6a7b3dcc",
                     onSuccess: (p) {
                       setState(() {
                         loadingButton = false;

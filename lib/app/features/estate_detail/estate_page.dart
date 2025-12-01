@@ -154,7 +154,7 @@ class _EstatePageState extends State<EstatePage> {
                 //description next
 
                 const DetailDivider(),
-                const DetailLogmentTitle2(title: 'Où se situe le logement'),
+                const DetailLogmentTitle2(title: 'Où se situe le logement ?'),
                 DetailEstateMap(bienImmobilier: state.data),
                 const DetailDivider(),
                 const SliverGap(10),

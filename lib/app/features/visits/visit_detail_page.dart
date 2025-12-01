@@ -347,7 +347,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       OperatorsSelectorPage.name,
                       extra: PaymentPageAdapter(
                           itemId: state.demandeVisitResponse.data.id,
-                          collection: ProductType.reservations.name,
+                          collection: ProductType.demandes_visites.name,
                           amount: state.demandeVisitResponse.data
                               .montantTotalDemandeVisite
                               .toInt()),

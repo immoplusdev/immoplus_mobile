@@ -101,10 +101,28 @@ class SessionManager {
     return await isar.userModelSchemas.get(1);
   }
 
-  Future setOpended() async {
+  /// Marque l'onboarding comme lu/vu par l'utilisateur
+  Future<void> markOnboardingAsRead() async {
     await isarConfig.instance.writeTxn(() async {
-      await isarConfig.instance.onboardingSchemas
-          .put(OnboardingSchema()..date = DateTime.now());
+      await isarConfig.instance.onboardingSchemas.put(
+        OnboardingSchema()
+          ..hasReadOnboarding = true
+          ..readAt = DateTime.now(),
+      );
+    });
+  }
+
+  /// Vérifie si l'utilisateur a déjà vu l'onboarding
+  Future<bool> hasReadOnboarding() async {
+    final onboardingData =
+        await isarConfig.instance.onboardingSchemas.where().findFirst();
+    return onboardingData?.hasReadOnboarding ?? false;
+  }
+
+  /// Réinitialise le statut de l'onboarding (utile pour les tests)
+  Future<void> resetOnboarding() async {
+    await isarConfig.instance.writeTxn(() async {
+      await isarConfig.instance.onboardingSchemas.clear();
     });
   }
 }

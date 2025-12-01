@@ -27,7 +27,7 @@ class _ResidencesListState extends State<ResidencesList> {
       long: FilterHandler.long,
       startDate: FilterHandler.startDate,
       endDate: FilterHandler.endDate,
-      radius: (FilterHandler.lat != null) ? 100 : null,
+      // radius: (FilterHandler.lat != null) ? 100 : null,
       where: whereFilters,
       page: page,
     )

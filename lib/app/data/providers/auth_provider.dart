@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
 import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
+import 'package:immoplus/app/data/models/auth/verify_email_otp.dart';
+import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 
 import 'package:retrofit/retrofit.dart';
@@ -68,4 +70,14 @@ abstract class AuthProvider {
   @POST('/auth/reset-password')
   Future<HttpResponse> resetPassword(
       @Body() ResetPasswordBody resetPasswordBody);
+
+  @POST('/users/send-otp')
+  Future<HttpResponse> sendEmailOTP(@Body() SendEmailOtpBody sendEmailOtpBody);
+
+  @POST('/users/verify-otp')
+  Future<VerifyEmailResponse> verifyOtp(
+      @Body() VerifyEmailOtp sendEmailOtpBody);
+
+  @DELETE('/users/{id}')
+  Future<HttpResponse> deleteAccount(@Path() String id);
 }
