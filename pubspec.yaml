@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.6+8
+version: 1.0.7+1
 
 environment:
   sdk: ^3.6.0
@@ -31,12 +31,10 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  isar:
+  isar_community:
     version: ^3.1.8
-    hosted: https://pub.isar-community.dev/
-  isar_flutter_libs: # contains Isar Core
+  isar_community_flutter_libs:
     version: ^3.1.8
-    hosted: https://pub.isar-community.dev/
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   retrofit: ^4.4.2
@@ -70,7 +68,7 @@ dependencies:
   flutter_map: ^7.0.2
   flutter_markdown: ^0.7.6
   flutter_masked_text2: ^0.9.1
-  flutter_quill: ^10.8.5
+  flutter_quill: ^11.5.0
   flutter_rating_bar: ^4.0.1
   flutter_staggered_grid_view: ^0.7.0
   flutter_svg: ^2.0.17
@@ -90,7 +88,7 @@ dependencies:
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.1.0
   injectable: ^2.5.0
-  intl: ^0.19.0
+  intl: ^0.20.1
   intro_slider: ^4.2.1
   latlong2: ^0.9.1
   loading_indicator: ^3.1.1
@@ -132,9 +130,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  isar_generator:
+  isar_community_generator:
     version: ^3.1.8
-    hosted: https://pub.isar-community.dev/
   build_runner: ^2.4.14
   retrofit_generator: ">=8.0.0 <10.0.0"
   freezed: ^2.5.7

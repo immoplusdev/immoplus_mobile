@@ -11,7 +11,7 @@ import device_info_plus
 import file_selector_macos
 import firebase_core
 import geolocator_apple
-import isar_flutter_libs
+import isar_community_flutter_libs
 import just_audio
 import location
 import package_info_plus

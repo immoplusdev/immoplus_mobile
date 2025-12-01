@@ -82,3 +82,17 @@ ios/Runner/GeneratedPluginRegistrant.*
 android/.gradle/
 android/app/key.properties
 android/local.properties
+
+# Genereted files
+*.g.dart
+*.freezed.dart
+*.config.dart
+*.gr.dart
+*.mocks.dart
+*.gen.dart
+*.part.dart
+*.iconfig.dart
+*.module.dart
+*.graphql.dart
+*.injectable.dart
+*.riverpod.dart

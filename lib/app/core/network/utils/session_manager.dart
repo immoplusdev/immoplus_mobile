@@ -4,7 +4,7 @@ import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../data/models/local/onboarding_schema.dart';

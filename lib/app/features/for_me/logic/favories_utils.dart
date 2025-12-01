@@ -4,7 +4,7 @@ import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 @singleton
 class FavoriesUtils {

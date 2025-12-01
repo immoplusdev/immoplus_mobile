@@ -10,7 +10,7 @@ import 'package:immoplus/app/features/for_me/components/empty_indicator.dart';
 import 'package:immoplus/app/features/for_me/components/favorite_card.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
