@@ -12,9 +12,14 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class VisitCubit extends Cubit<VisitRequestState> {
-  VisitCubit() : super(const VisitRequestState.initial());
+  final BienImmobilierRepository bienImmobilierRepository;
+
+  VisitCubit(this.bienImmobilierRepository)
+      : super(const VisitRequestState.initial());
 
   getVisits() async {
     emit(const LOADING_VISITS_LIST());
@@ -32,7 +37,7 @@ class VisitCubit extends Cubit<VisitRequestState> {
     emit(const LOADING_VISITS());
     try {
       DemandeVisitResponse reservationModel =
-          await BienImmobilierRepository().getVisit(id: id);
+          await bienImmobilierRepository.getVisit(id: id);
       emit(VisitRequestState.receiveId(reservationModel));
     } catch (e) {
       emit(VisitRequestState.error(e.toString()));
@@ -44,7 +49,7 @@ class VisitCubit extends Cubit<VisitRequestState> {
     try {
       CustomPopup.showLoagingToast();
       DemandeVisitResponse demandeVisitResponse =
-          await BienImmobilierRepository().createVisit(model: body);
+          await bienImmobilierRepository.createVisit(model: body);
       emit(VisitRequestState.receive(demandeVisitResponse.data));
     } catch (e, s) {
       log(s.toString());

@@ -7,13 +7,16 @@ import 'package:immoplus/app/data/models/remote/reservations/reservations_collec
 
 import 'package:immoplus/app/data/providers/reservation_provider.dart';
 import 'package:immoplus/app/data/providers/residence_provider.dart';
+import 'package:injectable/injectable.dart';
 
 import '../models/remote/reservations/reservation_request_body.dart';
 import '../models/remote/residence/residence_response.dart';
 import '../models/remote/residence/residences_collection.dart';
 
+@injectable
 class ResidenceRepository {
-  final dioClient = getIt<Dio>();
+  Dio dioClient;
+  ResidenceRepository(this.dioClient);
 
   Future<ReservationsCollection> getReservations({
     required int page,
@@ -132,6 +135,51 @@ class ResidenceRepository {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
       final response = await ResidenceProvider(dioClient).getResidences(
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        where: where,
+        search: search,
+        lat: lat,
+        long: long,
+        perPage: perPage,
+        radius: radius,
+        startDate: startDate,
+        endDate: endDate,
+      );
+
+      return response;
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } catch (error) {
+      inspect(error);
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
+  Future<ResidencesCollection> getResidencesProprietaire({
+    required String proprietaireId,
+    required int page,
+    String? orderBy,
+    String? orderDir,
+    Map<String, dynamic>? where,
+    String? search,
+    double? lat,
+    double? long,
+    int? perPage,
+    double? radius,
+    String? startDate,
+    String? endDate,
+  }) async {
+    //dioClient.options.queryParameters['meta'] = '*';
+    try {
+      final response =
+          await ResidenceProvider(dioClient).getResidencesProprietaire(
+        proprietaireId: proprietaireId,
         page: page,
         orderBy: orderBy,
         orderDir: orderDir,

@@ -10,6 +10,7 @@ import 'package:immoplus/app/features/account/pages/permission_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
+import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
@@ -26,7 +27,7 @@ import 'package:immoplus/app/features/registration/screens/send_email_opt_page.d
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
-import 'package:immoplus/app/features/test/test_wave_web_view.dart';
+import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
@@ -158,9 +159,25 @@ class AppRouter {
         name: EstatePage.name,
         builder: (context, state) => EstatePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
-          // bienImmobilierModel: state.extra as BienImmobilierModel,
         ),
       ),
+      //TODO : vérifier que les routes depplink fonctionnent correctement
+      GoRoute(
+        path: '/user_residences/:userId',
+        name: ResidencePage.name,
+        builder: (context, state) => ResidencesUserPage(
+          userId: state.pathParameters['userId'] ?? '',
+        ),
+      ),
+
+      GoRoute(
+        path: '/user_estates/:userId',
+        name: EstatePage.name,
+        builder: (context, state) => EstateUserPage(
+          proprietaireId: state.pathParameters['userId'] ?? '',
+        ),
+      ),
+
       GoRoute(
         path: '/payment/reservations/:idProduct',
         builder: (context, state) => WillPopScope(

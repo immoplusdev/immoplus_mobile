@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/components/empty_elements_indicator.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
-import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
+import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class EstatesList extends StatefulWidget {
@@ -18,9 +17,11 @@ class EstatesList extends StatefulWidget {
 }
 
 class _EstatesListState extends State<EstatesList> {
+  final BienImmobilierRepository bienImmobilierRepository =
+      getIt<BienImmobilierRepository>();
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(PropertyType.estate);
-    BienImmobilierRepository()
+    bienImmobilierRepository
         .getBiensImmobiliers(
       page: page,
       search: FilterHandler.search,

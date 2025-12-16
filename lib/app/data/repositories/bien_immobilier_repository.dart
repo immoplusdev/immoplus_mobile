@@ -6,6 +6,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_req
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/providers/bien_immobilier_provider.dart';
 import 'package:immoplus/app/data/providers/reservation_provider.dart';
+import 'package:injectable/injectable.dart';
 
 import '../models/remote/bienimmobilier/bien_immobilier_collection.dart';
 import '../models/remote/bienimmobilier/bien_immobilier_single.dart';
@@ -15,9 +16,10 @@ import '../models/remote/bienimmobilier/demande_visite_collection.dart';
 import '../models/remote/bienimmobilier/demande_visite_model.dart';
 import '../models/remote/bienimmobilier/visit_programmer_body.dart';
 
+@injectable
 class BienImmobilierRepository {
-  final dioClient = getIt<Dio>();
-
+  final Dio dioClient;
+  BienImmobilierRepository(this.dioClient);
   Future<BienImmobilierCollection> getBiensImmobiliers({
     required int page,
     String? orderBy,
@@ -34,6 +36,52 @@ class BienImmobilierRepository {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
       final response = await BienImmobilierProvider(dioClient).getImmobiliers(
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        where: where,
+        search: search,
+        lat: lat,
+        long: long,
+        perPage: perPage,
+        radius: radius,
+        startDate: startDate,
+        endDate: endDate,
+      );
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log(dioError.requestOptions.uri.toString(), name: "URI");
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      inspect(error);
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
+  Future<BienImmobilierCollection> getBiensImmobiliersProprietaireId({
+    required String proprietaireId,
+    required int page,
+    String? orderBy,
+    String? orderDir,
+    Map<String, dynamic>? where,
+    String? search,
+    double? lat,
+    double? long,
+    int? perPage,
+    double? radius,
+    String? startDate,
+    String? endDate,
+  }) async {
+    //dioClient.options.queryParameters['meta'] = '*';
+    try {
+      final response =
+          await BienImmobilierProvider(dioClient).getImmobiliersProprietaireId(
+        proprietaireId: proprietaireId,
         page: page,
         orderBy: orderBy,
         orderDir: orderDir,

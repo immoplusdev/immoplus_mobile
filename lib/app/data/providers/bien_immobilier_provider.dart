@@ -41,6 +41,21 @@ abstract class BienImmobilierProvider {
     @Query("_order_by") String? orderBy,
     @Query("_order_dir") String? orderDir,
   });
+  @GET("/biens-immobiliers/data/public/proprietaire/{proprietaireId}")
+  Future<BienImmobilierCollection> getImmobiliersProprietaireId({
+    @Path() required String proprietaireId,
+    @Query("_search") String? search,
+    @Queries() Map<String, dynamic>? where,
+    @Query("_lat") double? lat,
+    @Query("_long") double? long,
+    @Query("_per_page") int? perPage,
+    @Query("_page") int? page,
+    @Query("_radius") double? radius,
+    @Query("_start_date") String? startDate,
+    @Query("_end_date") String? endDate,
+    @Query("_order_by") String? orderBy,
+    @Query("_order_dir") String? orderDir,
+  });
   //* end point de la map
   @GET("/biens-immobiliers/data/public/geolocalized")
   Future<BienImmobilierCollection> getBienImmobilierGeolocalized(

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
@@ -18,11 +19,13 @@ class VisitHistoryPage extends StatefulWidget {
 }
 
 class _VisitHistoryPageState extends State<VisitHistoryPage> {
+  final BienImmobilierRepository bienImmobilierRepository =
+      getIt<BienImmobilierRepository>();
   final PagingController<int, DemandeVisiteModel> _pagingController =
       PagingController(firstPageKey: 1);
 
   Future<void> loadPage(int page) async {
-    BienImmobilierRepository()
+    bienImmobilierRepository
         .getVisites(
       page: page,
       perPage: 5,

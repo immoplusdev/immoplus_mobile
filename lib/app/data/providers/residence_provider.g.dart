@@ -97,6 +97,59 @@ class _ResidenceProvider implements ResidenceProvider {
   }
 
   @override
+  Future<ResidencesCollection> getResidencesProprietaire({
+    required String proprietaireId,
+    String? search,
+    Map<String, dynamic>? where,
+    double? lat,
+    double? long,
+    int? perPage,
+    int? page,
+    double? radius,
+    String? startDate,
+    String? endDate,
+    String? orderBy,
+    String? orderDir,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'_search': search,
+      r'_lat': lat,
+      r'_long': long,
+      r'_per_page': perPage,
+      r'_page': page,
+      r'_radius': radius,
+      r'_start_date': startDate,
+      r'_end_date': endDate,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
+    };
+    queryParameters.addAll(where ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResidencesCollection>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/residences/data/public/proprietaire/${proprietaireId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResidencesCollection _value;
+    try {
+      _value = ResidencesCollection.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ResidencesCollection> getResidencesGeolocalized({
     double? lat,
     double? long,

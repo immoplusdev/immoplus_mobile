@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -22,9 +23,10 @@ class BookingHistoryPage extends StatefulWidget {
 class _BookingHistoryPageState extends State<BookingHistoryPage> {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
+  final ResidenceRepository residenceRepository = getIt<ResidenceRepository>();
 
   Future<void> loadPage(int page) async {
-    ResidenceRepository()
+    residenceRepository
         .getReservations(
       page: page,
       perPage: 5,

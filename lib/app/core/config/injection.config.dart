@@ -25,12 +25,23 @@ import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
+import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
+    as _i398;
+import 'package:immoplus/app/data/repositories/residence_repository.dart'
+    as _i143;
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
     as _i237;
 import 'package:immoplus/app/features/booking/logic/booking_services.dart'
     as _i946;
+import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart'
+    as _i488;
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
     as _i374;
+import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
+    as _i1028;
+import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart'
+    as _i85;
+import 'package:immoplus/app/features/visits/logic/visit_cubit.dart' as _i745;
 import 'package:immoplus/app/logic/authentification/login_cubit.dart' as _i888;
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart'
     as _i783;
@@ -71,8 +82,20 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i1023.ErrorInterceptor>(),
           gh<_i358.RequestInterceptor>(),
         ));
+    gh.factory<_i398.BienImmobilierRepository>(
+        () => _i398.BienImmobilierRepository(gh<_i361.Dio>()));
+    gh.factory<_i143.ResidenceRepository>(
+        () => _i143.ResidenceRepository(gh<_i361.Dio>()));
+    gh.factory<_i745.VisitCubit>(
+        () => _i745.VisitCubit(gh<_i398.BienImmobilierRepository>()));
+    gh.factory<_i488.EstateCubit>(
+        () => _i488.EstateCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i946.BookingServices>(
         () => _i946.BookingServices(gh<_i361.Dio>()));
+    gh.factory<_i1028.MapViwerCubit>(() => _i1028.MapViwerCubit(
+          gh<_i143.ResidenceRepository>(),
+          gh<_i398.BienImmobilierRepository>(),
+        ));
     gh.factory<_i783.RgistrationCubitCubit>(() => _i783.RgistrationCubitCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
@@ -83,8 +106,12 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           gh<_i640.NotificationService>(),
         ));
-    gh.factory<_i237.BookingCubit>(
-        () => _i237.BookingCubit(gh<_i946.BookingServices>()));
+    gh.factory<_i85.ResidenceCubit>(
+        () => _i85.ResidenceCubit(gh<_i143.ResidenceRepository>()));
+    gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(
+          gh<_i946.BookingServices>(),
+          gh<_i143.ResidenceRepository>(),
+        ));
     return this;
   }
 }

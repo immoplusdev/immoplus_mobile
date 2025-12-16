@@ -15,7 +15,9 @@ import 'package:injectable/injectable.dart';
 @injectable
 class BookingCubit extends Cubit<BookingRequestState> {
   BookingServices bookingServices;
-  BookingCubit(this.bookingServices)
+  ResidenceRepository residenceRepository;
+
+  BookingCubit(this.bookingServices, this.residenceRepository)
       : super(const BookingRequestState.initial());
 
   // getBookings() async {
@@ -35,7 +37,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
     emit(const LOADING_BOOKING());
     try {
       ReservationResponse reservationModel =
-          await ResidenceRepository().getReservation(id: id);
+          await residenceRepository.getReservation(id: id);
       emit(BookingRequestState.receiveBooking(reservationModel));
     } catch (e) {
       emit(BookingRequestState.error(e.toString()));
@@ -81,7 +83,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
     emit(const LOADING_BOOKING());
     try {
       ReservationResponse reservationResponse =
-          await ResidenceRepository().createBooking(model: body);
+          await residenceRepository.createBooking(model: body);
       emit(BookingRequestState.receiveBooking(reservationResponse));
 
       NavigationService.navigatorKey.currentContext!.pushNamed(

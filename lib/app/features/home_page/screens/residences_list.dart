@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -20,7 +21,8 @@ class ResidencesList extends StatefulWidget {
 class _ResidencesListState extends State<ResidencesList> {
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(PropertyType.residence);
-    ResidenceRepository()
+    ResidenceRepository residenceRepository = getIt<ResidenceRepository>();
+    residenceRepository
         .getResidences(
       search: FilterHandler.search,
       lat: FilterHandler.lat,

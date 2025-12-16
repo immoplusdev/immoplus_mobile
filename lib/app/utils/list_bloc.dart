@@ -42,22 +42,22 @@ class AppBlocs {
       create: (context) => getIt<BookingCubit>(),
     ),
     BlocProvider<VisitCubit>(
-      create: (context) => VisitCubit(),
+      create: (context) => getIt<VisitCubit>(),
     ),
     BlocProvider<EstateCubit>(
-      create: (context) => EstateCubit(),
+      create: (context) => getIt<EstateCubit>(),
     ),
     // BlocProvider<HistoryCubit>(
     //   create: (context) => HistoryCubit(),
     // ),
     BlocProvider<MapViwerCubit>(
-      create: (context) => MapViwerCubit(),
+      create: (context) => getIt<MapViwerCubit>(),
     ),
     BlocProvider<ResidenceCubit>(
-      create: (context) => ResidenceCubit(),
+      create: (context) => getIt<ResidenceCubit>(),
     ),
     BlocProvider<PaymentCubit>(
-      create: (context) => PaymentCubit(),
+      create: (context) => getIt<PaymentCubit>(),
     ),
     BlocProvider<FilterCubit>(
       create: (context) => FilterCubit(),

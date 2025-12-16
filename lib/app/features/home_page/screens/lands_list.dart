@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/components/empty_elements_indicator.dart';
@@ -15,8 +16,10 @@ class LandsList extends StatefulWidget {
 }
 
 class _LandsListState extends State<LandsList> {
+  final BienImmobilierRepository bienImmobilierRepository =
+      getIt<BienImmobilierRepository>();
   Future<void> loadPage(int page) async {
-    BienImmobilierRepository()
+    bienImmobilierRepository
         .getBiensImmobiliers(page: page, perPage: 5, where: {
       '_where': [
         '{"_field": "bienImmobilierDisponible", "_op": "eq", "_val": true}',

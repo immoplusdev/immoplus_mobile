@@ -12,9 +12,15 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/widgets/tickets_cards/small_estate_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/small_residence_card.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class MapViwerCubit extends Cubit<MapViwerCubitState> {
-  MapViwerCubit() : super(MapViwerCubitState());
+  ResidenceRepository residenceRepository;
+  BienImmobilierRepository bienImmobilierRepository;
+
+  MapViwerCubit(this.residenceRepository, this.bienImmobilierRepository)
+      : super(MapViwerCubitState());
   static List<Marker> datas = [];
 
   onChangeSearchFocus(bool focusState) {
@@ -26,7 +32,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
     emit(MapViwerCubitState(isLoading: true, markers: datas));
 
     ResidencesCollection residencesCollection =
-        await ResidenceRepository().getResidencesLocalized(
+        await residenceRepository.getResidencesLocalized(
       lat: center.latitude,
       long: center.longitude,
       radius: radius,
@@ -34,8 +40,8 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
       page: page,
     );
     BienImmobilierCollection bienImmobilierCollection =
-        await BienImmobilierRepository()
-            .getBiensLocalized(lat: center.latitude, long: center.longitude);
+        await bienImmobilierRepository.getBiensLocalized(
+            lat: center.latitude, long: center.longitude);
     datas.clear();
     datas.addAll(await _buildResidencesMarkers(residencesCollection));
     datas.addAll(await _buildBiensImmoMarkers(bienImmobilierCollection));
