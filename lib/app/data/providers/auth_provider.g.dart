@@ -52,7 +52,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = FileDataModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      // //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -101,7 +101,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = AccountCreationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -128,7 +128,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = AccountCreationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -157,7 +157,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = AccountCreationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -186,7 +186,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = AccountCreationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -215,7 +215,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = AccountCreationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -269,7 +269,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = UpdateUserResponseModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -296,7 +296,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = ConfigModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -398,7 +398,7 @@ class _AuthProvider implements AuthProvider {
     try {
       _value = VerifyEmailResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

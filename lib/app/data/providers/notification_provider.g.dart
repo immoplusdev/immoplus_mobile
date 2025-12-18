@@ -49,7 +49,7 @@ class _NotificationProvider implements NotificationProvider {
     try {
       _value = NotificationsResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

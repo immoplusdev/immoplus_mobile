@@ -41,7 +41,7 @@ class _ConfigsProvider implements ConfigsProvider {
     try {
       _value = CommuneCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -71,7 +71,7 @@ class _ConfigsProvider implements ConfigsProvider {
     try {
       _value = VilleCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      //errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

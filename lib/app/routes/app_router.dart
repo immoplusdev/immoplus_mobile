@@ -164,7 +164,7 @@ class AppRouter {
       //TODO : vérifier que les routes depplink fonctionnent correctement
       GoRoute(
         path: '/user_residences/:userId',
-        name: ResidencePage.name,
+        name: ResidencesUserPage.name,
         builder: (context, state) => ResidencesUserPage(
           userId: state.pathParameters['userId'] ?? '',
         ),
@@ -172,7 +172,7 @@ class AppRouter {
 
       GoRoute(
         path: '/user_estates/:userId',
-        name: EstatePage.name,
+        name: EstateUserPage.name,
         builder: (context, state) => EstateUserPage(
           proprietaireId: state.pathParameters['userId'] ?? '',
         ),
