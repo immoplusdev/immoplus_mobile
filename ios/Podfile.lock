@@ -1,32 +1,8 @@
 PODS:
-  - audio_session (0.0.1):
-    - Flutter
-  - connectivity_plus (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - device_info_plus (0.0.1):
-    - Flutter
-  - Firebase/CoreOnly (11.15.0):
-    - FirebaseCore (~> 11.15.0)
-  - firebase_core (3.15.2):
-    - Firebase/CoreOnly (= 11.15.0)
-    - Flutter
-  - FirebaseCore (11.15.0):
-    - FirebaseCoreInternal (~> 11.15.0)
-    - GoogleUtilities/Environment (~> 8.1)
-    - GoogleUtilities/Logger (~> 8.1)
-  - FirebaseCoreInternal (11.15.0):
-    - "GoogleUtilities/NSData+zlib (~> 8.1)"
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
-  - flutter_keyboard_visibility_temp_fork (0.0.1):
-    - Flutter
   - fluttertoast (0.0.2):
-    - Flutter
-  - geocoding_ios (1.0.5):
-    - Flutter
-  - geolocator_apple (1.2.0):
     - Flutter
   - Google-Maps-iOS-Utils (5.0.0):
     - GoogleMaps (~> 8.0)
@@ -39,21 +15,8 @@ PODS:
   - GoogleMaps/Base (8.4.0)
   - GoogleMaps/Maps (8.4.0):
     - GoogleMaps/Base
-  - GoogleUtilities/Environment (8.1.0):
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.0):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Privacy
-  - "GoogleUtilities/NSData+zlib (8.1.0)":
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.0)
-  - image_picker_ios (0.0.1):
-    - Flutter
   - isar_community_flutter_libs (1.0.0):
     - Flutter
-  - just_audio (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - libphonenumber_plugin (0.0.1):
     - Flutter
     - PhoneNumberKit (~> 3.7.8)
@@ -110,11 +73,6 @@ PODS:
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - package_info_plus (0.4.5):
-    - Flutter
-  - path_provider_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
   - PhoneNumberKit (3.7.11):
@@ -123,101 +81,41 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (3.7.11)
   - PhoneNumberKit/UIKit (3.7.11):
     - PhoneNumberKit/PhoneNumberKitCore
-  - quill_native_bridge_ios (0.0.1):
-    - Flutter
-  - share_plus (0.0.1):
-    - Flutter
   - sms_autofill (0.0.1):
     - Flutter
-  - sqflite_darwin (0.0.4):
-    - Flutter
-    - FlutterMacOS
-  - url_launcher_ios (0.0.1):
-    - Flutter
-  - vibration (3.0.0):
-    - Flutter
-  - video_player_avfoundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - wakelock_plus (0.0.1):
-    - Flutter
-  - webview_flutter_wkwebview (0.0.1):
-    - Flutter
-    - FlutterMacOS
 
 DEPENDENCIES:
-  - audio_session (from `.symlinks/plugins/audio_session/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
-  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - flutter_keyboard_visibility_temp_fork (from `.symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
-  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
-  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - isar_community_flutter_libs (from `.symlinks/plugins/isar_community_flutter_libs/ios`)
-  - just_audio (from `.symlinks/plugins/just_audio/darwin`)
   - libphonenumber_plugin (from `.symlinks/plugins/libphonenumber_plugin/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
-  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - quill_native_bridge_ios (from `.symlinks/plugins/quill_native_bridge_ios/ios`)
-  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
-  - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - vibration (from `.symlinks/plugins/vibration/ios`)
-  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
-  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
-  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
   trunk:
-    - Firebase
-    - FirebaseCore
-    - FirebaseCoreInternal
     - Google-Maps-iOS-Utils
     - GoogleMaps
-    - GoogleUtilities
     - OneSignalXCFramework
     - PhoneNumberKit
 
 EXTERNAL SOURCES:
-  audio_session:
-    :path: ".symlinks/plugins/audio_session/ios"
-  connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/darwin"
-  device_info_plus:
-    :path: ".symlinks/plugins/device_info_plus/ios"
-  firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  flutter_keyboard_visibility_temp_fork:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  geocoding_ios:
-    :path: ".symlinks/plugins/geocoding_ios/ios"
-  geolocator_apple:
-    :path: ".symlinks/plugins/geolocator_apple/ios"
   google_maps_flutter_ios:
     :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
-  image_picker_ios:
-    :path: ".symlinks/plugins/image_picker_ios/ios"
   isar_community_flutter_libs:
     :path: ".symlinks/plugins/isar_community_flutter_libs/ios"
-  just_audio:
-    :path: ".symlinks/plugins/just_audio/darwin"
   libphonenumber_plugin:
     :path: ".symlinks/plugins/libphonenumber_plugin/ios"
   location:
@@ -226,70 +124,27 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/map_launcher/ios"
   onesignal_flutter:
     :path: ".symlinks/plugins/onesignal_flutter/ios"
-  package_info_plus:
-    :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
-  quill_native_bridge_ios:
-    :path: ".symlinks/plugins/quill_native_bridge_ios/ios"
-  share_plus:
-    :path: ".symlinks/plugins/share_plus/ios"
   sms_autofill:
     :path: ".symlinks/plugins/sms_autofill/ios"
-  sqflite_darwin:
-    :path: ".symlinks/plugins/sqflite_darwin/darwin"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
-  vibration:
-    :path: ".symlinks/plugins/vibration/ios"
-  video_player_avfoundation:
-    :path: ".symlinks/plugins/video_player_avfoundation/darwin"
-  wakelock_plus:
-    :path: ".symlinks/plugins/wakelock_plus/ios"
-  webview_flutter_wkwebview:
-    :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  audio_session: 32a33910dd5bb35d54297e4b50006481071f196b
-  connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
-  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
-  Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
-  firebase_core: 99a37263b3c27536063a7b601d9e2a49400a433c
-  FirebaseCore: efb3893e5b94f32b86e331e3bd6dadf18b66568e
-  FirebaseCoreInternal: 9afa45b1159304c963da48addb78275ef701c6b4
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
-  flutter_keyboard_visibility_temp_fork: 8a8809c4129e31d25fca77446e0f3fd548122ced
-  fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
-  geocoding_ios: d7460f56e80e118d57678efe5c2cdc888739ff18
-  geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1
+  flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
+  fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
-  google_maps_flutter_ios: e31555a04d1986ab130f2b9f24b6cdc861acc6d3
+  google_maps_flutter_ios: 0291eb2aa252298a769b04d075e4a9d747ff7264
   GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
-  GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
-  image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
-  isar_community_flutter_libs: cf478bdca01f7fb2bde0320930a785456748f1ad
-  just_audio: a42c63806f16995daf5b219ae1d679deb76e6a79
-  libphonenumber_plugin: 642b004d6fe3ea35c7919f664b7f3f886d25b087
-  location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
-  map_launcher: 5fde49ac9a52672bf99da746599f507b4490d7b5
-  onesignal_flutter: f69ff09eeaf41cea4b7a841de5a61e79e7fd9a5a
+  isar_community_flutter_libs: bede843185a61a05ff364a05c9b23209523f7e0d
+  libphonenumber_plugin: e3f18ea4f29a54af15a8853817c3773c31646cff
+  location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
+  map_launcher: fe43bda6720bb73c12fcc1bdd86123ff49a4d4d6
+  onesignal_flutter: 3a2b51f9262c851166a882a553d71a8ccec4e29c
   OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
-  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
-  quill_native_bridge_ios: 2b01d585fcc73d0f5eed78c0bd244ee564b06f5a
-  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
-  sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  vibration: 3797858f8cbf53d841e189ef8bd533d96e4ca93c
-  video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
-  wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
-  webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
+  sms_autofill: b36b2147535657fea83d7f3898d7831de70bd8e4
 
 PODFILE CHECKSUM: eda1d72c19e2f6e3b21a85dd1bb9a81cbf9dfd13
 

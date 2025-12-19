@@ -96,3 +96,6 @@ android/local.properties
 *.graphql.dart
 *.injectable.dart
 *.riverpod.dart
+
+apple-app-site-association
+assetlinks.json
