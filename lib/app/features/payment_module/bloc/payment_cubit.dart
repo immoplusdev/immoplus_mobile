@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/logic/request_state.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class PaymentCubit extends Cubit<RequestState> {
   PaymentCubit() : super(const REQUEST_INITIAL());
 

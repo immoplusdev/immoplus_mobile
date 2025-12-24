@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class HomePageCubit extends Cubit<HomePageState> {
   HomePageCubit() : super(HomePageState(indexPage: 0));
 

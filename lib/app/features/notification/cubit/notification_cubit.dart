@@ -4,7 +4,9 @@ import 'package:immoplus/app/data/repositories/notification_repository.dart';
 import 'package:immoplus/app/features/notification/cubit/notification_cubit_state.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/model/notifications_response.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class NotificationCubit extends Cubit<NotificationCubitState> {
   NotificationCubit() : super(const NotificationCubitState.loading());
 

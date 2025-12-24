@@ -5,7 +5,9 @@ import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/logic/authentification/delete_account_cubit_state.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class DeleteAccountCubit extends Cubit<DeleteAccountState> {
   DeleteAccountCubit() : super(const DeleteAccountState.initial());
 

@@ -38,7 +38,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = BienImmobilierSingle.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -90,7 +90,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = BienImmobilierCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -143,7 +143,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = BienImmobilierCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -191,7 +191,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = BienImmobilierCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -220,7 +220,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = BienImmobilierSingle.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -249,7 +249,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = ResidenceResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -276,7 +276,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = DemandeVisitResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -305,7 +305,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = DemandeVisitResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -346,7 +346,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = DemandeVisiteCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -386,7 +386,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = DemandeVisiteCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -415,7 +415,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = DemandeVisiteModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -442,7 +442,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     try {
       _value = DemandeVisiteModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

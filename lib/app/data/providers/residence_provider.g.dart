@@ -38,7 +38,7 @@ class _ResidenceProvider implements ResidenceProvider {
     try {
       _value = ResidenceResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -90,7 +90,7 @@ class _ResidenceProvider implements ResidenceProvider {
     try {
       _value = ResidencesCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -143,7 +143,7 @@ class _ResidenceProvider implements ResidenceProvider {
     try {
       _value = ResidencesCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -191,7 +191,7 @@ class _ResidenceProvider implements ResidenceProvider {
     try {
       _value = ResidencesCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -220,7 +220,7 @@ class _ResidenceProvider implements ResidenceProvider {
     try {
       _value = ResidenceResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -248,7 +248,7 @@ class _ResidenceProvider implements ResidenceProvider {
     try {
       _value = ResidenceResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

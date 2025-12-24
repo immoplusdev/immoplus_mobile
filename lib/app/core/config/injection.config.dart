@@ -35,16 +35,25 @@ import 'package:immoplus/app/features/booking/logic/booking_services.dart'
     as _i946;
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart'
     as _i488;
+import 'package:immoplus/app/features/filter/logic/filter_cubit.dart' as _i79;
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
     as _i374;
+import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
+import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart'
+    as _i430;
+import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart'
+    as _i872;
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart'
     as _i85;
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart' as _i745;
+import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart'
+    as _i636;
 import 'package:immoplus/app/logic/authentification/login_cubit.dart' as _i888;
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart'
     as _i783;
+import 'package:immoplus/app/logic/bloc/navigation_cubit.dart' as _i1001;
 import 'package:injectable/injectable.dart' as _i526;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -59,6 +68,12 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final dioConfig = _$DioConfig();
+    gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit());
+    gh.factory<_i430.NotificationCubit>(() => _i430.NotificationCubit());
+    gh.factory<_i872.PaymentCubit>(() => _i872.PaymentCubit());
+    gh.factory<_i79.FilterCubit>(() => _i79.FilterCubit());
+    gh.factory<_i1001.NavigationCubit>(() => _i1001.NavigationCubit());
+    gh.factory<_i636.DeleteAccountCubit>(() => _i636.DeleteAccountCubit());
     gh.singleton<_i847.IsarConfig>(() => _i847.IsarConfig());
     gh.lazySingleton<_i358.RequestInterceptor>(
         () => _i358.RequestInterceptor());

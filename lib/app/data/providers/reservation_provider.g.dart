@@ -38,7 +38,7 @@ class _ReservationProvider implements ReservationProvider {
     try {
       _value = ReservationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -78,7 +78,7 @@ class _ReservationProvider implements ReservationProvider {
     try {
       _value = ReservationsCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -107,7 +107,7 @@ class _ReservationProvider implements ReservationProvider {
     try {
       _value = ReservationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -148,7 +148,7 @@ class _ReservationProvider implements ReservationProvider {
     try {
       _value = ReservationsCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -175,7 +175,7 @@ class _ReservationProvider implements ReservationProvider {
     try {
       _value = ReservationResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
