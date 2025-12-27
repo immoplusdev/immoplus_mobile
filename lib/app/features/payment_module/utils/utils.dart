@@ -314,21 +314,6 @@ class Utils {
     }
   }
 
-  static authentificationPopup({required BuildContext context}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.85,
-            child: const LoginPage()),
-      ),
-    );
-  }
-
   static IconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {
       return FontAwesomeIcons.coins;

@@ -11,6 +11,7 @@ import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -82,7 +83,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return currentUser == null
-        ? const LoginPage()
+        ? const AuthenticationPage()
         : Scaffold(
             backgroundColor: Colors.white,
             body: Padding(

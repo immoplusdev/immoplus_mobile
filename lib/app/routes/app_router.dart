@@ -7,6 +7,7 @@ import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/pages/permission_page.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -59,6 +60,11 @@ class AppRouter {
         path: '/login_page',
         name: LoginPage.name,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/${AuthenticationPage.name}',
+        name: AuthenticationPage.name,
+        builder: (context, state) => const AuthenticationPage(),
       ),
 
       GoRoute(
