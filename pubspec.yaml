@@ -17,7 +17,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 # for new deployment use 1.0.9+12 (INCREMENT !!!) POUR UNIFORMISER IOS ET ANDROID CAR SUR ANDROID ON EST A 1.0.7 pourtant usr ios  1.0.7 y etait deja
-version: 1.0.8+11
+version: 1.0.9+12
 
 environment:
   sdk: ^3.6.0
@@ -119,7 +119,7 @@ dependencies:
   country_code_picker: ^3.2.0
   google_maps_custom_marker: ^1.0.3
   google_places_flutter: ^2.0.9
-  firebase_core: ^4.3.0  
+  firebase_core: ^4.3.0
   onesignal_flutter: ^5.3.3
   passwordfield: ^0.2.0
   pinput: ^5.0.1

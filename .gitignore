@@ -77,6 +77,8 @@ ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
 ios/ServiceDefinitions.json
 ios/Runner/GeneratedPluginRegistrant.*
+ios/Podfile.lock
+pubspec.lock
 
 # Android
 android/.gradle/
