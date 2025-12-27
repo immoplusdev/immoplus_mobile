@@ -163,14 +163,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                       'Mot de passe oublié',
                       style: GoogleFonts.inter(color: AppColors.primary),
                     )),
-                TextButton(
-                    onPressed: () {
-                      context.pushNamed(SendEmailOptPage.name);
-                    },
-                    child: Text(
-                      'S\'inscrire',
-                      style: GoogleFonts.inter(color: AppColors.primary),
-                    )),
+                // TextButton(
+                //     onPressed: () {
+                //       context.pushNamed(SendEmailOptPage.name);
+                //     },
+                //     child: Text(
+                //       'S\'inscrire',
+                //       style: GoogleFonts.inter(color: AppColors.primary),
+                //     )),
               ],
             ),
             const Row(
