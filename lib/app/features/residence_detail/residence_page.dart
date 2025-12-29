@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
-import 'package:immoplus/app/features/estate_detail/components/see_more_button.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_title2.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_title_centered.dart';
@@ -23,7 +21,6 @@ import 'components/detail_description.dart';
 import 'components/detail_logment_amentities.dart';
 import 'components/detail_logment_appbar.dart';
 import 'components/detail_logment_available_day.dart';
-import 'components/detail_logment_infos.dart';
 import 'components/detail_logment_map.dart';
 import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
@@ -34,7 +31,10 @@ class ResidencePage extends StatefulWidget {
 
   final String idProduct;
   static String name = 'logment_page';
-  //final ResidenceModel? residenceModel;
+
+  static String routePath() => '/residence_detail/:idProduct';
+
+  static String route(String idProduct) => '/residence_detail/$idProduct';
   @override
   State<ResidencePage> createState() => _ResidencePageState();
 }

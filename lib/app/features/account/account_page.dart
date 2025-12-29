@@ -375,11 +375,7 @@ class _AccountPageState extends State<AccountPage> {
                                     style: TextStyle(color: Colors.red),
                                   ),
                                   onPressed: () async {
-                                    await sessionManager.clearSession().then(
-                                      (value) {
-                                        context.goNamed(SplashScreen.name);
-                                      },
-                                    );
+                                    await sessionManager.logout();
                                   },
                                 ),
                               ],

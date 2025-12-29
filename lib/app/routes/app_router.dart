@@ -52,7 +52,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/payment_history',
+        path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
         builder: (context, state) => const PaymentHistoryPage(),
       ),
@@ -97,12 +97,14 @@ class AppRouter {
         builder: (context, state) => const OnboardingNewPage(),
       ),
       GoRoute(
-        path: '/booking-history',
+        path: BookingHistoryPage.routePath(),
         name: BookingHistoryPage.name,
-        builder: (context, state) => const BookingHistoryPage(),
+        builder: (context, state) => BookingHistoryPage(
+          reservationId: state.uri.queryParameters['reservationId'],
+        ),
       ),
       GoRoute(
-        path: '/visites-history',
+        path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
       ),
@@ -153,7 +155,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/residence_detail/:idProduct',
+        path: ResidencePage.routePath(),
         name: ResidencePage.name,
         builder: (context, state) => ResidencePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
@@ -161,7 +163,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/estate_detail/:idProduct',
+        path: EstatePage.routePath(),
         name: EstatePage.name,
         builder: (context, state) => EstatePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
