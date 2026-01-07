@@ -371,7 +371,7 @@ class _AccountPageState extends State<AccountPage> {
                                 ),
                                 TextButton(
                                   child: const Text(
-                                    'Se déconnecté',
+                                    'Se déconnecter',
                                     style: TextStyle(color: Colors.red),
                                   ),
                                   onPressed: () async {
