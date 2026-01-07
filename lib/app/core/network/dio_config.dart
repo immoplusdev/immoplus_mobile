@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus/app/core/network/interceptors/request_interceptor.dart';
+import 'package:immoplus/app/utils/request_path.dart';
 import 'package:injectable/injectable.dart';
 
 import 'interceptors/auth_interceptor.dart';
@@ -13,7 +14,7 @@ abstract class DioConfig {
       RequestInterceptor requestInterceptor) {
     //just config
     final dio = Dio(BaseOptions(
-        baseUrl: dotenv.env['API_PRO_URL'] ?? '',
+        baseUrl: RequestPath.baseUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {

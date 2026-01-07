@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:immoplus/app/core/config/app_flavor.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,6 @@ class EnvHandler {
     Intl.defaultLocale = 'fr_FR';
 
     await initializeDateFormatting('fr_FR', null);
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: AppFlavor.envFileName);
   }
 }
