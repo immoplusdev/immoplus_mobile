@@ -18,7 +18,7 @@ class InternationalPhoneInput extends StatefulWidget {
     this.onValidPhoneNumber,
     this.initialCountryCode = 'CI',
     this.validator,
-    this.onInputValidated, // Default to Côte d’Ivoire
+    this.onInputValidated,
     this.initialPhoneNumber,
     this.backgroundColor,
     this.isEnabled = true,
@@ -32,15 +32,19 @@ class InternationalPhoneInput extends StatefulWidget {
 class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   final TextEditingController _controller = TextEditingController();
   late PhoneNumber _phoneNumber;
+  late PhoneNumber
+      _initialPhoneNumber; // AJOUT : Variable statique pour initialValue
   final ValueNotifier<bool?> _isValidNotifier = ValueNotifier<bool?>(null);
 
   @override
   void initState() {
     super.initState();
-    _phoneNumber = PhoneNumber(
+    // MODIFICATION : Créer une valeur initiale séparée qui ne change jamais
+    _initialPhoneNumber = PhoneNumber(
       isoCode: widget.initialCountryCode,
       phoneNumber: widget.initialPhoneNumber,
     );
+    _phoneNumber = _initialPhoneNumber; // Initialiser la valeur courante
   }
 
   @override
@@ -80,7 +84,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               //validator: widget.validator,
               ignoreBlank: false,
               autoValidateMode: AutovalidateMode.disabled,
-              initialValue: _phoneNumber,
+              initialValue:
+                  _initialPhoneNumber, // MODIFICATION : Utiliser la valeur statique
               textFieldController: _controller,
               formatInput: true,
               maxLength: 13,

@@ -159,10 +159,10 @@ class _ResidencePageState extends State<ResidencePage> {
                 //   text: state.data.description,
                 // ),
                 const DetailDivider(),
-                const DetailLogmentTitleCentered(title: 'Jours disponibles'),
-                DetailLogmentAvailableDay(
-                  reservation: state.data,
-                ),
+                // const DetailLogmentTitleCentered(title: 'Jours disponibles'),
+                // DetailLogmentAvailableDay(
+                //   reservation: state.data,
+                // ),
 
                 const DetailLogmentTitleCentered(
                     title: 'Où se situe le logement ?'),
