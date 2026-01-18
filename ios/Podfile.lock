@@ -1,4 +1,6 @@
 PODS:
+  - device_info_plus (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
@@ -83,6 +85,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -104,6 +107,8 @@ SPEC REPOS:
     - PhoneNumberKit
 
 EXTERNAL SOURCES:
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
@@ -128,6 +133,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sms_autofill/ios"
 
 SPEC CHECKSUMS:
+  device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1

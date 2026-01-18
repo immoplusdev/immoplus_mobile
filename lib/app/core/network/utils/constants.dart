@@ -13,3 +13,5 @@ Future<String?> uploadFile({required File file}) async {
   EasyLoading.dismiss();
   return response.data!.id;
 }
+
+const double appPadding = 16.0;

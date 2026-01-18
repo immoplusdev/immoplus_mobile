@@ -43,7 +43,7 @@ class _PlacesApiProvider implements PlacesApiProvider {
     try {
       _value = PlaceDetails.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -85,7 +85,7 @@ class _PlacesApiProvider implements PlacesApiProvider {
     try {
       _value = AutocompleteResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

@@ -55,8 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
     ConnectinityService.listen();
 
     _getData(context: context);
-
-    // FireBaseServices(context).initNotification();
     super.initState();
   }
 

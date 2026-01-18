@@ -38,7 +38,7 @@ class _PaymentProvider implements PaymentProvider {
     try {
       _value = PaymentItentModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -65,7 +65,7 @@ class _PaymentProvider implements PaymentProvider {
     try {
       _value = PaymentItentModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -92,7 +92,7 @@ class _PaymentProvider implements PaymentProvider {
     try {
       _value = PaymentItentModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -132,7 +132,7 @@ class _PaymentProvider implements PaymentProvider {
     try {
       _value = PaymentsModelCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
-      //errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
