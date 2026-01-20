@@ -34,6 +34,12 @@ class EstatePage extends StatefulWidget {
   final BienImmobilierModel? bienImmobilierModel;
   static String name = 'estate_page';
 
+  // 🎯 Pattern pour GoRoute
+  static String routePath() => '/estate_detail/:idProduct';
+
+  // 🎯 Route complète avec ID
+  static String route(String idProduct) => '/estate_detail/$idProduct';
+
   @override
   State<EstatePage> createState() => _EstatePageState();
 }

@@ -20,6 +20,10 @@ class PaymentHistoryPage extends StatefulWidget {
   const PaymentHistoryPage({super.key});
   static String name = 'PAYMENTHISTORYPAGE';
 
+  static String routePath() => '/payment_history';
+
+  static String route() => '/payment_history';
+
   @override
   State<PaymentHistoryPage> createState() => _PaymentHistoryPageState();
 }

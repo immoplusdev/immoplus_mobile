@@ -49,17 +49,12 @@ class GeneralConditionPage extends StatelessWidget {
         <li><strong>Email :</strong> contact@afriqsolus.ci</li>
           </ul>
       
-          <h3>2. Hébergeur</h3>
-          <p><strong>Nom de l’hébergeur :</strong> [Préciser le nom de l’hébergeur]</p>
-          <p><strong>Adresse :</strong> [Adresse de l’hébergeur]</p>
-          <p><strong>Téléphone :</strong> [Numéro de téléphone de l’hébergeur]</p>
+          <h3>2. Directeur de publication</h3>
+          <p><strong>Nom :</strong> Assoko Moune Moise</p>
+          <p><strong>Téléphone :</strong> 0779801183</p>
+          <p><strong>Email :</strong> m.assoko@afrisolus.ci</p>
       
-          <h3>3. Directeur de publication</h3>
-          <p><strong>Nom :</strong> [Nom du responsable]</p>
-          <p><strong>Téléphone :</strong> [Numéro de téléphone]</p>
-          <p><strong>Email :</strong> [Adresse email]</p>
-      
-          <h3>4. Propriété intellectuelle</h3>
+          <h3>3. Propriété intellectuelle</h3>
           <p>L’ensemble du contenu de l’application ImmoPlus est protégé par le droit de la propriété intellectuelle. Toute reproduction ou représentation, en tout ou partie, est strictement interdite.</p>
       
           <h3>Date de prise d'effet et date de la dernière mise à jour :</h3>

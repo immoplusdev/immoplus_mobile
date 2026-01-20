@@ -10,9 +10,9 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
+import 'package:immoplus/app/services/share_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DetailEstateAppBar extends StatefulWidget {
@@ -34,6 +34,8 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
     );
     super.initState();
   }
+
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +78,14 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
           padding: const EdgeInsets.only(right: 10),
           child: IconButton(
             padding: EdgeInsets.zero,
+            key: _shareButtonKey,
             iconSize: 20,
             onPressed: () async {
-              await Share.share(
-                "https://app.immoplus.ci/residence_detail/${widget.bienImmobilier.id}",
-                subject: 'Partager cette résidence',
+              final origin =
+                  ShareService.getSharePositionFromKey(_shareButtonKey);
+              await ShareService.shareResidence(
+                residenceId: widget.bienImmobilier.id,
+                sharePositionOrigin: origin,
               );
             },
             style: IconButton.styleFrom(

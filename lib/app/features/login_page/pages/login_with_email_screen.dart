@@ -126,14 +126,14 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                         'Mot de passe oublié',
                         style: GoogleFonts.inter(color: AppColors.primary),
                       )),
-                  TextButton(
-                      onPressed: () {
-                        context.pushNamed(SendEmailOptPage.name);
-                      },
-                      child: Text(
-                        'S\'inscrire',
-                        style: GoogleFonts.inter(color: AppColors.primary),
-                      )),
+                  // TextButton(
+                  //     onPressed: () {
+                  //       context.pushNamed(SendEmailOptPage.name);
+                  //     },
+                  //     child: Text(
+                  //       'S\'inscrire',
+                  //       style: GoogleFonts.inter(color: AppColors.primary),
+                  //     )),
                 ],
               ),
               const Gap(5),

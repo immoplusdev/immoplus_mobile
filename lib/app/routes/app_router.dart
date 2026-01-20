@@ -7,6 +7,7 @@ import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/pages/permission_page.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -51,7 +52,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/payment_history',
+        path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
         builder: (context, state) => const PaymentHistoryPage(),
       ),
@@ -59,6 +60,11 @@ class AppRouter {
         path: '/login_page',
         name: LoginPage.name,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/${AuthenticationPage.name}',
+        name: AuthenticationPage.name,
+        builder: (context, state) => const AuthenticationPage(),
       ),
 
       GoRoute(
@@ -91,12 +97,14 @@ class AppRouter {
         builder: (context, state) => const OnboardingNewPage(),
       ),
       GoRoute(
-        path: '/booking-history',
+        path: BookingHistoryPage.routePath(),
         name: BookingHistoryPage.name,
-        builder: (context, state) => const BookingHistoryPage(),
+        builder: (context, state) => BookingHistoryPage(
+          reservationId: state.uri.queryParameters['reservationId'],
+        ),
       ),
       GoRoute(
-        path: '/visites-history',
+        path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
       ),
@@ -147,7 +155,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/residence_detail/:idProduct',
+        path: ResidencePage.routePath(),
         name: ResidencePage.name,
         builder: (context, state) => ResidencePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
@@ -155,7 +163,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/estate_detail/:idProduct',
+        path: EstatePage.routePath(),
         name: EstatePage.name,
         builder: (context, state) => EstatePage(
           idProduct: state.pathParameters['idProduct'] ?? '',

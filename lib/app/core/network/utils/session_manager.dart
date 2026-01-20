@@ -1,10 +1,11 @@
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
-import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../data/models/local/onboarding_schema.dart';
@@ -69,7 +70,8 @@ class SessionManager {
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
     await clearSession();
-    AppRouter.router.goNamed(LoginPage.name);
+    OneSignal.logout();
+    AppRouter.router.goNamed(SplashScreen.name);
   }
 
   Future<UserModelSchema?> getCurrentUser() async {

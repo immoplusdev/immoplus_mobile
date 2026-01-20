@@ -6,6 +6,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_history_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -14,8 +15,18 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'components/booking_loading_card.dart';
 
 class BookingHistoryPage extends StatefulWidget {
-  const BookingHistoryPage({super.key});
+  final String? reservationId;
+  const BookingHistoryPage({super.key, this.reservationId});
   static String name = 'BOOKING_HISTORY';
+
+  static String routePath() => '/booking-history';
+
+  static String route({String? reservationId}) {
+    return reservationId != null
+        ? '/booking-history?reservationId=$reservationId'
+        : '/booking-history';
+  }
+
   @override
   State<BookingHistoryPage> createState() => _BookingHistoryPageState();
 }
@@ -50,6 +61,26 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
     _pagingController.addPageRequestListener((pageKey) {
       loadPage(pageKey);
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.reservationId != null) {
+        showModalBottomSheet(
+          backgroundColor: AppColors.scafold,
+          showDragHandle: true,
+          enableDrag: true,
+          isScrollControlled: true,
+          useRootNavigator: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          context: context,
+          builder: (context) => SizedBox(
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: BookingDetailPage(
+                id: widget.reservationId!,
+              )),
+        );
+      }
+    });
+
     super.initState();
   }
 

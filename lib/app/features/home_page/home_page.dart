@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
@@ -40,7 +41,8 @@ class _HomePageState extends State<HomePage>
       HistoryPageState.refrechAll();
     }();
     _tabController = TabController(length: 4, vsync: this);
-
+    final notificationService = getIt<NotificationService>();
+    notificationService.setupNotificationListener();
     super.initState();
   }
 
