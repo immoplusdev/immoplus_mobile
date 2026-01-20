@@ -6,6 +6,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_c
 import 'package:immoplus/app/data/models/remote/residence/residences_collection.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -13,6 +14,8 @@ import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/widgets/tickets_cards/small_estate_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/small_residence_card.dart';
 import 'package:injectable/injectable.dart';
+
+const _defaultPadding = 15.0;
 
 @injectable
 class MapViwerCubit extends Cubit<MapViwerCubitState> {
@@ -78,7 +81,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                       height: 150,
                       //padding: const EdgeInsets.all(10),
                       margin: const EdgeInsets.only(
-                          bottom: 40, left: 10, right: 10),
+                          bottom: 40 + _defaultPadding, left: 10, right: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
@@ -138,7 +141,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                       height: 150,
                       //padding: const EdgeInsets.all(10),
                       margin: const EdgeInsets.only(
-                          bottom: 40, left: 10, right: 10),
+                          bottom: 40 + _defaultPadding, left: 10, right: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),

@@ -16,6 +16,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/reservations/dates_reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/booking/data/estimate_cost_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
@@ -502,6 +503,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
       bottomNavigationBar: Container(
         color: AppColors.scafold,
         height: 90,
+        margin: EdgeInsets.only(bottom: kDefaultPadding),
         padding:
             const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 20),
         child: BlocBuilder<BookingCubit, BookingRequestState>(

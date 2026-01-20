@@ -14,8 +14,9 @@ class LogmentBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
-      height: 70,
+      padding: const EdgeInsets.symmetric(horizontal: 20)
+          .copyWith(bottom: 20, top: 10),
+      height: 80,
       child: ElevatedButton(
         onPressed: () {
           if (sessionManager.currentUser == null) {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/estate_detail/components/detail_rooms.dart';
 import 'package:immoplus/app/features/estate_detail/components/logment_bottom_bar.dart';
@@ -172,7 +173,7 @@ class _EstatePageState extends State<EstatePage> {
             bottomNavigationBar: EstateBottomBar(
               bienImmobilier: state.data,
             ),
-          );
+          ).safeArea();
         }
 
         return InitialDetailLogmentScreen(
