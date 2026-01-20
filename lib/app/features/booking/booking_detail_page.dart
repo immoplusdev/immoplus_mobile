@@ -210,40 +210,68 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     ),
                   )),
 
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                  if (hasPaid(state.reservationResponse))
+                    // Proprietaire
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)
+                            .copyWith(bottom: 10),
+                        child: Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            enabled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            leading: const CircleAvatar(
+                              //backgroundColor: Colors.white,
+                              child: Icon(
+                                FontAwesomeIcons.userTie,
+                                //color: Colors.green,
+                              ),
+                            ),
+                            title: const Text("Propriétaire"),
+                            subtitle: Text(state.reservationResponse.data
+                                .proprietaire.phoneNumber
+                                .split('-')
+                                .last
+                                .toString()),
+                            titleTextStyle:
+                                Theme.of(context).textTheme.bodyMedium,
+                            trailing: Icon(
+                              FontAwesomeIcons.phoneVolume,
+                              color: AppColors.primary,
+                            ),
+                            subtitleTextStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: AppColors.primary),
+                            onTap: () async {
+                              final phone = state.reservationResponse.data
+                                  .proprietaire.phoneNumber
+                                  .split('-');
+                              Utils.makePhoneCall(phone.last);
+                            },
                           ),
-                          leading: Icon(
-                            FontAwesomeIcons.headset,
-                            color: AppColors.primary,
-                          ),
-                          title: const Text("Contacter nous"),
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: AppColors.primary),
-                          trailing: Icon(
-                            CupertinoIcons.chevron_right_circle_fill,
-                            color: AppColors.primary,
-                          ),
-                          onTap: () async {
-                            ContactUtils.showContact(id: widget.id);
-                          },
                         ),
                       ),
                     ),
-                  ),
+                  if (hasPaid(state.reservationResponse))
+                    // code reservation
+                    _customTile(
+                      icon: Icons.label_rounded,
+                      trailingIcon: Icons.content_copy_rounded,
+                      title:
+                          "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
+                      onTap: () {
+                        Utils.copyToClipboard(
+                            state.reservationResponse.data.codeReservation);
+                      },
+                    ),
 
+                  // voir l'itinéraire
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10)
@@ -307,64 +335,42 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ),
                   ),
-                  if (hasPaid(state.reservationResponse))
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(bottom: 10),
-                        child: Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(20),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            enabled: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            leading: const CircleAvatar(
-                              //backgroundColor: Colors.white,
-                              child: Icon(
-                                FontAwesomeIcons.userTie,
-                                //color: Colors.green,
-                              ),
-                            ),
-                            title: const Text("Propriétaire"),
-                            subtitle: Text(state.reservationResponse.data
-                                .proprietaire.phoneNumber
-                                .split('-')
-                                .last
-                                .toString()),
-                            titleTextStyle:
-                                Theme.of(context).textTheme.bodyMedium,
-                            trailing: Icon(
-                              FontAwesomeIcons.phoneVolume,
-                              color: AppColors.primary,
-                            ),
-                            subtitleTextStyle: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: AppColors.primary),
-                            onTap: () async {
-                              final phone = state.reservationResponse.data
-                                  .proprietaire.phoneNumber
-                                  .split('-');
-                              Utils.makePhoneCall(phone.last);
-                            },
+
+                  // Contactez nous
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10)
+                          .copyWith(bottom: 10),
+                      child: Material(
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: ListTile(
+                          tileColor: Colors.white,
+                          enabled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
+                          leading: Icon(
+                            FontAwesomeIcons.headset,
+                            color: AppColors.primary,
+                          ),
+                          title: const Text("Support client"),
+                          titleTextStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(color: AppColors.primary),
+                          trailing: Icon(
+                            CupertinoIcons.chevron_right_circle_fill,
+                            color: AppColors.primary,
+                          ),
+                          onTap: () async {
+                            ContactUtils.showContact(id: widget.id);
+                          },
                         ),
                       ),
                     ),
-                  if (hasPaid(state.reservationResponse))
-                    _customTile(
-                      icon: Icons.label_rounded,
-                      trailingIcon: Icons.content_copy_rounded,
-                      title:
-                          "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
-                      onTap: () {
-                        Utils.copyToClipboard(
-                            state.reservationResponse.data.codeReservation);
-                      },
-                    ),
+                  ),
+
                   SliverGap(50)
                 ],
               ),

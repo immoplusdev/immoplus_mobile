@@ -2,9 +2,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RequestPath {
   //https://run.mocky.io/v3/a0fc7f79-97ef-4ea4-8f89-02014218f516
-  static final String baseUrl = dotenv.env['API_PRO_URL'] ?? '';
-  static String appUrl = dotenv.env['APP_URL'] ?? '';
-  static String baseUrlTest = dotenv.env['API_TEST_URL'] ?? '';
+  static final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
   //"https://run.mocky.io/v3";
   //config
   static String config = "/api/configuration/retrieve";

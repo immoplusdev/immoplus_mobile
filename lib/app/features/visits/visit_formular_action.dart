@@ -158,7 +158,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                         (sessionManager.configModel?.data?.expressVisitPrice ??
                                 "_")
                             .toString(),
-                    title: 'Visite Express',
+                    title: 'Visite Expresse',
                     subTiltle:
                         "Vous serez programmé le plus vite possible voire le même jour pour la visite et un véhicule sera mis à votre disposition pour le transport.",
                     onTap: () {
@@ -170,7 +170,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                               CupertinoAlertDialog(
                             //title: const Text('Alert'),
                             content: const Text(
-                                'Confirmez-vous cette demande de visite express ?'),
+                                'Confirmez-vous cette demande de visite expresse ?'),
                             actions: <CupertinoDialogAction>[
                               CupertinoDialogAction(
                                 isDefaultAction: false,
@@ -210,7 +210,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                         (sessionManager.configModel?.data?.normalVisitPrice ??
                                 "_")
                             .toString(),
-                    title: 'Visite normal',
+                    title: 'Visite normale',
                     subTiltle:
                         "Vous serez programmé pour la visite et nous vous notifierons le jour et l'heure de votre passage.",
                     onTap: () {

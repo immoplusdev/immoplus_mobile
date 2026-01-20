@@ -11,6 +11,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/auth/update_user_dto.dart';
+import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader.dart';
@@ -223,7 +224,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             },
           ),
         ),
-      ),
+      ).safeArea(),
     );
   }
 }

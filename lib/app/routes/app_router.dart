@@ -31,6 +31,7 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
+import 'package:immoplus/app/force_update_required_page.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 
@@ -102,6 +103,16 @@ class AppRouter {
         builder: (context, state) => BookingHistoryPage(
           reservationId: state.uri.queryParameters['reservationId'],
         ),
+      ),
+      GoRoute(
+        path: ForceUpdateRequiredPage.routePath(),
+        name: ForceUpdateRequiredPage.name,
+        builder: (context, state) {
+          final onUpdateTap = state.extra as Function()?;
+          return ForceUpdateRequiredPage(
+            onUpdateTap: onUpdateTap,
+          );
+        },
       ),
       GoRoute(
         path: VisitHistoryPage.routePath(),

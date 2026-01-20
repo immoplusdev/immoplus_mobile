@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_title2.dart';
@@ -20,7 +21,6 @@ import 'package:video_player/video_player.dart';
 import 'components/detail_description.dart';
 import 'components/detail_logment_amentities.dart';
 import 'components/detail_logment_appbar.dart';
-import 'components/detail_logment_available_day.dart';
 import 'components/detail_logment_map.dart';
 import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
@@ -159,10 +159,10 @@ class _ResidencePageState extends State<ResidencePage> {
                 //   text: state.data.description,
                 // ),
                 const DetailDivider(),
-                const DetailLogmentTitleCentered(title: 'Jours disponibles'),
-                DetailLogmentAvailableDay(
-                  reservation: state.data,
-                ),
+                // const DetailLogmentTitleCentered(title: 'Jours disponibles'),
+                // DetailLogmentAvailableDay(
+                //   reservation: state.data,
+                // ),
 
                 const DetailLogmentTitleCentered(
                     title: 'Où se situe le logement ?'),
@@ -184,7 +184,7 @@ class _ResidencePageState extends State<ResidencePage> {
             bottomNavigationBar: LogmentBottomBar(
               residenceModel: state.data,
             ),
-          );
+          ).safeArea();
         }
 
         return InitialDetailLogmentScreen(
