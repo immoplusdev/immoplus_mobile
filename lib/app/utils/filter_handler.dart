@@ -88,6 +88,29 @@ class FilterHandler {
   static Map<String, List<String>> getAllFilters(PropertyType propertyType) {
     final List<String> allFilters = [];
 
+    // === FILTRES PAR DÉFAUT SELON LE TYPE ===
+    switch (propertyType) {
+      case PropertyType.estate:
+        allFilters.addAll([
+          '{"_field": "bienImmobilierDisponible", "_op": "eq", "_val": true}',
+          '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
+          '{"_field": "aLouer", "_op": "eq", "_val": true}',
+        ]);
+        break;
+
+      case PropertyType.land:
+        allFilters.addAll([
+          '{"_field": "bienImmobilierDisponible", "_op": "eq", "_val": true}',
+          '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
+          '{"_field": "aLouer", "_op": "eq", "_val": false}'
+        ]);
+        break;
+
+      // Autres types...
+      default:
+        break;
+    }
+
     // Ajout des différents types de filtres
     allFilters.addAll(getPriceFilters(propertyType));
 

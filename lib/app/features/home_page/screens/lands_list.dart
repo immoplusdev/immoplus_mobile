@@ -4,6 +4,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/components/empty_elements_indicator.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -18,15 +19,21 @@ class LandsList extends StatefulWidget {
 class _LandsListState extends State<LandsList> {
   final BienImmobilierRepository bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
+
   Future<void> loadPage(int page) async {
+    final whereFilters = FilterHandler.getAllFilters(PropertyType.land);
     bienImmobilierRepository
-        .getBiensImmobiliers(page: page, perPage: 5, where: {
-      '_where': [
-        '{"_field": "bienImmobilierDisponible", "_op": "eq", "_val": true}',
-        '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
-        '{"_field": "aLouer", "_op": "eq", "_val": false}'
-      ],
-    }).then((value) {
+        .getBiensImmobiliers(
+      page: page,
+      where: whereFilters,
+      search: FilterHandler.search,
+      lat: FilterHandler.lat,
+      long: FilterHandler.long,
+      startDate: FilterHandler.startDate,
+      // radius: (FilterHandler.lat != null) ? 100 : null,
+      endDate: FilterHandler.endDate,
+    )
+        .then((value) {
       if (value.hasNext == true) {
         HomePageState.pagingControllerLand
             .appendPage(value.data ?? [], (value.currentPage)! + 1);
