@@ -128,6 +128,8 @@ dependencies:
   new_version_plus: ^1.0.1
   confetti: ^0.8.0
   package_info_plus: ^9.0.0
+  google_sign_in: ^7.2.0
+  flutter_facebook_auth: ^7.1.5
 
 dev_dependencies:
   flutter_test:

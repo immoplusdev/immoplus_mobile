@@ -10,12 +10,6 @@ import 'package:immoplus/app/logic/authentification/registration_cubit_state.dar
 // Optionnel si vous utilisez PinFieldAutoFill. Sinon, remplacez par vos propres champs.
 import 'package:sms_autofill/sms_autofill.dart';
 
-class DataRouterRegistration {
-  String email;
-  String token;
-  DataRouterRegistration({required this.email, required this.token});
-}
-
 class VerifyEmailOtpPage extends StatefulWidget {
   const VerifyEmailOtpPage({
     super.key,

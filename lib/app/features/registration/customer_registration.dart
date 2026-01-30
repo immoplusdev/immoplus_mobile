@@ -23,11 +23,26 @@ import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
 
+class DataRouterRegistration {
+  String email;
+  String token;
+  final String? firstName;
+  final String? lastName;
+  final String? phoneNumber;
+  final String? provider;
+
+  DataRouterRegistration(
+      {required this.email,
+      required this.token,
+      this.firstName,
+      this.lastName,
+      this.phoneNumber,
+      this.provider});
+}
+
 class CustomerRegistration extends StatefulWidget {
-  const CustomerRegistration(
-      {super.key, required this.email, required this.token});
-  final String email;
-  final String token;
+  const CustomerRegistration({super.key, required this.data});
+  final DataRouterRegistration data;
 
   static String name = "customer_Registration";
 
@@ -56,10 +71,10 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
 
     _formController = FormController(
         productId: 0,
-        firstName: TextEditingController(text: ''),
-        lastName: TextEditingController(text: ''),
-        phoneNumber: TextEditingController(text: ''),
-        email: TextEditingController(text: widget.email),
+        firstName: TextEditingController(text: widget.data.firstName ?? ''),
+        lastName: TextEditingController(text: widget.data.lastName ?? ''),
+        phoneNumber: TextEditingController(text: widget.data.phoneNumber ?? ''),
+        email: TextEditingController(text: widget.data.email),
         password: TextEditingController(text: ''));
 
     super.initState();
@@ -326,18 +341,20 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                                     }
 
                                     final body = CustomerRegistrationBody(
-                                      avatar: fileId,
-                                      firstName:
-                                          _formController.firstName!.text,
-                                      lastName: _formController.lastName!.text,
-                                      email: _formController.email!.text,
-                                      token: widget.token,
-                                      phoneNumber:
-                                          PhoneNumberHandler.formatPhoneNumber(
-                                              _formController.phoneNumber!.text
-                                                ..replaceAll(" ", "")),
-                                      password: _formController.password!.text,
-                                    );
+                                        avatar: fileId,
+                                        firstName:
+                                            _formController.firstName!.text,
+                                        lastName:
+                                            _formController.lastName!.text,
+                                        email: _formController.email!.text,
+                                        token: widget.data.token,
+                                        phoneNumber: PhoneNumberHandler
+                                            .formatPhoneNumber(_formController
+                                                .phoneNumber!.text
+                                              ..replaceAll(" ", "")),
+                                        password:
+                                            _formController.password!.text,
+                                        provider: widget.data.provider);
 
                                     context
                                         .read<RgistrationCubitCubit>()

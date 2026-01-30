@@ -12,7 +12,28 @@
           "package_name": "com.immoplus.ci"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1003203724496-ev4h76r4lq914r3kagmkdmleq847c3uo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.immoplus.ci",
+            "certificate_hash": "7556e148fdeec1ca2c96e2a42b3e52bbbacbb7da"
+          }
+        },
+        {
+          "client_id": "1003203724496-q08dpk86duumlt4kmotol1nd0k6bs6vn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.immoplus.ci",
+            "certificate_hash": "e6f486e091da64be0b7147e045de12897fc0f26b"
+          }
+        },
+        {
+          "client_id": "1003203724496-q2k3aq57i3a3oktgga8bnv5ij1tl9vmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU"
@@ -20,7 +41,57 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003203724496-q2k3aq57i3a3oktgga8bnv5ij1tl9vmd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1003203724496-0ap650ojm96k6c24vlf8ql7gapje005i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.immoplus.ci",
+                "app_store_id": "6755297623"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003203724496:android:50f45baf38e1bb3c458ad5",
+        "android_client_info": {
+          "package_name": "com.immoplus_pro.ci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003203724496-q2k3aq57i3a3oktgga8bnv5ij1tl9vmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003203724496-q2k3aq57i3a3oktgga8bnv5ij1tl9vmd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1003203724496-0ap650ojm96k6c24vlf8ql7gapje005i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.immoplus.ci",
+                "app_store_id": "6755297623"
+              }
+            }
+          ]
         }
       }
     }
