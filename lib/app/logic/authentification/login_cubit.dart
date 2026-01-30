@@ -250,6 +250,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await _performSocialLogin(body);
     } catch (e, s) {
       log(" Error Google Sign-In: $e ", stackTrace: s);
+      if (e is GoogleSignInException &&
+          e.code == GoogleSignInExceptionCode.canceled) {
+        // L'utilisateur a annulé la connexion
+        emit(const LoginCubitState.initial());
+        return;
+      }
       CustomPopup.showErrorToast(
           text: 'Erreur lors de la connexion avec Google');
       emit(const LoginCubitState.initial());
