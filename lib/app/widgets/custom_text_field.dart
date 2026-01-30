@@ -81,6 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         style: (widget.fontSize != null)
             ? TextStyle(fontSize: widget.fontSize)
             : null,
+        // enableInteractiveSelection: !widget.readOnly,
         autofocus: widget.autofocus ?? false,
         onChanged: ((value) {}),
         autovalidateMode: AutovalidateMode.onUserInteraction,

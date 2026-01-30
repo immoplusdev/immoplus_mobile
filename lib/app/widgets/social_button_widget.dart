@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 
 enum LoginMode {
@@ -23,22 +22,21 @@ class SocialLoginButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
+    return Center(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Bouton de switch (PIN ou @)
           _buildSwitchButton(),
 
           // Bouton Facebook
-          _SocialButton(
-            backgroundColor: HexColor("#0866FF"),
-            onPressed: () {
-              context.read<LoginCubit>().signInWithFacebook();
-            },
-            child: SvgPicture.asset('assets/svgs/icons/facebook.svg'),
-          ),
+          // _SocialButton(
+          //   backgroundColor: HexColor("#0866FF"),
+          //   onPressed: () {
+          //     context.read<LoginCubit>().signInWithFacebook();
+          //   },
+          //   child: SvgPicture.asset('assets/svgs/icons/facebook.svg'),
+          // ),
 
           // Bouton Google
           _SocialButton(
