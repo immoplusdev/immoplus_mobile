@@ -69,8 +69,21 @@
 	<!-- Deeplink fix redirect -->
 	<key>FlutterDeepLinkingEnabled</key>
     <false/>
+	<!-- FACEBOOK&GOOGLE CONFIG START HERE -->
 	<key>CFBundleURLTypes</key>
 	<array>
+		<!-- Facebook + Google merged -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb505592098598027</string>
+				<string>com.googleusercontent.apps.1003203724496-0ap650ojm96k6c24vlf8ql7gapje005i</string>
+			</array>
+		</dict>
+		
+		<!-- HTTPS Deeplink -->
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
@@ -80,6 +93,23 @@
 			</array>
 		</dict>
 	</array>
+
+	<key>FacebookAppID</key>
+	<string>505592098598027</string>
+	<key>FacebookClientToken</key>
+	<string>f870bbd7caa1ca5344f9aaeda75fe13b</string>
+	<key>FacebookDisplayName</key>
+	<string>Immo Plus</string>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>fbapi</string>
+	<string>fb-messenger-share-api</string>
+	<string>fbauth2</string>
+	<string>fbshareextension</string>
+	</array>
+<!-- FACEBOOK&GOOGLE CONFIG END HERE -->
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>

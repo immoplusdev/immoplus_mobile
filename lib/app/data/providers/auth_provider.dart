@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
 import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
+import 'package:immoplus/app/data/models/auth/social_login_body.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_otp.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
@@ -80,4 +81,8 @@ abstract class AuthProvider {
 
   @DELETE('/users/{id}')
   Future<HttpResponse> deleteAccount(@Path() String id);
+
+  @POST('/auth/social-login')
+  Future<AccountCreationResponse> socialLogin(
+      @Body() SocialLoginBody socialLoginBody);
 }

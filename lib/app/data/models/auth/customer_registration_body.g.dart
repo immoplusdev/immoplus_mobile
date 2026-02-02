@@ -16,6 +16,7 @@ _$CustomerRegistrationBodyImpl _$$CustomerRegistrationBodyImplFromJson(
       phoneNumber: json['phoneNumber'] as String?,
       password: json['password'] as String?,
       token: json['token'] as String?,
+      provider: json['provider'] as String?,
     );
 
 Map<String, dynamic> _$$CustomerRegistrationBodyImplToJson(
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$CustomerRegistrationBodyImplToJson(
       'phoneNumber': instance.phoneNumber,
       'password': instance.password,
       'token': instance.token,
+      'provider': instance.provider,
     };

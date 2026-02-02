@@ -28,6 +28,7 @@ mixin _$CustomerRegistrationBody {
   String? get phoneNumber => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get provider => throw _privateConstructorUsedError;
 
   /// Serializes this CustomerRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +53,8 @@ abstract class $CustomerRegistrationBodyCopyWith<$Res> {
       String? email,
       String? phoneNumber,
       String? password,
-      String? token});
+      String? token,
+      String? provider});
 }
 
 /// @nodoc
@@ -78,6 +80,7 @@ class _$CustomerRegistrationBodyCopyWithImpl<$Res,
     Object? phoneNumber = freezed,
     Object? password = freezed,
     Object? token = freezed,
+    Object? provider = freezed,
   }) {
     return _then(_value.copyWith(
       avatar: freezed == avatar
@@ -108,6 +111,10 @@ class _$CustomerRegistrationBodyCopyWithImpl<$Res,
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -128,7 +135,8 @@ abstract class _$$CustomerRegistrationBodyImplCopyWith<$Res>
       String? email,
       String? phoneNumber,
       String? password,
-      String? token});
+      String? token,
+      String? provider});
 }
 
 /// @nodoc
@@ -153,6 +161,7 @@ class __$$CustomerRegistrationBodyImplCopyWithImpl<$Res>
     Object? phoneNumber = freezed,
     Object? password = freezed,
     Object? token = freezed,
+    Object? provider = freezed,
   }) {
     return _then(_$CustomerRegistrationBodyImpl(
       avatar: freezed == avatar
@@ -183,6 +192,10 @@ class __$$CustomerRegistrationBodyImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -197,7 +210,8 @@ class _$CustomerRegistrationBodyImpl implements _CustomerRegistrationBody {
       this.email,
       this.phoneNumber,
       this.password,
-      this.token});
+      this.token,
+      this.provider});
 
   factory _$CustomerRegistrationBodyImpl.fromJson(Map<String, dynamic> json) =>
       _$$CustomerRegistrationBodyImplFromJson(json);
@@ -216,10 +230,12 @@ class _$CustomerRegistrationBodyImpl implements _CustomerRegistrationBody {
   final String? password;
   @override
   final String? token;
+  @override
+  final String? provider;
 
   @override
   String toString() {
-    return 'CustomerRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, token: $token)';
+    return 'CustomerRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, token: $token, provider: $provider)';
   }
 
   @override
@@ -237,13 +253,15 @@ class _$CustomerRegistrationBodyImpl implements _CustomerRegistrationBody {
                 other.phoneNumber == phoneNumber) &&
             (identical(other.password, password) ||
                 other.password == password) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.provider, provider) ||
+                other.provider == provider));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, avatar, firstName, lastName,
-      email, phoneNumber, password, token);
+      email, phoneNumber, password, token, provider);
 
   /// Create a copy of CustomerRegistrationBody
   /// with the given fields replaced by the non-null parameter values.
@@ -270,7 +288,8 @@ abstract class _CustomerRegistrationBody implements CustomerRegistrationBody {
       final String? email,
       final String? phoneNumber,
       final String? password,
-      final String? token}) = _$CustomerRegistrationBodyImpl;
+      final String? token,
+      final String? provider}) = _$CustomerRegistrationBodyImpl;
 
   factory _CustomerRegistrationBody.fromJson(Map<String, dynamic> json) =
       _$CustomerRegistrationBodyImpl.fromJson;
@@ -289,6 +308,8 @@ abstract class _CustomerRegistrationBody implements CustomerRegistrationBody {
   String? get password;
   @override
   String? get token;
+  @override
+  String? get provider;
 
   /// Create a copy of CustomerRegistrationBody
   /// with the given fields replaced by the non-null parameter values.

@@ -286,8 +286,7 @@ class AppRouter {
         name: CustomerRegistration.name,
         builder: (BuildContext context, GoRouterState state) {
           return CustomerRegistration(
-            email: (state.extra as DataRouterRegistration).email,
-            token: (state.extra as DataRouterRegistration).token,
+            data: state.extra as DataRouterRegistration,
           );
         },
       ),

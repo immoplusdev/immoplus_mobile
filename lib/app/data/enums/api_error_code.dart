@@ -11,6 +11,7 @@ enum ApiErrorCode {
   jwtTokenNotActive('JWT_TOKEN_NOT_ACTIVE'),
   jwtTokenMissing('JWT_TOKEN_MISSING'),
   invalidRefreshToken('INVALID_REFRESH_TOKEN'),
+  socialAccountNotFound('SOCIAL_ACCOUNT_NOT_FOUND'),
 
   // Erreurs de permissions
   insufficientPermissions('INSUFFICIENT_PERMISSIONS'),

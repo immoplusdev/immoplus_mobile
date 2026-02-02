@@ -8,6 +8,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
 import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
 import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
+import 'package:immoplus/app/data/models/auth/social_login_body.dart';
 import 'package:immoplus/app/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_otp.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
@@ -281,6 +282,24 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to delete account: $error');
+    }
+  }
+
+  Future<AccountCreationResponse> socialLogin(
+      {required SocialLoginBody body}) async {
+    try {
+      final response = await AuthProvider(dioClient).socialLogin(body);
+      inspect(response);
+      return response;
+    } on DioException catch (_) {
+      rethrow;
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to social login: $error');
     }
   }
 }

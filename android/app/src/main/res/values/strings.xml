@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Immo plus</string>
+    <string name="facebook_app_id">505592098598027</string>
+    <string name="fb_login_protocol_scheme">fb505592098598027</string>
+    <string name="facebook_client_token">f870bbd7caa1ca5344f9aaeda75fe13b</string>
+</resources>
