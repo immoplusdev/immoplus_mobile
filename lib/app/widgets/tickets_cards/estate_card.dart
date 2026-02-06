@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
@@ -139,6 +140,7 @@ class _EstateCardState extends State<EstateCard> {
                     )
                   ],
                 ),
+                Gap(10),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Row(
@@ -151,13 +153,14 @@ class _EstateCardState extends State<EstateCard> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              widget.bienImmobilierModel.nom,
+                              widget.bienImmobilierModel.nom.capitalizeFirst(),
                               overflow: TextOverflow.fade,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
+                            Gap(5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +194,7 @@ class _EstateCardState extends State<EstateCard> {
                                 ),
                               ],
                             ),
-                            const Gap(1),
+                            Gap(5),
                             RichText(
                                 text: TextSpan(children: [
                               TextSpan(

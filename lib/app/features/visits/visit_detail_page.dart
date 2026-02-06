@@ -10,6 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
@@ -90,202 +91,105 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
-              child: CustomScrollView(
-                slivers: [
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () async {
-                      this.context.read<VisitCubit>().getVisit(id: widget.id);
-                    },
-                  ),
-                  SliverToBoxAdapter(
-                      child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: EstateInfo(
-                        bienImmobilierModel:
-                            state.demandeVisitResponse.data.bienImmobilier!),
-                  )),
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: Padding(
+              child: Container(
+                padding: EdgeInsets.all(appPadding),
+                child: CustomScrollView(
+                  slivers: [
+                    CupertinoSliverRefreshControl(
+                      onRefresh: () async {
+                        this.context.read<VisitCubit>().getVisit(id: widget.id);
+                      },
+                    ),
+                    SliverToBoxAdapter(
+                        child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: EstateInfo(
+                          bienImmobilierModel:
+                              state.demandeVisitResponse.data.bienImmobilier!),
+                    )),
+                    const SliverGap(10),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          title: const Text('Identifiant de la demande:'),
+                          subtitle: SelectableText(
+                              state.demandeVisitResponse.data.id.toString()),
+                          dense: true,
+                          trailing: IconButton(
+                            color: AppColors.primary,
+                            icon: const Icon(FontAwesomeIcons.copy),
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(
+                                      text: state.demandeVisitResponse.data.id
+                                          .toString()))
+                                  .then((value) {
+                                //Vibrate.feedback(FeedbackType.impact);
+                                EasyLoading.showToast('Identifiant copié');
+                              }).catchError((err) {
+                                EasyLoading.showToast(err.toString());
+                              });
+                            },
+                          ),
+                          titleTextStyle:
+                              Theme.of(context).textTheme.bodyMedium,
+                          subtitleTextStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: Colors.purple),
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(child: Divider()),
+                    SliverToBoxAdapter(
+                      child: ServiceStatusSection(
+                          status: state.demandeVisitResponse.data
+                                  .statusDemandeVisite ??
+                              ''),
+                    ),
+                    SliverToBoxAdapter(
+                      child: PaymentStatusSection(
+                          demandeVisitModel: state.demandeVisitResponse.data),
+                    ),
+                    SliverToBoxAdapter(
                       child: ListTile(
+                        //contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        title: const Text('Identifiant de la demande:'),
-                        subtitle: SelectableText(
-                            state.demandeVisitResponse.data.id.toString()),
-                        dense: true,
-                        trailing: IconButton(
-                          color: AppColors.primary,
-                          icon: const Icon(FontAwesomeIcons.copy),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(
-                                    text: state.demandeVisitResponse.data.id
-                                        .toString()))
-                                .then((value) {
-                              //Vibrate.feedback(FeedbackType.impact);
-                              EasyLoading.showToast('Identifiant copié');
-                            }).catchError((err) {
-                              EasyLoading.showToast(err.toString());
-                            });
-                          },
-                        ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                        subtitleTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: Colors.purple),
-                      ),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(child: Divider()),
-                  SliverToBoxAdapter(
-                    child: ServiceStatusSection(
-                        status: state.demandeVisitResponse.data
-                                .statusDemandeVisite ??
-                            ''),
-                  ),
-                  SliverToBoxAdapter(
-                    child: PaymentStatusSection(
-                        demandeVisitModel: state.demandeVisitResponse.data),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      //contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      tileColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
 
-                      leading: const CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          child: Icon(Icons.calendar_month)),
-                      horizontalTitleGap: 0,
-                      //dense: true,
-                      title: const Text(
-                        'Jour de visite:',
-                      ),
-                      subtitle: Text(
-                        (state.demandeVisitResponse.data.datesDemandeVisite
-                                .isEmpty)
-                            ? "Aucune date programmée"
-                            : VisitUtils.formatDateTime(state
-                                .demandeVisitResponse
-                                .data
-                                .datesDemandeVisite
-                                .last
-                                .date!
-                                .toIso8601String()),
-                        style:
-                            GoogleFonts.inter(color: Colors.red, fontSize: 18),
-                      ),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: Divider(),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: Icon(
-                            FontAwesomeIcons.headset,
-                            color: AppColors.primary,
-                          ),
-                          title: const Text("Contacter nous"),
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: AppColors.primary),
-                          trailing: Icon(
-                            CupertinoIcons.chevron_right_circle_fill,
-                            color: AppColors.primary,
-                          ),
-                          onTap: () async {
-                            ContactUtils.showContact(id: widget.id);
-                          },
+                        leading: const CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(Icons.calendar_month)),
+                        horizontalTitleGap: 0,
+                        //dense: true,
+                        title: const Text(
+                          'Jour de visite:',
+                        ),
+                        subtitle: Text(
+                          (state.demandeVisitResponse.data.datesDemandeVisite
+                                  .isEmpty)
+                              ? "Aucune date programmée"
+                              : VisitUtils.formatDateTime(state
+                                  .demandeVisitResponse
+                                  .data
+                                  .datesDemandeVisite
+                                  .last
+                                  .date!
+                                  .toIso8601String()),
+                          style: GoogleFonts.inter(
+                              color: Colors.red, fontSize: 18),
                         ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: Icon(
-                            CupertinoIcons.location,
-                            color: AppColors.primary,
-                          ),
-                          title: const Text("Voir l'itinéraire"),
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: AppColors.primary),
-                          trailing: Icon(
-                            CupertinoIcons.chevron_right_circle_fill,
-                            color: AppColors.primary,
-                          ),
-                          onTap: () async {
-                            if (await MapLauncher.isMapAvailable(
-                                    MapType.google) ??
-                                false) {
-                              MapLauncher.showDirections(
-                                destinationTitle: state.demandeVisitResponse
-                                    .data.bienImmobilier!.nom,
-                                destination: Coords(
-                                  state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates![1],
-                                  state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates![0],
-                                ),
-                                directionsMode: DirectionsMode.driving,
-                                mapType: MapType.google,
-                              );
-                            } else {
-                              final availableMaps =
-                                  await MapLauncher.installedMaps;
-                              print(availableMaps);
-                              await availableMaps.first.showDirections(
-                                destinationTitle: state.demandeVisitResponse
-                                    .data.bienImmobilier!.nom,
-                                destination: Coords(
-                                  state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates![1],
-                                  state.demandeVisitResponse.data
-                                      .bienImmobilier!.position.coordinates![0],
-                                ),
-                                directionsMode: DirectionsMode.driving,
-                              );
-                            }
-                          },
-                        ),
-                      ),
+                    const SliverToBoxAdapter(
+                      child: Divider(),
                     ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: Divider(),
-                  ),
-                  if (shouldShowOwnerPhone(state.demandeVisitResponse))
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10)
@@ -299,44 +203,161 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            leading: const CircleAvatar(
-                              //backgroundColor: Colors.white,
-                              child: Icon(
-                                FontAwesomeIcons.userTie,
-                                //color: Colors.green,
-                              ),
-                            ),
-                            title: const Text("Propriétaire"),
-                            subtitle: Text(state.demandeVisitResponse.data
-                                .proprietaire!.phoneNumber
-                                .split('-')
-                                .last
-                                .toString()),
-                            titleTextStyle:
-                                Theme.of(context).textTheme.bodyMedium,
-                            trailing: Icon(
-                              FontAwesomeIcons.phoneVolume,
+                            leading: Icon(
+                              FontAwesomeIcons.headset,
                               color: AppColors.primary,
                             ),
-                            subtitleTextStyle: Theme.of(context)
+                            title: const Text("Contacter nous"),
+                            titleTextStyle: Theme.of(context)
                                 .textTheme
-                                .titleMedium!
+                                .bodyMedium!
                                 .copyWith(color: AppColors.primary),
+                            trailing: Icon(
+                              CupertinoIcons.chevron_right_circle_fill,
+                              color: AppColors.primary,
+                            ),
                             onTap: () async {
-                              final phone = state.demandeVisitResponse.data
-                                  .proprietaire!.phoneNumber
-                                  .split('-');
-                              Utils.makePhoneCall(phone.last);
+                              ContactUtils.showContact(id: widget.id);
                             },
                           ),
                         ),
                       ),
                     ),
-                ],
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)
+                            .copyWith(bottom: 10),
+                        child: Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            enabled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            leading: Icon(
+                              CupertinoIcons.location,
+                              color: AppColors.primary,
+                            ),
+                            title: const Text("Voir l'itinéraire"),
+                            titleTextStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: AppColors.primary),
+                            trailing: Icon(
+                              CupertinoIcons.chevron_right_circle_fill,
+                              color: AppColors.primary,
+                            ),
+                            onTap: () async {
+                              if (await MapLauncher.isMapAvailable(
+                                      MapType.google) ??
+                                  false) {
+                                MapLauncher.showDirections(
+                                  destinationTitle: state.demandeVisitResponse
+                                      .data.bienImmobilier!.nom,
+                                  destination: Coords(
+                                    state
+                                        .demandeVisitResponse
+                                        .data
+                                        .bienImmobilier!
+                                        .position
+                                        .coordinates![1],
+                                    state
+                                        .demandeVisitResponse
+                                        .data
+                                        .bienImmobilier!
+                                        .position
+                                        .coordinates![0],
+                                  ),
+                                  directionsMode: DirectionsMode.driving,
+                                  mapType: MapType.google,
+                                );
+                              } else {
+                                final availableMaps =
+                                    await MapLauncher.installedMaps;
+                                print(availableMaps);
+                                await availableMaps.first.showDirections(
+                                  destinationTitle: state.demandeVisitResponse
+                                      .data.bienImmobilier!.nom,
+                                  destination: Coords(
+                                    state
+                                        .demandeVisitResponse
+                                        .data
+                                        .bienImmobilier!
+                                        .position
+                                        .coordinates![1],
+                                    state
+                                        .demandeVisitResponse
+                                        .data
+                                        .bienImmobilier!
+                                        .position
+                                        .coordinates![0],
+                                  ),
+                                  directionsMode: DirectionsMode.driving,
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: Divider(),
+                    ),
+                    if (shouldShowOwnerPhone(state.demandeVisitResponse))
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10)
+                              .copyWith(bottom: 10),
+                          child: Material(
+                            elevation: 2,
+                            borderRadius: BorderRadius.circular(20),
+                            child: ListTile(
+                              tileColor: Colors.white,
+                              enabled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              leading: const CircleAvatar(
+                                //backgroundColor: Colors.white,
+                                child: Icon(
+                                  FontAwesomeIcons.userTie,
+                                  //color: Colors.green,
+                                ),
+                              ),
+                              title: const Text("Propriétaire"),
+                              subtitle: Text(state.demandeVisitResponse.data
+                                  .proprietaire!.phoneNumber
+                                  .split('-')
+                                  .last
+                                  .toString()),
+                              titleTextStyle:
+                                  Theme.of(context).textTheme.bodyMedium,
+                              trailing: Icon(
+                                FontAwesomeIcons.phoneVolume,
+                                color: AppColors.primary,
+                              ),
+                              subtitleTextStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(color: AppColors.primary),
+                              onTap: () async {
+                                final phone = state.demandeVisitResponse.data
+                                    .proprietaire!.phoneNumber
+                                    .split('-');
+                                Utils.makePhoneCall(phone.last);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
             bottomSheet: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10)
+              padding: const EdgeInsets.symmetric(horizontal: appPadding)
                   .copyWith(bottom: 20),
               child: Visibility(
                 visible: shouldShowPaymentButton(state.demandeVisitResponse),
@@ -384,39 +405,42 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
             appBar: AppBar(
               automaticallyImplyLeading: true,
             ),
-            body: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.remove_circle,
-                    size: 100,
-                    color: Colors.grey,
-                  ),
-                  const SizedBox(
-                    width: 250,
-                    child: Text(
-                      "Vous n'avez pas accès à cet élément ou aucun élément correspondant",
-                      textAlign: TextAlign.center,
+            body: Container(
+              padding: EdgeInsets.all(appPadding),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.remove_circle,
+                      size: 100,
+                      color: Colors.grey,
                     ),
-                  ),
-                  const Gap(50),
-                  SizedBox(
-                    width: 300,
-                    child: ListTile(
-                      onTap: () {
-                        //context.goNamed(BookingPage.name);
-                      },
-                      horizontalTitleGap: 5,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      tileColor: AppColors.primaryLite,
-                      leading:
-                          const Icon(CupertinoIcons.chevron_left_circle_fill),
-                      title: const Text("Retour a la page d'historique"),
+                    const SizedBox(
+                      width: 250,
+                      child: Text(
+                        "Vous n'avez pas accès à cet élément ou aucun élément correspondant",
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  )
-                ],
+                    const Gap(50),
+                    SizedBox(
+                      width: 300,
+                      child: ListTile(
+                        onTap: () {
+                          //context.goNamed(BookingPage.name);
+                        },
+                        horizontalTitleGap: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        tileColor: AppColors.primaryLite,
+                        leading:
+                            const Icon(CupertinoIcons.chevron_left_circle_fill),
+                        title: const Text("Retour a la page d'historique"),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -80,54 +82,59 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.white,
-                currentIndex: _selectedIndex,
-                onTap: (value) => _onItemTapped(index: value, pageState: state),
-                selectedFontSize: 12,
-                unselectedFontSize: 12,
-                showSelectedLabels: true,
-                showUnselectedLabels: true,
-                selectedItemColor: AppColors.primary,
-                unselectedItemColor: Colors.grey,
-                items: [
-                  _buildNavItem(
-                      icon: ImmoIcons.home,
-                      label: "Accueil",
-                      isActive: state == PageState.home //_selectedIndex == 0,
-                      ),
-                  _buildNavItem(
-                    icon: ImmoIcons.coeur,
-                    label: "Favoris",
-                    isActive: state == PageState.forMe, //_selectedIndex == 1,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
-                      height: (state.name == PageState.home.name) ? 20 : 40,
-                      child: Icon(
-                        FontAwesomeIcons.sliders,
-                        color: (state.name == PageState.home.name)
-                            ? Colors.transparent
-                            : Colors.grey.shade300,
-                      ),
-                    ), // Espace pour le bouton flottant
+              child: SizedBox(
+                height: Platform.isAndroid ? 105 : null,
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.white,
+                  currentIndex: _selectedIndex,
+                  onTap: (value) =>
+                      _onItemTapped(index: value, pageState: state),
+                  selectedFontSize: 12,
+                  unselectedFontSize: 12,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  selectedItemColor: AppColors.primary,
+                  unselectedItemColor: Colors.grey,
+                  items: [
+                    _buildNavItem(
+                        icon: ImmoIcons.home,
+                        label: "Accueil",
+                        isActive: state == PageState.home //_selectedIndex == 0,
+                        ),
+                    _buildNavItem(
+                      icon: ImmoIcons.coeur,
+                      label: "Favoris",
+                      isActive: state == PageState.forMe, //_selectedIndex == 1,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        height: (state.name == PageState.home.name) ? 20 : 40,
+                        child: Icon(
+                          FontAwesomeIcons.sliders,
+                          color: (state.name == PageState.home.name)
+                              ? Colors.transparent
+                              : Colors.grey.shade300,
+                        ),
+                      ), // Espace pour le bouton flottant
 
-                    label: "Filtre",
-                  ),
-                  _buildNavItem(
-                      icon: ImmoIcons.visua,
-                      label: "Explorer",
+                      label: "Filtre",
+                    ),
+                    _buildNavItem(
+                        icon: ImmoIcons.visua,
+                        label: "Explorer",
+                        isActive:
+                            state == PageState.explore //_selectedIndex == 3,
+                        ),
+                    _buildNavItem(
+                      icon: ImmoIcons.compte,
+                      label: "Compte",
                       isActive:
-                          state == PageState.explore //_selectedIndex == 3,
-                      ),
-                  _buildNavItem(
-                    icon: ImmoIcons.compte,
-                    label: "Compte",
-                    isActive: state == PageState.acount, // _selectedIndex == 4,
-                  ),
-                ],
+                          state == PageState.acount, // _selectedIndex == 4,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
