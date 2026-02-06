@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
 class ThemeConfig {
@@ -26,8 +25,7 @@ class ThemeConfig {
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor:
-              HexColor("#eff5fb"), // CupertinoColors.secondarySystemFill,
+          fillColor: CupertinoColors.secondarySystemFill,
           labelStyle: const TextStyle(color: CupertinoColors.black),
 
           prefixStyle: const TextStyle(color: CupertinoColors.systemGrey),
@@ -56,10 +54,10 @@ class ThemeConfig {
               color: Colors.black,
             )),
         checkboxTheme: CheckboxThemeData(
-          fillColor: WidgetStateProperty.all(HexColor('#2172cb')),
+          fillColor: WidgetStateProperty.all(AppColors.primary),
         ),
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: HexColor('#2172cb'),
+              primary: AppColors.primary,
               secondaryContainer: CupertinoColors.white,
               onPrimary: CupertinoColors.white,
               surface: CupertinoColors.systemGrey,

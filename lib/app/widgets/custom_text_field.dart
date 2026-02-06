@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField({
@@ -124,11 +125,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
           //focusColor: Colors.white,
           suffixIcon: widget.sufixIcon,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(radiusButton),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(radiusButton),
             borderSide: BorderSide.none,
           ),
         ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -20,8 +23,15 @@ class HomePageWrapper extends StatefulWidget {
 class _HomePageWrapperState extends State<HomePageWrapper> {
   int _selectedIndex = 0;
   final navigationHandler = getIt<NavigationHandler>();
+  final sessionManager = getIt<SessionManager>();
 
   void _onItemTapped({required int index, required PageState pageState}) {
+    if (index == 4) {
+      if (sessionManager.currentUser == null) {
+        context.pushNamed(AuthenticationPage.name);
+        return;
+      }
+    }
     if (index == 2 && pageState == PageState.home) {
       _showFilterDialog();
     } else if (index != 2) {
@@ -51,12 +61,6 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
       builder: (context, state) {
         return Scaffold(
           body: widget.child,
-          // body: Center(
-          //   child: Text(
-          //     'Page ${_selectedIndex + 1}',
-          //     style: const TextStyle(fontSize: 24),
-          //   ),
-          // ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
@@ -127,10 +131,8 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               ),
             ),
           ),
-
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-
           floatingActionButton: (state.name == PageState.home.name)
               ? FloatingActionButton(
                   backgroundColor: AppColors.scafold,

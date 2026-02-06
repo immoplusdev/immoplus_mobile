@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/visits/visit_formular_action.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
-import 'package:immoplus/app/utils/utils.dart';
 
 class EstateBottomBar extends StatelessWidget {
   EstateBottomBar({super.key, required this.bienImmobilier});
@@ -21,7 +22,8 @@ class EstateBottomBar extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             if (sessionManager.currentUser == null) {
-              Utils.authentificationPopup(context: context);
+              context.pushNamed(AuthenticationPage.name);
+              // Utils.authentificationPopup(context: context);
             } else {
               if (bienImmobilier.aLouer) {
                 Navigator.push(

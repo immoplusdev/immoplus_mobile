@@ -34,6 +34,9 @@ class _SplashScreenState extends State<SplashScreen> {
     // await sessionManager.resetOnboarding();
     final hasSeenOnboarding = await sessionManager.hasReadOnboarding();
 
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+
     if (!hasSeenOnboarding) {
       // Redirection vers l'onboarding si pas encore vu
       AppRouter.router.goNamed(OnboardingNewPage.name);

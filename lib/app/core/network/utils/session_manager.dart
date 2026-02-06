@@ -2,7 +2,6 @@ import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -71,7 +70,8 @@ class SessionManager {
   Future<void> logout() async {
     await clearSession();
     OneSignal.logout();
-    AppRouter.router.goNamed(SplashScreen.name);
+    AppRouter.router.go('/');
+    // AppRouter.router.goNamed(SplashScreen.name);
   }
 
   Future<UserModelSchema?> getCurrentUser() async {

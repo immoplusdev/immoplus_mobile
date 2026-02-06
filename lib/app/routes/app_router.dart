@@ -24,6 +24,7 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
+import 'package:immoplus/app/features/registration/register_page.dart';
 import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
@@ -61,6 +62,13 @@ class AppRouter {
         path: '/login_page',
         name: LoginPage.name,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/${RegisterPage.name}',
+        name: RegisterPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const RegisterPage();
+        },
       ),
       GoRoute(
         path: '/${AuthenticationPage.name}',
@@ -135,33 +143,31 @@ class AppRouter {
           GoRoute(
             path: '/homePage',
             name: HomePage.name,
-            builder: (context, state) => const HomePage(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const HomePage(),
+            ),
           ),
-
           GoRoute(
             path: '/for_me',
             name: FavoritePage.name,
-            builder: (context, state) => const FavoritePage(),
-            routes: const [],
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const FavoritePage(),
+            ),
           ),
-
-          // GoRoute(
-          //     path: '/history',
-          //     name: HistoricalPage.name,
-          //     builder: (context, state) => const HistoricalPage(),
-          //     routes: const []),
           GoRoute(
             path: '/map',
             name: MapViewer.name,
-            builder: (context, state) => const MapViewer(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const MapViewer(),
+            ),
           ),
           GoRoute(
             path: '/account',
             name: AccountPage.name,
-            builder: (context, state) => AccountPage(),
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: AccountPage(),
+            ),
           ),
-
-          // Ajoutez plus de routes ici si nécessaire
         ],
       ),
 

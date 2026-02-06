@@ -1,6 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/auth/customer_registration_body.dart';
 import 'package:immoplus/app/data/models/remote/files/file_data_model.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
@@ -19,6 +17,7 @@ import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
+import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
@@ -86,66 +85,28 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
       create: (context) => getIt<RgistrationCubitCubit>(),
       child: Form(
         key: _formKey,
-        child: Scaffold(
-          backgroundColor: AppColors.primaryLite,
-          body: CustomScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            //padding: const EdgeInsets.only(left: 15, right: 15),
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                backgroundColor: AppColors.primaryLite,
-                leadingWidth: 35,
-                centerTitle: true,
-                pinned: true,
-                title: Text(
-                  "Inscription",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Center(
-                  child: AutoSizeText(
-                    maxLines: 1,
-                    "Veuillez renseigner les champs",
-                    textAlign: TextAlign.center,
-                    style:
-                        Theme.of(context).textTheme.headlineSmall!.copyWith(),
-                  ),
-                ),
-              ),
-              const SliverGap(20),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: InternationalPhoneInput(
+        child: CustomPageImmo(
+          title: "Création de compte",
+          content: Container(
+            padding: const EdgeInsets.all(appPadding),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  InternationalPhoneInput(
                     backgroundColor: AppColors.primaryLite,
                     onValidPhoneNumber: (value) {
-                      //phoneNumber = value;
                       print(value);
                       if (value != _formController.phoneNumber!.text) {
                         _formController.phoneNumber!.text = value;
                       }
-
-                      // Le numéro valide est traité ici si nécessaire
-                      // print(phoneNumber);
                     },
                     onInputValidated: (p0) {},
                     validator: (String? value) =>
                         FormUtils.numberValidator(number: value),
                   ),
-                ),
-              ),
-              const SliverGap(6),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: CustomTextField(
+                  Gap(10),
+                  CustomTextField(
                     isEnabled: false,
-                    fillColor: Colors.white,
                     controller: _formController.email,
                     prefixIcon: const Icon(CupertinoIcons.mail),
                     labelText: 'Email',
@@ -153,42 +114,24 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     validator: (String? value) =>
                         FormUtils.emailValidator(email: value),
                   ),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: CustomTextField(
-                    fillColor: Colors.white,
+                  CustomTextField(
                     controller: _formController.firstName,
                     prefixIcon: const Icon(FontAwesomeIcons.user),
                     labelText: "Nom",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: CustomTextField(
-                    fillColor: Colors.white,
+                  CustomTextField(
                     controller: _formController.lastName,
                     prefixIcon: const Icon(FontAwesomeIcons.user),
                     labelText: "Prénom",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: ValueListenableBuilder<bool>(
+                  ValueListenableBuilder<bool>(
                     valueListenable: _passwordNotifier,
                     builder: (BuildContext context, bool value, child) {
                       return CustomTextField(
-                        fillColor: Colors.white,
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         textInputType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.next,
@@ -213,17 +156,10 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                       );
                     },
                   ),
-                ),
-              ),
-              const SliverGap(10),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                sliver: SliverToBoxAdapter(
-                  child: ValueListenableBuilder<bool>(
+                  ValueListenableBuilder<bool>(
                     valueListenable: _passwordConfirmNotifier,
                     builder: (BuildContext context, bool value, child) {
                       return CustomTextField(
-                        fillColor: Colors.white,
                         textInputAction: TextInputAction.done,
                         textInputType: TextInputType.visiblePassword,
                         prefixIcon: const Icon(CupertinoIcons.lock),
@@ -254,61 +190,54 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                       );
                     },
                   ),
-                ),
-              ),
-              const SliverGap(10),
-              SliverToBoxAdapter(
-                child: ValueListenableBuilder<bool>(
-                  valueListenable: _cguNotifier,
-                  builder: (BuildContext context, bool value, child) {
-                    return Row(
-                      children: [
-                        Checkbox(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            value: value,
-                            fillColor: value
-                                ? WidgetStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : WidgetStateProperty.all(Colors.white),
-                            onChanged: (val) {
-                              _cguNotifier.value = !_cguNotifier.value;
-                            }),
-                        const Text("j'approuve les"),
-                        TextButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                isScrollControlled: true,
-                                useRootNavigator: true,
-                                showDragHandle: true,
-                                context: context,
-                                builder: (context) =>
-                                    const FractionallySizedBox(
-                                        heightFactor: 0.9,
-                                        child: GeneralConditionPage()),
-                              );
-                            },
-                            child: Text(
-                              'Termes & conditions',
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary),
-                            )),
-                        const Gap(10),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              const SliverGap(10),
-              SliverPadding(
-                padding: const EdgeInsets.all(5.0),
-                sliver:
-                    BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
-                  builder: (context, state) {
-                    return SliverToBoxAdapter(
-                      child: CustomLoadingButtom(
+                  Gap(20),
+                  ValueListenableBuilder<bool>(
+                    valueListenable: _cguNotifier,
+                    builder: (BuildContext context, bool value, child) {
+                      return Row(
+                        children: [
+                          Checkbox(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                              value: value,
+                              fillColor: value
+                                  ? WidgetStateProperty.all(
+                                      Theme.of(context).colorScheme.primary)
+                                  : WidgetStateProperty.all(Colors.white),
+                              onChanged: (val) {
+                                _cguNotifier.value = !_cguNotifier.value;
+                              }),
+                          const Text("j'approuve les"),
+                          TextButton(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  isScrollControlled: true,
+                                  useRootNavigator: true,
+                                  showDragHandle: true,
+                                  context: context,
+                                  builder: (context) =>
+                                      const FractionallySizedBox(
+                                          heightFactor: 0.9,
+                                          child: GeneralConditionPage()),
+                                );
+                              },
+                              child: Text(
+                                'Termes & conditions',
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              )),
+                          const Gap(10),
+                        ],
+                      );
+                    },
+                  ),
+                  Gap(20),
+                  BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
+                    builder: (context, state) {
+                      return CustomLoadingButtom(
                         isLoading: (state is REGISTRATION_LOADING),
                         onClick: ((state is REGISTRATION_LOADING))
                             ? null
@@ -368,12 +297,12 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                                 //context.go('/homePage');
                               },
                         text: "créer mon compte",
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  )
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

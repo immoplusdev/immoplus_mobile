@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -55,85 +55,70 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: widget.backgroundColor ?? AppColors.scafold,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ListTile(
-            tileColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: InternationalPhoneNumberInput(
-              isEnabled: widget.isEnabled,
-              onInputChanged: (PhoneNumber number) {
-                _phoneNumber = number;
-              },
-              onInputValidated: (bool value) {
-                if (_isValidNotifier.value != value) {
-                  _isValidNotifier.value = value;
-                }
-                if (value && widget.onValidPhoneNumber != null) {
-                  widget.onValidPhoneNumber!(_phoneNumber.phoneNumber ?? '');
-                }
-                if (widget.onInputValidated != null) {
-                  widget.onInputValidated!(value);
-                }
-              },
-              //validator: widget.validator,
-              ignoreBlank: false,
-              autoValidateMode: AutovalidateMode.disabled,
-              initialValue:
-                  _initialPhoneNumber, // MODIFICATION : Utiliser la valeur statique
-              textFieldController: _controller,
-              formatInput: true,
-              maxLength: 13,
-              spaceBetweenSelectorAndTextField: 0,
-              textAlignVertical: TextAlignVertical.center,
-              hintText: "Numéro de téléphone",
-              keyboardType: TextInputType.phone,
-              keyboardAction: TextInputAction.done,
-              inputBorder: InputBorder.none,
-              selectorConfig: const SelectorConfig(
-                leadingPadding: 0,
-                setSelectorButtonAsPrefixIcon: true,
-                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                trailingSpace: false,
-              ),
-              selectorTextStyle: Theme.of(context).textTheme.bodyLarge,
-              inputDecoration: InputDecoration(
-                prefixIcon: const Text('|'),
-                hintStyle: Theme.of(context).textTheme.bodyMedium,
-                suffixIcon: const Icon(
-                  FontAwesomeIcons.whatsapp,
-                  size: 20,
-                  color: Colors.green,
-                ),
-                fillColor: Colors.white,
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                hintText: "Numéro de téléphone",
-                errorStyle: const TextStyle(height: 0),
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: InternationalPhoneNumberInput(
+        isEnabled: widget.isEnabled,
+        onInputChanged: (PhoneNumber number) {
+          _phoneNumber = number;
+        },
+        onInputValidated: (bool value) {
+          if (_isValidNotifier.value != value) {
+            _isValidNotifier.value = value;
+          }
+          if (value && widget.onValidPhoneNumber != null) {
+            widget.onValidPhoneNumber!(_phoneNumber.phoneNumber ?? '');
+          }
+          if (widget.onInputValidated != null) {
+            widget.onInputValidated!(value);
+          }
+        },
+        // validator: widget.validator,
+        validator: null,
+        ignoreBlank: false,
+        autoValidateMode: AutovalidateMode.onUserInteraction,
+        initialValue:
+            _initialPhoneNumber, // MODIFICATION : Utiliser la valeur statique
+        textFieldController: _controller,
+        formatInput: true,
+        maxLength: 13,
+        spaceBetweenSelectorAndTextField: 0,
+        textAlignVertical: TextAlignVertical.center,
+        errorMessage: "Le numéro de téléphone est incorrect",
+        searchBoxDecoration: InputDecoration(
+          labelText: "Rechercher un pays",
+        ),
+        hintText: "Numéro de téléphone",
+        keyboardType: TextInputType.phone,
+        keyboardAction: TextInputAction.done,
+        inputBorder: InputBorder.none,
+        selectorConfig: const SelectorConfig(
+          leadingPadding: 16,
+          setSelectorButtonAsPrefixIcon: true,
+          selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+          trailingSpace: false,
+        ),
+        selectorTextStyle: Theme.of(context).textTheme.bodyLarge,
+        inputDecoration: InputDecoration(
+          hintStyle: Theme.of(context).textTheme.bodyMedium,
+          suffixIcon: const Icon(
+            FontAwesomeIcons.whatsapp,
+            size: 20,
+            color: Colors.green,
           ),
-          ValueListenableBuilder<bool?>(
-            valueListenable: _isValidNotifier,
-            builder: (context, isValid, child) {
-              if ((isValid == null) || (isValid == true)) {
-                return const SizedBox.shrink();
-              }
-              return const Text(
-                'Le numéro de téléphone est invalide.',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 14,
-                ),
-              );
-            },
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radiusButton),
+            borderSide: BorderSide.none,
           ),
-        ],
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radiusButton),
+            borderSide: BorderSide.none,
+          ),
+          fillColor: AppColors.ECECEC,
+          errorStyle: const TextStyle(color: Colors.redAccent),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
+          hintText: "Numéro de téléphone",
+        ),
       ),
     );
   }
