@@ -4,14 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
 class OperatorsSelectorPage extends StatefulWidget {
@@ -143,26 +140,26 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
               childCount: OrderPaymentController.retraitOperatorsItems.length,
             ),
           ),
-          SliverToBoxAdapter(
-            child: TextButton(
-              onPressed: () {
-                AppDialog.confirm(
-                    context: context,
-                    content:
-                        "Votre demande risque d’être annulée dans moins de 12 heures si la facture n’est pas payée à temps. Veuillez contacter le service client pour plus d’informations.",
-                    rollback: () {
-                      AppRouter.router.goNamed(HomePage.name);
-                    });
-              },
-              child: Text(
-                "Payer plus tard",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: Colors.red),
-              ),
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: TextButton(
+          //     onPressed: () {
+          //       AppDialog.confirm(
+          //           context: context,
+          //           content:
+          //               "Votre demande risque d’être annulée dans moins de 12 heures si la facture n’est pas payée à temps. Veuillez contacter le service client pour plus d’informations.",
+          //           rollback: () {
+          //             AppRouter.router.goNamed(HomePage.name);
+          //           });
+          //     },
+          //     child: Text(
+          //       "Payer plus tard",
+          //       style: Theme.of(context)
+          //           .textTheme
+          //           .titleMedium!
+          //           .copyWith(color: Colors.red),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

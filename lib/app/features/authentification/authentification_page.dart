@@ -48,6 +48,30 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       ],
       child: EnvironmentsBadge(
         child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: context.canPop()
+                ? UnconstrainedBox(
+                    child: GestureDetector(
+                      onTap: () {
+                        context.pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.blue65BAF0),
+                        child: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          color: AppColors.white,
+                          size: 14,
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
           body: Stack(
             children: [
               Container(
@@ -72,7 +96,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Gap(80),
+                      Gap(80 + MediaQuery.of(context).padding.top),
                       _infoTile(label: "Meubles"),
                       _infoTile(label: "Résidences"),
                       _infoTile(label: "Locations"),
