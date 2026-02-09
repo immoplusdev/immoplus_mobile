@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/models/remote/configs/commune_model.dart';
+import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 
 import '../residence/commodite_model.dart';
 import '../residence/piece_model.dart';
@@ -32,6 +34,8 @@ class BienImmobilierModel with _$BienImmobilierModel {
     @Default([]) List<PieceModel> pieces,
     @Default('') String? ville,
     @Default('') String? commune,
+    @JsonKey(name: 'ville_model') VilleModel? villeModel,
+    @JsonKey(name: 'commune_model') CommuneModel? communeModel,
     @Default('') String? video,
     @Default(false) bool aLouer,
     // 🔥 Ces champs manquants

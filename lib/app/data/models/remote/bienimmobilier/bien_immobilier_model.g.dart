@@ -50,6 +50,13 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
           const [],
       ville: json['ville'] as String? ?? '',
       commune: json['commune'] as String? ?? '',
+      villeModel: json['ville_model'] == null
+          ? null
+          : VilleModel.fromJson(json['ville_model'] as Map<String, dynamic>),
+      communeModel: json['commune_model'] == null
+          ? null
+          : CommuneModel.fromJson(
+              json['commune_model'] as Map<String, dynamic>),
       video: json['video'] as String? ?? '',
       aLouer: json['aLouer'] as bool? ?? false,
       latitude: toDouble(json['latitude']),
@@ -82,6 +89,8 @@ Map<String, dynamic> _$$BienImmobilierModelImplToJson(
       'pieces': instance.pieces,
       'ville': instance.ville,
       'commune': instance.commune,
+      'ville_model': instance.villeModel,
+      'commune_model': instance.communeModel,
       'video': instance.video,
       'aLouer': instance.aLouer,
       'latitude': instance.latitude,

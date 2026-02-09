@@ -29,6 +29,10 @@ mixin _$ResidenceModel {
   String get adresse => throw _privateConstructorUsedError;
   String get ville => throw _privateConstructorUsedError;
   String get commune => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ville_model')
+  VilleModel? get villeModel => throw _privateConstructorUsedError;
+  @JsonKey(name: 'commune_model')
+  CommuneModel? get communeModel => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
   String get video => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
@@ -71,6 +75,8 @@ abstract class $ResidenceModelCopyWith<$Res> {
       String adresse,
       String ville,
       String commune,
+      @JsonKey(name: 'ville_model') VilleModel? villeModel,
+      @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       PositionModel position,
       String video,
       List<String> images,
@@ -86,6 +92,8 @@ abstract class $ResidenceModelCopyWith<$Res> {
       String reglesSupplementaires,
       bool residenceDisponible});
 
+  $VilleModelCopyWith<$Res>? get villeModel;
+  $CommuneModelCopyWith<$Res>? get communeModel;
   $PositionModelCopyWith<$Res> get position;
 }
 
@@ -113,6 +121,8 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? adresse = null,
     Object? ville = null,
     Object? commune = null,
+    Object? villeModel = freezed,
+    Object? communeModel = freezed,
     Object? position = null,
     Object? video = null,
     Object? images = null,
@@ -165,6 +175,14 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
               as String,
+      villeModel: freezed == villeModel
+          ? _value.villeModel
+          : villeModel // ignore: cast_nullable_to_non_nullable
+              as VilleModel?,
+      communeModel: freezed == communeModel
+          ? _value.communeModel
+          : communeModel // ignore: cast_nullable_to_non_nullable
+              as CommuneModel?,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -228,6 +246,34 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $VilleModelCopyWith<$Res>? get villeModel {
+    if (_value.villeModel == null) {
+      return null;
+    }
+
+    return $VilleModelCopyWith<$Res>(_value.villeModel!, (value) {
+      return _then(_value.copyWith(villeModel: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CommuneModelCopyWith<$Res>? get communeModel {
+    if (_value.communeModel == null) {
+      return null;
+    }
+
+    return $CommuneModelCopyWith<$Res>(_value.communeModel!, (value) {
+      return _then(_value.copyWith(communeModel: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $PositionModelCopyWith<$Res> get position {
     return $PositionModelCopyWith<$Res>(_value.position, (value) {
       return _then(_value.copyWith(position: value) as $Val);
@@ -253,6 +299,8 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       String adresse,
       String ville,
       String commune,
+      @JsonKey(name: 'ville_model') VilleModel? villeModel,
+      @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       PositionModel position,
       String video,
       List<String> images,
@@ -268,6 +316,10 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       String reglesSupplementaires,
       bool residenceDisponible});
 
+  @override
+  $VilleModelCopyWith<$Res>? get villeModel;
+  @override
+  $CommuneModelCopyWith<$Res>? get communeModel;
   @override
   $PositionModelCopyWith<$Res> get position;
 }
@@ -294,6 +346,8 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? adresse = null,
     Object? ville = null,
     Object? commune = null,
+    Object? villeModel = freezed,
+    Object? communeModel = freezed,
     Object? position = null,
     Object? video = null,
     Object? images = null,
@@ -346,6 +400,14 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
               as String,
+      villeModel: freezed == villeModel
+          ? _value.villeModel
+          : villeModel // ignore: cast_nullable_to_non_nullable
+              as VilleModel?,
+      communeModel: freezed == communeModel
+          ? _value.communeModel
+          : communeModel // ignore: cast_nullable_to_non_nullable
+              as CommuneModel?,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -419,6 +481,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.adresse = '',
       this.ville = '',
       this.commune = '',
+      @JsonKey(name: 'ville_model') this.villeModel,
+      @JsonKey(name: 'commune_model') this.communeModel,
       this.position = const PositionModel(),
       this.video = '',
       final List<String> images = const [],
@@ -467,6 +531,12 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final String commune;
+  @override
+  @JsonKey(name: 'ville_model')
+  final VilleModel? villeModel;
+  @override
+  @JsonKey(name: 'commune_model')
+  final CommuneModel? communeModel;
   @override
   @JsonKey()
   final PositionModel position;
@@ -531,7 +601,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
 
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
   }
 
   @override
@@ -552,6 +622,10 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.adresse, adresse) || other.adresse == adresse) &&
             (identical(other.ville, ville) || other.ville == ville) &&
             (identical(other.commune, commune) || other.commune == commune) &&
+            (identical(other.villeModel, villeModel) ||
+                other.villeModel == villeModel) &&
+            (identical(other.communeModel, communeModel) ||
+                other.communeModel == communeModel) &&
             (identical(other.position, position) ||
                 other.position == position) &&
             (identical(other.video, video) || other.video == video) &&
@@ -592,6 +666,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         adresse,
         ville,
         commune,
+        villeModel,
+        communeModel,
         position,
         video,
         const DeepCollectionEquality().hash(_images),
@@ -636,6 +712,8 @@ abstract class _ResidenceModel implements ResidenceModel {
       final String adresse,
       final String ville,
       final String commune,
+      @JsonKey(name: 'ville_model') final VilleModel? villeModel,
+      @JsonKey(name: 'commune_model') final CommuneModel? communeModel,
       final PositionModel position,
       final String video,
       final List<String> images,
@@ -672,6 +750,12 @@ abstract class _ResidenceModel implements ResidenceModel {
   String get ville;
   @override
   String get commune;
+  @override
+  @JsonKey(name: 'ville_model')
+  VilleModel? get villeModel;
+  @override
+  @JsonKey(name: 'commune_model')
+  CommuneModel? get communeModel;
   @override
   PositionModel get position;
   @override

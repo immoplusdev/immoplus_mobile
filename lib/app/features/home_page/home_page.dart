@@ -81,53 +81,60 @@ class _HomePageState extends State<HomePage>
             backgroundColor: AppColors.whiteBackground,
             body: DefaultTabController(
               length: 4,
-              child: CustomScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                slivers: [
-                  HomeSearchAppbar(
-                    currentIndex: state.indexPage,
-                    controller: _tabController,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  HomePageState.getPageListController(state.indexPage)
+                      .refresh();
+                },
+                child: CustomScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
                   ),
-                  ValueListenableBuilder<int>(
-                    valueListenable: FilterHandler.notifier,
-                    builder: (context, _, child) {
-                      return FilterHandler.hasActiveFilters
-                          ? SliverToBoxAdapter(
-                              child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Row(
-                                  spacing: 8,
-                                  children: FilterHandler.getActiveFiltersChips(
-                                    onRefresh: () async {
-                                      HomePageState.getPageListController(
-                                              state.indexPage)
-                                          .refresh();
-                                    },
+                  slivers: [
+                    HomeSearchAppbar(
+                      currentIndex: state.indexPage,
+                      controller: _tabController,
+                    ),
+                    ValueListenableBuilder<int>(
+                      valueListenable: FilterHandler.notifier,
+                      builder: (context, _, child) {
+                        return FilterHandler.hasActiveFilters
+                            ? SliverToBoxAdapter(
+                                child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: Row(
+                                    spacing: 8,
+                                    children:
+                                        FilterHandler.getActiveFiltersChips(
+                                      onRefresh: () async {
+                                        HomePageState.getPageListController(
+                                                state.indexPage)
+                                            .refresh();
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ))
-                          : const SliverToBoxAdapter();
-                    },
-                  ),
-                  CupertinoSliverRefreshControl(
-                    //      backgroundColor: Colors.white,
-                    // color: Theme.of(context).colorScheme.primary,
-                    onRefresh: () async {
-                      HomePageState.getPageListController(state.indexPage)
-                          .refresh();
-                      // _pagingController.refresh();
-                    },
-                  ),
-                  const SliverGap(10),
-                  HomePageState.getPageListFromIndex(state.indexPage),
-                ],
+                              ))
+                            : const SliverToBoxAdapter();
+                      },
+                    ),
+                    // CupertinoSliverRefreshControl(
+                    //   //      backgroundColor: Colors.white,
+                    //   // color: Theme.of(context).colorScheme.primary,
+                    //   onRefresh: () async {
+                    //     HomePageState.getPageListController(state.indexPage)
+                    //         .refresh();
+                    //     // _pagingController.refresh();
+                    //   },
+                    // ),
+                    const SliverGap(10),
+                    HomePageState.getPageListFromIndex(state.indexPage),
+                  ],
+                ),
               ),
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
@@ -143,34 +144,22 @@ class _ResidenceCardState extends State<ResidenceCard> {
                           ),
                           Gap(5),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // const Icon(
-                              //   Icons.location_on_outlined,
-                              //   size: 20,
-                              // ),
+                              const ImmoIcon(
+                                ImmoIcons.marker,
+                                size: 10,
+                              ),
+                              const Gap(3),
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    const ImmoIcon(
-                                      ImmoIcons.marker,
-                                      size: 10,
-                                    ),
-                                    const Gap(3),
-                                    Expanded(
-                                      child: Text(
-                                        maxLines: 1,
-                                        overflow: TextOverflow.clip,
-                                        widget.residence.adresse,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                                color: Colors.grey.shade600),
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  maxLines: maxLineAdress,
+                                  overflow: TextOverflow.clip,
+                                  // TODO Add commune
+                                  "${widget.residence.adresse} ${widget.residence.communeModel?.name ?? ""}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: Colors.grey.shade600),
                                 ),
                               ),
                             ],

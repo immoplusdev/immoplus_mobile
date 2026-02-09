@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus/app/data/models/remote/configs/commune_model.dart';
+import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 
 import 'commodite_model.dart';
 import 'piece_model.dart';
@@ -19,6 +21,8 @@ class ResidenceModel with _$ResidenceModel {
     @Default('') String adresse,
     @Default('') String ville,
     @Default('') String commune,
+    @JsonKey(name: 'ville_model') VilleModel? villeModel,
+    @JsonKey(name: 'commune_model') CommuneModel? communeModel,
     @Default(PositionModel()) PositionModel position,
     @Default('') String video,
     @Default([]) List<String> images,
