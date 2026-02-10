@@ -6,7 +6,6 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_c
 import 'package:immoplus/app/data/models/remote/residence/residences_collection.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
-import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -15,7 +14,7 @@ import 'package:immoplus/app/widgets/tickets_cards/small_estate_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/small_residence_card.dart';
 import 'package:injectable/injectable.dart';
 
-const _defaultPadding = 15.0;
+const _defaultPadding = 100.0;
 
 @injectable
 class MapViwerCubit extends Cubit<MapViwerCubitState> {
@@ -70,6 +69,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                 context: NavigationService.navigatorKey.currentContext!,
                 backgroundColor: Colors.transparent,
                 barrierColor: Colors.transparent,
+                isDismissible: true,
                 isScrollControlled: true,
                 useRootNavigator: true,
                 shape: RoundedRectangleBorder(
@@ -80,8 +80,11 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                 builder: (context) => Container(
                       height: 150,
                       //padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(
-                          bottom: 40 + _defaultPadding, left: 10, right: 10),
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewPadding.bottom +
+                              _defaultPadding,
+                          left: 10,
+                          right: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
@@ -93,7 +96,12 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                           ),
                         ],
                       ),
-                      child: SmallResidenceCard(residenceModel: element),
+                      child: SmallResidenceCard(
+                        residenceModel: element,
+                        closeTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ));
           },
         ),
@@ -132,6 +140,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                 barrierColor: Colors.transparent,
                 isScrollControlled: true,
                 useRootNavigator: true,
+                isDismissible: true,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -140,8 +149,11 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                 builder: (context) => Container(
                       height: 150,
                       //padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(
-                          bottom: 40 + _defaultPadding, left: 10, right: 10),
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewPadding.bottom +
+                              _defaultPadding,
+                          left: 10,
+                          right: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
@@ -153,7 +165,11 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                           ),
                         ],
                       ),
-                      child: SmallEstateCard(bienImmobilier: element),
+                      child: SmallEstateCard(
+                          bienImmobilier: element,
+                          closeTap: () {
+                            Navigator.pop(context);
+                          }),
                     ));
           },
         ),

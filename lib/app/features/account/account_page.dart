@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
@@ -87,7 +88,7 @@ class _AccountPageState extends State<AccountPage> {
         : Scaffold(
             backgroundColor: Colors.white,
             body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.all(appPadding),
               child: CustomScrollView(
                 slivers: [
                   // Header Section

@@ -41,6 +41,10 @@ mixin _$BienImmobilierModel {
   List<PieceModel> get pieces => throw _privateConstructorUsedError;
   String? get ville => throw _privateConstructorUsedError;
   String? get commune => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ville_model')
+  VilleModel? get villeModel => throw _privateConstructorUsedError;
+  @JsonKey(name: 'commune_model')
+  CommuneModel? get communeModel => throw _privateConstructorUsedError;
   String? get video => throw _privateConstructorUsedError;
   bool get aLouer =>
       throw _privateConstructorUsedError; // 🔥 Ces champs manquants
@@ -91,6 +95,8 @@ abstract class $BienImmobilierModelCopyWith<$Res> {
       List<PieceModel> pieces,
       String? ville,
       String? commune,
+      @JsonKey(name: 'ville_model') VilleModel? villeModel,
+      @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       String? video,
       bool aLouer,
       @JsonKey(fromJson: toDouble) double? latitude,
@@ -99,6 +105,8 @@ abstract class $BienImmobilierModelCopyWith<$Res> {
       @JsonKey(defaultValue: false) bool? fetesAutorises});
 
   $PositionModelCopyWith<$Res> get position;
+  $VilleModelCopyWith<$Res>? get villeModel;
+  $CommuneModelCopyWith<$Res>? get communeModel;
 }
 
 /// @nodoc
@@ -137,6 +145,8 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
     Object? pieces = null,
     Object? ville = freezed,
     Object? commune = freezed,
+    Object? villeModel = freezed,
+    Object? communeModel = freezed,
     Object? video = freezed,
     Object? aLouer = null,
     Object? latitude = freezed,
@@ -229,6 +239,14 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
               as String?,
+      villeModel: freezed == villeModel
+          ? _value.villeModel
+          : villeModel // ignore: cast_nullable_to_non_nullable
+              as VilleModel?,
+      communeModel: freezed == communeModel
+          ? _value.communeModel
+          : communeModel // ignore: cast_nullable_to_non_nullable
+              as CommuneModel?,
       video: freezed == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
@@ -265,6 +283,34 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
       return _then(_value.copyWith(position: value) as $Val);
     });
   }
+
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VilleModelCopyWith<$Res>? get villeModel {
+    if (_value.villeModel == null) {
+      return null;
+    }
+
+    return $VilleModelCopyWith<$Res>(_value.villeModel!, (value) {
+      return _then(_value.copyWith(villeModel: value) as $Val);
+    });
+  }
+
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CommuneModelCopyWith<$Res>? get communeModel {
+    if (_value.communeModel == null) {
+      return null;
+    }
+
+    return $CommuneModelCopyWith<$Res>(_value.communeModel!, (value) {
+      return _then(_value.copyWith(communeModel: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -297,6 +343,8 @@ abstract class _$$BienImmobilierModelImplCopyWith<$Res>
       List<PieceModel> pieces,
       String? ville,
       String? commune,
+      @JsonKey(name: 'ville_model') VilleModel? villeModel,
+      @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       String? video,
       bool aLouer,
       @JsonKey(fromJson: toDouble) double? latitude,
@@ -306,6 +354,10 @@ abstract class _$$BienImmobilierModelImplCopyWith<$Res>
 
   @override
   $PositionModelCopyWith<$Res> get position;
+  @override
+  $VilleModelCopyWith<$Res>? get villeModel;
+  @override
+  $CommuneModelCopyWith<$Res>? get communeModel;
 }
 
 /// @nodoc
@@ -342,6 +394,8 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
     Object? pieces = null,
     Object? ville = freezed,
     Object? commune = freezed,
+    Object? villeModel = freezed,
+    Object? communeModel = freezed,
     Object? video = freezed,
     Object? aLouer = null,
     Object? latitude = freezed,
@@ -434,6 +488,14 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
               as String?,
+      villeModel: freezed == villeModel
+          ? _value.villeModel
+          : villeModel // ignore: cast_nullable_to_non_nullable
+              as VilleModel?,
+      communeModel: freezed == communeModel
+          ? _value.communeModel
+          : communeModel // ignore: cast_nullable_to_non_nullable
+              as CommuneModel?,
       video: freezed == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
@@ -487,6 +549,8 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
       final List<PieceModel> pieces = const [],
       this.ville = '',
       this.commune = '',
+      @JsonKey(name: 'ville_model') this.villeModel,
+      @JsonKey(name: 'commune_model') this.communeModel,
       this.video = '',
       this.aLouer = false,
       @JsonKey(fromJson: toDouble) this.latitude,
@@ -586,6 +650,12 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
   @JsonKey()
   final String? commune;
   @override
+  @JsonKey(name: 'ville_model')
+  final VilleModel? villeModel;
+  @override
+  @JsonKey(name: 'commune_model')
+  final CommuneModel? communeModel;
+  @override
   @JsonKey()
   final String? video;
   @override
@@ -607,7 +677,7 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
 
   @override
   String toString() {
-    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, video: $video, aLouer: $aLouer, latitude: $latitude, longitude: $longitude, nombreMaxOccupants: $nombreMaxOccupants, fetesAutorises: $fetesAutorises)';
+    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, villeModel: $villeModel, communeModel: $communeModel, video: $video, aLouer: $aLouer, latitude: $latitude, longitude: $longitude, nombreMaxOccupants: $nombreMaxOccupants, fetesAutorises: $fetesAutorises)';
   }
 
   @override
@@ -649,6 +719,10 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
             const DeepCollectionEquality().equals(other._pieces, _pieces) &&
             (identical(other.ville, ville) || other.ville == ville) &&
             (identical(other.commune, commune) || other.commune == commune) &&
+            (identical(other.villeModel, villeModel) ||
+                other.villeModel == villeModel) &&
+            (identical(other.communeModel, communeModel) ||
+                other.communeModel == communeModel) &&
             (identical(other.video, video) || other.video == video) &&
             (identical(other.aLouer, aLouer) || other.aLouer == aLouer) &&
             (identical(other.latitude, latitude) ||
@@ -686,6 +760,8 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
         const DeepCollectionEquality().hash(_pieces),
         ville,
         commune,
+        villeModel,
+        communeModel,
         video,
         aLouer,
         latitude,
@@ -734,6 +810,8 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
           final List<PieceModel> pieces,
           final String? ville,
           final String? commune,
+          @JsonKey(name: 'ville_model') final VilleModel? villeModel,
+          @JsonKey(name: 'commune_model') final CommuneModel? communeModel,
           final String? video,
           final bool aLouer,
           @JsonKey(fromJson: toDouble) final double? latitude,
@@ -787,6 +865,12 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   String? get ville;
   @override
   String? get commune;
+  @override
+  @JsonKey(name: 'ville_model')
+  VilleModel? get villeModel;
+  @override
+  @JsonKey(name: 'commune_model')
+  CommuneModel? get communeModel;
   @override
   String? get video;
   @override

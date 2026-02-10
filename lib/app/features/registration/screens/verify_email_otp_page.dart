@@ -1,14 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/widgets/custom_input.dart';
+import 'package:immoplus/app/widgets/custom_loading_button.dart';
+import 'package:immoplus/app/widgets/custom_page_immo.dart';
+import 'package:immoplus/gen/assets.gen.dart';
 // Optionnel si vous utilisez PinFieldAutoFill. Sinon, remplacez par vos propres champs.
-import 'package:sms_autofill/sms_autofill.dart';
 
 class VerifyEmailOtpPage extends StatefulWidget {
   const VerifyEmailOtpPage({
@@ -117,169 +121,119 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Vérification du code'),
-        centerTitle: true,
-        elevation: 0,
-        leading: widget.pageController == null
-            ? null
-            : IconButton(
-                icon: const Icon(Icons.chevron_left),
-                onPressed: () {
-                  widget.pageController!.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-      ),
-      body: BlocListener<RgistrationCubitCubit, RegistrationCubitState>(
+    return CustomPageImmo(
+      title: 'Vérification du code',
+      content: BlocListener<RgistrationCubitCubit, RegistrationCubitState>(
         listener: (context, state) {
           setState(() => _isLoading = state is REGISTRATION_LOADING);
         },
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 520),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              child: Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: CustomScrollView(
-                      shrinkWrap: true,
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.mark_email_read_outlined,
-                                  size: 48, color: theme.colorScheme.primary),
-                              const SizedBox(height: 12),
-                              Text(
-                                'Entrez le code reçu par email',
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Un code à 6 chiffres a été envoyé à ${widget.email}',
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.textTheme.bodyMedium?.color
-                                      ?.withOpacity(0.8),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 28),
-                              // Champ OTP (6 cases)
-                              PinFieldAutoFill(
-                                codeLength: 6,
-                                currentCode: _otpController.text,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(6),
-                                ],
-                                decoration: BoxLooseDecoration(
-                                  gapSpace: 10,
-                                  radius: const Radius.circular(10),
-                                  strokeColorBuilder: FixedColorBuilder(
-                                    theme.colorScheme.primary.withOpacity(.5),
-                                  ),
-                                  bgColorBuilder: FixedColorBuilder(
-                                      theme.colorScheme.surface),
-                                  textStyle: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                onCodeChanged: (code) {
-                                  final v = (code ?? '').trim();
-                                  if (v.length <= 6) {
-                                    _otpController.value = TextEditingValue(
-                                      text: v,
-                                      selection: TextSelection.collapsed(
-                                          offset: v.length),
-                                    );
-                                    if (_formKey.currentState?.mounted ??
-                                        false) {
-                                      _formKey.currentState!.validate();
-                                    }
-                                  }
-                                },
-                                onCodeSubmitted: (_) =>
-                                    _isLoading ? null : _submit(context),
-                              ),
-                              Builder(builder: (context) {
-                                final err = _otpValidator(_otpController.text);
-                                return AnimatedOpacity(
-                                  opacity: (err == null) ? 0 : 1,
-                                  duration: const Duration(milliseconds: 200),
-                                  child: (err == null)
-                                      ? const SizedBox.shrink()
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: Text(
-                                            err,
-                                            style: TextStyle(
-                                              color: theme.colorScheme.error,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ),
-                                );
-                              }),
-                              const SizedBox(height: 24),
-                            ],
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: FilledButton(
-                              onPressed:
-                                  _isLoading ? null : () => _submit(context),
-                              style: FilledButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: _isLoading
-                                  ? const CupertinoActivityIndicator()
-                                  : const Text(
-                                      'Valider le code',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(appPadding),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Entrez le code reçu par email',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(8),
+                    Text(
+                      'Un code à 6 chiffres a été envoyé à ${widget.email}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color:
+                            theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(28),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.E6F5FF,
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Image.asset(
+                              Assets.img.email.path,
+                              width: 35,
                             ),
                           ),
-                        ),
-                        SliverToBoxAdapter(child: const SizedBox(height: 12)),
-                        SliverToBoxAdapter(
-                          child: TextButton(
-                            onPressed:
-                                _isLoading ? null : () => _resend(context),
-                            child: const Text('Renvoyer le code'),
+                          Gap(14),
+                          Text("Code de vérification",
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w600, fontSize: 15)),
+                          Gap(13),
+                          // Champ OTP (6 cases)
+                          CustomPinput(
+                            controller: _otpController,
+                            onCompleted: (pin) => _submit(context),
+                            onChanged: (code) {
+                              if (_formKey.currentState?.mounted ?? false) {
+                                _formKey.currentState!.validate();
+                              }
+                            },
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+
+                          // Message d'erreur animé
+                          Builder(
+                            builder: (context) {
+                              final err = _otpValidator(_otpController.text);
+                              return AnimatedOpacity(
+                                opacity: (err == null) ? 0 : 1,
+                                duration: const Duration(milliseconds: 200),
+                                child: (err == null)
+                                    ? const SizedBox.shrink()
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          err,
+                                          style: TextStyle(
+                                            color: theme.colorScheme.error,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                              );
+                            },
+                          ),
+                          const Gap(24),
+
+                          // Bouton de validation
+                          SizedBox(
+                            width: double.infinity,
+                            child: CustomLoadingButtom(
+                              text: "Valider le code",
+                              onClick: () => _submit(context),
+                              isLoading: _isLoading,
+                            ),
+                          ),
+                          const Gap(12),
+
+                          // Bouton renvoyer
+                          Center(
+                            child: TextButton(
+                              onPressed:
+                                  _isLoading ? null : () => _resend(context),
+                              child: const Text('Renvoyer le code'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),

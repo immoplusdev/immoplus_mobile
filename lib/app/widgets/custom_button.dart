@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
+
+const _buttonHeight = 50.0;
 
 class CustomButtom extends StatelessWidget {
   const CustomButtom({
     super.key,
-    required this.text,
+    this.text,
+    this.child,
     this.onClick,
     this.clickable = true,
     this.color,
@@ -14,8 +17,10 @@ class CustomButtom extends StatelessWidget {
     this.fontSize,
     this.elevation,
     this.isLoading = false,
+    this.borderRadius,
   });
-  final String text;
+  final String? text;
+  final Widget? child;
   final void Function()? onClick;
   final Color? color;
   final Color? textColor;
@@ -23,11 +28,12 @@ class CustomButtom extends StatelessWidget {
   final double? elevation;
   final bool clickable;
   final bool isLoading;
+  final BorderRadius? borderRadius;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: 50,
+        height: _buttonHeight,
         //padding: EdgeInsets.only(left: 30, right: 30),
         width: double.infinity,
         child: ElevatedButton(
@@ -35,11 +41,12 @@ class CustomButtom extends StatelessWidget {
             elevation: elevation ?? 0,
             backgroundColor: (clickable)
                 ? (color == null)
-                    ? HexColor('#2172cb')
+                    ? AppColors.primary
                     : color
                 : Colors.grey[400],
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    borderRadius ?? BorderRadius.circular(radiusButton)),
           ),
           onPressed: isLoading
               ? null
@@ -48,14 +55,14 @@ class CustomButtom extends StatelessWidget {
                   : null,
           child: isLoading
               ? CupertinoActivityIndicator()
-              : Text(
-                  text,
-                  style: GoogleFonts.inter(
-                    color: textColor ?? Colors.white,
-                    fontSize: fontSize,
-                    fontWeight: FontWeight.w600,
+              : child ??
+                  Text(
+                    text ?? "",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: textColor ?? Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
-                ),
         ),
       ),
     );

@@ -67,8 +67,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
           snap: false,
           floating: true,
           titleSpacing: 0,
-          //toolbarHeight: 60,
-
           backgroundColor: AppColors.whiteBackground,
           title: Container(
             color: AppColors.whiteBackground,

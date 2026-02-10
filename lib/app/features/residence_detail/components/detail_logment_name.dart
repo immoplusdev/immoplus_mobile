@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
-import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 
 class DetailLogmentName extends StatelessWidget {
   const DetailLogmentName({super.key, required this.residenceModel});
@@ -37,7 +37,7 @@ class DetailLogmentName extends StatelessWidget {
                       const Gap(3),
                       Expanded(
                         child: Text(
-                          maxLines: 1,
+                          maxLines: maxLineAdress,
                           overflow: TextOverflow.clip,
                           residenceModel.adresse,
                           style: Theme.of(context)

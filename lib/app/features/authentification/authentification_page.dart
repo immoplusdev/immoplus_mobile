@@ -1,15 +1,17 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/features/login_page/pages/login_with_email_screen.dart';
-import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
-import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/features/registration/register_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/widgets/config_env.dart';
+import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:immoplus/gen/assets.gen.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({super.key});
@@ -44,127 +46,133 @@ class _AuthenticationPageState extends State<AuthenticationPage>
         BlocProvider(create: (context) => getIt<LoginCubit>()),
         BlocProvider(create: (context) => getIt<RgistrationCubitCubit>()),
       ],
-      child: Scaffold(
-        backgroundColor: AppColors.primaryLite,
-        body: CustomScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          physics: const NeverScrollableScrollPhysics(),
-          slivers: [
-            SliverAppBar(
-              backgroundColor: AppColors.primaryLite,
-              leadingWidth: 35,
-            ),
-            const SliverGap(30),
-
-            // Titre principal
-            SliverToBoxAdapter(
-              child: Center(
-                child: Text(
-                  "Bienvenue",
-                  style: context.textTheme.headlineMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            const SliverGap(8),
-
-            // Sous-titre
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              sliver: SliverToBoxAdapter(
-                child: Center(
-                  child: AutoSizeText(
-                    maxLines: 1,
-                    "Connectez-vous ou créez votre compte",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-              ),
-            ),
-            const SliverGap(30),
-
-            // TabBar personnalisé
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverToBoxAdapter(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.lightBlue.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.all(4),
-                  child: TabBar(
-                    controller: _tabController,
-                    indicator: BoxDecoration(
-                      color: AppColors.lightBlue,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+      child: EnvironmentsBadge(
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: context.canPop()
+                ? UnconstrainedBox(
+                    child: GestureDetector(
+                      onTap: () {
+                        context.pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.blue65BAF0),
+                        child: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          color: AppColors.white,
+                          size: 14,
                         ),
-                      ],
+                      ),
                     ),
-                    labelColor: AppColors.primaryLite,
-                    unselectedLabelColor: Colors.black,
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    unselectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                    ),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    dividerColor: Colors.transparent,
-                    tabs: const [
-                      Tab(text: "Connexion"),
-                      Tab(text: "Inscription"),
+                  )
+                : null,
+          ),
+          body: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: const [
+                      Color(0xFFFFFFFF),
+                      Color(0xFFFFFEFE),
+                      Color(0xFF64DCFD),
+                      Color(0xFF156CE4),
+                    ],
+                    stops: const [0.0, 0.3, 0.7, 1.0],
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(appPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Gap(80 + MediaQuery.of(context).padding.top),
+                      _infoTile(label: "Meubles"),
+                      _infoTile(label: "Résidences"),
+                      _infoTile(label: "Locations"),
+                      Gap(180),
+                      Image.asset(
+                        Assets.icon.iconRadius.path,
+                        width: 63,
+                        height: 63,
+                      ),
+                      Gap(15),
+                      Text("Commencez à visiter, louer, acheter, réserver",
+                          // textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                          )),
+                      Gap(80),
+                      CustomButtom(
+                        text: "Connexion",
+                        onClick: () {
+                          context.pushNamed(LoginPage.name);
+                        },
+                        color: AppColors.customBlue,
+                        borderRadius: BorderRadius.circular(radiusButton),
+                      ),
+                      Gap(6),
+                      CustomButtom(
+                        onClick: () {
+                          context.pushNamed(RegisterPage.name);
+                        },
+                        color: AppColors.whiteBackground,
+                        textColor: AppColors.black,
+                        borderRadius: BorderRadius.circular(radiusButton),
+                        child: FittedBox(
+                          child: RichText(
+                            text: TextSpan(
+                              text: "Vous n’avez pas de compte ? ",
+                              children: [
+                                TextSpan(
+                                  text: "Inscrivez-vous",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                )
+                              ],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Gap(10),
                     ],
                   ),
                 ),
               ),
-            ),
-            const SliverGap(5),
-
-            // Contenu des onglets
-            SliverFillRemaining(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: TabBarView(
-                  controller: _tabController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    // Page de connexion
-                    PageView(
-                      controller: _loginPageController,
-                      scrollDirection: Axis.horizontal,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        OTPLoginPage(
-                          rootPageController: _loginPageController,
-                        ),
-                        LoginWithEmailScreen(
-                          rootPageController: _loginPageController,
-                        ),
-                      ],
-                    ),
-
-                    // Page d'inscription
-                    const SendEmailOptPage(),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _infoTile({required String label}) {
+    return Text(
+      label,
+      style: TextStyle(
+        color: AppColors.black,
+        fontSize: 40,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

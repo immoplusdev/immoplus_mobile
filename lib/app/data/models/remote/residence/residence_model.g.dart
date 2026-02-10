@@ -17,6 +17,13 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       adresse: json['adresse'] as String? ?? '',
       ville: json['ville'] as String? ?? '',
       commune: json['commune'] as String? ?? '',
+      villeModel: json['ville_model'] == null
+          ? null
+          : VilleModel.fromJson(json['ville_model'] as Map<String, dynamic>),
+      communeModel: json['commune_model'] == null
+          ? null
+          : CommuneModel.fromJson(
+              json['commune_model'] as Map<String, dynamic>),
       position: json['position'] == null
           ? const PositionModel()
           : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
@@ -56,6 +63,8 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'adresse': instance.adresse,
       'ville': instance.ville,
       'commune': instance.commune,
+      'ville_model': instance.villeModel,
+      'commune_model': instance.communeModel,
       'position': instance.position,
       'video': instance.video,
       'images': instance.images,

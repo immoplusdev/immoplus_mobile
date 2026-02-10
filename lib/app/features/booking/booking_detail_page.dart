@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
@@ -54,27 +55,25 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
-              child: CustomScrollView(
-                slivers: [
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () async {
-                      this
-                          .context
-                          .read<BookingCubit>()
-                          .getBooking(id: widget.id);
-                    },
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(appPadding),
+                child: CustomScrollView(
+                  slivers: [
+                    CupertinoSliverRefreshControl(
+                      onRefresh: () async {
+                        this
+                            .context
+                            .read<BookingCubit>()
+                            .getBooking(id: widget.id);
+                      },
+                    ),
 
-                  SliverToBoxAdapter(
-                      child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: LogmentInfo(
-                        logmentModel: state.reservationResponse.data.residence),
-                  )),
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                    SliverToBoxAdapter(
+                        child: LogmentInfo(
+                            logmentModel:
+                                state.reservationResponse.data.residence)),
+                    const SliverGap(10),
+                    SliverToBoxAdapter(
                       child: ListTile(
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -105,23 +104,19 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             .copyWith(color: Colors.purple),
                       ),
                     ),
-                  ),
-                  // SliverToBoxAdapter(
-                  //     child: Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 10),
-                  //   child: ElevatedButton(
-                  //       onPressed: () {
-                  //         inspect(state.data.logement);
-                  //       },
-                  //       child: Text(
-                  //           'Teste')), // LogmentInfo(logmentModel: state.data.logement!),
-                  // )),
-                  const SliverToBoxAdapter(child: Divider()),
+                    // SliverToBoxAdapter(
+                    //     child: Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: 10),
+                    //   child: ElevatedButton(
+                    //       onPressed: () {
+                    //         inspect(state.data.logement);
+                    //       },
+                    //       child: Text(
+                    //           'Teste')), // LogmentInfo(logmentModel: state.data.logement!),
+                    // )),
+                    const SliverToBoxAdapter(child: Divider()),
 
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
+                    SliverToBoxAdapter(
                       child: ListTile(
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -141,14 +136,10 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         ),
                       ),
                     ),
-                  ),
 
-                  const SliverGap(5),
+                    SliverGap(10),
 
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
+                    SliverToBoxAdapter(
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundColor: (BookingUtils.getBookingStatus(
@@ -184,38 +175,31 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         ),
                       ),
                     ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    // color: Colors.white,
-                    // borderRadius: BorderRadius.circular(20),
-                    child: ReservationStatusSection(
-                        status:
-                            state.reservationResponse.data.statusReservation ??
-                                ''),
-                  ),
-
-                  SliverToBoxAdapter(
-                      //  color: Colors.white,
-                      //   borderRadius: BorderRadius.circular(20),
-                      child: BookingPaymentStatus(
-                          reservationModel: state.reservationResponse.data)),
-                  const SliverGap(5),
-                  SliverToBoxAdapter(
-                      child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10)
-                        .copyWith(bottom: 10),
-                    child: PlaningBookingCardDetail(
-                      reservationModel: state.reservationResponse.data,
-                    ),
-                  )),
-
-                  if (hasPaid(state.reservationResponse))
-                    // Proprietaire
+                    SliverGap(10),
                     SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(bottom: 10),
+                      // color: Colors.white,
+                      // borderRadius: BorderRadius.circular(20),
+                      child: ReservationStatusSection(
+                          status: state
+                                  .reservationResponse.data.statusReservation ??
+                              ''),
+                    ),
+                    SliverGap(10),
+                    SliverToBoxAdapter(
+                        //  color: Colors.white,
+                        //   borderRadius: BorderRadius.circular(20),
+                        child: BookingPaymentStatus(
+                            reservationModel: state.reservationResponse.data)),
+                    const SliverGap(10),
+                    SliverToBoxAdapter(
+                        child: PlaningBookingCardDetail(
+                      reservationModel: state.reservationResponse.data,
+                    )),
+                    SliverGap(10),
+
+                    if (hasPaid(state.reservationResponse))
+                      // Proprietaire
+                      SliverToBoxAdapter(
                         child: Material(
                           elevation: 2,
                           borderRadius: BorderRadius.circular(20),
@@ -257,25 +241,24 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           ),
                         ),
                       ),
-                    ),
-                  if (hasPaid(state.reservationResponse))
-                    // code reservation
-                    _customTile(
-                      icon: Icons.label_rounded,
-                      trailingIcon: Icons.content_copy_rounded,
-                      title:
-                          "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
-                      onTap: () {
-                        Utils.copyToClipboard(
-                            state.reservationResponse.data.codeReservation);
-                      },
-                    ),
+                    SliverGap(10),
 
-                  // voir l'itinéraire
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
+                    if (hasPaid(state.reservationResponse))
+                      // code reservation
+                      _customTile(
+                        icon: Icons.label_rounded,
+                        trailingIcon: Icons.content_copy_rounded,
+                        title:
+                            "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
+                        onTap: () {
+                          Utils.copyToClipboard(
+                              state.reservationResponse.data.codeReservation);
+                        },
+                      ),
+                    SliverGap(10),
+
+                    // voir l'itinéraire
+                    SliverToBoxAdapter(
                       child: Material(
                         elevation: 2,
                         borderRadius: BorderRadius.circular(20),
@@ -334,13 +317,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         ),
                       ),
                     ),
-                  ),
-
-                  // Contactez nous
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
+                    SliverGap(10),
+                    // Contactez nous
+                    SliverToBoxAdapter(
                       child: Material(
                         elevation: 2,
                         borderRadius: BorderRadius.circular(20),
@@ -369,14 +348,14 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         ),
                       ),
                     ),
-                  ),
 
-                  SliverGap(50)
-                ],
+                    SliverGap(50)
+                  ],
+                ),
               ),
             ),
             bottomSheet: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10)
+              padding: const EdgeInsets.symmetric(horizontal: appPadding)
                   .copyWith(bottom: 20),
               child: Visibility(
                 visible: state.reservationResponse.data.statusFacture ==

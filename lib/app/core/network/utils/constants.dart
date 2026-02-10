@@ -15,3 +15,5 @@ Future<String?> uploadFile({required File file}) async {
 }
 
 const double appPadding = 16.0;
+const double radiusButton = 43.0;
+const int maxLineAdress = 3;

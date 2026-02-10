@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/features/for_me/components/empty_indicator.dart';
 import 'package:immoplus/app/features/for_me/components/favorite_card.dart';
@@ -101,7 +102,7 @@ class _FavoritePageState extends State<FavoritePage> {
             ),
             body: ListView.builder(
               itemCount: favorites.length,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.all(appPadding),
               itemBuilder: (context, index) {
                 final favorite = favorites[index];
                 return Dismissible(

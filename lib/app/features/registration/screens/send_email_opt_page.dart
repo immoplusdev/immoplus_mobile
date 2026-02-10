@@ -1,11 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/formular_utils.dart';
+import 'package:immoplus/app/widgets/custom_loading_button.dart';
+import 'package:immoplus/app/widgets/custom_page_immo.dart';
+import 'package:immoplus/app/widgets/custom_text_field.dart';
+import 'package:immoplus/gen/assets.gen.dart';
 
 class SendEmailOptPage extends StatefulWidget {
   const SendEmailOptPage({super.key});
@@ -39,164 +46,123 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
     }
   }
 
-  String? _emailValidator(String? value) {
-    final email = value?.trim() ?? '';
-    if (email.isEmpty) return "L'email est requis";
-    if (email.length > 254) return "L'email est trop long";
-    if (email.contains(' ')) return "L'email ne doit pas contenir d'espaces";
-
-    final regex = RegExp(r'^[\w\.\-+]+@([\w\-]+\.)+[A-Za-z]{2,}$');
-    if (!regex.hasMatch(email)) return "Format d'email incorrect";
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
-      builder: (context, state) {
-        final isLoading = state is REGISTRATION_LOADING;
-        return CustomScrollView(
-          slivers: [
-            // SliverAppBar(
-            //   pinned: false,
-            //   floating: false,
-            //   automaticallyImplyLeading: false,
-            //   toolbarHeight: 0,
-            //   elevation: 0,
-            //   backgroundColor: theme.scaffoldBackgroundColor,
-            // ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 500),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Form(
-                          key: _formKey,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.mark_email_read_outlined,
-                                  size: 48, color: theme.colorScheme.primary),
-                              const SizedBox(height: 12),
-                              Text(
-                                "Saisissez votre adresse email",
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "Un code de vérification vous sera envoyé.",
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.textTheme.bodyMedium?.color
-                                      ?.withOpacity(0.8),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 28),
+    return CustomPageImmo(
+      title: "Vérification de l'email",
+      content: BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
+        builder: (context, state) {
+          final isLoading = state is REGISTRATION_LOADING;
 
-                              // Champ email
-                              TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.send,
-                                validator: _emailValidator,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.deny(
-                                      RegExp(r"\s")),
-                                  LengthLimitingTextInputFormatter(254),
-                                ],
-                                onFieldSubmitted: (_) =>
-                                    isLoading ? null : _submit(context),
-                                decoration: InputDecoration(
-                                  hintText: "Adresse email",
-                                  prefixIcon: const Icon(Icons.email_outlined),
-                                  filled: true,
-                                  fillColor: theme
-                                      .colorScheme.surfaceContainerHighest
-                                      .withOpacity(0.4),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 18, horizontal: 14),
-                                  suffixIcon:
-                                      ValueListenableBuilder<TextEditingValue>(
-                                    valueListenable: _emailController,
-                                    builder: (context, value, _) {
-                                      if (value.text.isEmpty)
-                                        return const SizedBox();
-                                      return IconButton(
-                                        tooltip: "Effacer",
-                                        icon: const Icon(Icons.close),
-                                        onPressed: isLoading
-                                            ? null
-                                            : _emailController.clear,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 24),
-
-                              // Bouton
-                              SizedBox(
-                                width: double.infinity,
-                                child: FilledButton(
-                                  onPressed:
-                                      isLoading ? null : () => _submit(context),
-                                  style: FilledButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  child: isLoading
-                                      ? const CupertinoActivityIndicator()
-                                      : const Text(
-                                          "Envoyer le code",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "Votre email est uniquement utilisé pour cette vérification.",
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.textTheme.bodySmall?.color
-                                      ?.withOpacity(0.7),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(appPadding),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 520),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Saisissez votre adresse email",
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
+                      const Gap(8),
+                      Text(
+                        "Un code de vérification vous sera envoyé.",
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.textTheme.bodyMedium?.color
+                              ?.withOpacity(0.8),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(28),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColors.E6F5FF,
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Image.asset(
+                                Assets.img.email.path,
+                                width: 35,
+                              ),
+                            ),
+                            Gap(14),
+                            Text("Adresse E-mail",
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600, fontSize: 15)),
+                            Gap(13),
+                            // Champ email
+                            CustomTextField(
+                              labelText: "Adresse email",
+                              controller: _emailController,
+                              textInputType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.send,
+                              validator: (String? value) =>
+                                  FormUtils.emailValidator(email: value),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                LengthLimitingTextInputFormatter(254),
+                              ],
+                              onFieldSubmitted: (_) =>
+                                  isLoading ? null : _submit(context),
+                              prefixIcon: const Icon(Icons.email_outlined),
+                              fontSize: 16,
+                              fillColor: AppColors.white,
+                              sufixIcon:
+                                  ValueListenableBuilder<TextEditingValue>(
+                                valueListenable: _emailController,
+                                builder: (context, value, _) {
+                                  if (value.text.isEmpty) {
+                                    return const SizedBox();
+                                  }
+                                  return IconButton(
+                                    tooltip: "Effacer",
+                                    icon: const Icon(Icons.close),
+                                    onPressed: isLoading
+                                        ? null
+                                        : _emailController.clear,
+                                  );
+                                },
+                              ),
+                            ),
+                            const Gap(8),
+
+                            // Bouton
+                            CustomLoadingButtom(
+                              text: "Envoyer le code",
+                              onClick: () => _submit(context),
+                              isLoading: isLoading,
+                              clickable: true,
+                            ),
+                            const Gap(24),
+                            Text(
+                              "Votre email est uniquement utilisé pour cette vérification.",
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -17,8 +17,11 @@ import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/social_button_widget.dart';
 
 class LoginWithEmailScreen extends StatefulWidget {
-  const LoginWithEmailScreen({super.key, required this.rootPageController});
-  final PageController rootPageController;
+  const LoginWithEmailScreen({
+    super.key,
+    required this.onSwitchMode,
+  });
+  final VoidCallback onSwitchMode;
 
   @override
   State<LoginWithEmailScreen> createState() => _LoginWithEmailScreenState();
@@ -28,7 +31,6 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
   late ValueNotifier<bool> _passwordNotifier;
   late GlobalKey<FormState> _formKey;
 
-  late Map<String, dynamic> _formData;
   late FormController _formController;
   // INITSTATE
   @override
@@ -56,142 +58,128 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
       key: _formKey,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Column(
-            children: [
-              const Gap(40),
-              CustomTextField(
-                fillColor: Colors.white,
-                controller: _formController.email,
-                labelText: 'Email',
-                textInputType: TextInputType.emailAddress,
-                prefixIcon: const Icon(
-                  CupertinoIcons.mail,
-                  size: 19,
-                ),
-                validator: (value) => FormUtils.emailValidator(email: value),
+        child: Column(
+          children: [
+            const Gap(40),
+            CustomTextField(
+              controller: _formController.email,
+              labelText: 'Email',
+              textInputType: TextInputType.emailAddress,
+              prefixIcon: const Icon(
+                CupertinoIcons.mail,
+                size: 19,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              ValueListenableBuilder<bool>(
-                  valueListenable: _passwordNotifier,
-                  builder: (BuildContext context, bool value, child) {
-                    return CustomTextField(
-                      fillColor: Colors.white,
-                      controller: _formController.password,
-                      obscureText: !_passwordNotifier.value,
-                      prefixIcon: const Icon(CupertinoIcons.lock),
-                      sufixIcon: IconButton(
-                        onPressed: () {
-                          _passwordNotifier.value = !_passwordNotifier.value;
-                        },
-                        icon: Icon(
-                          (value)
-                              ? Icons.visibility_off_rounded
-                              : Icons.visibility_rounded,
-                        ),
-                        iconSize: 22,
-                      ),
-                      labelText: 'Mot de passe',
-                      validator: (value) =>
-                          FormUtils.passwordValidator(password: value),
-                    );
-                  }),
-              const Gap(5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
+              validator: (value) => FormUtils.emailValidator(email: value),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ValueListenableBuilder<bool>(
+                valueListenable: _passwordNotifier,
+                builder: (BuildContext context, bool value, child) {
+                  return CustomTextField(
+                    controller: _formController.password,
+                    obscureText: !_passwordNotifier.value,
+                    prefixIcon: const Icon(CupertinoIcons.lock),
+                    sufixIcon: IconButton(
                       onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => ResetPassword(),
-                        //     ));
-                        context.pushNamed(ResetPasswordPage.name);
+                        _passwordNotifier.value = !_passwordNotifier.value;
                       },
-                      child: Text(
-                        'Mot de passe oublié',
-                        style: GoogleFonts.inter(color: AppColors.primary),
-                      )),
-                  // TextButton(
-                  //     onPressed: () {
-                  //       context.pushNamed(SendEmailOptPage.name);
-                  //     },
-                  //     child: Text(
-                  //       'S\'inscrire',
-                  //       style: GoogleFonts.inter(color: AppColors.primary),
-                  //     )),
-                ],
-              ),
-              const Gap(5),
-              BlocBuilder<LoginCubit, LoginCubitState>(
-                builder: (context, state) {
-                  return CustomLoadingButtom(
-                    isLoading: (state is LOGIN_LOADING),
-                    onClick: ((state is LOGIN_LOADING))
-                        ? null
-                        : () {
-                            if (_formKey.currentState!.validate()) {
-                              FocusScope.of(context).unfocus();
-
-                              final body = LoginBodyModel(
-                                username: _formController.email!.text,
-                                password: _formController.password!.text,
-                                source: AccountSource.customerApp.value,
-                              );
-
-                              context.read<LoginCubit>().onSendData(
-                                    body: body,
-                                  );
-                            }
-
-                            //context.go('/homePage');
-                          },
-                    text: 'Connexion'.toUpperCase(),
-                  );
-                },
-              ),
-              const Gap(10),
-              const Row(
-                children: [
-                  Flexible(
-                    child: SizedBox(
-                      width: 200,
-                      child: Divider(
-                        thickness: 1,
+                      icon: Icon(
+                        (value)
+                            ? Icons.visibility_off_rounded
+                            : Icons.visibility_rounded,
                       ),
+                      iconSize: 22,
+                    ),
+                    labelText: 'Mot de passe',
+                    validator: (value) =>
+                        FormUtils.passwordValidator(password: value),
+                  );
+                }),
+            const Gap(5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => ResetPassword(),
+                      //     ));
+                      context.pushNamed(ResetPasswordPage.name);
+                    },
+                    child: Text(
+                      'Mot de passe oublié',
+                      style: GoogleFonts.inter(color: AppColors.primary),
+                    )),
+                // TextButton(
+                //     onPressed: () {
+                //       context.pushNamed(SendEmailOptPage.name);
+                //     },
+                //     child: Text(
+                //       'S\'inscrire',
+                //       style: GoogleFonts.inter(color: AppColors.primary),
+                //     )),
+              ],
+            ),
+            const Gap(5),
+            BlocBuilder<LoginCubit, LoginCubitState>(
+              builder: (context, state) {
+                return CustomLoadingButtom(
+                  isLoading: (state is LOGIN_LOADING),
+                  onClick: ((state is LOGIN_LOADING))
+                      ? null
+                      : () {
+                          if (_formKey.currentState!.validate()) {
+                            FocusScope.of(context).unfocus();
+
+                            final body = LoginBodyModel(
+                              username: _formController.email!.text,
+                              password: _formController.password!.text,
+                              source: AccountSource.customerApp.value,
+                            );
+
+                            context.read<LoginCubit>().onSendData(
+                                  body: body,
+                                );
+                          }
+
+                          //context.go('/homePage');
+                        },
+                  text: 'Connexion'.toUpperCase(),
+                );
+              },
+            ),
+            const Gap(10),
+            const Row(
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    width: 200,
+                    child: Divider(
+                      thickness: 1,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Ou'),
-                  ),
-                  Flexible(
-                      child: SizedBox(
-                          child: Divider(
-                    thickness: 1,
-                  ))),
-                ],
-              ),
-              const Gap(10),
-              SocialLoginButtons(
-                mode: LoginMode.email,
-                onSwitchMode: () {
-                  widget.rootPageController.previousPage(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-            ],
-          ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Ou'),
+                ),
+                Flexible(
+                    child: SizedBox(
+                        child: Divider(
+                  thickness: 1,
+                ))),
+              ],
+            ),
+            const Gap(10),
+            SocialLoginButtons(
+              mode: LoginMode.email,
+              onSwitchMode: widget.onSwitchMode,
+            ),
+          ],
         ),
       ),
     );

@@ -390,20 +390,20 @@ class Utils {
     }
   }
 
-  static authentificationPopup({required BuildContext context}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: HexColor("#121224"),
-      enableDrag: true,
-      context: context,
-      builder: (context) => FractionallySizedBox(
-        heightFactor: 0.95,
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(30), child: const LoginPage()),
-      ),
-    );
-  }
+  // static authentificationPopup({required BuildContext context}) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  //     backgroundColor: HexColor("#121224"),
+  //     enableDrag: true,
+  //     context: context,
+  //     builder: (context) => FractionallySizedBox(
+  //       heightFactor: 1,
+  //       child: ClipRRect(
+  //           borderRadius: BorderRadius.circular(30), child: const LoginPage()),
+  //     ),
+  //   );
+  // }
 
   static IconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {
