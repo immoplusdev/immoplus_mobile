@@ -4,6 +4,9 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
@@ -11,6 +14,7 @@ import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
+import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 
@@ -67,63 +71,119 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
           snap: false,
           floating: true,
           titleSpacing: 0,
+          toolbarHeight: 180,
           backgroundColor: AppColors.whiteBackground,
           title: Container(
             color: AppColors.whiteBackground,
-            padding: const EdgeInsets.all(10).copyWith(right: 0, left: 15),
             margin: EdgeInsets.symmetric(horizontal: 10),
-            height: 60,
-            child: CupertinoSearchTextField(
-              prefixIcon: Icon(
-                CupertinoIcons.search,
-                color: Colors.grey.shade700,
-              ),
-              onSubmitted: (keyword) {
-                if (FilterHandler.search != null) {
-                  if (FilterHandler.search!.isNotEmpty) {
-                    log(keyword);
-                    HomePageState.getPageListController(widget.currentIndex)
-                        .refresh();
-                  } else {
-                    FilterHandler.search = null;
-                    FilterHandler.notifyChange();
-                    HomePageState.getPageListController(widget.currentIndex)
-                        .refresh();
-                  }
-                }
-              },
-              onChanged: (text) {
-                EasyDebounce.debounce(text, const Duration(milliseconds: 300),
-                    () {
-                  FilterHandler.search = text;
-                  FilterHandler.notifyChange();
-                  if (FilterHandler.search != null) {
-                    if (FilterHandler.search!.isNotEmpty) {
-                      log(text);
-                      HomePageState.getPageListController(widget.currentIndex)
-                          .refresh();
-                    } else {
-                      FilterHandler.search = null;
-                      FilterHandler.notifyChange();
-                      HomePageState.getPageListController(widget.currentIndex)
-                          .refresh();
+            // height: 60,
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/img/loc_ic.svg",
+                      color: AppColors.primary,
+                    ),
+                    Gap(5),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(39),
+                      ),
+                      child: Text(
+                        "Blvd Charles bauza 21",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.white,
+                              fontSize: 13,
+                            ),
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        context.pushNamed(NotificationsPage.name);
+                      },
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.F2F2F2,
+                        ),
+                        child: Icon(
+                          Icons.notifications_none_rounded,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Gap(8),
+                Text(
+                  "Plannifie\nTon Sejour Idéal",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Gap(10),
+                CupertinoSearchTextField(
+                  prefixIcon: Icon(
+                    CupertinoIcons.search,
+                    color: Colors.grey.shade700,
+                  ),
+                  onSubmitted: (keyword) {
+                    if (FilterHandler.search != null) {
+                      if (FilterHandler.search!.isNotEmpty) {
+                        log(keyword);
+                        HomePageState.getPageListController(widget.currentIndex)
+                            .refresh();
+                      } else {
+                        FilterHandler.search = null;
+                        FilterHandler.notifyChange();
+                        HomePageState.getPageListController(widget.currentIndex)
+                            .refresh();
+                      }
                     }
-                  }
-                });
-              },
-              placeholder: FilterHandler.search ??
-                  'Maison, Résidence, Meuble, Terrain ...',
-              placeholderStyle: GoogleFonts.inter(
-                  fontSize: 14, color: CupertinoColors.systemGrey2),
-              decoration: BoxDecoration(
-                color: HexColor("#EDEFF9"),
-                //color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
-                // boxShadow: [
-                //   BoxShadow(
-                //       blurRadius: 8, spreadRadius: 1, color: Colors.grey.shade300),
-                // ],
-              ),
+                  },
+                  onChanged: (text) {
+                    EasyDebounce.debounce(
+                        text, const Duration(milliseconds: 300), () {
+                      FilterHandler.search = text;
+                      FilterHandler.notifyChange();
+                      if (FilterHandler.search != null) {
+                        if (FilterHandler.search!.isNotEmpty) {
+                          log(text);
+                          HomePageState.getPageListController(
+                                  widget.currentIndex)
+                              .refresh();
+                        } else {
+                          FilterHandler.search = null;
+                          FilterHandler.notifyChange();
+                          HomePageState.getPageListController(
+                                  widget.currentIndex)
+                              .refresh();
+                        }
+                      }
+                    });
+                  },
+                  placeholder: FilterHandler.search ??
+                      'Maison, Résidence, Meuble, Terrain ...',
+                  placeholderStyle: GoogleFonts.inter(
+                      fontSize: 14, color: CupertinoColors.systemGrey2),
+                  decoration: BoxDecoration(
+                    color: HexColor("#EDEFF9"),
+                    //color: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       blurRadius: 8, spreadRadius: 1, color: Colors.grey.shade300),
+                    // ],
+                  ),
+                ),
+              ],
             ),
           ),
 
