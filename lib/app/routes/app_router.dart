@@ -14,6 +14,7 @@ import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
+import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -177,6 +178,19 @@ class AppRouter {
         builder: (context, state) => ResidencePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
         ),
+      ),
+
+      GoRoute(
+        path: NearResidencesPage.routePath,
+        name: NearResidencesPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return NearResidencesPage(
+            latitude: extra['lat'] as double,
+            longitude: extra['long'] as double,
+            radius: extra['radius'] as double? ?? 50,
+          );
+        },
       ),
 
       GoRoute(

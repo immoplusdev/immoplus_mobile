@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocationService {
@@ -92,26 +93,37 @@ class LocationService {
   }
 
   static Future<Position> getCurrentPosition() async {
-    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!isLocationServiceEnabled) {
-      throw Exception('Location services are disabled.');
-    }
+    try {
+      bool isLocationServiceEnabled =
+          await Geolocator.isLocationServiceEnabled();
+      if (!isLocationServiceEnabled) {
+        throw CustomLocationServiceDisabledException(
+          'Veuillez activer les services de localisation dans les paramètres',
+        );
+      }
 
-    LocationPermission locationPermission = await Geolocator.checkPermission();
-    if (locationPermission == LocationPermission.denied ||
-        locationPermission == LocationPermission.deniedForever) {
-      locationPermission = await Geolocator.requestPermission();
-    }
-    if ([
-      LocationPermission.always,
-      LocationPermission.whileInUse,
-    ].any((element) => element == locationPermission)) {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+      LocationPermission locationPermission =
+          await Geolocator.checkPermission();
+      if (locationPermission == LocationPermission.denied ||
+          locationPermission == LocationPermission.deniedForever) {
+        locationPermission = await Geolocator.requestPermission();
+      }
+      if ([
+        LocationPermission.always,
+        LocationPermission.whileInUse,
+      ].any((element) => element == locationPermission)) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
 
-      return position;
-    } else {
-      throw Exception('Location permissions are denied.');
+        return position;
+      } else {
+        throw LocationPermissionDeniedException(
+            'Location permissions are denied.');
+      }
+    } on LocationException {
+      rethrow;
+    } catch (e) {
+      throw LocationUnknownException(e.toString());
     }
   }
 

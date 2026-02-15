@@ -9,6 +9,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/widgets/custom_chip.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
@@ -46,7 +47,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
             borderRadius: BorderRadius.circular(30),
             onTap: () {
               Constantes.tempPage = Utils.getCurrentLocation();
-              context.push('/residence_detail/${widget.residenceModel.id}',
+              context.push(ResidencePage.route(widget.residenceModel.id),
                   extra: widget.residenceModel);
             },
             child: Container(

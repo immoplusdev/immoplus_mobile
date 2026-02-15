@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
@@ -171,16 +170,9 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   },
                   placeholder: FilterHandler.search ??
                       'Maison, Résidence, Meuble, Terrain ...',
-                  placeholderStyle: GoogleFonts.inter(
-                      fontSize: 14, color: CupertinoColors.systemGrey2),
                   decoration: BoxDecoration(
                     color: HexColor("#EDEFF9"),
-                    //color: Colors.red,
                     borderRadius: BorderRadius.circular(20),
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //       blurRadius: 8, spreadRadius: 1, color: Colors.grey.shade300),
-                    // ],
                   ),
                 ),
               ],

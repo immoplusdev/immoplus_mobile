@@ -3,6 +3,7 @@ import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
 
@@ -26,7 +27,7 @@ class FavoriesUtils {
         ..name = residence.nom
         ..images = residence.images
         ..date = DateTime.now()
-        ..destination = '/residence_detail/${residence.id}'
+        ..destination = ResidencePage.route(residence.id)
         ..type = residence.typeResidence);
     });
   }
