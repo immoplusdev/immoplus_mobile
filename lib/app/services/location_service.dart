@@ -154,6 +154,48 @@ class LocationService {
     }
   }
 
+  static Future<String> getFormattedAddress({
+    required double latitude,
+    required double longitude,
+    int maxLength = 25,
+  }) async {
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+
+        // Construire l'adresse par priorité
+        String address = '';
+
+        if (place.street != null && place.street!.isNotEmpty) {
+          address = place.street!;
+        } else if (place.subLocality != null && place.subLocality!.isNotEmpty) {
+          address = place.subLocality!;
+        } else if (place.locality != null && place.locality!.isNotEmpty) {
+          address = place.locality!;
+        } else if (place.administrativeArea != null &&
+            place.administrativeArea!.isNotEmpty) {
+          address = place.administrativeArea!;
+        } else {
+          address = "Position actuelle";
+        }
+
+        // Limiter la longueur si nécessaire
+        if (address.length > maxLength) {
+          address = '${address.substring(0, maxLength)}...';
+        }
+
+        return address;
+      } else {
+        return "Position actuelle";
+      }
+    } catch (e) {
+      return "Position indisponible";
+    }
+  }
+
   /// Vérifie si les permissions de localisation sont accordées
   static Future<bool> hasLocationPermission() async {
     try {

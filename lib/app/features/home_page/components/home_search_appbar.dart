@@ -6,14 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
+import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 
@@ -28,6 +31,58 @@ class HomeSearchAppbar extends StatefulWidget {
 
 class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   final double iconSize = 28;
+  String _currentAddress = "Localisation...";
+  bool _isLoadingAddress = true;
+
+  /// ✅ Utiliser LocationService
+  Future<void> _loadCurrentLocation() async {
+    try {
+      // Vérifier si on a déjà une position dans FilterHandler
+      if (FilterHandler.locationName != null) {
+        setState(() {
+          _currentAddress = FilterHandler.locationName!;
+          _isLoadingAddress = false;
+        });
+        return;
+      }
+
+      // ✅ Utiliser votre LocationService
+      final position = await LocationService.getCurrentPosition();
+
+      // ✅ Utiliser la nouvelle méthode pour obtenir l'adresse formatée
+      final address = await LocationService.getFormattedAddress(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        maxLength: 25,
+      );
+
+      if (mounted) {
+        setState(() {
+          _currentAddress = address;
+          _isLoadingAddress = false;
+        });
+      }
+    } on LocationException catch (e) {
+      // ✅ Gérer vos exceptions personnalisées
+      if (mounted) {
+        setState(() {
+          _currentAddress = "Position indisponible";
+          _isLoadingAddress = false;
+        });
+      }
+      log('Erreur de localisation: ${e.message}');
+    } catch (e) {
+      // Autres erreurs
+      if (mounted) {
+        setState(() {
+          _currentAddress = "Position indisponible";
+          _isLoadingAddress = false;
+        });
+      }
+      log('Erreur de localisation: $e');
+    }
+  }
+
   onSelectPlace() {
     showModalBottomSheet(
       useRootNavigator: true,
@@ -61,6 +116,14 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _loadCurrentLocation();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<FilterCubit, FilterHandler>(
       builder: (context, state) {
@@ -89,17 +152,33 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     Gap(5),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      constraints: BoxConstraints(maxWidth: 200),
                       decoration: BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(39),
                       ),
-                      child: Text(
-                        "Blvd Charles bauza 21",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.white,
-                              fontSize: 13,
+                      child: _isLoadingAddress
+                          ? SizedBox(
+                              width: 12,
+                              height: 12,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              _currentAddress,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: AppColors.white,
+                                    fontSize: 13,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                             ),
-                      ),
                     ),
                     Spacer(),
                     GestureDetector(
