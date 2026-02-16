@@ -43,7 +43,7 @@ class FurnitureDetailModel {
   });
 
   factory FurnitureDetailModel.fromJson(Map<String, dynamic> json) {
-    // Gere si le JSON est deja l'objet ou enveloppe dans 'data'
+    // Handles payloads where the object is either at root or nested in `data`.
     final d = (json['data'] ?? json) as Map<String, dynamic>;
 
     return FurnitureDetailModel(
