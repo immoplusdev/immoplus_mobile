@@ -183,7 +183,6 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
 
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
       itemCount: _nearResidences.length,
       separatorBuilder: (context, index) => const Gap(12),
       itemBuilder: (context, index) {

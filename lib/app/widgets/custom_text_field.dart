@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -26,6 +25,9 @@ class CustomTextField extends StatefulWidget {
     this.fillColor,
     this.autofocus = false,
     this.isEnabled = true,
+    this.onChanged,
+    this.enabledBorder,
+    this.focusedBorder,
   });
   final String? labelText;
   final Widget? sufixIcon;
@@ -47,27 +49,22 @@ class CustomTextField extends StatefulWidget {
   final Color? fillColor;
   final bool? autofocus;
   final bool isEnabled;
+  final Function(String)? onChanged;
+  final InputBorder? enabledBorder;
+  final InputBorder? focusedBorder;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
   final FocusNode _textFieldFocus = FocusNode();
-  Color _color = const Color.fromARGB(158, 234, 234, 234);
-  Color _iconColor = const Color.fromARGB(236, 74, 74, 74);
   @override
   void initState() {
     _textFieldFocus.addListener(() {
       if (_textFieldFocus.hasFocus) {
-        setState(() {
-          _color = HexColor('#2072ca').withOpacity(0.1);
-          _iconColor = HexColor('#2072ca');
-        });
+        setState(() {});
       } else {
-        setState(() {
-          _color = const Color.fromARGB(158, 234, 234, 234);
-          _iconColor = const Color.fromARGB(236, 74, 74, 74);
-        });
+        setState(() {});
       }
     });
     super.initState();
@@ -84,7 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : null,
         // enableInteractiveSelection: !widget.readOnly,
         autofocus: widget.autofocus ?? false,
-        onChanged: ((value) {}),
+        onChanged: widget.onChanged,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: widget.validator,
         obscureText: widget.obscureText,
@@ -128,10 +125,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderRadius: BorderRadius.circular(radiusButton),
             borderSide: BorderSide.none,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: BorderSide.none,
-          ),
+          focusedBorder: widget.focusedBorder ??
+              OutlineInputBorder(
+                borderRadius: BorderRadius.circular(radiusButton),
+                borderSide: BorderSide.none,
+              ),
+          enabledBorder: widget.enabledBorder ??
+              OutlineInputBorder(
+                borderRadius: BorderRadius.circular(radiusButton),
+                borderSide: BorderSide.none,
+              ),
         ),
       ),
     );

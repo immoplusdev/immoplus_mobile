@@ -1,15 +1,12 @@
 import 'dart:developer';
-
 import 'package:easy_debounce/easy_debounce.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -19,6 +16,8 @@ import 'package:immoplus/app/features/notification/pages/notification_page.dart'
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
+import 'package:immoplus/app/widgets/custom_text_field.dart';
+import 'package:immoplus/gen/assets.gen.dart';
 
 class HomeSearchAppbar extends StatefulWidget {
   const HomeSearchAppbar(
@@ -115,12 +114,29 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     );
   }
 
+  final TextEditingController _searchController = TextEditingController();
+  bool _showClearButton = false;
+  static const String _searchDebounceKey = 'search_home';
+  static const int _searchDeboucemillisecond = 400;
+
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _showClearButton = _searchController.text.isNotEmpty;
+      });
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _loadCurrentLocation();
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    EasyDebounce.cancel(_searchDebounceKey);
+    super.dispose();
   }
 
   @override
@@ -133,20 +149,18 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
           snap: false,
           floating: true,
           titleSpacing: 0,
-          toolbarHeight: 180,
+          toolbarHeight: 130,
           backgroundColor: AppColors.whiteBackground,
           title: Container(
             color: AppColors.whiteBackground,
             margin: EdgeInsets.symmetric(horizontal: 10),
-            // height: 60,
-
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     SvgPicture.asset(
-                      "assets/img/loc_ic.svg",
+                      Assets.img.locIc,
                       color: AppColors.primary,
                     ),
                     Gap(5),
@@ -199,20 +213,30 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     )
                   ],
                 ),
-                Gap(8),
-                Text(
-                  "Plannifie\nTon Sejour Idéal",
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                Gap(10),
-                CupertinoSearchTextField(
-                  prefixIcon: Icon(
-                    CupertinoIcons.search,
-                    color: Colors.grey.shade700,
-                  ),
-                  onSubmitted: (keyword) {
+                Gap(5),
+                CustomTextField(
+                  labelText: 'Que cherchez-vous ?',
+                  prefixIcon: Icon(Icons.search),
+                  controller: _searchController,
+                  sufixIcon: _showClearButton
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.cancel,
+                            color: Colors.grey.shade600,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            EasyDebounce.cancel(_searchDebounceKey);
+                            _searchController.clear();
+                            FilterHandler.search = null;
+                            FilterHandler.notifyChange();
+                            HomePageState.getPageListController(
+                                    widget.currentIndex)
+                                .refresh();
+                          },
+                        )
+                      : null,
+                  onFieldSubmitted: (keyword) {
                     if (FilterHandler.search != null) {
                       if (FilterHandler.search!.isNotEmpty) {
                         log(keyword);
@@ -227,8 +251,9 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     }
                   },
                   onChanged: (text) {
-                    EasyDebounce.debounce(
-                        text, const Duration(milliseconds: 300), () {
+                    EasyDebounce.debounce(_searchDebounceKey,
+                        const Duration(milliseconds: _searchDeboucemillisecond),
+                        () {
                       FilterHandler.search = text;
                       FilterHandler.notifyChange();
                       if (FilterHandler.search != null) {
@@ -247,69 +272,24 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                       }
                     });
                   },
-                  placeholder: FilterHandler.search ??
-                      'Maison, Résidence, Meuble, Terrain ...',
-                  decoration: BoxDecoration(
-                    color: HexColor("#EDEFF9"),
-                    borderRadius: BorderRadius.circular(20),
+                  fillColor: Colors.transparent,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(radiusButton),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(radiusButton),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                    ),
                   ),
                 ),
+                Gap(5),
               ],
             ),
           ),
-
-          // actions: [
-          //   (FilterHandler.locationName != null)
-          //       ? UnconstrainedBox(
-          //           child: Padding(
-          //             padding: const EdgeInsets.only(left: 5, right: 3),
-          //             child: CustomChip(
-          //               icon: Icons.location_on,
-          //               iconColor: Colors.blue.shade400,
-          //               label: FilterHandler.locationName!,
-          //               padding: EdgeInsets.symmetric(vertical: 0),
-          //               labelStyle: context.textTheme.bodySmall,
-          //               iconSize: 13,
-          //               onTap: onSelectPlace,
-          //               backgroundColor: Colors.grey.shade200,
-          //               trailing: InkWell(
-          //                   onTap: () {
-          //                     setState(() {
-          //                       FilterHandler.locationName = null;
-          //                       FilterHandler.lat = null;
-          //                       FilterHandler.long = null;
-          //                     });
-          //                     FilterHandler.notifyChange();
-          //                   },
-          //                   child: Icon(
-          //                     CupertinoIcons.xmark_circle_fill,
-          //                     size: 15,
-          //                     color: Colors.redAccent,
-          //                   )),
-          //             ),
-          //           ),
-          //         )
-          //       : Container(
-          //           width: 40,
-          //           height: 40,
-          //           margin: const EdgeInsets.all(8),
-          //           decoration: BoxDecoration(
-          //             border: Border.all(color: Colors.grey.shade300),
-          //             borderRadius: BorderRadius.circular(60),
-          //           ),
-          //           child: InkWell(
-          //             borderRadius: BorderRadius.circular(60),
-          //             splashFactory: InkRipple.splashFactory,
-          //             onTap: onSelectPlace,
-          //             child: Icon(
-          //               FontAwesomeIcons.map,
-          //               color: AppColors.primary,
-          //               size: 17,
-          //             ),
-          //           ),
-          //         ),
-          // ],
-
           bottom: PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: HomeChoiceMenu()),
