@@ -9,7 +9,7 @@ class DetailLogmentTitle2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 5),
         child: Text(
           title,
           style: Theme.of(context).textTheme.titleLarge!,

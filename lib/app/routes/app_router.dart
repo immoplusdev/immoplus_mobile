@@ -29,6 +29,7 @@ import 'package:immoplus/app/features/registration/screens/send_email_opt_page.d
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
@@ -175,6 +176,14 @@ class AppRouter {
         path: ResidencePage.routePath(),
         name: ResidencePage.name,
         builder: (context, state) => ResidencePage(
+          idProduct: state.pathParameters['idProduct'] ?? '',
+        ),
+      ),
+
+      GoRoute(
+        path: FurnitureDetailPage.routePath(),
+        name: FurnitureDetailPage.name,
+        builder: (context, state) => FurnitureDetailPage(
           idProduct: state.pathParameters['idProduct'] ?? '',
         ),
       ),

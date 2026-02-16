@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
+// import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:map_launcher/map_launcher.dart' as MPL;
+// import 'package:immoplus/app/utils/app_colors.dart';
+// import 'package:map_launcher/map_launcher.dart' as MPL;
 
 class DetailLogmentMap extends StatefulWidget {
   const DetailLogmentMap({super.key, required this.residence});
