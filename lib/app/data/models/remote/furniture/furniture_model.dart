@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus/app/data/models/remote/configs/commune_model.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class FurnitureDetailInfos extends StatelessWidget {
   const FurnitureDetailInfos({super.key, required this.furnitureModel});
@@ -13,18 +12,47 @@ class FurnitureDetailInfos extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Divider(),
-            const Gap(10),
-            Row(
-              children: [
-                Expanded(child: _buildInfoItem(context, "Type", furnitureModel.type ?? "-")),
-                Expanded(child: _buildInfoItem(context, "Catégorie", furnitureModel.category ?? "-")),
-                Expanded(child: _buildInfoItem(context, "Etat", furnitureModel.etat ?? "-")),
-              ],
+            const Gap(16),
+            Text(
+              'Informations du meuble',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Gap(14),
-            
+            LayoutBuilder(
+              builder: (context, constraints) {
+                const spacing = 12.0;
+                final itemWidth = (constraints.maxWidth - spacing) / 2;
+
+                return Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: [
+                    _buildInfoItem(
+                      context,
+                      width: itemWidth,
+                      label: "Type",
+                      value: furnitureModel.type ?? "-",
+                    ),
+                    _buildInfoItem(
+                      context,
+                      width: itemWidth,
+                      label: "Catégorie",
+                      value: furnitureModel.category ?? "-",
+                    ),
+                    _buildInfoItem(
+                      context,
+                      width: itemWidth,
+                      label: "Etat",
+                      value: furnitureModel.etat ?? "-",
+                    ),
+                  ],
+                );
+              },
+            ),
+            const Gap(18),
             const Divider(),
           ],
         ),
@@ -32,32 +60,51 @@ class FurnitureDetailInfos extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoItem(BuildContext context, String label, String value) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.grey.shade600,
-            fontSize: 12,
+  Widget _buildInfoItem(
+    BuildContext context, {
+    required double width,
+    required String label,
+    required String value,
+  }) {
+    return SizedBox(
+      width: width,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF7F8FA),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: const Color(0xFFEAECEF),
           ),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
         ),
-        const Gap(5),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label.toUpperCase(),
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 11.5,
+                letterSpacing: 1.1,
+                fontWeight: FontWeight.w600,
               ),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            const Gap(7),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF111827),
+                  ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
-
- 
 }

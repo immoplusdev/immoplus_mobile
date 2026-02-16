@@ -70,9 +70,10 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                     ),
                   ),
                 ),
-                const SliverGap(20),
+  
                 FurnitureDetailVideo(furnitureModel: furniture),
                 const DetailDivider(),
+                const SliverGap(10),
                 const DetailLogmentTitleCentered(
                     title: 'Où se trouve ce meuble ?'),
                 const SliverGap(20),
