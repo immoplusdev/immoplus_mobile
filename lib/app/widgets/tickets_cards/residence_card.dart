@@ -10,6 +10,7 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
@@ -48,7 +49,8 @@ class _ResidenceCardState extends State<ResidenceCard> {
           borderRadius: BorderRadius.circular(15),
           onTap: () {
             Constantes.tempPage = Utils.getCurrentLocation();
-            context.push('/residence_detail/${widget.residence.id}',
+
+            context.push(ResidencePage.route(widget.residence.id),
                 extra: widget.residence);
           },
           child: Column(
@@ -213,7 +215,8 @@ class _ResidenceCardState extends State<ResidenceCard> {
           top: 10,
           child: ValueListenableBuilder(
             valueListenable: _liked,
-            builder: (context, value, child) => GestureDetector(
+            builder: (context, value, child) => ResidenceFavoriteButton(
+              isFavorite: value,
               onTap: () async {
                 if (_liked.value == false) {
                   favoriesUtils
@@ -224,36 +227,33 @@ class _ResidenceCardState extends State<ResidenceCard> {
                 }
                 _liked.value = !value;
               },
-              child: CircleAvatar(
-                radius: 14,
-                backgroundColor: value ? Colors.red : Colors.grey.shade300,
-                child: const Icon(
-                  FontAwesomeIcons.solidHeart,
-                  size: 16,
-                  color: Colors.white,
-                ),
-              ),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(30),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Colors.black.withOpacity(0.3),
-              //         spreadRadius: 0.5,
-              //         blurRadius: 6,
-              //       ),
-              //     ],
-              //   ),
-              //   child: ImmoIcon(
-              //     value ? ImmoIcons.coeur2 : ImmoIcons.coeur1,
-              //     size: 20,
-              //     //color: Colors.grey.shade600,
-              //   ),
-              // ),
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class ResidenceFavoriteButton extends StatelessWidget {
+  final bool isFavorite;
+  final VoidCallback onTap;
+  const ResidenceFavoriteButton(
+      {super.key, required this.isFavorite, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: CircleAvatar(
+        radius: 14,
+        backgroundColor: isFavorite ? Colors.red : Colors.grey.shade300,
+        child: const Icon(
+          FontAwesomeIcons.solidHeart,
+          size: 16,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

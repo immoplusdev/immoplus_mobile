@@ -3,8 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
@@ -16,8 +14,9 @@ import 'package:shimmer/shimmer.dart';
 
 class SmallResidenceCard extends StatefulWidget {
   final VoidCallback? closeTap;
+  final VoidCallback? onCardTap;
   const SmallResidenceCard(
-      {super.key, required this.residenceModel, this.closeTap});
+      {super.key, required this.residenceModel, this.closeTap, this.onCardTap});
   final ResidenceModel residenceModel;
   @override
   State<SmallResidenceCard> createState() => _SmallResidenceCardState();
@@ -44,11 +43,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
         Positioned.fill(
           child: InkWell(
             borderRadius: BorderRadius.circular(30),
-            onTap: () {
-              Constantes.tempPage = Utils.getCurrentLocation();
-              context.push('/residence_detail/${widget.residenceModel.id}',
-                  extra: widget.residenceModel);
-            },
+            onTap: widget.onCardTap,
             child: Container(
               padding: const EdgeInsets.all(8),
               height: 100,

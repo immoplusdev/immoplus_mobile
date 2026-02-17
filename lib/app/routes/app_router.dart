@@ -14,6 +14,7 @@ import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
+import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -46,7 +47,14 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
-    redirect: (context, state) => showOnboarding ? '/onboarding' : null,
+    redirect: (context, state) {
+      print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
+      print('🔍 GoRouter redirect - Path: ${state.uri.path}');
+      print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
+
+      if (showOnboarding) return '/onboarding';
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/',
@@ -181,6 +189,19 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: NearResidencesPage.routePath,
+        name: NearResidencesPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return NearResidencesPage(
+            latitude: extra['lat'] as double,
+            longitude: extra['long'] as double,
+            radius: extra['radius'] as double? ?? 50,
+          );
+        },
+      ),
+
+      GoRoute(
         path: FurnitureDetailPage.routePath(),
         name: FurnitureDetailPage.name,
         builder: (context, state) => FurnitureDetailPage(
@@ -194,6 +215,13 @@ class AppRouter {
         builder: (context, state) => EstatePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
         ),
+      ),
+      GoRoute(
+        path: '/bien_detail/:bienId',
+        redirect: (context, state) {
+          final bienId = state.pathParameters['bienId'];
+          return '/estate_detail/$bienId';
+        },
       ),
       //TODO : vérifier que les routes depplink fonctionnent correctement
       GoRoute(

@@ -7,7 +7,8 @@
             "namespace": "android_app",
             "package_name": "com.immoplus.ci",
             "sha256_cert_fingerprints": [
-                "77:0F:ED:DF:1F:F2:51:91:57:C6:4A:56:E1:B8:3F:81:7A:B5:E5:D9:5B:3E:E7:10:29:20:ED:2D:AC:DF:25:BA"
+                "77:0F:ED:DF:1F:F2:51:91:57:C6:4A:56:E1:B8:3F:81:7A:B5:E5:D9:5B:3E:E7:10:29:20:ED:2D:AC:DF:25:BA",
+                "4E:31:FF:0B:50:FC:FC:8E:74:78:CB:50:61:EA:A1:AB:C4:8F:8B:C9:4A:FF:2B:7F:60:05:3D:9D:CE:3B:8F:99"
             ]
         }
     }

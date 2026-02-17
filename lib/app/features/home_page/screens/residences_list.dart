@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
+import 'package:immoplus/app/widgets/section_title.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import 'history_page_state.dart';
 
 class ResidencesList extends StatefulWidget {
   const ResidencesList({super.key});
@@ -86,13 +86,35 @@ class _ResidencesListState extends State<ResidencesList> {
             "Aucun élément trouvé",
             style: Theme.of(context).textTheme.titleLarge,
           )),
-          itemBuilder: (context, item, index) => Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 1).copyWith(bottom: 13),
-            child: ResidenceCard(
-              residence: item,
-            ),
-          ),
+          itemBuilder: (context, item, index) {
+            // 🎯 Insérer ResidencesNearList
+            if (index == 0) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ResidencesNearList(),
+                  SectionTitle(
+                    title: "Ce qu’il vous faut",
+                  ),
+                  Gap(13),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 1)
+                        .copyWith(bottom: 13),
+                    child: ResidenceCard(
+                      residence: item,
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 1)
+                  .copyWith(bottom: 13),
+              child: ResidenceCard(
+                residence: item,
+              ),
+            );
+          },
         ),
       ),
     );

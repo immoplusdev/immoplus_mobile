@@ -5,6 +5,7 @@ class ShareService {
   /// Partage un texte simple avec position d'origine
   static Future<ShareResult> shareText({
     required String text,
+    required String uri,
     String? subject,
     BuildContext? context,
     Rect? sharePositionOrigin,
@@ -12,10 +13,12 @@ class ShareService {
     try {
       final origin = _getSharePositionOrigin(context, sharePositionOrigin);
 
-      return await Share.share(
-        text,
-        subject: subject,
-        sharePositionOrigin: origin,
+      return await SharePlus.instance.share(
+        ShareParams(
+            uri: Uri.parse(uri),
+            sharePositionOrigin: origin,
+            title: text,
+            subject: subject),
       );
     } catch (e) {
       debugPrint('Erreur lors du partage: $e');
@@ -31,71 +34,30 @@ class ShareService {
     Rect? sharePositionOrigin,
   }) async {
     final url = "https://app.immoplus.ci/residence_detail/$residenceId";
-    final text = residenceName != null
-        ? "Découvrez cette résidence: $residenceName\n$url"
-        : url;
+    final text = "Découvrez cette résidence: ${residenceName ?? ""}";
 
     return await shareText(
       text: text,
+      uri: url,
       subject: 'Partager cette résidence',
       context: context,
       sharePositionOrigin: sharePositionOrigin,
     );
   }
 
-  /// Partage une URL de propriété
-  static Future<ShareResult> shareProperty({
-    required String propertyId,
-    String? propertyName,
+  static Future<ShareResult> shareBien({
+    required String bienId,
+    String? bienName,
     BuildContext? context,
     Rect? sharePositionOrigin,
   }) async {
-    final url = "https://app.immoplus.ci/property_detail/$propertyId";
-    final text = propertyName != null
-        ? "Découvrez cette propriété: $propertyName\n$url"
-        : url;
+    final url = "https://app.immoplus.ci/bien_detail/$bienId";
+    final text = "Découvrez ce bien: ${bienName ?? ""}";
 
     return await shareText(
+      uri: url,
       text: text,
-      subject: 'Partager cette propriété',
-      context: context,
-      sharePositionOrigin: sharePositionOrigin,
-    );
-  }
-
-  /// Partage une URL générique
-  static Future<ShareResult> shareUrl({
-    required String url,
-    String? title,
-    String? subject,
-    BuildContext? context,
-    Rect? sharePositionOrigin,
-  }) async {
-    final text = title != null ? "$title\n$url" : url;
-
-    return await shareText(
-      text: text,
-      subject: subject,
-      context: context,
-      sharePositionOrigin: sharePositionOrigin,
-    );
-  }
-
-  /// Partage avec message personnalisé pour l'application
-  static Future<ShareResult> shareAppInvitation({
-    BuildContext? context,
-    Rect? sharePositionOrigin,
-  }) async {
-    const text = """
-Découvrez Immo Plus Pro - La solution complète pour gérer vos biens immobiliers !
-
-Téléchargez l'application:
-https://app.immoplus.ci
-""";
-
-    return await shareText(
-      text: text,
-      subject: "Rejoignez Immo Plus Pro",
+      subject: 'Partager ce bien',
       context: context,
       sharePositionOrigin: sharePositionOrigin,
     );

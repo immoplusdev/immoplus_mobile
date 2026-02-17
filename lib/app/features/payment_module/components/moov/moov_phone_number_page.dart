@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:immoplus/app/features/payment_module/components/moov/moov_validator_page.dart';
-import 'package:immoplus/app/features/payment_module/utils/moov_payment_router.dart';
+import 'package:immoplus/app/features/payment_module/components/moov/moov_payment_controller.dart';
+import 'package:immoplus/app/features/payment_module/services/payment_services.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
+import 'package:immoplus/app/features/payment_module/utils/payment_utils.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -11,36 +12,44 @@ import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
-
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import '../../../../constants/constantes.dart';
-import '../../services/payment_services.dart';
-import '../../utils/payment_utils.dart';
-
 class MoovNumberPage extends StatefulWidget {
-  const MoovNumberPage({super.key});
-  static String name = 'number';
+  const MoovNumberPage({
+    super.key,
+    required this.controller,
+  });
+
+  final MoovPaymentController controller;
+
   @override
   State<MoovNumberPage> createState() => _MoovNumberPageState();
 }
 
 class _MoovNumberPageState extends State<MoovNumberPage> {
   final FormController _formController = FormController(
-      productId: 0, phoneNumber: TextEditingController(text: ''));
+    productId: 0,
+    phoneNumber: TextEditingController(text: ''),
+  );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool loadingButton = false;
+  bool _loadingButton = false;
+
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      MoovPaymentRouter.pageStateNotifier.value = MoovNumberPage.name;
-    });
+  void dispose() {
+    _formController.phoneNumber?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final paymentData = PaymentData.of(context);
+
+    if (paymentData == null) {
+      return const Center(
+        child: Text('Erreur: Données de paiement manquantes'),
+      );
+    }
+
     return Form(
       key: _formKey,
       child: Container(
@@ -53,7 +62,8 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
               contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
                 foregroundImage: NetworkImage(
-                    OrderPaymentController.selectedOperator.logo ?? ''),
+                  OrderPaymentController.selectedOperator.logo,
+                ),
               ),
               title: Text(
                 'Paiement par ${OrderPaymentController.selectedOperator.name}',
@@ -66,12 +76,13 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
                 ),
                 onPressed: () {
                   AppDialog.confirm(
-                      context: context,
-                      content: "Voulez vous annuler l'opération ?",
-                      rollback: () {
-                        AppRouter.router.pop();
-                        AppRouter.router.pop();
-                      });
+                    context: context,
+                    content: "Voulez vous annuler l'opération ?",
+                    rollback: () {
+                      AppRouter.router.pop();
+                      AppRouter.router.pop();
+                    },
+                  );
                 },
               ),
             ),
@@ -81,8 +92,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
                 FontAwesomeIcons.moneyBill,
                 color: Colors.green,
               ),
-              title:
-                  Text(Utils.formatCurrency(PaymentData.of(context)!.amount)),
+              title: Text(Utils.formatCurrency(paymentData.amount)),
               titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),
@@ -95,57 +105,49 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
               labelText: 'Numéro de téléphone valide',
               prefixIcon: const Icon(CupertinoIcons.phone),
               validator: (String? value) => PaymentUtils.numberValidator(
-                  number: value!.replaceAll(' ', ''),
-                  operatorName:
-                      OrderPaymentController.selectedOperator.value ?? ''),
+                number: value!.replaceAll(' ', ''),
+                operatorName: OrderPaymentController.selectedOperator.value,
+              ),
               inputFormatters: [
                 MaskTextInputFormatter(
-                    mask: '## ## ## ## ##', filter: {'#': RegExp(r'[0-9]')})
+                  mask: '## ## ## ## ##',
+                  filter: {'#': RegExp(r'[0-9]')},
+                ),
               ],
             ),
             CustomButtom(
-              isLoading: loadingButton,
+              isLoading: _loadingButton,
               text: 'Confirmer',
-              onClick: () {
-                // MoovPaymentRouter.pageStateNotifier.value =
-                //     MoovOptValidatorPage.name;
-                // MoovPaymentRouter.router.goNamed(MoovOptValidatorPage.name,
-                //     extra: PaymentIntentModel(paymentMethod: 'moov'));
-
-                if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    loadingButton = true;
-                  });
-                  PaymentServices.initPayment(
-                    context: context,
-                    number:
-                        _formController.phoneNumber!.text.replaceAll(' ', ''),
-                    collection: PaymentData.of(context)?.productType ??
-                        ProductType.booking.name,
-                    itemID: PaymentData.of(context)?.orderID ??
-                        "38c16b58-74a5-47ec-b404-8ebf6a7b3dcc",
-                    onSuccess: (p) {
-                      setState(() {
-                        loadingButton = false;
-                      });
-                      MoovPaymentRouter.pageStateNotifier.value =
-                          MoovOptValidatorPage.name;
-                      MoovPaymentRouter.router
-                          .goNamed(MoovOptValidatorPage.name, extra: p);
-                    },
-                    onFailed: () {
-                      setState(() {
-                        loadingButton = false;
-                      });
-                    },
-                  );
-                }
-              },
+              onClick: () => _onConfirm(paymentData),
             ),
-            //Gap(MediaQuery.viewInsetsOf(context).bottom)
           ],
         ),
       ),
+    );
+  }
+
+  void _onConfirm(PaymentData paymentData) {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _loadingButton = true);
+
+    PaymentServices.initPayment(
+      context: context,
+      number: _formController.phoneNumber!.text.replaceAll(' ', ''),
+      collection: paymentData.productType,
+      itemID: paymentData.orderID,
+      onSuccess: (paymentIntentData) {
+        if (!mounted) return;
+
+        setState(() => _loadingButton = false);
+
+        // ✅ Naviguer vers l'étape suivante via le controller
+        widget.controller.goToValidator(paymentIntentData);
+      },
+      onFailed: () {
+        if (!mounted) return;
+        setState(() => _loadingButton = false);
+      },
     );
   }
 }

@@ -5,8 +5,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:immoplus/app/features/map_view/logics/map_card_overlay_service.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
 import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
@@ -29,7 +29,7 @@ class _MapViewerState extends State<MapViewer> {
   void initState() {
     context
         .read<MapViwerCubit>()
-        .getMapDataAll(center: LatLng(5.365162, -4.000802));
+        .getMapDataAll(center: LatLng(5.365162, -4.000802), context: context);
     super.initState();
   }
 
@@ -64,11 +64,18 @@ class _MapViewerState extends State<MapViewer> {
     final perPage = getPerPage(zoom);
 
     await context.read<MapViwerCubit>().getMapDataAll(
+          context: context,
           center: center,
           radius: radius * 1000, // Convertir km en mètres
           perPage: perPage,
           page: 1, // tu peux gérer le paging plus tard
         );
+  }
+
+  @override
+  void dispose() {
+    MapCardOverlayService.hide();
+    super.dispose();
   }
 
   @override

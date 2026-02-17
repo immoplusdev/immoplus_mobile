@@ -1,6 +1,5 @@
 library;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -65,14 +64,8 @@ class _HomePageState extends State<HomePage>
     FilterHandler.search = null;
   }
 
-  // Create a ScrollController to listen for scroll events
-  final ScrollController _scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
-    //print('ACCOUNT ${UserModel().emailVerified}');
-    //inspect(Constantes.configApp);
-    //Constantes.buildNotifier.value = !Constantes.buildNotifier.value;
     return BlocBuilder<HomePageCubit, HomePageState>(
       builder: (context, state) {
         _tabController.animateTo(state.indexPage);
@@ -122,15 +115,6 @@ class _HomePageState extends State<HomePage>
                             : const SliverToBoxAdapter();
                       },
                     ),
-                    // CupertinoSliverRefreshControl(
-                    //   //      backgroundColor: Colors.white,
-                    //   // color: Theme.of(context).colorScheme.primary,
-                    //   onRefresh: () async {
-                    //     HomePageState.getPageListController(state.indexPage)
-                    //         .refresh();
-                    //     // _pagingController.refresh();
-                    //   },
-                    // ),
                     const SliverGap(10),
                     HomePageState.getPageListFromIndex(state.indexPage),
                   ],

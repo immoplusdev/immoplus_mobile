@@ -1,7 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart'; // ← AJOUTER
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
@@ -26,39 +25,52 @@ class _SplashScreenState extends State<SplashScreen> {
   final dio = getIt<Dio>();
 
   Future<void> _getData({required BuildContext context}) async {
+    // ✅ Initialiser les services (toujours nécessaire)
     ConfigModel configModel = await AuthRepository().getConfig();
     sessionManager.configModel = configModel;
     await sessionManager.getCurrentUser();
 
-    // Vérification si l'onboarding a été vu
-    // await sessionManager.resetOnboarding();
+    // ✅ Configurer l'authentification si nécessaire
+    if (sessionManager.currentUser != null) {
+      dio.options.headers['Authorization'] =
+          'Bearer ${sessionManager.currentUser!.accessToken}';
+      notificationService.suscribeCurrentUser();
+    }
+
+    // Vérification de l'onboarding
     final hasSeenOnboarding = await sessionManager.hasReadOnboarding();
 
     await Future.delayed(const Duration(milliseconds: 300));
+
     if (!mounted) return;
 
+    // ✅ VÉRIFIER LA ROUTE ACTUELLE AVANT DE NAVIGUER
+    final currentPath = GoRouterState.of(context).uri.path;
+
+    // Si on n'est plus sur "/", c'est qu'un deep link a pris le contrôle
+    if (currentPath != '/') {
+      print('✅ Deep link detected ($currentPath), skipping splash navigation');
+      return; // ← NE PAS NAVIGUER
+    }
+
+    // ✅ Sinon, flow normal
     if (!hasSeenOnboarding) {
-      // Redirection vers l'onboarding si pas encore vu
       AppRouter.router.goNamed(OnboardingNewPage.name);
       return;
     }
 
-    if (sessionManager.currentUser == null) {
-      AppRouter.router.goNamed(HomePage.name);
-    } else {
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
-      notificationService.suscribeCurrentUser();
-      AppRouter.router.goNamed(HomePage.name);
-    }
+    AppRouter.router.goNamed(HomePage.name);
   }
 
   @override
   void initState() {
+    super.initState();
     ConnectinityService.listen();
 
-    _getData(context: context);
-    super.initState();
+    // ✅ Attendre que le widget tree soit construit
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getData(context: context);
+    });
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:immoplus/app/features/payment_module/components/mtn/mtn_validator_page.dart';
+import 'package:immoplus/app/features/payment_module/components/mtn/mtn_payment_controller.dart';
 import 'package:immoplus/app/features/payment_module/services/payment_services.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_utils.dart';
@@ -12,33 +12,44 @@ import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-
-import '../../../../widgets/operator_payment.dart';
-import '../../utils/mtn_payment_router.dart';
+import 'package:immoplus/app/widgets/operator_payment.dart';
 
 class MtnNumberPage extends StatefulWidget {
-  const MtnNumberPage({super.key});
-  static String name = 'number';
+  const MtnNumberPage({
+    super.key,
+    required this.controller,
+  });
+
+  final MtnPaymentController controller;
+
   @override
   State<MtnNumberPage> createState() => _MtnNumberPageState();
 }
 
 class _MtnNumberPageState extends State<MtnNumberPage> {
   final FormController _formController = FormController(
-      productId: 0, phoneNumber: TextEditingController(text: ''));
+    productId: 0,
+    phoneNumber: TextEditingController(text: ''),
+  );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool loadingButton = false;
+  bool _loadingButton = false;
+
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      MtnPaymentRouter.pageStateNotifier.value = MtnNumberPage.name;
-    });
+  void dispose() {
+    _formController.phoneNumber?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final paymentData = PaymentData.of(context);
+
+    if (paymentData == null) {
+      return const Center(
+        child: Text('Erreur: Données de paiement manquantes'),
+      );
+    }
+
     return Form(
       key: _formKey,
       child: Container(
@@ -51,7 +62,8 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
               contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
                 foregroundImage: NetworkImage(
-                    OrderPaymentController.selectedOperator.logo ?? ''),
+                  OrderPaymentController.selectedOperator.logo,
+                ),
               ),
               title: Text(
                 'Paiement par ${OrderPaymentController.selectedOperator.name}',
@@ -64,12 +76,13 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
                 ),
                 onPressed: () {
                   AppDialog.confirm(
-                      context: context,
-                      content: "Voulez vous annuler l'opération ?",
-                      rollback: () {
-                        AppRouter.router.pop();
-                        AppRouter.router.pop();
-                      });
+                    context: context,
+                    content: "Voulez vous annuler l'opération ?",
+                    rollback: () {
+                      AppRouter.router.pop();
+                      AppRouter.router.pop();
+                    },
+                  );
                 },
               ),
             ),
@@ -79,8 +92,7 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
                 FontAwesomeIcons.moneyBill,
                 color: Colors.green,
               ),
-              title:
-                  Text(Utils.formatCurrency(PaymentData.of(context)!.amount)),
+              title: Text(Utils.formatCurrency(paymentData.amount)),
               titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),
@@ -93,55 +105,49 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
               labelText: 'Numéro de téléphone valide',
               prefixIcon: const Icon(CupertinoIcons.phone),
               validator: (String? value) => PaymentUtils.numberValidator(
-                  number: value!.replaceAll(' ', ''),
-                  operatorName:
-                      OrderPaymentController.selectedOperator.value ?? ''),
+                number: value!.replaceAll(' ', ''),
+                operatorName: OrderPaymentController.selectedOperator.value,
+              ),
               inputFormatters: [
                 MaskTextInputFormatter(
-                    mask: '## ## ## ## ##', filter: {'#': RegExp(r'[0-9]')})
+                  mask: '## ## ## ## ##',
+                  filter: {'#': RegExp(r'[0-9]')},
+                ),
               ],
             ),
             CustomButtom(
-              isLoading: loadingButton,
+              isLoading: _loadingButton,
               text: 'Confirmer',
-              onClick: () {
-                // MtnPaymentRouter.pageStateNotifier.value =
-                //     MtnValidatorPage.name;
-                // MtnPaymentRouter.router.goNamed(MtnValidatorPage.name,
-                //     extra: PaymentIntentModel(paymentMethod: 'mtn'));
-
-                if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    loadingButton = true;
-                  });
-                  PaymentServices.initPayment(
-                    context: context,
-                    number:
-                        _formController.phoneNumber!.text.replaceAll(' ', ''),
-                    collection: PaymentData.of(context)!.productType,
-                    itemID: PaymentData.of(context)!.orderID,
-                    onSuccess: (p) {
-                      setState(() {
-                        loadingButton = false;
-                      });
-                      MtnPaymentRouter.pageStateNotifier.value =
-                          MtnValidatorPage.name;
-                      MtnPaymentRouter.router
-                          .goNamed(MtnValidatorPage.name, extra: p);
-                    },
-                    onFailed: () {
-                      setState(() {
-                        loadingButton = false;
-                      });
-                    },
-                  );
-                }
-              },
+              onClick: () => _onConfirm(paymentData),
             ),
-            //Gap(MediaQuery.viewInsetsOf(context).bottom)
           ],
         ),
       ),
+    );
+  }
+
+  void _onConfirm(PaymentData paymentData) {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _loadingButton = true);
+
+    PaymentServices.initPayment(
+      context: context,
+      number: _formController.phoneNumber!.text.replaceAll(' ', ''),
+      collection: paymentData.productType,
+      itemID: paymentData.orderID,
+      onSuccess: (paymentIntentData) {
+        if (!mounted) return;
+
+        setState(() => _loadingButton = false);
+
+        // ✅ Naviguer vers l'étape suivante via le controller
+        widget.controller.goToValidator(paymentIntentData);
+      },
+      onFailed: () {
+        if (!mounted) return;
+        setState(() => _loadingButton = false);
+      },
     );
   }
 }

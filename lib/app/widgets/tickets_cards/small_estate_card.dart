@@ -3,8 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
@@ -16,9 +14,10 @@ import 'package:shimmer/shimmer.dart';
 
 class SmallEstateCard extends StatefulWidget {
   const SmallEstateCard(
-      {super.key, required this.bienImmobilier, this.closeTap});
+      {super.key, required this.bienImmobilier, this.closeTap, this.onCardTap});
   final BienImmobilierModel bienImmobilier;
   final VoidCallback? closeTap;
+  final VoidCallback? onCardTap;
   @override
   State<SmallEstateCard> createState() => _SmallEstateCardState();
 }
@@ -44,10 +43,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
         Positioned.fill(
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            onTap: () {
-              Constantes.tempPage = Utils.getCurrentLocation();
-              context.push('/estate_detail/${widget.bienImmobilier.id}');
-            },
+            onTap: widget.onCardTap,
             child: Container(
               padding: const EdgeInsets.all(8),
               height: 100,
