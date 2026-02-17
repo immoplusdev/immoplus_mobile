@@ -16,6 +16,7 @@ import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dar
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
 import 'package:shimmer/shimmer.dart';
@@ -192,12 +193,8 @@ class _FurnitureCardState extends State<FurnitureCard> {
                               final phone =
                                   widget.furniture.ownerPhoneNumber.trim();
                               if (phone.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        "Numéro du propriétaire indisponible"),
-                                  ),
-                                );
+                                ToastUtils.error(
+                                    "Numéro du propriétaire indisponible");
                                 return;
                               }
                               Utils.makePhoneCall(phone);

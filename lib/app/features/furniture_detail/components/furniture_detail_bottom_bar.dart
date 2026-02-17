@@ -4,6 +4,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 class FurnitureDetailBottomBar extends StatelessWidget {
@@ -26,11 +27,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
 
           final phone = furnitureModel.ownerPhoneNumber.trim();
           if (phone.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Numéro du propriétaire indisponible"),
-              ),
-            );
+            ToastUtils.error("Numéro du propriétaire indisponible");
             return;
           }
           Utils.makePhoneCall(phone);
