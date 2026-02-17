@@ -14,13 +14,11 @@ import 'package:immoplus/app/features/account/widgets/general_condition_page.dar
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
-import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart';
 import 'package:immoplus/app/logic/authentification/delete_account_cubit_state.dart';
-import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 

@@ -5,8 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -32,6 +35,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   final double iconSize = 28;
   String _currentAddress = "Localisation...";
   bool _isLoadingAddress = true;
+  final sessionManager = getIt<SessionManager>();
 
   /// ✅ Utiliser LocationService
   Future<void> _loadCurrentLocation() async {
@@ -149,7 +153,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
           snap: false,
           floating: true,
           titleSpacing: 0,
-          toolbarHeight: 130,
+          toolbarHeight: 125,
           backgroundColor: AppColors.whiteBackground,
           title: Container(
             color: AppColors.whiteBackground,
@@ -197,7 +201,11 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                        context.pushNamed(NotificationsPage.name);
+                        if (sessionManager.currentUser != null) {
+                          context.pushNamed(NotificationsPage.name);
+                        } else {
+                          context.pushNamed(AuthenticationPage.name);
+                        }
                       },
                       child: Container(
                         width: 48,
@@ -213,52 +221,36 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     )
                   ],
                 ),
-                Gap(5),
-                CustomTextField(
-                  labelText: 'Que cherchez-vous ?',
-                  prefixIcon: Icon(Icons.search),
-                  controller: _searchController,
-                  sufixIcon: _showClearButton
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.cancel,
-                            color: Colors.grey.shade600,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            EasyDebounce.cancel(_searchDebounceKey);
-                            _searchController.clear();
-                            FilterHandler.search = null;
-                            FilterHandler.notifyChange();
-                            HomePageState.getPageListController(
-                                    widget.currentIndex)
-                                .refresh();
-                          },
-                        )
-                      : null,
-                  onFieldSubmitted: (keyword) {
-                    if (FilterHandler.search != null) {
-                      if (FilterHandler.search!.isNotEmpty) {
-                        log(keyword);
-                        HomePageState.getPageListController(widget.currentIndex)
-                            .refresh();
-                      } else {
-                        FilterHandler.search = null;
-                        FilterHandler.notifyChange();
-                        HomePageState.getPageListController(widget.currentIndex)
-                            .refresh();
-                      }
-                    }
-                  },
-                  onChanged: (text) {
-                    EasyDebounce.debounce(_searchDebounceKey,
-                        const Duration(milliseconds: _searchDeboucemillisecond),
-                        () {
-                      FilterHandler.search = text;
-                      FilterHandler.notifyChange();
+                Gap(10),
+                SizedBox(
+                  height: 50,
+                  child: CustomTextField(
+                    contentPadding: EdgeInsets.symmetric(vertical: 0),
+                    labelText: 'Que cherchez-vous ?',
+                    prefixIcon: Icon(Icons.search),
+                    controller: _searchController,
+                    sufixIcon: _showClearButton
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.cancel,
+                              color: Colors.grey.shade600,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              EasyDebounce.cancel(_searchDebounceKey);
+                              _searchController.clear();
+                              FilterHandler.search = null;
+                              FilterHandler.notifyChange();
+                              HomePageState.getPageListController(
+                                      widget.currentIndex)
+                                  .refresh();
+                            },
+                          )
+                        : null,
+                    onFieldSubmitted: (keyword) {
                       if (FilterHandler.search != null) {
                         if (FilterHandler.search!.isNotEmpty) {
-                          log(text);
+                          log(keyword);
                           HomePageState.getPageListController(
                                   widget.currentIndex)
                               .refresh();
@@ -270,19 +262,42 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                               .refresh();
                         }
                       }
-                    });
-                  },
-                  fillColor: Colors.transparent,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(radiusButton),
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
+                    },
+                    onChanged: (text) {
+                      EasyDebounce.debounce(
+                          _searchDebounceKey,
+                          const Duration(
+                              milliseconds: _searchDeboucemillisecond), () {
+                        FilterHandler.search = text;
+                        FilterHandler.notifyChange();
+                        if (FilterHandler.search != null) {
+                          if (FilterHandler.search!.isNotEmpty) {
+                            log(text);
+                            HomePageState.getPageListController(
+                                    widget.currentIndex)
+                                .refresh();
+                          } else {
+                            FilterHandler.search = null;
+                            FilterHandler.notifyChange();
+                            HomePageState.getPageListController(
+                                    widget.currentIndex)
+                                .refresh();
+                          }
+                        }
+                      });
+                    },
+                    fillColor: Colors.transparent,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(radiusButton),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                      ),
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(radiusButton),
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(radiusButton),
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                      ),
                     ),
                   ),
                 ),

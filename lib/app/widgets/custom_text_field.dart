@@ -28,6 +28,7 @@ class CustomTextField extends StatefulWidget {
     this.onChanged,
     this.enabledBorder,
     this.focusedBorder,
+    this.contentPadding,
   });
   final String? labelText;
   final Widget? sufixIcon;
@@ -52,6 +53,7 @@ class CustomTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
+  final EdgeInsets? contentPadding;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
@@ -101,7 +103,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusNode: _textFieldFocus,
         decoration: InputDecoration(
           errorStyle: const TextStyle(color: Colors.redAccent),
-          contentPadding: const EdgeInsets.symmetric(vertical: 20),
+          contentPadding:
+              widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 20),
           // prefixIconColor: _iconColor,
           // suffixIconColor: _iconColor,
 
