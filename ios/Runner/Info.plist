@@ -28,9 +28,16 @@
 	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>https</string>
+		<string>http</string>
 		<string>sms</string>
 		<string>tel</string>
+		<string>mailto</string>
 		<string>whatsapp</string>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
 		<string>comgooglemaps</string>
 		<string>baidumap</string>
 		<string>iosamap</string>
@@ -100,14 +107,6 @@
 	<string>f870bbd7caa1ca5344f9aaeda75fe13b</string>
 	<key>FacebookDisplayName</key>
 	<string>Immo Plus</string>
-
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	<string>fbapi</string>
-	<string>fb-messenger-share-api</string>
-	<string>fbauth2</string>
-	<string>fbshareextension</string>
-	</array>
 <!-- FACEBOOK&GOOGLE CONFIG END HERE -->
 
 	<key>LSRequiresIPhoneOS</key>

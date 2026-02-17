@@ -10,7 +10,7 @@ class SmallButton extends StatelessWidget {
     return UnconstrainedBox(
       child: Container(
         height: 30,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: AppColors.primary,
           borderRadius: BorderRadius.circular(100),
@@ -18,7 +18,7 @@ class SmallButton extends StatelessWidget {
         child: Center(
             child: Text(
           text,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         )),
       ),
     );

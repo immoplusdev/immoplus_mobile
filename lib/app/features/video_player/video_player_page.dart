@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -26,8 +27,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   Future<void> _initializeAndPlayVideo() async {
-    final String videoUrl =
-        "https://api-v2.immoplus.ci/files/videos/raw/public/${widget.videoID}";
+    // En dev (FLAVOR=dev) : URL dev. En prod : URL prod. Plus d'URL prod en dur.
+    final String? videoUrl = Utils.getVideoPath(id: widget.videoID);
+    if (videoUrl == null || videoUrl.isEmpty) {
+      log('Vidéo: baseUrl ou videoID manquant → impossible de lire la vidéo');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Impossible de lire la vidéo';
+        });
+      }
+      return;
+    }
     log('Tentative de chargement de la vidéo: $videoUrl');
 
     try {

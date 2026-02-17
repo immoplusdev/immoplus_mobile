@@ -1,9 +1,10 @@
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
+import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
 
@@ -42,6 +43,19 @@ class FavoriesUtils {
         ..date = DateTime.now()
         ..destination = '/estate_detail/${bienImmobilierModel.id}'
         ..type = bienImmobilierModel.typeBienImmobilier);
+    });
+  }
+
+  addFurnitureToFavorites(FurnitureModel furnitureModel) async {
+    await isarConfig.instance.writeTxn(() async {
+      await isarConfig.instance.fovoriteModels.put(FovoriteModel()
+        ..itemId = furnitureModel.id
+        ..adress = furnitureModel.adresse
+        ..name = furnitureModel.titre
+        ..images = furnitureModel.images
+        ..date = DateTime.now()
+        ..destination = FurnitureDetailPage.route(furnitureModel.id)
+        ..type = furnitureModel.type);
     });
   }
 

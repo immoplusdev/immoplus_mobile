@@ -69,6 +69,15 @@ class Utils {
   static String getImagePath({required String id}) =>
       "${RequestPath.baseUrl}/files/raw/public/$id";
 
+  /// URL vidéo à partir de l'ID. En dev (FLAVOR=dev) utilise l'URL dev [RequestPath.baseUrl].
+  /// En prod utilise l'URL prod. Retourne null si baseUrl ou id vide → "Impossible de lire la vidéo".
+  static String? getVideoPath({required String id}) {
+    final baseUrl = RequestPath.baseUrl.trim();
+    final videoId = id.trim();
+    if (baseUrl.isEmpty || videoId.isEmpty) return null;
+    return "$baseUrl/files/videos/raw/public/$videoId";
+  }
+
   static Widget getImageWidget({required String id}) => CachedNetworkImage(
         imageUrl: "${RequestPath.baseUrl}/files/raw/public/$id",
         placeholder: (context, url) => Shimmer.fromColors(

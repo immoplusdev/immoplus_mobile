@@ -24,7 +24,7 @@ PODS:
   - google_maps_flutter_ios (0.0.1):
     - Flutter
     - Google-Maps-iOS-Utils (< 7.0, >= 5.0)
-    - GoogleMaps (< 10.0, >= 8.4)
+    - GoogleMaps (< 11.0, >= 8.4)
   - GoogleMaps (9.4.0):
     - GoogleMaps/Maps (= 9.4.0)
   - GoogleMaps/Maps (9.4.0)
@@ -39,10 +39,10 @@ PODS:
     - Flutter
   - onesignal_flutter (5.3.4):
     - Flutter
-    - OneSignalXCFramework (= 5.2.14)
-  - OneSignalXCFramework (5.2.14):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.14)
-  - OneSignalXCFramework/OneSignal (5.2.14):
+    - OneSignalXCFramework (= 5.4.1)
+  - OneSignalXCFramework (5.4.1):
+    - OneSignalXCFramework/OneSignalComplete (= 5.4.1)
+  - OneSignalXCFramework/OneSignal (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -50,38 +50,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.14):
+  - OneSignalXCFramework/OneSignalComplete (5.4.1):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.14)
-  - OneSignalXCFramework/OneSignalExtension (5.2.14):
+  - OneSignalXCFramework/OneSignalCore (5.4.1)
+  - OneSignalXCFramework/OneSignalExtension (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.14):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.14):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.14):
+  - OneSignalXCFramework/OneSignalLocation (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.14):
+  - OneSignalXCFramework/OneSignalNotifications (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.14):
+  - OneSignalXCFramework/OneSignalOSCore (5.4.1):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.14):
+  - OneSignalXCFramework/OneSignalOutcomes (5.4.1):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.14):
+  - OneSignalXCFramework/OneSignalUser (5.4.1):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -167,14 +167,14 @@ SPEC CHECKSUMS:
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   Google-Maps-iOS-Utils: 0a484b05ed21d88c9f9ebbacb007956edd508a96
-  google_maps_flutter_ios: 0291eb2aa252298a769b04d075e4a9d747ff7264
+  google_maps_flutter_ios: 0cf046caf50b00d95071f79e8031fcd5ef902beb
   GoogleMaps: 0608099d4870cac8754bdba9b6953db543432438
   isar_community_flutter_libs: bede843185a61a05ff364a05c9b23209523f7e0d
   libphonenumber_plugin: e3f18ea4f29a54af15a8853817c3773c31646cff
   location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
   map_launcher: fe43bda6720bb73c12fcc1bdd86123ff49a4d4d6
-  onesignal_flutter: 3a2b51f9262c851166a882a553d71a8ccec4e29c
-  OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
+  onesignal_flutter: d706835865d1adf2f03afc7c7b6d237494e693e3
+  OneSignalXCFramework: 0b85a8d949247f80809a9d5598200cc263591129
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
   sms_autofill: b36b2147535657fea83d7f3898d7831de70bd8e4
