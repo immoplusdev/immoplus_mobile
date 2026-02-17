@@ -66,9 +66,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    //print('ACCOUNT ${UserModel().emailVerified}');
-    //inspect(Constantes.configApp);
-    //Constantes.buildNotifier.value = !Constantes.buildNotifier.value;
     return BlocBuilder<HomePageCubit, HomePageState>(
       builder: (context, state) {
         _tabController.animateTo(state.indexPage);

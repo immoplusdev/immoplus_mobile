@@ -23,8 +23,11 @@ import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
 class HomeSearchAppbar extends StatefulWidget {
-  const HomeSearchAppbar(
-      {super.key, required this.controller, required this.currentIndex});
+  const HomeSearchAppbar({
+    super.key,
+    required this.controller,
+    required this.currentIndex,
+  });
   final TabController controller;
   final int currentIndex;
   @override
@@ -95,27 +98,23 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       showDragHandle: true,
       backgroundColor: AppColors.whiteBackground,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      builder: (context) => const FractionallySizedBox(
-        heightFactor: 0.9,
-        child: LocationPage(),
-      ),
-    ).then(
-      (value) {
-        inspect(value);
-        if (value is Address) {
-          setState(() {
-            FilterHandler.locationName = value.description!.length > 20
-                ? '${value.description!.substring(0, 20)}…'
-                : value.description;
-            FilterHandler.lat = value.latitude;
-            FilterHandler.long = value.longitude;
-          });
-          FilterHandler.notifyChange();
-          HomePageState.pagingControllerResidence.refresh();
-          HomePageState.pagingControllerEstate.refresh();
-        }
-      },
-    );
+      builder: (context) =>
+          const FractionallySizedBox(heightFactor: 0.9, child: LocationPage()),
+    ).then((value) {
+      inspect(value);
+      if (value is Address) {
+        setState(() {
+          FilterHandler.locationName = value.description!.length > 20
+              ? '${value.description!.substring(0, 20)}…'
+              : value.description;
+          FilterHandler.lat = value.latitude;
+          FilterHandler.long = value.longitude;
+        });
+        FilterHandler.notifyChange();
+        HomePageState.pagingControllerResidence.refresh();
+        HomePageState.pagingControllerEstate.refresh();
+      }
+    });
   }
 
   final TextEditingController _searchController = TextEditingController();
@@ -214,11 +213,9 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                           shape: BoxShape.circle,
                           color: AppColors.F2F2F2,
                         ),
-                        child: Icon(
-                          Icons.notifications_none_rounded,
-                        ),
+                        child: Icon(Icons.notifications_none_rounded),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Gap(10),
@@ -242,8 +239,8 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                               FilterHandler.search = null;
                               FilterHandler.notifyChange();
                               HomePageState.getPageListController(
-                                      widget.currentIndex)
-                                  .refresh();
+                                widget.currentIndex,
+                              ).refresh();
                             },
                           )
                         : null,
@@ -252,62 +249,59 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                         if (FilterHandler.search!.isNotEmpty) {
                           log(keyword);
                           HomePageState.getPageListController(
-                                  widget.currentIndex)
-                              .refresh();
+                            widget.currentIndex,
+                          ).refresh();
                         } else {
                           FilterHandler.search = null;
                           FilterHandler.notifyChange();
                           HomePageState.getPageListController(
-                                  widget.currentIndex)
-                              .refresh();
+                            widget.currentIndex,
+                          ).refresh();
                         }
                       }
                     },
                     onChanged: (text) {
                       EasyDebounce.debounce(
-                          _searchDebounceKey,
-                          const Duration(
-                              milliseconds: _searchDeboucemillisecond), () {
-                        FilterHandler.search = text;
-                        FilterHandler.notifyChange();
-                        if (FilterHandler.search != null) {
-                          if (FilterHandler.search!.isNotEmpty) {
-                            log(text);
-                            HomePageState.getPageListController(
-                                    widget.currentIndex)
-                                .refresh();
-                          } else {
-                            FilterHandler.search = null;
-                            FilterHandler.notifyChange();
-                            HomePageState.getPageListController(
-                                    widget.currentIndex)
-                                .refresh();
+                        _searchDebounceKey,
+                        const Duration(milliseconds: _searchDeboucemillisecond),
+                        () {
+                          FilterHandler.search = text;
+                          FilterHandler.notifyChange();
+                          if (FilterHandler.search != null) {
+                            if (FilterHandler.search!.isNotEmpty) {
+                              log(text);
+                              HomePageState.getPageListController(
+                                widget.currentIndex,
+                              ).refresh();
+                            } else {
+                              FilterHandler.search = null;
+                              FilterHandler.notifyChange();
+                              HomePageState.getPageListController(
+                                widget.currentIndex,
+                              ).refresh();
+                            }
                           }
-                        }
-                      });
+                        },
+                      );
                     },
                     fillColor: Colors.transparent,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(radiusButton),
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                      ),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(radiusButton),
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                      ),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
                     ),
                   ),
                 ),
-                Gap(5),
               ],
             ),
           ),
           bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(50),
-              child: HomeChoiceMenu()),
+            preferredSize: const Size.fromHeight(50),
+            child: HomeChoiceMenu(),
+          ),
         );
       },
     );
