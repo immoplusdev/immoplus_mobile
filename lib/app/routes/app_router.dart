@@ -46,7 +46,14 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
-    redirect: (context, state) => showOnboarding ? '/onboarding' : null,
+    redirect: (context, state) {
+      print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
+      print('🔍 GoRouter redirect - Path: ${state.uri.path}');
+      print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
+
+      if (showOnboarding) return '/onboarding';
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/',
@@ -199,6 +206,13 @@ class AppRouter {
         builder: (context, state) => EstatePage(
           idProduct: state.pathParameters['idProduct'] ?? '',
         ),
+      ),
+      GoRoute(
+        path: '/bien_detail/:bienId',
+        redirect: (context, state) {
+          final bienId = state.pathParameters['bienId'];
+          return '/estate_detail/$bienId';
+        },
       ),
       //TODO : vérifier que les routes depplink fonctionnent correctement
       GoRoute(

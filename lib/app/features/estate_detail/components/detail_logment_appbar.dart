@@ -9,6 +9,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
+import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
 import 'package:immoplus/app/services/share_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -54,8 +55,11 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
             if (kDebugMode) {
               print(Constantes.tempPage);
             }
-            context.pop();
-            //context.pop();
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.goNamed(HomePage.name);
+            }
           },
           style: IconButton.styleFrom(
             iconSize: 20,
@@ -83,8 +87,8 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
             onPressed: () async {
               final origin =
                   ShareService.getSharePositionFromKey(_shareButtonKey);
-              await ShareService.shareResidence(
-                residenceId: widget.bienImmobilier.id,
+              await ShareService.shareBien(
+                bienId: widget.bienImmobilier.id,
                 sharePositionOrigin: origin,
               );
             },

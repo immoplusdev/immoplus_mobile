@@ -43,6 +43,23 @@ class ShareService {
     );
   }
 
+  static Future<ShareResult> shareBien({
+    required String bienId,
+    String? bienName,
+    BuildContext? context,
+    Rect? sharePositionOrigin,
+  }) async {
+    final url = "https://app.immoplus.ci/bien_detail/$bienId";
+    final text = bienName != null ? "Découvrez ce bien: $bienName\n$url" : url;
+
+    return await shareText(
+      text: text,
+      subject: 'Partager ce bien',
+      context: context,
+      sharePositionOrigin: sharePositionOrigin,
+    );
+  }
+
   /// Partage une URL de propriété
   static Future<ShareResult> shareProperty({
     required String propertyId,

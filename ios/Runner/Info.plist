@@ -68,7 +68,7 @@
     </dict>
 	<!-- Deeplink fix redirect -->
 	<key>FlutterDeepLinkingEnabled</key>
-    <false/>
+    <true/>
 	<!-- FACEBOOK&GOOGLE CONFIG START HERE -->
 	<key>CFBundleURLTypes</key>
 	<array>
