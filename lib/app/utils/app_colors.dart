@@ -16,6 +16,7 @@ class AppColors {
   static Color transparent = Colors.transparent;
   static Color lightBlue = Color(0xff2072ca);
   static Color customBlue = Color(0xff2744de);
+  static const Color blue4227DE = Color(0xFF4227DE);
   static Color blue65BAF0 = Color(0xff65BAF0);
   static Color blue0F41D9 = Color(0xff0F41D9);
   static Color blue8ED3FF = Color(0xff8ED3FF);

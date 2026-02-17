@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class SmallButton extends StatelessWidget {
   final String text;
@@ -9,15 +10,15 @@ class SmallButton extends StatelessWidget {
     return UnconstrainedBox(
       child: Container(
         height: 30,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.blueAccent,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(100),
         ),
         child: Center(
             child: Text(
           text,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         )),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 import 'package:intl/intl.dart';
 
@@ -164,3 +165,68 @@ List<double> listToDouble(dynamic value) {
 
 const maxPriceLimit = 3000000;
 const minPriceLimit = 100;
+
+// === FURNITURE MODULE CONSTANTS ===
+class FurnitureUIConstants {
+  // Spacing (multiples de 4)
+  static const double spacingXS = 4.0;
+  static const double spacingS = 8.0;
+  static const double spacingM = 16.0;
+  static const double spacingL = 24.0;
+  static const double spacingXL = 32.0;
+  static const double spacingXXL = 48.0;
+
+  // Border Radius
+  static const double radiusSmall = 8.0;
+  static const double radiusMedium = 12.0;
+  static const double radiusLarge = 16.0;
+  static const double radiusXLarge = 24.0;
+
+  // Hero Header
+  static const double heroHeightPercent = 0.42;
+  static const double heroMinHeight = 360.0;
+
+  // Sticky Bar
+  static const double stickyBarHeight = 72.0;
+  static const double stickyBarButtonGap = 12.0;
+  static const double secondaryButtonWidthPercent = 0.35;
+  static const double primaryButtonWidthPercent = 0.65;
+
+  // Typography Sizes
+  static const double fontSizeH1 = 24.0;
+  static const double fontSizeH2 = 28.0;
+  static const double fontSizeSubtitle = 16.0;
+  static const double fontSizeBody = 15.0;
+  static const double fontSizeMetadata = 13.0;
+  static const double fontSizeChipLabel = 14.0;
+
+  // Line Heights
+  static const double lineHeightH1 = 32.0;
+  static const double lineHeightH2 = 36.0;
+  static const double lineHeightBody = 22.0;
+
+  // Elevation & Shadows (pour BoxShadow)
+  static List<BoxShadow> get shadowLight => [
+        BoxShadow(
+          color: AppColors.blue4227DE.withValues(alpha: 0.08),
+          offset: const Offset(0, 2),
+          blurRadius: 8,
+        ),
+      ];
+
+  static List<BoxShadow> get shadowMedium => [
+        BoxShadow(
+          color: AppColors.blue4227DE.withValues(alpha: 0.12),
+          offset: const Offset(0, 4),
+          blurRadius: 16,
+        ),
+      ];
+
+  static List<BoxShadow> get shadowHeavy => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.15),
+          offset: const Offset(0, 8),
+          blurRadius: 24,
+        ),
+      ];
+}

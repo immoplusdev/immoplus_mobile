@@ -28,6 +28,8 @@ import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
     as _i398;
+import 'package:immoplus/app/data/repositories/furniture_repository.dart'
+    as _i976;
 import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
@@ -39,6 +41,8 @@ import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart'
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart' as _i79;
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
     as _i374;
+import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart'
+    as _i123;
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
@@ -100,6 +104,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i1023.ErrorInterceptor>(),
           gh<_i358.RequestInterceptor>(),
         ));
+    gh.factory<_i976.FurnitureRepository>(
+        () => _i976.FurnitureRepository(gh<_i361.Dio>()));
     gh.factory<_i398.BienImmobilierRepository>(
         () => _i398.BienImmobilierRepository(gh<_i361.Dio>()));
     gh.factory<_i143.ResidenceRepository>(
@@ -114,6 +120,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i143.ResidenceRepository>(),
           gh<_i398.BienImmobilierRepository>(),
         ));
+    gh.factory<_i123.FurnitureCubit>(
+        () => _i123.FurnitureCubit(gh<_i976.FurnitureRepository>()));
     gh.factory<_i783.RgistrationCubitCubit>(() => _i783.RgistrationCubitCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),

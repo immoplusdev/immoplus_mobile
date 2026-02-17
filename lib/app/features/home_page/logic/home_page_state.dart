@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/home_page/screens/estates_list.dart';
 import 'package:immoplus/app/features/home_page/screens/furnitures_list.dart';
 import 'package:immoplus/app/features/home_page/screens/lands_list.dart';
@@ -14,7 +15,7 @@ class HomePageState {
       PagingController(firstPageKey: 1);
   static PagingController<int, BienImmobilierModel> pagingControllerLand =
       PagingController(firstPageKey: 1);
-  static PagingController<int, BienImmobilierModel> pagingControllerFurniture =
+  static PagingController<int, FurnitureModel> pagingControllerFurniture =
       PagingController(firstPageKey: 1);
   int indexPage;
   HomePageState({required this.indexPage});
