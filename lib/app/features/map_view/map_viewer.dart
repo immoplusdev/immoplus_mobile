@@ -54,15 +54,15 @@ class _MapViewerState extends State<MapViewer> {
 
   int getPerPage(double zoom) {
     return 10;
-    if (zoom < 5) {
-      return 20; // continent
-    } else if (zoom < 10) {
-      return 50; // pays
-    } else if (zoom < 14) {
-      return 1000; // ville
-    } else {
-      return 300; // quartier
-    }
+    // if (zoom < 5) {
+    //   return 20; // continent
+    // } else if (zoom < 10) {
+    //   return 50; // pays
+    // } else if (zoom < 14) {
+    //   return 1000; // ville
+    // } else {
+    //   return 300; // quartier
+    // }
   }
 
   Future<void> fetchMapData(CameraPosition cameraPosition) async {
