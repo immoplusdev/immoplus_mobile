@@ -94,6 +94,8 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (3.7.11)
   - PhoneNumberKit/UIKit (3.7.11):
     - PhoneNumberKit/PhoneNumberKitCore
+  - sign_in_with_apple (0.0.1):
+    - Flutter
   - sms_autofill (0.0.1):
     - Flutter
 
@@ -112,6 +114,7 @@ DEPENDENCIES:
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
 
 SPEC REPOS:
@@ -152,6 +155,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/onesignal_flutter/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sms_autofill:
     :path: ".symlinks/plugins/sms_autofill/ios"
 
@@ -177,6 +182,7 @@ SPEC CHECKSUMS:
   OneSignalXCFramework: 0b85a8d949247f80809a9d5598200cc263591129
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
+  sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
   sms_autofill: b36b2147535657fea83d7f3898d7831de70bd8e4
 
 PODFILE CHECKSUM: c46de86f59a49cbe9cadcdff6cfc66fd9c59c1c7

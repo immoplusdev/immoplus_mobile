@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 // import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
@@ -27,7 +28,8 @@ class _DetailLogmentMapState extends State<DetailLogmentMap> {
   Widget build(BuildContext context) {
     return (widget.residence.position != null)
         ? SliverPadding(
-            padding: const EdgeInsets.all(8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: appPadding, vertical: 8),
             sliver: SliverToBoxAdapter(
               child: SizedBox(
                 height: 300,

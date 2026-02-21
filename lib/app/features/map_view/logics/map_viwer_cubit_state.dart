@@ -14,8 +14,28 @@ class MapViwerCubitState {
     this.polygons = const [],
     this.polyline = const [],
     this.searchIsFocus = false,
-    this.zoom = 11.6,
+    this.zoom = 13,
     this.initialPosition = const LatLng(5.365162, -4.000802),
     this.isLoading = false,
   });
+
+  MapViwerCubitState copyWith({
+    bool? isLoading,
+    bool? searchIsFocus,
+    List<Marker>? markers,
+    List<Polygon>? polygons,
+    List<Polyline>? polyline,
+    double? zoom,
+    LatLng? initialPosition,
+  }) {
+    return MapViwerCubitState(
+      isLoading: isLoading ?? this.isLoading,
+      searchIsFocus: searchIsFocus ?? this.searchIsFocus,
+      markers: markers ?? this.markers,
+      polygons: polygons ?? this.polygons,
+      polyline: polyline ?? this.polyline,
+      zoom: zoom ?? this.zoom,
+      initialPosition: initialPosition ?? this.initialPosition,
+    );
+  }
 }

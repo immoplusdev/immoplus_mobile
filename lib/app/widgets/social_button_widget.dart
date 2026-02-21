@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,27 +48,23 @@ class SocialLoginButtons extends StatelessWidget {
             },
             child: SvgPicture.asset(
               'assets/svgs/icons/google.svg',
-              width: 70,
+              width: 30,
             ),
           ),
 
           // Bouton Apple
-          // _SocialButton(
-          //   backgroundColor: Colors.black,
-          //   onPressed: () {
-          //     CustomPopup.toast(
-          //       text:
-          //           "La connexion via Apple n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-          //       toastPosition: EasyLoadingToastPosition.bottom,
-          //       color: AppColors.primary,
-          //     );
-          //   },
-          //   child: const Icon(
-          //     FontAwesomeIcons.apple,
-          //     color: Colors.white,
-          //     size: 40,
-          //   ),
-          // ),
+          if (Platform.isIOS)
+            _SocialButton(
+              backgroundColor: Colors.black,
+              onPressed: () => context.read<LoginCubit>().signInWithApple(),
+              child: Center(
+                child: const Icon(
+                  FontAwesomeIcons.apple,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
         ],
       ),
     );
