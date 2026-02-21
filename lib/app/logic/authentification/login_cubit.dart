@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -317,10 +318,19 @@ class LoginCubit extends Cubit<LoginCubitState> {
         provider: SocialProviderEnum.apple.value,
       );
 
+      final emailFromToken =
+          credential.email ?? _extractEmailFromToken(credential.identityToken);
+      if (emailFromToken == null) {
+        CustomPopup.showErrorToast(
+            text: "Impossible d'obtenir votre adresse email");
+        emit(const LoginCubitState.initial());
+        return;
+      }
+
       final body = SocialLoginBody(
         provider: SocialProviderEnum.apple.value,
         token: credential.identityToken ?? '',
-        email: credential.email ?? '',
+        email: emailFromToken,
         source: AccountSource.customerApp.value,
       );
 
@@ -338,6 +348,21 @@ class LoginCubit extends Cubit<LoginCubitState> {
       CustomPopup.showErrorToast(
           text: 'Erreur lors de la connexion avec Apple');
       emit(const LoginCubitState.initial());
+    }
+  }
+
+  String? _extractEmailFromToken(String? identityToken) {
+    if (identityToken == null) return null;
+    try {
+      final parts = identityToken.split('.');
+      if (parts.length < 2) return null;
+      final payload = utf8.decode(
+        base64Url.decode(base64Url.normalize(parts[1])),
+      );
+      final Map<String, dynamic> data = jsonDecode(payload);
+      return data['email'] as String?;
+    } catch (_) {
+      return null;
     }
   }
 

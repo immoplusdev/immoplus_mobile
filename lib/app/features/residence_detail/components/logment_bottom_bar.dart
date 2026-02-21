@@ -23,26 +23,26 @@ class LogmentBottomBar extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: appPadding).copyWith(top: 10),
       child: Row(
         children: [
-          // RichText(
-          //     text: TextSpan(children: [
-          //   TextSpan(
-          //     text:
-          //         "${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F",
-          //     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-          //           fontSize: 28,
-          //           fontWeight: FontWeight.bold,
-          //           color: AppColors.primary,
-          //         ),
-          //   ),
-          //   TextSpan(
-          //     text: '/nuitée',
-          //     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-          //           color: Colors.grey.shade800,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //   )
-          // ])),
-          // Gap(10),
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text:
+                  "${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F",
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+            ),
+            TextSpan(
+              text: '/nuitée',
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Colors.grey.shade800,
+                    fontWeight: FontWeight.bold,
+                  ),
+            )
+          ])),
+          Gap(10),
           Expanded(
             child: ElevatedButton(
               onPressed: () {
@@ -56,7 +56,7 @@ class LogmentBottomBar extends StatelessWidget {
                               residenceModel: residenceModel)));
                 }
               },
-              child: const Text('Réserver'),
+              child: FittedBox(child: const Text('Réserver')),
             ),
           ),
         ],

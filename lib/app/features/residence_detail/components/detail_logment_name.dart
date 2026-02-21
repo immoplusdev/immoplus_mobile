@@ -16,61 +16,34 @@ class DetailLogmentName extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: appPadding)
             .copyWith(top: 15, bottom: 10),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AutoSizeText(
-                    residenceModel.nom,
-                    maxLines: 2,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Row(
-                    children: [
-                      const ImmoIcon(
-                        ImmoIcons.marker,
-                        size: 10,
-                      ),
-                      const Gap(3),
-                      Expanded(
-                        child: Text(
-                          maxLines: maxLineAdress,
-                          overflow: TextOverflow.clip,
-                          residenceModel.adresse,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(color: Colors.grey.shade600),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            AutoSizeText(
+              residenceModel.nom,
+              maxLines: 2,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                text:
-                    "${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-              ),
-              TextSpan(
-                text: '/nuitée',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.grey.shade800,
-                      fontWeight: FontWeight.bold,
-                    ),
-              )
-            ])),
-            const Gap(8),
+            Row(
+              children: [
+                const ImmoIcon(
+                  ImmoIcons.marker,
+                  size: 10,
+                ),
+                const Gap(3),
+                Expanded(
+                  child: Text(
+                    maxLines: maxLineAdress,
+                    overflow: TextOverflow.clip,
+                    residenceModel.adresse,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.grey.shade600),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
