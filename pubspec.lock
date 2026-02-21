@@ -473,6 +473,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.8"
+  ez_circle_avatar:
+    dependency: "direct main"
+    description:
+      name: ez_circle_avatar
+      sha256: "11ffd3c952d95b0bcd28e96860f59cf99ffb19333c35160c979d29593fb47ddc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   facebook_auth_desktop:
     dependency: transitive
     description:

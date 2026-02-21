@@ -1,26 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
+import 'package:immoplus/app/features/account/widgets/delete_account_dialog.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
+import 'package:immoplus/app/features/account/widgets/logout_confirm_dialog.dart';
+import 'package:immoplus/app/features/account/widgets/open_settings_dialog.dart';
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
+import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
-import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart';
-import 'package:immoplus/app/logic/authentification/delete_account_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:immoplus/app/utils/contact_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// Design tokens — minimalist luxury, 2026
+const Color _kIconBg = Color(0xFFF2F2F2);
+const Color _kIconColor = Color(0xFF374151);
+const Color _kLabelColor = Color(0xFF0D0D0D);
+const Color _kSectionColor = Color(0xFF64748B);
+const Color _kTrailingColor = Color(0xFF374151);
+const Color _kBrandMuted = Color(0xFF9CA3AF); // muted light grey
+const Color _kSocialIcon = Color(0xFF6B7280); // monochromatic grey
 
 class AccountPage extends StatefulWidget {
   AccountPage({super.key});
@@ -37,431 +48,350 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     super.initState();
-
     currentUser = sessionManager.currentUser;
-    if (mounted) {
-      setState(() {});
-    }
+    if (mounted) setState(() {});
   }
 
-  openSetting() {
-    showCupertinoModalPopup<void>(
+  Future<void> _refreshUser() async {
+    await sessionManager.getCurrentUser();
+    currentUser = sessionManager.currentUser;
+    if (mounted) setState(() {});
+  }
+
+  void _showLogoutDialog() {
+    showLogoutConfirmDialog(
+      context,
+      onLogout: sessionManager.logout,
+    );
+  }
+
+  void _openServiceClient() {
+    // TODO: ouvrir lien / téléphone service client
+    ContactUtils.showContact();
+  }
+
+  void _showTermsBottomSheet() {
+    showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      isScrollControlled: true,
+      useRootNavigator: true,
+      showDragHandle: true,
       context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Voulez-vous ouvrir les paramètres ?'),
-        content:
-            Text("Pour voir les permissions veuillez ouvrir les paramètres"),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            /// This parameter indicates this action is the default,
-            /// and turns the action's text to bold text.
-            // isDestructiveAction: true,
-            isDefaultAction: false,
-            onPressed: () {
-              context.pop();
-            },
-            child: const Text('Retour'),
-          ),
-          CupertinoDialogAction(
-            /// This parameter indicates the action would perform
-            /// a destructive action such as deletion, and turns
-            /// the action's text color to red.
-            isDefaultAction: true,
-            onPressed: () {
-              context.pop();
-              openAppSettings();
-            },
-            child: const Text('Paramètre'),
-          ),
-        ],
+      builder: (context) => const FractionallySizedBox(
+        heightFactor: 0.9,
+        child: GeneralConditionPage(),
       ),
+    );
+  }
+
+  /// Icône centrée dans un conteneur 40×40 gris doux, trait fin (monochrome).
+  Widget _iconLeading(Widget icon) {
+    return Container(
+      width: SettingsTile.kIconContainerSize,
+      height: SettingsTile.kIconContainerSize,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: _kIconBg,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: icon,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return currentUser == null
-        ? const AuthenticationPage()
-        : Scaffold(
-            backgroundColor: Colors.white,
-            body: Padding(
-              padding: const EdgeInsets.all(appPadding),
-              child: CustomScrollView(
-                slivers: [
-                  // Header Section
-                  const SliverGap(45),
-                  ProfileHearder(
-                    currentUser: currentUser,
-                  ),
-                  const SliverGap(18),
-                  // List Sections
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              20,
-                            ),
-                            topRight: Radius.circular(20)),
-                      ),
-                      tileColor: AppColors.scafold,
-                      onTap: () async {
-                        await context.pushNamed(EditAccountPage.name);
-                        await sessionManager.getCurrentUser();
+    if (currentUser == null) {
+      return const AuthenticationPage();
+    }
 
-                        currentUser = sessionManager.currentUser;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(appPadding),
+        child: CustomScrollView(
+          slivers: [
+            const SliverGap(20),
+             SliverAppBar(
+      expandedHeight: 20.0, // Définit la hauteur de la barre lorsqu'elle est étendue [2]
+      pinned: true,          // Permet de garder la barre visible en haut de l'écran lors du défilement [3, 4]
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text("Profile"), // Le nom "Profil" est défini ici [2, 5]
+        centerTitle: true,    // Par défaut à true, permet de centrer le titre [5]
+      ),
+    ),
+            ProfileHearder(
+              currentUser: currentUser,
+              onServiceClientPressed: _openServiceClient,
+            ),
+            const SliverGap(32),
+            _sectionTitle('COMPTE'),
+            _buildFirstGroup(context),
+            const SliverGap(28),
+            _sectionTitle('ACTIVITÉ ET PAIEMENTS'),
+            _buildSecondGroup(context),
+            const SliverGap(28),
+            _sectionTitle('SESSION'),
+            _buildLogoutTile(context),
+            const SliverGap(40),
+            _buildDeleteAccountAction(context),
+            const SliverGap(56),
+            _buildBrandSignature(),
+            const SliverGap(20),
+            _buildSocialRow(),
+            const SliverGap(32),
+          ],
+        ),
+      ),
+    );
+  }
 
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      },
-                      horizontalTitleGap: 0,
-                      leading: Icon(
-                        CupertinoIcons.person,
-                        color: Colors.amber.shade800,
-                      ),
-                      title: const Text('Informations personnelles '),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: AppColors.scafold,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(
-                            20,
-                          ),
-                          bottomLeft: Radius.circular(
-                            20,
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        context.pushNamed(ChangePassword.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.lock,
-                        color: Colors.blue,
-                        size: 20,
-                      ),
-                      title: const Text('Changer mon mot de passe'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  //
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              20,
-                            ),
-                            topRight: Radius.circular(20)),
-                      ),
-                      tileColor: AppColors.scafold,
-                      onTap: () {
-                        showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          isScrollControlled: true,
-                          useRootNavigator: true,
-                          showDragHandle: true,
-                          context: context,
-                          builder: (context) => const FractionallySizedBox(
-                              heightFactor: 0.9, child: GeneralConditionPage()),
-                        );
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        CupertinoIcons.text_alignleft,
-                        color: Colors.black,
-                      ),
+  /// Signature de marque centrée, typo élégante gris doux.
+  Widget _buildBrandSignature() {
+    return SliverToBoxAdapter(
+      child: Center(
+        child: Text(
+          '@Afriq\'Solus',
+          style: GoogleFonts.dmSans(
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+            color: _kBrandMuted,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
 
-                      // Icon(
-                      //   FontAwesomeIcons.key,
-                      //   color: AppColors.primary,
-                      //   size: 20,
-                      // ),
-                      title: const Text('Termes et conditions'),
+  /// Ligne d’icônes sociales minimalistes, monochrome, trait fin.
+  Widget _buildSocialRow() {
+    return SliverToBoxAdapter(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _socialIcon(FontAwesomeIcons.instagram, () => _openUrl('https://www.instagram.com/immoplus_lapp')),
+          const SizedBox(width: 28),
+          _socialIcon(FontAwesomeIcons.tiktok, () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
+          // const SizedBox(width: 28),
+          // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
+          const SizedBox(width: 28),
+          _socialIcon(FontAwesomeIcons.facebook, () => _openUrl('https://www.facebook.com/profile.php?id=61584464421569')),
+        ],
+      ),
+    );
+  }
 
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: AppColors.scafold,
-                      onTap: openSetting,
-                      horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.gears,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                      title: const Text('Permissions'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: AppColors.scafold,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(
-                            20,
-                          ),
-                          bottomLeft: Radius.circular(
-                            20,
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        context.pushNamed(NotificationsPage.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.bell,
-                        color: Colors.orange,
-                        size: 20,
-                      ),
-                      title: const Text('Notification'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  //
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              20,
-                            ),
-                            topRight: Radius.circular(20)),
-                      ),
-                      tileColor: AppColors.scafold,
-                      onTap: () {
-                        context.pushNamed(BookingHistoryPage.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.doorOpen,
-                        color: Colors.deepPurpleAccent,
-                        size: 20,
-                      ),
-                      title: const Text('Historiques des réservations'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
+  Widget _socialIcon(IconData icon, VoidCallback onTap) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(icon, size: 22, color: _kSocialIcon),
+        ),
+      ),
+    );
+  }
 
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: AppColors.scafold,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(
-                            20,
-                          ),
-                          bottomLeft: Radius.circular(
-                            20,
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        context.pushNamed(VisitHistoryPage.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.personWalkingLuggage,
-                        color: Colors.purple,
-                      ),
-                      title: const Text('Historiques des visites'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  //
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: AppColors.scafold,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      onTap: () {
-                        context.pushNamed(PaymentHistoryPage.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.moneyBills,
-                        color: Colors.green,
-                        size: 20,
-                      ),
-                      title: const Text('Paiements'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 
-                  const SliverGap(15),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: AppColors.scafold,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      onTap: () {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: false, // user must tap button!
-                          builder: (BuildContext context) {
-                            return CupertinoAlertDialog(
-                              title: const SizedBox(
-                                child: Center(
-                                  child: Icon(
-                                    Icons.exit_to_app_rounded,
-                                    size: 60,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                              content: const Text(
-                                  'Souhaitez vous vous déconnecter ?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text(
-                                    'Annuler',
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text(
-                                    'Se déconnecter',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                  onPressed: () async {
-                                    await sessionManager.logout();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.rightFromBracket,
-                        color: Colors.red,
-                        size: 20,
-                      ),
-                      title: const Text('Se déconnecter'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                  const SliverGap(20),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      //tileColor: AppColors.scafold,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      onTap: () {
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (BuildContext dialogContext) {
-                            return BlocProvider(
-                              create: (context) => DeleteAccountCubit(),
-                              child: BlocConsumer<DeleteAccountCubit,
-                                  DeleteAccountState>(
-                                listener: (context, state) {},
-                                builder: (context, state) {
-                                  return CupertinoAlertDialog(
-                                    title: const Text('Suppression de compte'),
-                                    content: const Text(
-                                      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
-                                    ),
-                                    actions: <Widget>[
-                                      CupertinoDialogAction(
-                                        isDefaultAction: true,
-                                        onPressed: () {
-                                          Navigator.of(dialogContext).pop();
-                                        },
-                                        child: const Text('Annuler'),
-                                      ),
-                                      CupertinoDialogAction(
-                                        isDestructiveAction: true,
-                                        onPressed: state.maybeWhen(
-                                          loading: () => null,
-                                          orElse: () => () {
-                                            context
-                                                .read<DeleteAccountCubit>()
-                                                .deleteAccount();
-                                          },
-                                        ),
-                                        child: state.maybeWhen(
-                                          loading: () =>
-                                              const CupertinoActivityIndicator(),
-                                          orElse: () =>
-                                              const Text('Oui, supprimer'),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      horizontalTitleGap: 0,
-                      leading: const Icon(
-                        FontAwesomeIcons.userXmark,
-                        color: Colors.red,
-                        size: 20,
-                      ),
-                      title: const Text('Supprimer mon compte'),
-                    ),
-                  ),
-                ],
+  Widget _sectionTitle(String title) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, bottom: 10),
+        child: Text(
+          title,
+          style: GoogleFonts.dmSans(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: _kSectionColor,
+            letterSpacing: 1.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFirstGroup(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        SettingsTile(
+          shape: SettingsTile.shapeFirst,
+          leading: _iconLeading(Icon(CupertinoIcons.person, size: 20, color: _kIconColor)),
+          title: 'Informations personnelles',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () async {
+            await context.pushNamed(EditAccountPage.name);
+            await _refreshUser();
+          },
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(Icon(FontAwesomeIcons.lock, size: 18, color: _kIconColor)),
+          title: 'Changer mon mot de passe',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(ChangePassword.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(Icon(CupertinoIcons.text_alignleft, size: 20, color: _kIconColor)),
+          title: 'Termes et conditions',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: _showTermsBottomSheet,
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeLast,
+          leading: _iconLeading(Icon(FontAwesomeIcons.gears, size: 18, color: _kIconColor)),
+          title: 'Permissions',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => showOpenSettingsDialog(context),
+        ),
+      ]),
+    );
+  }
+
+  Widget _buildSecondGroup(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        SettingsTile(
+          shape: SettingsTile.shapeFirst,
+          leading: _iconLeading(Icon(FontAwesomeIcons.bell, size: 18, color: _kIconColor)),
+          title: 'Notification',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(NotificationsPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(Icon(FontAwesomeIcons.doorOpen, size: 18, color: _kIconColor)),
+          title: 'Historiques des réservations',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(BookingHistoryPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(Icon(FontAwesomeIcons.personWalkingLuggage, size: 18, color: _kIconColor)),
+          title: 'Historiques des visites',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(VisitHistoryPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeLast,
+          leading: _iconLeading(Icon(FontAwesomeIcons.moneyBills, size: 18, color: _kIconColor)),
+          title: 'Paiements',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(PaymentHistoryPage.name),
+        ),
+      ]),
+    );
+  }
+
+  /// Tuile Déconnexion (section SESSION).
+  Widget _buildLogoutTile(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        SettingsTile(
+          shape: SettingsTile.shapeSingle,
+          leading: _iconLeading(Icon(FontAwesomeIcons.arrowRightFromBracket, size: 18, color: _kIconColor)),
+          title: 'Déconnexion',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: _showLogoutDialog,
+        ),
+      ]),
+    );
+  }
+
+  /// Bouton « Supprimer mon compte » : texte bordeaux discret, pas de fond.
+  Widget _buildDeleteAccountAction(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => showDeleteAccountDialog(context),
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Center(
+              child: Text(
+                'Supprimer mon compte',
+                style: GoogleFonts.dmSans(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red,
+                ),
               ),
             ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 }
