@@ -14,7 +14,7 @@ class DetailLogmentName extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8)
+        padding: const EdgeInsets.symmetric(horizontal: appPadding)
             .copyWith(top: 15, bottom: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -34,6 +34,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SocialLoginUser {
   final String? firstName;
@@ -295,6 +296,47 @@ class LoginCubit extends Cubit<LoginCubitState> {
     } catch (e) {
       CustomPopup.showErrorToast(
           text: 'Erreur lors de la connexion avec Facebook');
+      emit(const LoginCubitState.initial());
+    }
+  }
+
+  Future<void> signInWithApple() async {
+    emit(const LOGIN_LOADING());
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      socialLoginUser = SocialLoginUser(
+        firstName: credential.givenName,
+        lastName: credential.familyName,
+        email: credential.email ?? '',
+        provider: SocialProviderEnum.apple.value,
+      );
+
+      final body = SocialLoginBody(
+        provider: SocialProviderEnum.apple.value,
+        token: credential.identityToken ?? '',
+        email: credential.email ?? '',
+        source: AccountSource.customerApp.value,
+      );
+
+      await _performSocialLogin(body);
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        emit(const LoginCubitState.initial());
+        return;
+      }
+      CustomPopup.showErrorToast(
+          text: 'Erreur lors de la connexion avec Apple');
+      emit(const LoginCubitState.initial());
+    } catch (e, s) {
+      log('Error Apple Sign-In: $e', stackTrace: s);
+      CustomPopup.showErrorToast(
+          text: 'Erreur lors de la connexion avec Apple');
       emit(const LoginCubitState.initial());
     }
   }
