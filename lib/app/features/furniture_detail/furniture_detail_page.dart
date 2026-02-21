@@ -70,7 +70,6 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                     ),
                   ),
                 ),
-  
                 FurnitureDetailVideo(furnitureModel: furniture),
                 const DetailDivider(),
                 const SliverGap(10),
@@ -89,7 +88,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
 
         if (state is FURNITURE_ERROR) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Erreur')),
+            appBar: AppBar(title: const Text('Détails')),
             body: Center(child: Text(state.error)),
           );
         }

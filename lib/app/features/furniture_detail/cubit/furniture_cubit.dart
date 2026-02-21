@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_response.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
@@ -17,7 +18,11 @@ class FurnitureCubit extends Cubit<FurnitureState> {
       FurnitureResponse furnitureResponse =
           await furnitureRepository.getFurniture(id);
 
-      emit(FurnitureState.data(data: furnitureResponse.data ?? FurnitureModel()));
+      emit(FurnitureState.data(
+          data: furnitureResponse.data ?? FurnitureModel()));
+    } on DioException catch (dioError) {
+      final error = dioError.response?.data;
+      emit(FurnitureState.error(error: error['message'] ?? ""));
     } catch (e) {
       emit(FurnitureState.error(error: e.toString()));
     }
