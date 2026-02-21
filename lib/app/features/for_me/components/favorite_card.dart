@@ -4,171 +4,231 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
+import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/widgets/custom_chip.dart';
-import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 import 'package:shimmer/shimmer.dart';
+
+// White Luxury — cartes claires, pas de fond noir
+const Color _kSurface = Color(0xFFF9FAFB);
+const Color _kGold = Color(0xFF2744de);
+const Color _kTextPrimary = Color(0xFF0A1128);
+const Color _kTextSecondary = Color(0xFF6B7280);
+const Color _kSeparator = Color(0xFFE5E7EB);
+const Color _kTagBg = Color(0x26C9A84C); // rgba(201, 168, 76, 0.15)
 
 class FavoriteCard extends StatefulWidget {
   final bool isSelect;
-  const FavoriteCard(
-      {super.key, required this.favotiteModel, required this.isSelect});
+  const FavoriteCard({
+    super.key,
+    required this.favotiteModel,
+    required this.isSelect,
+  });
   final FovoriteModel favotiteModel;
+
   @override
   State<FavoriteCard> createState() => _FavoriteCardState();
 }
 
 class _FavoriteCardState extends State<FavoriteCard> {
+  static const double _imageWidth = 140;
+  static const double _imageHeight = 160;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(20),
       onTap: () {
         Constantes.tempPage = Utils.getCurrentLocation();
         context.push(widget.favotiteModel.destination!);
       },
       child: Container(
-        padding: const EdgeInsets.all(8),
-        height: 150,
+        height: 160,
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.scafold,
-          border: widget.isSelect
-              ? Border.all(
-                  color: Theme.of(context).colorScheme.primary, width: 2)
-              : null,
-          borderRadius: BorderRadius.circular(30),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.primary.withOpacity(0.05), width: 1),
           // boxShadow: [
           //   BoxShadow(
-          //     blurRadius: 3,
-          //     spreadRadius: 1,
-          //     color: Colors.grey.shade300,
+          //     color: Colors.black.withOpacity(0.06),
+          //     blurRadius: 24,
+          //     offset: const Offset(0, 4),
+          //     spreadRadius: 0,
           //   ),
           // ],
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            _buildImageSection(),
+            const SizedBox(width: 14),
             Expanded(
-                child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                //height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Stack(
-                  children: [
-                    CachedNetworkImage(
-                      width: double.infinity,
-                      imageUrl: Utils.getImagePath(
-                          id: widget.favotiteModel.images!.first),
-                      placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
-                        period: const Duration(milliseconds: 500),
-                        child: Container(
-                          color: Colors.white,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => SizedBox(
-                        height: double.infinity,
-                        child: Center(
-                          child: Icon(
-                            FontAwesomeIcons.images,
-                            size: 100,
-                            color: Colors.grey.shade400,
-                          ),
-                        ),
-                      ),
-                      fit: BoxFit.cover, // Ajuste l'image au conteneur
-                    ),
-                    // Positioned(
-                    //   left: 10,
-                    //   top: 8,
-                    //   child: ValueListenableBuilder(
-                    //     valueListenable: _liked,
-                    //     builder: (context, value, child) => GestureDetector(
-                    //       onTap: () {
-                    //         _liked.value = !value;
-                    //       },
-                    //       child: CircleAvatar(
-                    //         radius: 14,
-                    //         backgroundColor:
-                    //             value ? Colors.red : Colors.grey.shade300,
-                    //         child: const Icon(
-                    //           FontAwesomeIcons.solidHeart,
-                    //           size: 16,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    Positioned(
-                      left: 10,
-                      bottom: 10,
-                      child: CustomChip(
-                        label: widget.favotiteModel.type!,
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
-                        backgroundColor: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )),
-            Expanded(
-                child: Container(
-              margin: const EdgeInsets.only(left: 10),
-              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AutoSizeText(
-                    widget.favotiteModel.name!,
+                    widget.favotiteModel.name?.capitalizeWords() ?? '',
                     maxLines: 3,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.grey.shade600),
+                    style: GoogleFonts.dmSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: _kTextPrimary,
+                      height: 1.25,
+                    ),
                   ),
                   const Gap(8),
-                  const RatingComponent(rating: 5),
-                  const Gap(5),
-                  Flexible(
-                    child: Row(
-                      children: [
-                        const ImmoIcon(
-                          ImmoIcons.marker,
-                          color: Colors.black,
-                          size: 10,
-                        ),
-                        const Gap(3),
-                        Expanded(
-                          child: Text(
-                            maxLines: 1,
-                            overflow: TextOverflow.clip,
-                            widget.favotiteModel.adress!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: Colors.grey.shade600),
+                  _buildRating(),
+                  const Gap(8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on_outlined,
+                        size: 14,
+                        color: _kTextSecondary,
+                      ),
+                      const Gap(4),
+                      Expanded(
+                        child: Text(
+                          widget.favotiteModel.adress ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.dmSans(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: _kTextSecondary,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            )),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildImageSection() {
+    return SizedBox(
+      width: _imageWidth,
+      height: _imageHeight,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (widget.favotiteModel.images != null &&
+                widget.favotiteModel.images!.isNotEmpty)
+              CachedNetworkImage(
+                imageUrl: Utils.getImagePath(
+                  id: widget.favotiteModel.images!.first,
+                ),
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: _kSeparator,
+                  highlightColor: _kSurface,
+                  period: const Duration(milliseconds: 500),
+                  child: Container(color: _kSeparator),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: _kSeparator,
+                  child: Icon(
+                    FontAwesomeIcons.images,
+                    size: 36,
+                    color: _kTextSecondary,
+                  ),
+                ),
+                fit: BoxFit.cover,
+              )
+            else
+              Container(
+                color: _kSeparator,
+                child: Icon(
+                  FontAwesomeIcons.images,
+                  size: 36,
+                  color: _kTextSecondary,
+                ),
+              ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 48,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.2),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 8,
+              bottom: 8,
+              child: CustomChip(
+                        label: widget.favotiteModel.type!,
+                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        backgroundColor: Colors.white,
+                      ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Tag type (maison/villa): pill, gold border, gold text, bg transparent (rgba gold 0.15).
+  Widget _buildTypeTag(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        // border: Border.all(color: _kGold, width: 1),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.dmSans(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  /// Rating: star #C9A84C, 14px weight 600.
+  Widget _buildRating() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(
+          FontAwesomeIcons.solidStar,
+          color: Colors.orange,
+          size: 14,
+        ),
+        const Gap(4),
+        Text(
+          '5.0',
+          style: GoogleFonts.dmSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: _kTextSecondary,
+          ),
+        ),
+      ],
     );
   }
 }
