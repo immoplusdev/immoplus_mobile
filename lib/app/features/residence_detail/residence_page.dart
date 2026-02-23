@@ -124,10 +124,10 @@ class _ResidencePageState extends State<ResidencePage>
                   ),
                   const SliverGap(10),
                   // const DetailDivider(),
-                  const DetailLogmentTitle2(title: 'Jours disponibles'),
-                  DetailLogmentAvailableDay(
-                    reservation: state.data,
-                  ),
+                  // const DetailLogmentTitle2(title: 'Jours disponibles'),
+                  // DetailLogmentAvailableDay(
+                  //   reservation: state.data,
+                  // ),
                   const DetailLogmentTitle2(
                       title: 'Ce que propose ce logement'),
                   //offer list
