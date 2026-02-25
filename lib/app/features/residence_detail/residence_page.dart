@@ -7,7 +7,6 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_divider.dart';
-import 'package:immoplus/app/features/residence_detail/components/detail_logment_available_day.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_title2.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_rooms.dart';
 import 'package:immoplus/app/features/residence_detail/components/inititial_detail_screen.dart';

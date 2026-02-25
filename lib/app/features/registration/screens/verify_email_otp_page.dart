@@ -32,6 +32,7 @@ class VerifyEmailOtpPage extends StatefulWidget {
   final PageController? pageController;
 
   static const name = 'VERIFY_EMAIL_OTP';
+  static String routePath() => '/verify-email-otp';
 
   @override
   State<VerifyEmailOtpPage> createState() => _VerifyEmailOtpPageState();
@@ -70,24 +71,10 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
     setState(() => _isLoading = false);
 
     if (resp is VerifyEmailResponse) {
-      // Succès : navigation
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text('Email vérifié avec succès.'),
-      //     backgroundColor: Colors.green,
-      //   ),
-      // );
       context.pushReplacementNamed(CustomerRegistration.name,
           extra: DataRouterRegistration(
               email: resp.data.email.toString(),
               token: resp.data.token.toString()));
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(
-      //       builder: (context) => CustomerRegistration(
-      //           email: resp.data.email.toString(),
-      //           token: resp.data.token.toString()),
-      //     ),
-      //     (route) => false);
     } else {
       // Échec : feedback
       ScaffoldMessenger.of(context).showSnackBar(

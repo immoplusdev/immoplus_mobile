@@ -187,42 +187,6 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         ),
                       ),
                     ),
-                    const SliverToBoxAdapter(
-                      child: Divider(),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(bottom: 10),
-                        child: Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(20),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            enabled: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            leading: Icon(
-                              FontAwesomeIcons.headset,
-                              color: AppColors.primary,
-                            ),
-                            title: const Text("Contacter nous"),
-                            titleTextStyle: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: AppColors.primary),
-                            trailing: Icon(
-                              CupertinoIcons.chevron_right_circle_fill,
-                              color: AppColors.primary,
-                            ),
-                            onTap: () async {
-                              ContactUtils.showContact(id: widget.id);
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10)
@@ -352,6 +316,42 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           ),
                         ),
                       ),
+                    const SliverToBoxAdapter(
+                      child: Divider(),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)
+                            .copyWith(bottom: 10),
+                        child: Material(
+                          elevation: 2,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            enabled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            leading: Icon(
+                              FontAwesomeIcons.headset,
+                              color: AppColors.primary,
+                            ),
+                            title: const Text("Service client"),
+                            titleTextStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: AppColors.primary),
+                            trailing: Icon(
+                              CupertinoIcons.chevron_right_circle_fill,
+                              color: AppColors.primary,
+                            ),
+                            onTap: () async {
+                              ContactUtils.showContact(id: widget.id);
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

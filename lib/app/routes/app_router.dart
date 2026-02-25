@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
@@ -35,6 +40,8 @@ import 'package:immoplus/app/features/residence_detail/residences_user_page.dart
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/force_update_required_page.dart';
+import 'package:immoplus/app/logic/authentification/login_cubit.dart';
+import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 
@@ -67,23 +74,100 @@ class AppRouter {
         name: PaymentHistoryPage.name,
         builder: (context, state) => const PaymentHistoryPage(),
       ),
-      GoRoute(
-        path: '/login_page',
-        name: LoginPage.name,
-        builder: (context, state) => const LoginPage(),
-      ),
-      GoRoute(
-        path: '/${RegisterPage.name}',
-        name: RegisterPage.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return const RegisterPage();
+      // ShellRoute auth — sans navigatorKey, sans UI wrapper
+      ShellRoute(
+        builder: (context, state, child) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<LoginCubit>()),
+              BlocProvider(create: (_) => getIt<RgistrationCubitCubit>()),
+            ],
+            child: child,
+          );
         },
+        routes: [
+          GoRoute(
+            path: '/${AuthenticationPage.name}',
+            name: AuthenticationPage.name,
+            builder: (context, state) => AuthenticationPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
+          ),
+          GoRoute(
+            path: LoginPage.routePath(),
+            name: LoginPage.name,
+            builder: (context, state) => const LoginPage(),
+          ),
+          GoRoute(
+            path: '/${RegisterPage.name}',
+            name: RegisterPage.name,
+            builder: (context, state) => const RegisterPage(),
+          ),
+          GoRoute(
+            path: SendEmailOptPage.routePath(),
+            name: SendEmailOptPage.name,
+            builder: (context, state) => const SendEmailOptPage(),
+          ),
+          GoRoute(
+            path: VerifyEmailOtpPage.routePath(),
+            name: VerifyEmailOtpPage.name,
+            builder: (context, state) => VerifyEmailOtpPage(
+              email: state.extra as String,
+            ),
+          ),
+          GoRoute(
+            path: CustomerRegistration.routePath(),
+            name: CustomerRegistration.name,
+            builder: (context, state) => CustomerRegistration(
+              data: state.extra as DataRouterRegistration,
+            ),
+          ),
+        ],
       ),
-      GoRoute(
-        path: '/${AuthenticationPage.name}',
-        name: AuthenticationPage.name,
-        builder: (context, state) => const AuthenticationPage(),
-      ),
+      // GoRoute(
+      //   path: '/login_page',
+      //   name: LoginPage.name,
+      //   builder: (context, state) => LoginPage(
+      //     redirectData: state.extra as AuthRedirectData?,
+      //   ),
+      // ),
+      // GoRoute(
+      //   path: '/${RegisterPage.name}',
+      //   name: RegisterPage.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const RegisterPage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/${AuthenticationPage.name}',
+      //   name: AuthenticationPage.name,
+      //   builder: (context, state) => AuthenticationPage(
+      //     redirectData: state.extra as AuthRedirectData?,
+      //   ),
+      // ),
+      // GoRoute(
+      //   path: '/send-email-otp',
+      //   name: SendEmailOptPage.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const SendEmailOptPage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/verify-email-otp',
+      //   name: VerifyEmailOtpPage.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return VerifyEmailOtpPage(email: state.extra as String);
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/registration',
+      //   name: CustomerRegistration.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return CustomerRegistration(
+      //       data: state.extra as DataRouterRegistration,
+      //     );
+      //   },
+      // ),
 
       GoRoute(
         path: '/edit_account',
@@ -310,29 +394,7 @@ class AppRouter {
       //         orderCashModel: state.extra as OrderCashModel,
       //       );
       //     }),
-      GoRoute(
-        path: '/send-email-otp',
-        name: SendEmailOptPage.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return const SendEmailOptPage();
-        },
-      ),
-      GoRoute(
-        path: '/verify-email-otp',
-        name: VerifyEmailOtpPage.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return VerifyEmailOtpPage(email: state.extra as String);
-        },
-      ),
-      GoRoute(
-        path: '/registration',
-        name: CustomerRegistration.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return CustomerRegistration(
-            data: state.extra as DataRouterRegistration,
-          );
-        },
-      ),
+
       GoRoute(
         path: '/${NotificationsPage.name}',
         name: NotificationsPage.name,

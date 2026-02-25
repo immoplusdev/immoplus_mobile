@@ -20,13 +20,6 @@ class AppBlocs {
     BlocProvider<LoginCubit>(
       create: (context) => getIt<LoginCubit>(),
     ),
-
-    // BlocProvider<GalleryCubit>(
-    //   create: (context) => GalleryCubit(),
-    // ),
-    // BlocProvider<ProductCubit>(
-    //   create: (context) => ProductCubit(),
-    // ),
     BlocProvider<RgistrationCubitCubit>(
       create: (context) => getIt<RgistrationCubitCubit>(),
     ),

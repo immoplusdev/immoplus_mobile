@@ -44,6 +44,7 @@ class CustomerRegistration extends StatefulWidget {
   final DataRouterRegistration data;
 
   static String name = "customer_Registration";
+  static String routePath() => '/registration';
 
   @override
   State<CustomerRegistration> createState() => _CustomerRegistrationState();
@@ -81,227 +82,220 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<RgistrationCubitCubit>(),
-      child: Form(
-        key: _formKey,
-        child: CustomPageImmo(
-          title: "Création de compte",
-          content: Container(
-            padding: const EdgeInsets.all(appPadding),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  InternationalPhoneInput(
-                    backgroundColor: AppColors.primaryLite,
-                    onValidPhoneNumber: (value) {
-                      print(value);
-                      if (value != _formController.phoneNumber!.text) {
-                        _formController.phoneNumber!.text = value;
-                      }
-                    },
-                    onInputValidated: (p0) {},
-                    validator: (String? value) =>
-                        FormUtils.numberValidator(number: value),
-                  ),
-                  Gap(10),
-                  CustomTextField(
-                    isEnabled: false,
-                    controller: _formController.email,
-                    prefixIcon: const Icon(CupertinoIcons.mail),
-                    labelText: 'Email',
-                    textInputType: TextInputType.emailAddress,
-                    validator: (String? value) =>
-                        FormUtils.emailValidator(email: value),
-                  ),
-                  CustomTextField(
-                    controller: _formController.firstName,
-                    prefixIcon: const Icon(FontAwesomeIcons.user),
-                    labelText: "Nom",
-                    validator: (String? value) =>
-                        FormUtils.fieldValidator(value: value),
-                  ),
-                  CustomTextField(
-                    controller: _formController.lastName,
-                    prefixIcon: const Icon(FontAwesomeIcons.user),
-                    labelText: "Prénom",
-                    validator: (String? value) =>
-                        FormUtils.fieldValidator(value: value),
-                  ),
-                  ValueListenableBuilder<bool>(
-                    valueListenable: _passwordNotifier,
-                    builder: (BuildContext context, bool value, child) {
-                      return CustomTextField(
-                        prefixIcon: const Icon(CupertinoIcons.lock),
-                        textInputType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.next,
-                        controller: _formController.password,
-                        obscureText: !value,
-                        sufixIcon: IconButton(
-                          onPressed: () {
-                            _passwordNotifier.value = !value;
-                          },
-                          icon: Icon(
-                            value
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                          ),
+    return Form(
+      key: _formKey,
+      child: CustomPageImmo(
+        title: "Création de compte",
+        content: Container(
+          padding: const EdgeInsets.all(appPadding),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                InternationalPhoneInput(
+                  backgroundColor: AppColors.primaryLite,
+                  onValidPhoneNumber: (value) {
+                    print(value);
+                    if (value != _formController.phoneNumber!.text) {
+                      _formController.phoneNumber!.text = value;
+                    }
+                  },
+                  onInputValidated: (p0) {},
+                  validator: (String? value) =>
+                      FormUtils.numberValidator(number: value),
+                ),
+                Gap(10),
+                CustomTextField(
+                  isEnabled: false,
+                  controller: _formController.email,
+                  prefixIcon: const Icon(CupertinoIcons.mail),
+                  labelText: 'Email',
+                  textInputType: TextInputType.emailAddress,
+                  validator: (String? value) =>
+                      FormUtils.emailValidator(email: value),
+                ),
+                CustomTextField(
+                  controller: _formController.firstName,
+                  prefixIcon: const Icon(FontAwesomeIcons.user),
+                  labelText: "Nom",
+                  validator: (String? value) =>
+                      FormUtils.fieldValidator(value: value),
+                ),
+                CustomTextField(
+                  controller: _formController.lastName,
+                  prefixIcon: const Icon(FontAwesomeIcons.user),
+                  labelText: "Prénom",
+                  validator: (String? value) =>
+                      FormUtils.fieldValidator(value: value),
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: _passwordNotifier,
+                  builder: (BuildContext context, bool value, child) {
+                    return CustomTextField(
+                      prefixIcon: const Icon(CupertinoIcons.lock),
+                      textInputType: TextInputType.visiblePassword,
+                      textInputAction: TextInputAction.next,
+                      controller: _formController.password,
+                      obscureText: !value,
+                      sufixIcon: IconButton(
+                        onPressed: () {
+                          _passwordNotifier.value = !value;
+                        },
+                        icon: Icon(
+                          value
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
                         ),
-                        labelText: 'Mot de passe',
-                        onFieldSubmitted: (_) {
-                          FocusScope.of(context).nextFocus();
+                      ),
+                      labelText: 'Mot de passe',
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).nextFocus();
+                      },
+                      validator: (String? value) =>
+                          FormUtils.passwordValidator(password: value),
+                    );
+                  },
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: _passwordConfirmNotifier,
+                  builder: (BuildContext context, bool value, child) {
+                    return CustomTextField(
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.visiblePassword,
+                      prefixIcon: const Icon(CupertinoIcons.lock),
+                      controller: _formController.passwordConfirm,
+                      obscureText: !value,
+                      sufixIcon: IconButton(
+                        onPressed: () {
+                          _passwordConfirmNotifier.value = !value;
                         },
-                        validator: (String? value) =>
-                            FormUtils.passwordValidator(password: value),
-                      );
-                    },
-                  ),
-                  ValueListenableBuilder<bool>(
-                    valueListenable: _passwordConfirmNotifier,
-                    builder: (BuildContext context, bool value, child) {
-                      return CustomTextField(
-                        textInputAction: TextInputAction.done,
-                        textInputType: TextInputType.visiblePassword,
-                        prefixIcon: const Icon(CupertinoIcons.lock),
-                        controller: _formController.passwordConfirm,
-                        obscureText: !value,
-                        sufixIcon: IconButton(
-                          onPressed: () {
-                            _passwordConfirmNotifier.value = !value;
-                          },
-                          icon: Icon(
-                            value
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                          ),
+                        icon: Icon(
+                          value
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
                         ),
-                        labelText: 'Confirmation du mot de passe',
-                        onFieldSubmitted: (_) {
-                          FocusScope.of(context).unfocus();
-                        },
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Veuillez entrer un mot de passe';
-                          } else if (value != _formController.password!.text) {
-                            return 'Le mot de passe ne correspond pas';
-                          }
-                          return null;
-                        },
-                      );
-                    },
-                  ),
-                  Gap(20),
-                  ValueListenableBuilder<bool>(
-                    valueListenable: _cguNotifier,
-                    builder: (BuildContext context, bool value, child) {
-                      return Row(
-                        children: [
-                          Checkbox(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
-                              value: value,
-                              fillColor: value
-                                  ? WidgetStateProperty.all(
-                                      Theme.of(context).colorScheme.primary)
-                                  : WidgetStateProperty.all(Colors.white),
-                              onChanged: (val) {
-                                _cguNotifier.value = !_cguNotifier.value;
-                              }),
-                          const Text("j'approuve les"),
-                          TextButton(
-                              onPressed: () {
-                                showModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  isScrollControlled: true,
-                                  useRootNavigator: true,
-                                  showDragHandle: true,
-                                  context: context,
-                                  builder: (context) =>
-                                      const FractionallySizedBox(
-                                          heightFactor: 0.9,
-                                          child: GeneralConditionPage()),
-                                );
-                              },
-                              child: Text(
-                                'Termes & conditions',
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              )),
-                          const Gap(10),
-                        ],
-                      );
-                    },
-                  ),
-                  Gap(20),
-                  BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
-                    builder: (context, state) {
-                      return CustomLoadingButtom(
-                        isLoading: (state is REGISTRATION_LOADING),
-                        onClick: ((state is REGISTRATION_LOADING))
-                            ? null
-                            : () async {
-                                if (_formKey.currentState!.validate() &&
-                                    _formController
-                                        .firstName!.text.isNotEmpty) {
-                                  if (!_cguNotifier.value) {
-                                    CustomPopup.toast(
-                                        text:
-                                            "Les Conditions d'utilisation ne sont pas approuvées",
-                                        toastPosition:
-                                            EasyLoadingToastPosition.bottom);
-                                  } else {
-                                    String? fileId;
-                                    try {
-                                      if (fileUploaderControllerPhotoIdentite
-                                              .file !=
-                                          null) {
-                                        CustomPopup.showLoagingToast(
-                                            text: "Envoi de l'image...");
-                                        FileDataModel fileDataModel =
-                                            await fileUploaderControllerPhotoIdentite
-                                                .upladFile();
-                                        fileId = fileDataModel.data!.id;
-                                        EasyLoading.dismiss();
-                                      }
-                                    } catch (e) {
+                      ),
+                      labelText: 'Confirmation du mot de passe',
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Veuillez entrer un mot de passe';
+                        } else if (value != _formController.password!.text) {
+                          return 'Le mot de passe ne correspond pas';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                ),
+                Gap(20),
+                ValueListenableBuilder<bool>(
+                  valueListenable: _cguNotifier,
+                  builder: (BuildContext context, bool value, child) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            value: value,
+                            fillColor: value
+                                ? WidgetStateProperty.all(
+                                    Theme.of(context).colorScheme.primary)
+                                : WidgetStateProperty.all(Colors.white),
+                            onChanged: (val) {
+                              _cguNotifier.value = !_cguNotifier.value;
+                            }),
+                        const Text("j'approuve les"),
+                        TextButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                isScrollControlled: true,
+                                useRootNavigator: true,
+                                showDragHandle: true,
+                                context: context,
+                                builder: (context) =>
+                                    const FractionallySizedBox(
+                                        heightFactor: 0.9,
+                                        child: GeneralConditionPage()),
+                              );
+                            },
+                            child: Text(
+                              'Termes & conditions',
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary),
+                            )),
+                        const Gap(10),
+                      ],
+                    );
+                  },
+                ),
+                Gap(20),
+                BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
+                  builder: (context, state) {
+                    return CustomLoadingButtom(
+                      isLoading: (state is REGISTRATION_LOADING),
+                      onClick: ((state is REGISTRATION_LOADING))
+                          ? null
+                          : () async {
+                              if (_formKey.currentState!.validate() &&
+                                  _formController.firstName!.text.isNotEmpty) {
+                                if (!_cguNotifier.value) {
+                                  CustomPopup.toast(
+                                      text:
+                                          "Les Conditions d'utilisation ne sont pas approuvées",
+                                      toastPosition:
+                                          EasyLoadingToastPosition.bottom);
+                                } else {
+                                  String? fileId;
+                                  try {
+                                    if (fileUploaderControllerPhotoIdentite
+                                            .file !=
+                                        null) {
+                                      CustomPopup.showLoagingToast(
+                                          text: "Envoi de l'image...");
+                                      FileDataModel fileDataModel =
+                                          await fileUploaderControllerPhotoIdentite
+                                              .upladFile();
+                                      fileId = fileDataModel.data!.id;
                                       EasyLoading.dismiss();
                                     }
-
-                                    final body = CustomerRegistrationBody(
-                                        avatar: fileId,
-                                        firstName:
-                                            _formController.firstName!.text,
-                                        lastName:
-                                            _formController.lastName!.text,
-                                        email: _formController.email!.text,
-                                        token: widget.data.token,
-                                        phoneNumber: PhoneNumberHandler
-                                            .formatPhoneNumber(_formController
-                                                .phoneNumber!.text
-                                              ..replaceAll(" ", "")),
-                                        password:
-                                            _formController.password!.text,
-                                        provider: widget.data.provider);
-
-                                    context
-                                        .read<RgistrationCubitCubit>()
-                                        .createCustomerAccount(
-                                          customerRegistrationBody: body,
-                                          //fileID: fileId,
-                                        );
+                                  } catch (e) {
+                                    EasyLoading.dismiss();
                                   }
-                                }
 
-                                //context.go('/homePage');
-                              },
-                        text: "créer mon compte",
-                      );
-                    },
-                  )
-                ],
-              ),
+                                  final body = CustomerRegistrationBody(
+                                      avatar: fileId,
+                                      firstName:
+                                          _formController.firstName!.text,
+                                      lastName: _formController.lastName!.text,
+                                      email: _formController.email!.text,
+                                      token: widget.data.token,
+                                      phoneNumber:
+                                          PhoneNumberHandler.formatPhoneNumber(
+                                              _formController.phoneNumber!.text
+                                                ..replaceAll(" ", "")),
+                                      password: _formController.password!.text,
+                                      provider: widget.data.provider);
+
+                                  context
+                                      .read<RgistrationCubitCubit>()
+                                      .createCustomerAccount(
+                                        customerRegistrationBody: body,
+                                        //fileID: fileId,
+                                      );
+                                }
+                              }
+
+                              //context.go('/homePage');
+                            },
+                      text: "créer mon compte",
+                    );
+                  },
+                )
+              ],
             ),
           ),
         ),

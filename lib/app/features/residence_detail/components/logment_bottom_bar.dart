@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking/booking_formular_action.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
@@ -47,6 +49,17 @@ class LogmentBottomBar extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 if (sessionManager.currentUser == null) {
+                  getIt<AuthRedirectService>().set((
+                    popUntilRouteName: ResidencePage.name,
+                    callback: () => Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (_) => BookingFormularAction(
+                                residenceModel: residenceModel),
+                          ),
+                        ),
+                  ));
+                  // 2. Naviguer sans extra
                   context.pushNamed(AuthenticationPage.name);
                 } else {
                   Navigator.push(

@@ -24,6 +24,7 @@ import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
     as _i415;
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
+import 'package:immoplus/app/core/services/auth_redirect_service.dart' as _i944;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
@@ -87,6 +88,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i242.EnvHandler>(() => _i242.EnvHandler());
     gh.lazySingleton<_i57.RemoteConfigService>(
         () => _i57.RemoteConfigService());
+    gh.lazySingleton<_i944.AuthRedirectService>(
+        () => _i944.AuthRedirectService());
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
     gh.singleton<_i374.FavoriesUtils>(
@@ -126,11 +129,13 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
           gh<_i640.NotificationService>(),
+          gh<_i944.AuthRedirectService>(),
         ));
     gh.factory<_i888.LoginCubit>(() => _i888.LoginCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
           gh<_i640.NotificationService>(),
+          gh<_i944.AuthRedirectService>(),
         ));
     gh.factory<_i85.ResidenceCubit>(
         () => _i85.ResidenceCubit(gh<_i143.ResidenceRepository>()));

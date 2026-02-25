@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/estate_detail/components/detail_rooms.dart';
-import 'package:immoplus/app/features/estate_detail/components/logment_bottom_bar.dart';
+import 'package:immoplus/app/features/estate_detail/components/estate_bottom_bar.dart';
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_description.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_divider.dart';
