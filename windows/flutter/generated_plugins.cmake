@@ -9,6 +9,8 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_windows
   geolocator_windows
   isar_community_flutter_libs
+  media_kit_libs_windows_video
+  media_kit_video
   permission_handler_windows
   share_plus
   url_launcher_windows

@@ -66,9 +66,14 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomePageCubit, HomePageState>(
+    return BlocConsumer<HomePageCubit, HomePageState>(
+      listenWhen: (previous, current) => previous.indexPage != current.indexPage,
+      listener: (context, state) {
+        if (_tabController.index != state.indexPage && mounted) {
+          _tabController.animateTo(state.indexPage);
+        }
+      },
       builder: (context, state) {
-        _tabController.animateTo(state.indexPage);
         return EnvironmentsBadge(
           child: Scaffold(
             backgroundColor: AppColors.whiteBackground,

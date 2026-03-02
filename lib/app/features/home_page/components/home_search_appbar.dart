@@ -15,6 +15,7 @@ import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
+import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -198,6 +199,35 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                             ),
                     ),
                     Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          backgroundColor: AppColors.whiteBackground,
+                          showDragHandle: true,
+                          enableDrag: true,
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          context: context,
+                          builder: (context) => SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.88,
+                            child: const FilterPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.F2F2F2,
+                        ),
+                        child: Icon(Icons.tune_rounded, color: AppColors.primary),
+                      ),
+                    ),
+                    const Gap(8),
                     GestureDetector(
                       onTap: () {
                         if (sessionManager.currentUser != null) {

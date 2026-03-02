@@ -203,7 +203,7 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
               aspectRatio: 1,
               viewportFraction: 1.0,
               initialPage: 0,
-              enableInfiniteScroll: true,
+              enableInfiniteScroll: widget.logmentModel.images.length > 1,
               reverse: false,
               autoPlay: false,
               autoPlayInterval: const Duration(seconds: 2),

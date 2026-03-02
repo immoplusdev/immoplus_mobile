@@ -95,7 +95,7 @@ class _FurnitureCardState extends State<FurnitureCard> {
                           aspectRatio: 1,
                           viewportFraction: 1.0,
                           initialPage: 0,
-                          enableInfiniteScroll: true,
+                          enableInfiniteScroll: widget.furniture.images.length > 1,
                           reverse: false,
                           autoPlay: false,
                           enlargeCenterPage: false,
