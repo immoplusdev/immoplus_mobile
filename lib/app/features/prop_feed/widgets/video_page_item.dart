@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -14,8 +15,12 @@ import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/bounce_side_action_button.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/side_action_button.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
+import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/social_post_header.dart';
-// import 'package:immoplus/app/features/prop_feed/widgets/urgency_badge.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 
 class VideoPageItem extends StatefulWidget {
   const VideoPageItem({
@@ -41,11 +46,12 @@ class _VideoPageItemState extends State<VideoPageItem>
     with SingleTickerProviderStateMixin {
   bool _showPlayIcon = false;
   bool _isDescriptionExpanded = false;
-  bool _isLiked = false;
   TapDownDetails? _tapDetails;
   final GlobalKey _likeKey = GlobalKey();
   late final AnimationController _iconAnim;
   Future<String?>? _localThumbnailFuture;
+  Timer? _viewTimer;
+  bool _isSharing = false;
 
   static const double _overlayBottom = 4.0;
 
@@ -65,9 +71,31 @@ class _VideoPageItemState extends State<VideoPageItem>
 
   @override
   void dispose() {
+    _cancelViewTimer();
     _iconAnim.dispose();
     super.dispose();
   }
+
+  // ---------------------------------------------------------------------------
+  // Timer de vue (3 s de lecture → video:view)
+  // ---------------------------------------------------------------------------
+
+  void _startViewTimer(String videoId) {
+    _cancelViewTimer();
+    _viewTimer = Timer(const Duration(seconds: 3), () {
+      if (!mounted) return;
+      widget.controller.sendViewEvent(videoId, 3000);
+    });
+  }
+
+  void _cancelViewTimer() {
+    _viewTimer?.cancel();
+    _viewTimer = null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Interactions
+  // ---------------------------------------------------------------------------
 
   void _onTapPlayPause() {
     widget.controller.togglePlayPause(widget.index);
@@ -76,9 +104,7 @@ class _VideoPageItemState extends State<VideoPageItem>
       _iconAnim.forward(from: 0.0);
     });
     Future.delayed(const Duration(milliseconds: 700), () {
-      if (mounted) {
-        setState(() => _showPlayIcon = false);
-      }
+      if (mounted) setState(() => _showPlayIcon = false);
     });
   }
 
@@ -87,69 +113,50 @@ class _VideoPageItemState extends State<VideoPageItem>
         widget.controller.isVisible &&
         widget.controller.currentIndex == widget.index) {
       widget.controller.playAt(widget.index);
+      final video = widget.controller.videos[widget.index];
+      _startViewTimer(video.id);
     }
-    if (info.visibleFraction < 0.1 &&
-        widget.controller.currentIndex != widget.index) {
-      widget.controller.pauseAt(widget.index);
+    if (info.visibleFraction < 0.1) {
+      _cancelViewTimer();
+      if (widget.controller.currentIndex != widget.index) {
+        widget.controller.pauseAt(widget.index);
+      }
     }
   }
 
-  void _showBookingSheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.38,
-          minChildSize: 0.3,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const Text(
-                          'Reserver une visite',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        FilledButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          style: FilledButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text('Confirmer'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+  Future<void> _onShareTap(String videoId) async {
+    if (_isSharing) return;
+    setState(() => _isSharing = true);
+    try {
+      await widget.controller.shareVideo(videoId);
+    } finally {
+      if (mounted) setState(() => _isSharing = false);
+    }
   }
+
+    /// Navigue vers la page de détail du bien lié à la vidéo.
+  void _navigateToDetail(VideoModel video) {
+    final entity = video.relatedTo?.entity;
+    final id = video.relatedTo?.id;
+    if (id == null || id.isEmpty) return;
+
+    final String? route;
+    switch (entity) {
+      case 'residence':
+        route = ResidencePage.route(id);
+      case 'bien_immobilier':
+        route = EstatePage.route(id);
+      case 'furniture':
+        route = FurnitureDetailPage.route(id);
+      default:
+        route = null;
+    }
+    if (route != null) context.push(route);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Build
+  // ---------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +169,8 @@ class _VideoPageItemState extends State<VideoPageItem>
         final video = widget.controller.videos[widget.index];
         final isPlaying = widget.controller.isPlayingAt(widget.index);
         final isReady = widget.controller.isReadyAt(widget.index);
+        final isLiked = widget.controller.getIsLikedForVideo(video.id);
+        final likesCount = widget.controller.getLikesCountForVideo(video.id);
 
         return Stack(
           fit: StackFit.expand,
@@ -195,7 +204,8 @@ class _VideoPageItemState extends State<VideoPageItem>
             Positioned.fill(
               child: DoubleTapDetector(
                 onTap: _onTapPlayPause,
-                onDoubleTap: (details) => setState(() => _tapDetails = details),
+                onDoubleTap: (details) =>
+                    setState(() => _tapDetails = details),
                 behavior: HitTestBehavior.translucent,
                 child: Center(
                   child: AnimatedOpacity(
@@ -242,52 +252,57 @@ class _VideoPageItemState extends State<VideoPageItem>
                   ),
                 ),
                 onLikeCall: () {
-                  if (!_isLiked) {
-                    setState(() => _isLiked = true);
+                  if (!isLiked) {
+                    widget.controller.toggleLike(video.id);
                   }
                 },
-                onCompleteAnimation: () => setState(() => _tapDetails = null),
+                onCompleteAnimation: () =>
+                    setState(() => _tapDetails = null),
               ),
             Positioned(
               left: 0,
               right: 72,
               bottom: _overlayBottom,
               child: SocialPostHeader(
-                username: widget.username ?? 'user_${widget.index + 1}',
-                caption:
-                    "Perched in a sanctuary of glass and steel, the dinner feels like a private viewing of the world's heartbeat. The electric blue of the twilight reflects off the obsidian table surface. Below, the city is a sea of diamonds-neon signs and moving headlights blurring into a kinetic symphony of light.",
-                hashtags: const ['#RestaurantView', '#UrbanEscape'],
+                username: widget.username ??
+                    video.author?.name ??
+                    'Immoplus',
+                avatarUrl: widget.avatarUrl ?? video.author?.avatar,
+                avatarPath: widget.avatarPath,
+                caption: video.content?.description ??
+                    video.content?.title ??
+                    '',
+                hashtags: const [],
                 isExpanded: _isDescriptionExpanded,
-                onMoreTap: () {
-                  setState(
-                    () => _isDescriptionExpanded = !_isDescriptionExpanded,
-                  );
-                },
+                onMoreTap: () => setState(
+                    () => _isDescriptionExpanded = !_isDescriptionExpanded),
               ),
             ),
             Positioned(
               right: 8,
+              top: 0,
               bottom: 20,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  const SizedBox(height: 12),
                   GestureDetector(
                     key: _likeKey,
-                    onTap: () => setState(() => _isLiked = !_isLiked),
+                    onTap: () => widget.controller.toggleLike(video.id),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          _isLiked ? Iconsax.heart5 : Iconsax.heart,
-                          color:
-                              _isLiked ? const Color(0xFFFF2D55) : Colors.white,
+                          isLiked ? Iconsax.heart5 : Iconsax.heart,
+                          color: isLiked
+                              ? const Color(0xFFFF2D55)
+                              : Colors.white,
                           size: 24,
                         ),
                         const SizedBox(height: 1),
-                        const Text(
-                          '1.2k',
-                          style: TextStyle(
+                        Text(
+                          _formatCount(likesCount),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -303,18 +318,21 @@ class _VideoPageItemState extends State<VideoPageItem>
                       ],
                     ),
                   ),
-                  const SizedBox(height: 18),
-                  const SideActionButton(
+                  const SizedBox(height: 16),
+                  SideActionButton(
                     icon: Iconsax.link,
                     label: 'Partager',
+                    isLoading: _isSharing,
+                    onTap: () => _onShareTap(video.id),
                   ),
-                  const SizedBox(height: 30),
-                  _buildPriceBadge(),
                   const SizedBox(height: 12),
-                  BounceSideActionButton(
-                    label: 'Reserver',
-                    onTap: _showBookingSheet,
-                  ),
+                  _buildPriceBadge(video),
+                  const SizedBox(height: 10),
+                  if (video.relatedTo?.id != null)
+                    BounceSideActionButton(
+                      label: 'Reserver',
+                      onTap: () => _navigateToDetail(video),
+                    ),
                 ],
               ),
             ),
@@ -324,7 +342,19 @@ class _VideoPageItemState extends State<VideoPageItem>
     );
   }
 
-  Widget _buildPriceBadge() {
+  String _formatCount(int count) {
+    if (count >= 1000000) {
+      return '${(count / 1000000).toStringAsFixed(1)}M';
+    }
+    if (count >= 1000) {
+      return '${(count / 1000).toStringAsFixed(1)}k';
+    }
+    return '$count';
+  }
+
+  Widget _buildPriceBadge(VideoModel video) {
+    final price = video.content?.price;
+    if (price == null || price.isEmpty) return const SizedBox.shrink();
     return FadeInUp(
       duration: const Duration(milliseconds: 800),
       child: ClipRRect(
@@ -348,9 +378,9 @@ class _VideoPageItemState extends State<VideoPageItem>
                 ),
               ],
             ),
-            child: const Text(
-              '25.000 F/nuit',
-              style: TextStyle(
+            child: Text(
+              price,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.w900,

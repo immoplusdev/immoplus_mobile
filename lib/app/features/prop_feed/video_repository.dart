@@ -3,10 +3,15 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
+
+typedef FeedPage = ({List<VideoModel> items, String? cursor, bool hasMore});
 
 class VideoRepository {
   VideoRepository();
@@ -21,28 +26,130 @@ class VideoRepository {
   );
   final Set<String> _cachedUrls = {};
 
-  final List<VideoModel> _videos = [
-    const VideoModel(id: '1', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/b25e7392-0041-4731-b43a-370397011fde.mp4'),
-    const VideoModel(id: '2', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/7b323096-2df7-4ae1-b7ea-a8d0e2a5a96b.mp4'),
-    const VideoModel(id: '3', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/7942052a-3448-405f-96dd-7c0a36e4a090.mp4'),
-    const VideoModel(id: '4', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/487852a3-1f0f-4328-9c96-1c7672175e14.mp4'),
-    const VideoModel(id: '5', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/8236b95b-df97-4c6b-9f8d-f48319d82b74.mp4'),
-    const VideoModel(id: '6', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/22d323e2-1f3c-4260-aedd-eee052ef3490.mp4'),
-    const VideoModel(id: '7', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/874e7450-c249-4bbd-b454-16809c0b5a5a.mp4'),
-    const VideoModel(id: '8', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/de0618b3-ae40-41df-ad2a-8400ee908201.mp4'),
-    const VideoModel(id: '9', url: 'https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/e7cb7670-6692-478b-b137-b6430aaef23f.mp4'),
-  ];
+  String get _baseUrl => dotenv.env['API_BASE_URL'] ?? '';
 
-  Future<void> initializeCacheMetadata() async {
-    for (final video in _videos) {
+  // ---------------------------------------------------------------------------
+  // Feed API — GET /feed
+  // ---------------------------------------------------------------------------
+
+  Future<FeedPage> fetchFeed({String? cursor, int limit = 10}) async {
+    try {
+      final params = <String, dynamic>{'limit': limit};
+      if (cursor != null) params['cursor'] = cursor;
+      final response = await _dio.get(
+        '$_baseUrl/feed',
+        queryParameters: params,
+      );
+      return _parseFeedPage(response.data as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('[VideoRepository] fetchFeed error → $e');
+      return (items: <VideoModel>[], cursor: null, hasMore: false);
+    }
+  }
+
+  Future<VideoModel?> fetchVideoDetail(String id) async {
+    try {
+      final response = await _dio.get('$_baseUrl/feed/videos/$id');
+      final data = (response.data as Map<String, dynamic>)['data'];
+      if (data == null) return null;
+      return VideoModel.fromJson(data as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('[VideoRepository] fetchVideoDetail error → $e');
+      return null;
+    }
+  }
+
+  /// Remplace le scheme+host+port localhost/127.0.0.1 par le vrai domaine API.
+  /// Utile quand le backend est déployé mais retourne encore des URLs localhost.
+  String _normalizeUrl(String url) {
+    if (url.isEmpty) return url;
+    final uri = Uri.tryParse(url);
+    if (uri == null) return url;
+    if (uri.host != 'localhost' && uri.host != '127.0.0.1') return url;
+    return _baseUrl +
+        uri.path +
+        (uri.hasQuery ? '?${uri.query}' : '');
+  }
+
+  FeedPage _parseFeedPage(Map<String, dynamic> data) {
+    final rawList = data['data'] as List<dynamic>? ?? [];
+    final items = rawList
+        .map((e) {
+          final json = Map<String, dynamic>.from(e as Map);
+          // Corrige les URLs localhost retournées par le backend déployé
+          if (json['videoUrl'] is String) {
+            json['videoUrl'] = _normalizeUrl(json['videoUrl'] as String);
+          }
+          if (json['thumbnailUrl'] is String) {
+            json['thumbnailUrl'] =
+                _normalizeUrl(json['thumbnailUrl'] as String);
+          }
+          return VideoModel.fromJson(json);
+        })
+        .where((v) {
+          if (v.url.isEmpty) return false;
+          final uri = Uri.tryParse(v.url);
+          if (uri == null) return false;
+          final lastSegment =
+              uri.pathSegments.isEmpty ? '' : uri.pathSegments.last;
+          return lastSegment != 'undefined' && lastSegment.isNotEmpty;
+        })
+        .toList();
+    return (
+      items: items,
+      cursor: data['cursor'] as String?,
+      hasMore: data['has_more'] as bool? ?? false,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Short URL — POST /short  (Auth requis)
+  // ---------------------------------------------------------------------------
+
+  /// Crée un short link pour la vidéo [feedVideoId].
+  /// Retourne le [code] court (ex. "aB3xYz") — le contrôleur construit l'URL publique.
+  Future<String?> createShortLink(String feedVideoId) async {
+    try {
+      final token = await _getAccessToken();
+      final response = await _dio.post(
+        '$_baseUrl/short',
+        data: {'feedVideoId': feedVideoId},
+        options: Options(
+          headers: token != null
+              ? {'Authorization': 'Bearer $token'}
+              : null,
+        ),
+      );
+      final body = response.data as Map<String, dynamic>;
+      // On utilise "code" pour construire l'URL publique côté app.
+      return body['code'] as String?;
+    } catch (e) {
+      debugPrint('[VideoRepository] createShortLink error → $e');
+      return null;
+    }
+  }
+
+  Future<String?> _getAccessToken() async {
+    try {
+      final user = await getIt<SessionManager>().getCurrentUser();
+      return user?.accessToken;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Cache & thumbnail helpers (inchangés)
+  // ---------------------------------------------------------------------------
+
+  Future<void> initializeCacheMetadata(List<VideoModel> videos) async {
+    for (final video in videos) {
       final cached = await cacheManager.getFileFromCache(video.url);
       if (cached != null && await cached.file.exists()) {
         _cachedUrls.add(video.url);
       }
     }
   }
-
-  List<VideoModel> getVideos() => _videos;
 
   bool isStreamManifest(String url) {
     final lower = url.toLowerCase();
@@ -81,7 +188,8 @@ class VideoRepository {
         timeMs: 500,
       );
       if (path == null) return null;
-      final createdPath = path.startsWith('/') ? path : '${thumbDir.path}/$path';
+      final createdPath =
+          path.startsWith('/') ? path : '${thumbDir.path}/$path';
       final created = File(createdPath);
       if (await created.exists() && createdPath != ourPath) {
         await created.copy(ourPath);

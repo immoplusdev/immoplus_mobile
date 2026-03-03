@@ -9,6 +9,8 @@ class SideActionButton extends StatelessWidget {
     this.iconColor = Colors.white,
     this.iconSize = 24.0,
     this.iconRadius = 18.0,
+    this.onTap,
+    this.isLoading = false,
   });
 
   final IconData icon;
@@ -16,27 +18,43 @@ class SideActionButton extends StatelessWidget {
   final Color iconColor;
   final double iconSize;
   final double iconRadius;
+  final VoidCallback? onTap;
+
+  /// Affiche un spinner à la place de l'icône pendant un traitement.
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: iconRadius,
-          child: Icon(icon, color: iconColor, size: iconSize),
-        ),
-        const SizedBox(height: 1),
-        Text(
-          label,
-          style: TextStyle(
-            color: iconColor, 
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: isLoading ? null : onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: iconRadius,
+            child: isLoading
+                ? SizedBox(
+                    width: iconSize,
+                    height: iconSize,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      color: iconColor,
+                    ),
+                  )
+                : Icon(icon, color: iconColor, size: iconSize),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            label,
+            style: TextStyle(
+              color: iconColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

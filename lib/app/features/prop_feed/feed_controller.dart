@@ -1,13 +1,17 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/prop_feed/feed_socket_service.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
 
@@ -27,6 +31,19 @@ class VideoFeedController extends GetxController {
   final Set<int> _readyIndexes = <int>{};
   final Map<int, Completer<void>> _readyCompleters = <int, Completer<void>>{};
 
+  // Pagination cursor
+  String? _cursor;
+  bool _hasMore = true;
+  bool _isLoadingMore = false;
+
+  // Likes state (source: stats API + WebSocket temps réel)
+  final Map<String, int> _likesCount = <String, int>{};
+  final Map<String, bool> _isLiked = <String, bool>{};
+
+  // Socket
+  FeedSocketService? _socketService;
+  String? _socketActiveVideoId;
+
   int _currentIndex = 0;
   bool _isVisible = true;
   bool _hasBeenHidden = false;
@@ -36,10 +53,11 @@ class VideoFeedController extends GetxController {
   bool get isVisible => _isVisible;
 
   VideoController? getVideoController(int index) => _videoControllers[index];
-
   bool isReadyAt(int index) => _readyIndexes.contains(index);
-
   bool isPlayingAt(int index) => _players[index]?.state.playing ?? false;
+
+  int getLikesCountForVideo(String videoId) => _likesCount[videoId] ?? 0;
+  bool getIsLikedForVideo(String videoId) => _isLiked[videoId] ?? false;
 
   Future<String?> getThumbnailPathForVideo(String url) =>
       _repository.getThumbnailPathForVideo(url);
@@ -47,13 +65,138 @@ class VideoFeedController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    videos.assignAll(_repository.getVideos());
-    if (videos.isEmpty) {
-      return;
-    }
+    _fetchFeed();
+  }
+
+  // ---------------------------------------------------------------------------
+  // API + socket
+  // ---------------------------------------------------------------------------
+
+  Future<void> _fetchFeed() async {
+    final result = await _repository.fetchFeed();
+    _cursor = result.cursor;
+    _hasMore = result.hasMore;
+    _initLikesFromItems(result.items);
+    videos.assignAll(result.items);
+    if (videos.isEmpty) return;
     _preloadThumbnails();
     _initializeFirstVideo();
+    _connectSocket();
   }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore || !_hasMore) return;
+    _isLoadingMore = true;
+    try {
+      final result = await _repository.fetchFeed(cursor: _cursor);
+      _cursor = result.cursor;
+      _hasMore = result.hasMore;
+      _initLikesFromItems(result.items);
+      if (result.items.isNotEmpty) {
+        videos.addAll(result.items);
+      }
+    } catch (e) {
+      debugPrint('[VideoFeedController] _loadMore error → $e');
+    } finally {
+      _isLoadingMore = false;
+    }
+  }
+
+  void _initLikesFromItems(List<VideoModel> items) {
+    for (final v in items) {
+      if (!_likesCount.containsKey(v.id)) {
+        _likesCount[v.id] = v.stats?.likes ?? 0;
+      }
+    }
+  }
+
+  Future<void> _connectSocket() async {
+    try {
+      final sessionManager = getIt<SessionManager>();
+      final user = await sessionManager.getCurrentUser();
+      final token = user?.accessToken;
+      if (token == null || token.isEmpty) return;
+
+      final baseUrl = dotenv.env['API_BASE_URL'] ?? '';
+      if (baseUrl.isEmpty) return;
+
+      _socketService = FeedSocketService(
+        onLikesUpdated: _onSocketLikesUpdated,
+      );
+      _socketService!.connect(baseUrl, token);
+    } catch (e) {
+      debugPrint('[VideoFeedController] socket connect failed → $e');
+    }
+  }
+
+  void _onSocketLikesUpdated(String videoId, int likesCount, bool liked) {
+    _likesCount[videoId] = likesCount;
+    _isLiked[videoId] = liked;
+    final idx = videos.indexWhere((v) => v.id == videoId);
+    if (idx != -1) {
+      update(<Object>['video_$idx']);
+    }
+  }
+
+  // Appelé depuis VideoPageItem après 3 s de lecture
+  void sendViewEvent(String videoId, int durationMs) {
+    _socketService?.sendView(videoId, durationMs);
+  }
+
+  // Toggle like depuis VideoPageItem
+  void toggleLike(String videoId) {
+    final current = _isLiked[videoId] ?? false;
+    // Mise à jour optimiste
+    _isLiked[videoId] = !current;
+    _likesCount[videoId] = (_likesCount[videoId] ?? 0) + (current ? -1 : 1);
+    _socketService?.toggleLike(videoId);
+    final idx = videos.indexWhere((v) => v.id == videoId);
+    if (idx != -1) {
+      update(<Object>['video_$idx']);
+    }
+  }
+
+
+  /// Domaine public de partage. Lisible depuis l'env (SHARE_BASE_URL) ou valeur par défaut.
+  static String get _shareBaseUrl =>
+      dotenv.env['SHARE_BASE_URL'] ?? 'https://app.immoplus.ci';
+
+  // Crée un short link via POST /short puis ouvre la feuille de partage native.
+  // Le lien partagé : https://app.immoplus.ci/short/<code>
+  Future<void> shareVideo(String videoId) async {
+    final code = await _repository.createShortLink(videoId);
+    if (code == null || code.isEmpty) {
+      // Fallback : partager l'URL directe de la vidéo
+      final idx = videos.indexWhere((v) => v.id == videoId);
+      if (idx != -1) {
+        await SharePlus.instance.share(ShareParams(
+          text: videos[idx].url,
+          subject: 'Découvrez ce bien sur Immoplus',
+        ));
+      }
+      return;
+    }
+    final publicLink = '$_shareBaseUrl/v/$code';
+    await SharePlus.instance.share(ShareParams(
+      text: publicLink,
+      subject: 'Découvrez ce bien sur Immoplus 🏠',
+    ));
+  }
+
+  void _socketEnterVideo(int index) {
+    if (index < 0 || index >= videos.length) return;
+    final videoId = videos[index].id;
+    if (_socketActiveVideoId == videoId) return;
+    if (_socketActiveVideoId != null) {
+      _socketService?.leaveVideo(_socketActiveVideoId!);
+    }
+    _socketActiveVideoId = videoId;
+    _socketService?.enterVideo(videoId);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Thumbnail
+  // ---------------------------------------------------------------------------
 
   void _preloadThumbnails() {
     final count = videos.length.clamp(0, 3);
@@ -61,6 +204,10 @@ class VideoFeedController extends GetxController {
       _repository.getThumbnailPathForVideo(videos[i].url);
     }
   }
+
+  // ---------------------------------------------------------------------------
+  // Player lifecycle
+  // ---------------------------------------------------------------------------
 
   Future<void> _initializeFirstVideo() async {
     await initPlayer(0, videos[0].url);
@@ -72,6 +219,7 @@ class VideoFeedController extends GetxController {
     }
     _players[0]?.setVolume(100.0);
     _players[0]?.play();
+    _socketEnterVideo(0);
     _preloadWindow(0);
     _disposeDistantPlayers(0);
     update();
@@ -87,17 +235,11 @@ class VideoFeedController extends GetxController {
   }
 
   Future<void> initPlayer(int index, String url) async {
-    if (index < 0 || index >= videos.length) {
-      return;
-    }
-    if (_readyIndexes.contains(index)) {
-      return;
-    }
+    if (index < 0 || index >= videos.length) return;
+    if (_readyIndexes.contains(index)) return;
 
     final inFlight = _readyCompleters[index];
-    if (inFlight != null) {
-      return inFlight.future;
-    }
+    if (inFlight != null) return inFlight.future;
 
     final completer = Completer<void>();
     _readyCompleters[index] = completer;
@@ -106,7 +248,6 @@ class VideoFeedController extends GetxController {
     final player = _players[index] ?? Player();
     final videoController = _videoControllers[index] ?? VideoController(player);
 
-    // Expose controller immediately so UI can render loading state sooner.
     _players[index] = player;
     _videoControllers[index] = videoController;
     update(<Object>['video_$index']);
@@ -123,29 +264,23 @@ class VideoFeedController extends GetxController {
         _players.remove(index);
         _videoControllers.remove(index);
         _readyIndexes.remove(index);
-        if (!completer.isCompleted) {
-          completer.complete();
-        }
+        if (!completer.isCompleted) completer.complete();
         return;
       }
 
       _readyIndexes.add(index);
-      if (!completer.isCompleted) {
-        completer.complete();
-      }
+      if (!completer.isCompleted) completer.complete();
       _disposeDistantPlayers(_currentIndex);
       update(<Object>['video_$index']);
     } catch (e, st) {
-      debugPrint('[VideoFeedController] init failed for $url -> $e\n$st');
+      debugPrint('[VideoFeedController] init failed for $url → $e\n$st');
       _readyIndexes.remove(index);
       _players.remove(index);
       _videoControllers.remove(index);
       try {
         await player.dispose();
       } catch (_) {}
-      if (!completer.isCompleted) {
-        completer.complete();
-      }
+      if (!completer.isCompleted) completer.complete();
     } finally {
       _initializingIndexes.remove(index);
       _readyCompleters.remove(index);
@@ -153,14 +288,9 @@ class VideoFeedController extends GetxController {
   }
 
   void _preloadWindow(int index) {
-    if (videos.isEmpty) {
-      return;
-    }
-    final indices = <int>[index + 1, index + 2];
-    for (final i in indices) {
-      if (i < 0 || i >= videos.length) {
-        continue;
-      }
+    if (videos.isEmpty) return;
+    for (final i in <int>[index + 1, index + 2]) {
+      if (i < 0 || i >= videos.length) continue;
       if (_readyIndexes.contains(i) || _initializingIndexes.contains(i)) {
         continue;
       }
@@ -169,11 +299,14 @@ class VideoFeedController extends GetxController {
   }
 
   void onPageChanged(int index) {
-    if (videos.isEmpty) {
-      return;
-    }
+    if (videos.isEmpty) return;
 
     _currentIndex = index;
+
+    // Pagination : charger la suite quand proche de la fin
+    if (!_isLoadingMore && _hasMore && index >= videos.length - 3) {
+      _loadMore();
+    }
 
     for (final player in _players.values) {
       player.pause();
@@ -198,15 +331,14 @@ class VideoFeedController extends GetxController {
       });
     }
 
+    _socketEnterVideo(index);
     _preloadWindow(index);
     _disposeDistantPlayers(index);
     update();
   }
 
   void _disposeDistantPlayers(int currentIdx) {
-    if (videos.isEmpty) {
-      return;
-    }
+    if (videos.isEmpty) return;
 
     final keep = <int>{};
     for (final i in <int>[
@@ -215,16 +347,12 @@ class VideoFeedController extends GetxController {
       currentIdx + 1,
       currentIdx + 2,
     ]) {
-      if (i >= 0 && i < videos.length) {
-        keep.add(i);
-      }
+      if (i >= 0 && i < videos.length) keep.add(i);
     }
 
     final keys = List<int>.from(_players.keys);
     for (final key in keys) {
-      if (keep.contains(key)) {
-        continue;
-      }
+      if (keep.contains(key)) continue;
       final player = _players.remove(key);
       _videoControllers.remove(key);
       _readyIndexes.remove(key);
@@ -236,9 +364,7 @@ class VideoFeedController extends GetxController {
   }
 
   void playAt(int index) {
-    if (!_isVisible || _currentIndex != index) {
-      return;
-    }
+    if (!_isVisible || _currentIndex != index) return;
     final player = _players[index];
     if (player == null || !_readyIndexes.contains(index)) {
       if (index >= 0 && index < videos.length) {
@@ -257,9 +383,7 @@ class VideoFeedController extends GetxController {
     }
 
     for (final entry in _players.entries) {
-      if (entry.key != index) {
-        entry.value.pause();
-      }
+      if (entry.key != index) entry.value.pause();
     }
     player.setVolume(100.0);
     player.play();
@@ -267,11 +391,7 @@ class VideoFeedController extends GetxController {
   }
 
   void pauseAt(int index) {
-    final player = _players[index];
-    if (player == null) {
-      return;
-    }
-    player.pause();
+    _players[index]?.pause();
     update(<Object>['video_$index']);
   }
 
@@ -313,7 +433,7 @@ class VideoFeedController extends GetxController {
     if (videos.length <= 1) return 0;
     int next;
     do {
-      next = Random().nextInt(videos.length);
+      next = (DateTime.now().millisecondsSinceEpoch % videos.length).toInt();
     } while (next == _currentIndex);
     return next;
   }
@@ -324,7 +444,9 @@ class VideoFeedController extends GetxController {
       p.pause();
     }
     _currentIndex = next;
-    if (_players.containsKey(next) && _isVisible && _readyIndexes.contains(next)) {
+    if (_players.containsKey(next) &&
+        _isVisible &&
+        _readyIndexes.contains(next)) {
       _players[next]!.setVolume(100.0);
       _players[next]!.play();
     } else if (next >= 0 && next < videos.length) {
@@ -339,14 +461,13 @@ class VideoFeedController extends GetxController {
         }
       });
     }
+    _socketEnterVideo(next);
     _preloadWindow(next);
     _disposeDistantPlayers(next);
     update();
   }
 
-  void clearHasBeenHidden() {
-    _hasBeenHidden = false;
-  }
+  void clearHasBeenHidden() => _hasBeenHidden = false;
 
   void onFeedHidden() {
     _isVisible = false;
@@ -366,9 +487,7 @@ class VideoFeedController extends GetxController {
     } else {
       final idx = _currentIndex;
       for (final entry in _players.entries) {
-        if (entry.key != idx) {
-          entry.value.pause();
-        }
+        if (entry.key != idx) entry.value.pause();
       }
     }
     if (!_hasBeenHidden) {
@@ -395,13 +514,11 @@ class VideoFeedController extends GetxController {
     update();
   }
 
-  /// Persiste l'horodatage de départ pour calculer la durée d'absence au retour.
   Future<void> saveSessionTimestamp() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_sessionTimestampKey, DateTime.now().toIso8601String());
   }
 
-  /// Décide de reprendre exactement ou de rafraîchir selon la durée d'absence.
   Future<void> onAppResumed() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_sessionTimestampKey);
@@ -421,8 +538,6 @@ class VideoFeedController extends GetxController {
     }
   }
 
-  /// Reprend la vidéo exactement à la position conservée par media_kit.
-  /// Réinitialise le flag [_hasBeenHidden] pour que l'écran ne saute pas.
   void _resumeCurrentPlayer() {
     _isVisible = true;
     _hasBeenHidden = false;
@@ -436,7 +551,10 @@ class VideoFeedController extends GetxController {
     } else if (_currentIndex >= 0 && _currentIndex < videos.length) {
       final idx = _currentIndex;
       initPlayer(idx, videos[idx].url).then((_) {
-        if (!isClosed && _isVisible && _currentIndex == idx && _readyIndexes.contains(idx)) {
+        if (!isClosed &&
+            _isVisible &&
+            _currentIndex == idx &&
+            _readyIndexes.contains(idx)) {
           _players[idx]?.setVolume(100.0);
           _players[idx]?.play();
           update(<Object>['video_$idx']);
@@ -446,8 +564,6 @@ class VideoFeedController extends GetxController {
     update();
   }
 
-  /// Dispose tous les players et laisse [_hasBeenHidden] à true.
-  /// L'écran détectera ce flag et appellera _jumpToRandomPage().
   void _refreshFeed() {
     _isVisible = false;
     for (final player in _players.values) {
@@ -459,18 +575,21 @@ class VideoFeedController extends GetxController {
     _readyIndexes.clear();
     _initializingIndexes.clear();
     _readyCompleters.clear();
+    // Reset pagination et re-fetch
+    _cursor = null;
+    _hasMore = true;
+    _fetchFeed();
     update();
   }
 
   @override
   void onClose() {
+    _socketService?.disconnect();
     for (final player in _players.values) {
       player.stop();
       player.dispose();
     }
     _players.clear();
-    // VideoController has no public dispose API in media_kit_video 2.x.
-    // Releasing Player instances frees underlying native video resources.
     _videoControllers.clear();
     _initializingIndexes.clear();
     _readyIndexes.clear();
