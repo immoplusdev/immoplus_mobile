@@ -17,7 +17,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 # for new deployment use 1.0.9+12 (INCREMENT !!!) POUR UNIFORMISER IOS ET ANDROID CAR SUR ANDROID ON EST A 1.0.7 pourtant usr ios  1.0.7 y etait deja
-version: 1.0.17+22
+version: 1.0.18+23
 
 environment:
   sdk: ^3.6.0
