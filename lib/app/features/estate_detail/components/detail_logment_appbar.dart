@@ -204,7 +204,7 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
             aspectRatio: 16 / 9,
             viewportFraction: 1.0,
             initialPage: 0,
-            enableInfiniteScroll: true,
+            enableInfiniteScroll: widget.bienImmobilier.images.length > 1,
             reverse: false,
             autoPlay: false,
             autoPlayInterval: const Duration(seconds: 2),

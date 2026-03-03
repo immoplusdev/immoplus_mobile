@@ -98,7 +98,7 @@ class _EstateCardState extends State<EstateCard> {
                               aspectRatio: 1,
                               viewportFraction: 1.0,
                               initialPage: 0,
-                              enableInfiniteScroll: true,
+                              enableInfiniteScroll: widget.bienImmobilierModel.images.length > 1,
                               reverse: false,
                               autoPlay: false,
                               autoPlayInterval: const Duration(seconds: 2),

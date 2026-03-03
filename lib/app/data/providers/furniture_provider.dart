@@ -16,46 +16,46 @@ abstract class FurnitureProvider {
 
   @GET("/furnitures")
   Future<FurnitureCollection> getFurnitures({
-    @Query("search") String? search,
+    @Query("_search") String? search,
     @Queries() Map<String, dynamic>? where,
-    @Query("lat") double? lat,
-    @Query("long") double? long,
-    @Query("perPage") int? perPage,
-    @Query("page") int? page,
-    @Query("radius") double? radius,
-    @Query("startDate") String? startDate,
-    @Query("endDate") String? endDate,
-    @Query("orderBy") String? orderBy,
-    @Query("orderDir") String? orderDir,
+    @Query("_lat") double? lat,
+    @Query("_long") double? long,
+    @Query("_per_page") int? perPage,
+    @Query("_page") int? page,
+    @Query("_radius") double? radius,
+    @Query("_start_date") String? startDate,
+    @Query("_end_date") String? endDate,
+    @Query("_order_by") String? orderBy,
+    @Query("_order_dir") String? orderDir,
   });
 
   @GET("/furnitures/proprietaire/{proprietaireId}")
   Future<FurnitureCollection> getFurnituresProprietaire({
     @Path() required String proprietaireId,
-    @Query("search") String? search,
+    @Query("_search") String? search,
     @Queries() Map<String, dynamic>? where,
-    @Query("lat") double? lat,
-    @Query("long") double? long,
-    @Query("perPage") int? perPage,
-    @Query("page") int? page,
-    @Query("radius") double? radius,
-    @Query("startDate") String? startDate,
-    @Query("endDate") String? endDate,
-    @Query("orderBy") String? orderBy,
-    @Query("orderDir") String? orderDir,
+    @Query("_lat") double? lat,
+    @Query("_long") double? long,
+    @Query("_per_page") int? perPage,
+    @Query("_page") int? page,
+    @Query("_radius") double? radius,
+    @Query("_start_date") String? startDate,
+    @Query("_end_date") String? endDate,
+    @Query("_order_by") String? orderBy,
+    @Query("_order_dir") String? orderDir,
   });
 
   @GET("/furnitures/geolocalized")
   Future<FurnitureCollection> getFurnituresGeolocalized({
-    @Query("lat") double? lat,
-    @Query("long") double? long,
-    @Query("radius") double? radius,
-    @Query("perPage") int? perPage,
-    @Query("page") int? page,
-    @Query("search") String? search,
-    @Query('where') List<Map<String, dynamic>>? where,
-    @Query("orderBy") String? orderBy,
-    @Query("orderDir") String? orderDir,
+    @Query("_lat") double? lat,
+    @Query("_long") double? long,
+    @Query("_radius") double? radius,
+    @Query("_per_page") int? perPage,
+    @Query("_page") int? page,
+    @Query("_search") String? search,
+    @Query('_where') List<Map<String, dynamic>>? where,
+    @Query("_order_by") String? orderBy,
+    @Query("_order_dir") String? orderDir,
   });
 }
 

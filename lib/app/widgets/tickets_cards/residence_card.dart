@@ -95,7 +95,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                           viewportFraction:
                               1.0, // Pas de découpage ou chevauchement
                           initialPage: 0,
-                          enableInfiniteScroll: true,
+                          enableInfiniteScroll: widget.residence.images.length > 1,
 
                           reverse: false,
                           autoPlay: false,
