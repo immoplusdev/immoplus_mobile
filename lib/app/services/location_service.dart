@@ -49,6 +49,38 @@ class LocationService {
     }
   }
 
+  // ─── Méthodes de vérification de permission ──────────────────────────────
+
+  /// Vérifie l'état actuel de la permission sans la demander
+  static Future<LocationPermission> checkPermission() async {
+    return await Geolocator.checkPermission();
+  }
+
+  /// Demande la permission de localisation
+  static Future<LocationPermission> requestPermission() async {
+    return await Geolocator.requestPermission();
+  }
+
+  /// Vérifie si la permission est accordée (whileInUse ou always)
+  static Future<bool> get isPermissionGranted async {
+    final permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+  }
+
+  /// Vérifie si la permission est refusée (denied ou permanentlyDenied)
+  static Future<bool> get isPermissionDenied async {
+    final permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever;
+  }
+
+  /// Vérifie si la permission n'a jamais été demandée
+  static Future<bool> get isPermissionNotDetermined async {
+    final permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.denied;
+  }
+
   static Future<Position> getCurrentPosition() async {
     try {
       await _ensureServiceEnabled();
@@ -141,7 +173,7 @@ class LocationService {
           ? '${address.substring(0, maxLength)}...'
           : address;
     } catch (_) {
-      return 'Position indisponible';
+      return 'Position actuelle';
     }
   }
 

@@ -45,6 +45,8 @@ import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
 import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart'
     as _i123;
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart'
+    as _i529;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
 import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart'
@@ -80,6 +82,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i79.FilterCubit>(() => _i79.FilterCubit());
     gh.factory<_i1001.NavigationCubit>(() => _i1001.NavigationCubit());
     gh.factory<_i636.DeleteAccountCubit>(() => _i636.DeleteAccountCubit());
+    gh.factory<_i529.LocationPermissionCubit>(
+        () => _i529.LocationPermissionCubit());
     gh.singleton<_i847.IsarConfig>(() => _i847.IsarConfig());
     gh.lazySingleton<_i358.RequestInterceptor>(
         () => _i358.RequestInterceptor());

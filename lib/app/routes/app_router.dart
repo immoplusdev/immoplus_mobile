@@ -20,6 +20,7 @@ import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -283,6 +284,12 @@ class AppRouter {
             radius: extra['radius'] as double? ?? 50,
           );
         },
+      ),
+
+      GoRoute(
+        path: BestRatedResidencesPage.routePath,
+        name: BestRatedResidencesPage.routeName,
+        builder: (context, state) => const BestRatedResidencesPage(),
       ),
 
       GoRoute(

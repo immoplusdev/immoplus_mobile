@@ -13,7 +13,11 @@ import 'package:immoplus/app/features/authentification/authentification_page.dar
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
+import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
@@ -72,7 +76,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       // ✅ Gérer vos exceptions personnalisées
       if (mounted) {
         setState(() {
-          _currentAddress = "Position indisponible";
+          _currentAddress = "Position actuelle";
           _isLoadingAddress = false;
         });
       }
@@ -81,7 +85,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       // Autres erreurs
       if (mounted) {
         setState(() {
-          _currentAddress = "Position indisponible";
+          _currentAddress = "Position actuelle";
           _isLoadingAddress = false;
         });
       }
@@ -101,7 +105,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       builder: (context) =>
           const FractionallySizedBox(heightFactor: 0.9, child: LocationPage()),
     ).then((value) {
-      inspect(value);
       if (value is Address) {
         setState(() {
           FilterHandler.locationName = value.description!.length > 20
@@ -131,7 +134,12 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       });
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _loadCurrentLocation();
+      final cubit = context.read<LocationPermissionCubit>();
+      await cubit.checkPermission();
+
+      if (cubit.state.isGranted) {
+        await _loadCurrentLocation();
+      }
     });
   }
 
@@ -140,6 +148,146 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     _searchController.dispose();
     EasyDebounce.cancel(_searchDebounceKey);
     super.dispose();
+  }
+
+  Widget _buildLocationText(
+      BuildContext context, LocationPermissionState state) {
+    return state.when(
+      initial: () => SizedBox(
+        width: 12,
+        height: 12,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+        ),
+      ),
+      checking: () => SizedBox(
+        width: 12,
+        height: 12,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+        ),
+      ),
+      granted: () => _isLoadingAddress
+          ? SizedBox(
+              width: 12,
+              height: 12,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+              ),
+            )
+          : Text(
+              _currentAddress,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.white,
+                    fontSize: 13,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+            ),
+      denied: () => Text(
+        'Activez votre localisation',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.white,
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
+            ),
+      ),
+      permanentlyDenied: () => Text(
+        'Activez votre localisation',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.white,
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
+            ),
+      ),
+      notDetermined: () => Text(
+        'Cliquez pour partager votre localisation',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.white,
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
+            ),
+      ),
+    );
+  }
+
+  void _handleLocationTap(BuildContext context, LocationPermissionState state) {
+    state.when(
+      initial: () {},
+      checking: () {},
+      granted: () => onSelectPlace(),
+      denied: () => _showPermissionDeniedModal(context, isPermanent: false),
+      permanentlyDenied: () =>
+          _showPermissionDeniedModal(context, isPermanent: true),
+      notDetermined: () => _requestLocationPermission(context),
+    );
+  }
+
+  Future<void> _requestLocationPermission(BuildContext context) async {
+    final cubit = context.read<LocationPermissionCubit>();
+    await cubit.requestPermission();
+
+    // Si accordée, juste charger l'adresse pour l'affichage (sans filtrer)
+    if (cubit.state.isGranted) {
+      setState(() {
+        _isLoadingAddress = true;
+      });
+      await _loadCurrentLocation();
+    }
+  }
+
+  void _showPermissionDeniedModal(BuildContext context,
+      {required bool isPermanent}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Icon(
+              Icons.location_on_rounded,
+              color: AppColors.primary,
+              size: 28,
+            ),
+            Gap(12),
+            Expanded(
+              child: Text(
+                'Autorisation de localisation',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          isPermanent
+              ? 'Pour accéder aux résidences à proximité, vous devez autoriser l\'accès à votre localisation dans les paramètres de l\'application.'
+              : 'Activez votre localisation pour accéder à cette section.',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        actions: [
+          CustomButtom(
+            onClick: () async {
+              Navigator.pop(context);
+              if (isPermanent) {
+                await openAppSettings();
+              } else {
+                await _requestLocationPermission(context);
+              }
+            },
+            child: Text(
+              'Activer maintenant',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -162,40 +310,34 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      Assets.img.locIc,
-                      color: AppColors.primary,
-                    ),
-                    Gap(5),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      constraints: BoxConstraints(maxWidth: 200),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(39),
-                      ),
-                      child: _isLoadingAddress
-                          ? SizedBox(
-                              width: 12,
-                              height: 12,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.white,
-                                ),
+                    BlocBuilder<LocationPermissionCubit,
+                        LocationPermissionState>(
+                      builder: (context, permissionState) {
+                        return GestureDetector(
+                          onTap: () =>
+                              _handleLocationTap(context, permissionState),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                Assets.img.locIc,
+                                color: AppColors.primary,
                               ),
-                            )
-                          : Text(
-                              _currentAddress,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: AppColors.white,
-                                    fontSize: 13,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                            ),
+                              Gap(5),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                constraints: BoxConstraints(maxWidth: 200),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  borderRadius: BorderRadius.circular(39),
+                                ),
+                                child: _buildLocationText(
+                                    context, permissionState),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                     Spacer(),
                     GestureDetector(

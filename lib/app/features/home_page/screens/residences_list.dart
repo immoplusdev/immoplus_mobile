@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
+import 'package:immoplus/app/features/home_page/screens/residences_best_rated_list.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/section_title.dart';
@@ -87,24 +91,34 @@ class _ResidencesListState extends State<ResidencesList> {
             style: Theme.of(context).textTheme.titleLarge,
           )),
           itemBuilder: (context, item, index) {
-            // 🎯 Insérer ResidencesNearList
+            // 🎯 Affichage conditionnel selon permission de localisation
             if (index == 0) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ResidencesNearList(),
-                  SectionTitle(
-                    title: "Ce qu’il vous faut",
-                  ),
-                  Gap(13),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 1)
-                        .copyWith(bottom: 13),
-                    child: ResidenceCard(
-                      residence: item,
-                    ),
-                  ),
-                ],
+              return BlocBuilder<LocationPermissionCubit, LocationPermissionState>(
+                builder: (context, permissionState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // "À Deux Pas de Chez Vous" → SEULEMENT si permission accordée
+                      if (permissionState.isGranted)
+                        const ResidencesNearList(),
+
+                      // "Les mieux notées" → TOUJOURS affichée
+                      const ResidencesBestRatedList(),
+
+                      SectionTitle(
+                        title: "Ce qu'il vous faut",
+                      ),
+                      Gap(13),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1)
+                            .copyWith(bottom: 13),
+                        child: ResidenceCard(
+                          residence: item,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
             }
             return Padding(

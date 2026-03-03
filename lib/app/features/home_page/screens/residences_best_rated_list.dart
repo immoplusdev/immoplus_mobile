@@ -1,103 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
-import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
-import 'package:immoplus/app/services/location_service.dart';
+import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/section_title.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 
-class NearResidencesConstants {
-  NearResidencesConstants._();
-
-  /// Rayon en km pour considérer les résidences comme "proches"
-  static const double defaultRadius = 10.0;
+class BestRatedResidencesConstants {
+  BestRatedResidencesConstants._();
 
   /// Nombre maximum d'éléments à afficher dans la liste horizontale
   static const int maxItemsPreview = 10;
 
   /// Titre de la section
-  static const String sectionTitle = 'À Deux Pas de Vous';
-
-  /// Message d'erreur de localisation
-  static const String locationErrorMessage =
-      'Impossible de récupérer votre position pour voir les résidences proches';
+  static const String sectionTitle = 'Les mieux notées';
 }
 
-class ResidencesNearList extends StatefulWidget {
-  const ResidencesNearList({
+class ResidencesBestRatedList extends StatefulWidget {
+  const ResidencesBestRatedList({
     super.key,
-    this.radius = NearResidencesConstants.defaultRadius,
-    this.maxItems = NearResidencesConstants.maxItemsPreview,
+    this.maxItems = BestRatedResidencesConstants.maxItemsPreview,
   });
 
-  final double radius;
   final int maxItems;
 
   @override
-  State<ResidencesNearList> createState() => _ResidencesNearListState();
+  State<ResidencesBestRatedList> createState() =>
+      _ResidencesBestRatedListState();
 }
 
-class _ResidencesNearListState extends State<ResidencesNearList> {
+class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
   final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
 
   bool _isLoading = true;
   bool _hasError = false;
-  bool _locationError = false;
-  bool _isDismissed = false;
   String? _errorMessage;
-  List<ResidenceModel> _nearResidences = [];
-  Position? _userPosition;
+  List<ResidenceModel> _bestRatedResidences = [];
 
   @override
   void initState() {
     super.initState();
-    _loadNearResidences();
+    _loadBestRatedResidences();
   }
 
-  Future<void> _loadNearResidences() async {
+  Future<void> _loadBestRatedResidences() async {
     setState(() {
       _isLoading = true;
       _hasError = false;
-      _locationError = false;
     });
 
     try {
-      // Récupérer la position de l'utilisateur
-      _userPosition = await LocationService.getCurrentPosition();
-
-      // Charger les résidences proches
+      // Charger les résidences triées par score DESC
       final result = await _residenceRepository.getResidences(
-        lat: _userPosition?.latitude,
-        long: _userPosition?.longitude,
-        radius: widget.radius,
         page: 1,
+        orderBy: 'score',
+        orderDir: 'desc',
       );
 
       if (mounted) {
         setState(() {
-          _nearResidences = (result.data ?? []).take(widget.maxItems).toList();
-          _isLoading = false;
-        });
-      }
-    } on LocationException catch (e) {
-      // Gestion propre des exceptions de localisation
-      if (mounted) {
-        setState(() {
-          _locationError = true;
-          _errorMessage = e.message;
+          _bestRatedResidences =
+              (result.data ?? []).take(widget.maxItems).toList();
           _isLoading = false;
         });
       }
     } catch (error) {
-      // Autres erreurs (API, réseau, etc.)
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -108,19 +80,8 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
     }
   }
 
-  void _dismissLocationError() {
-    setState(() {
-      _isDismissed = true;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Ne rien afficher si le message d'erreur a été fermé
-    if (_isDismissed) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -130,23 +91,19 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           children: [
             Expanded(
               child: SectionTitle(
-                title: NearResidencesConstants.sectionTitle,
+                title: BestRatedResidencesConstants.sectionTitle,
               ),
             ),
             TextButton(
-              onPressed: _userPosition != null && _nearResidences.isNotEmpty
+              onPressed: _bestRatedResidences.isNotEmpty
                   ? () {
-                      context.push(NearResidencesPage.routePath, extra: {
-                        'lat': _userPosition!.latitude,
-                        'long': _userPosition!.longitude,
-                        'radius': widget.radius,
-                      });
+                      context.push(BestRatedResidencesPage.routePath);
                     }
                   : null,
               child: Text(
                 'Voir tout',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: _userPosition != null && _nearResidences.isNotEmpty
+                      color: _bestRatedResidences.isNotEmpty
                           ? AppColors.primary
                           : Colors.grey.shade400,
                       fontWeight: FontWeight.w600,
@@ -156,7 +113,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           ],
         ),
         SizedBox(
-          height: _locationError ? null : 170,
+          height: 170,
           child: _buildContent(),
         ),
         const Gap(15),
@@ -169,25 +126,21 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
       return _buildLoadingState();
     }
 
-    if (_locationError) {
-      return _buildLocationErrorState();
-    }
-
     if (_hasError) {
       return _buildErrorState();
     }
 
-    if (_nearResidences.isEmpty) {
+    if (_bestRatedResidences.isEmpty) {
       return _buildEmptyState();
     }
 
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: _nearResidences.length,
+      itemCount: _bestRatedResidences.length,
       separatorBuilder: (context, index) => const Gap(12),
       itemBuilder: (context, index) {
         return CompactResidenceCard(
-          residence: _nearResidences[index],
+          residence: _bestRatedResidences[index],
         );
       },
     );
@@ -211,51 +164,6 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
     );
   }
 
-  Widget _buildLocationErrorState() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.orange.shade50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.orange.shade200,
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.location_off_outlined,
-            color: Colors.orange.shade700,
-            size: 28,
-          ),
-          const Gap(12),
-          Expanded(
-            child: Text(
-              _errorMessage ?? NearResidencesConstants.locationErrorMessage,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.orange.shade900,
-                  ),
-            ),
-          ),
-          const Gap(8),
-          IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Colors.orange.shade700,
-              size: 20,
-            ),
-            onPressed: _dismissLocationError,
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            splashRadius: 20,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildEmptyState() {
     return Container(
       height: 280,
@@ -274,25 +182,17 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.home_outlined,
+              Icons.star_border_outlined,
               size: 48,
               color: Colors.grey.shade400,
             ),
             const Gap(12),
             Text(
-              'Aucune résidence proche',
+              'Aucune résidence disponible',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.grey.shade700,
                   ),
-            ),
-            const Gap(6),
-            Text(
-              'Aucune résidence trouvée dans un rayon de ${widget.radius.toInt()} km',
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -324,7 +224,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           ),
           const Gap(12),
           TextButton(
-            onPressed: _loadNearResidences,
+            onPressed: _loadBestRatedResidences,
             child: Text(
               'Réessayer',
               style: TextStyle(color: Colors.red.shade700),

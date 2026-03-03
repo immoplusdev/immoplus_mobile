@@ -11,6 +11,7 @@ import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -66,10 +67,12 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomePageCubit, HomePageState>(
-      builder: (context, state) {
-        _tabController.animateTo(state.indexPage);
-        return EnvironmentsBadge(
+    return BlocProvider(
+      create: (context) => getIt<LocationPermissionCubit>()..checkPermission(),
+      child: BlocBuilder<HomePageCubit, HomePageState>(
+        builder: (context, state) {
+          _tabController.animateTo(state.indexPage);
+          return EnvironmentsBadge(
           child: Scaffold(
             backgroundColor: AppColors.whiteBackground,
             body: DefaultTabController(
@@ -124,6 +127,7 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
+      ),
     );
   }
 }
