@@ -43,7 +43,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       perPage: 5,
       orderBy: OrderByField.createdAt.value,
       orderDir: OrderDir.desc.value,
-      //where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+      // where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
     )
         .then((value) {
       if (value.hasNext == true) {

@@ -42,13 +42,18 @@ const FovoriteModelSchema = CollectionSchema(
       name: r'itemId',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'itemScore': PropertySchema(
       id: 5,
+      name: r'itemScore',
+      type: IsarType.double,
+    ),
+    r'name': PropertySchema(
+      id: 6,
       name: r'name',
       type: IsarType.string,
     ),
     r'type': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'type',
       type: IsarType.string,
     )
@@ -143,8 +148,9 @@ void _fovoriteModelSerialize(
   writer.writeString(offsets[2], object.destination);
   writer.writeStringList(offsets[3], object.images);
   writer.writeString(offsets[4], object.itemId);
-  writer.writeString(offsets[5], object.name);
-  writer.writeString(offsets[6], object.type);
+  writer.writeDouble(offsets[5], object.itemScore);
+  writer.writeString(offsets[6], object.name);
+  writer.writeString(offsets[7], object.type);
 }
 
 FovoriteModel _fovoriteModelDeserialize(
@@ -160,8 +166,9 @@ FovoriteModel _fovoriteModelDeserialize(
   object.id = id;
   object.images = reader.readStringList(offsets[3]);
   object.itemId = reader.readStringOrNull(offsets[4]);
-  object.name = reader.readStringOrNull(offsets[5]);
-  object.type = reader.readStringOrNull(offsets[6]);
+  object.itemScore = reader.readDoubleOrNull(offsets[5]);
+  object.name = reader.readStringOrNull(offsets[6]);
+  object.type = reader.readStringOrNull(offsets[7]);
   return object;
 }
 
@@ -183,8 +190,10 @@ P _fovoriteModelDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 6:
+      return (reader.readStringOrNull(offset)) as P;
+    case 7:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1343,6 +1352,90 @@ extension FovoriteModelQueryFilter
   }
 
   QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
+      itemScoreIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'itemScore',
+      ));
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
+      itemScoreIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'itemScore',
+      ));
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
+      itemScoreEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'itemScore',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
+      itemScoreGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'itemScore',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
+      itemScoreLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'itemScore',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
+      itemScoreBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'itemScore',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterFilterCondition>
       nameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1706,6 +1799,19 @@ extension FovoriteModelQuerySortBy
     });
   }
 
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterSortBy> sortByItemScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'itemScore', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterSortBy>
+      sortByItemScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'itemScore', Sort.desc);
+    });
+  }
+
   QueryBuilder<FovoriteModel, FovoriteModel, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1794,6 +1900,19 @@ extension FovoriteModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterSortBy> thenByItemScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'itemScore', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FovoriteModel, FovoriteModel, QAfterSortBy>
+      thenByItemScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'itemScore', Sort.desc);
+    });
+  }
+
   QueryBuilder<FovoriteModel, FovoriteModel, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1854,6 +1973,12 @@ extension FovoriteModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<FovoriteModel, FovoriteModel, QDistinct> distinctByItemScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'itemScore');
+    });
+  }
+
   QueryBuilder<FovoriteModel, FovoriteModel, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1905,6 +2030,12 @@ extension FovoriteModelQueryProperty
   QueryBuilder<FovoriteModel, String?, QQueryOperations> itemIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'itemId');
+    });
+  }
+
+  QueryBuilder<FovoriteModel, double?, QQueryOperations> itemScoreProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'itemScore');
     });
   }
 
