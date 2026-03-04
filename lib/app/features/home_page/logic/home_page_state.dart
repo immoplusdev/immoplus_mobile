@@ -18,13 +18,21 @@ class HomePageState {
   static PagingController<int, FurnitureModel> pagingControllerFurniture =
       PagingController(firstPageKey: 1);
 
-  // Track whether each controller has a listener attached
-  static final List<bool> _listenerAttached = [false, false, false, false];
+  // Token pour invalider les requêtes périmées (race condition fix)
+  static int _residenceToken = 0;
+  static int get residenceToken => _residenceToken;
+  static void refreshResidences() {
+    _residenceToken++;
+    pagingControllerResidence.refresh();
+  }
 
-  static bool isListenerAttached(int index) => _listenerAttached[index];
-
-  static void setListenerAttached(int index, bool value) {
-    _listenerAttached[index] = value;
+  /// Refresh sécurisé : incrémente le token pour l'index 0 (résidences)
+  static void refreshPage(int index) {
+    if (index == 0) {
+      refreshResidences();
+    } else {
+      getPageListController(index).refresh();
+    }
   }
 
   int indexPage;

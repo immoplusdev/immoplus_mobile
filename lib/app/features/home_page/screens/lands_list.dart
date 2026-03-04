@@ -20,6 +20,8 @@ class _LandsListState extends State<LandsList> {
   final BienImmobilierRepository bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
 
+  void _onPageRequest(int pageKey) => loadPage(pageKey);
+
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(PropertyType.land);
     bienImmobilierRepository
@@ -40,7 +42,6 @@ class _LandsListState extends State<LandsList> {
       } else {
         HomePageState.pagingControllerLand.appendLastPage(value.data ?? []);
       }
-      //change(value, status: RxStatus.success());
     }).onError((error, stackTrace) {
       HomePageState.pagingControllerLand.error = error.toString();
     });
@@ -49,18 +50,14 @@ class _LandsListState extends State<LandsList> {
   @override
   void initState() {
     super.initState();
-    if (!HomePageState.isListenerAttached(3)) {
-      HomePageState.pagingControllerLand
-          .addPageRequestListener((pageKey) {
-        loadPage(pageKey);
-      });
-      HomePageState.setListenerAttached(3, true);
-    }
+    HomePageState.pagingControllerLand.addPageRequestListener(_onPageRequest);
     HomePageState.pagingControllerLand.refresh();
   }
 
   @override
   void dispose() {
+    HomePageState.pagingControllerLand
+        .removePageRequestListener(_onPageRequest);
     super.dispose();
   }
 

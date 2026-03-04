@@ -19,6 +19,9 @@ class EstatesList extends StatefulWidget {
 class _EstatesListState extends State<EstatesList> {
   final BienImmobilierRepository bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
+
+  void _onPageRequest(int pageKey) => loadPage(pageKey);
+
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(PropertyType.estate);
     bienImmobilierRepository
@@ -39,10 +42,7 @@ class _EstatesListState extends State<EstatesList> {
       } else {
         HomePageState.pagingControllerEstate.appendLastPage(value.data ?? []);
       }
-      //change(value, status: RxStatus.success());
     }).onError((error, stackTrace) {
-      // inspect(error);
-      // inspect(stackTrace);
       HomePageState.pagingControllerEstate.error = error.toString();
     });
   }
@@ -50,18 +50,14 @@ class _EstatesListState extends State<EstatesList> {
   @override
   void initState() {
     super.initState();
-    if (!HomePageState.isListenerAttached(2)) {
-      HomePageState.pagingControllerEstate
-          .addPageRequestListener((pageKey) {
-        loadPage(pageKey);
-      });
-      HomePageState.setListenerAttached(2, true);
-    }
+    HomePageState.pagingControllerEstate.addPageRequestListener(_onPageRequest);
     HomePageState.pagingControllerEstate.refresh();
   }
 
   @override
   void dispose() {
+    HomePageState.pagingControllerEstate
+        .removePageRequestListener(_onPageRequest);
     super.dispose();
   }
 

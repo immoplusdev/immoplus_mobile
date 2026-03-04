@@ -23,21 +23,29 @@ class ResidencesList extends StatefulWidget {
 }
 
 class _ResidencesListState extends State<ResidencesList> {
+  void _onPageRequest(int pageKey) => loadPage(pageKey);
+
   Future<void> loadPage(int page) async {
+    final myToken = HomePageState.residenceToken;
+
+    // utiliser le token pour invalider les requêtes périmées
+    // si le token est différent, la requête est périmée et on ne la charge pas
+    // cela permet d`eviter d`avoir des requêtes périmées en arrière-plan 
+    // qui rendent la liste de résidences invalide et vide
     final whereFilters = FilterHandler.getAllFilters(PropertyType.residence);
-    ResidenceRepository residenceRepository = getIt<ResidenceRepository>();
-    residenceRepository
-        .getResidences(
-      search: FilterHandler.search,
-      lat: FilterHandler.lat,
-      long: FilterHandler.long,
-      startDate: FilterHandler.startDate,
-      endDate: FilterHandler.endDate,
-      // radius: (FilterHandler.lat != null) ? 100 : null,
-      where: whereFilters,
-      page: page,
-    )
-        .then((value) {
+    final residenceRepository = getIt<ResidenceRepository>();
+    try {
+      final value = await residenceRepository.getResidences(
+        search: FilterHandler.search,
+        lat: FilterHandler.lat,
+        long: FilterHandler.long,
+        startDate: FilterHandler.startDate,
+        endDate: FilterHandler.endDate,
+        // radius: (FilterHandler.lat != null) ? 100 : null,
+        where: whereFilters,
+        page: page,
+      );
+      if (myToken != HomePageState.residenceToken) return;
       if (value.hasNext == true) {
         HomePageState.pagingControllerResidence
             .appendPage(value.data ?? [], (value.currentPage)! + 1);
@@ -45,95 +53,82 @@ class _ResidencesListState extends State<ResidencesList> {
         HomePageState.pagingControllerResidence
             .appendLastPage(value.data ?? []);
       }
-      //change(value, status: RxStatus.success());
-    }).onError((error, stackTrace) {
+    } catch (error) {
+      if (myToken != HomePageState.residenceToken) return;
       HomePageState.pagingControllerResidence.error = error.toString();
-    });
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    if (!HomePageState.isListenerAttached(0)) {
-      HomePageState.pagingControllerResidence
-          .addPageRequestListener((pageKey) {
-        loadPage(pageKey);
-      });
-      HomePageState.setListenerAttached(0, true);
-    }
-    HomePageState.pagingControllerResidence.refresh();
+    HomePageState.pagingControllerResidence
+        .addPageRequestListener(_onPageRequest);
+    HomePageState.refreshResidences();
   }
 
   @override
   void dispose() {
+    HomePageState.pagingControllerResidence
+        .removePageRequestListener(_onPageRequest);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      sliver: PagedSliverList<int, ResidenceModel>(
-        pagingController: HomePageState.pagingControllerResidence,
-        builderDelegate: PagedChildBuilderDelegate(
-          firstPageProgressIndicatorBuilder: (context) => Padding(
-            padding: const EdgeInsets.all(10),
-            child: SizedBox(
-              //height: 600,
-              child: Column(
-                children: List.generate(
-                  10,
-                  (index) => LoadProductCard(),
+    return SliverMainAxisGroup(
+      slivers: [
+        BlocBuilder<LocationPermissionCubit, LocationPermissionState>(
+          builder: (context, permissionState) {
+            return SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (permissionState.isGranted) const ResidencesNearList(),
+                    const ResidencesBestRatedList(),
+                    SectionTitle(title: "Ce qu'il vous faut"),
+                    const Gap(13),
+                  ],
                 ),
-              ),
-            ),
-          ),
-          noItemsFoundIndicatorBuilder: (context) => Center(
-              child: Text(
-            "Aucun élément trouvé",
-            style: Theme.of(context).textTheme.titleLarge,
-          )),
-          itemBuilder: (context, item, index) {
-            // 🎯 Affichage conditionnel selon permission de localisation
-            if (index == 0) {
-              return BlocBuilder<LocationPermissionCubit, LocationPermissionState>(
-                builder: (context, permissionState) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // "À Deux Pas de Chez Vous" → SEULEMENT si permission accordée
-                      if (permissionState.isGranted)
-                        const ResidencesNearList(),
-
-                      // "Les mieux notées" → TOUJOURS affichée
-                      const ResidencesBestRatedList(),
-
-                      SectionTitle(
-                        title: "Ce qu'il vous faut",
-                      ),
-                      Gap(13),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 1)
-                            .copyWith(bottom: 13),
-                        child: ResidenceCard(
-                          residence: item,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1)
-                  .copyWith(bottom: 13),
-              child: ResidenceCard(
-                residence: item,
               ),
             );
           },
         ),
-      ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: PagedSliverList<int, ResidenceModel>(
+            pagingController: HomePageState.pagingControllerResidence,
+            builderDelegate: PagedChildBuilderDelegate(
+              firstPageProgressIndicatorBuilder: (context) => Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(
+                  child: Column(
+                    children: List.generate(
+                      10,
+                      (index) => LoadProductCard(),
+                    ),
+                  ),
+                ),
+              ),
+              noItemsFoundIndicatorBuilder: (context) => Center(
+                child: Text(
+                  "Aucun élément trouvé",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              itemBuilder: (context, item, index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 1)
+                    .copyWith(bottom: 13),
+                child: ResidenceCard(
+                  residence: item,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -63,6 +63,9 @@ class _HomePageState extends State<HomePage>
   void dispose() {
     super.dispose();
     FilterHandler.search = null;
+    FilterHandler.lat = null;
+    FilterHandler.long = null;
+    FilterHandler.locationName = null;
   }
 
   @override
@@ -79,8 +82,12 @@ class _HomePageState extends State<HomePage>
               length: 4,
               child: RefreshIndicator(
                 onRefresh: () async {
-                  HomePageState.getPageListController(state.indexPage)
-                      .refresh();
+                  if (state.indexPage == 0) {
+                    HomePageState.refreshResidences();
+                  } else {
+                    HomePageState.getPageListController(state.indexPage)
+                        .refresh();
+                  }
                 },
                 child: CustomScrollView(
                   keyboardDismissBehavior:

@@ -60,6 +60,10 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
   List<ResidenceModel> _nearResidences = [];
   Position? _userPosition;
 
+  // Dernières valeurs lat/long connues pour détecter un vrai changement de localisation
+  double? _lastLat;
+  double? _lastLong;
+
   @override
   void initState() {
     super.initState();
@@ -73,7 +77,12 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
   }
 
   void _onLocationChanged() {
-    if (mounted) _loadNearResidences();
+    if (!mounted) return;
+    final locationChanged =
+        FilterHandler.lat != _lastLat || FilterHandler.long != _lastLong;
+    _lastLat = FilterHandler.lat;
+    _lastLong = FilterHandler.long;
+    _loadNearResidences(showModalIfEmpty: locationChanged);
   }
 
   @override
@@ -82,7 +91,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
     super.dispose();
   }
 
-  Future<void> _loadNearResidences() async {
+  Future<void> _loadNearResidences({bool showModalIfEmpty = false}) async {
     setState(() {
       _isLoading = true;
       _hasError = false;
@@ -109,6 +118,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         lat: lat,
         long: long,
         radius: widget.radius,
+        search: FilterHandler.search,
         page: 1,
       );
 
@@ -118,7 +128,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           _nearResidences = residences;
           _isLoading = false;
         });
-        if (residences.isEmpty) {
+        if (residences.isEmpty && showModalIfEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               EmptyStateCard.showAsModal(

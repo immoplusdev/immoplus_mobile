@@ -153,7 +153,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     if (FilterHandler.search == null && _searchController.text.isNotEmpty) {
       EasyDebounce.cancel(_searchDebounceKey);
       _searchController.clear();
-      HomePageState.getPageListController(widget.currentIndex).refresh();
+      HomePageState.refreshPage(widget.currentIndex);
     }
   }
 
@@ -419,13 +419,11 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                                     size: 18,
                                   ),
                                   onPressed: () {
-                                    EasyDebounce.cancel(_searchDebounceKey);
                                     _searchController.clear();
+                                    EasyDebounce.cancel(_searchDebounceKey);
                                     FilterHandler.search = null;
                                     FilterHandler.notifyChange();
-                                    HomePageState.getPageListController(
-                                      widget.currentIndex,
-                                    ).refresh();
+                                    HomePageState.refreshPage(widget.currentIndex);
                                   },
                                 )
                               : IconButton(
@@ -440,15 +438,11 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                             if (FilterHandler.search != null) {
                               if (FilterHandler.search!.isNotEmpty) {
                                 log(keyword);
-                                HomePageState.getPageListController(
-                                  widget.currentIndex,
-                                ).refresh();
+                                HomePageState.refreshPage(widget.currentIndex);
                               } else {
                                 FilterHandler.search = null;
                                 FilterHandler.notifyChange();
-                                HomePageState.getPageListController(
-                                  widget.currentIndex,
-                                ).refresh();
+                                HomePageState.refreshPage(widget.currentIndex);
                               }
                             }
                           },
@@ -458,22 +452,13 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                               const Duration(
                                   milliseconds: _searchDeboucemillisecond),
                               () {
-                                FilterHandler.search = text;
+                                final search =
+                                    text.isNotEmpty ? text : null;
+                                FilterHandler.search = search;
                                 FilterHandler.notifyChange();
-                                if (FilterHandler.search != null) {
-                                  if (FilterHandler.search!.isNotEmpty) {
-                                    log(text);
-                                    HomePageState.getPageListController(
-                                      widget.currentIndex,
-                                    ).refresh();
-                                  } else {
-                                    FilterHandler.search = null;
-                                    FilterHandler.notifyChange();
-                                    HomePageState.getPageListController(
-                                      widget.currentIndex,
-                                    ).refresh();
-                                  }
-                                }
+                                if (search != null) log(text);
+                                HomePageState.refreshPage(
+                                    widget.currentIndex);
                               },
                             );
                           },
