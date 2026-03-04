@@ -76,14 +76,14 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final dioConfig = _$DioConfig();
+    gh.factory<_i529.LocationPermissionCubit>(
+        () => _i529.LocationPermissionCubit());
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit());
     gh.factory<_i430.NotificationCubit>(() => _i430.NotificationCubit());
     gh.factory<_i872.PaymentCubit>(() => _i872.PaymentCubit());
     gh.factory<_i79.FilterCubit>(() => _i79.FilterCubit());
     gh.factory<_i1001.NavigationCubit>(() => _i1001.NavigationCubit());
     gh.factory<_i636.DeleteAccountCubit>(() => _i636.DeleteAccountCubit());
-    gh.factory<_i529.LocationPermissionCubit>(
-        () => _i529.LocationPermissionCubit());
     gh.singleton<_i847.IsarConfig>(() => _i847.IsarConfig());
     gh.lazySingleton<_i358.RequestInterceptor>(
         () => _i358.RequestInterceptor());
