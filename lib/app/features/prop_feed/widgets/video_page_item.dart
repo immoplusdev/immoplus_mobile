@@ -19,6 +19,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
+import 'package:immoplus/app/features/prop_feed/widgets/reservation_bottom_sheet.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/social_post_header.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 
@@ -134,24 +135,51 @@ class _VideoPageItemState extends State<VideoPageItem>
     }
   }
 
-    /// Navigue vers la page de détail du bien lié à la vidéo.
-  void _navigateToDetail(VideoModel video) {
+  /// Ouvre le bottom sheet Réserver avec les données de la vidéo.
+  void _showReservationSheet(VideoModel video) {
     final entity = video.relatedTo?.entity;
     final id = video.relatedTo?.id;
     if (id == null || id.isEmpty) return;
 
-    final String? route;
-    switch (entity) {
-      case 'residence':
-        route = ResidencePage.route(id);
-      case 'bien_immobilier':
-        route = EstatePage.route(id);
-      case 'furniture':
-        route = FurnitureDetailPage.route(id);
-      default:
-        route = null;
-    }
-    if (route != null) context.push(route);
+    final data = ReservationSheetData(
+      entity: entity ?? '',
+      entityId: id,
+      videoId: video.id,
+      title: video.content?.title ?? video.content?.description,
+      description: video.content?.description ?? video.content?.title,
+      price: video.content?.price,
+      location: video.content?.location,
+      authorName: video.author?.name,
+      authorAvatarUrl: video.author?.avatar,
+      thumbnailUrl: video.thumbnailUrl,
+      
+      
+    );
+
+    ReservationBottomSheet.show(
+      context: context,
+      data: data,
+      onReserve: () {
+        // TODO: logique de réservation
+      },
+      onViewDetail: () {
+        final String? route;
+        switch (entity) {
+          case 'residence':
+            route = ResidencePage.route(id);
+          case 'bien_immobilier':
+            route = EstatePage.route(id);
+          case 'furniture':
+            route = FurnitureDetailPage.route(id);
+          default:
+            route = null;
+        }
+        if (route != null) context.push(route);
+      },
+      size: ReservationSheetSize(
+        heightFactor: 0.45,
+      ),
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -181,13 +209,17 @@ class _VideoPageItemState extends State<VideoPageItem>
               child: VisibilityDetector(
                 key: Key('video_${widget.index}'),
                 onVisibilityChanged: _onVisibilityChanged,
-                child: videoController == null
-                    ? const SizedBox.expand()
-                    : Video(
-                        controller: videoController,
-                        fit: BoxFit.contain,
-                        controls: NoVideoControls,
-                      ),
+                child: AnimatedOpacity(
+                  opacity: isReady ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: videoController == null
+                      ? const SizedBox.expand()
+                      : Video(
+                          controller: videoController,
+                          fit: BoxFit.contain,
+                          controls: NoVideoControls,
+                        ),
+                ),
               ),
             ),
             if (!isReady)
@@ -331,7 +363,7 @@ class _VideoPageItemState extends State<VideoPageItem>
                   if (video.relatedTo?.id != null)
                     BounceSideActionButton(
                       label: 'Reserver',
-                      onTap: () => _navigateToDetail(video),
+                      onTap: () => _showReservationSheet(video),
                     ),
                 ],
               ),
