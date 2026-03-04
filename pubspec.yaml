@@ -134,6 +134,7 @@ dependencies:
   widget_to_marker: ^1.0.6
   http: ^1.6.0
   ez_circle_avatar: ^0.0.5
+  iconsax: ^0.0.8
 
 dev_dependencies:
   flutter_test:
@@ -186,6 +187,7 @@ flutter:
     - assets/icon/leading.json
     - assets/img/onboarding/
     - assets/img/panorama.jpg
+    - assets/img/modal/
     - assets/gif/
     - assets/svgs/icons/
   #   - images/a_dot_ham.jpeg

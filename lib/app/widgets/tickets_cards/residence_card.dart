@@ -115,12 +115,12 @@ class _ResidenceCardState extends State<ResidenceCard> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: RatingComponent(
-                        rating: (widget.residence.score ?? 0).toDouble()),
-                  )
+                  // Positioned(
+                  //   bottom: 10,
+                  //   right: 10,
+                  //   child: RatingComponent(
+                  //       rating: (widget.residence.score ?? 0).toDouble()),
+                  // )
                 ],
               ),
               Gap(10),

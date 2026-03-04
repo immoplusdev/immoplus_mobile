@@ -49,18 +49,20 @@ class _EstatesListState extends State<EstatesList> {
 
   @override
   void initState() {
-    HomePageState.pagingControllerEstate = PagingController(firstPageKey: 1);
-    HomePageState.pagingControllerEstate.addPageRequestListener((pageKey) {
-      loadPage(pageKey);
-    });
     super.initState();
+    if (!HomePageState.isListenerAttached(2)) {
+      HomePageState.pagingControllerEstate
+          .addPageRequestListener((pageKey) {
+        loadPage(pageKey);
+      });
+      HomePageState.setListenerAttached(2, true);
+    }
+    HomePageState.pagingControllerEstate.refresh();
   }
 
   @override
   void dispose() {
     super.dispose();
-
-    HomePageState.pagingControllerEstate.dispose();
   }
 
   @override

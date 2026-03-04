@@ -21,9 +21,11 @@ class CompactResidenceCard extends StatefulWidget {
   const CompactResidenceCard({
     super.key,
     required this.residence,
+    this.showRating = true,
   });
 
   final ResidenceModel residence;
+  final bool showRating;
 
   @override
   State<CompactResidenceCard> createState() => _CompactResidenceCardState();
@@ -71,14 +73,15 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
               // Gradient overlay pour rendre le texte lisible
               _buildGradientOverlay(),
 
-              // Rating en haut à gauche
-              Positioned(
-                top: 16,
-                left: 16,
-                child: RatingComponent(
-                  rating: (widget.residence.score ?? 0).toDouble(),
+              // Rating en haut à gauche (optionnel)
+              if (widget.showRating)
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child: RatingComponent(
+                    rating: (widget.residence.score ?? 0).toDouble(),
+                  ),
                 ),
-              ),
 
               // Badge de prix en haut à droite
               Positioned(

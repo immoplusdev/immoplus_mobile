@@ -2,17 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/immo_icons.dart';
 
 class HomePageWrapper extends StatefulWidget {
   const HomePageWrapper({super.key, required this.child});
@@ -28,33 +26,15 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   final sessionManager = getIt<SessionManager>();
 
   void _onItemTapped({required int index, required PageState pageState}) {
-    if (index == 4) {
+    // Compte (index 3) requiert une authentification
+    if (index == 3) {
       if (sessionManager.currentUser == null) {
         context.pushNamed(AuthenticationPage.name);
         return;
       }
     }
-    if (index == 2 && pageState == PageState.home) {
-      _showFilterDialog();
-    } else if (index != 2) {
-      _selectedIndex = index;
-      navigationHandler.switchPage(id: index, context: context);
-    }
-  }
-
-  void _showFilterDialog() {
-    showModalBottomSheet(
-      backgroundColor: AppColors.whiteBackground,
-      showDragHandle: true,
-      enableDrag: true,
-      isScrollControlled: true,
-      useRootNavigator: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      context: context,
-      builder: (context) => SizedBox(
-          height: MediaQuery.of(context).size.height * 0.88,
-          child: const FilterPage()),
-    );
+    setState(() => _selectedIndex = index);
+    navigationHandler.switchPage(id: index, context: context);
   }
 
   @override
@@ -71,7 +51,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   spreadRadius: 1,
                   blurRadius: 10,
                 ),
@@ -98,65 +78,42 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                   unselectedItemColor: Colors.grey,
                   items: [
                     _buildNavItem(
-                        icon: ImmoIcons.home,
-                        label: "Accueil",
-                        isActive: state == PageState.home //_selectedIndex == 0,
-                        ),
-                    _buildNavItem(
-                      icon: ImmoIcons.coeur,
-                      label: "Favoris",
-                      isActive: state == PageState.forMe, //_selectedIndex == 1,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        height: (state.name == PageState.home.name) ? 20 : 40,
-                        child: Icon(
-                          FontAwesomeIcons.sliders,
-                          color: (state.name == PageState.home.name)
-                              ? Colors.transparent
-                              : Colors.grey.shade300,
-                        ),
-                      ), // Espace pour le bouton flottant
-
-                      label: "Filtre",
+                      icon: Iconsax.home,
+                      activeIcon: Iconsax.home5,
+                      label: 'Accueil',
+                      isActive: state == PageState.home,
                     ),
                     _buildNavItem(
-                        icon: ImmoIcons.visua,
-                        label: "Explorer",
-                        isActive:
-                            state == PageState.explore //_selectedIndex == 3,
-                        ),
+                      icon: Iconsax.heart,
+                      activeIcon: Iconsax.heart5,
+                      label: 'Favoris',
+                      isActive: state == PageState.forMe,
+                    ),
                     _buildNavItem(
-                      icon: ImmoIcons.compte,
-                      label: "Compte",
-                      isActive:
-                          state == PageState.acount, // _selectedIndex == 4,
+                      icon: Iconsax.location,
+                      activeIcon: Iconsax.location5,
+                      label: 'Explorer',
+                      isActive: state == PageState.explore,
+                    ),
+                    _buildNavItem(
+                      icon: Iconsax.profile_circle,
+                      activeIcon: Iconsax.profile_circle5,
+                      label: 'Compte',
+                      isActive: state == PageState.acount,
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: (state.name == PageState.home.name)
-              ? FloatingActionButton(
-                  backgroundColor: AppColors.scafold,
-                  onPressed: _showFilterDialog,
-                  child: Icon(
-                    FontAwesomeIcons.sliders,
-                    color: AppColors.primary,
-                  ),
-                )
-              : null,
         );
       },
     );
   }
 
   BottomNavigationBarItem _buildNavItem({
-    required ImmoIcons icon,
+    required IconData icon,
+    required IconData activeIcon,
     required String label,
     required bool isActive,
   }) {
@@ -164,24 +121,25 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
       icon: isActive
           ? Container(
               height: 40,
-              //width: 20,
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ImmoIcon(
-                icon,
+              child: Icon(
+                activeIcon,
                 color: AppColors.primary,
-                size: 25,
+                size: 24,
               ),
             )
           : SizedBox(
               height: 40,
-              child: ImmoIcon(
-                icon,
-                color: Colors.grey.shade600,
-                size: 25,
+              child: Center(
+                child: Icon(
+                  icon,
+                  color: Colors.grey.shade600,
+                  size: 24,
+                ),
               ),
             ),
       label: label,

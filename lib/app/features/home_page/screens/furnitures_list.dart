@@ -44,17 +44,19 @@ class _FurnituresListState extends State<FurnituresList> {
 
   @override
   void initState() {
-    HomePageState.pagingControllerFurniture =
-        PagingController(firstPageKey: 1);
-    HomePageState.pagingControllerFurniture.addPageRequestListener((pageKey) {
-      loadPage(pageKey);
-    });
     super.initState();
+    if (!HomePageState.isListenerAttached(1)) {
+      HomePageState.pagingControllerFurniture
+          .addPageRequestListener((pageKey) {
+        loadPage(pageKey);
+      });
+      HomePageState.setListenerAttached(1, true);
+    }
+    HomePageState.pagingControllerFurniture.refresh();
   }
 
   @override
   void dispose() {
-    HomePageState.pagingControllerFurniture.dispose();
     super.dispose();
   }
 

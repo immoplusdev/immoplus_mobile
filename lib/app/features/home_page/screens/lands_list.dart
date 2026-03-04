@@ -48,18 +48,20 @@ class _LandsListState extends State<LandsList> {
 
   @override
   void initState() {
-    HomePageState.pagingControllerLand = PagingController(firstPageKey: 1);
-    HomePageState.pagingControllerLand.addPageRequestListener((pageKey) {
-      loadPage(pageKey);
-    });
     super.initState();
+    if (!HomePageState.isListenerAttached(3)) {
+      HomePageState.pagingControllerLand
+          .addPageRequestListener((pageKey) {
+        loadPage(pageKey);
+      });
+      HomePageState.setListenerAttached(3, true);
+    }
+    HomePageState.pagingControllerLand.refresh();
   }
 
   @override
   void dispose() {
     super.dispose();
-
-    HomePageState.pagingControllerLand.dispose();
   }
 
   @override

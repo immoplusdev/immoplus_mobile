@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +22,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
@@ -76,7 +79,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       // ✅ Gérer vos exceptions personnalisées
       if (mounted) {
         setState(() {
-          _currentAddress = "Position actuelle";
+          _currentAddress = "Partager ma position";
           _isLoadingAddress = false;
         });
       }
@@ -85,7 +88,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       // Autres erreurs
       if (mounted) {
         setState(() {
-          _currentAddress = "Position actuelle";
+          _currentAddress = "Partager ma position";
           _isLoadingAddress = false;
         });
       }
@@ -99,23 +102,26 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      showDragHandle: true,
+      showDragHandle: false,
+      useSafeArea: true,
       backgroundColor: AppColors.whiteBackground,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      builder: (context) =>
-          const FractionallySizedBox(heightFactor: 0.9, child: LocationPage()),
+      builder: (context) => const LocationPage(),
     ).then((value) {
+      // S'assurer que tout indicateur de chargement résiduel est effacé
+      EasyLoading.dismiss();
       if (value is Address) {
+        final name = value.description != null && value.description!.length > 20
+            ? '${value.description!.substring(0, 20)}…'
+            : value.description;
         setState(() {
-          FilterHandler.locationName = value.description!.length > 20
-              ? '${value.description!.substring(0, 20)}…'
-              : value.description;
+          FilterHandler.locationName = name;
           FilterHandler.lat = value.latitude;
           FilterHandler.long = value.longitude;
+          _currentAddress = name ?? _currentAddress;
         });
+        // Notifier seulement la section "À Deux Pas" — pas la liste principale
         FilterHandler.notifyChange();
-        HomePageState.pagingControllerResidence.refresh();
-        HomePageState.pagingControllerEstate.refresh();
       }
     });
   }
@@ -133,41 +139,66 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
         _showClearButton = _searchController.text.isNotEmpty;
       });
     });
+    FilterHandler.notifier.addListener(_onFilterChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final cubit = context.read<LocationPermissionCubit>();
-      await cubit.checkPermission();
-
       if (cubit.state.isGranted) {
         await _loadCurrentLocation();
       }
     });
   }
 
+  // Réagir aux changements externes de FilterHandler (ex: suppression du chip)
+  void _onFilterChanged() {
+    if (FilterHandler.search == null && _searchController.text.isNotEmpty) {
+      EasyDebounce.cancel(_searchDebounceKey);
+      _searchController.clear();
+      HomePageState.getPageListController(widget.currentIndex).refresh();
+    }
+  }
+
   @override
   void dispose() {
+    FilterHandler.notifier.removeListener(_onFilterChanged);
     _searchController.dispose();
     EasyDebounce.cancel(_searchDebounceKey);
     super.dispose();
   }
 
+  void _showFilterDialog() {
+    showModalBottomSheet(
+      backgroundColor: AppColors.whiteBackground,
+      showDragHandle: true,
+      enableDrag: true,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.88,
+        child: const FilterPage(),
+      ),
+    );
+  }
+
   Widget _buildLocationText(
       BuildContext context, LocationPermissionState state) {
     return state.when(
-      initial: () => SizedBox(
-        width: 12,
-        height: 12,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-        ),
+      initial: () => Text(
+        'Activer ma position',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.white,
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
+            ),
       ),
-      checking: () => SizedBox(
-        width: 12,
-        height: 12,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-        ),
+      checking: () => Text(
+        'Activer ma position',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.white,
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
+            ),
       ),
       granted: () => _isLoadingAddress
           ? SizedBox(
@@ -203,7 +234,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
             ),
       ),
       notDetermined: () => Text(
-        'Cliquez pour partager votre localisation',
+        'Activer ma position',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: AppColors.white,
               fontSize: 13,
@@ -228,14 +259,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   Future<void> _requestLocationPermission(BuildContext context) async {
     final cubit = context.read<LocationPermissionCubit>();
     await cubit.requestPermission();
-
-    // Si accordée, juste charger l'adresse pour l'affichage (sans filtrer)
-    if (cubit.state.isGranted) {
-      setState(() {
-        _isLoadingAddress = true;
-      });
-      await _loadCurrentLocation();
-    }
+    // BlocListener handles loading the address on state transition to granted
   }
 
   void _showPermissionDeniedModal(BuildContext context,
@@ -292,9 +316,18 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FilterCubit, FilterHandler>(
-      builder: (context, state) {
-        return SliverAppBar(
+    return BlocListener<LocationPermissionCubit, LocationPermissionState>(
+      listenWhen: (previous, current) =>
+          !previous.isGranted && current.isGranted,
+      listener: (context, state) async {
+        setState(() {
+          _isLoadingAddress = true;
+        });
+        await _loadCurrentLocation();
+      },
+      child: BlocBuilder<FilterCubit, FilterHandler>(
+        builder: (context, state) {
+          return SliverAppBar(
           automaticallyImplyLeading: false,
           pinned: true,
           snap: false,
@@ -360,82 +393,103 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     ),
                   ],
                 ),
-                Gap(10),
-                SizedBox(
-                  height: 50,
-                  child: CustomTextField(
-                    contentPadding: EdgeInsets.symmetric(vertical: 0),
-                    labelText: 'Que cherchez-vous ?',
-                    prefixIcon: Icon(Icons.search),
-                    controller: _searchController,
-                    sufixIcon: _showClearButton
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.cancel,
-                              color: Colors.grey.shade600,
-                              size: 20,
+                Gap(14),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 57.5,
+                        child: CustomTextField(
+                          contentPadding: EdgeInsets.symmetric(vertical: 0),
+                          labelText: 'Que cherchez-vous ?',
+                          prefixIcon: Icon(
+                            color: AppColors.primary,
+                            size: 20,
+
+                            Iconsax.search_normal_1
                             ),
-                            onPressed: () {
-                              EasyDebounce.cancel(_searchDebounceKey);
-                              _searchController.clear();
-                              FilterHandler.search = null;
-                              FilterHandler.notifyChange();
-                              HomePageState.getPageListController(
-                                widget.currentIndex,
-                              ).refresh();
-                            },
-                          )
-                        : null,
-                    onFieldSubmitted: (keyword) {
-                      if (FilterHandler.search != null) {
-                        if (FilterHandler.search!.isNotEmpty) {
-                          log(keyword);
-                          HomePageState.getPageListController(
-                            widget.currentIndex,
-                          ).refresh();
-                        } else {
-                          FilterHandler.search = null;
-                          FilterHandler.notifyChange();
-                          HomePageState.getPageListController(
-                            widget.currentIndex,
-                          ).refresh();
-                        }
-                      }
-                    },
-                    onChanged: (text) {
-                      EasyDebounce.debounce(
-                        _searchDebounceKey,
-                        const Duration(milliseconds: _searchDeboucemillisecond),
-                        () {
-                          FilterHandler.search = text;
-                          FilterHandler.notifyChange();
-                          if (FilterHandler.search != null) {
-                            if (FilterHandler.search!.isNotEmpty) {
-                              log(text);
-                              HomePageState.getPageListController(
-                                widget.currentIndex,
-                              ).refresh();
-                            } else {
-                              FilterHandler.search = null;
-                              FilterHandler.notifyChange();
-                              HomePageState.getPageListController(
-                                widget.currentIndex,
-                              ).refresh();
+                          controller: _searchController,
+                          sufixIcon: _showClearButton
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: Colors.grey.shade600,
+                                    size: 18,
+                                  ),
+                                  onPressed: () {
+                                    EasyDebounce.cancel(_searchDebounceKey);
+                                    _searchController.clear();
+                                    FilterHandler.search = null;
+                                    FilterHandler.notifyChange();
+                                    HomePageState.getPageListController(
+                                      widget.currentIndex,
+                                    ).refresh();
+                                  },
+                                )
+                              : IconButton(
+                                  icon: Icon(
+                                    Iconsax.setting_4,
+                                    color: AppColors.primary,
+                                    size: 18,
+                                  ),
+                                  onPressed: _showFilterDialog,
+                                ),
+                          onFieldSubmitted: (keyword) {
+                            if (FilterHandler.search != null) {
+                              if (FilterHandler.search!.isNotEmpty) {
+                                log(keyword);
+                                HomePageState.getPageListController(
+                                  widget.currentIndex,
+                                ).refresh();
+                              } else {
+                                FilterHandler.search = null;
+                                FilterHandler.notifyChange();
+                                HomePageState.getPageListController(
+                                  widget.currentIndex,
+                                ).refresh();
+                              }
                             }
-                          }
-                        },
-                      );
-                    },
-                    fillColor: Colors.transparent,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(radiusButton),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                          },
+                          onChanged: (text) {
+                            EasyDebounce.debounce(
+                              _searchDebounceKey,
+                              const Duration(
+                                  milliseconds: _searchDeboucemillisecond),
+                              () {
+                                FilterHandler.search = text;
+                                FilterHandler.notifyChange();
+                                if (FilterHandler.search != null) {
+                                  if (FilterHandler.search!.isNotEmpty) {
+                                    log(text);
+                                    HomePageState.getPageListController(
+                                      widget.currentIndex,
+                                    ).refresh();
+                                  } else {
+                                    FilterHandler.search = null;
+                                    FilterHandler.notifyChange();
+                                    HomePageState.getPageListController(
+                                      widget.currentIndex,
+                                    ).refresh();
+                                  }
+                                }
+                              },
+                            );
+                          },
+                          fillColor: Colors.transparent,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(radiusButton),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(radiusButton),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                        ),
+                      ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(radiusButton),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -445,7 +499,8 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
             child: HomeChoiceMenu(),
           ),
         );
-      },
+        },
+      ),
     );
   }
 }

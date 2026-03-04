@@ -17,6 +17,16 @@ class HomePageState {
       PagingController(firstPageKey: 1);
   static PagingController<int, FurnitureModel> pagingControllerFurniture =
       PagingController(firstPageKey: 1);
+
+  // Track whether each controller has a listener attached
+  static final List<bool> _listenerAttached = [false, false, false, false];
+
+  static bool isListenerAttached(int index) => _listenerAttached[index];
+
+  static void setListenerAttached(int index, bool value) {
+    _listenerAttached[index] = value;
+  }
+
   int indexPage;
   HomePageState({required this.indexPage});
 

@@ -53,16 +53,19 @@ class _ResidencesListState extends State<ResidencesList> {
 
   @override
   void initState() {
-    HomePageState.pagingControllerResidence = PagingController(firstPageKey: 1);
-    HomePageState.pagingControllerResidence.addPageRequestListener((pageKey) {
-      loadPage(pageKey);
-    });
     super.initState();
+    if (!HomePageState.isListenerAttached(0)) {
+      HomePageState.pagingControllerResidence
+          .addPageRequestListener((pageKey) {
+        loadPage(pageKey);
+      });
+      HomePageState.setListenerAttached(0, true);
+    }
+    HomePageState.pagingControllerResidence.refresh();
   }
 
   @override
   void dispose() {
-    HomePageState.pagingControllerResidence.dispose();
     super.dispose();
   }
 
