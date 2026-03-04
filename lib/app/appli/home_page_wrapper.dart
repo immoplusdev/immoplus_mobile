@@ -9,6 +9,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -26,15 +27,38 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   final sessionManager = getIt<SessionManager>();
 
   void _onItemTapped({required int index, required PageState pageState}) {
-    // Compte (index 3) requiert une authentification
-    if (index == 3) {
+    // Filtre (index 2) : ouvre la modal, ne navigue pas
+    if (index == 2) {
+      _showFilterDialog();
+      return;
+    }
+    // Compte (index 4) requiert une authentification
+    if (index == 4) {
       if (sessionManager.currentUser == null) {
         context.pushNamed(AuthenticationPage.name);
         return;
       }
     }
     setState(() => _selectedIndex = index);
-    navigationHandler.switchPage(id: index, context: context);
+    // Traduit l'index (skip 2 = filtre) : 3→2 (Explorer), 4→3 (Compte)
+    final navId = index < 2 ? index : index - 1;
+    navigationHandler.switchPage(id: navId, context: context);
+  }
+
+  void _showFilterDialog() {
+    showModalBottomSheet(
+      backgroundColor: AppColors.whiteBackground,
+      showDragHandle: true,
+      enableDrag: true,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.88,
+        child: const FilterPage(),
+      ),
+    );
   }
 
   @override
@@ -88,6 +112,12 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                       activeIcon: Iconsax.heart5,
                       label: 'Favoris',
                       isActive: state == PageState.forMe,
+                    ),
+                    _buildNavItem(
+                      icon: Iconsax.setting_4,
+                      activeIcon: Iconsax.setting_4,
+                      label: 'Filtres',
+                      isActive: true,
                     ),
                     _buildNavItem(
                       icon: Iconsax.location,
