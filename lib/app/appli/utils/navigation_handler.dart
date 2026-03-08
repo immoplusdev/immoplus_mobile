@@ -23,7 +23,7 @@ class NavigationHandler {
                         ? PageState.vivre
                         : id == 3
                             ? PageState.explore
-                            : PageState.acount,
+                            : PageState.account,
           );
     } else {
       context.read<NavigationCubit>().switchPage(
@@ -35,7 +35,7 @@ class NavigationHandler {
                         ? PageState.vivre
                         : id == 3
                             ? PageState.explore
-                            : PageState.acount,
+                            : PageState.account,
           );
     }
 

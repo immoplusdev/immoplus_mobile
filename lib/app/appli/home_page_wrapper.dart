@@ -36,7 +36,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
         return 2;
       case PageState.explore:
         return 3;
-      case PageState.acount:
+      case PageState.account:
         return 4;
       case PageState.history:
       case PageState.map:
@@ -138,7 +138,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                     _buildNavItem(
                       icon: Iconsax.user,
                       label: "Compte",
-                      isActive: state == PageState.acount,
+                      isActive: state == PageState.account,
                       immoMode: state == PageState.vivre,
                     ),
                   ],

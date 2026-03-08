@@ -14,7 +14,7 @@ enum PageState {
   explore,
   history,
   map,
-  acount,
+  account,
   forMe,
 }
 
@@ -65,7 +65,7 @@ class Constantes {
     PageState.home: const HomePage(),
     PageState.explore: Container(), //SearchPage(),
     PageState.map: Container(), //MapViewer(),
-    PageState.acount: AccountPage(),
+    PageState.account: AccountPage(),
     PageState.history: Container(), //HistoricalPage(),
   };
   //static ConfigModel? configApp;
