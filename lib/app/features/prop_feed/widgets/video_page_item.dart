@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
+import 'package:intl/intl.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
-import 'package:immoplus/app/features/prop_feed/widgets/bounce_side_action_button.dart';
+import 'package:immoplus/app/features/prop_feed/widgets/entity_action_button.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/side_action_button.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +22,7 @@ import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dar
 import 'package:immoplus/app/features/prop_feed/widgets/reservation_bottom_sheet.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/social_post_header.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/utils/request_path.dart';
 
 class VideoPageItem extends StatefulWidget {
   const VideoPageItem({
@@ -45,16 +46,17 @@ class VideoPageItem extends StatefulWidget {
 
 class _VideoPageItemState extends State<VideoPageItem>
     with SingleTickerProviderStateMixin {
+  static String? _lastKnownThumbnail;
+
+  bool _thumbnailLoaded = false;
   bool _showPlayIcon = false;
   bool _isDescriptionExpanded = false;
   TapDownDetails? _tapDetails;
   final GlobalKey _likeKey = GlobalKey();
   late final AnimationController _iconAnim;
-  Future<String?>? _localThumbnailFuture;
   Timer? _viewTimer;
-  bool _isSharing = false;
 
-  static const double _overlayBottom = 4.0;
+  // static const double _overlayBottom = 1.0;
 
   @override
   void initState() {
@@ -63,10 +65,13 @@ class _VideoPageItemState extends State<VideoPageItem>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    final video = widget.controller.videos[widget.index];
-    if (video.thumbnailUrl == null || video.thumbnailUrl!.isEmpty) {
-      _localThumbnailFuture =
-          widget.controller.getThumbnailPathForVideo(video.url);
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoPageItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.index != widget.index) {
+      _thumbnailLoaded = false;
     }
   }
 
@@ -125,40 +130,21 @@ class _VideoPageItemState extends State<VideoPageItem>
     }
   }
 
-  Future<void> _onShareTap(String videoId) async {
-    if (_isSharing) return;
-    setState(() => _isSharing = true);
-    try {
-      await widget.controller.shareVideo(videoId);
-    } finally {
-      if (mounted) setState(() => _isSharing = false);
-    }
+  void _onShareTap(String videoId) {
+    widget.controller.shareVideo(videoId);
   }
 
-  /// Ouvre le bottom sheet Réserver avec les données de la vidéo.
+  /// Ouvre le bottom sheet Réserver avec récupération automatique des données via l'API.
   void _showReservationSheet(VideoModel video) {
     final entity = video.relatedTo?.entity;
     final id = video.relatedTo?.id;
     if (id == null || id.isEmpty) return;
 
-    final data = ReservationSheetData(
-      entity: entity ?? '',
-      entityId: id,
-      videoId: video.id,
-      title: video.content?.title ?? video.content?.description,
-      description: video.content?.description ?? video.content?.title,
-      price: video.content?.price,
-      location: video.content?.location,
-      authorName: video.author?.name,
-      authorAvatarUrl: video.author?.avatar,
-      thumbnailUrl: video.thumbnailUrl,
-      
-      
-    );
-
-    ReservationBottomSheet.show(
+    ReservationBottomSheet.showWithEntityData(
       context: context,
-      data: data,
+      entityId: id,
+      entityType: entity ?? '',
+      videoId: video.id,
       onReserve: () {
         // TODO: logique de réservation
       },
@@ -177,7 +163,7 @@ class _VideoPageItemState extends State<VideoPageItem>
         if (route != null) context.push(route);
       },
       size: ReservationSheetSize(
-        heightFactor: 0.45,
+        heightFactor: 0.40,
       ),
     );
   }
@@ -203,15 +189,32 @@ class _VideoPageItemState extends State<VideoPageItem>
         return Stack(
           fit: StackFit.expand,
           children: [
-            Container(color: Colors.black),
-            if (!isReady) _buildThumbnail(video),
+            // Couche 1 : thumbnail précédent (fond permanent, jamais noir)
+            if (_lastKnownThumbnail != null)
+              CachedNetworkImage(
+                imageUrl: _lastKnownThumbnail!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                placeholder: (_, __) => const SizedBox.shrink(),
+                errorWidget: (_, __, ___) => const SizedBox.shrink(),
+              )
+            else
+              Container(color: const Color(0xFF111111)),
+            // Couche 2 : thumbnail actuel qui fade-in quand prêt
+            AnimatedOpacity(
+              opacity: _thumbnailLoaded ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 250),
+              child: _buildThumbnail(video),
+            ),
+            // Couche 3 : vidéo qui fade-in quand isReady=true
             Positioned.fill(
               child: VisibilityDetector(
                 key: Key('video_${widget.index}'),
                 onVisibilityChanged: _onVisibilityChanged,
                 child: AnimatedOpacity(
                   opacity: isReady ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 300),
                   child: videoController == null
                       ? const SizedBox.expand()
                       : Video(
@@ -222,17 +225,6 @@ class _VideoPageItemState extends State<VideoPageItem>
                 ),
               ),
             ),
-            if (!isReady)
-              const Center(
-                child: SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
             Positioned.fill(
               child: DoubleTapDetector(
                 onTap: _onTapPlayPause,
@@ -294,30 +286,38 @@ class _VideoPageItemState extends State<VideoPageItem>
             Positioned(
               left: 0,
               right: 72,
-              bottom: _overlayBottom,
-              child: SocialPostHeader(
-                username: widget.username ??
-                    video.author?.name ??
-                    'Immoplus',
-                avatarUrl: widget.avatarUrl ?? video.author?.avatar,
-                avatarPath: widget.avatarPath,
-                caption: video.content?.description ??
-                    video.content?.title ??
-                    '',
-                hashtags: const [],
-                isExpanded: _isDescriptionExpanded,
-                onMoreTap: () => setState(
-                    () => _isDescriptionExpanded = !_isDescriptionExpanded),
+              bottom:-7,
+              child: LayoutBuilder(
+                builder: (context, constraints) => SocialPostHeader(
+                  username: widget.username ??
+                      video.author?.name ??
+                      'Immoplus',
+                  avatarUrl: widget.avatarUrl ?? video.author?.avatar,
+                  avatarPath: widget.avatarPath,
+                  date: _formatDate(video.createdAt),
+                  verify: true,
+                  caption: video.content?.description ??
+                      video.content?.title ??
+                      '',
+                  hashtags: const [],
+                  isExpanded: _isDescriptionExpanded,
+                  contentMaxWidth: constraints.maxWidth,
+                  contentMaxLines: 2,
+                  onMoreTap: () => setState(
+                      () => _isDescriptionExpanded = !_isDescriptionExpanded),
+                ),
               ),
             ),
             Positioned(
               right: 8,
               top: 0,
-              bottom: 20,
+              bottom: 7,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
+
+                  const SizedBox(height: 12),
                   GestureDetector(
                     key: _likeKey,
                     onTap: () => widget.controller.toggleLike(video.id),
@@ -354,15 +354,14 @@ class _VideoPageItemState extends State<VideoPageItem>
                   SideActionButton(
                     icon: Iconsax.link,
                     label: 'Partager',
-                    isLoading: _isSharing,
                     onTap: () => _onShareTap(video.id),
                   ),
                   const SizedBox(height: 12),
                   _buildPriceBadge(video),
                   const SizedBox(height: 10),
                   if (video.relatedTo?.id != null)
-                    BounceSideActionButton(
-                      label: 'Reserver',
+                    EntityActionButton(
+                      relatedTo: video.relatedTo,
                       onTap: () => _showReservationSheet(video),
                     ),
                 ],
@@ -372,6 +371,16 @@ class _VideoPageItemState extends State<VideoPageItem>
         );
       },
     );
+  }
+
+  String? _formatDate(String? createdAt) {
+    if (createdAt == null || createdAt.isEmpty) return null;
+    try {
+      final dt = DateTime.tryParse(createdAt);
+      return dt != null ? DateFormat('yyyy-MM-dd').format(dt) : null;
+    } catch (_) {
+      return null;
+    }
   }
 
   String _formatCount(int count) {
@@ -425,32 +434,38 @@ class _VideoPageItemState extends State<VideoPageItem>
   }
 
   Widget _buildThumbnail(VideoModel video) {
-    if (video.thumbnailUrl != null && video.thumbnailUrl!.isNotEmpty) {
+    final thumbnailUrl = _getThumbnailUrl(video);
+    if (thumbnailUrl != null && thumbnailUrl.isNotEmpty) {
       return CachedNetworkImage(
-        imageUrl: video.thumbnailUrl!,
+        imageUrl: thumbnailUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        placeholder: (_, __) => Container(color: Colors.black),
-        errorWidget: (_, __, ___) => Container(color: Colors.black),
+        placeholder: (_, __) => const SizedBox.shrink(),
+        errorWidget: (_, __, ___) => const SizedBox.shrink(),
+        imageBuilder: (_, imageProvider) {
+          _lastKnownThumbnail = thumbnailUrl;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() => _thumbnailLoaded = true);
+          });
+          return Image(image: imageProvider, fit: BoxFit.cover);
+        },
       );
     }
-    return FutureBuilder<String?>(
-      future: _localThumbnailFuture,
-      builder: (context, snap) {
-        if (snap.connectionState == ConnectionState.done &&
-            snap.hasData &&
-            snap.data != null) {
-          return Image.file(
-            File(snap.data!),
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-            gaplessPlayback: true,
-          );
-        }
-        return Container(color: Colors.black);
-      },
-    );
+    return const SizedBox.shrink();
+  }
+
+  /// Retourne l'URL de la miniature : thumbnailUrl si présent, sinon URL construite depuis miniature (UUID).
+  static String? _getThumbnailUrl(VideoModel video) {
+    if (video.thumbnailUrl != null && video.thumbnailUrl!.trim().isNotEmpty) {
+      return video.thumbnailUrl;
+    }
+    if (video.miniature != null && video.miniature!.trim().isNotEmpty) {
+      final baseUrl = RequestPath.baseUrl.trim();
+      if (baseUrl.isNotEmpty) {
+        return '$baseUrl/files/raw/public/${video.miniature}';
+      }
+    }
+    return null;
   }
 }

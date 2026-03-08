@@ -5,6 +5,8 @@ class FeedItemContent {
     this.description,
     this.price,
     this.location,
+    this.commodites = const [],
+    this.pieces = const [],
   });
 
   final String? title;
@@ -12,12 +14,55 @@ class FeedItemContent {
   final String? price;
   final String? location;
 
-  factory FeedItemContent.fromJson(Map<String, dynamic> json) =>
-      FeedItemContent(
-        title: json['title'] as String?,
-        description: json['description'] as String?,
-        price: json['price'] as String?,
-        location: json['location'] as String?,
+  /// [{ "text": "WiFi", "icon": "wifi" }, ...]
+  final List<FeedCommodite> commodites;
+
+  /// [{ "nom": "Chambre", "nombre": 1 }, ...]
+  final List<FeedPiece> pieces;
+
+  factory FeedItemContent.fromJson(Map<String, dynamic> json) {
+    final commoditesRaw = json['commodites'] as List<dynamic>? ?? [];
+    final piecesRaw = json['pieces'] as List<dynamic>? ?? [];
+    return FeedItemContent(
+      title: json['title'] as String?,
+      description: json['description'] as String?,
+      price: json['price'] as String?,
+      location: json['location'] as String?,
+      commodites: commoditesRaw
+          .map((e) => FeedCommodite.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      pieces: piecesRaw
+          .map((e) => FeedPiece.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+}
+
+class FeedCommodite {
+  const FeedCommodite({required this.text, required this.icon});
+  final String text;
+  final String icon;
+  factory FeedCommodite.fromJson(Map<String, dynamic> json) =>
+      FeedCommodite(
+        text: json['text'] as String? ?? '',
+        icon: json['icon'] as String? ?? '',
+      );
+}
+
+class FeedPiece {
+  const FeedPiece({
+    required this.nom,
+    required this.nombre,
+    this.value,
+  });
+  final String nom;
+  final int nombre;
+  final String? value;
+  factory FeedPiece.fromJson(Map<String, dynamic> json) =>
+      FeedPiece(
+        nom: json['nom'] as String? ?? '',
+        nombre: json['nombre'] as int? ?? 0,
+        value: json['value'] as String?,
       );
 }
 
@@ -67,6 +112,8 @@ class VideoModel {
     required this.id,
     required this.url,
     this.thumbnailUrl,
+    /// UUID du fichier miniature (table files). URL: {baseUrl}/files/raw/public/{miniature}
+    this.miniature,
     this.source,
     this.status = 'ready',
     this.content,
@@ -74,6 +121,7 @@ class VideoModel {
     this.relatedTo,
     this.author,
     this.createdAt,
+    this.shortCode,
   });
 
   final String id;
@@ -82,6 +130,7 @@ class VideoModel {
   final String url;
 
   final String? thumbnailUrl;
+  final String? miniature;
   final String? source;
   final String status;
   final FeedItemContent? content;
@@ -90,10 +139,14 @@ class VideoModel {
   final FeedItemAuthor? author;
   final String? createdAt;
 
+  /// Code court pour le partage (ex: "Xk9mP2"). Fourni par GET /feed.
+  final String? shortCode;
+
   factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json['id'] as String? ?? '',
         url: json['videoUrl'] as String? ?? '',
         thumbnailUrl: json['thumbnailUrl'] as String?,
+        miniature: json['miniature'] as String?,
         source: json['source'] as String?,
         status: json['status'] as String? ?? 'ready',
         content: json['content'] != null
@@ -111,5 +164,6 @@ class VideoModel {
             ? FeedItemAuthor.fromJson(json['author'] as Map<String, dynamic>)
             : null,
         createdAt: json['createdAt'] as String?,
+        shortCode: json['shortCode'] as String?,
       );
 }

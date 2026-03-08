@@ -46,6 +46,8 @@ dependencies:
       url: https://github.com/Shahidbangash/intl_phone_number_input.git
       ref: develop
   dio: ^5.8.0+1
+  talker: ^5.1.15
+  talker_dio_logger: ^5.1.15
   asset_cache: ^2.1.0
   auto_size_text: ^3.0.0
   bloc: ^9.0.0

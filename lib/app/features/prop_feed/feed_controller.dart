@@ -14,6 +14,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/prop_feed/feed_socket_service.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
+import 'package:immoplus/main.dart';
 
 class VideoFeedController extends GetxController {
   VideoFeedController() : _repository = VideoRepository();
@@ -73,30 +74,67 @@ class VideoFeedController extends GetxController {
   // ---------------------------------------------------------------------------
 
   Future<void> _fetchFeed() async {
-    final result = await _repository.fetchFeed();
+    talker.info('[VideoFeed] 📺 Initializing feed (TikTok-like pagination: limit=5)...');
+    final result = await _repository.fetchFeed(); // limit=5 by default
     _cursor = result.cursor;
     _hasMore = result.hasMore;
     _initLikesFromItems(result.items);
     videos.assignAll(result.items);
-    if (videos.isEmpty) return;
-    _preloadThumbnails();
+
+    talker.info(
+      '[VideoFeed] ✓ Initial buffer loaded: ${result.items.length} videos | '
+      'Strategy: 1 visible + 1 prefetch + 3 buffer | '
+      'cursor=${_cursor?.substring(0, 8) ?? 'null'}... | hasMore=$_hasMore'
+    );
+
+    if (videos.isEmpty) {
+      talker.warning('[VideoFeed] ⚠️ Feed is empty');
+      return;
+    }
     _initializeFirstVideo();
     _connectSocket();
   }
 
   Future<void> _loadMore() async {
-    if (_isLoadingMore || !_hasMore) return;
+    if (_isLoadingMore || !_hasMore) {
+      if (_isLoadingMore) {
+        talker.debug('[VideoFeed:Pagination] ⏳ Already loading more...');
+      }
+      if (!_hasMore) {
+        talker.info('[VideoFeed:Pagination] ✓ No more videos to load');
+      }
+      return;
+    }
+
     _isLoadingMore = true;
+    talker.info(
+      '[VideoFeed:Pagination] 📥 Fetching 5 more videos (TikTok-like limit) | '
+      'cursor=${_cursor?.substring(0, 8) ?? 'null'}... | buffered=${videos.length} | players=${_players.length}'
+    );
+
     try {
-      final result = await _repository.fetchFeed(cursor: _cursor);
+      final result = await _repository.fetchFeed(cursor: _cursor); // limit=5
       _cursor = result.cursor;
       _hasMore = result.hasMore;
       _initLikesFromItems(result.items);
+
       if (result.items.isNotEmpty) {
         videos.addAll(result.items);
+        talker.info(
+          '[VideoFeed:Pagination] ✓ Buffer extended: +${result.items.length} | '
+          'total buffer=${videos.length} | '
+          'nextCursor=${_cursor?.substring(0, 8) ?? 'null'}... | hasMore=$_hasMore | '
+          'memory=Players(${_players.length})/Buffer(${videos.length})'
+        );
+      } else {
+        talker.warning('[VideoFeed:Pagination] ⚠️ Empty response - no new videos');
       }
-    } catch (e) {
-      debugPrint('[VideoFeedController] _loadMore error → $e');
+    } catch (e, st) {
+      talker.error(
+        '[VideoFeed:Pagination] ❌ Error loading more videos',
+        e,
+        st,
+      );
     } finally {
       _isLoadingMore = false;
     }
@@ -161,26 +199,25 @@ class VideoFeedController extends GetxController {
   static String get _shareBaseUrl =>
       dotenv.env['SHARE_BASE_URL'] ?? 'https://app.immoplus.ci';
 
-  // Crée un short link via POST /short puis ouvre la feuille de partage native.
-  // Le lien partagé : https://app.immoplus.ci/short/<code>
+  // Utilise le shortCode fourni par GET /feed pour partager le lien.
   Future<void> shareVideo(String videoId) async {
-    final code = await _repository.createShortLink(videoId);
-    if (code == null || code.isEmpty) {
+    final idx = videos.indexWhere((v) => v.id == videoId);
+    if (idx == -1) return;
+    final video = videos[idx];
+    final code = video.shortCode;
+    if (code != null && code.isNotEmpty) {
+      final publicLink = '$_shareBaseUrl/v/$code';
+      await SharePlus.instance.share(ShareParams(
+        text: publicLink,
+        subject: 'Découvrez ce bien sur Immoplus',
+      ));
+    } else {
       // Fallback : partager l'URL directe de la vidéo
-      final idx = videos.indexWhere((v) => v.id == videoId);
-      if (idx != -1) {
-        await SharePlus.instance.share(ShareParams(
-          text: videos[idx].url,
-          subject: 'Découvrez ce bien sur Immoplus',
-        ));
-      }
-      return;
+      await SharePlus.instance.share(ShareParams(
+        text: video.url,
+        subject: 'Découvrez ce bien sur Immoplus',
+      ));
     }
-    final publicLink = '$_shareBaseUrl/v/$code';
-    await SharePlus.instance.share(ShareParams(
-      text: publicLink,
-      subject: 'Découvrez ce bien sur Immoplus 🏠',
-    ));
   }
 
   void _socketEnterVideo(int index) {
@@ -195,15 +232,8 @@ class VideoFeedController extends GetxController {
   }
 
   // ---------------------------------------------------------------------------
-  // Thumbnail
+  // Thumbnail (utilise thumbnailUrl ou miniature de l'API, plus de génération locale)
   // ---------------------------------------------------------------------------
-
-  void _preloadThumbnails() {
-    final count = videos.length.clamp(0, 3);
-    for (int i = 0; i < count; i++) {
-      _repository.getThumbnailPathForVideo(videos[i].url);
-    }
-  }
 
   // ---------------------------------------------------------------------------
   // Player lifecycle
@@ -289,12 +319,20 @@ class VideoFeedController extends GetxController {
 
   void _preloadWindow(int index) {
     if (videos.isEmpty) return;
+    final toPreload = <int>[];
     for (final i in <int>[index + 1, index + 2]) {
       if (i < 0 || i >= videos.length) continue;
       if (_readyIndexes.contains(i) || _initializingIndexes.contains(i)) {
         continue;
       }
+      toPreload.add(i);
       initPlayer(i, videos[i].url);
+    }
+    if (toPreload.isNotEmpty) {
+      talker.debug(
+        '[VideoFeed:Preload] Preloading indices: $toPreload | '
+        'ready=${_readyIndexes.length} | initializing=${_initializingIndexes.length}'
+      );
     }
   }
 
@@ -302,9 +340,14 @@ class VideoFeedController extends GetxController {
     if (videos.isEmpty) return;
 
     _currentIndex = index;
+    talker.debug('[VideoFeed:PageChange] Current index: $index / ${videos.length}');
 
     // Pagination : charger la suite quand proche de la fin
     if (!_isLoadingMore && _hasMore && index >= videos.length - 3) {
+      talker.info(
+        '[VideoFeed:Pagination] 🔔 Near end detected! '
+        'index=$index >= ${videos.length} - 3'
+      );
       _loadMore();
     }
 
@@ -361,6 +404,12 @@ class VideoFeedController extends GetxController {
       player?.dispose();
       update(<Object>['video_$key']);
     }
+
+    // Log memory status
+    talker.debug(
+      '[VideoFeed:Memory] Players in memory: ${_players.length} | '
+      'Keep indices: $keep | Total videos buffered: ${videos.length}'
+    );
   }
 
   void playAt(int index) {

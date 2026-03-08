@@ -5,16 +5,30 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
+import 'package:immoplus/main.dart';
 
 typedef FeedPage = ({List<VideoModel> items, String? cursor, bool hasMore});
 
 class VideoRepository {
-  VideoRepository();
+  VideoRepository() {
+    if (kDebugMode) {
+      _dio.interceptors.add(
+        TalkerDioLogger(
+          settings: const TalkerDioLoggerSettings(
+            printRequestHeaders: false,
+            printResponseHeaders: false,
+            printRequestData: true,
+            printResponseData: true,
+            printResponseMessage: true,
+          ),
+        ),
+      );
+    }
+  }
 
   final Dio _dio = Dio();
   final CacheManager cacheManager = CacheManager(
@@ -32,17 +46,26 @@ class VideoRepository {
   // Feed API — GET /feed
   // ---------------------------------------------------------------------------
 
-  Future<FeedPage> fetchFeed({String? cursor, int limit = 10}) async {
+  Future<FeedPage> fetchFeed({String? cursor, int limit = 5}) async {
     try {
       final params = <String, dynamic>{'limit': limit};
-      if (cursor != null) params['cursor'] = cursor;
+      if (cursor != null) {
+        params['cursor'] = cursor;
+        talker.info(
+          '[VideoRepository] 📡 GET /feed?limit=$limit (pagination) | '
+          'cursor=${cursor.substring(0, 8)}... | TikTok-like incremental load'
+        );
+      } else {
+        talker.info('[VideoRepository] 📡 GET /feed?limit=$limit (initial) | First batch of videos');
+      }
+
       final response = await _dio.get(
         '$_baseUrl/feed',
         queryParameters: params,
       );
       return _parseFeedPage(response.data as Map<String, dynamic>);
     } catch (e) {
-      debugPrint('[VideoRepository] fetchFeed error → $e');
+      talker.error('[VideoRepository] ❌ fetchFeed error', e);
       return (items: <VideoModel>[], cursor: null, hasMore: false);
     }
   }
@@ -73,69 +96,43 @@ class VideoRepository {
 
   FeedPage _parseFeedPage(Map<String, dynamic> data) {
     final rawList = data['data'] as List<dynamic>? ?? [];
-    final items = rawList
-        .map((e) {
-          final json = Map<String, dynamic>.from(e as Map);
-          // Corrige les URLs localhost retournées par le backend déployé
-          if (json['videoUrl'] is String) {
-            json['videoUrl'] = _normalizeUrl(json['videoUrl'] as String);
-          }
-          if (json['thumbnailUrl'] is String) {
-            json['thumbnailUrl'] =
-                _normalizeUrl(json['thumbnailUrl'] as String);
-          }
-          return VideoModel.fromJson(json);
-        })
-        .where((v) {
-          if (v.url.isEmpty) return false;
-          final uri = Uri.tryParse(v.url);
-          if (uri == null) return false;
-          final lastSegment =
-              uri.pathSegments.isEmpty ? '' : uri.pathSegments.last;
-          return lastSegment != 'undefined' && lastSegment.isNotEmpty;
-        })
-        .toList();
+
+    final items = <VideoModel>[];
+    int filtered = 0;
+
+    for (final e in rawList) {
+      final json = Map<String, dynamic>.from(e as Map);
+      // Normalise les URLs localhost → domaine API réel
+      if (json['videoUrl'] is String) {
+        json['videoUrl'] = _normalizeUrl(json['videoUrl'] as String);
+      }
+      if (json['thumbnailUrl'] is String) {
+        json['thumbnailUrl'] = _normalizeUrl(json['thumbnailUrl'] as String);
+      }
+      final video = VideoModel.fromJson(json);
+      // Ne rejeter que les vidéos sans URL
+      if (video.url.isEmpty) {
+        filtered++;
+        talker.debug('[Feed] Filtered video (empty URL): id=${video.id}');
+        continue;
+      }
+      items.add(video);
+    }
+
+    final nextCursor = data['cursor'] as String?;
+    final hasMore = data['has_more'] as bool? ?? false;
+
+    talker.info(
+      '[Feed] ✓ Parsed response | '
+      'received=$rawList | valid=${items.length} | filtered=$filtered | '
+      'nextCursor=${nextCursor?.substring(0, 8) ?? 'null'}... | hasMore=$hasMore'
+    );
+
     return (
       items: items,
-      cursor: data['cursor'] as String?,
-      hasMore: data['has_more'] as bool? ?? false,
+      cursor: nextCursor,
+      hasMore: hasMore,
     );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Short URL — POST /short  (Auth requis)
-  // ---------------------------------------------------------------------------
-
-  /// Crée un short link pour la vidéo [feedVideoId].
-  /// Retourne le [code] court (ex. "aB3xYz") — le contrôleur construit l'URL publique.
-  Future<String?> createShortLink(String feedVideoId) async {
-    try {
-      final token = await _getAccessToken();
-      final response = await _dio.post(
-        '$_baseUrl/short',
-        data: {'feedVideoId': feedVideoId},
-        options: Options(
-          headers: token != null
-              ? {'Authorization': 'Bearer $token'}
-              : null,
-        ),
-      );
-      final body = response.data as Map<String, dynamic>;
-      // On utilise "code" pour construire l'URL publique côté app.
-      return body['code'] as String?;
-    } catch (e) {
-      debugPrint('[VideoRepository] createShortLink error → $e');
-      return null;
-    }
-  }
-
-  Future<String?> _getAccessToken() async {
-    try {
-      final user = await getIt<SessionManager>().getCurrentUser();
-      return user?.accessToken;
-    } catch (_) {
-      return null;
-    }
   }
 
   // ---------------------------------------------------------------------------
@@ -215,7 +212,8 @@ class VideoRepository {
 
   Future<void> _downloadProgressive(String url) async {
     final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/${Uri.parse(url).pathSegments.last}');
+    final lastSegment = Uri.parse(url).pathSegments.lastOrNull ?? 'video';
+    final file = File('${dir.path}/vid_${lastSegment.hashCode.abs()}_$lastSegment');
     final sink = file.openWrite(mode: FileMode.writeOnly);
     final resp = await _dio.get<ResponseBody>(
       url,
@@ -226,7 +224,8 @@ class VideoRepository {
     }
     await sink.close();
     final bytes = await file.readAsBytes();
-    await DefaultCacheManager().putFile(
+    await file.delete();
+    await cacheManager.putFile(
       url,
       bytes,
       fileExtension: _extractExtension(url),

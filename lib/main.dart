@@ -4,6 +4,9 @@ import 'package:immoplus/app/appli/my_app.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:talker/talker.dart';
+
+final talker = Talker();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

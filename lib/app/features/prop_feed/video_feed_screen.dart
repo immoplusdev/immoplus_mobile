@@ -120,6 +120,10 @@ class _VideoFeedViewState extends State<VideoFeedView>
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
+          top: true,
+          bottom: true,
+          right: false,
+          left: false,
           child: Stack(
             fit: StackFit.expand,
             children: [

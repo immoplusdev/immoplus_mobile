@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'property_type_dropdown.dart';
 
 /// Barre de navigation supérieure du feed : onglets + recherche.
 class TopNavBar extends StatefulWidget {
@@ -8,13 +8,18 @@ class TopNavBar extends StatefulWidget {
     this.initialIndex = 1,
     this.onTabSelected,
     this.onSearchTap,
+    this.onPropertyTypeSelected,
   });
 
   final int initialIndex;
   final ValueChanged<int>? onTabSelected;
   final VoidCallback? onSearchTap;
+  final ValueChanged<PropertyType>? onPropertyTypeSelected;
 
-  static const List<String> _tabs = ['Near you', 'For you'];
+  static const List<String> _tabs = ['Près de Toi', 'Pour Toi'];
+
+  /// Espacement horizontal entre les onglets.
+  static const double tabSpacing = 12;
 
   @override
   State<TopNavBar> createState() => _TopNavBarState();
@@ -22,11 +27,20 @@ class TopNavBar extends StatefulWidget {
 
 class _TopNavBarState extends State<TopNavBar> {
   late int _selectedIndex;
+  final ScrollController _scrollController = ScrollController();
+  bool _showPropertyDropdown = false;
+  PropertyType? _selectedPropertyType;
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,41 +51,93 @@ class _TopNavBarState extends State<TopNavBar> {
     }
   }
 
+  void _onTabTap(int index) {
+    setState(() => _selectedIndex = index);
+    widget.onTabSelected?.call(index);
+  }
+
+  void _onImmobilierLongPress() {
+    setState(() => _showPropertyDropdown = true);
+  }
+
+  /// Retourne le label de l'onglet (affiche le type sélectionné pour Immobilier)
+  String _getTabLabel(int index) {
+    if (index == 2 && _selectedPropertyType != null) {
+      return _selectedPropertyType!.label;
+    }
+    return TopNavBar._tabs[index];
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(
                   TopNavBar._tabs.length,
-                  (index) => _TabItem(
-                    label: TopNavBar._tabs[index],
-                    isSelected: _selectedIndex == index,
-                    onTap: () {
-                      setState(() => _selectedIndex = index);
-                      widget.onTabSelected?.call(index);
-                    },
+                  (index) => Padding(
+                    padding: EdgeInsets.only(
+                      right: index < TopNavBar._tabs.length - 1
+                          ? TopNavBar.tabSpacing
+                          : 0,
+                    ),
+                    child: index == 2
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _TabItem(
+                                label: _getTabLabel(index),
+                                isSelected: _selectedIndex == index,
+                                onTap: () => _onTabTap(index),
+                                onLongPress: _onImmobilierLongPress,
+                              ),
+                              if (_showPropertyDropdown)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: PropertyTypeDropdown(
+                                    selectedType: _selectedPropertyType,
+                                    onSelected: (type) {
+                                      setState(() => _selectedPropertyType = type);
+                                      widget.onPropertyTypeSelected?.call(type);
+                                      Future.delayed(
+                                        const Duration(milliseconds: 150),
+                                        () {
+                                          if (mounted) {
+                                            setState(
+                                                () => _showPropertyDropdown =
+                                                    false);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                            ],
+                          )
+                        : _TabItem(
+                            label: _getTabLabel(index),
+                            isSelected: _selectedIndex == index,
+                            onTap: () => _onTabTap(index),
+                            onLongPress: null,
+                          ),
                   ),
                 ),
               ),
             ),
-            // GestureDetector(
-            //   onTap: widget.onSearchTap,
-            //   child: const Icon(
-            //     Iconsax.search_normal_1,
-            //     color: Colors.white,
-            //     size: 24,
-            //   ),
-            // ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -82,19 +148,29 @@ class _TabItem extends StatelessWidget {
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.onLongPress,
   });
 
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        // decoration: BoxDecoration(
+        //   border: Border.all(
+        //     color: Colors.white.withValues(alpha: 0.2),
+        //     width: 1,
+        //   ),
+        //   borderRadius: BorderRadius.circular(20),
+        // ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -105,7 +181,14 @@ class _TabItem extends StatelessWidget {
                     ? Colors.white
                     : Colors.white.withOpacity(0.7),
                 fontSize: 15,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
+                shadows: [
+                  Shadow(
+                    color: const Color(0xFF1E1E1E).withValues(alpha: 0.2),
+                    offset: const Offset(0, 1),
+                    blurRadius: 2,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 6),
@@ -124,3 +207,4 @@ class _TabItem extends StatelessWidget {
     );
   }
 }
+
