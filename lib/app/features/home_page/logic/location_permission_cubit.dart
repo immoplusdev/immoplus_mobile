@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 class LocationPermissionCubit extends Cubit<LocationPermissionState> {
   LocationPermissionCubit() : super(const LocationPermissionState.initial());
 
-  /// Vérifie l'état actuel de la permission
+  /// Vérifie l'état actuel de la permission et demande automatiquement si pas encore accordée
   Future<void> checkPermission() async {
     emit(const LocationPermissionState.checking());
 
@@ -20,9 +20,9 @@ class LocationPermissionCubit extends Cubit<LocationPermissionState> {
         emit(const LocationPermissionState.granted());
       } else if (permission == LocationPermission.deniedForever) {
         emit(const LocationPermissionState.permanentlyDenied());
-      } else if (permission == LocationPermission.denied) {
-        // Première fois ou refusée temporairement
-        emit(const LocationPermissionState.notDetermined());
+      } else {
+        // Première fois ou refusée temporairement → demander automatiquement
+        await requestPermission();
       }
     } catch (e) {
       emit(const LocationPermissionState.notDetermined());
