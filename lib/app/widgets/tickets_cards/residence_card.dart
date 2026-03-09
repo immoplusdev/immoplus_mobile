@@ -16,6 +16,7 @@ import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
+import 'package:immoplus/app/widgets/tickets_cards/components/card_image_carousel.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -56,73 +57,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: AspectRatio(
-                      aspectRatio: 1.70, // Rectangle paysage
-                      child: FlutterCarousel(
-                        items: widget.residence.images
-                            .map((e) => Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: Utils.getImagePath(id: e),
-                                    placeholder: (context, url) =>
-                                        Shimmer.fromColors(
-                                      baseColor: Colors.grey.shade300,
-                                      highlightColor: Colors.grey.shade100,
-                                      period: const Duration(milliseconds: 500),
-                                      child: Container(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) => Icon(
-                                      FontAwesomeIcons.images,
-                                      size: 100,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    fit: BoxFit
-                                        .cover, // Ajuste l'image au conteneur
-                                  ),
-                                ))
-                            .toList(),
-                        options: FlutterCarouselOptions(
-                          aspectRatio: 1, // Assure le rectangle paysage
-                          viewportFraction:
-                              1.0, // Pas de découpage ou chevauchement
-                          initialPage: 0,
-                          enableInfiniteScroll: widget.residence.images.length > 1,
-
-                          reverse: false,
-                          autoPlay: false,
-                          enlargeCenterPage: false,
-                          scrollDirection: Axis.horizontal,
-                          showIndicator: true,
-                          indicatorMargin: 20,
-                          slideIndicator: CircularSlideIndicator(
-                            slideIndicatorOptions: const SlideIndicatorOptions(
-                              indicatorRadius: 4,
-                              enableHalo: true,
-                              enableAnimation: true,
-                              itemSpacing: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Positioned(
-                  //   bottom: 10,
-                  //   right: 10,
-                  //   child: RatingComponent(
-                  //       rating: (widget.residence.score ?? 0).toDouble()),
-                  // )
-                ],
-              ),
+              CardImageCarousel(images: widget.residence.images),
               Gap(10),
               Container(
                 //color: Colors.grey,

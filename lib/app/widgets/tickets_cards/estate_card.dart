@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -14,8 +12,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
-import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:immoplus/app/widgets/tickets_cards/components/card_image_carousel.dart';
 
 class EstateCard extends StatefulWidget {
   const EstateCard({super.key, required this.bienImmobilierModel});
@@ -55,92 +52,7 @@ class _EstateCardState extends State<EstateCard> {
             },
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: AspectRatio(
-                        aspectRatio: 1.70, // Rectangle paysage
-                        child: FlutterCarousel(
-                            items: widget.bienImmobilierModel.images
-                                .map((e) => Container(
-                                      color: Colors.grey.shade200,
-                                      width: double.infinity,
-                                      child: CachedNetworkImage(
-                                        imageUrl: Utils.getImagePath(
-                                            id: e), //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
-
-                                        placeholder: (context, url) =>
-                                            Shimmer.fromColors(
-                                          baseColor: Colors.grey.shade300,
-                                          highlightColor: Colors.grey.shade100,
-                                          period:
-                                              const Duration(milliseconds: 500),
-                                          child: Container(
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(
-                                          FontAwesomeIcons.images,
-                                          size: 100,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                        fit: BoxFit
-                                            .cover, // or other BoxFit values as per your design
-                                      ),
-                                    ))
-                                .toList(),
-                            options: FlutterCarouselOptions(
-                              //height: 240.0,
-                              aspectRatio: 1,
-                              viewportFraction: 1.0,
-                              initialPage: 0,
-                              enableInfiniteScroll: widget.bienImmobilierModel.images.length > 1,
-                              reverse: false,
-                              autoPlay: false,
-                              autoPlayInterval: const Duration(seconds: 2),
-                              autoPlayAnimationDuration:
-                                  const Duration(milliseconds: 800),
-                              autoPlayCurve: Curves.fastOutSlowIn,
-                              enlargeCenterPage: false,
-                              controller: FlutterCarouselController(),
-                              onPageChanged: (e, x) {},
-                              pageSnapping: true,
-                              scrollDirection: Axis.horizontal,
-                              pauseAutoPlayOnTouch: true,
-                              pauseAutoPlayOnManualNavigate: true,
-                              pauseAutoPlayInFiniteScroll: false,
-                              enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                              disableCenter: false,
-                              showIndicator: true,
-                              indicatorMargin: 20,
-                              slideIndicator: CircularSlideIndicator(
-                                  slideIndicatorOptions:
-                                      const SlideIndicatorOptions(
-                                //currentIndicatorColor: Colors.red,
-                                indicatorRadius: 4,
-
-                                enableHalo: true,
-                                enableAnimation: true,
-                                itemSpacing: 12,
-                              )
-                                  // indicatorRadius: 3,
-                                  // itemSpacing: 10,
-                                  ),
-                              floatingIndicator: true,
-                            )),
-                      ),
-                    ),
-                    // Positioned(
-                    //   bottom: 10,
-                    //   right: 10,
-                    //   child: RatingComponent(rating: 5),
-                    // )
-                  ],
-                ),
+                CardImageCarousel(images: widget.bienImmobilierModel.images),
                 Gap(10),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
