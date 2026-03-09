@@ -170,7 +170,7 @@ class _VideoFeedViewState extends State<VideoFeedView>
                 left: 0,
                 right: 0,
                 child: TopNavBar(
-                  initialIndex: 1,
+                  initialIndex: 0,
                   onSearchTap: () {},
                 ),
               ),

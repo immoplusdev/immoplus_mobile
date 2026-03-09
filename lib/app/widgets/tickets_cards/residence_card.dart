@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +15,6 @@ import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/card_image_carousel.dart';
-import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ResidenceCard extends StatefulWidget {
   const ResidenceCard({super.key, required this.residence});
@@ -146,26 +142,27 @@ class _ResidenceCardState extends State<ResidenceCard> {
             ],
           ),
         ),
-        Positioned(
-          right: 10,
-          top: 10,
-          child: ValueListenableBuilder(
-            valueListenable: _liked,
-            builder: (context, value, child) => ResidenceFavoriteButton(
-              isFavorite: value,
-              onTap: () async {
-                if (_liked.value == false) {
-                  favoriesUtils
-                      .addResidenceToFavorites(widget.residence)
-                      .then((value) {});
-                } else {
-                  favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
-                }
-                _liked.value = !value;
-              },
-            ),
-          ),
-        ),
+        // Bouton cœur (commenté)
+        // Positioned(
+        //   right: 10,
+        //   bottom: 160,
+        //   child: ValueListenableBuilder(
+        //     valueListenable: _liked,
+        //     builder: (context, value, child) => ResidenceFavoriteButton(
+        //       isFavorite: value,
+        //       onTap: () async {
+        //         if (_liked.value == false) {
+        //           favoriesUtils
+        //               .addResidenceToFavorites(widget.residence)
+        //               .then((value) {});
+        //         } else {
+        //           favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
+        //         }
+        //         _liked.value = !value;
+        //       },
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

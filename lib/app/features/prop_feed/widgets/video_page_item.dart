@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:instagram_like_animation_button/instagram_like_animation_button.dart';
-import 'package:media_kit_video/media_kit_video.dart';
+import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
@@ -200,14 +200,10 @@ class _VideoPageItemState extends State<VideoPageItem>
               child: VisibilityDetector(
                 key: Key('video_${widget.index}'),
                 onVisibilityChanged: _onVisibilityChanged,
-                child: videoController == null
+                child: videoController == null ||
+                        !videoController.value.isInitialized
                     ? const SizedBox.expand()
-                    : Video(
-                        controller: videoController,
-                        fit: BoxFit.contain,
-                        fill: Colors.transparent,
-                        controls: NoVideoControls,
-                      ),
+                    : _buildVideoFit(videoController),
               ),
             ),
             // Couche 4 : overlay ImmoLoading PAR-DESSUS la vidéo
@@ -426,6 +422,33 @@ class _VideoPageItemState extends State<VideoPageItem>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Affiche la vidéo en plein écran (cover) pour les vidéos verticales
+  /// et en ratio natif (contain) pour les vidéos horizontales.
+  Widget _buildVideoFit(VideoPlayerController controller) {
+    final aspectRatio = controller.value.aspectRatio;
+    final isVertical = aspectRatio <= 0 || aspectRatio < 1.0;
+
+    if (isVertical) {
+      return SizedBox.expand(
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: controller.value.size.width,
+            height: controller.value.size.height,
+            child: VideoPlayer(controller),
+          ),
+        ),
+      );
+    }
+
+    return Center(
+      child: AspectRatio(
+        aspectRatio: aspectRatio,
+        child: VideoPlayer(controller),
       ),
     );
   }
