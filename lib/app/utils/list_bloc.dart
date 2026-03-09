@@ -32,7 +32,7 @@ class AppBlocs {
       create: (context) => HomePageCubit(),
     ),
     BlocProvider<LocationPermissionCubit>(
-      create: (context) => getIt<LocationPermissionCubit>(),
+      create: (context) => getIt<LocationPermissionCubit>()..checkPermission(),
     ),
     BlocProvider<DeleteAccountCubit>(
       create: (context) => DeleteAccountCubit(),

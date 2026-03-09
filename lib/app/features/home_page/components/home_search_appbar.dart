@@ -24,7 +24,6 @@ import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
@@ -330,162 +329,164 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       child: BlocBuilder<FilterCubit, FilterHandler>(
         builder: (context, state) {
           return SliverAppBar(
-          automaticallyImplyLeading: false,
-          pinned: true,
-          snap: false,
-          floating: true,
-          titleSpacing: 0,
-          toolbarHeight: 125,
-          backgroundColor: AppColors.whiteBackground,
-          title: Container(
-            color: AppColors.whiteBackground,
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    BlocBuilder<LocationPermissionCubit,
-                        LocationPermissionState>(
-                      builder: (context, permissionState) {
-                        return GestureDetector(
-                          onTap: () =>
-                              _handleLocationTap(context, permissionState),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                Assets.img.locIc,
-                                color: AppColors.primary,
-                              ),
-                              Gap(5),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 3),
-                                constraints: BoxConstraints(maxWidth: 200),
-                                decoration: BoxDecoration(
+            automaticallyImplyLeading: false,
+            pinned: true,
+            snap: false,
+            floating: true,
+            titleSpacing: 0,
+            toolbarHeight: 125,
+            backgroundColor: AppColors.whiteBackground,
+            title: Container(
+              color: AppColors.whiteBackground,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      BlocBuilder<LocationPermissionCubit,
+                          LocationPermissionState>(
+                        builder: (context, permissionState) {
+                          return GestureDetector(
+                            onTap: () =>
+                                _handleLocationTap(context, permissionState),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.img.locIc,
                                   color: AppColors.primary,
-                                  borderRadius: BorderRadius.circular(39),
                                 ),
-                                child: _buildLocationText(
-                                    context, permissionState),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        if (sessionManager.currentUser != null) {
-                          context.pushNamed(NotificationsPage.name);
-                        } else {
-                          context.pushNamed(AuthenticationPage.name);
-                        }
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.F2F2F2,
-                        ),
-                        child: Icon(Icons.notifications_none_rounded),
-                      ),
-                    ),
-                  ],
-                ),
-                Gap(14),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 57.5,
-                        child: CustomTextField(
-                          contentPadding: EdgeInsets.symmetric(vertical: 0),
-                          labelText: 'Que cherchez-vous ?',
-                          prefixIcon: Icon(
-                            color: AppColors.primary,
-                            size: 20,
-
-                            Iconsax.search_normal_1
-                            ),
-                          controller: _searchController,
-                          sufixIcon: _showClearButton
-                              ? IconButton(
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    color: Colors.grey.shade600,
-                                    size: 18,
-                                  ),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    EasyDebounce.cancel(_searchDebounceKey);
-                                    FilterHandler.search = null;
-                                    FilterHandler.notifyChange();
-                                    HomePageState.refreshPage(widget.currentIndex);
-                                  },
-                                )
-                              : IconButton(
-                                  icon: Icon(
-                                    Iconsax.setting_4,
+                                Gap(5),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 3),
+                                  constraints: BoxConstraints(maxWidth: 200),
+                                  decoration: BoxDecoration(
                                     color: AppColors.primary,
-                                    size: 18,
+                                    borderRadius: BorderRadius.circular(39),
                                   ),
-                                  onPressed: _showFilterDialog,
+                                  child: _buildLocationText(
+                                      context, permissionState),
                                 ),
-                          onFieldSubmitted: (keyword) {
-                            if (FilterHandler.search != null) {
-                              if (FilterHandler.search!.isNotEmpty) {
-                                log(keyword);
-                                HomePageState.refreshPage(widget.currentIndex);
-                              } else {
-                                FilterHandler.search = null;
-                                FilterHandler.notifyChange();
-                                HomePageState.refreshPage(widget.currentIndex);
-                              }
-                            }
-                          },
-                          onChanged: (text) {
-                            EasyDebounce.debounce(
-                              _searchDebounceKey,
-                              const Duration(
-                                  milliseconds: _searchDeboucemillisecond),
-                              () {
-                                final search =
-                                    text.isNotEmpty ? text : null;
-                                FilterHandler.search = search;
-                                FilterHandler.notifyChange();
-                                if (search != null) log(text);
-                                HomePageState.refreshPage(
-                                    widget.currentIndex);
-                              },
-                            );
-                          },
-                          fillColor: Colors.transparent,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(radiusButton),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          if (sessionManager.currentUser != null) {
+                            context.pushNamed(NotificationsPage.name);
+                          } else {
+                            context.pushNamed(AuthenticationPage.name);
+                          }
+                        },
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.F2F2F2,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(radiusButton),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          child: Icon(Icons.notifications_none_rounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gap(14),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 57.5,
+                          child: CustomTextField(
+                            contentPadding: EdgeInsets.symmetric(vertical: 0),
+                            labelText: 'Que cherchez-vous ?',
+                            prefixIcon: Icon(
+                                color: AppColors.primary,
+                                size: 20,
+                                Iconsax.search_normal_1),
+                            controller: _searchController,
+                            sufixIcon: _showClearButton
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.cancel,
+                                      color: Colors.grey.shade600,
+                                      size: 18,
+                                    ),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      EasyDebounce.cancel(_searchDebounceKey);
+                                      FilterHandler.search = null;
+                                      FilterHandler.notifyChange();
+                                      HomePageState.refreshPage(
+                                          widget.currentIndex);
+                                    },
+                                  )
+                                : IconButton(
+                                    icon: Icon(
+                                      Iconsax.setting_4,
+                                      color: AppColors.primary,
+                                      size: 18,
+                                    ),
+                                    onPressed: _showFilterDialog,
+                                  ),
+                            onFieldSubmitted: (keyword) {
+                              if (FilterHandler.search != null) {
+                                if (FilterHandler.search!.isNotEmpty) {
+                                  log(keyword);
+                                  HomePageState.refreshPage(
+                                      widget.currentIndex);
+                                } else {
+                                  FilterHandler.search = null;
+                                  FilterHandler.notifyChange();
+                                  HomePageState.refreshPage(
+                                      widget.currentIndex);
+                                }
+                              }
+                            },
+                            onChanged: (text) {
+                              EasyDebounce.debounce(
+                                _searchDebounceKey,
+                                const Duration(
+                                    milliseconds: _searchDeboucemillisecond),
+                                () {
+                                  final search = text.isNotEmpty ? text : null;
+                                  FilterHandler.search = search;
+                                  FilterHandler.notifyChange();
+                                  if (search != null) log(text);
+                                  HomePageState.refreshPage(
+                                      widget.currentIndex);
+                                },
+                              );
+                            },
+                            fillColor: Colors.transparent,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(radiusButton),
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade300),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(radiusButton),
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade300),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: HomeChoiceMenu(),
-          ),
-        );
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: HomeChoiceMenu(),
+            ),
+          );
         },
       ),
     );
