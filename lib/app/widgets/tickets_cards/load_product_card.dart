@@ -9,53 +9,79 @@ class LoadProductCard extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      period: const Duration(milliseconds: 500),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 15),
-        child: Column(
-          children: [
-            Container(
-              decoration: _deco,
-              height: 220,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+        final availableHeight = constraints.maxHeight;
+
+        final isHeightConstrained = availableHeight.isFinite;
+        final imageHeight = isHeightConstrained
+            ? (availableHeight * 0.72).clamp(0.0, 220.0)
+            : 220.0;
+
+        final titleWidth = (availableWidth * 0.55).clamp(100.0, 200.0);
+        final subtitleWidth = (availableWidth * 0.42).clamp(80.0, 130.0);
+        final priceWidth = (availableWidth * 0.28).clamp(70.0, 100.0);
+
+        return Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          period: const Duration(milliseconds: 500),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Column(
+                Container(
+                  decoration: _deco,
+                  height: imageHeight,
+                ),
+                const SizedBox(height: 15),
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      decoration: _deco,
-                      height: 15,
-                      width: 200,
-                    ),
-                    for (int i = 1; i <= 2; i++)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 5),
-                        decoration: _deco,
-                        height: 13,
-                        width: 130,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 5),
+                            decoration: _deco,
+                            height: 15,
+                            width: titleWidth,
+                          ),
+                          for (int i = 1; i <= 2; i++)
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              decoration: _deco,
+                              height: 13,
+                              width: subtitleWidth,
+                            ),
+                        ],
                       ),
+                    ),
+                    const SizedBox(width: 12),
+                    Flexible(
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          decoration: _deco,
+                          height: 25,
+                          width: priceWidth,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  decoration: _deco,
-                  height: 25,
-                  width: 100,
-                ),
               ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

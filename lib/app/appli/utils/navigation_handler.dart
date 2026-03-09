@@ -12,30 +12,49 @@ import 'package:injectable/injectable.dart';
 class NavigationHandler {
   SessionManager sessionManager;
   NavigationHandler(this.sessionManager);
-
-  void switchPage({required int id, required BuildContext context}) {
-    final PageState pageState;
-    switch (id) {
-      case 0:
-        pageState = PageState.home;
-      case 1:
-        pageState = PageState.forMe;
-      case 2:
-        pageState = PageState.explore;
-      default:
-        pageState = PageState.acount;
+  switchPage({required int id, required BuildContext context}) {
+    if (sessionManager.currentUser == null) {
+      context.read<NavigationCubit>().switchPage(
+            id == 0
+                ? PageState.home
+                : id == 1
+                    ? PageState.forMe
+                    : id == 2
+                        ? PageState.vivre
+                        : id == 3
+                            ? PageState.explore
+                            : PageState.account,
+          );
+    } else {
+      context.read<NavigationCubit>().switchPage(
+            id == 0
+                ? PageState.home
+                : id == 1
+                    ? PageState.forMe
+                    : id == 2
+                        ? PageState.vivre
+                        : id == 3
+                            ? PageState.explore
+                            : PageState.account,
+          );
     }
-    context.read<NavigationCubit>().switchPage(pageState);
 
     switch (id) {
       case 0:
         context.go('/homePage');
+        break;
       case 1:
         context.goNamed(FavoritePage.name);
+        break;
       case 2:
+        context.go('/vivre');
+        break;
+      case 3:
         context.go('/map');
+        break;
       default:
         context.goNamed(AccountPage.name);
+        break;
     }
   }
 }

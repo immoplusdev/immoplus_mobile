@@ -38,6 +38,7 @@ import 'package:immoplus/app/features/reset_password/pages/reset_password_page.d
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
+import 'package:immoplus/app/features/vivre/vivre_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/force_update_required_page.dart';
@@ -246,6 +247,13 @@ class AppRouter {
             name: FavoritePage.name,
             pageBuilder: (context, state) => NoTransitionPage(
               child: const FavoritePage(),
+            ),
+          ),
+          GoRoute(
+            path: '/vivre',
+            name: VivrePage.name,
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const VivrePage(),
             ),
           ),
           GoRoute(

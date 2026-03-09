@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart';
@@ -26,8 +27,12 @@ class AppBlocs {
     BlocProvider<NavigationCubit>(
       create: (context) => NavigationCubit(),
     ),
+
     BlocProvider<HomePageCubit>(
       create: (context) => HomePageCubit(),
+    ),
+    BlocProvider<LocationPermissionCubit>(
+      create: (context) => getIt<LocationPermissionCubit>(),
     ),
     BlocProvider<DeleteAccountCubit>(
       create: (context) => DeleteAccountCubit(),

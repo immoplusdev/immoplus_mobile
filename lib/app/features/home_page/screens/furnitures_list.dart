@@ -34,7 +34,7 @@ class _FurnituresListState extends State<FurnituresList> {
         .then((value) {
       if (value.hasNext == true) {
         HomePageState.pagingControllerFurniture
-            .appendPage(value.data ?? [], (value.currentPage)! + 1);
+            .appendPage(value.data ?? [], (value.currentPage)! + 1); 
       } else {
         HomePageState.pagingControllerFurniture
             .appendLastPage(value.data ?? []);

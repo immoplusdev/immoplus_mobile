@@ -5,7 +5,7 @@ class AppColors {
   // static Color primary = HexColor("#006FFD"); // HexColor('#2172cb');
   static Color primary = customBlue;
   static Color noSelected = CupertinoColors.inactiveGray;
-  static Color primaryLite = Color.fromARGB(255, 234, 244, 254);
+  static Color primaryLite = Color(0xFFEAF4FE);
   static Color scafold = const Color.fromARGB(255, 238, 247, 255);
 
   static Color whiteBackground = const Color.fromARGB(

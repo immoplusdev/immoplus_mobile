@@ -70,12 +70,15 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<LocationPermissionCubit>()..checkPermission(),
-      child: BlocBuilder<HomePageCubit, HomePageState>(
-        builder: (context, state) {
+    return BlocConsumer<HomePageCubit, HomePageState>(
+      listenWhen: (previous, current) => previous.indexPage != current.indexPage,
+      listener: (context, state) {
+        if (_tabController.index != state.indexPage && mounted) {
           _tabController.animateTo(state.indexPage);
-          return EnvironmentsBadge(
+        }
+      },
+      builder: (context, state) {
+        return EnvironmentsBadge(
           child: Scaffold(
             backgroundColor: AppColors.whiteBackground,
             body: DefaultTabController(
@@ -134,7 +137,6 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
-      ),
-    );
+      );
   }
 }

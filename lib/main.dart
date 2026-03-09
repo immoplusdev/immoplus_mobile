@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/my_app.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:talker/talker.dart';
+
+final talker = Talker();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
   await configureDependencies();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   OneSignal.initialize("3dcf3bc5-e4c7-4328-9d30-0f33cdedb1f0");

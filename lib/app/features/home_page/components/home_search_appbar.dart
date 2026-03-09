@@ -20,6 +20,7 @@ import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
+import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:iconsax/iconsax.dart';
@@ -141,6 +142,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     });
     FilterHandler.notifier.addListener(_onFilterChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
       final cubit = context.read<LocationPermissionCubit>();
       if (cubit.state.isGranted) {
         await _loadCurrentLocation();
