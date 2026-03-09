@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/video_player/video_player_page.dart';
 
@@ -17,8 +18,7 @@ class DetailLogmentVideo extends StatelessWidget {
       child: SliverToBoxAdapter(
         child: Container(
           padding: const EdgeInsets.all(8),
-          margin: const EdgeInsets.all(10),
-          // height: 300,
+          margin: const EdgeInsets.symmetric(horizontal: appPadding),
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(20),

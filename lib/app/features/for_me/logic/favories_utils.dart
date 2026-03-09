@@ -29,6 +29,7 @@ class FavoriesUtils {
         ..images = residence.images
         ..date = DateTime.now()
         ..destination = ResidencePage.route(residence.id)
+        ..itemScore = residence.score?.toDouble()
         ..type = residence.typeResidence);
     });
   }
@@ -42,6 +43,7 @@ class FavoriesUtils {
         ..images = bienImmobilierModel.images
         ..date = DateTime.now()
         ..destination = '/estate_detail/${bienImmobilierModel.id}'
+        ..itemScore = bienImmobilierModel.score?.toDouble()
         ..type = bienImmobilierModel.typeBienImmobilier);
     });
   }

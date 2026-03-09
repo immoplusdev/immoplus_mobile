@@ -315,6 +315,14 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                           return Text(snapshot.error.toString());
                         }
                         if (snapshot.hasData) {
+                          // convert snapshot data into a working list of occupied dates
+                          final List<DateTime> bookedDates =
+                              List<DateTime>.from(
+                                  snapshot.data as List<DateTime>);
+                          // keep unselectagleDates for any legacy uses
+                          unselectagleDates =
+                              bookedDates.map((d) => d).toList();
+
                           return ValueListenableBuilder(
                               valueListenable: userDatesNotifier,
                               builder: (context, value, child) {
@@ -328,12 +336,72 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                     customModePickerIcon: const SizedBox(),
                                     firstDate: DateTime.now(),
                                     selectableDayPredicate: (day) =>
-                                        !unselectagleDates.any((element) =>
-                                            isSameDate(element!, day)),
+                                        !bookedDates
+                                            .any((b) => isSameDate(b, day)),
+                                    dayBuilder: ({
+                                      required date,
+                                      decoration,
+                                      isDisabled,
+                                      isSelected,
+                                      isToday,
+                                      textStyle,
+                                    }) {
+                                      final bool isBooked = bookedDates
+                                          .any((b) => isSameDate(b, date));
+                                      if (isBooked) {
+                                        return IgnorePointer(
+                                          ignoring: true,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade300,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                date.day.toString(),
+                                                style: (textStyle ??
+                                                        const TextStyle())
+                                                    .copyWith(
+                                                  color: Colors.grey,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return Container(
+                                        decoration: decoration,
+                                        child: Center(
+                                          child: Text(
+                                            date.day.toString(),
+                                            style: textStyle,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                   onDisplayedMonthChanged: null,
                                   value: markedDates,
                                   onValueChanged: (value) {
+                                    // validate range against booked dates
+                                    if (value.length == 2) {
+                                      final range =
+                                          datesBetween(value.first, value.last);
+                                      final conflict = range.any((d) =>
+                                          bookedDates
+                                              .any((b) => isSameDate(b, d)));
+                                      if (conflict) {
+                                        ToastUtils.showError(
+                                            description:
+                                                "La sélection contient des dates déjà réservées. La sélection est réduite au jour choisi.");
+                                        _applySingleDateSelection(
+                                            value.last, context);
+                                        return;
+                                      }
+                                    }
+
                                     markedDates.clear();
                                     markedDates.addAll(value);
                                     if (markedDates.length >= 2) {
@@ -594,5 +662,36 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
       //       )
       //     : null,
     );
+  }
+
+  void _applySingleDateSelection(DateTime? date, BuildContext context) {
+    if (date == null) return;
+
+    markedDates.clear();
+    markedDates.add(date);
+
+    selectedDates.clear();
+    selectedDates.addAll(markedDates);
+
+    if (selectedDates.isNotEmpty) {
+      final List<DateTime> datesWithHours =
+          _applyResidenceTimesToDates(selectedDates);
+      selectedDates.clear();
+      selectedDates.addAll(datesWithHours);
+
+      _formController.dates!.clear();
+      for (var element in selectedDates) {
+        _formController.addDate(date: element!.toIso8601String());
+      }
+    }
+
+    // Recalculate estimate
+    context.read<BookingCubit>().estimateCost(
+          residenceId: widget.residenceModel.id,
+          dateDebut: startDateCalculated,
+          dateFin: endDateCalculated,
+        );
+
+    setState(() {});
   }
 }

@@ -17,6 +17,7 @@ import 'package:immoplus/gen/assets.gen.dart';
 class SendEmailOptPage extends StatefulWidget {
   const SendEmailOptPage({super.key});
   static const String name = "SendEmailOptPage";
+  static String routePath() => '/send-email-otp';
   @override
   State<SendEmailOptPage> createState() => _SendEmailOptPageState();
 }

@@ -13,6 +13,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
+import 'package:lottie/lottie.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/entity_action_button.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/side_action_button.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +49,6 @@ class _VideoPageItemState extends State<VideoPageItem>
     with SingleTickerProviderStateMixin {
   static String? _lastKnownThumbnail;
 
-  bool _thumbnailLoaded = false;
   bool _showPlayIcon = false;
   bool _isDescriptionExpanded = false;
   TapDownDetails? _tapDetails;
@@ -65,14 +65,6 @@ class _VideoPageItemState extends State<VideoPageItem>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-  }
-
-  @override
-  void didUpdateWidget(covariant VideoPageItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.index != widget.index) {
-      _thumbnailLoaded = false;
-    }
   }
 
   @override
@@ -181,8 +173,8 @@ class _VideoPageItemState extends State<VideoPageItem>
         final videoController =
             widget.controller.getVideoController(widget.index);
         final video = widget.controller.videos[widget.index];
-        final isPlaying = widget.controller.isPlayingAt(widget.index);
         final isReady = widget.controller.isReadyAt(widget.index);
+        final isPlaying = widget.controller.isPlayingAt(widget.index);
         final isLiked = widget.controller.getIsLikedForVideo(video.id);
         final likesCount = widget.controller.getLikesCountForVideo(video.id);
 
@@ -196,32 +188,37 @@ class _VideoPageItemState extends State<VideoPageItem>
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
-                placeholder: (_, __) => const SizedBox.shrink(),
-                errorWidget: (_, __, ___) => const SizedBox.shrink(),
+                placeholder: (_, __) => _buildImmoLoadingLayer(),
+                errorWidget: (_, __, ___) => _buildImmoLoadingLayer(),
               )
             else
-              Container(color: const Color(0xFF111111)),
-            // Couche 2 : thumbnail actuel qui fade-in quand prêt
-            AnimatedOpacity(
-              opacity: _thumbnailLoaded ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 250),
-              child: _buildThumbnail(video),
-            ),
-            // Couche 3 : vidéo qui fade-in quand isReady=true
+              _buildImmoLoadingLayer(),
+            // Couche 2 : thumbnail actuel
+            _buildThumbnail(video),
+            // Couche 3 : vidéo (en dessous de l'overlay pour ne pas montrer du noir)
             Positioned.fill(
               child: VisibilityDetector(
                 key: Key('video_${widget.index}'),
                 onVisibilityChanged: _onVisibilityChanged,
+                child: videoController == null
+                    ? const SizedBox.expand()
+                    : Video(
+                        controller: videoController,
+                        fit: BoxFit.contain,
+                        fill: Colors.transparent,
+                        controls: NoVideoControls,
+                      ),
+              ),
+            ),
+            // Couche 4 : overlay ImmoLoading PAR-DESSUS la vidéo
+            // Disparaît dès que le player est prêt (preloaded → pas de loading)
+            Positioned.fill(
+              child: IgnorePointer(
+                ignoring: isReady,
                 child: AnimatedOpacity(
-                  opacity: isReady ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: videoController == null
-                      ? const SizedBox.expand()
-                      : Video(
-                          controller: videoController,
-                          fit: BoxFit.contain,
-                          controls: NoVideoControls,
-                        ),
+                  opacity: isReady ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 400),
+                  child: _buildImmoLoadingLayer(),
                 ),
               ),
             ),
@@ -433,6 +430,25 @@ class _VideoPageItemState extends State<VideoPageItem>
     );
   }
 
+  /// Fond noir + ImmoLoading Lottie (réutilisé pour éviter flash noir).
+  Widget _buildImmoLoadingLayer() {
+    return Container(
+      color: const Color(0xFF111111),
+      child: Center(
+        child: SizedBox(
+          width: 150,
+          height: 150,
+          child: Lottie.asset(
+            'assets/animations/immo-loading.json',
+            fit: BoxFit.contain,
+            repeat: true,
+            reverse: false,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildThumbnail(VideoModel video) {
     final thumbnailUrl = _getThumbnailUrl(video);
     if (thumbnailUrl != null && thumbnailUrl.isNotEmpty) {
@@ -441,18 +457,15 @@ class _VideoPageItemState extends State<VideoPageItem>
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        placeholder: (_, __) => const SizedBox.shrink(),
-        errorWidget: (_, __, ___) => const SizedBox.shrink(),
+        placeholder: (_, __) => _buildImmoLoadingLayer(),
+        errorWidget: (_, __, ___) => _buildImmoLoadingLayer(),
         imageBuilder: (_, imageProvider) {
           _lastKnownThumbnail = thumbnailUrl;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) setState(() => _thumbnailLoaded = true);
-          });
           return Image(image: imageProvider, fit: BoxFit.cover);
         },
       );
     }
-    return const SizedBox.shrink();
+    return _buildImmoLoadingLayer();
   }
 
   /// Retourne l'URL de la miniature : thumbnailUrl si présent, sinon URL construite depuis miniature (UUID).

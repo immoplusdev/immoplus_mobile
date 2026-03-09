@@ -63,6 +63,7 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
       longitude: toDouble(json['longitude']),
       nombreMaxOccupants: toInt(json['nombreMaxOccupants']),
       fetesAutorises: json['fetesAutorises'] as bool? ?? false,
+      score: json['score'] as num?,
     );
 
 Map<String, dynamic> _$$BienImmobilierModelImplToJson(
@@ -97,4 +98,5 @@ Map<String, dynamic> _$$BienImmobilierModelImplToJson(
       'longitude': instance.longitude,
       'nombreMaxOccupants': instance.nombreMaxOccupants,
       'fetesAutorises': instance.fetesAutorises,
+      'score': instance.score,
     };

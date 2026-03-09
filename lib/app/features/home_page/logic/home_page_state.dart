@@ -17,6 +17,24 @@ class HomePageState {
       PagingController(firstPageKey: 1);
   static PagingController<int, FurnitureModel> pagingControllerFurniture =
       PagingController(firstPageKey: 1);
+
+  // Token pour invalider les requêtes périmées (race condition fix)
+  static int _residenceToken = 0;
+  static int get residenceToken => _residenceToken;
+  static void refreshResidences() {
+    _residenceToken++;
+    pagingControllerResidence.refresh();
+  }
+
+  /// Refresh sécurisé : incrémente le token pour l'index 0 (résidences)
+  static void refreshPage(int index) {
+    if (index == 0) {
+      refreshResidences();
+    } else {
+      getPageListController(index).refresh();
+    }
+  }
+
   int indexPage;
   HomePageState({required this.indexPage});
 

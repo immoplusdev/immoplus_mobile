@@ -11,6 +11,7 @@ import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -62,6 +63,9 @@ class _HomePageState extends State<HomePage>
   void dispose() {
     super.dispose();
     FilterHandler.search = null;
+    FilterHandler.lat = null;
+    FilterHandler.long = null;
+    FilterHandler.locationName = null;
   }
 
   @override
@@ -81,8 +85,12 @@ class _HomePageState extends State<HomePage>
               length: 4,
               child: RefreshIndicator(
                 onRefresh: () async {
-                  HomePageState.getPageListController(state.indexPage)
-                      .refresh();
+                  if (state.indexPage == 0) {
+                    HomePageState.refreshResidences();
+                  } else {
+                    HomePageState.getPageListController(state.indexPage)
+                        .refresh();
+                  }
                 },
                 child: CustomScrollView(
                   keyboardDismissBehavior:
@@ -129,6 +137,6 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
-    );
+      );
   }
 }

@@ -22,7 +22,7 @@ class CustomLocationServiceDisabledException extends LocationException {
 class LocationPermissionDeniedException extends LocationException {
   const LocationPermissionDeniedException([String? details])
       : super(
-          'Permission de localisation refusée',
+          'Activez votre localisation pour accéder à cette section',
           details,
         );
 }
@@ -31,7 +31,7 @@ class LocationPermissionDeniedException extends LocationException {
 class LocationPermissionDeniedForeverException extends LocationException {
   const LocationPermissionDeniedForeverException([String? details])
       : super(
-          'Permission de localisation refusée définitivement',
+          'Permission de localisation refusée définitivement, Activez votre localisation pour accéder à cette section',
           details,
         );
 }
@@ -49,7 +49,7 @@ class LocationTimeoutException extends LocationException {
 class LocationUnknownException extends LocationException {
   const LocationUnknownException([String? details])
       : super(
-          'Erreur inconnue lors de la récupération de la position',
+          'Activez votre localisation pour accéder à cette section',
           details,
         );
 }

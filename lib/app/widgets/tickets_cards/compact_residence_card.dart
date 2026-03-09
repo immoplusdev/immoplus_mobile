@@ -13,22 +13,25 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:shimmer/shimmer.dart';
 
-class NearResidenceCard extends StatefulWidget {
-  const NearResidenceCard({
+class CompactResidenceCard extends StatefulWidget {
+  const CompactResidenceCard({
     super.key,
     required this.residence,
+    this.showRating = true,
   });
 
   final ResidenceModel residence;
+  final bool showRating;
 
   @override
-  State<NearResidenceCard> createState() => _NearResidenceCardState();
+  State<CompactResidenceCard> createState() => _CompactResidenceCardState();
 }
 
-class _NearResidenceCardState extends State<NearResidenceCard> {
+class _CompactResidenceCardState extends State<CompactResidenceCard> {
   final favoriesUtils = getIt<FavoriesUtils>();
   final ValueNotifier<bool> _liked = ValueNotifier(false);
 
@@ -69,6 +72,16 @@ class _NearResidenceCardState extends State<NearResidenceCard> {
 
               // Gradient overlay pour rendre le texte lisible
               _buildGradientOverlay(),
+
+              // Rating en haut à gauche (optionnel)
+              if (widget.showRating)
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child: RatingComponent(
+                    rating: (widget.residence.score ?? 0).toDouble(),
+                  ),
+                ),
 
               // Badge de prix en haut à droite
               Positioned(

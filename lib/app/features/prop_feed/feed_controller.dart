@@ -247,21 +247,10 @@ class VideoFeedController extends GetxController {
         !_readyIndexes.contains(0)) {
       return;
     }
-    _players[0]?.setVolume(100.0);
     _players[0]?.play();
     _socketEnterVideo(0);
     _preloadWindow(0);
-    _disposeDistantPlayers(0);
     update();
-  }
-
-  Future<String> _resolveMediaSource(String url) async {
-    final cachedFile = await _repository.getCachedFile(url);
-    if (cachedFile != null) {
-      return Uri.file(cachedFile.path).toString();
-    }
-    _repository.cacheInBackground(url);
-    return url;
   }
 
   Future<void> initPlayer(int index, String url) async {
@@ -283,10 +272,12 @@ class VideoFeedController extends GetxController {
     update(<Object>['video_$index']);
 
     try {
-      await player.setPlaylistMode(PlaylistMode.single);
-      await player.setVolume(100.0);
-      final mediaSource = await _resolveMediaSource(url);
-      await player.open(Media(mediaSource), play: false);
+      // Fire-and-forget : pas besoin d'attendre ces configs avant open()
+      player.setPlaylistMode(PlaylistMode.single);
+      // Ouvrir directement avec l'URL réseau (MediaKit stream nativement)
+      await player.open(Media(url), play: false);
+      // Cacher en arrière-plan pour les prochaines lectures
+      _repository.cacheInBackground(url);
 
       if (isClosed) {
         player.stop();
@@ -320,7 +311,7 @@ class VideoFeedController extends GetxController {
   void _preloadWindow(int index) {
     if (videos.isEmpty) return;
     final toPreload = <int>[];
-    for (final i in <int>[index + 1, index + 2]) {
+    for (final i in <int>[index + 1, index + 2, index + 3]) {
       if (i < 0 || i >= videos.length) continue;
       if (_readyIndexes.contains(i) || _initializingIndexes.contains(i)) {
         continue;
@@ -339,6 +330,7 @@ class VideoFeedController extends GetxController {
   void onPageChanged(int index) {
     if (videos.isEmpty) return;
 
+    final previousIndex = _currentIndex;
     _currentIndex = index;
     talker.debug('[VideoFeed:PageChange] Current index: $index / ${videos.length}');
 
@@ -351,8 +343,9 @@ class VideoFeedController extends GetxController {
       _loadMore();
     }
 
-    for (final player in _players.values) {
-      player.pause();
+    // Ne pauser que le player précédent (pas tous)
+    if (previousIndex != index) {
+      _players[previousIndex]?.pause();
     }
 
     final currentPlayer = _players[index];
@@ -389,6 +382,7 @@ class VideoFeedController extends GetxController {
       currentIdx,
       currentIdx + 1,
       currentIdx + 2,
+      currentIdx + 3,
     ]) {
       if (i >= 0 && i < videos.length) keep.add(i);
     }

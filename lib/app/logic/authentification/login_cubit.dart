@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/enums/api_error_code.dart';
@@ -34,6 +36,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SocialLoginUser {
   final String? firstName;
@@ -52,12 +55,29 @@ class SocialLoginUser {
 
 @injectable
 class LoginCubit extends Cubit<LoginCubitState> {
-  LoginCubit(this.sessionManager, this.dio, this.notificationService)
+  LoginCubit(this.sessionManager, this.dio, this.notificationService,
+      this.authRedirectService)
       : super(const LoginCubitState.initial());
   SessionManager sessionManager;
   NotificationService notificationService;
+  final AuthRedirectService authRedirectService;
   Dio dio;
   SocialLoginUser? socialLoginUser;
+
+  void _navigateAfterLogin() {
+    final context = NavigationService.navigatorKey.currentContext!;
+    final redirectData = authRedirectService.get();
+    if (redirectData != null) {
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == redirectData.popUntilRouteName,
+      );
+      redirectData.callback();
+      authRedirectService.clear();
+    } else {
+      context.goNamed(HomePage.name);
+    }
+  }
+
   onSendData({required LoginBodyModel body}) async {
     emit(const LOGIN_LOADING());
     try {
@@ -88,10 +108,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      _navigateAfterLogin();
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -145,7 +162,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
+      _navigateAfterLogin();
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -299,6 +316,71 @@ class LoginCubit extends Cubit<LoginCubitState> {
     }
   }
 
+  Future<void> signInWithApple() async {
+    emit(const LOGIN_LOADING());
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      socialLoginUser = SocialLoginUser(
+        firstName: credential.givenName,
+        lastName: credential.familyName,
+        email: credential.email ?? '',
+        provider: SocialProviderEnum.apple.value,
+      );
+
+      final emailFromToken =
+          credential.email ?? _extractEmailFromToken(credential.identityToken);
+      if (emailFromToken == null) {
+        CustomPopup.showErrorToast(
+            text: "Impossible d'obtenir votre adresse email");
+        emit(const LoginCubitState.initial());
+        return;
+      }
+
+      final body = SocialLoginBody(
+        provider: SocialProviderEnum.apple.value,
+        token: credential.identityToken ?? '',
+        email: emailFromToken,
+        source: AccountSource.customerApp.value,
+      );
+
+      await _performSocialLogin(body);
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        emit(const LoginCubitState.initial());
+        return;
+      }
+      CustomPopup.showErrorToast(
+          text: 'Erreur lors de la connexion avec Apple');
+      emit(const LoginCubitState.initial());
+    } catch (e, s) {
+      log('Error Apple Sign-In: $e', stackTrace: s);
+      CustomPopup.showErrorToast(
+          text: 'Erreur lors de la connexion avec Apple');
+      emit(const LoginCubitState.initial());
+    }
+  }
+
+  String? _extractEmailFromToken(String? identityToken) {
+    if (identityToken == null) return null;
+    try {
+      final parts = identityToken.split('.');
+      if (parts.length < 2) return null;
+      final payload = utf8.decode(
+        base64Url.decode(base64Url.normalize(parts[1])),
+      );
+      final Map<String, dynamic> data = jsonDecode(payload);
+      return data['email'] as String?;
+    } catch (_) {
+      return null;
+    }
+  }
+
 // Méthode commune pour les connexions sociales
   Future<void> _performSocialLogin(SocialLoginBody body) async {
     try {
@@ -329,10 +411,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      _navigateAfterLogin();
     } on DioException catch (e) {
       final errorData = e.response?.data;
       final errorResponse = ApiErrorResponse.fromJson(errorData);

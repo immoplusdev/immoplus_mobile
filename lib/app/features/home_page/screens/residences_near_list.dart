@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -7,12 +8,15 @@ import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/widgets/empty_state_card.dart';
 import 'package:immoplus/app/widgets/section_title.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/near_residence_card.dart';
+import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 
 class NearResidencesConstants {
   NearResidencesConstants._();
@@ -48,7 +52,7 @@ class ResidencesNearList extends StatefulWidget {
 class _ResidencesNearListState extends State<ResidencesNearList> {
   final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
 
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool _hasError = false;
   bool _locationError = false;
   bool _isDismissed = false;
@@ -56,13 +60,38 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
   List<ResidenceModel> _nearResidences = [];
   Position? _userPosition;
 
+  // Dernières valeurs lat/long connues pour détecter un vrai changement de localisation
+  double? _lastLat;
+  double? _lastLong;
+
   @override
   void initState() {
     super.initState();
-    _loadNearResidences();
+    FilterHandler.notifier.addListener(_onLocationChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final permState = context.read<LocationPermissionCubit>().state;
+      if (FilterHandler.lat != null || permState.isGranted) {
+        _loadNearResidences();
+      }
+    });
   }
 
-  Future<void> _loadNearResidences() async {
+  void _onLocationChanged() {
+    if (!mounted) return;
+    final locationChanged =
+        FilterHandler.lat != _lastLat || FilterHandler.long != _lastLong;
+    _lastLat = FilterHandler.lat;
+    _lastLong = FilterHandler.long;
+    _loadNearResidences(showModalIfEmpty: locationChanged);
+  }
+
+  @override
+  void dispose() {
+    FilterHandler.notifier.removeListener(_onLocationChanged);
+    super.dispose();
+  }
+
+  Future<void> _loadNearResidences({bool showModalIfEmpty = false}) async {
     setState(() {
       _isLoading = true;
       _hasError = false;
@@ -70,22 +99,49 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
     });
 
     try {
-      // Récupérer la position de l'utilisateur
-      _userPosition = await LocationService.getCurrentPosition();
+      double? lat;
+      double? long;
+
+      // Priorité : position sélectionnée par l'utilisateur via le bouton
+      if (FilterHandler.lat != null && FilterHandler.long != null) {
+        lat = FilterHandler.lat;
+        long = FilterHandler.long;
+      } else {
+        // Fallback : position GPS
+        _userPosition = await LocationService.getCurrentPosition();
+        lat = _userPosition?.latitude;
+        long = _userPosition?.longitude;
+      }
 
       // Charger les résidences proches
       final result = await _residenceRepository.getResidences(
-        lat: _userPosition?.latitude,
-        long: _userPosition?.longitude,
+        lat: lat,
+        long: long,
         radius: widget.radius,
+        search: FilterHandler.search,
         page: 1,
       );
 
       if (mounted) {
+        final residences = (result.data ?? []).take(widget.maxItems).toList();
         setState(() {
-          _nearResidences = (result.data ?? []).take(widget.maxItems).toList();
+          _nearResidences = residences;
           _isLoading = false;
         });
+        if (residences.isEmpty && showModalIfEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              EmptyStateCard.showAsModal(
+                context,
+                imagePath: 'assets/img/modal/image.png',
+                title: 'Faibles résidences à proximité',
+                subtitle:
+                    'Explorez les résidences les mieux notées pour plus de choix',
+                autoDismissDuration: const Duration(seconds: 3),
+              );
+            }
+          });
+        }
       }
     } on LocationException catch (e) {
       // Gestion propre des exceptions de localisation
@@ -116,8 +172,8 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
 
   @override
   Widget build(BuildContext context) {
-    // Ne rien afficher si le message d'erreur a été fermé
-    if (_isDismissed) {
+    // Masquer toute la section si pas de résidences proches (ou erreur)
+    if (!_isLoading && (_nearResidences.isEmpty || _hasError || _locationError || _isDismissed)) {
       return const SizedBox.shrink();
     }
 
@@ -134,19 +190,23 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
               ),
             ),
             TextButton(
-              onPressed: _userPosition != null && _nearResidences.isNotEmpty
+              onPressed: _nearResidences.isNotEmpty
                   ? () {
-                      context.push(NearResidencesPage.routePath, extra: {
-                        'lat': _userPosition!.latitude,
-                        'long': _userPosition!.longitude,
-                        'radius': widget.radius,
-                      });
+                      final lat = FilterHandler.lat ?? _userPosition?.latitude;
+                      final long = FilterHandler.long ?? _userPosition?.longitude;
+                      if (lat != null && long != null) {
+                        context.push(NearResidencesPage.routePath, extra: {
+                          'lat': lat,
+                          'long': long,
+                          'radius': widget.radius,
+                        });
+                      }
                     }
                   : null,
               child: Text(
                 'Voir tout',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: _userPosition != null && _nearResidences.isNotEmpty
+                      color: _nearResidences.isNotEmpty
                           ? AppColors.primary
                           : Colors.grey.shade400,
                       fontWeight: FontWeight.w600,
@@ -186,8 +246,9 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
       itemCount: _nearResidences.length,
       separatorBuilder: (context, index) => const Gap(12),
       itemBuilder: (context, index) {
-        return NearResidenceCard(
+        return CompactResidenceCard(
           residence: _nearResidences[index],
+          showRating: false,
         );
       },
     );

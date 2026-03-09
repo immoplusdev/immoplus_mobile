@@ -134,11 +134,11 @@ class _EstateCardState extends State<EstateCard> {
                             )),
                       ),
                     ),
-                    Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: RatingComponent(rating: 5),
-                    )
+                    // Positioned(
+                    //   bottom: 10,
+                    //   right: 10,
+                    //   child: RatingComponent(rating: 5),
+                    // )
                   ],
                 ),
                 Gap(10),

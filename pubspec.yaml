@@ -17,7 +17,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 # for new deployment use 1.0.9+12 (INCREMENT !!!) POUR UNIFORMISER IOS ET ANDROID CAR SUR ANDROID ON EST A 1.0.7 pourtant usr ios  1.0.7 y etait deja
-version: 1.0.16+21
+version: 1.0.18+23
 
 environment:
   sdk: ^3.6.0
@@ -141,6 +141,9 @@ dependencies:
   package_info_plus: ^9.0.0
   google_sign_in: ^7.2.0
   flutter_facebook_auth: ^7.1.5
+  sign_in_with_apple: ^7.0.1
+  widget_to_marker: ^1.0.6
+  http: ^1.6.0
   ez_circle_avatar: ^0.0.5
   # UI & animations
   shadcn_ui:
@@ -154,6 +157,7 @@ dependencies:
   media_kit_libs_video: ^1.0.7
   preload_page_view: ^0.2.0
   socket_io_client: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -206,6 +210,7 @@ flutter:
     - assets/icon/leading.json
     - assets/img/onboarding/
     - assets/img/panorama.jpg
+    - assets/img/modal/
     - assets/gif/
     - assets/svgs/icons/
   #   - images/a_dot_ham.jpeg

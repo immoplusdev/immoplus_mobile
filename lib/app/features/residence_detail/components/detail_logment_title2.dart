@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 
 class DetailLogmentTitle2 extends StatelessWidget {
   const DetailLogmentTitle2({super.key, required this.title});
@@ -9,7 +8,8 @@ class DetailLogmentTitle2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 5),
+        padding: const EdgeInsets.symmetric(horizontal: appPadding)
+            .copyWith(bottom: 5),
         child: Text(
           title,
           style: Theme.of(context).textTheme.titleLarge!,

@@ -211,6 +211,7 @@ class LocationController extends GetxController
       );
       NavigationService.navigatorKey.currentContext!.pop(address);
     } catch (e) {
+      EasyLoading.dismiss();
       NavigationService.navigatorKey.currentContext!.pop(null);
     }
 

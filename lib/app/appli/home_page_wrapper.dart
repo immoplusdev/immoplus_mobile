@@ -87,7 +87,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               // ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   spreadRadius: 1,
                   blurRadius: 10,
                 ),
@@ -174,7 +174,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               child: Icon(
                 icon,
                 color: AppColors.primary,
-                size: 25,
+                size: 24,
               ),
             )
           : SizedBox(

@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/features/map_view/logics/map_card_overlay_service.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
+import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 import 'package:immoplus/app/features/map_view/widgets/map_search_text_field.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -25,11 +26,17 @@ class MapViewer extends StatefulWidget {
 class _MapViewerState extends State<MapViewer> {
   GoogleMapController? mapController;
   FocusNode focusNode = FocusNode();
+  static const _defaultPosition = LatLng(5.365162, -4.000802);
+  LatLng position = _defaultPosition;
   @override
   void initState() {
-    context
-        .read<MapViwerCubit>()
-        .getMapDataAll(center: LatLng(5.365162, -4.000802), context: context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _initUserPosition();
+      context
+          .read<MapViwerCubit>()
+          .getMapDataAll(center: position!, context: context);
+    });
+
     super.initState();
   }
 
@@ -46,15 +53,16 @@ class _MapViewerState extends State<MapViewer> {
   }
 
   int getPerPage(double zoom) {
-    if (zoom < 5) {
-      return 20; // continent
-    } else if (zoom < 10) {
-      return 50; // pays
-    } else if (zoom < 14) {
-      return 1000; // ville
-    } else {
-      return 300; // quartier
-    }
+    return 10;
+    // if (zoom < 5) {
+    //   return 20; // continent
+    // } else if (zoom < 10) {
+    //   return 50; // pays
+    // } else if (zoom < 14) {
+    //   return 1000; // ville
+    // } else {
+    //   return 300; // quartier
+    // }
   }
 
   Future<void> fetchMapData(CameraPosition cameraPosition) async {
@@ -66,10 +74,22 @@ class _MapViewerState extends State<MapViewer> {
     await context.read<MapViwerCubit>().getMapDataAll(
           context: context,
           center: center,
-          radius: radius * 1000, // Convertir km en mètres
+          radius: radius,
           perPage: perPage,
           page: 1, // tu peux gérer le paging plus tard
         );
+  }
+
+  Future<void> _initUserPosition() async {
+    try {
+      final pos = await LocationService.getCurrentPosition();
+      position = LatLng(pos.latitude, pos.longitude);
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(position, 13),
+      );
+    } catch (_) {
+      position = LatLng(5.365162, -4.000802);
+    }
   }
 
   @override
@@ -88,7 +108,7 @@ class _MapViewerState extends State<MapViewer> {
               style:
                   '[{"featureType": "poi","elementType": "labels","stylers": [{"visibility": "off"}]}]',
               initialCameraPosition: CameraPosition(
-                target: state.initialPosition,
+                target: position,
                 zoom: state.zoom,
               ),
               myLocationEnabled: true,
@@ -127,29 +147,10 @@ class _MapViewerState extends State<MapViewer> {
             Visibility(
               visible: state.searchIsFocus,
               child: GestureDetector(
-                // Détecte un simple tap
-                onTap: () {
-                  context.read<MapViwerCubit>().onChangeSearchFocus(false);
-                  focusNode.unfocus();
-                },
-
-                // Détecte un mouvement (glissement ou déplacement)
-                onPanUpdate: (details) {
-                  context.read<MapViwerCubit>().onChangeSearchFocus(false);
-                  focusNode.unfocus();
-                },
-
-                // Détecte le début du mouvement
-                onPanStart: (details) {
-                  context.read<MapViwerCubit>().onChangeSearchFocus(false);
-                  focusNode.unfocus();
-                },
-
-                // Détecte la fin du mouvement
-                onPanEnd: (details) {
-                  context.read<MapViwerCubit>().onChangeSearchFocus(false);
-                  focusNode.unfocus();
-                },
+                onTap: _dismissSearch,
+                onPanUpdate: (_) => _dismissSearch(),
+                onPanStart: (_) => _dismissSearch(),
+                onPanEnd: (_) => _dismissSearch(),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(
                       sigmaX: 4.0, sigmaY: 4.0), // Intensité du flou
@@ -168,23 +169,19 @@ class _MapViewerState extends State<MapViewer> {
                   children: [
                     PlaceAutocompleteWidget(
                       focusNode: focusNode,
-                      onPlaceSelected: (p0) => _onPlaceSelected(p0),
+                      onPlaceSelected: (p0) {
+                        _dismissSearch();
+                        _onPlaceSelected(p0);
+                      },
                       googleApiKey: dotenv.get('GOOGLE_API_KEY'),
                       onFocusChange: (isFocused) {
-                        // if (isFocused = true) {
-                        //   Future.delayed(const Duration(microseconds: 500), () {
-                        //     focusNode.requestFocus();
-                        //   });
-                        // }
-                        context
-                            .read<MapViwerCubit>()
-                            .onChangeSearchFocus(isFocused);
-
-                        // if (isFocused) {
-                        //   print('Le champ a le focus');
-                        // } else {
-                        //   print('Le champ a perdu le focus');
-                        // }
+                        if (!isFocused) {
+                          _dismissSearch();
+                        } else {
+                          context
+                              .read<MapViwerCubit>()
+                              .onChangeSearchFocus(true);
+                        }
                       },
                     ),
                     LocationPermissionBanner(),
@@ -227,5 +224,15 @@ class _MapViewerState extends State<MapViewer> {
         );
       },
     );
+  }
+
+  void _dismissSearch() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      try {
+        FocusManager.instance.primaryFocus?.unfocus();
+        context.read<MapViwerCubit>().onChangeSearchFocus(false);
+      } catch (_) {}
+    });
   }
 }

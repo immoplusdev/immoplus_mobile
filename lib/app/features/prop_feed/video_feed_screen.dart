@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
@@ -118,7 +119,7 @@ class _VideoFeedViewState extends State<VideoFeedView>
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: _statusBarStyle,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF111111),
         body: SafeArea(
           top: true,
           bottom: true,
@@ -131,11 +132,25 @@ class _VideoFeedViewState extends State<VideoFeedView>
                 final n = controller.videos.length;
                 final count = n > 0 ? n * _loopMultiplier : 0;
                 if (count == 0) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Container(
+                    color: const Color(0xFF111111),
+                    child: Center(
+                      child: SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: Lottie.asset(
+                          'assets/animations/immo-loading.json',
+                          fit: BoxFit.contain,
+                          repeat: true,
+                          reverse: false,
+                        ),
+                      ),
+                    ),
+                  );
                 }
                 return PreloadPageView.builder(
                   controller: _pageController,
-                  preloadPagesCount: 1,
+                  preloadPagesCount: 2,
                   scrollDirection: Axis.vertical,
                   itemCount: count,
                   onPageChanged: (pageIndex) =>

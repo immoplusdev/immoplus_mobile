@@ -36,6 +36,7 @@ class ResidenceModel with _$ResidenceModel {
     @Default(false) bool animauxAutorises,
     @Default(false) bool fetesAutorises,
     @Default('') String reglesSupplementaires,
+    num? score,
     //ClientModel? proprietaire,
     @Default(true) bool residenceDisponible,
   }) = _ResidenceModel;

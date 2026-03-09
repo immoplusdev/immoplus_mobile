@@ -43,6 +43,7 @@ class BienImmobilierModel with _$BienImmobilierModel {
     @JsonKey(fromJson: toDouble) double? longitude,
     @JsonKey(fromJson: toInt) int? nombreMaxOccupants,
     @JsonKey(defaultValue: false) bool? fetesAutorises,
+    num? score,
   }) = _BienImmobilierModel;
 
   factory BienImmobilierModel.fromJson(Map<String, dynamic> json) =>
