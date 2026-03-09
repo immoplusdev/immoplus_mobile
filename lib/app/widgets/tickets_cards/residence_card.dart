@@ -15,8 +15,8 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
-import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ResidenceCard extends StatefulWidget {
@@ -58,6 +58,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
             children: [
               Stack(
                 children: [
+                  // Image carousel
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: AspectRatio(
@@ -114,6 +115,20 @@ class _ResidenceCardState extends State<ResidenceCard> {
                         ),
                       ),
                     ),
+                  ),
+                  // Icône verify en bas à droite de l'image
+                  Positioned(
+                    bottom: 12,
+                    right: 12,
+                    child:     CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Iconsax.verify,
+                    size: 16,
+                    color: AppColors.primary,
+                  ),
+                ),
                   ),
                   // Positioned(
                   //   bottom: 10,
@@ -211,26 +226,28 @@ class _ResidenceCardState extends State<ResidenceCard> {
             ],
           ),
         ),
-        Positioned(
-          right: 10,
-          top: 10,
-          child: ValueListenableBuilder(
-            valueListenable: _liked,
-            builder: (context, value, child) => ResidenceFavoriteButton(
-              isFavorite: value,
-              onTap: () async {
-                if (_liked.value == false) {
-                  favoriesUtils
-                      .addResidenceToFavorites(widget.residence)
-                      .then((value) {});
-                } else {
-                  favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
-                }
-                _liked.value = !value;
-              },
-            ),
-          ),
-        ),
+        // Bouton cœur (commenté)
+        // Positioned(
+        //   right: 10,
+        //   bottom: 160,
+        //   child: ValueListenableBuilder(
+        //     valueListenable: _liked,
+        //     builder: (context, value, child) => ResidenceFavoriteButton(
+        //       isFavorite: value,
+        //       onTap: () async {
+        //         if (_liked.value == false) {
+        //           favoriesUtils
+        //               .addResidenceToFavorites(widget.residence)
+        //               .then((value) {});
+        //         } else {
+        //           favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
+        //         }
+        //         _liked.value = !value;
+        //       },
+        //     ),
+        //   ),
+        // ),
+   
       ],
     );
   }

@@ -13,8 +13,8 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
-import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CompactResidenceCard extends StatefulWidget {
@@ -98,11 +98,25 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
                 child: _buildResidenceInfo(context),
               ),
 
-              // Bouton favori en bas à droite
+              // Bouton cœur (commenté)
+              // Positioned(
+              //   right: 16,
+              //   bottom: 16,
+              //   child: _buildFavoriteButton(),
+              // ),
+              // Icône verify en bas de la card
               Positioned(
                 right: 16,
                 bottom: 16,
-                child: _buildFavoriteButton(),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Iconsax.verify,
+                    size: 16,
+                    color: AppColors.primary,
+                  ),
+                ),
               ),
             ],
           ),
@@ -255,23 +269,23 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
     );
   }
 
-  /// Bouton favori
-  Widget _buildFavoriteButton() {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _liked,
-      builder: (context, isLiked, _) {
-        return ResidenceFavoriteButton(
-          isFavorite: isLiked,
-          onTap: () async {
-            if (_liked.value) {
-              await favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
-            } else {
-              await favoriesUtils.addResidenceToFavorites(widget.residence);
-            }
-            _liked.value = !isLiked;
-          },
-        );
-      },
-    );
-  }
+  /// Bouton favori (commenté)
+  // Widget _buildFavoriteButton() {
+  //   return ValueListenableBuilder<bool>(
+  //     valueListenable: _liked,
+  //     builder: (context, isLiked, _) {
+  //       return ResidenceFavoriteButton(
+  //         isFavorite: isLiked,
+  //         onTap: () async {
+  //           if (_liked.value) {
+  //             await favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
+  //           } else {
+  //             await favoriesUtils.addResidenceToFavorites(widget.residence);
+  //           }
+  //           _liked.value = !isLiked;
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 }

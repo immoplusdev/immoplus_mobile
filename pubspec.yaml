@@ -152,9 +152,6 @@ dependencies:
       ref: main
   animate_do: ^4.2.0
   smooth_sheets: ^0.17.0
-  media_kit: ^1.2.6
-  media_kit_video: ^2.0.1
-  media_kit_libs_video: ^1.0.7
   preload_page_view: ^0.2.0
   socket_io_client: ^3.0.0
 

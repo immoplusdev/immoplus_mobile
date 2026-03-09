@@ -5,7 +5,7 @@ import 'property_type_dropdown.dart';
 class TopNavBar extends StatefulWidget {
   const TopNavBar({
     super.key,
-    this.initialIndex = 1,
+    this.initialIndex = 0,
     this.onTabSelected,
     this.onSearchTap,
     this.onPropertyTypeSelected,
@@ -16,7 +16,7 @@ class TopNavBar extends StatefulWidget {
   final VoidCallback? onSearchTap;
   final ValueChanged<PropertyType>? onPropertyTypeSelected;
 
-  static const List<String> _tabs = ['Près de Toi', 'Pour Toi'];
+  static const List<String> _tabs = [ 'Pour Toi'];
 
   /// Espacement horizontal entre les onglets.
   static const double tabSpacing = 12;
