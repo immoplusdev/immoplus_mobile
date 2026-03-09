@@ -8,10 +8,10 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: Theme.of(context)
-          .textTheme
-          .bodyLarge!
-          .copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
     );
   }
 }
