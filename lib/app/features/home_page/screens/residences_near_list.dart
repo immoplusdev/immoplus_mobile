@@ -118,7 +118,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         lat: lat,
         long: long,
         radius: widget.radius,
-        search: FilterHandler.search,
+        // search: FilterHandler.search,
         page: 1,
       );
 
@@ -173,7 +173,11 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
   @override
   Widget build(BuildContext context) {
     // Masquer toute la section si pas de résidences proches (ou erreur)
-    if (!_isLoading && (_nearResidences.isEmpty || _hasError || _locationError || _isDismissed)) {
+    if (!_isLoading &&
+        (_nearResidences.isEmpty ||
+            _hasError ||
+            _locationError ||
+            _isDismissed)) {
       return const SizedBox.shrink();
     }
 
@@ -193,7 +197,8 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
               onPressed: _nearResidences.isNotEmpty
                   ? () {
                       final lat = FilterHandler.lat ?? _userPosition?.latitude;
-                      final long = FilterHandler.long ?? _userPosition?.longitude;
+                      final long =
+                          FilterHandler.long ?? _userPosition?.longitude;
                       if (lat != null && long != null) {
                         context.push(NearResidencesPage.routePath, extra: {
                           'lat': lat,

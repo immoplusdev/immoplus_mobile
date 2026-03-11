@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
@@ -66,9 +67,9 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
       // Charger les résidences triées par score DESC
       final result = await _residenceRepository.getResidences(
         page: 1,
-        search: FilterHandler.search,
-        orderBy: 'score',
-        orderDir: 'desc',
+        // search: FilterHandler.search,
+        orderBy: OrderByField.score.value,
+        orderDir: OrderDir.desc.value,
       );
 
       if (mounted) {
