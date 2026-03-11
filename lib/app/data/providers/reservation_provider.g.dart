@@ -50,8 +50,9 @@ class _ReservationProvider implements ReservationProvider {
     int page,
     int perPage,
     String? orderBy,
-    String? orderDir,
-  ) async {
+    String? orderDir, [
+    List<String>? where,
+  ]) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_search': search,
@@ -59,6 +60,7 @@ class _ReservationProvider implements ReservationProvider {
       r'_per_page': perPage,
       r'_order_by': orderBy,
       r'_order_dir': orderDir,
+      r'_where': where,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

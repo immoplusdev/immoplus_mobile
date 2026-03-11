@@ -17,6 +17,7 @@ import 'package:immoplus/app/features/account/widgets/open_settings_dialog.dart'
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
@@ -314,6 +315,20 @@ class _AccountPageState extends State<AccountPage> {
             height: 1.25,
           ),
           onTap: () => context.pushNamed(BookingHistoryPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(Icon(FontAwesomeIcons.creditCard, size: 18, color: _kIconColor)),
+          title: 'Réservations à payer',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.push(PendingPaymentReservationsPage.route()),
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,

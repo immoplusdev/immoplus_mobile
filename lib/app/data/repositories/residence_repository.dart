@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/enums/order_dir.dart';
+import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservations_collection.dart';
+import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
 
 import 'package:immoplus/app/data/providers/reservation_provider.dart';
 import 'package:immoplus/app/data/providers/residence_provider.dart';
@@ -24,11 +27,12 @@ class ResidenceRepository {
     String? orderBy,
     String? orderDir,
     String? search,
+    List<String>? where,
   }) async {
     //dioClient.options.queryParameters['meta'] = '*';
     try {
       final response = await ReservationProvider(dioClient)
-          .getBookings(search, page, perPage, orderBy, orderDir);
+          .getBookings(search, page, perPage, orderBy, orderDir, where);
       inspect(response);
       return response;
     } on DioException catch (dioError) {
@@ -40,6 +44,45 @@ class ResidenceRepository {
       log('Error: $error');
       throw Exception('Failed to load users: $error');
     }
+  }
+
+  /// Récupère la dernière réservation en attente de réponse du propriétaire
+  Future<ReservationModel?> getLatestPendingProprietaireReponse() async {
+    try {
+      final where = [
+        '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttenteReponseProprietaire.backendValue}"}',
+        '{ "_field": "statusFacture", "_op": "eq", "_val": "non_paye"}'
+      ];
+      final result = await getReservations(
+        page: 1,
+        perPage: 1,
+        where: where,
+        orderBy: OrderByField.createdAt.value,
+        orderDir: OrderDir.desc.value,
+      );
+      if (result.data.isNotEmpty) return result.data.first;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Récupère les réservations en attente de paiement client
+  Future<ReservationsCollection> getReservationsEnAttentePaiement({
+    int page = 1,
+    int perPage = 10,
+  }) {
+    final where = [
+      '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttentePaiementClient.backendValue}"}',
+      '{ "_field": "statusFacture", "_op": "eq", "_val": "non_paye"}'
+    ];
+    return getReservations(
+      page: page,
+      perPage: perPage,
+      where: where,
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
+    );
   }
 
   Future<ReservationsCollection> getReservationsOwner({

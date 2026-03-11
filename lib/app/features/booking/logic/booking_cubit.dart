@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/booking/data/estimate_price_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
 import 'package:immoplus/app/features/booking/logic/booking_services.dart';
-import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
-import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/features/home_page/components/reservation_countdown_banner.dart';
+import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -85,17 +85,13 @@ class BookingCubit extends Cubit<BookingRequestState> {
       ReservationResponse reservationResponse =
           await residenceRepository.createBooking(model: body);
       emit(BookingRequestState.receiveBooking(reservationResponse));
+      ReservationCountdownBanner.refresh();
 
-      NavigationService.navigatorKey.currentContext!.pushNamed(
-        OperatorsSelectorPage.name,
-        extra: PaymentPageAdapter(
-          itemId: reservationResponse.data.id,
-          collection: ProductType.reservations.name,
-          amount: amount,
-
-          // amount: reservationResponse.data.montantTotalReservation.toInt(),
-        ),
+      ToastUtils.showSuccess(
+        description: "Votre réservation a bien été enregistrée.",
       );
+      // Retour au home, le paiement sera géré par l'overlay
+      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
     } catch (e) {
       emit(BookingRequestState.error(e.toString()));
     }

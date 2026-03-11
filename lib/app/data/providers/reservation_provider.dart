@@ -25,7 +25,8 @@ abstract class ReservationProvider {
       @Query("_page") int page,
       @Query("_per_page") int perPage,
       @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir);
+      @Query("_order_dir") String? orderDir,
+      [@Query('_where') List<String>? where]);
 
   @POST("/reservations")
   Future<ReservationResponse> createBookings(

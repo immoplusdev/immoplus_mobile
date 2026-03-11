@@ -39,6 +39,7 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
 import 'package:immoplus/app/features/vivre/vivre_page.dart';
+import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/force_update_required_page.dart';
@@ -204,6 +205,13 @@ class AppRouter {
         path: BookingHistoryPage.routePath(),
         name: BookingHistoryPage.name,
         builder: (context, state) => BookingHistoryPage(
+          reservationId: state.uri.queryParameters['reservationId'],
+        ),
+      ),
+      GoRoute(
+        path: PendingPaymentReservationsPage.routePath(),
+        name: PendingPaymentReservationsPage.name,
+        builder: (context, state) => PendingPaymentReservationsPage(
           reservationId: state.uri.queryParameters['reservationId'],
         ),
       ),

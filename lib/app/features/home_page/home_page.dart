@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+// import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
@@ -19,6 +20,7 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 
 import 'components/home_search_appbar.dart';
+import 'components/reservation_countdown_banner.dart';
 
 // part 'widgets/about_secton.dart';
 // part 'widgets/custom_app_bar.dart';
@@ -50,6 +52,9 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
+      // if (mounted) {
+      //   getIt<ClientReservationOverlayService>().checkAndShowOverlay(context);
+      // }
     });
     super.initState();
   }
@@ -102,6 +107,12 @@ class _HomePageState extends State<HomePage>
                     HomeSearchAppbar(
                       currentIndex: state.indexPage,
                       controller: _tabController,
+                    ),
+                    const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: ReservationCountdownBanner(),
+                      ),
                     ),
                     ValueListenableBuilder<int>(
                       valueListenable: FilterHandler.notifier,

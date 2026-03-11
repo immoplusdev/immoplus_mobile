@@ -26,6 +26,7 @@ import 'package:immoplus/app/services/location_service.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
+import 'package:immoplus/app/features/home_page/components/reservation_countdown_banner.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
@@ -395,89 +396,75 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                     ],
                   ),
                   Gap(14),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 57.5,
-                          child: CustomTextField(
-                            contentPadding: EdgeInsets.symmetric(vertical: 0),
-                            labelText: 'Que cherchez-vous ?',
-                            prefixIcon: Icon(
+                  SizedBox(
+                    height: 57.5,
+                    child: CustomTextField(
+                      contentPadding: EdgeInsets.symmetric(vertical: 0),
+                      labelText: 'Que cherchez-vous ?',
+                      prefixIcon: Icon(
+                          color: AppColors.primary,
+                          size: 20,
+                          Iconsax.search_normal_1),
+                      controller: _searchController,
+                      sufixIcon: _showClearButton
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.cancel,
+                                color: Colors.grey.shade600,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                _searchController.clear();
+                                EasyDebounce.cancel(_searchDebounceKey);
+                                FilterHandler.search = null;
+                                FilterHandler.notifyChange();
+                                HomePageState.refreshPage(widget.currentIndex);
+                              },
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Iconsax.setting_4,
                                 color: AppColors.primary,
-                                size: 20,
-                                Iconsax.search_normal_1),
-                            controller: _searchController,
-                            sufixIcon: _showClearButton
-                                ? IconButton(
-                                    icon: Icon(
-                                      Icons.cancel,
-                                      color: Colors.grey.shade600,
-                                      size: 18,
-                                    ),
-                                    onPressed: () {
-                                      _searchController.clear();
-                                      EasyDebounce.cancel(_searchDebounceKey);
-                                      FilterHandler.search = null;
-                                      FilterHandler.notifyChange();
-                                      HomePageState.refreshPage(
-                                          widget.currentIndex);
-                                    },
-                                  )
-                                : IconButton(
-                                    icon: Icon(
-                                      Iconsax.setting_4,
-                                      color: AppColors.primary,
-                                      size: 18,
-                                    ),
-                                    onPressed: _showFilterDialog,
-                                  ),
-                            onFieldSubmitted: (keyword) {
-                              if (FilterHandler.search != null) {
-                                if (FilterHandler.search!.isNotEmpty) {
-                                  log(keyword);
-                                  HomePageState.refreshPage(
-                                      widget.currentIndex);
-                                } else {
-                                  FilterHandler.search = null;
-                                  FilterHandler.notifyChange();
-                                  HomePageState.refreshPage(
-                                      widget.currentIndex);
-                                }
-                              }
-                            },
-                            onChanged: (text) {
-                              EasyDebounce.debounce(
-                                _searchDebounceKey,
-                                const Duration(
-                                    milliseconds: _searchDeboucemillisecond),
-                                () {
-                                  final search = text.isNotEmpty ? text : null;
-                                  FilterHandler.search = search;
-                                  FilterHandler.notifyChange();
-                                  if (search != null) log(text);
-                                  HomePageState.refreshPage(
-                                      widget.currentIndex);
-                                },
-                              );
-                            },
-                            fillColor: Colors.transparent,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(radiusButton),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade300),
+                                size: 18,
+                              ),
+                              onPressed: _showFilterDialog,
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(radiusButton),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade300),
-                            ),
-                          ),
-                        ),
+                      onFieldSubmitted: (keyword) {
+                        if (FilterHandler.search != null) {
+                          if (FilterHandler.search!.isNotEmpty) {
+                            log(keyword);
+                            HomePageState.refreshPage(widget.currentIndex);
+                          } else {
+                            FilterHandler.search = null;
+                            FilterHandler.notifyChange();
+                            HomePageState.refreshPage(widget.currentIndex);
+                          }
+                        }
+                      },
+                      onChanged: (text) {
+                        EasyDebounce.debounce(
+                          _searchDebounceKey,
+                          const Duration(
+                              milliseconds: _searchDeboucemillisecond),
+                          () {
+                            final search = text.isNotEmpty ? text : null;
+                            FilterHandler.search = search;
+                            FilterHandler.notifyChange();
+                            if (search != null) log(text);
+                            HomePageState.refreshPage(widget.currentIndex);
+                          },
+                        );
+                      },
+                      fillColor: Colors.transparent,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(radiusButton),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
                       ),
-                    ],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(radiusButton),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                    ),
                   ),
                 ],
               ),
