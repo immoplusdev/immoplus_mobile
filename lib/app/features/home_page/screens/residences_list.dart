@@ -30,7 +30,7 @@ class _ResidencesListState extends State<ResidencesList> {
 
     // utiliser le token pour invalider les requêtes périmées
     // si le token est différent, la requête est périmée et on ne la charge pas
-    // cela permet d`eviter d`avoir des requêtes périmées en arrière-plan 
+    // cela permet d`eviter d`avoir des requêtes périmées en arrière-plan
     // qui rendent la liste de résidences invalide et vide
     final whereFilters = FilterHandler.getAllFilters(PropertyType.residence);
     final residenceRepository = getIt<ResidenceRepository>();
