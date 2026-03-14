@@ -11,6 +11,9 @@ import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_pending.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -26,7 +29,6 @@ import 'package:immoplus/app/services/location_service.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
-import 'package:immoplus/app/features/home_page/components/reservation_countdown_banner.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
@@ -329,21 +331,29 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       },
       child: BlocBuilder<FilterCubit, FilterHandler>(
         builder: (context, state) {
-          return SliverAppBar(
-            automaticallyImplyLeading: false,
-            pinned: true,
-            snap: false,
-            floating: true,
-            titleSpacing: 0,
-            toolbarHeight: 125,
-            backgroundColor: AppColors.whiteBackground,
-            title: Container(
-              color: AppColors.whiteBackground,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+          return ValueListenableBuilder<bool>(
+            valueListenable: ReservationPendingBanner.hasReservationNotifier,
+            builder: (context, hasReservation, _) {
+              return SliverAppBar(
+                automaticallyImplyLeading: false,
+                pinned: true,
+                snap: false,
+                floating: true,
+                titleSpacing: 0,
+                toolbarHeight: hasReservation ? 220 : 140,
+                backgroundColor: AppColors.whiteBackground,
+                title: Container(
+                  color: AppColors.whiteBackground,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ReservationPendingBanner(),
+                      if (hasReservation) Gap(14),
+
+
+                      
+                      Row(
                     children: [
                       BlocBuilder<LocationPermissionCubit,
                           LocationPermissionState>(
@@ -469,10 +479,12 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                 ],
               ),
             ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(50),
-              child: HomeChoiceMenu(),
-            ),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(50),
+                  child: HomeChoiceMenu(),
+                ),
+              );
+            },
           );
         },
       ),

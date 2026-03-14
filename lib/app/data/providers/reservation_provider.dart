@@ -43,4 +43,10 @@ abstract class ReservationProvider {
 
   @POST("/reservations/action/annuler/{id}")
   Future<ReservationResponse> annulerBookings(@Path() String id);
+
+  @POST("/reservations/action/annuler-client/{id}")
+  Future<ReservationResponse> annulerReservationClient(
+    @Path() String id,
+    @Body() Map<String, dynamic> body,
+  );
 }

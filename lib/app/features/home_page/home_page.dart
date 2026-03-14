@@ -114,12 +114,6 @@ class _HomePageState extends State<HomePage>
                       currentIndex: state.indexPage,
                       controller: _tabController,
                     ),
-                    const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: ReservationCountdownBanner(),
-                      ),
-                    ),
                     ValueListenableBuilder<int>(
                       valueListenable: FilterHandler.notifier,
                       builder: (context, _, child) {

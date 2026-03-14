@@ -32,8 +32,8 @@ class HomeChoiceMenu extends StatelessWidget {
 
   final List<MenuOption> _choices = [
     MenuOption(label: 'Résidences', icon: ImmoIcons.home),
-    MenuOption(label: 'Meubles', icon: ImmoIcons.meubles),
     MenuOption(label: 'Locations', icon: ImmoIcons.location),
+    MenuOption(label: 'Meubles', icon: ImmoIcons.meubles),
     MenuOption(label: 'Achats', icon: ImmoIcons.terrain),
   ];
 

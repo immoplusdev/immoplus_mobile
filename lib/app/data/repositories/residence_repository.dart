@@ -67,6 +67,24 @@ class ResidenceRepository {
     }
   }
 
+  Future<ReservationModel> annulerReservationClient({
+  required String reservationId,
+  required String notes,
+}) async {
+  try {
+    final response = await ReservationProvider(dioClient)
+        .annulerReservationClient(
+          reservationId,
+          {'notes': notes},
+        );
+    return response.data;
+  } on DioException catch (e) {
+    throw Exception('Erreur annulation: ${e.message}');
+  }
+}
+
+
+
   /// Récupère les réservations en attente de paiement client
   Future<ReservationsCollection> getReservationsEnAttentePaiement({
     int page = 1,
@@ -84,6 +102,8 @@ class ResidenceRepository {
       orderDir: OrderDir.desc.value,
     );
   }
+
+
 
   Future<ReservationsCollection> getReservationsOwner({
     required String id,
