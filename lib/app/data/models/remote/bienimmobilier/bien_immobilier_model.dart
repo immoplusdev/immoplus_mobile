@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/enums/validation_status.dart';
 import 'package:immoplus/app/data/models/remote/configs/commune_model.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 
@@ -48,4 +49,9 @@ class BienImmobilierModel with _$BienImmobilierModel {
 
   factory BienImmobilierModel.fromJson(Map<String, dynamic> json) =>
       _$BienImmobilierModelFromJson(json);
+}
+
+extension BienImmobilierModelX on BienImmobilierModel {
+  ValidationStatus get validationStatus =>
+      ValidationStatus.fromString(statusValidation);
 }

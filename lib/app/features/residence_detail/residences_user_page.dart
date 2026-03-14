@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/data/enums/validation_status.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -27,6 +28,11 @@ class _ResidencesUserPageState extends State<ResidencesUserPage> {
       proprietaireId: widget.userId,
       page: page,
       search: searchQuery.isEmpty ? null : searchQuery,
+      where: {
+        '_where': [
+          '{"_field": "validationStatus", "_op": "eq", "_val": "${ValidationStatus.valide.value}"}',
+        ],
+      },
     )
         .then((value) {
       if (value.hasNext == true) {

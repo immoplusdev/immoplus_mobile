@@ -3,6 +3,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -76,7 +77,8 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageCubit, HomePageState>(
-      listenWhen: (previous, current) => previous.indexPage != current.indexPage,
+      listenWhen: (previous, current) =>
+          previous.indexPage != current.indexPage,
       listener: (context, state) {
         if (_tabController.index != state.indexPage && mounted) {
           _tabController.animateTo(state.indexPage);
@@ -86,6 +88,10 @@ class _HomePageState extends State<HomePage>
         return EnvironmentsBadge(
           child: Scaffold(
             backgroundColor: AppColors.whiteBackground,
+            floatingActionButton: FloatingActionButton(onPressed: () {
+              context.push(
+                  '/user_residences/6dfa2537-6f9b-4199-949b-0d337a138446');
+            }),
             body: DefaultTabController(
               length: 4,
               child: RefreshIndicator(
@@ -148,6 +154,6 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
-      );
+    );
   }
 }

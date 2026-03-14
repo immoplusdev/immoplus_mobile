@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/data/enums/validation_status.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
@@ -23,13 +24,16 @@ class _EstateUserPageState extends State<EstateUserPage> {
   String searchQuery = '';
 
   Future<void> loadPage(int page) async {
-    bienImmobilierRepository
-        .getBiensImmobiliersProprietaireId(
+    bienImmobilierRepository.getBiensImmobiliersProprietaireId(
       proprietaireId: widget.proprietaireId,
       page: page,
       search: searchQuery.isEmpty ? null : searchQuery,
-    )
-        .then((value) {
+      where: {
+        '_where': [
+          '{"_field": "validationStatus", "_op": "eq", "_val": "${ValidationStatus.valide.value}"}',
+        ],
+      },
+    ).then((value) {
       if (value.hasNext == true) {
         pagingController.appendPage(value.data ?? [], (value.currentPage)! + 1);
       } else {
