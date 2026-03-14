@@ -17,6 +17,7 @@ import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
@@ -236,6 +237,14 @@ class AppRouter {
         builder: (context, state) => OtpPageTest(
           currentPhoneNumber: state.extra as String,
         ),
+      ),
+      GoRoute(
+        path: '/reservation-engagement',
+        name: ReservationEngagementFrame.name,
+        builder: (context, state) {
+          final reservation = state.extra as ReservationEngagementFrame;
+          return reservation;
+        },
       ),
       ShellRoute(
         navigatorKey: _rootNavigatorKey,

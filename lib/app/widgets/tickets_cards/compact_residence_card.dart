@@ -21,11 +21,13 @@ class CompactResidenceCard extends StatefulWidget {
   const CompactResidenceCard({
     super.key,
     required this.residence,
-    this.showRating = true,
+    this.showRating = true, 
+    this.showVerify = true,
   });
 
   final ResidenceModel residence;
   final bool showRating;
+  final bool showVerify;
 
   @override
   State<CompactResidenceCard> createState() => _CompactResidenceCardState();
@@ -105,19 +107,33 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
               //   child: _buildFavoriteButton(),
               // ),
               // Icône verify en bas de la card
-              Positioned(
-                right: 16,
-                bottom: 16,
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Iconsax.verify,
-                    size: 16,
-                    color: AppColors.primary,
+              // Positioned(
+              //   right: 16,
+              //   bottom: 16,
+              //   child: CircleAvatar(
+              //     radius: 14,
+              //     backgroundColor: Colors.white,
+              //     child: Icon(
+              //       Iconsax.verify,
+              //       size: 16,
+              //       color: AppColors.primary,
+              if (widget.showVerify)
+                  Positioned(
+                    right: 16,
+                    bottom: 16,
+                    child: CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Iconsax.verify,
+                        size: 16,
+                        color: AppColors.primary,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -238,33 +254,34 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         ),
         const Gap(8),
         // Localisation
-        Row(
-          children: [
-            Icon(
-              Icons.location_on_outlined,
-              size: 16,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            const Gap(4),
-            Expanded(
-              child: Text(
-                "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+       Row(
+  children: [
+    Icon(
+      Icons.location_on_outlined,
+      size: 16,
+      color: Colors.white.withOpacity(0.9),
+    ),
+    const Gap(4),
+    SizedBox(
+      width: 160,
+      child: Text(
+        "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Colors.white.withOpacity(0.9),
+          shadows: [
+            Shadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
             ),
           ],
         ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ],
+),
       ],
     );
   }

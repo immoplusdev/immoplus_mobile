@@ -6,8 +6,9 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/booking/data/estimate_price_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
 import 'package:immoplus/app/features/booking/logic/booking_services.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/home_page/components/reservation_countdown_banner.dart';
-import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:injectable/injectable.dart';
@@ -85,13 +86,23 @@ class BookingCubit extends Cubit<BookingRequestState> {
       ReservationResponse reservationResponse =
           await residenceRepository.createBooking(model: body);
       emit(BookingRequestState.receiveBooking(reservationResponse));
-      ReservationCountdownBanner.refresh();
+      ReservationPendingBanner.refresh();
 
       ToastUtils.showSuccess(
         description: "Votre réservation a bien été enregistrée.",
       );
-      // Retour au home, le paiement sera géré par l'overlay
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
+
+      // Navigue vers ReservationEngagementFrame
+      final context = NavigationService.navigatorKey.currentContext;
+      if (context != null) {
+        final ownerName = reservationResponse.data.residence.nom;
+        context.goNamed(
+          ReservationEngagementFrame.name,
+          extra: ReservationEngagementFrame(ownerName: 
+          ownerName, reservationId: reservationResponse.data.id, montantTotal:reservationResponse.data.montantTotalReservation,
+        ),
+        );
+      }
     } catch (e) {
       emit(BookingRequestState.error(e.toString()));
     }

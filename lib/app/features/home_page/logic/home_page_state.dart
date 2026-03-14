@@ -40,19 +40,17 @@ class HomePageState {
 
   static Widget getPageListFromIndex(int index) => switch (index) {
         0 => const ResidencesList(),
-        1 => const FurnituresList(),
-        2 => const EstatesList(),
+        1 => const EstatesList(),
+        2 => const FurnituresList(),
         3 => const LandsList(),
-        //4 => const ResidencesList(),
         _ => const ResidencesList(),
       };
 
   static PagingController getPageListController(int index) => switch (index) {
         0 => pagingControllerResidence,
-        1 => pagingControllerFurniture,
-        2 => pagingControllerEstate,
+        1 => pagingControllerEstate,
+        2 => pagingControllerFurniture,
         3 => pagingControllerLand,
-        //4 => const ResidencesList(),
         _ => pagingControllerResidence,
       };
 }

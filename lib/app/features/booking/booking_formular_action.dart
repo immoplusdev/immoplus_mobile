@@ -22,6 +22,7 @@ import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
 import 'package:immoplus/app/features/booking/logic/booking_services.dart';
 import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/modules/country_phone_number/country_phone_number.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
@@ -640,7 +641,6 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                               .toList(),
                                           clientPhoneNumber: _formController
                                               .phoneNumber!.text));
-                                  context.pop();
                                 },
                                 child: const Text('Confirmer'),
                               ),
@@ -653,14 +653,6 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
           ),
         ),
       ),
-
-      // floatingActionButton: (kDebugMode)
-      //     ? FloatingActionButton(
-      //         onPressed: () {
-      //           log(selectedDates.toString());
-      //         },
-      //       )
-      //     : null,
     );
   }
 
