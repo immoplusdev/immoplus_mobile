@@ -36,9 +36,13 @@ enum ReservationBannerState {
 class ReservationPendingBanner extends StatefulWidget {
   const ReservationPendingBanner({super.key});
 
-  // ── Notifier : refresh externe ─────────────────────────────────────────────
+  // ── Notifier : refresh externe (hard reset) ────────────────────────────────
   static final ValueNotifier<int> refreshNotifier = ValueNotifier<int>(0);
   static void refresh() => refreshNotifier.value++;
+
+  // ── Notifier : soft refresh (re-fetch silencieux, pas de reset UI) ─────────
+  static final ValueNotifier<int> softRefreshNotifier = ValueNotifier<int>(0);
+  static void softRefresh() => softRefreshNotifier.value++;
 
   // ── Notifier : présence réservation (pilote toolbarHeight) ─────────────────
   static final ValueNotifier<bool> hasReservationNotifier =
@@ -51,8 +55,6 @@ class ReservationPendingBanner extends StatefulWidget {
       ValueNotifier<ReservationBannerState>(ReservationBannerState.idle);
 
   // ── Notifier : deadline ISO brute (source de vérité pour le countdown) ─────
-  // La frame calcule ELLE-MÊME les secondes depuis cette deadline.
-  // Pas de dépendance à un ticker externe → toujours correct au montage.
   static final ValueNotifier<String?> deadlineNotifier =
       ValueNotifier<String?>(null);
 
@@ -85,6 +87,9 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
   Timer? _refreshTimer;
   static const Duration _refreshInterval = Duration(seconds: 30);
 
+  // ── Guard anti-concurrent soft refresh ──────────────────────────────────────
+  bool _softRefreshInProgress = false;
+
   // ── Messages rotatifs ───────────────────────────────────────────────────────
   final List<String> _rotatingMessages = [
     'Il consulte les dates de votre séjour…',
@@ -102,12 +107,12 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
   late Animation<double> _messageOpacity;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
-  static const Color _bgColor      = Color(0xFFFFFFFF);
-  static const Color _iconBg       = Color(0xFFAB8DFF);
-  static const Color _accentLight  = Color(0xFFEEE8FF);
-  static const Color _textPrimary  = Color(0xFF1A1A1A);
-  static const Color _textMuted    = Color(0xFF888888);
-  static const Color _errorBg      = Color(0xFFFF5A5A);
+  static const Color _bgColor = Color(0xFFFFFFFF);
+  static const Color _iconBg = Color(0xFFAB8DFF);
+  static const Color _accentLight = Color(0xFFEEE8FF);
+  static const Color _textPrimary = Color(0xFF1A1A1A);
+  static const Color _textMuted = Color(0xFF888888);
+  static const Color _errorBg = Color(0xFFFF5A5A);
 
   @override
   void initState() {
@@ -116,6 +121,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     _fetchReservation();
     _startPeriodicRefresh();
     ReservationPendingBanner.refreshNotifier.addListener(_onForceRefresh);
+    ReservationPendingBanner.softRefreshNotifier.addListener(_onSoftRefresh);
   }
 
   void _initAnimations() {
@@ -145,11 +151,11 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     });
   }
 
+  // ── Hard refresh (reset complet de l'UI) ───────────────────────────────────
   void _onForceRefresh() {
     _cancelAllTimers();
     _autoCancelInProgress = false;
-    ReservationPendingBanner.setHasReservation(false);
-    ReservationPendingBanner.bannerStateNotifier.value = ReservationBannerState.idle;
+    _softRefreshInProgress = false;
     ReservationPendingBanner.deadlineNotifier.value = null;
     if (mounted) {
       setState(() {
@@ -163,6 +169,14 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     }
     _fetchReservation();
     _startPeriodicRefresh();
+  }
+
+  // ── Soft refresh (re-fetch silencieux, pas de reset UI) ────────────────────
+  void _onSoftRefresh() {
+    if (_softRefreshInProgress || _showingEndMessage || _autoCancelInProgress) {
+      return;
+    }
+    _silentRefresh();
   }
 
   void _cancelAllTimers() {
@@ -185,52 +199,69 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
       return;
     }
     try {
-      final result = await repo.getReservationsEnAttentePaiement(page: 1, perPage: 1);
+      final result =
+          await repo.getReservationsEnAttentePaiement(page: 1, perPage: 1);
       if (result.data.isNotEmpty) {
-        _setReservation(result.data.first, StatusReservation.enAttentePaiementClient);
+        _setReservation(
+            result.data.first, StatusReservation.enAttentePaiementClient);
         return;
       }
     } catch (e) {
       debugPrint('[ReservationPending] Error: $e');
     }
     ReservationPendingBanner.setHasReservation(false);
-    ReservationPendingBanner.bannerStateNotifier.value = ReservationBannerState.idle;
+    ReservationPendingBanner.bannerStateNotifier.value =
+        ReservationBannerState.idle;
     ReservationPendingBanner.deadlineNotifier.value = null;
     if (mounted) setState(() => _loading = false);
   }
 
   Future<void> _silentRefresh() async {
     if (_autoCancelInProgress || _showingEndMessage) return;
-    final repo = getIt<ResidenceRepository>();
 
-    final pending = await repo.getLatestPendingProprietaireReponse();
-    if (pending != null) {
-      _updateIfChanged(pending, StatusReservation.enAttenteReponseProprietaire);
-      return;
-    }
+    // Guard anti-concurrent
+    if (_softRefreshInProgress) return;
+    _softRefreshInProgress = true;
+
     try {
-      final result = await repo.getReservationsEnAttentePaiement(page: 1, perPage: 1);
-      if (result.data.isNotEmpty) {
-        _updateIfChanged(result.data.first, StatusReservation.enAttentePaiementClient);
+      final repo = getIt<ResidenceRepository>();
+
+      final pending = await repo.getLatestPendingProprietaireReponse();
+      if (pending != null) {
+        _updateIfChanged(
+            pending, StatusReservation.enAttenteReponseProprietaire);
         return;
       }
-    } catch (_) {}
+      try {
+        final result =
+            await repo.getReservationsEnAttentePaiement(page: 1, perPage: 1);
+        if (result.data.isNotEmpty) {
+          _updateIfChanged(
+              result.data.first, StatusReservation.enAttentePaiementClient);
+          return;
+        }
+      } catch (_) {}
 
-    if (_reservation != null &&
-        _secondsLeft > 0 &&
-        _status == StatusReservation.enAttenteReponseProprietaire) {
-      _triggerEndMessage(_EndState.proprietaireRefused);
-      return;
-    }
-    if (_reservation != null) {
-      ReservationPendingBanner.setHasReservation(false);
-      ReservationPendingBanner.bannerStateNotifier.value = ReservationBannerState.idle;
-      ReservationPendingBanner.deadlineNotifier.value = null;
-      if (mounted) setState(() => _reservation = null);
+      if (_reservation != null &&
+          _secondsLeft > 0 &&
+          _status == StatusReservation.enAttenteReponseProprietaire) {
+        _triggerEndMessage(_EndState.proprietaireRefused);
+        return;
+      }
+      if (_reservation != null) {
+        ReservationPendingBanner.setHasReservation(false);
+        ReservationPendingBanner.bannerStateNotifier.value =
+            ReservationBannerState.idle;
+        ReservationPendingBanner.deadlineNotifier.value = null;
+        if (mounted) setState(() => _reservation = null);
+      }
+    } finally {
+      _softRefreshInProgress = false;
     }
   }
 
   void _updateIfChanged(ReservationModel newRes, StatusReservation newStatus) {
+    // Même réservation, même statut → rien à faire
     if (_reservation?.id == newRes.id && _status == newStatus) return;
     _cancelAllTimers();
     _setReservation(newRes, newStatus);
@@ -278,7 +309,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     DateTime? created;
     try {
       final raw = _reservation!.createdAt;
-      created = (raw is DateTime ? raw : DateTime.tryParse(raw.toString())) as DateTime?;
+      created =
+          (raw is DateTime ? raw : DateTime.tryParse(raw.toString())) as DateTime?;
     } catch (_) {}
     _totalSeconds = created != null
         ? deadline.difference(created).inSeconds.clamp(1, 999999)
@@ -332,9 +364,9 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
 
     final bannerState = switch (state) {
       _EndState.proprietaireRefused => ReservationBannerState.endedRefused,
-      _EndState.waitingExpired      => ReservationBannerState.endedWaitingExpired,
-      _EndState.paymentExpired      => ReservationBannerState.endedPaymentExpired,
-      _EndState.none                => ReservationBannerState.idle,
+      _EndState.waitingExpired => ReservationBannerState.endedWaitingExpired,
+      _EndState.paymentExpired => ReservationBannerState.endedPaymentExpired,
+      _EndState.none => ReservationBannerState.idle,
     };
     ReservationPendingBanner.bannerStateNotifier.value = bannerState;
     ReservationPendingBanner.deadlineNotifier.value = null;
@@ -366,7 +398,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
   void _rotateMessage() async {
     await _messageController.reverse();
     if (!mounted) return;
-    setState(() => _messageIndex = (_messageIndex + 1) % _rotatingMessages.length);
+    setState(
+        () => _messageIndex = (_messageIndex + 1) % _rotatingMessages.length);
     await _messageController.forward();
   }
 
@@ -401,6 +434,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     _pulseController.dispose();
     _messageController.dispose();
     ReservationPendingBanner.refreshNotifier.removeListener(_onForceRefresh);
+    ReservationPendingBanner.softRefreshNotifier.removeListener(_onSoftRefresh);
     super.dispose();
   }
 
@@ -414,10 +448,14 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
 
   String get _endTitle {
     switch (_endState) {
-      case _EndState.proprietaireRefused: return 'Résidence non disponible';
-      case _EndState.waitingExpired:      return 'Demande expirée';
-      case _EndState.paymentExpired:      return 'Délai de paiement atteint';
-      case _EndState.none:                return '';
+      case _EndState.proprietaireRefused:
+        return 'Résidence non disponible';
+      case _EndState.waitingExpired:
+        return 'Demande expirée';
+      case _EndState.paymentExpired:
+        return 'Délai de paiement atteint';
+      case _EndState.none:
+        return '';
     }
   }
 
@@ -429,16 +467,21 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
         return 'Le propriétaire n\'a pas répondu à temps. Réessayez plus tard.';
       case _EndState.paymentExpired:
         return 'Temps limite de paiement atteint, votre réservation n\'a pu aboutir.';
-      case _EndState.none: return '';
+      case _EndState.none:
+        return '';
     }
   }
 
   IconData get _endIcon {
     switch (_endState) {
-      case _EndState.proprietaireRefused: return Iconsax.minus_cirlce;
-      case _EndState.waitingExpired:      return Iconsax.call_slash3;
-      case _EndState.paymentExpired:      return Iconsax.card_remove;
-      case _EndState.none:                return Icons.info_outline;
+      case _EndState.proprietaireRefused:
+        return Iconsax.minus_cirlce;
+      case _EndState.waitingExpired:
+        return Iconsax.call_slash3;
+      case _EndState.paymentExpired:
+        return Iconsax.card_remove;
+      case _EndState.none:
+        return Icons.info_outline;
     }
   }
 
@@ -502,7 +545,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            _status == StatusReservation.enAttentePaiementClient
+                            _status ==
+                                    StatusReservation.enAttentePaiementClient
                                 ? 'Propriétaire a confirmé votre demande'
                                 : 'Le propriétaire regarde votre demande',
                             style: const TextStyle(
@@ -518,7 +562,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                           FadeTransition(
                             opacity: _messageOpacity,
                             child: Text(
-                              _status == StatusReservation.enAttentePaiementClient
+                              _status ==
+                                      StatusReservation.enAttentePaiementClient
                                   ? 'Finalisez votre paiement pour confirmer'
                                   : _rotatingMessages[_messageIndex],
                               style: const TextStyle(
@@ -575,7 +620,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
       curve: Curves.easeOut,
       builder: (context, value, child) => Opacity(
         opacity: value,
-        child: Transform.translate(offset: Offset(0, 8 * (1 - value)), child: child),
+        child: Transform.translate(
+            offset: Offset(0, 8 * (1 - value)), child: child),
       ),
       child: Container(
         width: 375,
@@ -598,7 +644,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
               Container(
                 width: 64,
                 color: _errorBg,
-                child: Center(child: Icon(_endIcon, color: Colors.white, size: 22)),
+                child: Center(
+                    child: Icon(_endIcon, color: Colors.white, size: 22)),
               ),
               Expanded(
                 child: Padding(
@@ -636,7 +683,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Center(
-                  child: Icon(Icons.close_rounded, color: _textMuted.withOpacity(0.5), size: 16),
+                  child: Icon(Icons.close_rounded,
+                      color: _textMuted.withOpacity(0.5), size: 16),
                 ),
               ),
             ],

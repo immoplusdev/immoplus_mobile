@@ -13,13 +13,8 @@ import 'package:immoplus/app/constants/constantes.dart';
 ///
 /// Architecture :
 ///   • [ReservationPendingBanner] = source de vérité des STATUTS.
-///   • Cette frame = autonome pour le COUNTDOWN.
-///
-/// Fix timer figé :
-///   La frame NE lit plus secondsLeftNotifier (valeur dépendante d'un tick
-///   externe). Elle lit deadlineNotifier (ISO string) et recalcule les
-///   secondes ELLE-MÊME via DateTime.now(). Résultat : toujours correct
-///   au montage, même si le banner est disposé ou entre deux ticks.
+///   • Cette frame affiche des messages humains simples (pas de countdown).
+///   • Polling agressif (5s) via softRefresh tant que la frame est visible.
 class ReservationEngagementFrame extends StatefulWidget {
   static const String name = 'reservation_engagement';
 
@@ -43,52 +38,49 @@ class ReservationEngagementFrame extends StatefulWidget {
 
 class _ReservationEngagementFrameState
     extends State<ReservationEngagementFrame> with TickerProviderStateMixin {
-
-  // ── Countdown LOCAL autonome ────────────────────────────────────────────────
-  Timer? _localCountdownTimer;
-
   // ── Rotation messages ───────────────────────────────────────────────────────
   late AnimationController _messageController;
   late Animation<double> _messageOpacity;
   int _messageIndex = 0;
   Timer? _messageRotationTimer;
 
-  static const List<String> _waitingMessages = [
-    '👀 Le propriétaire regarde votre demande...',
-    '📅 Il consulte les dates de votre séjour...',
-    '✨ Votre logement est toujours disponible...',
-    '⏳ Plus qu\'un instant, il arrive...',
+  // ── Polling agressif (5s) tant que la frame est visible ─────────────────────
+  Timer? _aggressiveRefreshTimer;
+  static const Duration _aggressiveInterval = Duration(seconds: 5);
+
+  // ── Messages rotatifs — waitingOwner ────────────────────────────────────────
+  static const List<String> _waitingOwnerMessages = [
+    '👀 Il regarde votre demande…',
+    '📅 Il vérifie les disponibilités…',
+    '✨ Votre logement est disponible…',
+    '⏳ Plus qu\'un instant…',
+  ];
+
+  // ── Messages rotatifs — waitingPayment ──────────────────────────────────────
+  static const List<String> _waitingPaymentMessages = [
+    '💳 Finalisez pour confirmer',
+    '🔒 Votre place est réservée',
+    '⚡ Un dernier pas…',
   ];
 
   // ── État local ──────────────────────────────────────────────────────────────
   ReservationBannerState _currentState = ReservationBannerState.idle;
-  int _secondsLeft  = 0;
-  int _totalSeconds = 1;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
-  static const Color _primaryBlue   = Color(0xFF2744DE);
-  static const Color _successGreen  = Color(0xFF22C55E);
+  static const Color _primaryBlue = Color(0xFF2744DE);
+  static const Color _successGreen = Color(0xFF22C55E);
   static const Color _warningOrange = Color(0xFFF68A3A);
-  static const Color _errorRed      = Color(0xFFE63946);
-  static const Color _bgColor       = Color(0xFFFFFFFF);
-  static const Color _textPrimary   = Color(0xFF1A1A1A);
+  static const Color _errorRed = Color(0xFFE63946);
+  static const Color _bgColor = Color(0xFFFFFFFF);
+  static const Color _textPrimary = Color(0xFF1A1A1A);
   static const Color _textSecondary = Color(0xFF666666);
 
   @override
   void initState() {
     super.initState();
 
-    // ── Lecture initiale de l'état ────────────────────────────────────────────
     _currentState = ReservationPendingBanner.bannerStateNotifier.value;
-    _totalSeconds = ReservationPendingBanner.totalSecondsNotifier.value;
 
-    // ── Calcul secondes depuis la deadline brute ──────────────────────────────
-    // Pas de dépendance à secondsLeftNotifier → toujours juste au montage.
-    _secondsLeft = _computeSecondsFromDeadline(
-      ReservationPendingBanner.deadlineNotifier.value,
-    );
-
-    // ── Animation messages ────────────────────────────────────────────────────
     _messageController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -99,44 +91,29 @@ class _ReservationEngagementFrameState
       curve: Curves.easeInOut,
     );
 
-    // ── Démarrage countdown autonome ──────────────────────────────────────────
-    _startLocalCountdown();
-
-    if (_currentState == ReservationBannerState.waitingOwner) {
+    if (_currentState == ReservationBannerState.waitingOwner ||
+        _currentState == ReservationBannerState.waitingPayment) {
       _startMessageRotation();
     }
 
-    // ── Abonnement notifiers ──────────────────────────────────────────────────
-    // On écoute deadlineNotifier (pas secondsLeftNotifier) pour les resyncs.
-    ReservationPendingBanner.bannerStateNotifier .addListener(_onStateChanged);
-    ReservationPendingBanner.deadlineNotifier    .addListener(_onDeadlineChanged);
-    ReservationPendingBanner.totalSecondsNotifier.addListener(_onTotalChanged);
+    ReservationPendingBanner.bannerStateNotifier.addListener(_onStateChanged);
+
+    // ── Polling agressif : soft refresh toutes les 5s ────────────────────────
+    _startAggressiveRefresh();
   }
 
-  // ── Calcul secondes depuis deadline ISO ────────────────────────────────────
-  // Appelé à l'init et à chaque changement de deadline.
-  // Retourne toujours une valeur correcte, même si le banner est disposé.
-  int _computeSecondsFromDeadline(String? deadlineISO) {
-    if (deadlineISO == null) return 0;
-    final deadline = DateTime.tryParse(deadlineISO);
-    if (deadline == null) return 0;
-    final remaining = deadline.difference(DateTime.now());
-    return remaining.isNegative ? 0 : remaining.inSeconds;
-  }
+  // ── Polling agressif ───────────────────────────────────────────────────────
+  void _startAggressiveRefresh() {
+    // Force un refresh immédiat à l'ouverture de la frame
+    ReservationPendingBanner.softRefresh();
 
-  // ── Countdown local ─────────────────────────────────────────────────────────
-  void _startLocalCountdown() {
-    _localCountdownTimer?.cancel();
-    if (_secondsLeft <= 0) return;
-
-    _localCountdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (!mounted) return;
-      if (_secondsLeft > 0) {
-        setState(() => _secondsLeft--);
-      } else {
-        _localCountdownTimer?.cancel();
-        // Le banner gère l'auto-cancel API et la transition de statut.
+    _aggressiveRefreshTimer?.cancel();
+    _aggressiveRefreshTimer = Timer.periodic(_aggressiveInterval, (_) {
+      if (!mounted || _isTerminal) {
+        _aggressiveRefreshTimer?.cancel();
+        return;
       }
+      ReservationPendingBanner.softRefresh();
     });
   }
 
@@ -144,108 +121,71 @@ class _ReservationEngagementFrameState
   void _onStateChanged() {
     if (!mounted) return;
     final newState = ReservationPendingBanner.bannerStateNotifier.value;
-    setState(() => _currentState = newState);
+    setState(() {
+      _currentState = newState;
+      _messageIndex = 0;
+    });
 
     switch (newState) {
+      case ReservationBannerState.waitingOwner:
       case ReservationBannerState.waitingPayment:
-        // Propriétaire a accepté → nouveau délai paiement.
-        // La deadline a déjà été mise à jour dans deadlineNotifier par le banner.
-        // _onDeadlineChanged va s'en charger automatiquement.
-        _messageRotationTimer?.cancel();
+        _startMessageRotation();
         break;
 
       case ReservationBannerState.endedRefused:
       case ReservationBannerState.endedWaitingExpired:
       case ReservationBannerState.endedPaymentExpired:
-        _localCountdownTimer?.cancel();
         _messageRotationTimer?.cancel();
+        _aggressiveRefreshTimer?.cancel(); // Plus besoin de poller
         break;
 
       case ReservationBannerState.idle:
-        _localCountdownTimer?.cancel();
         _messageRotationTimer?.cancel();
+        _aggressiveRefreshTimer?.cancel();
         Future.delayed(const Duration(milliseconds: 600), () {
           if (mounted) context.goNamed(HomePage.name);
         });
         break;
-
-      case ReservationBannerState.waitingOwner:
-        // Resync au cas où on repasserait sur ce statut
-        _localCountdownTimer?.cancel();
-        _secondsLeft = _computeSecondsFromDeadline(
-          ReservationPendingBanner.deadlineNotifier.value,
-        );
-        _startLocalCountdown();
-        _startMessageRotation();
-        break;
     }
-  }
-
-  // ── Listener : nouvelle deadline publiée par le banner ─────────────────────
-  // Déclenché quand le statut change (ex: waitingOwner → waitingPayment).
-  // La frame recalcule ses secondes depuis la nouvelle deadline ISO.
-  void _onDeadlineChanged() {
-    if (!mounted) return;
-    final newSeconds = _computeSecondsFromDeadline(
-      ReservationPendingBanner.deadlineNotifier.value,
-    );
-    if (newSeconds <= 0) return;
-
-    _localCountdownTimer?.cancel();
-    setState(() => _secondsLeft = newSeconds);
-    _startLocalCountdown();
-
-    debugPrint('[EngagementFrame] Deadline resync → $_secondsLeft s');
-  }
-
-  // ── Listener : total secondes ───────────────────────────────────────────────
-  void _onTotalChanged() {
-    if (!mounted) return;
-    setState(() {
-      _totalSeconds = ReservationPendingBanner.totalSecondsNotifier.value;
-    });
   }
 
   // ── Rotation messages ───────────────────────────────────────────────────────
   void _startMessageRotation() {
     _messageRotationTimer?.cancel();
-    _messageRotationTimer = Timer.periodic(const Duration(seconds: 8), (_) {
+    _messageRotationTimer = Timer.periodic(const Duration(seconds: 6), (_) {
       if (!mounted) return;
-      if (_currentState == ReservationBannerState.waitingOwner) _rotateMessage();
+      if (_currentState == ReservationBannerState.waitingOwner ||
+          _currentState == ReservationBannerState.waitingPayment) {
+        _rotateMessage();
+      }
     });
   }
+
+  List<String> get _activeMessages =>
+      _currentState == ReservationBannerState.waitingPayment
+          ? _waitingPaymentMessages
+          : _waitingOwnerMessages;
 
   void _rotateMessage() async {
     await _messageController.reverse();
     if (!mounted) return;
-    setState(() => _messageIndex = (_messageIndex + 1) % _waitingMessages.length);
+    setState(
+        () => _messageIndex = (_messageIndex + 1) % _activeMessages.length);
     await _messageController.forward();
   }
 
   @override
   void dispose() {
-    _localCountdownTimer?.cancel();
+    _aggressiveRefreshTimer?.cancel();
     _messageRotationTimer?.cancel();
-    ReservationPendingBanner.bannerStateNotifier .removeListener(_onStateChanged);
-    ReservationPendingBanner.deadlineNotifier    .removeListener(_onDeadlineChanged);
-    ReservationPendingBanner.totalSecondsNotifier.removeListener(_onTotalChanged);
+    ReservationPendingBanner.bannerStateNotifier.removeListener(_onStateChanged);
     _messageController.dispose();
     super.dispose();
   }
 
-  // ── Helpers ─────────────────────────────────────────────────────────────────
-  String get _formattedTime {
-    final m = _secondsLeft ~/ 60;
-    final s = _secondsLeft % 60;
-    if (m > 0) return '$m min ${s}s';
-    return '${s}s';
-  }
-
-  double get _progressRatio => (_secondsLeft / _totalSeconds).clamp(0.0, 1.0);
-
   bool get _isTerminal =>
-      _currentState == ReservationBannerState.endedRefused        ||
-      _currentState == ReservationBannerState.endedWaitingExpired  ||
+      _currentState == ReservationBannerState.endedRefused ||
+      _currentState == ReservationBannerState.endedWaitingExpired ||
       _currentState == ReservationBannerState.endedPaymentExpired;
 
   // ── Build ───────────────────────────────────────────────────────────────────
@@ -322,7 +262,6 @@ class _ReservationEngagementFrameState
                         ),
                       ),
                       const SizedBox(height: 24),
-
                       Text(
                         widget.ownerName,
                         style: const TextStyle(
@@ -332,7 +271,6 @@ class _ReservationEngagementFrameState
                         ),
                       ),
                       const SizedBox(height: 10),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -360,16 +298,11 @@ class _ReservationEngagementFrameState
                       ),
                       const SizedBox(height: 20),
 
-                      // ── Timer + barre ─────────────────────────────────────
+                      // ── Info contextuelle (remplace le timer) ─────────────
                       if (!_isTerminal) ...[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildTimerCard(),
-                        ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildProgressBar(),
+                          child: _buildContextCard(),
                         ),
                         const SizedBox(height: 20),
                       ] else
@@ -400,7 +333,7 @@ class _ReservationEngagementFrameState
           key: const ValueKey('waiting_owner_msg'),
           opacity: _messageOpacity,
           child: Text(
-            _waitingMessages[_messageIndex],
+            _waitingOwnerMessages[_messageIndex % _waitingOwnerMessages.length],
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 14,
@@ -520,89 +453,69 @@ class _ReservationEngagementFrameState
     );
   }
 
-  // ── Card timer ──────────────────────────────────────────────────────────────
-  Widget _buildTimerCard() {
+  // ── Card contextuelle (remplace le timer) ─────────────────────────────────
+  Widget _buildContextCard() {
     final isPayment = _currentState == ReservationBannerState.waitingPayment;
-    final bool isUrgent = _secondsLeft < 120 && _secondsLeft > 0;
 
-    final Color timerColor = isUrgent
-        ? _errorRed
-        : isPayment ? _warningOrange : _primaryBlue;
+    final Color cardColor = isPayment ? _warningOrange : _primaryBlue;
+    final Color cardBg =
+        isPayment ? const Color(0xFFFFF4E6) : const Color(0xFFF8F6FF);
 
-    final Color timerBg = isUrgent
-        ? const Color(0xFFFFEAEA)
-        : isPayment ? const Color(0xFFFFF4E6) : const Color(0xFFF8F6FF);
+    final IconData cardIcon = isPayment ? Iconsax.clock : Iconsax.message_text;
+    final String cardTitle = isPayment
+        ? 'Payez dans les prochaines minutes'
+        : 'Répond en général en moins de 2 min';
+    final String cardSubtitle = isPayment
+        ? 'Votre place est maintenue, ne tardez pas'
+        : 'Vous serez notifié dès sa réponse';
 
-    return AnimatedContainer(
+    return AnimatedSwitcher(
       duration: const Duration(milliseconds: 400),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: timerBg,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(Iconsax.timer_1, color: timerColor, size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  isPayment ? 'Temps restant pour payer' : 'Temps de réponse',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: _textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '$_formattedTime restant',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: timerColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (isUrgent)
+      child: Container(
+        key: ValueKey('context_${isPayment ? 'payment' : 'owner'}'),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
-                color: _errorRed.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                color: cardColor.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(
-                'Urgent',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: _errorRed,
-                ),
+              child: Icon(cardIcon, color: cardColor, size: 20),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cardTitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: cardColor,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    cardSubtitle,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: cardColor.withOpacity(0.7),
+                      height: 1.4,
+                    ),
+                  ),
+                ],
               ),
             ),
-        ],
-      ),
-    );
-  }
-
-  // ── Barre de progression ────────────────────────────────────────────────────
-  Widget _buildProgressBar() {
-    final isPayment = _currentState == ReservationBannerState.waitingPayment;
-    final Color barColor = _progressRatio < 0.3
-        ? _errorRed
-        : isPayment ? _warningOrange : _primaryBlue;
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: LinearProgressIndicator(
-        value: _progressRatio,
-        minHeight: 5,
-        backgroundColor: const Color(0xFFF0EEF8),
-        valueColor: AlwaysStoppedAnimation<Color>(barColor),
+          ],
+        ),
       ),
     );
   }
@@ -677,7 +590,8 @@ class _ReservationEngagementFrameState
             backgroundColor: color,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
             elevation: 2,
           ),
           child: Row(
@@ -685,7 +599,9 @@ class _ReservationEngagementFrameState
             children: [
               Icon(icon, size: 18),
               const SizedBox(width: 8),
-              Text(label, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              Text(label,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -711,7 +627,8 @@ class _ReservationEngagementFrameState
             foregroundColor: _primaryBlue,
             padding: const EdgeInsets.symmetric(vertical: 14),
             side: const BorderSide(color: _primaryBlue, width: 1.5),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
             elevation: 0,
           ),
           child: Row(
@@ -719,7 +636,9 @@ class _ReservationEngagementFrameState
             children: [
               Icon(icon, size: 18),
               const SizedBox(width: 8),
-              Text(label, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              Text(label,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -739,10 +658,14 @@ class _ReservationEngagementFrameState
         width: double.infinity,
         child: TextButton(
           onPressed: onPressed,
-          style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 12)),
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12)),
           child: Text(
             label,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _textSecondary),
+            style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: _textSecondary),
           ),
         ),
       ),

@@ -40,12 +40,30 @@ class NotificationService {
         final typeString = data['type'] as String?;
         final type = PushNotificationType.fromString(typeString);
 
-        if (type == PushNotificationType.reservationAccepted ||
-            type == PushNotificationType.reservationRefused) {
-          log('🔔 Reservation status changed → refresh banner',
+        if (type == PushNotificationType.reservationAccepted) {
+          log('🔔 Reservation accepted → update UI instantly + refresh',
               name: 'NOTIFICATION');
 
+          // Mise à jour instantanée : le propriétaire a accepté → passer en attente paiement
+          ReservationPendingBanner.bannerStateNotifier.value =
+              ReservationBannerState.waitingPayment;
+
+          // Puis fetch complet en arrière-plan pour les détails (montant, délais…)
           ReservationPendingBanner.refresh();
+          ReservationCountdownBanner.refresh();
+        }
+
+        if (type == PushNotificationType.reservationRefused) {
+          log('🔔 Reservation refused → update UI instantly + refresh',
+              name: 'NOTIFICATION');
+
+          // Mise à jour instantanée : le propriétaire a refusé
+          ReservationPendingBanner.bannerStateNotifier.value =
+              ReservationBannerState.endedRefused;
+
+          // Puis fetch pour nettoyer l'état
+          ReservationPendingBanner.refresh();
+          ReservationCountdownBanner.refresh();
         }
       }
 
