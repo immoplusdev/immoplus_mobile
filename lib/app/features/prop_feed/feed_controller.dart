@@ -29,8 +29,7 @@ class VideoFeedController extends GetxController {
       <int, VideoPlayerController>{};
   final Set<int> _initializingIndexes = <int>{};
   final Set<int> _readyIndexes = <int>{};
-  final Map<int, Completer<void>> _readyCompleters =
-      <int, Completer<void>>{};
+  final Map<int, Completer<void>> _readyCompleters = <int, Completer<void>>{};
 
   // Pagination cursor
   String? _cursor;
@@ -55,14 +54,44 @@ class VideoFeedController extends GetxController {
 
   VideoPlayerController? getVideoController(int index) => _controllers[index];
   bool isReadyAt(int index) => _readyIndexes.contains(index);
-  bool isPlayingAt(int index) =>
-      _controllers[index]?.value.isPlaying ?? false;
+  bool isPlayingAt(int index) => _controllers[index]?.value.isPlaying ?? false;
 
   int getLikesCountForVideo(String videoId) => _likesCount[videoId] ?? 0;
   bool getIsLikedForVideo(String videoId) => _isLiked[videoId] ?? false;
 
   Future<String?> getThumbnailPathForVideo(String url) =>
       _repository.getThumbnailPathForVideo(url);
+
+  static String _safeUrlForLogs(String url) {
+    if (url.trim().isEmpty) return '<empty>';
+    final uri = Uri.tryParse(url);
+    if (uri == null) return url.split('?').first.split('#').first;
+    return uri.replace(query: '', fragment: '').toString();
+  }
+
+  void _logFeedItems(String scope, List<VideoModel> items) {
+    final sample = items.take(3).map((v) {
+      return <String, dynamic>{
+        'id': v.id,
+        'status': v.status,
+        'videoUrl': _safeUrlForLogs(v.url),
+        'thumbnailUrl': _safeUrlForLogs(v.thumbnailUrl ?? ''),
+        'shortCode': v.shortCode,
+        'authorId': v.author?.id,
+        'relatedTo': <String, dynamic>{
+          'entity': v.relatedTo?.entity,
+          'id': v.relatedTo?.id,
+        },
+        'likes': v.stats?.likes,
+        'views': v.stats?.views,
+        'createdAt': v.createdAt,
+      };
+    }).toList();
+
+    talker.debug(
+      '[VideoFeed:$scope] items=${items.length} sample=$sample',
+    );
+  }
 
   @override
   void onInit() {
@@ -82,6 +111,7 @@ class VideoFeedController extends GetxController {
     _hasMore = result.hasMore;
     _initLikesFromItems(result.items);
     videos.assignAll(result.items);
+    _logFeedItems('InitialFetch', result.items);
 
     talker.info(
       '[VideoFeed] ✓ Initial buffer loaded: ${result.items.length} videos | '
@@ -119,6 +149,7 @@ class VideoFeedController extends GetxController {
       _cursor = result.cursor;
       _hasMore = result.hasMore;
       _initLikesFromItems(result.items);
+      _logFeedItems('LoadMore', result.items);
 
       if (result.items.isNotEmpty) {
         videos.addAll(result.items);
@@ -182,6 +213,15 @@ class VideoFeedController extends GetxController {
   // Appelé depuis VideoPageItem après 3 s de lecture
   void sendViewEvent(String videoId, int durationMs) {
     _socketService?.sendView(videoId, durationMs);
+  }
+
+  /// Cache la vidéo en arrière-plan (utile pour les MP4 progressifs).
+  /// Déclenché après quelques secondes de visionnage pour éviter de télécharger
+  /// des vidéos que l'utilisateur swipe immédiatement.
+  void cacheVideoInBackground(String videoId) {
+    final idx = videos.indexWhere((v) => v.id == videoId);
+    if (idx == -1) return;
+    _repository.cacheInBackground(videos[idx].url);
   }
 
   // Toggle like depuis VideoPageItem
@@ -310,15 +350,15 @@ class VideoFeedController extends GetxController {
       // Buffering silencieux : lancer play() à volume 0 pour que le player
       // télécharge et décode les premières frames. Quand l'utilisateur swipe,
       // les frames sont déjà en mémoire → lecture instantanée.
-      if (index != _currentIndex) {
+      if (index == _currentIndex + 1) {
         controller.play();
         talker.debug(
           '[VideoFeed:Preload] ▶ Silent buffering started for index $index',
         );
       }
 
-      // Cache en arrière-plan pour les prochaines sessions
-      _repository.cacheInBackground(url);
+      // Le cache disque (téléchargement complet) est déclenché après quelques
+      // secondes de visionnage (VideoPageItem → cacheVideoInBackground).
 
       if (!completer.isCompleted) completer.complete();
       _disposeDistantPlayers(_currentIndex);
@@ -340,7 +380,7 @@ class VideoFeedController extends GetxController {
   void _preloadWindow(int index) {
     if (videos.isEmpty) return;
     final toPreload = <int>[];
-    for (final i in <int>[index + 1, index + 2, index + 3]) {
+    for (final i in <int>[index + 1, index + 2]) {
       if (i < 0 || i >= videos.length) continue;
       if (_readyIndexes.contains(i) || _initializingIndexes.contains(i)) {
         continue;
@@ -363,6 +403,19 @@ class VideoFeedController extends GetxController {
     _currentIndex = index;
     talker.debug(
         '[VideoFeed:PageChange] Current index: $index / ${videos.length}');
+    if (index >= 0 && index < videos.length) {
+      final v = videos[index];
+      talker.debug(
+        '[VideoFeed:Scroll] idx=$index id=${v.id} '
+        'status=${v.status} '
+        'videoUrl=${_safeUrlForLogs(v.url)} '
+        'thumbnailUrl=${_safeUrlForLogs(v.thumbnailUrl ?? '')} '
+        'shortCode=${v.shortCode ?? ''} '
+        'authorId=${v.author?.id ?? ''} '
+        'relatedTo=${v.relatedTo?.entity ?? ''}:${v.relatedTo?.id ?? ''} '
+        'likes=${getLikesCountForVideo(v.id)} liked=${getIsLikedForVideo(v.id)}',
+      );
+    }
 
     // Pagination : charger la suite quand proche de la fin
     if (!_isLoadingMore && _hasMore && index >= videos.length - 3) {
@@ -416,7 +469,6 @@ class VideoFeedController extends GetxController {
       currentIdx,
       currentIdx + 1,
       currentIdx + 2,
-      currentIdx + 3,
     ]) {
       if (i >= 0 && i < videos.length) keep.add(i);
     }

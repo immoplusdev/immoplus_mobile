@@ -38,32 +38,89 @@ class VideoRepository {
       maxNrOfCacheObjects: 200,
     ),
   );
-  final Set<String> _cachedUrls = {};
+  final Set<String> _cachedCacheKeys = <String>{};
+  final Set<String> _inFlightCacheKeys = <String>{};
 
   String get _baseUrl => dotenv.env['API_BASE_URL'] ?? '';
+
+  static bool _isLocalhostHost(String host) =>
+      host == 'localhost' || host == '127.0.0.1' || host == '0.0.0.0';
+
+  static bool _looksLikePresignedUrl(Uri uri) {
+    if (!uri.hasQuery) return false;
+    for (final key in uri.queryParameters.keys) {
+      final lower = key.toLowerCase();
+      if (lower.startsWith('x-amz-')) return true; // S3/MinIO
+      if (lower.startsWith('x-goog-')) return true; // GCS
+    }
+    return false;
+  }
+
+  /// Clé de cache stable pour une URL (ignore query/fragment).
+  /// Utile avec les URLs presignées (signature qui change) pour éviter de
+  /// re-télécharger/cacher le même fichier à l'infini.
+  static String _cacheKeyForUrl(String url) {
+    if (url.isEmpty) return url;
+    final uri = Uri.tryParse(url);
+    if (uri == null) return url.split('#').first.split('?').first;
+    return uri.replace(query: '', fragment: '').toString();
+  }
 
   // ---------------------------------------------------------------------------
   // Feed API — GET /feed
   // ---------------------------------------------------------------------------
 
   Future<FeedPage> fetchFeed({String? cursor, int limit = 5}) async {
+    final params = <String, dynamic>{'limit': limit};
+    if (cursor != null) {
+      params['cursor'] = cursor;
+    }
     try {
-      final params = <String, dynamic>{'limit': limit};
       if (cursor != null) {
-        params['cursor'] = cursor;
         talker.info(
-          '[VideoRepository] 📡 GET /feed?limit=$limit (pagination) | '
-          'cursor=${cursor.substring(0, 8)}... | TikTok-like incremental load'
-        );
+            '[VideoRepository] 📡 GET /feed?limit=$limit (pagination) | '
+            'cursor=${cursor.substring(0, 8)}... | TikTok-like incremental load');
       } else {
-        talker.info('[VideoRepository] 📡 GET /feed?limit=$limit (initial) | First batch of videos');
+        talker.info(
+            '[VideoRepository] 📡 GET /feed?limit=$limit (initial) | First batch of videos');
       }
 
       final response = await _dio.get(
         '$_baseUrl/feed',
         queryParameters: params,
       );
+      final etag = response.headers.value('etag');
+      if (etag != null && etag.trim().isNotEmpty) {
+        talker.debug('[VideoRepository] ↩︎ /feed response etag=$etag');
+      }
       return _parseFeedPage(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+      if (status == 429) {
+        final retryAfterHeader =
+            e.response?.headers.value('retry-after')?.trim();
+        final retryDelay = Duration(
+          milliseconds: int.tryParse(retryAfterHeader ?? '') != null
+              ? (int.parse(retryAfterHeader!) * 1000)
+              : 800,
+        );
+        talker.warning(
+          '[VideoRepository] ⏳ 429 rate limited on GET /feed; retry in ${retryDelay.inMilliseconds}ms',
+        );
+        await Future.delayed(retryDelay);
+        try {
+          final response = await _dio.get(
+            '$_baseUrl/feed',
+            queryParameters: params,
+          );
+          return _parseFeedPage(response.data as Map<String, dynamic>);
+        } catch (e2) {
+          talker.error('[VideoRepository] ❌ fetchFeed retry failed', e2);
+        }
+      } else {
+        talker.error('[VideoRepository] ❌ fetchFeed Dio error', e);
+      }
+      return (items: <VideoModel>[], cursor: null, hasMore: false);
     } catch (e) {
       talker.error('[VideoRepository] ❌ fetchFeed error', e);
       return (items: <VideoModel>[], cursor: null, hasMore: false);
@@ -88,10 +145,13 @@ class VideoRepository {
     if (url.isEmpty) return url;
     final uri = Uri.tryParse(url);
     if (uri == null) return url;
-    if (uri.host != 'localhost' && uri.host != '127.0.0.1') return url;
-    return _baseUrl +
-        uri.path +
-        (uri.hasQuery ? '?${uri.query}' : '');
+
+    // Ne jamais "normaliser" une URL presignée : changer le host casse la
+    // signature (et donc le téléchargement).
+    if (_looksLikePresignedUrl(uri)) return url;
+
+    if (!_isLocalhostHost(uri.host)) return url;
+    return _baseUrl + uri.path + (uri.hasQuery ? '?${uri.query}' : '');
   }
 
   FeedPage _parseFeedPage(Map<String, dynamic> data) {
@@ -124,8 +184,8 @@ class VideoRepository {
 
     talker.info(
       '[Feed] ✓ Parsed response | '
-      'received=$rawList | valid=${items.length} | filtered=$filtered | '
-      'nextCursor=${nextCursor?.substring(0, 8) ?? 'null'}... | hasMore=$hasMore'
+      'received=${rawList.length} | valid=${items.length} | filtered=$filtered | '
+      'nextCursor=${nextCursor?.substring(0, 8) ?? 'null'}... | hasMore=$hasMore',
     );
 
     return (
@@ -141,9 +201,11 @@ class VideoRepository {
 
   Future<void> initializeCacheMetadata(List<VideoModel> videos) async {
     for (final video in videos) {
-      final cached = await cacheManager.getFileFromCache(video.url);
+      final cached = await cacheManager.getFileFromCache(
+        _cacheKeyForUrl(video.url),
+      );
       if (cached != null && await cached.file.exists()) {
-        _cachedUrls.add(video.url);
+        _cachedCacheKeys.add(_cacheKeyForUrl(video.url));
       }
     }
   }
@@ -154,12 +216,13 @@ class VideoRepository {
   }
 
   Future<File?> getCachedFile(String url) async {
-    final cached = await cacheManager.getFileFromCache(url);
+    final key = _cacheKeyForUrl(url);
+    final cached = await cacheManager.getFileFromCache(key);
     if (cached != null && await cached.file.exists()) {
-      _cachedUrls.add(url);
+      _cachedCacheKeys.add(key);
       return cached.file;
     }
-    _cachedUrls.remove(url);
+    _cachedCacheKeys.remove(key);
     return null;
   }
 
@@ -201,40 +264,22 @@ class VideoRepository {
 
   Future<void> cacheInBackground(String url) async {
     if (isStreamManifest(url)) return;
-    if (_cachedUrls.contains(url)) return;
+    final key = _cacheKeyForUrl(url);
+    if (_cachedCacheKeys.contains(key)) return;
+    if (_inFlightCacheKeys.contains(key)) return;
+    _inFlightCacheKeys.add(key);
     try {
       await _downloadProgressive(url);
-      _cachedUrls.add(url);
+      _cachedCacheKeys.add(key);
     } catch (e) {
       debugPrint('[VideoRepository] cache download failed → $e');
+    } finally {
+      _inFlightCacheKeys.remove(key);
     }
   }
 
   Future<void> _downloadProgressive(String url) async {
-    final dir = await getTemporaryDirectory();
-    final lastSegment = Uri.parse(url).pathSegments.lastOrNull ?? 'video';
-    final file = File('${dir.path}/vid_${lastSegment.hashCode.abs()}_$lastSegment');
-    final sink = file.openWrite(mode: FileMode.writeOnly);
-    final resp = await _dio.get<ResponseBody>(
-      url,
-      options: Options(responseType: ResponseType.stream),
-    );
-    await for (final chunk in resp.data!.stream) {
-      sink.add(chunk);
-    }
-    await sink.close();
-    final bytes = await file.readAsBytes();
-    await file.delete();
-    await cacheManager.putFile(
-      url,
-      bytes,
-      fileExtension: _extractExtension(url),
-    );
-  }
-
-  static String _extractExtension(String url) {
-    final idx = url.lastIndexOf('.');
-    if (idx == -1) return 'mp4';
-    return url.substring(idx + 1).split('?').first;
+    final key = _cacheKeyForUrl(url);
+    await cacheManager.downloadFile(url, key: key);
   }
 }

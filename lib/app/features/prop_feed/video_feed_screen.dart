@@ -158,7 +158,7 @@ class _VideoFeedViewState extends State<VideoFeedView>
                   itemBuilder: (context, pageIndex) {
                     final videoIndex = pageIndex % n;
                     return VideoPageItem(
-                      key: ValueKey<int>(videoIndex),
+                      key: ValueKey<int>(pageIndex),
                       index: videoIndex,
                       controller: controller,
                     );

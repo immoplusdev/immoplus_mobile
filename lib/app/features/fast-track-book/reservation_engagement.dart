@@ -481,7 +481,7 @@ class _ReservationEngagementFrameState
         child: Row(
           children: [
             Container(
-              width: 40,
+              width: 42,
               height: 40,
               decoration: BoxDecoration(
                 color: cardColor.withOpacity(0.12),
@@ -497,7 +497,7 @@ class _ReservationEngagementFrameState
                   Text(
                     cardTitle,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: cardColor,
                     ),
