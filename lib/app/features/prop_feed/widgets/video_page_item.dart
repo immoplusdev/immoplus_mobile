@@ -49,6 +49,13 @@ class _VideoPageItemState extends State<VideoPageItem>
     with SingleTickerProviderStateMixin {
   static String? _lastKnownThumbnail;
 
+  static String _stableCacheKey(String url) {
+    if (url.trim().isEmpty) return url;
+    final uri = Uri.tryParse(url);
+    if (uri == null) return url.split('#').first.split('?').first;
+    return uri.replace(query: '', fragment: '').toString();
+  }
+
   bool _showPlayIcon = false;
   bool _isDescriptionExpanded = false;
   TapDownDetails? _tapDetails;
@@ -83,6 +90,7 @@ class _VideoPageItemState extends State<VideoPageItem>
     _viewTimer = Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
       widget.controller.sendViewEvent(videoId, 3000);
+      widget.controller.cacheVideoInBackground(videoId);
     });
   }
 
@@ -185,6 +193,7 @@ class _VideoPageItemState extends State<VideoPageItem>
             if (_lastKnownThumbnail != null)
               CachedNetworkImage(
                 imageUrl: _lastKnownThumbnail!,
+                cacheKey: _stableCacheKey(_lastKnownThumbnail!),
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
@@ -221,8 +230,7 @@ class _VideoPageItemState extends State<VideoPageItem>
             Positioned.fill(
               child: DoubleTapDetector(
                 onTap: _onTapPlayPause,
-                onDoubleTap: (details) =>
-                    setState(() => _tapDetails = details),
+                onDoubleTap: (details) => setState(() => _tapDetails = details),
                 behavior: HitTestBehavior.translucent,
                 child: Center(
                   child: AnimatedOpacity(
@@ -273,25 +281,21 @@ class _VideoPageItemState extends State<VideoPageItem>
                     widget.controller.toggleLike(video.id);
                   }
                 },
-                onCompleteAnimation: () =>
-                    setState(() => _tapDetails = null),
+                onCompleteAnimation: () => setState(() => _tapDetails = null),
               ),
             Positioned(
               left: 0,
               right: 72,
-              bottom:-7,
+              bottom: -7,
               child: LayoutBuilder(
                 builder: (context, constraints) => SocialPostHeader(
-                  username: widget.username ??
-                      video.author?.name ??
-                      'Immoplus',
+                  username: widget.username ?? video.author?.name ?? 'Immoplus',
                   avatarUrl: widget.avatarUrl ?? video.author?.avatar,
                   avatarPath: widget.avatarPath,
                   date: _formatDate(video.createdAt),
                   verify: true,
-                  caption: video.content?.description ??
-                      video.content?.title ??
-                      '',
+                  caption:
+                      video.content?.description ?? video.content?.title ?? '',
                   hashtags: const [],
                   isExpanded: _isDescriptionExpanded,
                   contentMaxWidth: constraints.maxWidth,
@@ -309,7 +313,6 @@ class _VideoPageItemState extends State<VideoPageItem>
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-
                   const SizedBox(height: 12),
                   GestureDetector(
                     key: _likeKey,
@@ -319,9 +322,8 @@ class _VideoPageItemState extends State<VideoPageItem>
                       children: [
                         Icon(
                           isLiked ? Iconsax.heart5 : Iconsax.heart,
-                          color: isLiked
-                              ? const Color(0xFFFF2D55)
-                              : Colors.white,
+                          color:
+                              isLiked ? const Color(0xFFFF2D55) : Colors.white,
                           size: 24,
                         ),
                         const SizedBox(height: 1),
@@ -477,6 +479,7 @@ class _VideoPageItemState extends State<VideoPageItem>
     if (thumbnailUrl != null && thumbnailUrl.isNotEmpty) {
       return CachedNetworkImage(
         imageUrl: thumbnailUrl,
+        cacheKey: _stableCacheKey(thumbnailUrl),
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,

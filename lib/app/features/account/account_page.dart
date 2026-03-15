@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -22,6 +23,7 @@ import 'package:immoplus/app/features/booking_history/booking_history_page.dart'
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -281,6 +283,59 @@ class _AccountPageState extends State<AccountPage> {
           ),
           onTap: () => showOpenSettingsDialog(context),
         ),
+
+      // Widget spécial pour la section "Devenir Pro"
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          children: [
+            SettingsTile(
+              shape: SettingsTile.shapeMiddle,
+              leading: _iconLeading(Icon(Iconsax.crown_14, size: 20, color: _kIconColor)),
+              title: 'Devenir Pro',
+              titleColor: _kLabelColor,
+              trailingColor: _kTrailingColor,
+              titleStyle: GoogleFonts.dmSans(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: _kLabelColor,
+                height: 1.25,
+              ),
+              // Ajout du badge "Devenir Pro" à côté de l'encoche (trailing)
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      "Immo+ Pro",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    FontAwesomeIcons.chevronRight,
+                    size: 14,
+                    color: _kTrailingColor,
+                  ),
+                ],
+              ),
+              onTap: // ouvrir un lien 
+              () => _openUrl('https://immoplus.ci/install/pro'),
+            ),
+          ],
+        ),
+      ),
+
       ]),
     );
   }

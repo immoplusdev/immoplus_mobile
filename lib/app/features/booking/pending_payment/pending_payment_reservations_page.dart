@@ -30,7 +30,7 @@ class PendingPaymentReservationsPage extends StatefulWidget {
 }
 
 class _PendingPaymentReservationsPageState
-    extends State<PendingPaymentReservationsPage> {
+  extends State<PendingPaymentReservationsPage> {
   late final PendingPaymentReservationsCubit _cubit;
 
   @override
