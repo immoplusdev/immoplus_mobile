@@ -6,13 +6,11 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-// import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
-import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -20,7 +18,6 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 
 import 'components/home_search_appbar.dart';
-import 'components/reservation_countdown_banner.dart';
 
 // part 'widgets/about_secton.dart';
 // part 'widgets/custom_app_bar.dart';
@@ -76,7 +73,8 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageCubit, HomePageState>(
-      listenWhen: (previous, current) => previous.indexPage != current.indexPage,
+      listenWhen: (previous, current) =>
+          previous.indexPage != current.indexPage,
       listener: (context, state) {
         if (_tabController.index != state.indexPage && mounted) {
           _tabController.animateTo(state.indexPage);
@@ -142,6 +140,6 @@ class _HomePageState extends State<HomePage>
           ),
         );
       },
-      );
+    );
   }
 }

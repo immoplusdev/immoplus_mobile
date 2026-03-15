@@ -17,6 +17,7 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       adresse: json['adresse'] as String? ?? '',
       ville: json['ville'] as String? ?? '',
       commune: json['commune'] as String? ?? '',
+      statusValidation: json['statusValidation'] as String? ?? '',
       villeModel: json['ville_model'] == null
           ? null
           : VilleModel.fromJson(json['ville_model'] as Map<String, dynamic>),
@@ -64,6 +65,7 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'adresse': instance.adresse,
       'ville': instance.ville,
       'commune': instance.commune,
+      'statusValidation': instance.statusValidation,
       'ville_model': instance.villeModel,
       'commune_model': instance.communeModel,
       'position': instance.position,

@@ -29,6 +29,7 @@ mixin _$ResidenceModel {
   String get adresse => throw _privateConstructorUsedError;
   String get ville => throw _privateConstructorUsedError;
   String get commune => throw _privateConstructorUsedError;
+  String get statusValidation => throw _privateConstructorUsedError;
   @JsonKey(name: 'ville_model')
   VilleModel? get villeModel => throw _privateConstructorUsedError;
   @JsonKey(name: 'commune_model')
@@ -76,6 +77,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
       String adresse,
       String ville,
       String commune,
+      String statusValidation,
       @JsonKey(name: 'ville_model') VilleModel? villeModel,
       @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       PositionModel position,
@@ -123,6 +125,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? adresse = null,
     Object? ville = null,
     Object? commune = null,
+    Object? statusValidation = null,
     Object? villeModel = freezed,
     Object? communeModel = freezed,
     Object? position = null,
@@ -177,6 +180,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
       commune: null == commune
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusValidation: null == statusValidation
+          ? _value.statusValidation
+          : statusValidation // ignore: cast_nullable_to_non_nullable
               as String,
       villeModel: freezed == villeModel
           ? _value.villeModel
@@ -306,6 +313,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       String adresse,
       String ville,
       String commune,
+      String statusValidation,
       @JsonKey(name: 'ville_model') VilleModel? villeModel,
       @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       PositionModel position,
@@ -354,6 +362,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? adresse = null,
     Object? ville = null,
     Object? commune = null,
+    Object? statusValidation = null,
     Object? villeModel = freezed,
     Object? communeModel = freezed,
     Object? position = null,
@@ -408,6 +417,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
       commune: null == commune
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusValidation: null == statusValidation
+          ? _value.statusValidation
+          : statusValidation // ignore: cast_nullable_to_non_nullable
               as String,
       villeModel: freezed == villeModel
           ? _value.villeModel
@@ -494,6 +507,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.adresse = '',
       this.ville = '',
       this.commune = '',
+      this.statusValidation = '',
       @JsonKey(name: 'ville_model') this.villeModel,
       @JsonKey(name: 'commune_model') this.communeModel,
       this.position = const PositionModel(),
@@ -545,6 +559,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final String commune;
+  @override
+  @JsonKey()
+  final String statusValidation;
   @override
   @JsonKey(name: 'ville_model')
   final VilleModel? villeModel;
@@ -617,7 +634,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
 
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible)';
   }
 
   @override
@@ -638,6 +655,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.adresse, adresse) || other.adresse == adresse) &&
             (identical(other.ville, ville) || other.ville == ville) &&
             (identical(other.commune, commune) || other.commune == commune) &&
+            (identical(other.statusValidation, statusValidation) ||
+                other.statusValidation == statusValidation) &&
             (identical(other.villeModel, villeModel) ||
                 other.villeModel == villeModel) &&
             (identical(other.communeModel, communeModel) ||
@@ -683,6 +702,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         adresse,
         ville,
         commune,
+        statusValidation,
         villeModel,
         communeModel,
         position,
@@ -730,6 +750,7 @@ abstract class _ResidenceModel implements ResidenceModel {
       final String adresse,
       final String ville,
       final String commune,
+      final String statusValidation,
       @JsonKey(name: 'ville_model') final VilleModel? villeModel,
       @JsonKey(name: 'commune_model') final CommuneModel? communeModel,
       final PositionModel position,
@@ -769,6 +790,8 @@ abstract class _ResidenceModel implements ResidenceModel {
   String get ville;
   @override
   String get commune;
+  @override
+  String get statusValidation;
   @override
   @JsonKey(name: 'ville_model')
   VilleModel? get villeModel;
