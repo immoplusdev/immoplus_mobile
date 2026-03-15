@@ -30,7 +30,7 @@ class _EstateUserPageState extends State<EstateUserPage> {
       search: searchQuery.isEmpty ? null : searchQuery,
       where: {
         '_where': [
-          '{"_field": "validationStatus", "_op": "eq", "_val": "${ValidationStatus.valide.value}"}',
+          '{"_field": "statusValidation", "_op": "eq", "_val": "${ValidationStatus.valide.value}"}',
         ],
       },
     ).then((value) {

@@ -23,18 +23,16 @@ class _ResidencesUserPageState extends State<ResidencesUserPage> {
   String searchQuery = '';
 
   Future<void> loadPage(int page) async {
-    residenceRepository
-        .getResidencesProprietaire(
+    residenceRepository.getResidencesProprietaire(
       proprietaireId: widget.userId,
       page: page,
       search: searchQuery.isEmpty ? null : searchQuery,
       where: {
         '_where': [
-          '{"_field": "validationStatus", "_op": "eq", "_val": "${ValidationStatus.valide.value}"}',
+          '{"_field": "statusValidation", "_op": "eq", "_val": "${ValidationStatus.valide.value}"}',
         ],
       },
-    )
-        .then((value) {
+    ).then((value) {
       if (value.hasNext == true) {
         pagingController.appendPage(value.data ?? [], (value.currentPage)! + 1);
       } else {
