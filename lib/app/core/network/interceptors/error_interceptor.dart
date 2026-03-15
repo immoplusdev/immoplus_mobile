@@ -38,7 +38,8 @@ class ErrorInterceptor extends Interceptor {
     }
 
     // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
-    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
+    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode) &&
+        !_isActiveReservationBlock(err.response)) {
       _showErrorToast(apiErrorResponse, err.response);
     }
 
@@ -91,6 +92,15 @@ class ErrorInterceptor extends Interceptor {
     }
 
     return false; // Indique que l'erreur n'a pas pu être traitée
+  }
+
+  /// Retourne true si c'est un blocage "réservation active" — géré par le modal dédié
+  bool _isActiveReservationBlock(Response? response) {
+    if (response?.statusCode != 400) return false;
+    final data = response?.data;
+    if (data is! Map) return false;
+    final inner = data['data'];
+    return inner is Map && inner['reservationId'] != null;
   }
 
   /// Affiche le toast d'erreur approprié

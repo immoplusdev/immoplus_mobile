@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_request_body.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/booking/data/estimate_price_model.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
 import 'package:immoplus/app/features/booking/logic/booking_services.dart';
+import 'package:immoplus/app/features/booking/widgets/active_reservation_blocked_modal.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/home_page/components/reservation_countdown_banner.dart';
@@ -103,6 +105,35 @@ class BookingCubit extends Cubit<BookingRequestState> {
         ),
         );
       }
+    } on ActiveReservationException catch (e) {
+      emit(const BookingRequestState.initial());
+      final context = NavigationService.navigatorKey.currentContext;
+      if (context == null) return;
+
+      // Pré-charger la réservation pour avoir ownerName + montantTotal
+      ReservationResponse? existing;
+      try {
+        existing = await residenceRepository.getReservation(id: e.reservationId);
+      } catch (_) {}
+
+      if (!context.mounted) return;
+
+      ActiveReservationBlockedModal.showAsModal(
+        context,
+        message: e.message,
+        onViewReservation: () {
+          if (existing != null) {
+            context.goNamed(
+              ReservationEngagementFrame.name,
+              extra: ReservationEngagementFrame(
+                ownerName: existing.data.residence.nom,
+                reservationId: existing.data.id,
+                montantTotal: existing.data.montantTotalReservation,
+              ),
+            );
+          }
+        },
+      );
     } catch (e) {
       emit(BookingRequestState.error(e.toString()));
     }
