@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
@@ -172,11 +173,20 @@ class ResidenceRepository {
       inspect(response);
       return response;
     } on DioException catch (dioError) {
-      // Gérer les exceptions Dio ici
+      if (dioError.response?.statusCode == 400) {
+        final data = dioError.response?.data;
+        final reservationId = data?['data']?['reservationId'] as String?;
+        final message = data?['message'] as String? ?? 'Une réservation est déjà en cours.';
+        if (reservationId != null) {
+          throw ActiveReservationException(
+            message: message,
+            reservationId: reservationId,
+          );
+        }
+      }
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } catch (error) {
-      // Gérer d'autres types d'exceptions ici
       log('Error: $error');
       throw Exception('Failed to load users: $error');
     }
