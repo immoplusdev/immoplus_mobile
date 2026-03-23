@@ -309,8 +309,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     DateTime? created;
     try {
       final raw = _reservation!.createdAt;
-      created =
-          (raw is DateTime ? raw : DateTime.tryParse(raw.toString())) as DateTime?;
+      created = (raw is DateTime ? raw : DateTime.tryParse(raw.toString()))
+          as DateTime?;
     } catch (_) {}
     _totalSeconds = created != null
         ? deadline.difference(created).inSeconds.clamp(1, 999999)
@@ -545,8 +545,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            _status ==
-                                    StatusReservation.enAttentePaiementClient
+                            _status == StatusReservation.enAttentePaiementClient
                                 ? 'Propriétaire a confirmé votre demande'
                                 : 'Le propriétaire regarde votre demande',
                             style: const TextStyle(
@@ -585,16 +584,16 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          _formattedTime,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.5,
-                            color: _iconBg,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
+                        // Text(
+                        //   _formattedTime,
+                        //   style: const TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w600,
+                        //     letterSpacing: -0.5,
+                        //     color: _iconBg,
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 2),
                         const Icon(
                           Icons.chevron_right_rounded,
                           color: _textMuted,
@@ -606,7 +605,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                 ],
               ),
             ),
-            _buildProgressBar(),
+            // _buildProgressBar(),
           ],
         ),
       ),

@@ -254,7 +254,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         return CompactResidenceCard(
           residence: _nearResidences[index],
           showRating: false,
-          showVerify: false,
+          showName: false,
         );
       },
     );

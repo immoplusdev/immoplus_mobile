@@ -151,7 +151,8 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
       itemBuilder: (context, index) {
         return CompactResidenceCard(
           residence: _bestRatedResidences[index],
-          showRating: false, // Pas d'icône verify en haut à gauche
+          showRating: false,
+          showLocation: false,
         );
       },
     );

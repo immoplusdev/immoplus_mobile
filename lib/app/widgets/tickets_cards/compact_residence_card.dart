@@ -13,7 +13,6 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -21,13 +20,15 @@ class CompactResidenceCard extends StatefulWidget {
   const CompactResidenceCard({
     super.key,
     required this.residence,
-    this.showRating = true, 
-    this.showVerify = true,
+    this.showRating = true,
+    this.showName = true,
+    this.showLocation = true,
   });
 
   final ResidenceModel residence;
   final bool showRating;
-  final bool showVerify;
+  final bool showName;
+  final bool showLocation;
 
   @override
   State<CompactResidenceCard> createState() => _CompactResidenceCardState();
@@ -99,41 +100,6 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
                 bottom: 16,
                 child: _buildResidenceInfo(context),
               ),
-
-              // Bouton cœur (commenté)
-              // Positioned(
-              //   right: 16,
-              //   bottom: 16,
-              //   child: _buildFavoriteButton(),
-              // ),
-              // Icône verify en bas de la card
-              // Positioned(
-              //   right: 16,
-              //   bottom: 16,
-              //   child: CircleAvatar(
-              //     radius: 14,
-              //     backgroundColor: Colors.white,
-              //     child: Icon(
-              //       Iconsax.verify,
-              //       size: 16,
-              //       color: AppColors.primary,
-              if (widget.showVerify)
-                  Positioned(
-                    right: 16,
-                    bottom: 16,
-                    child: CircleAvatar(
-                      radius: 14,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Iconsax.verify,
-                        size: 16,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -235,53 +201,56 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Nom de la résidence
-        Text(
-          widget.residence.nom.capitalizeFirst(),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 4,
-                offset: const Offset(0, 1),
+        if (widget.showName)
+          Text(
+            widget.residence.nom.capitalizeFirst(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        // Localisation
+
+        if (widget.showLocation) ...[
+          const Gap(8),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on_outlined,
+                size: 16,
+                color: Colors.white.withOpacity(0.9),
+              ),
+              const Gap(4),
+              Expanded(
+                child: Text(
+                  "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
-          ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const Gap(8),
-        // Localisation
-       Row(
-  children: [
-    Icon(
-      Icons.location_on_outlined,
-      size: 16,
-      color: Colors.white.withOpacity(0.9),
-    ),
-    const Gap(4),
-    SizedBox(
-      width: 160,
-      child: Text(
-        "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: Colors.white.withOpacity(0.9),
-          shadows: [
-            Shadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 4,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    ),
-  ],
-),
+          )
+        ],
       ],
     );
   }
