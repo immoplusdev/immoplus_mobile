@@ -105,16 +105,16 @@ class SocialPostHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: onFollowTap,
-          child: ProfileAvatar(
-            username: username,
-            avatarUrl: avatarUrl,
-            avatarPath: avatarPath,
-            verify: verify,
-          ),
-        ),
-        const SizedBox(width: 4),
+        // GestureDetector(
+        //   onTap: onFollowTap,
+        //   child: ProfileAvatar(
+        //     username: username,
+        //     avatarUrl: avatarUrl,
+        //     avatarPath: avatarPath,
+        //     verify: verify,
+        //   ),
+        // ),
+        // const SizedBox(width: 4),
         Expanded(
           child: Row(
             mainAxisSize: MainAxisSize.min,

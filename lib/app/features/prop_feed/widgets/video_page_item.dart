@@ -190,20 +190,27 @@ class _VideoPageItemState extends State<VideoPageItem>
           fit: StackFit.expand,
           children: [
             // Couche 1 : thumbnail précédent (fond permanent, jamais noir)
-            if (_lastKnownThumbnail != null)
-              CachedNetworkImage(
-                imageUrl: _lastKnownThumbnail!,
-                cacheKey: _stableCacheKey(_lastKnownThumbnail!),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                placeholder: (_, __) => _buildImmoLoadingLayer(),
-                errorWidget: (_, __, ___) => _buildImmoLoadingLayer(),
-              )
-            else
-              _buildImmoLoadingLayer(),
+            AnimatedOpacity(
+              opacity: isReady ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 400),
+              child: _lastKnownThumbnail != null
+                  ? CachedNetworkImage(
+                      imageUrl: _lastKnownThumbnail!,
+                      cacheKey: _stableCacheKey(_lastKnownThumbnail!),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      placeholder: (_, __) => _buildImmoLoadingLayer(),
+                      errorWidget: (_, __, ___) => _buildImmoLoadingLayer(),
+                    )
+                  : _buildImmoLoadingLayer(),
+            ),
             // Couche 2 : thumbnail actuel
-            _buildThumbnail(video),
+            AnimatedOpacity(
+              opacity: isReady ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 400),
+              child: _buildThumbnail(video),
+            ),
             // Couche 3 : vidéo (en dessous de l'overlay pour ne pas montrer du noir)
             Positioned.fill(
               child: VisibilityDetector(
@@ -289,7 +296,7 @@ class _VideoPageItemState extends State<VideoPageItem>
               bottom: -7,
               child: LayoutBuilder(
                 builder: (context, constraints) => SocialPostHeader(
-                  username: widget.username ?? video.author?.name ?? 'Immoplus',
+                  username: video.content?.title?? 'Immoplus',
                   avatarUrl: widget.avatarUrl ?? video.author?.avatar,
                   avatarPath: widget.avatarPath,
                   date: _formatDate(video.createdAt),
