@@ -227,7 +227,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
             children: [
               Icon(
                 Icons.location_on_outlined,
-                size: 16,
+                size: 12,
                 color: Colors.white.withOpacity(0.9),
               ),
               const Gap(4),
@@ -236,6 +236,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
                   "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.white.withOpacity(0.9),
+                    fontSize: 11,
                     shadows: [
                       Shadow(
                         color: Colors.black.withOpacity(0.3),
