@@ -11,8 +11,6 @@ import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
-import 'package:immoplus/app/features/fast-track-book/reservation_pending.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
@@ -348,137 +346,137 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ReservationPendingBanner(),
+                      if (sessionManager.currentUser != null)
+                        ReservationPendingBanner(),
                       if (hasReservation) Gap(14),
-
-
-                      
                       Row(
-                    children: [
-                      BlocBuilder<LocationPermissionCubit,
-                          LocationPermissionState>(
-                        builder: (context, permissionState) {
-                          return GestureDetector(
-                            onTap: () =>
-                                _handleLocationTap(context, permissionState),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  Assets.img.locIc,
-                                  color: AppColors.primary,
+                        children: [
+                          BlocBuilder<LocationPermissionCubit,
+                              LocationPermissionState>(
+                            builder: (context, permissionState) {
+                              return GestureDetector(
+                                onTap: () => _handleLocationTap(
+                                    context, permissionState),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      Assets.img.locIc,
+                                      color: AppColors.primary,
+                                    ),
+                                    Gap(5),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 3),
+                                      constraints:
+                                          BoxConstraints(maxWidth: 200),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary,
+                                        borderRadius: BorderRadius.circular(39),
+                                      ),
+                                      child: _buildLocationText(
+                                          context, permissionState),
+                                    ),
+                                  ],
                                 ),
-                                Gap(5),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 3),
-                                  constraints: BoxConstraints(maxWidth: 200),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(39),
-                                  ),
-                                  child: _buildLocationText(
-                                      context, permissionState),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          if (sessionManager.currentUser != null) {
-                            context.pushNamed(NotificationsPage.name);
-                          } else {
-                            context.pushNamed(AuthenticationPage.name);
-                          }
-                        },
-                        child: Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.F2F2F2,
+                              );
+                            },
                           ),
-                          child: Icon(Icons.notifications_none_rounded),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              if (sessionManager.currentUser != null) {
+                                context.pushNamed(NotificationsPage.name);
+                              } else {
+                                context.pushNamed(AuthenticationPage.name);
+                              }
+                            },
+                            child: Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.F2F2F2,
+                              ),
+                              child: Icon(Icons.notifications_none_rounded),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Gap(14),
+                      SizedBox(
+                        height: 57.5,
+                        child: CustomTextField(
+                          contentPadding: EdgeInsets.symmetric(vertical: 0),
+                          labelText: 'Que cherchez-vous ?',
+                          prefixIcon: Icon(
+                              color: AppColors.primary,
+                              size: 20,
+                              Iconsax.search_normal_1),
+                          controller: _searchController,
+                          sufixIcon: _showClearButton
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: Colors.grey.shade600,
+                                    size: 18,
+                                  ),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    EasyDebounce.cancel(_searchDebounceKey);
+                                    FilterHandler.search = null;
+                                    FilterHandler.notifyChange();
+                                    HomePageState.refreshPage(
+                                        widget.currentIndex);
+                                  },
+                                )
+                              : IconButton(
+                                  icon: Icon(
+                                    Iconsax.setting_4,
+                                    color: AppColors.primary,
+                                    size: 18,
+                                  ),
+                                  onPressed: _showFilterDialog,
+                                ),
+                          onFieldSubmitted: (keyword) {
+                            if (FilterHandler.search != null) {
+                              if (FilterHandler.search!.isNotEmpty) {
+                                log(keyword);
+                                HomePageState.refreshPage(widget.currentIndex);
+                              } else {
+                                FilterHandler.search = null;
+                                FilterHandler.notifyChange();
+                                HomePageState.refreshPage(widget.currentIndex);
+                              }
+                            }
+                          },
+                          onChanged: (text) {
+                            EasyDebounce.debounce(
+                              _searchDebounceKey,
+                              const Duration(
+                                  milliseconds: _searchDeboucemillisecond),
+                              () {
+                                final search = text.isNotEmpty ? text : null;
+                                FilterHandler.search = search;
+                                FilterHandler.notifyChange();
+                                if (search != null) log(text);
+                                HomePageState.refreshPage(widget.currentIndex);
+                              },
+                            );
+                          },
+                          fillColor: Colors.transparent,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(radiusButton),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(radiusButton),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Gap(14),
-                  SizedBox(
-                    height: 57.5,
-                    child: CustomTextField(
-                      contentPadding: EdgeInsets.symmetric(vertical: 0),
-                      labelText: 'Que cherchez-vous ?',
-                      prefixIcon: Icon(
-                          color: AppColors.primary,
-                          size: 20,
-                          Iconsax.search_normal_1),
-                      controller: _searchController,
-                      sufixIcon: _showClearButton
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.cancel,
-                                color: Colors.grey.shade600,
-                                size: 18,
-                              ),
-                              onPressed: () {
-                                _searchController.clear();
-                                EasyDebounce.cancel(_searchDebounceKey);
-                                FilterHandler.search = null;
-                                FilterHandler.notifyChange();
-                                HomePageState.refreshPage(widget.currentIndex);
-                              },
-                            )
-                          : IconButton(
-                              icon: Icon(
-                                Iconsax.setting_4,
-                                color: AppColors.primary,
-                                size: 18,
-                              ),
-                              onPressed: _showFilterDialog,
-                            ),
-                      onFieldSubmitted: (keyword) {
-                        if (FilterHandler.search != null) {
-                          if (FilterHandler.search!.isNotEmpty) {
-                            log(keyword);
-                            HomePageState.refreshPage(widget.currentIndex);
-                          } else {
-                            FilterHandler.search = null;
-                            FilterHandler.notifyChange();
-                            HomePageState.refreshPage(widget.currentIndex);
-                          }
-                        }
-                      },
-                      onChanged: (text) {
-                        EasyDebounce.debounce(
-                          _searchDebounceKey,
-                          const Duration(
-                              milliseconds: _searchDeboucemillisecond),
-                          () {
-                            final search = text.isNotEmpty ? text : null;
-                            FilterHandler.search = search;
-                            FilterHandler.notifyChange();
-                            if (search != null) log(text);
-                            HomePageState.refreshPage(widget.currentIndex);
-                          },
-                        );
-                      },
-                      fillColor: Colors.transparent,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(radiusButton),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(radiusButton),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(50),
                   child: HomeChoiceMenu(),

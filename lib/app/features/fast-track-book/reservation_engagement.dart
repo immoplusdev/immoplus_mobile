@@ -36,8 +36,8 @@ class ReservationEngagementFrame extends StatefulWidget {
       _ReservationEngagementFrameState();
 }
 
-class _ReservationEngagementFrameState
-    extends State<ReservationEngagementFrame> with TickerProviderStateMixin {
+class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
+    with TickerProviderStateMixin {
   // ── Rotation messages ───────────────────────────────────────────────────────
   late AnimationController _messageController;
   late Animation<double> _messageOpacity;
@@ -50,8 +50,8 @@ class _ReservationEngagementFrameState
 
   // ── Messages rotatifs — waitingOwner ────────────────────────────────────────
   static const List<String> _waitingOwnerMessages = [
-    '👀 Il regarde votre demande…',
-    '📅 Il vérifie les disponibilités…',
+    '👀 Le propriétaire regarde votre demande…',
+    '📅 Le propriétaire vérifie les disponibilités…',
     '✨ Votre logement est disponible…',
     '⏳ Plus qu\'un instant…',
   ];
@@ -178,7 +178,8 @@ class _ReservationEngagementFrameState
   void dispose() {
     _aggressiveRefreshTimer?.cancel();
     _messageRotationTimer?.cancel();
-    ReservationPendingBanner.bannerStateNotifier.removeListener(_onStateChanged);
+    ReservationPendingBanner.bannerStateNotifier
+        .removeListener(_onStateChanged);
     _messageController.dispose();
     super.dispose();
   }
@@ -590,8 +591,8 @@ class _ReservationEngagementFrameState
             backgroundColor: color,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             elevation: 2,
           ),
           child: Row(
@@ -627,8 +628,8 @@ class _ReservationEngagementFrameState
             foregroundColor: _primaryBlue,
             padding: const EdgeInsets.symmetric(vertical: 14),
             side: const BorderSide(color: _primaryBlue, width: 1.5),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             elevation: 0,
           ),
           child: Row(

@@ -13,6 +13,8 @@ import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/pages/permission_page.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/features/become_pro/pages/become_pro_intro_page.dart';
+import 'package:immoplus/app/features/become_pro/pages/become_pro_form_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -177,6 +179,16 @@ class AppRouter {
         path: '/edit_account',
         name: EditAccountPage.name,
         builder: (context, state) => const EditAccountPage(),
+      ),
+      GoRoute(
+        path: '/become_pro_intro',
+        name: BecomeProIntroPage.name,
+        builder: (context, state) => const BecomeProIntroPage(),
+      ),
+      GoRoute(
+        path: '/become_pro_form',
+        name: BecomeProFormPage.name,
+        builder: (context, state) => const BecomeProFormPage(),
       ),
       GoRoute(
         path: '/change_password',

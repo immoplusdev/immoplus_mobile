@@ -78,8 +78,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
         : null;
     final email = currentUser?.email?.trim() ?? '';
     // Utilisateur inscrit uniquement : nom ou email pour l’affichage et le monogramme (si pas de photo).
-    final displayLabel = fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Utilisateur');
-    final monogramName = fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Utilisateur');
+    final displayLabel = fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Invité');
+    final monogramName = fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Invité');
 
     return Container(
       alignment: Alignment.center,

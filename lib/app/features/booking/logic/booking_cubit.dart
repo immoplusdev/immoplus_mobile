@@ -10,7 +10,6 @@ import 'package:immoplus/app/features/booking/logic/booking_services.dart';
 import 'package:immoplus/app/features/booking/widgets/active_reservation_blocked_modal.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
-import 'package:immoplus/app/features/home_page/components/reservation_countdown_banner.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:injectable/injectable.dart';
@@ -100,9 +99,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
         final ownerName = reservationResponse.data.residence.nom;
         context.goNamed(
           ReservationEngagementFrame.name,
-          extra: ReservationEngagementFrame(ownerName: 
-          ownerName, reservationId: reservationResponse.data.id, montantTotal:reservationResponse.data.montantTotalReservation,
-        ),
+          extra: ReservationEngagementFrame(
+            ownerName: ownerName,
+            reservationId: reservationResponse.data.id,
+            montantTotal: reservationResponse.data.montantTotalReservation,
+          ),
         );
       }
     } on ActiveReservationException catch (e) {
@@ -113,7 +114,8 @@ class BookingCubit extends Cubit<BookingRequestState> {
       // Pré-charger la réservation pour avoir ownerName + montantTotal
       ReservationResponse? existing;
       try {
-        existing = await residenceRepository.getReservation(id: e.reservationId);
+        existing =
+            await residenceRepository.getReservation(id: e.reservationId);
       } catch (_) {}
 
       if (!context.mounted) return;

@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/features/authentification/authentification_page.dart';
+
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -49,12 +49,6 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   void _onItemTapped({required int index, required PageState pageState}) {
     if (_indexForState(pageState) == index) {
       return;
-    }
-    if (index == 4) {
-      if (sessionManager.currentUser == null) {
-        context.pushNamed(AuthenticationPage.name);
-        return;
-      }
     }
     if (Get.isRegistered<VideoFeedController>()) {
       final feedCtrl = Get.find<VideoFeedController>();

@@ -113,7 +113,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Immo Plus nécessite l&apos;accès à la caméra pour que vous puissiez personnaliser votre page.</string>
+	<string>Immo Plus nécessite l'accès à la caméra pour que vous puissiez personnaliser votre page.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -121,7 +121,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Immo Plus nécessite l&apos;accès à la photothèque pour que vous puissiez personnaliser votre page.</string>
+	<string>Immo Plus nécessite l'accès à la photothèque pour que vous puissiez personnaliser votre page.</string>
 	<key>NSPrivacyAccessedAPITypes</key>
 	<array>
 		<dict>

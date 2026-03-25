@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -92,7 +93,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
 
   // ── Messages rotatifs ───────────────────────────────────────────────────────
   final List<String> _rotatingMessages = [
-    'Il consulte les dates de votre séjour…',
+    'Le propriétaire consulte les dates de votre séjour…',
     'Votre logement est toujours disponible.',
     'Plus qu\'un instant…',
     'La confirmation arrive vite.',
@@ -113,6 +114,8 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
   static const Color _textPrimary = Color(0xFF1A1A1A);
   static const Color _textMuted = Color(0xFF888888);
   static const Color _errorBg = Color(0xFFFF5A5A);
+
+  final sessionManager = getIt<SessionManager>();
 
   @override
   void initState() {
@@ -192,6 +195,9 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
   }
 
   Future<void> _fetchReservation() async {
+    if (sessionManager.currentUser == null) {
+      return;
+    }
     final repo = getIt<ResidenceRepository>();
     final pending = await repo.getLatestPendingProprietaireReponse();
     if (pending != null) {
