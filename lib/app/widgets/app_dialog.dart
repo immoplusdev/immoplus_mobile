@@ -127,6 +127,15 @@ class AppDialog {
                   ),
                 ),
                 const SizedBox(height: 24),
+                     CustomButtom(
+                  text: primaryButtonText,
+                  borderRadius: BorderRadius.circular(28),
+                  onClick: () {
+                    Navigator.of(ctx).pop();
+                    onPrimary?.call();
+                  },
+                ),
+                 const SizedBox(height: 10),
                 if (secondButtonText != null) ...[
                   SizedBox(
                     height: 50,
@@ -151,16 +160,9 @@ class AppDialog {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                 
                 ],
-                CustomButtom(
-                  text: primaryButtonText,
-                  borderRadius: BorderRadius.circular(28),
-                  onClick: () {
-                    Navigator.of(ctx).pop();
-                    onPrimary?.call();
-                  },
-                ),
+           
               ],
             ),
           ),

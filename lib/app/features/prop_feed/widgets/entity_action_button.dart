@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/bounce_side_action_button.dart';
+import 'package:immoplus/app/utils/contact_utils.dart';
 
 /// Configuration label + icône selon le type d'entité liée.
 class EntityActionConfig {
@@ -16,8 +18,8 @@ class EntityActionConfig {
 
   /// Retourne la config selon [entity].
   /// - furniture → Contacter (icône appel)
-  /// - residence → Visiter (icône localisation)
-  /// - bien_immobilier → Reserver (icône calendrier)
+  /// - residence → Réserver (icône calendrier)
+  /// - bien_immobilier → Visiter (icône localisation)
   static EntityActionConfig fromEntity(String? entity) {
     switch (entity?.toLowerCase()) {
       case 'furniture':
@@ -45,7 +47,9 @@ class EntityActionConfig {
 }
 
 /// Bouton d'action CTA du feed vidéo, adapté au type d'entité liée.
-/// Affiche le bon label et la bonne icône selon [relatedTo.entity].
+/// - Si [relatedTo] est null ou que son id est absent, affiche "Support"
+///   et ouvre le contact support client.
+/// - Sinon, affiche l'action adaptée à l'entité et appelle [onTap].
 class EntityActionButton extends StatelessWidget {
   const EntityActionButton({
     super.key,
@@ -56,8 +60,19 @@ class EntityActionButton extends StatelessWidget {
   final FeedItemRelatedTo? relatedTo;
   final VoidCallback onTap;
 
+  bool get _hasEntity =>
+      relatedTo?.id != null && relatedTo!.id!.isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
+    if (!_hasEntity) {
+      return BounceSideActionButton(
+        icon: Iconsax.headphone,
+        label: 'Support',
+        onTap: () => ContactUtils.showContact(),
+      );
+    }
+
     final config = EntityActionConfig.fromEntity(relatedTo?.entity);
     return BounceSideActionButton(
       label: config.label,

@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -21,59 +22,115 @@ class LogmentBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:
-          const EdgeInsets.symmetric(horizontal: appPadding).copyWith(top: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.shade100,
+            width: 1,
+          ),
+        ),
+      ),
+      padding: EdgeInsets.only(
+        left: appPadding,
+        right: appPadding,
+        top: 12,
+        bottom: MediaQuery.of(context).padding.bottom + 12,
+      ),
       child: Row(
         children: [
-          RichText(
-              text: TextSpan(children: [
-            TextSpan(
-              text:
-                  "${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F",
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-            ),
-            TextSpan(
-              text: '/nuitée',
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade800,
-                    fontWeight: FontWeight.bold,
-                  ),
-            )
-          ])),
-          Gap(10),
+          // ── Price section ──
           Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                if (sessionManager.currentUser == null) {
-                  getIt<AuthRedirectService>().set((
-                    popUntilRouteName: ResidencePage.name,
-                    callback: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (_) => BookingFormularAction(
-                                residenceModel: residenceModel),
-                          ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: CurrencyFormatter().format(
+                            residenceModel.prixReservation.toString()),
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF222222),
+                          letterSpacing: -0.5,
                         ),
-                  ));
-                  // 2. Naviguer sans extra
-                  context.pushNamed(AuthenticationPage.name);
-                } else {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) => BookingFormularAction(
-                              residenceModel: residenceModel)));
-                }
-              },
-              child: FittedBox(child: const Text('Réserver')),
+                      ),
+                      TextSpan(
+                        text: ' F',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'par nuitée',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── CTA Button ──
+          SizedBox(
+            height: 52,
+            child: ElevatedButton(
+              onPressed: () => _handleReservation(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(60),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                ),
+              ),
+              child: const Text('Réserver'),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _handleReservation(BuildContext context) {
+    if (sessionManager.currentUser == null) {
+      getIt<AuthRedirectService>().set((
+        popUntilRouteName: ResidencePage.name,
+        callback: () => Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (_) =>
+                    BookingFormularAction(residenceModel: residenceModel),
+              ),
+            ),
+      ));
+      context.pushNamed(AuthenticationPage.name);
+    } else {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) =>
+              BookingFormularAction(residenceModel: residenceModel),
+        ),
+      );
+    }
   }
 }

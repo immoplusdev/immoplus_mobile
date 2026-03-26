@@ -101,10 +101,6 @@ class _AccountPageState extends State<AccountPage> {
       secondButtonText: "Annuler",
       onPrimary: sessionManager.logout,
     );
-    // AppDialog.showLogoutConfirmDialog(
-    //   context,
-    //   onLogout: sessionManager.logout,
-    // );
   }
 
   void _openServiceClient() {

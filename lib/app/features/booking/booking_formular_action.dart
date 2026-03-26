@@ -28,6 +28,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:intl/intl.dart';
 
@@ -603,49 +604,32 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                             "Aucun jour de réservation sélectionné",
                             toastPosition: EasyLoadingToastPosition.bottom);
                       } else {
-                        showCupertinoModalPopup<void>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              CupertinoAlertDialog(
-                            //title: const Text('Alert'),
-                            content: Text(
-                                'Confirmez-vous cette demande de réservation pour $totalDays jours?'),
-                            actions: <CupertinoDialogAction>[
-                              CupertinoDialogAction(
-                                isDefaultAction: false,
-                                isDestructiveAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Annuer'),
-                              ),
-                              CupertinoDialogAction(
-                                isDefaultAction: true,
-                                isDestructiveAction: false,
-                                onPressed: () {
-                                  if (estimateCost == null) {
-                                    ToastUtils.showSuccess(
-                                        description:
-                                            "Veuillez choisir une date");
-                                    return;
-                                  }
-                                  context.read<BookingCubit>().orderBooking(
-                                      amount: estimateCost!.total.toInt(),
-                                      body: ReservationRequestBody(
-                                          residence: widget.residenceModel.id,
-                                          datesReservation: selectedDates
-                                              .map(
-                                                (e) => DatesReservationModel(
-                                                    date: e),
-                                              )
-                                              .toList(),
-                                          clientPhoneNumber: _formController
-                                              .phoneNumber!.text));
-                                },
-                                child: const Text('Confirmer'),
-                              ),
-                            ],
-                          ),
+                        AppDialog.show(
+                          title: 'Confirmation',
+                          description:
+                              'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
+                          primaryButtonText: 'Confirmer',
+                          secondButtonText: 'Annuler',
+                          onPrimary: () {
+                            if (estimateCost == null) {
+                              ToastUtils.showSuccess(
+                                  description:
+                                      "Veuillez choisir une date");
+                              return;
+                            }
+                            context.read<BookingCubit>().orderBooking(
+                                amount: estimateCost!.total.toInt(),
+                                body: ReservationRequestBody(
+                                    residence: widget.residenceModel.id,
+                                    datesReservation: selectedDates
+                                        .map(
+                                          (e) => DatesReservationModel(
+                                              date: e),
+                                        )
+                                        .toList(),
+                                    clientPhoneNumber: _formController
+                                        .phoneNumber!.text));
+                          },
                         );
                       }
                     }
