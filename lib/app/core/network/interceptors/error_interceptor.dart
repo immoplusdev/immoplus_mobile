@@ -9,6 +9,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/auth_service.dart';
 import 'package:immoplus/app/data/enums/api_error_code.dart';
 import 'package:immoplus/app/data/error/api_error_response.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:toastification/toastification.dart';
 
@@ -116,18 +117,9 @@ class ErrorInterceptor extends Interceptor {
       return;
     }
 
-    toastification.show(
-      type: ToastificationType.error,
-      context: context,
-      title: const Text("Oops, quelque chose s'est mal passé."),
-      description: Text(
-        message,
-        maxLines: 6,
-      ),
-      autoCloseDuration: const Duration(seconds: 5),
-      showProgressBar: false,
-      alignment: Alignment.bottomCenter,
-      style: ToastificationStyle.flatColored,
+    ToastUtils.showError(
+      title: "Oops, quelque chose s'est mal passé.",
+      description: message,
     );
   }
 

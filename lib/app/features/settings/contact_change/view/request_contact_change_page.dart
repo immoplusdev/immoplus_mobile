@@ -8,6 +8,7 @@ import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/confirm_contact_change_page.dart';
+import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
 
@@ -117,11 +118,8 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 16),
                     ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Champ requis';
-                      if (!v.contains('@')) return 'Email invalide';
-                      return null;
-                    },
+                    validator: (value) =>
+                        FormUtils.emailValidator(email: value),
                   ),
                 const Spacer(),
                 BlocBuilder<ContactChangeCubit, ContactChangeState>(
