@@ -1,21 +1,25 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ez_circle_avatar/ez_circle_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/auth/update_user_dto.dart';
 import 'package:immoplus/app/extensions/safe_area_extensions.dart';
+import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
-import 'package:immoplus/app/modules/files_uploader.dart/file_uploader.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
@@ -23,6 +27,7 @@ import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
+import 'package:shimmer/shimmer.dart';
 
 class EditAccountPage extends StatefulWidget {
   const EditAccountPage({super.key});
@@ -59,10 +64,71 @@ class _EditAccountPageState extends State<EditAccountPage> {
   }
 
   bool isPhoneNumberValid = false;
+  bool _photoLoading = false;
   String phoneNumber = '';
+
   void onInputValidated(bool isValid) {
     setState(() {
       isPhoneNumberValid = isValid;
+    });
+  }
+
+  Future<void> _pickProfileImage() async {
+    final XFile? file = await showModalBottomSheet<XFile?>(
+      context: context,
+      useSafeArea: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      backgroundColor: AppColors.whiteBackground,
+      showDragHandle: true,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 16),
+              child: Text(
+                "Photo de profil",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF0D0D0D),
+                ),
+              ),
+            ),
+            _sheetTile(
+              ctx: ctx,
+              icon: Iconsax.camera,
+              iconColor: AppColors.primary,
+              label: "Prendre une photo",
+              onTap: () => ImagePicker()
+                  .pickImage(source: ImageSource.camera, imageQuality: 50)
+                  .then((v) => Navigator.pop(ctx, v)),
+            ),
+            const Gap(10),
+            _sheetTile(
+              ctx: ctx,
+              icon: Iconsax.gallery,
+              iconColor: const Color(0xFF6B7280),
+              label: "Choisir depuis la galerie",
+              onTap: () => ImagePicker()
+                  .pickImage(source: ImageSource.gallery, imageQuality: 50)
+                  .then((v) => Navigator.pop(ctx, v)),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (file == null) return;
+    setState(() {
+      _photoLoading = true;
+    });
+    await Future.delayed(const Duration(milliseconds: 50));
+    setState(() {
+      fileUploaderController.filePath = file.path;
+      fileUploaderController.file = File(file.path);
+      _photoLoading = false;
     });
   }
 
@@ -90,7 +156,11 @@ class _EditAccountPageState extends State<EditAccountPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<LoginCubit>(),
-      child: Scaffold(
+      child: BlocListener<LoginCubit, LoginCubitState>(
+        listener: (context, state) {
+          if (state is LOGIN_SUCCESS) context.pop();
+        },
+        child: Scaffold(
         backgroundColor: AppColors.whiteBackground,
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -121,14 +191,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Gap(8),
-                        // Photo de profil
-                        FileUploader(
-                          fileUploaderController: fileUploaderController,
-                          title: "photo de profil",
-                          placeholderImageId:
-                              sessionManager.currentUser!.avatar,
-                        ),
+                        const Gap(24),
+                        _buildProfilePhotoCard(),
                         const Gap(32),
 
                         // Section titre
@@ -261,6 +325,49 @@ class _EditAccountPageState extends State<EditAccountPage> {
           ),
         ),
       ).safeArea(),
+      ),
+    );
+  }
+
+  Widget _sheetTile({
+    required BuildContext ctx,
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: const Color(0xFFF9FAFB),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, size: 18, color: iconColor),
+              ),
+              const Gap(14),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF1E1E1E),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -274,6 +381,111 @@ class _EditAccountPageState extends State<EditAccountPage> {
               color: const Color(0xFF344054),
               letterSpacing: 0.3,
             ),
+      ),
+    );
+  }
+
+  Widget _buildProfilePhotoCard() {
+    final user = sessionManager.currentUser!;
+    final fullName = '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();
+    final hasLocalFile = fileUploaderController.filePath != null;
+    final hasNetworkPhoto = user.avatar != null && user.avatar!.isNotEmpty;
+
+    Widget avatar;
+    if (_photoLoading) {
+      avatar = Shimmer.fromColors(
+        baseColor: Colors.grey.shade200,
+        highlightColor: Colors.grey.shade100,
+        child: Container(color: Colors.white),
+      );
+    } else if (hasLocalFile) {
+      avatar = Image.file(
+        File(fileUploaderController.filePath!),
+        fit: BoxFit.cover,
+      );
+    } else if (hasNetworkPhoto) {
+      avatar = CachedNetworkImage(
+        imageUrl: Utils.getImagePath(id: user.avatar!),
+        fit: BoxFit.cover,
+        memCacheWidth: 200,
+        memCacheHeight: 200,
+        placeholder: (_, __) => Shimmer.fromColors(
+          baseColor: Colors.grey.shade200,
+          highlightColor: Colors.grey.shade100,
+          child: Container(color: Colors.white),
+        ),
+        errorWidget: (_, __, ___) => EzCircleAvatar(
+          name: fullName.isNotEmpty ? fullName : 'U',
+          radius: 48,
+        ),
+      );
+    } else {
+      avatar = EzCircleAvatar(
+        name: fullName.isNotEmpty ? fullName : 'U',
+        radius: 48,
+      );
+    }
+
+    return GestureDetector(
+      onTap: _pickProfileImage,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                    width: 3,
+                  ),
+                  color: Colors.grey.shade100,
+                ),
+                child: ClipOval(child: avatar),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2.5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Iconsax.camera,
+                    size: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Gap(10),
+          Text(
+            hasLocalFile || hasNetworkPhoto
+                ? 'Changer la photo'
+                : 'Ajouter une photo',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.primary,
+            ),
+          ),
+        ],
       ),
     );
   }
