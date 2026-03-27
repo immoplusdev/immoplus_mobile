@@ -22,8 +22,8 @@ class DetailEstateKnowSection extends StatelessWidget {
               bienImmobilier.aLouer
                   ? 'Disponible à la location'
                   : 'Disponible à l\'achat',
-              if ((bienImmobilier.nombreMaxOccupants ?? 0) > 0)
-                '${bienImmobilier.nombreMaxOccupants} occupants maximum',
+              // if ((bienImmobilier.nombreMaxOccupants ?? 0) > 0)
+              //   '${bienImmobilier.nombreMaxOccupants} occupants maximum',
               'Contactez l\'agent pour planifier une visite',
             ],
           ),
@@ -32,26 +32,25 @@ class DetailEstateKnowSection extends StatelessWidget {
 
           // ── Informations légales ──
           const _KnowCard(
-            icon: Iconsax.document_text,
-            title: 'Informations légales',
+            icon: Iconsax.verify,
+            title: 'Propriété certifiée',
             items: [
-              'Documents de propriété disponibles',
-              'Vérification des titres fonciers',
-              'Assistance juridique sur demande',
+              'Bien vérifié et conforme',
+'Agence certifiée et fiable',
             ],
           ),
 
           Divider(height: 32, thickness: 0.5, color: Colors.grey.shade200),
 
           // ── Contact agent ──
-          const _KnowCard(
-            icon: Iconsax.call,
-            title: 'Contact agent',
-            items: [
-              'Réponse rapide sous 24h',
-              'Visite sur rendez-vous uniquement',
-            ],
-          ),
+          // const _KnowCard(
+          //   icon: Iconsax.call,
+          //   title: 'Contact agent',
+          //   items: [
+          //     'Réponse rapide sous 24h',
+          //     'Visite sur rendez-vous uniquement',
+          //   ],
+          // ),
         ]),
       ),
     );

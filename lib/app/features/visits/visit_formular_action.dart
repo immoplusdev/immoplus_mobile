@@ -18,6 +18,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/widgets/bottom_immoplus.dart';
 import 'package:immoplus/app/widgets/client_service_chip.dart';
 
@@ -73,6 +74,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
   }) {
     if (!_formKey.currentState!.validate()) return;
 
+    _selectedType = type;
     _formController.setServiceOption = type;
 
     AppDialog.show(
@@ -102,9 +104,15 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
           initial: () {},
           loading: () {},
           receive: (data) {
-            // ToastUtils.success('Demande de visite envoyée');
-            context.pop();
-            context.pop();
+            context.pop(); // ferme le dialog de confirmation
+            context.pushReplacementNamed(
+              VisitPendingPage.name,
+              extra: VisitPendingPage(
+                bienImmo: widget.bienImmoModel,
+                visitType: _selectedType ?? 'normal',
+                visitId: data.id,
+              ),
+            );
           },
           error: (message) {
             context.pop();

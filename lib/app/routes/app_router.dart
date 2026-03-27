@@ -45,6 +45,7 @@ import 'package:immoplus/app/features/vivre/vivre_page.dart';
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
+import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/force_update_required_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
@@ -249,6 +250,14 @@ class AppRouter {
         builder: (context, state) => OtpPageTest(
           currentPhoneNumber: state.extra as String,
         ),
+      ),
+      GoRoute(
+        path: '/visit-pending',
+        name: VisitPendingPage.name,
+        builder: (context, state) {
+          final page = state.extra as VisitPendingPage;
+          return page;
+        },
       ),
       GoRoute(
         path: '/reservation-engagement',

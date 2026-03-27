@@ -501,7 +501,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     return GestureDetector(
       onTap: _handleTap,
       child: Container(
-        width: 375,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: _bgColor,
           borderRadius: BorderRadius.circular(16),
@@ -629,7 +629,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
             offset: Offset(0, 8 * (1 - value)), child: child),
       ),
       child: Container(
-        width: 375,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: _bgColor,
           borderRadius: BorderRadius.circular(16),

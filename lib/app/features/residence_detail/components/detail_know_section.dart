@@ -51,13 +51,14 @@ class DetailKnowSection extends StatelessWidget {
 
           // ── Conditions d'annulation ──
           _KnowCard(
-            icon: Iconsax.calendar_remove,
-            title: "Conditions d'annulation",
-            items: const [
-              'Annulation gratuite selon les conditions',
-              'Consultez les détails avant de réserver',
-            ],
-          ),
+  icon: Iconsax.security,
+  title: "Consignes de salubrité",
+  items: const [
+    'Maintenir les lieux propres',
+    'Respecter les équipements et le mobilier',
+    'Laisser la résidence dans un état acceptable à votre départ',
+  ],
+),
         ]),
       ),
     );

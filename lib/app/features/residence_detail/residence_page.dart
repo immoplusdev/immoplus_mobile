@@ -83,34 +83,22 @@ class _ResidencePageState extends State<ResidencePage> {
 
                 // ── Name, Rating, Location ──
                 DetailLogmentName(residenceModel: data),
+                      if (hasPieces) ...[
+                  // const DetailLogmentTitle2(title: 'Lits et chambres'),
+                  const SliverGap(10),
+                  DetailLogmentRooms(logmentModel: data),
+                  const _SliverDivider(),
+                ],
 
-                const _SliverDivider(),
 
-                
-
-
-                // ── Highlights (Arrivée autonome, etc.) ──
-                DetailHighlights(residenceModel: data),
-
-                const _SliverDivider(),
-                     // ── Description with "Lire la suite" ──
+                         // ── Description with "Lire la suite" ──
                 const DetailLogmentTitle2(title: 'À propos de ce logement'),
                 const SliverGap(4),
                 _ExpandableDescription(description: data.description),
 
                 const _SliverDivider(),
 
-                // ── Rooms (only if has rooms with count > 0) ──
-                if (hasPieces) ...[
-                  const DetailLogmentTitle2(title: 'Lits et chambres'),
-                  const SliverGap(10),
-                  DetailLogmentRooms(logmentModel: data),
-                  const _SliverDivider(),
-                ],
-
-           
-
-                // ── Amenities ──
+                 // ── Amenities ──
                 const DetailLogmentTitle2(
                     title: 'Ce que propose ce logement'),
                 const SliverGap(8),
@@ -132,6 +120,22 @@ class _ResidencePageState extends State<ResidencePage> {
                   ),
 
                 const _SliverDivider(),
+          
+
+
+                
+
+
+                // ── Highlights (Arrivée autonome, etc.) ──
+                DetailHighlights(residenceModel: data),
+
+                const _SliverDivider(),
+            
+
+
+           
+
+               
 
                 // ── Video ──
                 if (data.video.isNotEmpty) ...[

@@ -11,6 +11,7 @@ import 'package:immoplus/app/features/home_page/screens/residences_best_rated_li
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/section_title.dart';
+import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -87,8 +88,12 @@ class _ResidencesListState extends State<ResidencesList> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (permissionState.isGranted) const ResidencesNearList(),
+                    //  const Gap(10),
                     const ResidencesBestRatedList(),
-                    SectionTitle(title: "Ce qu'il vous faut"),
+                    // const Gap(40),
+                    // const  _PromoSectionOld(),
+                    const Gap(40),
+                    SectionTitle(title: "Ce qu'il vous faut", useCalSans: true),
                     const Gap(13),
                   ],
                 ),
@@ -132,3 +137,78 @@ class _ResidencesListState extends State<ResidencesList> {
     );
   }
 }
+
+class _PromoSectionOld extends StatelessWidget {
+  const _PromoSectionOld();
+
+  static const List<PromoCardData> _promoItems = [
+    PromoCardData(
+      title: 'Trouvez votre résidence idéale',
+      description: 'Explorez nos résidences sélectionnées avec soin.',
+      linkText: 'Découvrir',
+      imagePath: 'assets/3d/Illustration.png',
+      backgroundColor: AppPrimaryColors.primary,      // Bleu principal
+    ),
+    PromoCardData(
+      title: 'Réservez en toute confiance',
+      description: 'Paiement sécurisé et annulation flexible.',
+      linkText: 'En savoir plus',
+      imagePath: 'assets/3d/Illustration-1.png',
+      backgroundColor: AppPrimaryColors.primary,   // Bleu foncé
+    ),
+    PromoCardData(
+      title: 'Des offres exclusives',
+      description: 'Accédez à des tarifs préférentiels.',
+      linkText: 'Voir les offres',
+      imagePath: 'assets/3d/Illustration-2.png',
+      backgroundColor: AppPrimaryColors.primary,   // Bleu clair
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return PromoCarousel(
+      items: _promoItems,
+      cardWidth: 300,
+      cardHeight: 350,
+      spacing: 12,
+    );
+  }
+}
+
+class AppPrimaryColors {
+  // Couleur principale
+  static const Color primary = kPrimaryColor;
+  
+  // Variantes plus claires
+  static const Color primary50 = Color(0xffEEF1FC);   // Très clair (backgrounds)
+  static const Color primary100 = Color(0xffC5CFF5);  // Clair
+  static const Color primary200 = Color(0xff9BADEF);  // 
+  static const Color primary300 = Color(0xff6B85E6);  // 
+  static const Color primary400 = Color(0xff4A64E2);  // Légèrement plus clair
+  
+  // Variantes plus foncées
+  static const Color primary600 = Color(0xff1E35B8);  // Plus foncé
+  static const Color primary700 = Color(0xff182A92);  // Foncé
+  static const Color primary800 = Color(0xff121F6C);  // Très foncé
+  static const Color primary900 = Color(0xff0C1446);  // Extra foncé
+}
+// class _PromoSection extends StatelessWidget {
+//   const _PromoSection();
+
+//   static const List<PromoCardData> _promoItems = [
+//     PromoCardData(backgroundImage: 'assets/promo/promo_1.JPG'),
+//     PromoCardData(backgroundImage: 'assets/promo/promo_2.JPG'),
+//     PromoCardData(backgroundImage: 'assets/promo/promo_3.JPG'),
+//   ];
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return PromoCarousel(
+//       items: _promoItems,
+//       cardWidth: 300,
+//       cardHeight: 325,
+//       spacing: 12,
+//     );
+//   }
+// }

@@ -87,10 +87,10 @@ class _EstatePageState extends State<EstatePage> {
 
                 const _SliverDivider(),
 
-                // ── Highlights ──
-                DetailEstateHighlights(bienImmobilier: data),
+                // // ── Highlights ──
+                // DetailEstateHighlights(bienImmobilier: data),
 
-                const _SliverDivider(),
+                // const _SliverDivider(),
 
                 // ── Description ──
                 const DetailLogmentTitle2(title: 'À propos de ce bien'),

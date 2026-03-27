@@ -204,7 +204,7 @@ class _FilterPageState extends State<FilterPage> {
 
             // Section: Prix
             const SliverToBoxAdapter(child: FilterRangePrice()),
-            const SliverGap(80),
+            const SliverGap(140),
           ],
         ),
 

@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/widgets/date_creation_widget.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
-import 'package:immoplus/app/features/visits/visit_detail_page.dart';
+import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
@@ -23,21 +24,15 @@ class VisitHistoryCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: () {
-          showModalBottomSheet(
-            backgroundColor: AppColors.whiteBackground,
-            showDragHandle: true,
-            enableDrag: true,
-            isScrollControlled: true,
-            useRootNavigator: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          if (demandeVisiteModel.bienImmobilier == null) return;
+          context.pushNamed(
+            VisitPendingPage.name,
+            extra: VisitPendingPage(
+              bienImmo: demandeVisiteModel.bienImmobilier!,
+              visitType: demandeVisiteModel.typeDemandeVisite ?? '',
+              visitId: demandeVisiteModel.id,
+              fromHistory: true,
             ),
-            context: context,
-            builder: (context) => FractionallySizedBox(
-                heightFactor: 0.75,
-                child: VisitDetailPage(
-                  id: demandeVisiteModel.id,
-                )),
           );
         },
         borderRadius: BorderRadius.circular(16),

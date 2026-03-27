@@ -12,47 +12,47 @@ class DetailEstateHighlights extends StatelessWidget {
   List<_HighlightData> _buildHighlights() {
     final highlights = <_HighlightData>[];
 
-    // Type de bien
-    if (bienImmobilier.typeBienImmobilier.isNotEmpty) {
-      highlights.add(
-        _HighlightData(
-          icon: Iconsax.building,
-          title: bienImmobilier.typeBienImmobilier,
-          subtitle: 'Type de bien immobilier.',
-        ),
-      );
-    }
+    // // Type de bien
+    // if (bienImmobilier.typeBienImmobilier.isNotEmpty) {
+    //   highlights.add(
+    //     _HighlightData(
+    //       icon: Iconsax.building,
+    //       title: bienImmobilier.typeBienImmobilier,
+    //       subtitle: 'Type de bien immobilier.',
+    //     ),
+    //   );
+    // }
 
     // Occupants max
-    if ((bienImmobilier.nombreMaxOccupants ?? 0) > 0) {
-      highlights.add(
-        _HighlightData(
-          icon: Iconsax.people,
-          title: '${bienImmobilier.nombreMaxOccupants} occupants maximum',
-          subtitle:
-              'Ce bien peut accueillir jusqu\'à ${bienImmobilier.nombreMaxOccupants} personnes.',
-        ),
-      );
-    }
+    // if ((bienImmobilier.nombreMaxOccupants ?? 0) > 0) {
+    //   highlights.add(
+    //     _HighlightData(
+    //       icon: Iconsax.people,
+    //       title: '${bienImmobilier.nombreMaxOccupants} occupants maximum',
+    //       subtitle:
+    //           'Ce bien peut accueillir jusqu\'à ${bienImmobilier.nombreMaxOccupants} personnes.',
+    //     ),
+    //   );
+    // }
 
-    // Fêtes autorisées
-    if (bienImmobilier.fetesAutorises == true) {
-      highlights.add(
-        const _HighlightData(
-          icon: Iconsax.music,
-          title: 'Événements autorisés',
-          subtitle: 'Les événements sont les bienvenus dans ce bien.',
-        ),
-      );
-    } else {
-      highlights.add(
-        const _HighlightData(
-          icon: Iconsax.music,
-          title: 'Événements non autorisés',
-          subtitle: 'Les événements ne sont pas acceptés dans ce bien.',
-        ),
-      );
-    }
+    // // Fêtes autorisées
+    // if (bienImmobilier.fetesAutorises == true) {
+    //   highlights.add(
+    //     const _HighlightData(
+    //       icon: Iconsax.music,
+    //       title: 'Événements autorisés',
+    //       subtitle: 'Les événements sont les bienvenus dans ce bien.',
+    //     ),
+    //   );
+    // } else {
+    //   highlights.add(
+    //     const _HighlightData(
+    //       icon: Iconsax.music,
+    //       title: 'Événements non autorisés',
+    //       subtitle: 'Les événements ne sont pas acceptés dans ce bien.',
+    //     ),
+    //   );
+    // }
 
     return highlights.take(3).toList();
   }

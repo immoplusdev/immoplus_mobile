@@ -20,7 +20,7 @@ class BestRatedResidencesConstants {
   static const int maxItemsPreview = 10;
 
   /// Titre de la section
-  static const String sectionTitle = 'Les mieux notées';
+  static const String sectionTitle = 'Top Résidences';
 }
 
 class ResidencesBestRatedList extends StatefulWidget {
@@ -102,6 +102,7 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
             Expanded(
               child: SectionTitle(
                 title: BestRatedResidencesConstants.sectionTitle,
+                useCalSans: true,
               ),
             ),
             TextButton(
