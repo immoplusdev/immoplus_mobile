@@ -102,12 +102,16 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       useRootNavigator: true,
       context: context,
       isScrollControlled: true,
-      enableDrag: false,
+      enableDrag: true,
       showDragHandle: false,
-      useSafeArea: true,
-      backgroundColor: AppColors.whiteBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      builder: (context) => const LocationPage(),
+      useSafeArea: false,
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) => const FractionallySizedBox(
+        heightFactor: 0.88,
+        child: LocationPage(),
+      ),
     ).then((value) {
       // S'assurer que tout indicateur de chargement résiduel est effacé
       EasyLoading.dismiss();

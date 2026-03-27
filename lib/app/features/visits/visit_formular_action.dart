@@ -209,7 +209,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                   VisitListTileAction(
                     icon: Iconsax.flash,
                     price: (sessionManager.configModel?.data?.expressVisitPrice ?? "_").toString(),
-                    title: 'Visite Expresse',
+                    title: 'Visite Express',
                     subtitle:
                         "Votre visite sera planifiée dans les plus brefs délais, avec possibilité d'intervention le jour même.",
                     onTap: () => _showConfirmDialog(
