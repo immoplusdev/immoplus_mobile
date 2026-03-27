@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -16,6 +17,7 @@ import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader_controller.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
@@ -44,13 +46,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
       builder: (BuildContext context) => Container(
         height: 216,
         padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system navigation bar.
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        // Provide a background color for the popup.
         color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
         child: SafeArea(
           top: false,
           child: child,
@@ -84,7 +83,6 @@ class _EditAccountPageState extends State<EditAccountPage> {
       email: TextEditingController(text: sessionManager.currentUser!.email),
     );
 
-    // TODO: implement initState
     super.initState();
   }
 
@@ -93,23 +91,20 @@ class _EditAccountPageState extends State<EditAccountPage> {
     return BlocProvider(
       create: (context) => getIt<LoginCubit>(),
       child: Scaffold(
+        backgroundColor: AppColors.whiteBackground,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Modifier mes informations'),
-          //backgroundColor: Colors.red,
-          //backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-
+          title: const Text('Informations personnelles'),
+          titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+          backgroundColor: AppColors.whiteBackground,
+          surfaceTintColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              size: 30,
-            ),
-            onPressed: () async {
-              context.pop();
-            },
+            icon: const Icon(Iconsax.arrow_left, size: 24),
+            onPressed: () => context.pop(),
           ),
-
           centerTitle: true,
         ),
         body: SafeArea(
@@ -118,45 +113,52 @@ class _EditAccountPageState extends State<EditAccountPage> {
               return SingleChildScrollView(
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.only(left: 25, right: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: SizedBox(
                   width: double.infinity,
-                  //color: Theme.of(context).colorScheme.primary,
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const Gap(8),
+                        // Photo de profil
                         FileUploader(
                           fileUploaderController: fileUploaderController,
                           title: "photo de profil",
                           placeholderImageId:
                               sessionManager.currentUser!.avatar,
                         ),
-                        const SizedBox(
-                          height: 25,
-                        ),
+                        const Gap(32),
+
+                        // Section titre
+                        _buildSectionHeader(context, "Identité"),
+                        const Gap(12),
+
                         CustomTextField(
                           controller: _formController.firstName,
-                          prefixIcon: const Icon(CupertinoIcons.person),
+                          prefixIcon: const Icon(Iconsax.user, size: 20),
                           labelText: 'Nom',
                           validator: (String? value) =>
                               FormUtils.fieldValidator(value: value),
                         ),
                         CustomTextField(
                           controller: _formController.lastName,
-                          prefixIcon: const Icon(CupertinoIcons.person),
+                          prefixIcon: const Icon(Iconsax.user, size: 20),
                           labelText: 'Prénom',
                           validator: (String? value) =>
                               FormUtils.fieldValidator(value: value),
                         ),
+
+                        const Gap(16),
+                        _buildSectionHeader(context, "Contact"),
+                        const Gap(12),
+
                         InternationalPhoneInput(
                           initialPhoneNumber:
                               sessionManager.currentUser!.phoneNumber,
                           onValidPhoneNumber: (value) {
                             phoneNumber = value;
-                            // Le numéro valide est traité ici si nécessaire
-                            // print(phoneNumber);
                           },
                           onInputValidated: onInputValidated,
                           isEnabled: false,
@@ -164,16 +166,44 @@ class _EditAccountPageState extends State<EditAccountPage> {
                         const Gap(10),
                         CustomTextField(
                           controller: _formController.email,
-                          prefixIcon: const Icon(CupertinoIcons.mail),
+                          prefixIcon: const Icon(Iconsax.sms, size: 20),
                           labelText: 'Email',
                           isEnabled: false,
                           textInputType: TextInputType.emailAddress,
                           validator: (String? value) =>
                               FormUtils.emailValidator(email: value),
                         ),
-                        const SizedBox(
-                          height: 300,
+
+                        // Info box pour les champs non modifiables
+                        const Gap(12),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF9FAFB),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFFF2F4F7)),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Iconsax.info_circle,
+                                size: 18,
+                                color: const Color(0xFF667085),
+                              ),
+                              const Gap(10),
+                              Expanded(
+                                child: Text(
+                                  "Le numéro de téléphone et l'email ne peuvent pas être modifiés. Contactez le support si nécessaire.",
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: const Color(0xFF667085),
+                                        height: 1.4,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        const Gap(100),
                       ],
                     ),
                   ),
@@ -187,6 +217,12 @@ class _EditAccountPageState extends State<EditAccountPage> {
           padding: const EdgeInsets.all(10.0),
           margin:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          decoration: BoxDecoration(
+            color: AppColors.whiteBackground,
+            border: const Border(
+              top: BorderSide(color: Color(0xFFF2F4F7)),
+            ),
+          ),
           child: BlocBuilder<LoginCubit, LoginCubitState>(
             builder: (context, state) {
               return CustomLoadingButtom(
@@ -219,12 +255,26 @@ class _EditAccountPageState extends State<EditAccountPage> {
                               );
                         }
                       },
-                text: "Modifier",
+                text: "Enregistrer les modifications",
               );
             },
           ),
         ),
       ).safeArea(),
+    );
+  }
+
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF344054),
+              letterSpacing: 0.3,
+            ),
+      ),
     );
   }
 }
