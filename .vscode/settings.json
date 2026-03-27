@@ -1,6 +1,6 @@
 {
   "cmake.sourceDirectory": "/Users/macpro/WORKSPACE/ci/windows/runner",
-  "dart.flutterSdkPath": ".fvm/versions/3.35.5",
+  "dart.flutterSdkPath": ".fvm/versions/3.41.4",
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 500,
   "dart.flutterHotReloadOnSave": "all",
