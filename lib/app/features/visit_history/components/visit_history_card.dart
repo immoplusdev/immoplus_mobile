@@ -1,189 +1,253 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/widgets/date_creation_widget.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/custom_chip.dart';
 import 'package:intl/intl.dart';
 
 class VisitHistoryCard extends StatelessWidget {
   VisitHistoryCard({super.key, required this.demandeVisiteModel});
   final DemandeVisiteModel demandeVisiteModel;
   final DateFormat formatDate = DateFormat('d MMMM yyyy');
+
   @override
   Widget build(BuildContext context) {
+    final isExpress = demandeVisiteModel.typeDemandeVisite == 'express';
+    final hasDates = demandeVisiteModel.datesDemandeVisite.isNotEmpty;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8).copyWith(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: () {
           showModalBottomSheet(
-            backgroundColor: AppColors.scafold,
+            backgroundColor: AppColors.whiteBackground,
             showDragHandle: true,
             enableDrag: true,
             isScrollControlled: true,
             useRootNavigator: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
             context: context,
             builder: (context) => FractionallySizedBox(
-                heightFactor: 0.7,
+                heightFactor: 0.75,
                 child: VisitDetailPage(
                   id: demandeVisiteModel.id,
                 )),
           );
         },
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1), // Ombre douce
-                  spreadRadius: 1, // L'étendue de l'ombre
-                  blurRadius: 10, // Flou de l'ombre
-                  offset: const Offset(0, 0), // Décalage horizontal et vertical
-                ),
-              ]),
-          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          //horizontalTitleGap: 0,
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+            border: Border.all(color: const Color(0xFFF2F4F7)),
+          ),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header: Type badge + Nom du bien
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomChip(
-                      backgroundColor:
-                          (demandeVisiteModel.typeDemandeVisite == 'express')
-                              ? Colors.redAccent
-                              : Colors.purple.shade300,
-                      labelStyle: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.white),
-                      icon: FontAwesomeIcons.stopwatch20,
-                      iconColor: Colors.white,
-                      iconSize: 15,
-                      label: demandeVisiteModel.typeDemandeVisite.toString()),
-                  if (demandeVisiteModel.bienImmobilier != null)
-                    CustomChip(
-                      icon: FontAwesomeIcons.signHanging,
-                      label: demandeVisiteModel.bienImmobilier!.nom,
-                      iconSize: 15,
-                      backgroundColor: CupertinoColors.systemFill,
+                  // Badge type visite
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: isExpress
+                          ? const Color(0xFFFEF3F2)
+                          : const Color(0xFFF4F3FF),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                ],
-              ),
-              DateCreationWidget(
-                createdAt: demandeVisiteModel.createdAt,
-              ),
-              if (demandeVisiteModel.bienImmobilier != null)
-                Text("📍 ${demandeVisiteModel.bienImmobilier!.adresse}"),
-              const Gap(10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.circleUser,
-                        size: 15,
-                      ),
-                      const Gap(5),
-                      Text("Touchez pour voir plus")
-                    ],
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          isExpress ? Iconsax.flash_1 : Iconsax.calendar_1,
+                          size: 14,
+                          color: isExpress
+                              ? const Color(0xFFF04438)
+                              : const Color(0xFF7A5AF8),
+                        ),
+                        const Gap(4),
+                        Text(
+                          demandeVisiteModel.typeDemandeVisite.toString().toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: isExpress
+                                ? const Color(0xFFF04438)
+                                : const Color(0xFF7A5AF8),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  const Spacer(),
+                  // Montant
                   AutoSizeText(
                     maxLines: 1,
                     Utils.formatCurrency(
                         demandeVisiteModel.montantTotalDemandeVisite),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(color: AppColors.primary),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
                   ),
                 ],
               ),
-              Divider(
-                thickness: 0.5,
-                color: Colors.grey.shade300,
-              ),
-              if (!demandeVisiteModel.datesDemandeVisite.isNotEmpty)
-                Material(
-                  child: ListTile(
-                    leading: const Icon(
-                      CupertinoIcons.calendar_badge_plus,
-                      color: Colors.red,
+              const Gap(12),
+
+              // Nom du bien immobilier
+              if (demandeVisiteModel.bienImmobilier != null) ...[
+                Text(
+                  demandeVisiteModel.bienImmobilier!.nom,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const Gap(4),
+                Row(
+                  children: [
+                    Icon(
+                      Iconsax.location,
+                      size: 14,
+                      color: const Color(0xFF667085),
                     ),
-                    tileColor: Colors.white,
-                    horizontalTitleGap: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                    const Gap(4),
+                    Expanded(
+                      child: Text(
+                        demandeVisiteModel.bienImmobilier!.adresse,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFF667085),
+                            ),
+                      ),
                     ),
-                    title: const AutoSizeText(
-                        maxLines: 2,
-                        "Aucun jour de visite n'a été planifié pour le moment"),
-                    // trailing: const Icon(
-                    //   FontAwesomeIcons.circleChevronRight,
-                    //   color: Colors.red,
-                    //   size: 18,
-                    // ),
-                    titleTextStyle: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.red),
+                  ],
+                ),
+              ],
+
+              const Gap(12),
+              Divider(thickness: 0.5, color: Colors.grey.shade200, height: 1),
+              const Gap(12),
+
+              // Date de visite ou message "pas de date"
+              if (!hasDates)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFAEB),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Iconsax.calendar_remove,
+                        size: 16,
+                        color: Color(0xFFF79009),
+                      ),
+                      const Gap(8),
+                      Expanded(
+                        child: Text(
+                          "Aucune date de visite planifiée",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: const Color(0xFFB54708),
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (demandeVisiteModel.datesDemandeVisite.isNotEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Date de la visite"),
-                        Chip(
-                          avatar: Icon(
-                            color: AppColors.primary,
-                            FontAwesomeIcons.triangleExclamation,
-                            size: 15,
+              if (hasDates)
+                Row(
+                  children: [
+                    // Date
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLite,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Iconsax.calendar_1, size: 14, color: AppColors.primary),
+                          const Gap(6),
+                          Text(
+                            Utils.formatDatOnly(
+                                dateTime: demandeVisiteModel
+                                    .datesDemandeVisite.first.date!),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
+                            ),
                           ),
-                          backgroundColor: AppColors.scafold,
-                          label: Text(Utils.formatDatOnly(
-                              dateTime: demandeVisiteModel
-                                  .datesDemandeVisite.first.date!)),
-                          labelStyle:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: AppColors.primary,
-                                  ),
+                        ],
+                      ),
+                    ),
+                    const Gap(8),
+                    // Heure
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLite,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Iconsax.clock, size: 14, color: AppColors.primary),
+                          const Gap(6),
+                          Text(
+                            Utils.formatTimeOnly(
+                                dateTime: demandeVisiteModel
+                                    .datesDemandeVisite.first.date!),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Voir plus
+                    Row(
+                      children: [
+                        Text(
+                          "Détails",
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                        const Gap(4),
+                        Icon(
+                          Iconsax.arrow_right_3,
+                          size: 14,
+                          color: AppColors.primary,
                         ),
                       ],
                     ),
-                  if (demandeVisiteModel.datesDemandeVisite.isNotEmpty)
-                    AutoSizeText(
-                      Utils.formatTimeOnly(
-                          dateTime: demandeVisiteModel
-                              .datesDemandeVisite.first.date!),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(color: AppColors.primary),
-                    ),
-                ],
-              )
+                  ],
+                ),
+
+              // Date de création
+              const Gap(8),
+              DateCreationWidget(
+                createdAt: demandeVisiteModel.createdAt,
+              ),
             ],
           ),
-
-          // leadingAndTrailingTextStyle: Theme.of(context).textTheme.bodySmall,
-          // titleTextStyle: Theme.of(context).textTheme.bodyLarge,
-          // subtitleTextStyle: Theme.of(context).textTheme.titleMedium,
         ),
       ),
     );

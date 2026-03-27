@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
@@ -34,11 +34,6 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
       perPage: 5,
       orderBy: OrderByField.createdAt.value,
       orderDir: OrderDir.desc.value,
-      // where: {
-      //   '_where': [
-      //     '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
-      //   ],
-      // },
     )
         .then((value) {
       if (value.hasNext == true) {
@@ -62,7 +57,6 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
   @override
   void dispose() {
     super.dispose();
-
     _pagingController.dispose();
   }
 
@@ -72,6 +66,11 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
       backgroundColor: AppColors.whiteBackground,
       appBar: AppBar(
         title: const Text("Historique des Visites"),
+        titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+        backgroundColor: AppColors.whiteBackground,
+        surfaceTintColor: Colors.transparent,
       ),
       body: SafeArea(
           child: CustomScrollView(
@@ -81,46 +80,61 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
               _pagingController.refresh();
             },
           ),
-          const SliverGap(15),
-          PagedSliverList<int, DemandeVisiteModel>(
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate(
-              firstPageProgressIndicatorBuilder: (context) => Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                    //height: 600,
-                    child: Column(
+          const SliverGap(8),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: PagedSliverList<int, DemandeVisiteModel>(
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate(
+                firstPageProgressIndicatorBuilder: (context) => Column(
                   children: List.generate(
-                    20,
+                    5,
                     (index) => const BookingLoadingCard(),
                   ),
-                )),
-              ),
-              noItemsFoundIndicatorBuilder: (context) => Center(
+                ),
+                noItemsFoundIndicatorBuilder: (context) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Gap(80),
-                  SvgPicture.asset(
-                    "assets/svgs/undraw/5.svg",
-                    width: 200,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Gap(80),
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryLite,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Icon(
+                          Iconsax.calendar_search,
+                          size: 36,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      const Gap(24),
+                      Text(
+                        "Aucune visite pour le moment",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      const Gap(8),
+                      Text(
+                        "Vos demandes de visite apparaîtront ici. Explorez nos résidences et planifiez votre première visite !",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: const Color(0xFF667085),
+                              height: 1.5,
+                            ),
+                      ),
+                    ],
                   ),
-                  const Gap(30),
-                  Text(
-                    "Aucune Réservation Pour le Moment",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const Gap(20),
-                  const Text(
-                    "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              )),
-              itemBuilder: (context, item, index) => VisitHistoryCard(
-                demandeVisiteModel: item,
+                ),
+                itemBuilder: (context, item, index) => VisitHistoryCard(
+                  demandeVisiteModel: item,
+                ),
               ),
             ),
           ),
