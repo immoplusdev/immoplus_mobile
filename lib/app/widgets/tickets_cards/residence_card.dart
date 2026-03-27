@@ -69,7 +69,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            widget.residence.nom.capitalizeFirst(),
+                            widget.residence.nom.capitalizeWords(),
                             overflow: TextOverflow.fade,
                             style: Theme.of(context)
                                 .textTheme
@@ -139,6 +139,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                   ],
                 ),
               ),
+               Gap(10),
             ],
           ),
         ),

@@ -28,7 +28,7 @@ class NearResidencesConstants {
   static const int maxItemsPreview = 10;
 
   /// Titre de la section
-  static const String sectionTitle = 'À Deux Pas de Vous';
+  static const String sectionTitle = 'Près De Vous';
 
   /// Message d'erreur de localisation
   static const String locationErrorMessage =
@@ -191,6 +191,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             Expanded(
               child: SectionTitle(
                 title: NearResidencesConstants.sectionTitle,
+                useCalSans: true,
               ),
             ),
             TextButton(

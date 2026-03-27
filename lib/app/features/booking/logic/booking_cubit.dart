@@ -88,10 +88,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
           await residenceRepository.createBooking(model: body);
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
-
       ToastUtils.showSuccess(
-        description: "Votre réservation a bien été enregistrée.",
-      );
+  description: "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
+);
+
+
 
       // Navigue vers ReservationEngagementFrame
       final context = NavigationService.navigatorKey.currentContext;

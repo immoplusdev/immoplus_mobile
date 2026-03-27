@@ -361,11 +361,10 @@ class _VideoPageItemState extends State<VideoPageItem>
                   const SizedBox(height: 12),
                   _buildPriceBadge(video),
                   const SizedBox(height: 10),
-                  if (video.relatedTo?.id != null)
-                    EntityActionButton(
-                      relatedTo: video.relatedTo,
-                      onTap: () => _showReservationSheet(video),
-                    ),
+                  EntityActionButton(
+                    relatedTo: video.relatedTo,
+                    onTap: () => _showReservationSheet(video),
+                  ),
                 ],
               ),
             ),

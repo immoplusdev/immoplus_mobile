@@ -41,7 +41,7 @@ const Color _kBrandMuted = Color(0xFF9CA3AF); // muted light grey
 const Color _kSocialIcon = Color(0xFF6B7280); // monochromatic grey
 
 class AccountPage extends StatefulWidget {
-  AccountPage({super.key});
+  const AccountPage({super.key});
   static String name = 'ACCOUNT_PAGE';
 
   @override
@@ -101,10 +101,6 @@ class _AccountPageState extends State<AccountPage> {
       secondButtonText: "Annuler",
       onPrimary: sessionManager.logout,
     );
-    // AppDialog.showLogoutConfirmDialog(
-    //   context,
-    //   onLogout: sessionManager.logout,
-    // );
   }
 
   void _openServiceClient() {
@@ -144,7 +140,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     if (currentUser == null) {
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.whiteBackground,
         body: Padding(
           padding: const EdgeInsets.all(appPadding),
           child: CustomScrollView(
@@ -170,7 +166,7 @@ class _AccountPageState extends State<AccountPage> {
                     shape: SettingsTile.shapeFirst,
                     leading: _iconLeading(const Icon(CupertinoIcons.person,
                         size: 20, color: _kIconColor)),
-                    title: "S'authentifier",
+                    title: "Se Connecter / S`Inscrire",
                     titleColor: _kLabelColor,
                     trailingColor: _kTrailingColor,
                     titleStyle: GoogleFonts.dmSans(
@@ -200,7 +196,7 @@ class _AccountPageState extends State<AccountPage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteBackground,
       body: Padding(
         padding: const EdgeInsets.all(appPadding),
         child: CustomScrollView(
@@ -532,6 +528,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget _buildProBadgeTile({required dynamic shape}) {
+    final isLoggedIn = currentUser != null;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -540,7 +537,7 @@ class _AccountPageState extends State<AccountPage> {
             shape: shape,
             leading: _iconLeading(
                 const Icon(Iconsax.crown_14, size: 20, color: _kIconColor)),
-            title: 'Devenir Pro',
+            title: isLoggedIn ? 'Devenir Pro' : 'Publier un bien',
             titleColor: _kLabelColor,
             trailingColor: _kTrailingColor,
             titleStyle: GoogleFonts.dmSans(

@@ -465,7 +465,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     final IconData cardIcon = isPayment ? Iconsax.clock : Iconsax.message_text;
     final String cardTitle = isPayment
         ? 'Payez dans les prochaines minutes'
-        : 'Répond en général en moins de 2 min';
+        : 'Répond habituellement dans un court délai.';
     final String cardSubtitle = isPayment
         ? 'Votre place est maintenue, ne tardez pas'
         : 'Vous serez notifié dès sa réponse';

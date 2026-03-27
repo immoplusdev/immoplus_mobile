@@ -184,21 +184,23 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   }
 
   BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-    return BottomNavigationBarItem(
-      icon: Container(
-        height: 40,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: isActive ? AppColors.primary.withOpacity(0.2) : null,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(
-          isActive ? Iconsax.play5 : Iconsax.play4,
-          color: isActive ? AppColors.primary : Colors.grey.shade600,
-          size: 25,
-        ),
+  return BottomNavigationBarItem(
+    icon: Container(
+      height: 40,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isActive
+            ? AppColors.primary.withOpacity(0.2)
+            : AppColors.primary.withOpacity(0.15), // 👈 couleur inactive
+        borderRadius: BorderRadius.circular(12),
       ),
-      label: 'Immo',
-    );
-  }
+      child: Icon(
+        isActive ? Iconsax.play5 : Iconsax.play5,
+        color: AppColors.primary ,
+        size: 25,
+      ),
+    ),
+    label: 'Video',
+  );
+}
 }

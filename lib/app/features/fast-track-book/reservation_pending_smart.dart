@@ -501,7 +501,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
     return GestureDetector(
       onTap: _handleTap,
       child: Container(
-        width: 375,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: _bgColor,
           borderRadius: BorderRadius.circular(16),
@@ -521,28 +521,28 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    width: 64,
-                    color: _iconBg,
-                    child: Center(
-                      child: ScaleTransition(
-                        scale: _pulseAnimation,
-                        child: Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            color: _accentLight.withOpacity(0.25),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(
-                            Iconsax.timer_1,
-                            color: Color(0xFFEEE8FF),
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   width: 64,
+                  //   color: _iconBg,
+                  //   child: Center(
+                  //     child: ScaleTransition(
+                  //       scale: _pulseAnimation,
+                  //       child: Container(
+                  //         width: 38,
+                  //         height: 38,
+                  //         decoration: BoxDecoration(
+                  //           color: _accentLight.withOpacity(0.25),
+                  //           borderRadius: BorderRadius.circular(10),
+                  //         ),
+                  //         child: const Icon(
+                  //           Iconsax.timer_1,
+                  //           color: Color(0xFFEEE8FF),
+                  //           size: 20,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
@@ -629,7 +629,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
             offset: Offset(0, 8 * (1 - value)), child: child),
       ),
       child: Container(
-        width: 375,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: _bgColor,
           borderRadius: BorderRadius.circular(16),

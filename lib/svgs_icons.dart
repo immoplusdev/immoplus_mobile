@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+
 class SVGMap {
   static Map<String, String> map = {
     'cottage': './assets/svgs/icons/cottage.svg',
@@ -38,5 +41,17 @@ class SVGMap {
     'coeur1': './assets/svgs/icons/coeur1.svg',
     'local_laundry': './assets/svgs/icons/local_laundry.svg',
     'dry_cleaning': './assets/svgs/icons/dry_cleaning.svg',
+  };
+    static const Map<String, IconData> iconsaxMap = {
+    'wifi': Iconsax.wifi,
+    'tv': Iconsax.monitor,
+    'directions_car': Iconsax.car,
+    'wind': Iconsax.wind,
+    'fan-solid': Iconsax.wind_2,
+    'local_laundry': Iconsax.rotate_left,
+    'microwave': Iconsax.cpu,
+    'dry_cleaning': Iconsax.tag,
+    'oven': Iconsax.flash,
+    'kitchen-set-solid': Iconsax.cup,
   };
 }

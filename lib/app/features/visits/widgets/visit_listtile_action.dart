@@ -6,84 +6,141 @@ class VisitListTileAction extends StatelessWidget {
   const VisitListTileAction({
     super.key,
     required this.title,
-    required this.subTiltle,
+    required this.subtitle,
     required this.onTap,
-    required this.price,
-    required this.backgroundImage,
+    this.price,
+    this.icon,
+    this.backgroundImage,
+    this.trailing,
   });
+
   final String title;
-  final String subTiltle;
+  final String subtitle;
   final void Function()? onTap;
-  final String price;
+  final String? price;
+  final IconData? icon;
   final ImageProvider<Object>? backgroundImage;
+  final Widget? trailing;
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(20),
-      elevation: 2,
-      child: ListTile(
-        shape: RoundedRectangleBorder(
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          //side: BorderSide(color: Colors.grey),
-        ),
-        onTap: onTap,
-        tileColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: Colors.white,
-              backgroundImage: backgroundImage,
-            ),
-          ],
-        ),
-        isThreeLine: true,
-        //dense: true,
-        minVerticalPadding: 8,
-        horizontalTitleGap: 4,
-        minLeadingWidth: 5,
-        title: RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: title,
-            style: GoogleFonts.inter(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-              color: Colors.black,
-            ),
+          border: Border.all(
+            color: Colors.grey.shade200,
+            width: 1.2,
           ),
-          TextSpan(
-              text: '  $price Fcfa',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-              ))
-        ])),
-        titleTextStyle: GoogleFonts.inter(
-          fontWeight: FontWeight.w600,
-          fontSize: 19,
-          color: Colors.black,
         ),
-        subtitleTextStyle: GoogleFonts.inter(
-          fontSize: 12,
-          color: Colors.grey,
-        ),
-        subtitle: Container(
-          padding: EdgeInsets.only(top: 5),
-          child: Text(subTiltle),
-        ),
-        trailing: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
           children: [
-            Icon(
-              CupertinoIcons.forward,
-              size: 25,
-              color: Colors.black,
+            // Leading icon / image
+            Container(
+              width: 56,
+              // height: 56,
+              // decoration: BoxDecoration(
+              //   color: primaryColor.withOpacity(0.08),
+              //   borderRadius: BorderRadius.circular(16),
+              // ),
+              child: backgroundImage != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image(
+                        image: backgroundImage!,
+                        width: 56,
+                        height: 56,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Icon(
+                      icon ?? CupertinoIcons.calendar,
+                      color: primaryColor,
+                      size: 28,
+                    ),
             ),
+
+            const SizedBox(width: 14),
+
+            // Title + subtitle
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Title row with optional price
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          title,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: primaryColor,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (price != null && price!.isNotEmpty) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '$price Fcfa',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // Subtitle
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade600,
+                      height: 1.4,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+                
+              ),
+            ),
+                    const SizedBox(width: 8),
+
+            // Trailing
+            trailing ??
+                Icon(
+                  CupertinoIcons.chevron_forward,
+                  size: 20,
+                  color: Colors.grey.shade400,
+                ),
           ],
+          
         ),
       ),
     );

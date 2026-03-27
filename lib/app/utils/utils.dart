@@ -52,6 +52,8 @@ class Utils {
     }
   }
 
+
+
   static String getCurrentLocation() =>
       AppRouter.router.routerDelegate.currentConfiguration.uri.toString();
 
@@ -526,6 +528,31 @@ class Utils {
       return const TimeOfDay(hour: 12, minute: 0);
     }
   }
+    static String cleanMarkdown(String markdownText) {
+  String text = markdownText;
+
+  text = text.replaceAll(RegExp(r'#{1,6}\s*'), '');
+  text = text.replaceAll(RegExp(r'\*\*(.*?)\*\*'), r'$1');
+  text = text.replaceAll(RegExp(r'__(.*?)__'), r'$1');
+  text = text.replaceAll(RegExp(r'\*(.*?)\*'), r'$1');
+  text = text.replaceAll(RegExp(r'_(.*?)_'), r'$1');
+  text = text.replaceAll(RegExp(r'^\s*[-*]\s+', multiLine: true), '');
+  text = text.replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '');
+  text = text.replaceAll(RegExp(r'\[([^\]]+)\]\([^\)]+\)'), r'$1');
+  text = text.replaceAll(RegExp(r'\n{2,}'), ' ');
+  text = text.replaceAll('\n', ' ');
+  text = text.replaceAll(RegExp(r' {2,}'), ' ').trim();
+
+  if (text.isNotEmpty) {
+    text = text[0].toUpperCase() + text.substring(1);
+  }
+
+  if (text.isNotEmpty && !'.!?'.contains(text[text.length - 1])) {
+    text = '$text.';
+  }
+
+  return text;
+}
 
   static copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));

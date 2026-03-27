@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
@@ -40,12 +38,10 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     context.read<VisitCubit>().getVisit(id: widget.id);
   }
 
-  /// verifier si la demande de visite contient des dates
   bool hasDateVisite(DemandeVisitResponse demandeVisitResponse) {
     return demandeVisitResponse.data.datesDemandeVisite.isNotEmpty;
   }
 
-  /// verifier si la demande de visite est payé
   bool hasPaid(DemandeVisitResponse demandeVisitResponse) {
     return demandeVisitResponse.data.statusFacture.toString() ==
         PaymentStatus.paye.name;
@@ -56,14 +52,11 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
         PaymentStatus.non_paye.name;
   }
 
-  /// verifier si la demande de visite contient une facture
   bool hasExpress(DemandeVisitResponse demandeVisitResponse) {
     return demandeVisitResponse.data.typeDemandeVisite.toString() == "express";
   }
 
-  /// Getter pour determiner si on doit afficher le bouton de paiement
   bool shouldShowPaymentButton(DemandeVisitResponse demandeVisitResponse) {
-    // Cas 1: Express - afficher si pas payé ET qu'il y a des dates de visite
     if (hasExpress(demandeVisitResponse)) {
       return hasNotPaid(demandeVisitResponse) &&
           hasDateVisite(demandeVisitResponse);
@@ -71,14 +64,10 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     return false;
   }
 
-  /// Getter pour determiner si on doit afficher le numéro du propriétaire
   bool shouldShowOwnerPhone(DemandeVisitResponse demandeVisitResponse) {
-    // Cas 1: Express - afficher si on a payé
     if (hasExpress(demandeVisitResponse)) {
       return hasPaid(demandeVisitResponse);
-    }
-    // Cas 2: Normal (pas express) - afficher si une date existe
-    else {
+    } else {
       return hasDateVisite(demandeVisitResponse);
     }
   }
@@ -88,357 +77,438 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     return BlocBuilder<VisitCubit, VisitRequestState>(
       builder: (context, state) {
         if (state is RECEIVE_VISIT) {
-          return Scaffold(
-            backgroundColor: AppColors.scafold,
-            body: SafeArea(
-              child: Container(
-                padding: EdgeInsets.all(appPadding),
-                child: CustomScrollView(
-                  slivers: [
-                    CupertinoSliverRefreshControl(
-                      onRefresh: () async {
-                        this.context.read<VisitCubit>().getVisit(id: widget.id);
-                      },
-                    ),
-                    SliverToBoxAdapter(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: EstateInfo(
-                          bienImmobilierModel:
-                              state.demandeVisitResponse.data.bienImmobilier!),
-                    )),
-                    const SliverGap(10),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          title: const Text('Identifiant de la demande:'),
-                          subtitle: SelectableText(
-                              state.demandeVisitResponse.data.id.toString()),
-                          dense: true,
-                          trailing: IconButton(
-                            color: AppColors.primary,
-                            icon: const Icon(FontAwesomeIcons.copy),
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(
-                                      text: state.demandeVisitResponse.data.id
-                                          .toString()))
-                                  .then((value) {
-                                //Vibrate.feedback(FeedbackType.impact);
-                                EasyLoading.showToast('Identifiant copié');
-                              }).catchError((err) {
-                                EasyLoading.showToast(err.toString());
-                              });
-                            },
-                          ),
-                          titleTextStyle:
-                              Theme.of(context).textTheme.bodyMedium,
-                          subtitleTextStyle: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(color: Colors.purple),
-                        ),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: Divider()),
-                    SliverToBoxAdapter(
-                      child: ServiceStatusSection(
-                          status: state.demandeVisitResponse.data
-                                  .statusDemandeVisite ??
-                              ''),
-                    ),
-                    SliverToBoxAdapter(
-                      child: PaymentStatusSection(
-                          demandeVisitModel: state.demandeVisitResponse.data),
-                    ),
-                    SliverToBoxAdapter(
-                      child: ListTile(
-                        //contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+          final data = state.demandeVisitResponse.data;
+          final isExpress = data.typeDemandeVisite.toString() == "express";
 
-                        leading: const CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            child: Icon(Icons.calendar_month)),
-                        horizontalTitleGap: 0,
-                        //dense: true,
-                        title: const Text(
-                          'Jour de visite:',
-                        ),
-                        subtitle: Text(
-                          (state.demandeVisitResponse.data.datesDemandeVisite
-                                  .isEmpty)
-                              ? "Aucune date programmée"
-                              : VisitUtils.formatDateTime(state
-                                  .demandeVisitResponse
-                                  .data
-                                  .datesDemandeVisite
-                                  .last
-                                  .date!
-                                  .toIso8601String()),
-                          style: GoogleFonts.inter(
-                              color: Colors.red, fontSize: 18),
-                        ),
-                      ),
+          return Scaffold(
+            backgroundColor: AppColors.whiteBackground,
+            body: SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () async {
+                      this.context.read<VisitCubit>().getVisit(id: widget.id);
+                    },
+                  ),
+
+                  // Info du bien immobilier
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: EstateInfo(
+                          bienImmobilierModel: data.bienImmobilier!),
                     ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(bottom: 10),
-                        child: Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(20),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            enabled: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            leading: Icon(
-                              CupertinoIcons.location,
-                              color: AppColors.primary,
-                            ),
-                            title: const Text("Voir l'itinéraire"),
-                            titleTextStyle: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: AppColors.primary),
-                            trailing: Icon(
-                              CupertinoIcons.chevron_right_circle_fill,
-                              color: AppColors.primary,
-                            ),
-                            onTap: () async {
-                              if (await MapLauncher.isMapAvailable(
-                                      MapType.google) ??
-                                  false) {
-                                MapLauncher.showDirections(
-                                  destinationTitle: state.demandeVisitResponse
-                                      .data.bienImmobilier!.nom,
-                                  destination: Coords(
-                                    state
-                                        .demandeVisitResponse
-                                        .data
-                                        .bienImmobilier!
-                                        .position
-                                        .coordinates![1],
-                                    state
-                                        .demandeVisitResponse
-                                        .data
-                                        .bienImmobilier!
-                                        .position
-                                        .coordinates![0],
+                  ),
+                  const SliverGap(16),
+
+                  // Badge type visite + Identifiant
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFF2F4F7)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Type visite badge
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: isExpress
+                                        ? const Color(0xFFFEF3F2)
+                                        : const Color(0xFFF4F3FF),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  directionsMode: DirectionsMode.driving,
-                                  mapType: MapType.google,
-                                );
-                              } else {
-                                final availableMaps =
-                                    await MapLauncher.installedMaps;
-                                print(availableMaps);
-                                await availableMaps.first.showDirections(
-                                  destinationTitle: state.demandeVisitResponse
-                                      .data.bienImmobilier!.nom,
-                                  destination: Coords(
-                                    state
-                                        .demandeVisitResponse
-                                        .data
-                                        .bienImmobilier!
-                                        .position
-                                        .coordinates![1],
-                                    state
-                                        .demandeVisitResponse
-                                        .data
-                                        .bienImmobilier!
-                                        .position
-                                        .coordinates![0],
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        isExpress
+                                            ? Iconsax.flash_1
+                                            : Iconsax.calendar_1,
+                                        size: 14,
+                                        color: isExpress
+                                            ? const Color(0xFFF04438)
+                                            : const Color(0xFF7A5AF8),
+                                      ),
+                                      const Gap(4),
+                                      Text(
+                                        isExpress
+                                            ? 'VISITE EXPRESS'
+                                            : 'VISITE NORMALE',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                          color: isExpress
+                                              ? const Color(0xFFF04438)
+                                              : const Color(0xFF7A5AF8),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  directionsMode: DirectionsMode.driving,
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: Divider(),
-                    ),
-                    if (shouldShowOwnerPhone(state.demandeVisitResponse))
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10)
-                              .copyWith(bottom: 10),
-                          child: Material(
-                            elevation: 2,
-                            borderRadius: BorderRadius.circular(20),
-                            child: ListTile(
-                              tileColor: Colors.white,
-                              enabled: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              leading: const CircleAvatar(
-                                //backgroundColor: Colors.white,
-                                child: Icon(
-                                  FontAwesomeIcons.userTie,
-                                  //color: Colors.green,
                                 ),
-                              ),
-                              title: const Text("Propriétaire"),
-                              subtitle: Text(state.demandeVisitResponse.data
-                                  .proprietaire!.phoneNumber
-                                  .split('-')
-                                  .last
-                                  .toString()),
-                              titleTextStyle:
-                                  Theme.of(context).textTheme.bodyMedium,
-                              trailing: Icon(
-                                FontAwesomeIcons.phoneVolume,
-                                color: AppColors.primary,
-                              ),
-                              subtitleTextStyle: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(color: AppColors.primary),
-                              onTap: () async {
-                                final phone = state.demandeVisitResponse.data
-                                    .proprietaire!.phoneNumber
-                                    .split('-');
-                                Utils.makePhoneCall(phone.last);
-                              },
+                              ],
                             ),
-                          ),
+                            const Gap(12),
+
+                            // Identifiant
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Identifiant de la demande',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: const Color(0xFF667085),
+                                            ),
+                                      ),
+                                      const Gap(2),
+                                      SelectableText(
+                                        data.id.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: const Color(0xFF344054),
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Clipboard.setData(ClipboardData(
+                                            text: data.id.toString()))
+                                        .then((_) {
+                                      EasyLoading.showToast('Identifiant copié');
+                                    }).catchError((err) {
+                                      EasyLoading.showToast(err.toString());
+                                    });
+                                  },
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryLite,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Icon(
+                                      Iconsax.copy,
+                                      size: 18,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    const SliverToBoxAdapter(
-                      child: Divider(),
                     ),
+                  ),
+                  const SliverGap(12),
+
+                  // Statut du service + Statut paiement
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFF2F4F7)),
+                        ),
+                        child: Column(
+                          children: [
+                            ServiceStatusSection(
+                                status:
+                                    data.statusDemandeVisite ?? ''),
+                            Divider(
+                                height: 1, color: const Color(0xFFF2F4F7)),
+                            PaymentStatusSection(
+                                demandeVisitModel: data),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SliverGap(12),
+
+                  // Jour de visite
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFF2F4F7)),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: data.datesDemandeVisite.isEmpty
+                                    ? const Color(0xFFFFFAEB)
+                                    : AppColors.primaryLite,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Iconsax.calendar_1,
+                                size: 20,
+                                color: data.datesDemandeVisite.isEmpty
+                                    ? const Color(0xFFF79009)
+                                    : AppColors.primary,
+                              ),
+                            ),
+                            const Gap(12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Jour de visite',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: const Color(0xFF667085),
+                                        ),
+                                  ),
+                                  const Gap(2),
+                                  Text(
+                                    data.datesDemandeVisite.isEmpty
+                                        ? "Aucune date programmée"
+                                        : VisitUtils.formatDateTime(data
+                                            .datesDemandeVisite
+                                            .last
+                                            .date!
+                                            .toIso8601String()),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: data
+                                                  .datesDemandeVisite.isEmpty
+                                              ? const Color(0xFFB54708)
+                                              : AppColors.primary,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SliverGap(12),
+
+                  // Actions: Itinéraire
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildActionTile(
+                        context,
+                        icon: Iconsax.location,
+                        title: "Voir l'itinéraire",
+                        subtitle: "Ouvrir dans Maps",
+                        onTap: () => _openMaps(state),
+                      ),
+                    ),
+                  ),
+                  const SliverGap(8),
+
+                  // Propriétaire
+                  if (shouldShowOwnerPhone(state.demandeVisitResponse))
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(bottom: 10),
-                        child: Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(20),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            enabled: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: _buildActionTile(
+                          context,
+                          icon: Iconsax.user,
+                          title: "Propriétaire",
+                          subtitle: data.proprietaire!.phoneNumber
+                              .split('-')
+                              .last,
+                          trailing: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFECFDF3),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Iconsax.call,
+                              size: 20,
+                              color: Color(0xFF12B76A),
+                            ),
+                          ),
+                          onTap: () {
+                            final phone = data.proprietaire!.phoneNumber
+                                .split('-');
+                            Utils.makePhoneCall(phone.last);
+                          },
+                        ),
+                      ),
+                    ),
+                  if (shouldShowOwnerPhone(state.demandeVisitResponse))
+                    const SliverGap(8),
+
+                  // Service client
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildActionTile(
+                        context,
+                        icon: Iconsax.headphone,
+                        title: "Service client",
+                        subtitle: "Besoin d'aide ?",
+                        onTap: () {
+                          ContactUtils.showContact(id: widget.id);
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // Espace pour le bouton de paiement en bas
+                  SliverGap(shouldShowPaymentButton(state.demandeVisitResponse)
+                      ? 100
+                      : 30),
+                ],
+              ),
+            ),
+
+            // Bouton payer en bas
+            bottomSheet: shouldShowPaymentButton(state.demandeVisitResponse)
+                ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16)
+                        .copyWith(bottom: 24, top: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteBackground,
+                      border: const Border(
+                        top: BorderSide(color: Color(0xFFF2F4F7)),
+                      ),
+                    ),
+                    child: SafeArea(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            context.pushNamed(
+                              OperatorsSelectorPage.name,
+                              extra: PaymentPageAdapter(
+                                  itemId: data.id,
+                                  collection:
+                                      ProductType.demandes_visites.name,
+                                  amount: data
+                                      .montantTotalDemandeVisite
+                                      .toInt()),
+                            );
+                          },
+                          icon: const Icon(Iconsax.card, size: 20),
+                          label: Text(
+                            'Payer ${Utils.formatCurrency(data.montantTotalDemandeVisite)}',
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                            leading: Icon(
-                              FontAwesomeIcons.headset,
-                              color: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
-                            title: const Text("Service client"),
-                            titleTextStyle: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: AppColors.primary),
-                            trailing: Icon(
-                              CupertinoIcons.chevron_right_circle_fill,
-                              color: AppColors.primary,
-                            ),
-                            onTap: () async {
-                              ContactUtils.showContact(id: widget.id);
-                            },
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            bottomSheet: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: appPadding)
-                  .copyWith(bottom: 20),
-              child: Visibility(
-                visible: shouldShowPaymentButton(state.demandeVisitResponse),
-                child: ListTile(
-                  tileColor: Colors.red.shade400,
-                  onTap: () {
-                    context.pushNamed(
-                      OperatorsSelectorPage.name,
-                      extra: PaymentPageAdapter(
-                          itemId: state.demandeVisitResponse.data.id,
-                          collection: ProductType.demandes_visites.name,
-                          amount: state.demandeVisitResponse.data
-                              .montantTotalDemandeVisite
-                              .toInt()),
-                    );
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  leading: const CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    radius: 15,
-                    child: Icon(
-                      FontAwesomeIcons.coins,
-                    ),
-                  ),
-                  horizontalTitleGap: 3,
-                  dense: true,
-                  title: Text(
-                      'Payer maintenant  ${state.demandeVisitResponse.data.montantTotalDemandeVisite} Fcfa'),
-                  titleTextStyle: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.white),
-                  trailing: const Icon(
-                    CupertinoIcons.chevron_right_circle_fill,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+                  )
+                : null,
           );
         } else if (state is Error_VISITSS) {
           return Scaffold(
+            backgroundColor: AppColors.whiteBackground,
             appBar: AppBar(
               automaticallyImplyLeading: true,
+              backgroundColor: AppColors.whiteBackground,
+              surfaceTintColor: Colors.transparent,
             ),
-            body: Container(
-              padding: EdgeInsets.all(appPadding),
-              child: Center(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.remove_circle,
-                      size: 100,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      width: 250,
-                      child: Text(
-                        "Vous n'avez pas accès à cet élément ou aucun élément correspondant",
-                        textAlign: TextAlign.center,
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEF3F2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Icon(
+                        Iconsax.info_circle,
+                        size: 36,
+                        color: Color(0xFFF04438),
                       ),
                     ),
-                    const Gap(50),
+                    const Gap(24),
+                    Text(
+                      "Élément introuvable",
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    const Gap(8),
+                    Text(
+                      "Vous n'avez pas accès à cet élément ou aucun élément correspondant n'a été trouvé.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: const Color(0xFF667085),
+                            height: 1.5,
+                          ),
+                    ),
+                    const Gap(32),
                     SizedBox(
-                      width: 300,
-                      child: ListTile(
-                        onTap: () {
-                          //context.goNamed(BookingPage.name);
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          if (context.canPop()) context.pop();
                         },
-                        horizontalTitleGap: 5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        tileColor: AppColors.primaryLite,
-                        leading:
-                            const Icon(CupertinoIcons.chevron_left_circle_fill),
-                        title: const Text("Retour a la page d'historique"),
+                        icon: const Icon(Iconsax.arrow_left, size: 18),
+                        label: const Text("Retour"),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: BorderSide(color: AppColors.primary),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -448,5 +518,90 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
         return const LoadingPage();
       },
     );
+  }
+
+  Widget _buildActionTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    Widget? trailing,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFF2F4F7)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLite,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, size: 20, color: AppColors.primary),
+            ),
+            const Gap(12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFF667085),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            trailing ??
+                Icon(
+                  Iconsax.arrow_right_3,
+                  size: 20,
+                  color: const Color(0xFF98A2B3),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openMaps(RECEIVE_VISIT state) async {
+    final bienImmo = state.demandeVisitResponse.data.bienImmobilier!;
+    final destination = Coords(
+      bienImmo.position.coordinates![1],
+      bienImmo.position.coordinates![0],
+    );
+
+    if (await MapLauncher.isMapAvailable(MapType.google) ?? false) {
+      MapLauncher.showDirections(
+        destinationTitle: bienImmo.nom,
+        destination: destination,
+        directionsMode: DirectionsMode.driving,
+        mapType: MapType.google,
+      );
+    } else {
+      final availableMaps = await MapLauncher.installedMaps;
+      await availableMaps.first.showDirections(
+        destinationTitle: bienImmo.nom,
+        destination: destination,
+        directionsMode: DirectionsMode.driving,
+      );
+    }
   }
 }
