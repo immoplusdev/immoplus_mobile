@@ -9,6 +9,7 @@ import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.
 import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_best_rated_list.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/section_title.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
@@ -92,8 +93,23 @@ class _ResidencesListState extends State<ResidencesList> {
                     const ResidencesBestRatedList(),
                     // const Gap(40),
                     // const  _PromoSectionOld(),
-                    const Gap(40),
-                    SectionTitle(title: "Ce qu'il vous faut", useCalSans: true),
+                    // const Gap(40),
+                    Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                "Ce qu'il vous faut",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ),
                     const Gap(13),
                   ],
                 ),

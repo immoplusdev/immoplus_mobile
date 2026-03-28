@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/features/prop_feed/widgets/profile_avatar.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/description_footer.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -15,6 +14,7 @@ class SocialPostHeader extends StatelessWidget {
     this.avatarUrl,
     this.avatarPath,
     this.date,
+    this.location,
     this.verify = false,
     this.onFollowTap,
     this.onMoreTap,
@@ -32,6 +32,8 @@ class SocialPostHeader extends StatelessWidget {
   final String? avatarPath;
   /// Date affichée à côté du username (ex: "2024-04-01").
   final String? date;
+  /// Localisation du bien (ex: "Cocody, Abidjan"). Null → ligne masquée.
+  final String? location;
   final bool verify;
   final VoidCallback? onFollowTap;
   final VoidCallback? onMoreTap;
@@ -62,24 +64,27 @@ class SocialPostHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildProfileRow(context),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Icon(
-                Iconsax.location,
-                color: AppColors.white.withOpacity(0.5),
-                size: 14,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                'Cocody, Abidjan',
-                style: TextStyle(
-                  color: AppColors.white.withOpacity(0.5),
-                  fontSize: 12,
+          // #17 — Use dynamic location instead of hardcoded 'Cocody, Abidjan'
+          if (location != null && location!.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(
+                  Iconsax.location,
+                  color: AppColors.white.withValues(alpha: 0.5),
+                  size: 14,
                 ),
-              ),
-            ],
-          ),
+                const SizedBox(width: 4),
+                Text(
+                  location!,
+                  style: TextStyle(
+                    color: AppColors.white.withValues(alpha: 0.5),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ],
           if (caption.isNotEmpty || hashtags.isNotEmpty) ...[
             const SizedBox(height: 8),
             _buildDescriptionRow(context),
@@ -240,7 +245,7 @@ class SocialPostHeader extends StatelessWidget {
         TextSpan(
           text: caption,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.95),
+            color: Colors.white.withValues(alpha: 0.95),
             fontSize: _captionFontSize,
             height: 1.35,
           ),

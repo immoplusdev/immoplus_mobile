@@ -496,7 +496,7 @@ class _AccountPageState extends State<AccountPage> {
       shape: SettingsTile.shapeMiddle,
       leading: _iconLeading(
           Icon(FontAwesomeIcons.lock, size: 18, color: _kIconColor)),
-      title: 'Changer mes identifiants de connexion',
+      title: 'Modifier mes identifiants de connexion',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,
       titleStyle: GoogleFonts.dmSans(

@@ -99,12 +99,30 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: SectionTitle(
-                title: BestRatedResidencesConstants.sectionTitle,
-                useCalSans: true,
+            // Expanded(
+            //   child: SectionTitle(
+            //     title: BestRatedResidencesConstants.sectionTitle,
+            //     useCalSans: true,
+            //   ),
+            // ),
+
+             Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                BestRatedResidencesConstants.sectionTitle,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                  letterSpacing: 0.3,
+                ),
               ),
             ),
+            
             TextButton(
               onPressed: _bestRatedResidences.isNotEmpty
                   ? () {
@@ -112,13 +130,13 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
                     }
                   : null,
               child: Text(
-                'Voir tout',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: _bestRatedResidences.isNotEmpty
-                          ? AppColors.primary
-                          : Colors.grey.shade400,
-                      fontWeight: FontWeight.w600,
-                    ),
+                'Voir plus',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                  letterSpacing: -0.1,
+                ),
               ),
             ),
           ],

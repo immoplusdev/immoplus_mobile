@@ -45,7 +45,7 @@ class _BounceSideActionButtonState extends State<BounceSideActionButton> {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: BounceSideActionButton._ctaBlue.withOpacity(0.45),
+                color: BounceSideActionButton._ctaBlue.withValues(alpha: 0.45),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),

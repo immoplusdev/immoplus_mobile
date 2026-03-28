@@ -179,7 +179,7 @@ class _TabItem extends StatelessWidget {
               style: TextStyle(
                 color: isSelected
                     ? Colors.white
-                    : Colors.white.withOpacity(0.7),
+                    : Colors.white.withValues(alpha: 0.7),
                 fontSize: 15,
                 fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
                 shadows: [

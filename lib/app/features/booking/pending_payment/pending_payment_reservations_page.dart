@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
@@ -51,11 +52,17 @@ class _PendingPaymentReservationsPageState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Réservations à payer'),
-        titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w700,
+        // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+        //       fontWeight: FontWeight.w700,
+        //     ),
+          elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left, size: 24),
+              onPressed: () => context.pop(),
             ),
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: Colors.transparent,
+        centerTitle: true,
       ),
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(

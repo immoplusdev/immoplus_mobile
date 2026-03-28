@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
@@ -143,6 +144,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     _pagingController.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,9 +154,15 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
         slivers: [
           SliverAppBar(
             title: const Text('Historique des paiements'),
-            titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+            // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            //       fontWeight: FontWeight.w700,
+            //     ),
+             elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left, size: 24),
+              onPressed: () => context.pop(),
+            ),
+            centerTitle: true,
             backgroundColor: AppColors.whiteBackground,
             surfaceTintColor: Colors.transparent,
             pinned: true,

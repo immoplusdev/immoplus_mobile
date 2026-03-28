@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
+import 'package:immoplus/app/features/prop_feed/video_feed_warmup_service.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -25,6 +27,7 @@ class HomePageWrapper extends StatefulWidget {
 class _HomePageWrapperState extends State<HomePageWrapper> {
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
+  Timer? _videoFeedWarmupTimer;
 
   int _indexForState(PageState state) {
     switch (state) {
@@ -46,6 +49,30 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
 
   static const int _vivreTabIndex = 2;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _videoFeedWarmupTimer?.cancel();
+      _videoFeedWarmupTimer = Timer(const Duration(milliseconds: 2500), () {
+        if (!mounted) return;
+
+        // Si l'utilisateur est déjà sur "Vivre" ou si le feed a déjà été créé,
+        // aucun intérêt de préchauffer.
+        final current = context.read<NavigationCubit>().state;
+        if (current == PageState.vivre) return;
+        if (Get.isRegistered<VideoFeedController>()) return;
+
+        final warmup = Get.isRegistered<VideoFeedWarmupService>()
+            ? Get.find<VideoFeedWarmupService>()
+            : Get.put(VideoFeedWarmupService(), permanent: true);
+
+        // Best-effort (pas d'await) : ne doit jamais impacter l'UI.
+        unawaited(warmup.warmup());
+      });
+    });
+  }
+
   void _onItemTapped({required int index, required PageState pageState}) {
     if (_indexForState(pageState) == index) {
       return;
@@ -60,6 +87,13 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
       }
     }
     navigationHandler.switchPage(id: index, context: context);
+  }
+
+  @override
+  void dispose() {
+    _videoFeedWarmupTimer?.cancel();
+    _videoFeedWarmupTimer = null;
+    super.dispose();
   }
 
   @override
@@ -189,15 +223,12 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
       height: 40,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: isActive
-            ? AppColors.primary.withOpacity(0.2)
-            : AppColors.primary.withOpacity(0.15), // 👈 couleur inactive
+        color: isActive ? AppColors.primary.withOpacity(0.2) : null,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Icon(
-        isActive ? Iconsax.play5 : Iconsax.play5,
+      child: Icon( Iconsax.play5,
         color: AppColors.primary ,
-        size: 25,
+        size: 28,
       ),
     ),
     label: 'Video',

@@ -152,13 +152,21 @@ class _VideoFeedViewState extends State<VideoFeedView>
                   controller: _pageController,
                   preloadPagesCount: 2,
                   scrollDirection: Axis.vertical,
+                  // #12 — Bouncing scroll physics for premium feel
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
                   itemCount: count,
-                  onPageChanged: (pageIndex) =>
-                      controller.onPageChanged(pageIndex % n),
+                  onPageChanged: (pageIndex) {
+                    // #10 — Haptic feedback on page snap
+                    HapticFeedback.selectionClick();
+                    controller.onPageChanged(pageIndex % n);
+                  },
                   itemBuilder: (context, pageIndex) {
                     final videoIndex = pageIndex % n;
                     return VideoPageItem(
-                      key: ValueKey<int>(pageIndex),
+                      // #2 — Use videoIndex for widget recycling (not pageIndex)
+                      key: ValueKey<int>(videoIndex),
                       index: videoIndex,
                       controller: controller,
                     );

@@ -28,7 +28,7 @@ class NearResidencesConstants {
   static const int maxItemsPreview = 10;
 
   /// Titre de la section
-  static const String sectionTitle = 'Près De Vous';
+  static const String sectionTitle = 'Moins d’un km';
 
   /// Message d'erreur de localisation
   static const String locationErrorMessage =
@@ -188,12 +188,26 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: SectionTitle(
-                title: NearResidencesConstants.sectionTitle,
-                useCalSans: true,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                NearResidencesConstants.sectionTitle,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                  letterSpacing: 0.3,
+                ),
               ),
             ),
+
+
+                
+                 
             TextButton(
               onPressed: _nearResidences.isNotEmpty
                   ? () {
@@ -210,13 +224,13 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
                     }
                   : null,
               child: Text(
-                'Voir tout',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: _nearResidences.isNotEmpty
-                          ? AppColors.primary
-                          : Colors.grey.shade400,
-                      fontWeight: FontWeight.w600,
-                    ),
+                'Voir plus',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                  letterSpacing: -0.1,
+                ),
               ),
             ),
           ],

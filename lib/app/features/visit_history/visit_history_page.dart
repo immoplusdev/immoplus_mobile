@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
@@ -64,14 +65,19 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
-      appBar: AppBar(
-        title: const Text("Historique des Visites"),
-        titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w700,
+      appBar: 
+      AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Historiques Des Visites'),
+            backgroundColor: AppColors.whiteBackground,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left, size: 24),
+              onPressed: () => context.pop(),
             ),
-        backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
-      ),
+            centerTitle: true,
+          ),
       body: SafeArea(
           child: CustomScrollView(
         slivers: [

@@ -147,6 +147,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   }
 
   final bookingServices = getIt<BookingServices>();
+  
   @override
   void initState() {
     _formController = FormController(
@@ -251,7 +252,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                 const Gap(16),
 
                 // Numéro de téléphone
-                _buildSectionLabel(context, 'Numéro de contact'),
+                _buildSectionLabel(context, 'Numéro de téléphone'),
                 const Gap(8),
                 CountryPhoneNumberInput(
                     controller: _formController.phoneNumber!),
@@ -517,197 +518,182 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                     ],
                   ),
                 ),
-                const Gap(16),
-
-                // Estimation de prix
-                BlocConsumer<BookingCubit, BookingRequestState>(
-                  builder: (context, state) {
-                    return Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFF2F4F7)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFECFDF3),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Icon(
-                                  Iconsax.receipt_item,
-                                  color: Color(0xFF12B76A),
-                                  size: 20,
-                                ),
-                              ),
-                              const Gap(12),
-                              Text(
-                                'Prix de la réservation',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          if (estimateCost != null) ...[
-                            const Gap(16),
-                            Divider(
-                                height: 1,
-                                color: const Color(0xFFF2F4F7)),
-                            const Gap(12),
-                            _buildPriceRow(
-                              context,
-                              label: 'Montant',
-                              value: Utils.formatCurrency(
-                                  estimateCost!.montant.toInt()),
-                            ),
-                            const Gap(8),
-                            _buildPriceRow(
-                              context,
-                              label: 'Frais de service',
-                              value: Utils.formatCurrency(
-                                  estimateCost!.frais.toInt()),
-                            ),
-                            const Gap(12),
-                            Divider(
-                                height: 1,
-                                color: const Color(0xFFF2F4F7)),
-                            const Gap(12),
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Total',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
-                                Text(
-                                  Utils.formatCurrency(
-                                      estimateCost!.total.toInt()),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.primary,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ] else ...[
-                            const Gap(12),
-                            Text(
-                              'Sélectionnez des dates pour voir le prix',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: const Color(0xFF98A2B3),
-                                  ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    );
-                  },
-                  listener: (context, state) {
-                    if (state is RECEIVE_ESTIMATE_COST) {
-                      setState(() {
-                        estimateCost = state.estimateCost.data;
-                      });
-                    }
-                  },
-                ),
-                const Gap(100),
+                const Gap(24),
               ],
             ),
           ),
         ),
       ),
 
-      // Bouton Réserver
+      // Bottom Bar avec Estimation (Gauche) et Bouton (Droite)
       bottomNavigationBar: Container(
-        color: AppColors.whiteBackground,
-        height: 90,
-        margin: EdgeInsets.only(bottom: kDefaultPadding),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 20),
-        child: BlocBuilder<BookingCubit, BookingRequestState>(
-          builder: (context, state) => CustomLoadingButtom(
-              textColor: Colors.white,
-              text: 'Réserver',
-              isLoading: state is LOADING_BOOKING,
-              onClick: (state is INITIAL_BOOKING)
-                  ? null
-                  : () {
-                      if (totalDays < widget.residenceModel.dureeMinSejour) {
-                        ToastUtils.showError(
-                            description:
-                                "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
-                        return;
-                      }
-                      if (totalDays > widget.residenceModel.dureeMaxSejour) {
-                        ToastUtils.showError(
-                            description:
-                                "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
-                        return;
-                      }
-                      if (_formKey.currentState!.validate()) {
-                        if (selectedDates.isEmpty) {
-                          EasyLoading.showToast(
-                              "Aucun jour de réservation sélectionné",
-                              toastPosition:
-                                  EasyLoadingToastPosition.bottom);
-                        } else {
-                          AppDialog.show(
-                            title: 'Confirmation',
-                            description:
-                                'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
-                            primaryButtonText: 'Confirmer',
-                            secondButtonText: 'Annuler',
-                            onPrimary: () {
-                              if (estimateCost == null) {
-                                ToastUtils.showSuccess(
+        decoration: BoxDecoration(
+          color: AppColors.whiteBackground,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              offset: const Offset(0, -4),
+              blurRadius: 12,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12).copyWith(
+          bottom: MediaQuery.of(context).padding.bottom > 0
+              ? MediaQuery.of(context).padding.bottom
+              : 16,
+        ),
+        child: BlocConsumer<BookingCubit, BookingRequestState>(
+          listener: (context, state) {
+            if (state is RECEIVE_ESTIMATE_COST) {
+              setState(() {
+                estimateCost = state.estimateCost.data;
+              });
+            }
+          },
+          builder: (context, state) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // GAUCHE : Bloc Estimation
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          // Container(
+                          //   padding: const EdgeInsets.all(4),
+                          //   decoration: BoxDecoration(
+                          //     color: const Color(0xFFECFDF3),
+                          //     borderRadius: BorderRadius.circular(6),
+                          //   ),
+                          //   child: const Icon(
+                          //     Iconsax.receipt_item,
+                          //     color: Color(0xFF12B76A),
+                          //     size: 16,
+                          //   ),
+                          // ),
+                          const Gap(6),
+                          Text(
+                            'Total estimé',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF667085),
+                                ),
+                          ),
+                        ],
+                      ),
+                      const Gap(4),
+                      if (estimateCost != null) ...[
+                        AutoSizeText(
+                          Utils.formatCurrency(estimateCost!.total.toInt()),
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.primary,
+                              ),
+                        ),
+                        AutoSizeText(
+                          'Dont ${Utils.formatCurrency(estimateCost!.frais.toInt())} de frais',
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: const Color(0xFF98A2B3),
+                                fontSize: 10,
+                              ),
+                        ),
+                      ] else ...[
+                        Text(
+                          '-- FCFA',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFFD0D5DD),
+                              ),
+                        ),
+                        Text(
+                          'Sélectionnez vos dates',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: const Color(0xFF98A2B3),
+                                fontSize: 10,
+                              ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const Gap(12),
+                
+                // DROITE : Bouton Réserver
+                Expanded(
+                  flex: 4,
+                  child: SizedBox(
+                    height: 52, // Fixe la hauteur du bouton pour un rendu uniforme
+                    child: CustomLoadingButtom(
+                      textColor: Colors.white,
+                      text: 'Réserver',
+                      isLoading: state is LOADING_BOOKING,
+                      onClick: (state is INITIAL_BOOKING)
+                          ? null
+                          : () {
+                              if (totalDays < widget.residenceModel.dureeMinSejour) {
+                                ToastUtils.showError(
                                     description:
-                                        "Veuillez choisir une date");
+                                        "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
                                 return;
                               }
-                              context.read<BookingCubit>().orderBooking(
-                                  amount: estimateCost!.total.toInt(),
-                                  body: ReservationRequestBody(
-                                      residence:
-                                          widget.residenceModel.id,
-                                      datesReservation: selectedDates
-                                          .map(
-                                            (e) =>
-                                                DatesReservationModel(
-                                                    date: e),
-                                          )
-                                          .toList(),
-                                      clientPhoneNumber:
-                                          _formController
-                                              .phoneNumber!.text));
+                              if (totalDays > widget.residenceModel.dureeMaxSejour) {
+                                ToastUtils.showError(
+                                    description:
+                                        "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
+                                return;
+                              }
+                              if (_formKey.currentState!.validate()) {
+                                if (selectedDates.isEmpty) {
+                                  EasyLoading.showToast(
+                                      "Aucun jour de réservation sélectionné",
+                                      toastPosition:
+                                          EasyLoadingToastPosition.bottom);
+                                } else {
+                                  AppDialog.show(
+                                    title: 'Confirmation',
+                                    description:
+                                        'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
+                                    primaryButtonText: 'Confirmer',
+                                    secondButtonText: 'Annuler',
+                                    onPrimary: () {
+                                      if (estimateCost == null) {
+                                        ToastUtils.showSuccess(
+                                            description:
+                                                "Veuillez choisir une date");
+                                        return;
+                                      }
+                                      context.read<BookingCubit>().orderBooking(
+                                          amount: estimateCost!.total.toInt(),
+                                          body: ReservationRequestBody(
+                                              residence:
+                                                  widget.residenceModel.id,
+                                              datesReservation: selectedDates
+                                                  .map(
+                                                    (e) =>
+                                                        DatesReservationModel(
+                                                            date: e),
+                                                  )
+                                                  .toList(),
+                                              clientPhoneNumber:
+                                                  _formController
+                                                      .phoneNumber!.text));
+                                    },
+                                  );
+                                }
+                              }
                             },
-                          );
-                        }
-                      }
-                    },
-            ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -768,31 +754,6 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
             ),
         ],
       ),
-    );
-  }
-
-  Widget _buildPriceRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: const Color(0xFF667085),
-              ),
-        ),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF344054),
-              ),
-        ),
-      ],
     );
   }
 

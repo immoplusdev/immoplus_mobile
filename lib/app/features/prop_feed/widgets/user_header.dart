@@ -38,7 +38,7 @@ class UserHeader extends StatelessWidget {
         TextSpan(
           text: caption,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.95),
+            color: Colors.white.withValues(alpha: 0.95),
             fontSize: _captionFontSize,
             height: 1.35,
           ),

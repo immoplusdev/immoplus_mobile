@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:instagram_like_animation_button/instagram_like_animation_button.dart';
@@ -15,7 +15,6 @@ import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:lottie/lottie.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/entity_action_button.dart';
-import 'package:immoplus/app/features/prop_feed/widgets/side_action_button.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -24,6 +23,35 @@ import 'package:immoplus/app/features/prop_feed/widgets/reservation_bottom_sheet
 import 'package:immoplus/app/features/prop_feed/widgets/social_post_header.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/request_path.dart';
+
+// ---------------------------------------------------------------------------
+// Lottie loading widget — cached composition, const constructor, RepaintBoundary
+// Avoids re-parsing the JSON on every rebuild (#4 optimization)
+// ---------------------------------------------------------------------------
+class _ImmoLoadingLayer extends StatelessWidget {
+  const _ImmoLoadingLayer();
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: Container(
+        color: const Color(0xFF111111),
+        child: Center(
+          child: SizedBox(
+            width: 150,
+            height: 150,
+            child: Lottie.asset(
+              'assets/animations/immo-loading.json',
+              fit: BoxFit.contain,
+              repeat: true,
+              reverse: false,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class VideoPageItem extends StatefulWidget {
   const VideoPageItem({
@@ -47,7 +75,9 @@ class VideoPageItem extends StatefulWidget {
 
 class _VideoPageItemState extends State<VideoPageItem>
     with SingleTickerProviderStateMixin {
-  static String? _lastKnownThumbnail;
+  // NON-static : chaque VideoPageItem garde son propre thumbnail de fallback
+  // (static causait un partage cross-widget → flashes visuels incorrects en boucle ×300)
+  String? _lastKnownThumbnail;
 
   static String _stableCacheKey(String url) {
     if (url.trim().isEmpty) return url;
@@ -56,14 +86,14 @@ class _VideoPageItemState extends State<VideoPageItem>
     return uri.replace(query: '', fragment: '').toString();
   }
 
-  bool _showPlayIcon = false;
-  bool _isDescriptionExpanded = false;
-  TapDownDetails? _tapDetails;
+  // #1 — Use ValueNotifiers instead of setState to avoid full-tree rebuilds
+  final ValueNotifier<bool> _showPlayIcon = ValueNotifier(false);
+  final ValueNotifier<bool> _isDescriptionExpanded = ValueNotifier(false);
+  final ValueNotifier<TapDownDetails?> _tapDetails = ValueNotifier(null);
+
   final GlobalKey _likeKey = GlobalKey();
   late final AnimationController _iconAnim;
   Timer? _viewTimer;
-
-  // static const double _overlayBottom = 1.0;
 
   @override
   void initState() {
@@ -78,6 +108,9 @@ class _VideoPageItemState extends State<VideoPageItem>
   void dispose() {
     _cancelViewTimer();
     _iconAnim.dispose();
+    _showPlayIcon.dispose();
+    _isDescriptionExpanded.dispose();
+    _tapDetails.dispose();
     super.dispose();
   }
 
@@ -105,12 +138,11 @@ class _VideoPageItemState extends State<VideoPageItem>
 
   void _onTapPlayPause() {
     widget.controller.togglePlayPause(widget.index);
-    setState(() {
-      _showPlayIcon = true;
-      _iconAnim.forward(from: 0.0);
-    });
+    // #1 — Only rebuilds the play/pause icon, not the entire tree
+    _showPlayIcon.value = true;
+    _iconAnim.forward(from: 0.0);
     Future.delayed(const Duration(milliseconds: 700), () {
-      if (mounted) setState(() => _showPlayIcon = false);
+      if (mounted) _showPlayIcon.value = false;
     });
   }
 
@@ -131,6 +163,7 @@ class _VideoPageItemState extends State<VideoPageItem>
   }
 
   void _onShareTap(String videoId) {
+    HapticFeedback.lightImpact(); // #10 — haptic on action
     widget.controller.shareVideo(videoId);
   }
 
@@ -139,6 +172,8 @@ class _VideoPageItemState extends State<VideoPageItem>
     final entity = video.relatedTo?.entity;
     final id = video.relatedTo?.id;
     if (id == null || id.isEmpty) return;
+
+    HapticFeedback.mediumImpact(); // #10 — haptic on CTA
 
     ReservationBottomSheet.showWithEntityData(
       context: context,
@@ -189,29 +224,36 @@ class _VideoPageItemState extends State<VideoPageItem>
         return Stack(
           fit: StackFit.expand,
           children: [
-            // Couche 1 : thumbnail précédent (fond permanent, jamais noir)
-            AnimatedOpacity(
-              opacity: isReady ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 400),
-              child: _lastKnownThumbnail != null
-                  ? CachedNetworkImage(
-                      imageUrl: _lastKnownThumbnail!,
-                      cacheKey: _stableCacheKey(_lastKnownThumbnail!),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                      placeholder: (_, __) => _buildImmoLoadingLayer(),
-                      errorWidget: (_, __, ___) => _buildImmoLoadingLayer(),
-                    )
-                  : _buildImmoLoadingLayer(),
-            ),
-            // Couche 2 : thumbnail actuel
-            AnimatedOpacity(
-              opacity: isReady ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 400),
-              child: _buildThumbnail(video),
-            ),
-            // Couche 3 : vidéo (en dessous de l'overlay pour ne pas montrer du noir)
+            // #6 — Remove thumbnail widgets from tree entirely when video is ready
+            // #5 — RepaintBoundary on static layers
+            if (!isReady) ...[
+              // Couche 1 : thumbnail précédent (fond permanent, jamais noir)
+              RepaintBoundary(
+                child: _lastKnownThumbnail != null
+                    ? CachedNetworkImage(
+                        imageUrl: _lastKnownThumbnail!,
+                        cacheKey: _stableCacheKey(_lastKnownThumbnail!),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        // #7 — Limit memory cache size
+                        memCacheWidth:
+                            (MediaQuery.sizeOf(context).width *
+                                    MediaQuery.devicePixelRatioOf(context))
+                                .toInt(),
+                        fadeInDuration: const Duration(milliseconds: 100),
+                        placeholder: (_, __) => const _ImmoLoadingLayer(),
+                        errorWidget: (_, __, ___) =>
+                            const _ImmoLoadingLayer(),
+                      )
+                    : const _ImmoLoadingLayer(),
+              ),
+              // Couche 2 : thumbnail actuel
+              RepaintBoundary(child: _buildThumbnail(context, video)),
+              // Couche 4 : overlay ImmoLoading PAR-DESSUS (disparaît dès ready)
+              const Positioned.fill(child: _ImmoLoadingLayer()),
+            ],
+            // Couche 3 : vidéo
             Positioned.fill(
               child: VisibilityDetector(
                 key: Key('video_${widget.index}'),
@@ -222,27 +264,30 @@ class _VideoPageItemState extends State<VideoPageItem>
                     : _buildVideoFit(videoController),
               ),
             ),
-            // Couche 4 : overlay ImmoLoading PAR-DESSUS la vidéo
-            // Disparaît dès que le player est prêt (preloaded → pas de loading)
-            Positioned.fill(
-              child: IgnorePointer(
-                ignoring: isReady,
-                child: AnimatedOpacity(
-                  opacity: isReady ? 0.0 : 1.0,
-                  duration: const Duration(milliseconds: 400),
-                  child: _buildImmoLoadingLayer(),
-                ),
-              ),
-            ),
+            // #22 — Video progress bar synced to actual video position/duration
+            // if (isReady && videoController != null)
+            //   Positioned(
+            //     bottom: 0,
+            //     left: 0,
+            //     right: 0,
+            //     child: RepaintBoundary(
+            //       child: _VideoProgressBar(controller: videoController),
+            //     ),
+            //   ),
+            // #1 — Play/pause icon isolated in ValueListenableBuilder
             Positioned.fill(
               child: DoubleTapDetector(
                 onTap: _onTapPlayPause,
-                onDoubleTap: (details) => setState(() => _tapDetails = details),
+                onDoubleTap: (details) => _tapDetails.value = details,
                 behavior: HitTestBehavior.translucent,
                 child: Center(
-                  child: AnimatedOpacity(
-                    opacity: _showPlayIcon ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 200),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _showPlayIcon,
+                    builder: (_, show, child) => AnimatedOpacity(
+                      opacity: show ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: child,
+                    ),
                     child: ScaleTransition(
                       scale: Tween<double>(begin: 0.8, end: 1.0).animate(
                         CurvedAnimation(
@@ -267,48 +312,60 @@ class _VideoPageItemState extends State<VideoPageItem>
                 ),
               ),
             ),
-            if (_tapDetails != null)
-              ReelAnimationLike(
-                key: ValueKey(_tapDetails),
-                likeKey: _likeKey,
-                position: _tapDetails!.globalPosition,
-                config: const LikeAnimationConfig(
-                  duration: Duration(milliseconds: 600),
-                  hapticType: HapticFeedbackType.light,
-                  scaleMax: 1.8,
-                ),
-                style: const LikeAnimationStyle(
-                  iconSize: Size(70, 70),
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFFF2D55), Color(0xFFFF6B6B)],
+            // #1 — Double-tap heart isolated in ValueListenableBuilder
+            ValueListenableBuilder<TapDownDetails?>(
+              valueListenable: _tapDetails,
+              builder: (_, details, __) {
+                if (details == null) return const SizedBox.shrink();
+                return ReelAnimationLike(
+                  key: ValueKey(details),
+                  likeKey: _likeKey,
+                  position: details.globalPosition,
+                  config: const LikeAnimationConfig(
+                    duration: Duration(milliseconds: 600),
+                    hapticType: HapticFeedbackType.light,
+                    scaleMax: 1.8,
                   ),
-                ),
-                onLikeCall: () {
-                  if (!isLiked) {
-                    widget.controller.toggleLike(video.id);
-                  }
-                },
-                onCompleteAnimation: () => setState(() => _tapDetails = null),
-              ),
+                  style: const LikeAnimationStyle(
+                    iconSize: Size(70, 70),
+                    gradient: LinearGradient(
+                      colors: [Color(0xFFFF2D55), Color(0xFFFF6B6B)],
+                    ),
+                  ),
+                  onLikeCall: () {
+                    if (!isLiked) {
+                      widget.controller.toggleLike(video.id);
+                    }
+                  },
+                  onCompleteAnimation: () => _tapDetails.value = null,
+                );
+              },
+            ),
+            // #1 — Description isolated in ValueListenableBuilder
             Positioned(
               left: 0,
               right: 72,
               bottom: -7,
-              child: LayoutBuilder(
-                builder: (context, constraints) => SocialPostHeader(
-                  username: video.content?.title?? 'Immoplus',
-                  avatarUrl: widget.avatarUrl ?? video.author?.avatar,
-                  avatarPath: widget.avatarPath,
-                  date: _formatDate(video.createdAt),
-                  verify: true,
-                  caption:
-                      video.content?.description ?? video.content?.title ?? '',
-                  hashtags: const [],
-                  isExpanded: _isDescriptionExpanded,
-                  contentMaxWidth: constraints.maxWidth,
-                  contentMaxLines: 2,
-                  onMoreTap: () => setState(
-                      () => _isDescriptionExpanded = !_isDescriptionExpanded),
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _isDescriptionExpanded,
+                builder: (_, expanded, __) => LayoutBuilder(
+                  builder: (context, constraints) => SocialPostHeader(
+                    username: video.content?.title ?? 'Immoplus',
+                    avatarUrl: widget.avatarUrl ?? video.author?.avatar,
+                    avatarPath: widget.avatarPath,
+                    date: _formatDate(video.createdAt),
+                    location: video.content?.location,
+                    verify: true,
+                    caption: video.content?.description ??
+                        video.content?.title ??
+                        '',
+                    hashtags: const [],
+                    isExpanded: expanded,
+                    contentMaxWidth: constraints.maxWidth,
+                    contentMaxLines: 2,
+                    onMoreTap: () =>
+                        _isDescriptionExpanded.value = !expanded,
+                  ),
                 ),
               ),
             ),
@@ -321,39 +378,55 @@ class _VideoPageItemState extends State<VideoPageItem>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   const SizedBox(height: 12),
+                  // #14 — Like button with elasticOut scale animation
                   GestureDetector(
                     key: _likeKey,
-                    onTap: () => widget.controller.toggleLike(video.id),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          isLiked ? Iconsax.heart5 : Iconsax.heart,
-                          color:
-                              isLiked ? const Color(0xFFFF2D55) : Colors.white,
-                          size: 24,
-                        ),
-                        const SizedBox(height: 1),
-                        Text(
-                          _formatCount(likesCount),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            shadows: [
-                              Shadow(
-                                color: Color(0x40000000),
-                                blurRadius: 3,
-                                offset: Offset(0, 1),
-                              ),
-                            ],
+                    onTap: () {
+                      HapticFeedback.lightImpact(); // #10 — haptic on like
+                      widget.controller.toggleLike(video.id);
+                    },
+                    child: TweenAnimationBuilder<double>(
+                      key: ValueKey('like_${video.id}_$isLiked'),
+                      tween: Tween(begin: 0.8, end: 1.0),
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.elasticOut,
+                      builder: (_, scale, child) =>
+                          Transform.scale(scale: scale, child: child),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isLiked ? Iconsax.heart5 : Iconsax.heart,
+                            color: isLiked
+                                ? const Color(0xFFFF2D55)
+                                : Colors.white,
+                            size: 24,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 1),
+                          Text(
+                            _formatCount(likesCount),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              // #18 — tabularFigures prevents counter "dancing"
+                              fontFeatures: [FontFeature.tabularFigures()],
+                              shadows: [
+                                Shadow(
+                                  color: Color(0x40000000),
+                                  blurRadius: 3,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  SideActionButton(
+                  // #15 — SideActionButton now uses bounce wrapper
+                  _BounceSideAction(
                     icon: Iconsax.link,
                     label: 'Partager',
                     onTap: () => _onShareTap(video.id),
@@ -394,15 +467,16 @@ class _VideoPageItemState extends State<VideoPageItem>
     return '$count';
   }
 
+  // #8 — Use ValueKey(video.id) to prevent FadeInUp from re-triggering on rebuild
+  // #9 — Reduce BackdropFilter sigma from 12 to 8
   Widget _buildPriceBadge(VideoModel video) {
     final price = video.content?.price;
     if (price == null || price.isEmpty) return const SizedBox.shrink();
-    return FadeInUp(
-      duration: const Duration(milliseconds: 800),
+    return RepaintBoundary(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(14),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
@@ -426,6 +500,8 @@ class _VideoPageItemState extends State<VideoPageItem>
                 color: Colors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.w900,
+                // #18 — tabularFigures for price stability
+                fontFeatures: [FontFeature.tabularFigures()],
               ),
             ),
           ),
@@ -461,26 +537,8 @@ class _VideoPageItemState extends State<VideoPageItem>
     );
   }
 
-  /// Fond noir + ImmoLoading Lottie (réutilisé pour éviter flash noir).
-  Widget _buildImmoLoadingLayer() {
-    return Container(
-      color: const Color(0xFF111111),
-      child: Center(
-        child: SizedBox(
-          width: 150,
-          height: 150,
-          child: Lottie.asset(
-            'assets/animations/immo-loading.json',
-            fit: BoxFit.contain,
-            repeat: true,
-            reverse: false,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildThumbnail(VideoModel video) {
+  // #7 — CachedNetworkImage with memCacheWidth
+  Widget _buildThumbnail(BuildContext context, VideoModel video) {
     final thumbnailUrl = _getThumbnailUrl(video);
     if (thumbnailUrl != null && thumbnailUrl.isNotEmpty) {
       return CachedNetworkImage(
@@ -489,15 +547,20 @@ class _VideoPageItemState extends State<VideoPageItem>
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        placeholder: (_, __) => _buildImmoLoadingLayer(),
-        errorWidget: (_, __, ___) => _buildImmoLoadingLayer(),
+        memCacheWidth:
+            (MediaQuery.sizeOf(context).width *
+                    MediaQuery.devicePixelRatioOf(context))
+                .toInt(),
+        fadeInDuration: const Duration(milliseconds: 100),
+        placeholder: (_, __) => const _ImmoLoadingLayer(),
+        errorWidget: (_, __, ___) => const _ImmoLoadingLayer(),
         imageBuilder: (_, imageProvider) {
           _lastKnownThumbnail = thumbnailUrl;
           return Image(image: imageProvider, fit: BoxFit.cover);
         },
       );
     }
-    return _buildImmoLoadingLayer();
+    return const _ImmoLoadingLayer();
   }
 
   /// Retourne l'URL de la miniature : thumbnailUrl si présent, sinon URL construite depuis miniature (UUID).
@@ -512,5 +575,156 @@ class _VideoPageItemState extends State<VideoPageItem>
       }
     }
     return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Progress bar synchronisée avec la position réelle de la vidéo.
+// Écoute directement le VideoPlayerController via addListener → mise à jour
+// frame par frame sans polling. Seule la barre est redessinée (ValueNotifier).
+// ---------------------------------------------------------------------------
+class _VideoProgressBar extends StatefulWidget {
+  const _VideoProgressBar({required this.controller});
+  final VideoPlayerController controller;
+
+  @override
+  State<_VideoProgressBar> createState() => _VideoProgressBarState();
+}
+
+class _VideoProgressBarState extends State<_VideoProgressBar> {
+  final ValueNotifier<double> _progress = ValueNotifier(0.0);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onVideoUpdate);
+  }
+
+  @override
+  void didUpdateWidget(_VideoProgressBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onVideoUpdate);
+      widget.controller.addListener(_onVideoUpdate);
+      _progress.value = 0.0;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onVideoUpdate);
+    _progress.dispose();
+    super.dispose();
+  }
+
+  void _onVideoUpdate() {
+    final duration = widget.controller.value.duration;
+    final position = widget.controller.value.position;
+    if (duration.inMilliseconds <= 0) {
+      _progress.value = 0.0;
+      return;
+    }
+    _progress.value =
+        (position.inMilliseconds / duration.inMilliseconds).clamp(0.0, 1.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<double>(
+      valueListenable: _progress,
+      builder: (_, value, __) => LinearProgressIndicator(
+        value: value,
+        backgroundColor: Colors.white.withValues(alpha: 0.15),
+        valueColor: AlwaysStoppedAnimation<Color>(
+          Colors.white.withValues(alpha: 0.85),
+        ),
+        minHeight: 2.5,
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// #15 — Bounce wrapper for SideActionButton (was missing animation on Partager)
+// #19 — Uses ValueNotifier<bool> instead of setState for the press state
+// ---------------------------------------------------------------------------
+class _BounceSideAction extends StatelessWidget {
+  const _BounceSideAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return _BounceWrapper(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 18,
+            child: Icon(icon, color: Colors.white, size: 24),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Reusable bounce wrapper using ValueNotifier (no setState)
+// ---------------------------------------------------------------------------
+class _BounceWrapper extends StatefulWidget {
+  const _BounceWrapper({required this.child, required this.onTap});
+
+  final Widget child;
+  final VoidCallback onTap;
+
+  @override
+  State<_BounceWrapper> createState() => _BounceWrapperState();
+}
+
+class _BounceWrapperState extends State<_BounceWrapper> {
+  final ValueNotifier<bool> _pressed = ValueNotifier(false);
+
+  @override
+  void dispose() {
+    _pressed.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _pressed.value = true,
+      onTapUp: (_) => _pressed.value = false,
+      onTapCancel: () => _pressed.value = false,
+      onTap: widget.onTap,
+      child: ValueListenableBuilder<bool>(
+        valueListenable: _pressed,
+        builder: (_, pressed, child) => AnimatedScale(
+          scale: pressed ? 0.9 : 1.0,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOutBack,
+          child: child,
+        ),
+        child: widget.child,
+      ),
+    );
   }
 }

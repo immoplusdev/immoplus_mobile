@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/prop_feed/feed_socket_service.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
+import 'package:immoplus/app/features/prop_feed/video_feed_warmup_service.dart';
 import 'package:immoplus/main.dart';
 
 class VideoFeedController extends GetxController {
@@ -66,7 +68,7 @@ class VideoFeedController extends GetxController {
     if (url.trim().isEmpty) return '<empty>';
     final uri = Uri.tryParse(url);
     if (uri == null) return url.split('?').first.split('#').first;
-    return uri.replace(query: '', fragment: '').toString();
+    return url.split('?').first.split('#').first;
   }
 
   void _logFeedItems(String scope, List<VideoModel> items) {
@@ -96,7 +98,51 @@ class VideoFeedController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _fetchFeed();
+    unawaited(_initFeed());
+  }
+
+  Future<void> _initFeed() async {
+    FeedPage? warmPage;
+    if (Get.isRegistered<VideoFeedWarmupService>()) {
+      final warmup = Get.find<VideoFeedWarmupService>();
+      if (warmup.hasFreshSnapshot()) {
+        warmPage = warmup.snapshot;
+      } else if (warmup.isInFlight) {
+        warmPage = await warmup.waitForSnapshot();
+      }
+    }
+
+    if (warmPage != null && warmPage.items.isNotEmpty) {
+      _applyInitialPage(warmPage, source: 'Warmup');
+      if (videos.isEmpty) return;
+
+      // Récupérer le player pré-initialisé du warmup → démarrage instantané
+      if (Get.isRegistered<VideoFeedWarmupService>()) {
+        final preInit =
+            Get.find<VideoFeedWarmupService>().takePreInitializedController();
+        if (preInit != null && preInit.value.isInitialized) {
+          _controllers[0] = preInit;
+          _readyIndexes.add(0);
+          if (_isVisible && _currentIndex == 0) {
+            preInit.setVolume(1.0);
+            preInit.play();
+          }
+          _socketEnterVideo(0);
+          _preloadWindow(0);
+          _connectSocket();
+          update();
+          talker.info(
+              '[VideoFeed] ⚡ Instant start — pre-initialized player from warmup');
+          return;
+        }
+      }
+
+      _initializeFirstVideo();
+      _connectSocket();
+      return;
+    }
+
+    await _fetchFeed();
   }
 
   // ---------------------------------------------------------------------------
@@ -107,17 +153,7 @@ class VideoFeedController extends GetxController {
     talker.info(
         '[VideoFeed] 📺 Initializing feed (TikTok-like pagination: limit=5)...');
     final result = await _repository.fetchFeed(); // limit=5 by default
-    _cursor = result.cursor;
-    _hasMore = result.hasMore;
-    _initLikesFromItems(result.items);
-    videos.assignAll(result.items);
-    _logFeedItems('InitialFetch', result.items);
-
-    talker.info(
-      '[VideoFeed] ✓ Initial buffer loaded: ${result.items.length} videos | '
-      'Strategy: 1 visible + 1 prefetch + 3 buffer | '
-      'cursor=${_cursor?.substring(0, 8) ?? 'null'}... | hasMore=$_hasMore',
-    );
+    _applyInitialPage(result, source: 'Network');
 
     if (videos.isEmpty) {
       talker.warning('[VideoFeed] ⚠️ Feed is empty');
@@ -125,6 +161,20 @@ class VideoFeedController extends GetxController {
     }
     _initializeFirstVideo();
     _connectSocket();
+  }
+
+  void _applyInitialPage(FeedPage page, {required String source}) {
+    _cursor = page.cursor;
+    _hasMore = page.hasMore;
+    _initLikesFromItems(page.items);
+    videos.assignAll(page.items);
+    _logFeedItems('InitialFetch:$source', page.items);
+
+    talker.info(
+      '[VideoFeed] ✓ Initial buffer loaded ($source): ${page.items.length} videos | '
+      'Strategy: 1 visible + 1 prefetch + 3 buffer | '
+      'cursor=${_cursor?.substring(0, 8) ?? 'null'}... | hasMore=$_hasMore',
+    );
   }
 
   Future<void> _loadMore() async {
@@ -560,7 +610,7 @@ class VideoFeedController extends GetxController {
     if (videos.length <= 1) return 0;
     int next;
     do {
-      next = (DateTime.now().millisecondsSinceEpoch % videos.length).toInt();
+      next = Random().nextInt(videos.length);
     } while (next == _currentIndex);
     return next;
   }
@@ -706,7 +756,6 @@ class VideoFeedController extends GetxController {
   }
 
   void _refreshFeed() {
-    _isVisible = false;
     for (final controller in _controllers.values) {
       controller.dispose();
     }
@@ -717,6 +766,7 @@ class VideoFeedController extends GetxController {
     // Reset pagination et re-fetch
     _cursor = null;
     _hasMore = true;
+    _isVisible = true; // Réactivé avant _fetchFeed pour que la 1ère vidéo puisse jouer
     _fetchFeed();
     update();
   }
