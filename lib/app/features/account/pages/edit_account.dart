@@ -161,170 +161,171 @@ class _EditAccountPageState extends State<EditAccountPage> {
           if (state is LOGIN_SUCCESS) context.pop();
         },
         child: Scaffold(
-        backgroundColor: AppColors.whiteBackground,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Informations personnelles'),
-          titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
           backgroundColor: AppColors.whiteBackground,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Iconsax.arrow_left, size: 24),
-            onPressed: () => context.pop(),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Informations personnelles'),
+            backgroundColor: AppColors.whiteBackground,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left, size: 24),
+              onPressed: () => context.pop(),
+            ),
+            centerTitle: true,
           ),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: BlocBuilder<LoginCubit, LoginCubitState>(
-            builder: (context, state) {
-              return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Gap(24),
-                        _buildProfilePhotoCard(),
-                        const Gap(32),
+          body: SafeArea(
+            child: BlocBuilder<LoginCubit, LoginCubitState>(
+              builder: (context, state) {
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Gap(24),
+                          _buildProfilePhotoCard(),
+                          const Gap(32),
 
-                        // Section titre
-                        _buildSectionHeader(context, "Identité"),
-                        const Gap(12),
+                          // Section titre
+                          _buildSectionHeader(context, "Identité"),
+                          const Gap(12),
 
-                        CustomTextField(
-                          controller: _formController.firstName,
-                          prefixIcon: const Icon(Iconsax.user, size: 20),
-                          labelText: 'Nom',
-                          validator: (String? value) =>
-                              FormUtils.fieldValidator(value: value),
-                        ),
-                        CustomTextField(
-                          controller: _formController.lastName,
-                          prefixIcon: const Icon(Iconsax.user, size: 20),
-                          labelText: 'Prénom',
-                          validator: (String? value) =>
-                              FormUtils.fieldValidator(value: value),
-                        ),
-
-                        const Gap(16),
-                        _buildSectionHeader(context, "Contact"),
-                        const Gap(12),
-
-                        InternationalPhoneInput(
-                          initialPhoneNumber:
-                              sessionManager.currentUser!.phoneNumber,
-                          onValidPhoneNumber: (value) {
-                            phoneNumber = value;
-                          },
-                          onInputValidated: onInputValidated,
-                          isEnabled: false,
-                        ),
-                        const Gap(10),
-                        CustomTextField(
-                          controller: _formController.email,
-                          prefixIcon: const Icon(Iconsax.sms, size: 20),
-                          labelText: 'Email',
-                          isEnabled: false,
-                          textInputType: TextInputType.emailAddress,
-                          validator: (String? value) =>
-                              FormUtils.emailValidator(email: value),
-                        ),
-
-                        // Info box pour les champs non modifiables
-                        const Gap(12),
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF9FAFB),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFFF2F4F7)),
+                          CustomTextField(
+                            controller: _formController.firstName,
+                            prefixIcon: const Icon(Iconsax.user, size: 20),
+                            labelText: 'Nom',
+                            validator: (String? value) =>
+                                FormUtils.fieldValidator(value: value),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Iconsax.info_circle,
-                                size: 18,
-                                color: const Color(0xFF667085),
-                              ),
-                              const Gap(10),
-                              Expanded(
-                                child: Text(
-                                  "Le numéro de téléphone et l'email ne peuvent pas être modifiés. Contactez le support si nécessaire.",
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: const Color(0xFF667085),
-                                        height: 1.4,
-                                      ),
+                          CustomTextField(
+                            controller: _formController.lastName,
+                            prefixIcon: const Icon(Iconsax.user, size: 20),
+                            labelText: 'Prénom',
+                            validator: (String? value) =>
+                                FormUtils.fieldValidator(value: value),
+                          ),
+
+                          const Gap(16),
+                          _buildSectionHeader(context, "Contact"),
+                          const Gap(12),
+
+                          InternationalPhoneInput(
+                            initialPhoneNumber:
+                                sessionManager.currentUser!.phoneNumber,
+                            onValidPhoneNumber: (value) {
+                              phoneNumber = value;
+                            },
+                            onInputValidated: onInputValidated,
+                            isEnabled: false,
+                          ),
+                          const Gap(10),
+                          CustomTextField(
+                            controller: _formController.email,
+                            prefixIcon: const Icon(Iconsax.sms, size: 20),
+                            labelText: 'Email',
+                            isEnabled: false,
+                            textInputType: TextInputType.emailAddress,
+                            validator: (String? value) =>
+                                FormUtils.emailValidator(email: value),
+                          ),
+
+                          // Info box pour les champs non modifiables
+                          const Gap(12),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF9FAFB),
+                              borderRadius: BorderRadius.circular(12),
+                              border:
+                                  Border.all(color: const Color(0xFFF2F4F7)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Iconsax.info_circle,
+                                  size: 18,
+                                  color: const Color(0xFF667085),
                                 ),
-                              ),
-                            ],
+                                const Gap(10),
+                                Expanded(
+                                  child: Text(
+                                    "Le numéro de téléphone et l'email peuvent être modifiés dans le menu \"Changer mes identifiants de connexion\"",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: const Color(0xFF667085),
+                                          height: 1.4,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const Gap(100),
-                      ],
+                          const Gap(100),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-        bottomNavigationBar: Container(
-          height: 100,
-          padding: const EdgeInsets.all(10.0),
-          margin:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          decoration: BoxDecoration(
-            color: AppColors.whiteBackground,
-            border: const Border(
-              top: BorderSide(color: Color(0xFFF2F4F7)),
+                );
+              },
             ),
           ),
-          child: BlocBuilder<LoginCubit, LoginCubitState>(
-            builder: (context, state) {
-              return CustomLoadingButtom(
-                isLoading: (state is LOGIN_LOADING),
-                onClick: ((state is LOGIN_LOADING))
-                    ? null
-                    : () async {
-                        String? avatar;
-                        inspect(fileUploaderController);
-                        if (fileUploaderController.file != null) {
-                          avatar = await uploadFile(
-                              file: fileUploaderController.file!);
-                        }
+          bottomNavigationBar: Container(
+            height: 100,
+            padding: const EdgeInsets.all(10.0),
+            margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            decoration: BoxDecoration(
+              color: AppColors.whiteBackground,
+              border: const Border(
+                top: BorderSide(color: Color(0xFFF2F4F7)),
+              ),
+            ),
+            child: BlocBuilder<LoginCubit, LoginCubitState>(
+              builder: (context, state) {
+                return CustomLoadingButtom(
+                  isLoading: (state is LOGIN_LOADING),
+                  onClick: ((state is LOGIN_LOADING))
+                      ? null
+                      : () async {
+                          String? avatar;
+                          inspect(fileUploaderController);
+                          if (fileUploaderController.file != null) {
+                            avatar = await uploadFile(
+                                file: fileUploaderController.file!);
+                          }
 
-                        if (_formKey.currentState!.validate() &&
-                            isPhoneNumberValid) {
-                          FocusScope.of(context).unfocus();
+                          if (_formKey.currentState!.validate() &&
+                              isPhoneNumberValid) {
+                            FocusScope.of(context).unfocus();
 
-                          final body = UpdateUserDto(
-                            firstName: _formController.firstName!.text,
-                            lastName: _formController.lastName!.text,
-                            email: _formController.email!.text,
-                            avatar:
-                                avatar ?? sessionManager.currentUser!.avatar,
-                            phoneNumber: phoneNumber,
-                          );
+                            final body = UpdateUserDto(
+                              firstName: _formController.firstName!.text,
+                              lastName: _formController.lastName!.text,
+                              email: _formController.email!.text,
+                              avatar:
+                                  avatar ?? sessionManager.currentUser!.avatar,
+                              phoneNumber: phoneNumber,
+                            );
 
-                          context.read<LoginCubit>().updateUserData(
-                                body: body,
-                              );
-                        }
-                      },
-                text: "Enregistrer les modifications",
-              );
-            },
+                            context.read<LoginCubit>().updateUserData(
+                                  body: body,
+                                );
+                          }
+                        },
+                  text: "Enregistrer les modifications",
+                );
+              },
+            ),
           ),
-        ),
-      ).safeArea(),
+        ).safeArea(),
       ),
     );
   }
