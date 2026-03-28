@@ -23,6 +23,7 @@ import '../models/auth/update_user_response_model.dart';
 import '../models/remote/files/file_data_model.dart';
 import '../models/auth/demande_pro_particulier_body.dart';
 import '../models/auth/demande_pro_particulier_me_response.dart';
+import '../models/remote/user/contact_change_models.dart';
 
 part 'auth_provider.g.dart';
 
@@ -94,4 +95,14 @@ abstract class AuthProvider {
 
   @GET('/demandes-pro-particulier/me')
   Future<DemandeProParticulierMeResponse> getDemandeProParticulierMe();
+
+  @POST('/users/request-contact-change')
+  Future<ContactChangeResponse> requestContactChange(
+    @Body() RequestContactChangeBody body,
+  );
+
+  @POST('/users/confirm-contact-change')
+  Future<UpdateUserResponseModel> confirmContactChange(
+    @Body() ConfirmContactChangeBody body,
+  );
 }

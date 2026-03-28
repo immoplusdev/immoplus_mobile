@@ -9,6 +9,11 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
+import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
+import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
+import 'package:immoplus/app/features/settings/contact_change/view/confirm_contact_change_page.dart';
+import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
+import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/pages/permission_page.dart';
@@ -190,6 +195,33 @@ class AppRouter {
         path: '/become_pro_form',
         name: BecomeProFormPage.name,
         builder: (context, state) => const BecomeProFormPage(),
+      ),
+      GoRoute(
+        path: ChangeCredentialsPage.path,
+        name: ChangeCredentialsPage.name,
+        builder: (context, state) => const ChangeCredentialsPage(),
+      ),
+      GoRoute(
+        path: '/settings/change-contact',
+        name: RequestContactChangePage.name,
+        builder: (context, state) => BlocProvider(
+          create: (_) => ContactChangeCubit(),
+          child: RequestContactChangePage(
+            type: state.extra as ContactChangeType,
+          ),
+        ),
+        routes: [
+          GoRoute(
+            path: 'confirm',
+            name: ConfirmContactChangePage.name,
+            builder: (context, state) => BlocProvider(
+              create: (_) => ContactChangeCubit(),
+              child: ConfirmContactChangePage(
+                type: state.extra as ContactChangeType,
+              ),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/change_password',

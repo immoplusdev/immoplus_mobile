@@ -14,7 +14,7 @@ import 'package:immoplus/app/data/enums/demande_pro_particulier_status.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
-import 'package:immoplus/app/features/account/pages/change_password.dart';
+import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/widgets/delete_account_dialog.dart';
 import 'package:immoplus/app/features/become_pro/pages/become_pro_intro_page.dart';
@@ -338,21 +338,7 @@ class _AccountPageState extends State<AccountPage> {
             await _refreshUser();
           },
         ),
-        SettingsTile(
-          shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(
-              Icon(FontAwesomeIcons.lock, size: 18, color: _kIconColor)),
-          title: 'Changer mon mot de passe',
-          titleColor: _kLabelColor,
-          trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: _kLabelColor,
-            height: 1.25,
-          ),
-          onTap: () => context.pushNamed(ChangePassword.name),
-        ),
+        _buildCredentialsTile(),
         _buildTermsTile(SettingsTile.shapeMiddle),
         SettingsTile(
           shape: SettingsTile.shapeLast,
@@ -502,6 +488,24 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCredentialsTile() {
+    return SettingsTile(
+      shape: SettingsTile.shapeMiddle,
+      leading: _iconLeading(
+          Icon(FontAwesomeIcons.lock, size: 18, color: _kIconColor)),
+      title: 'Changer mes identifiants de connexion',
+      titleColor: _kLabelColor,
+      trailingColor: _kTrailingColor,
+      titleStyle: GoogleFonts.dmSans(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: _kLabelColor,
+        height: 1.25,
+      ),
+      onTap: () => context.pushNamed(ChangeCredentialsPage.name),
     );
   }
 

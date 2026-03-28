@@ -26,6 +26,7 @@ import '../models/remote/files/file_data_model.dart';
 import '../providers/auth_provider.dart';
 import '../models/auth/demande_pro_particulier_body.dart';
 import '../models/auth/demande_pro_particulier_me_response.dart';
+import '../models/remote/user/contact_change_models.dart';
 
 class AuthRepository {
   final dioClient = getIt<Dio>();
@@ -344,6 +345,40 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to get demande pro: $error');
+    }
+  }
+
+  Future<ContactChangeResponse> requestContactChange(
+      RequestContactChangeBody body) async {
+    try {
+      return await AuthProvider(dioClient).requestContactChange(body);
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      final data = dioError.response?.data;
+      if (data is Map && data['message'] != null) {
+        throw RequestResponseExeption(data['message'].toString());
+      }
+      throw RequestResponseExeption(dioError.message ?? 'Erreur réseau');
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<UpdateUserResponseModel> confirmContactChange(
+      ConfirmContactChangeBody body) async {
+    try {
+      return await AuthProvider(dioClient).confirmContactChange(body);
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      final data = dioError.response?.data;
+      if (data is Map && data['message'] != null) {
+        throw RequestResponseExeption(data['message'].toString());
+      }
+      throw RequestResponseExeption(dioError.message ?? 'Erreur réseau');
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
     }
   }
 }

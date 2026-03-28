@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   // static Color primary = HexColor("#006FFD"); // HexColor('#2172cb');
   static Color primary = customBlue;
+  static Color green1CA53F = const Color(0xff1CA53F);
+  static Color redFF0000 = const Color(0xffFF0000);
   static Color noSelected = CupertinoColors.inactiveGray;
   static Color primaryLite = Color(0xFFEAF4FE);
   static Color scafold = const Color.fromARGB(255, 238, 247, 255);
