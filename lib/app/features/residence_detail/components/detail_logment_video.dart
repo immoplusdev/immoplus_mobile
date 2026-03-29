@@ -23,7 +23,7 @@ class DetailLogmentVideo extends StatelessWidget {
             const Text(
               'Visite vidéo',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.3,
                 color: Color(0xFF222222),

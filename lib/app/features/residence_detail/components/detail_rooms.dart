@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class DetailLogmentRooms extends StatelessWidget {
   const DetailLogmentRooms({super.key, required this.logmentModel});
@@ -70,7 +71,7 @@ class _RoomItem extends StatelessWidget {
         Icon(
           _icon,
           size: 20,
-          color: const Color(0xFF3D4A5C),
+          color:  Color(0xff2744de),
         ),
         const SizedBox(width: 6),
         Text(

@@ -16,11 +16,7 @@ import 'package:immoplus/app/features/residence_detail/components/inititial_deta
 import 'package:immoplus/app/features/residence_detail/components/logment_bottom_bar.dart';
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart';
 import 'package:immoplus/app/logic/request_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/svgs_icons.dart';
-
-import 'components/detail_description.dart';
 import 'components/detail_logment_amentities.dart';
 import 'components/detail_logment_appbar.dart';
 import 'components/detail_logment_map.dart';
@@ -92,7 +88,7 @@ class _ResidencePageState extends State<ResidencePage> {
 
 
                          // ── Description with "Lire la suite" ──
-                const DetailLogmentTitle2(title: 'À propos de ce logement'),
+                const DetailLogmentTitle2(title: 'Description'),
                 const SliverGap(4),
                 _ExpandableDescription(description: data.description),
 
@@ -100,7 +96,7 @@ class _ResidencePageState extends State<ResidencePage> {
 
                  // ── Amenities ──
                 const DetailLogmentTitle2(
-                    title: 'Ce que propose ce logement'),
+                    title: 'Commodités'),
                 const SliverGap(8),
                 DetailLogmentAmentities(residenceModel: data),
                 const SliverGap(12),
@@ -339,15 +335,15 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                       'Lire la suite',
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w100,
-                        color: const Color(0xFF343333).withOpacity(0.80),
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xff2744de),
                       ),
                     ),
                     const SizedBox(width: 4),
                     Icon(
                       Icons.chevron_right,
                       size: 15,
-                      color:const Color(0xFF343333).withOpacity(0.80),
+                      color:const Color(0xff2744de).withOpacity(0.80),
                     ),
                   ],
                 ),
@@ -381,7 +377,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'À propos du logement',
+                'Description',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -445,15 +441,15 @@ class _ViewAllLink extends StatelessWidget {
             label,
             style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w100,
-                        color: const Color(0xFF343333).withOpacity(0.80),
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff2744de),
                       )
           ),
           const SizedBox(width: 4),
           Icon(
              Icons.chevron_right,
             size: 15,
-            color: const Color(0xFF343333).withOpacity(0.80),
+            color: const  Color(0xff2744de),
           ),
         ],
       ),

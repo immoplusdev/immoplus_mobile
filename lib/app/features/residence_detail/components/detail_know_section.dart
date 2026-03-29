@@ -176,10 +176,10 @@ class _KnowCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: Color(0xff2744de).withOpacity(0.04),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 22, color: Colors.grey.shade700),
+            child: Icon(icon, size: 22, color: Color(0xff2744de)),
           ),
           const SizedBox(width: 14),
           // Content

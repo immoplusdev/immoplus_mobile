@@ -120,13 +120,13 @@ class _HighlightTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color:  Color(0xff2744de).withOpacity(0.04),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               data.icon,
               size: 22,
-              color: Colors.grey.shade700,
+              color:  Color(0xff2744de),
             ),
           ),
           const SizedBox(width: 14),

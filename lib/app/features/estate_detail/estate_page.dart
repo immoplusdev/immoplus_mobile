@@ -319,15 +319,15 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                       'Lire la suite',
                       style: TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w100,
-                        color: const Color(0xFF343333).withOpacity(0.80),
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff2744de).withOpacity(0.80),
                       ),
                     ),
                     const SizedBox(width: 4),
                     Icon(
                       Icons.chevron_right,
                       size: 15,
-                      color: const Color(0xFF343333).withOpacity(0.80),
+                      color: const Color(0xff2744de).withOpacity(0.80),
                     ),
                   ],
                 ),
