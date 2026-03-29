@@ -350,7 +350,7 @@ class _VideoPageItemState extends State<VideoPageItem>
                 valueListenable: _isDescriptionExpanded,
                 builder: (_, expanded, __) => LayoutBuilder(
                   builder: (context, constraints) => SocialPostHeader(
-                    username: video.content?.title ?? 'Immoplus',
+                    username: video.content?.title ?? 'Immo Plus',
                     avatarUrl: widget.avatarUrl ?? video.author?.avatar,
                     avatarPath: widget.avatarPath,
                     date: _formatDate(video.createdAt),

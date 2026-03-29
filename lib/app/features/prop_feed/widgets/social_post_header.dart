@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/description_footer.dart';
+import 'package:immoplus/app/features/prop_feed/widgets/profile_avatar.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
 /// En-tête de post type TikTok : avatar, nom, légende avec hashtags.
@@ -110,16 +111,18 @@ class SocialPostHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // GestureDetector(
-        //   onTap: onFollowTap,
-        //   child: ProfileAvatar(
-        //     username: username,
-        //     avatarUrl: avatarUrl,
-        //     avatarPath: avatarPath,
-        //     verify: verify,
-        //   ),
-        // ),
-        // const SizedBox(width: 4),
+        if (username == 'Immo Plus') ...[
+          GestureDetector(
+            onTap: onFollowTap,
+            child: ProfileAvatar(
+              username: username,
+              avatarUrl: "https://image2url.com/r2/default/images/1774772507455-c74e5e54-899a-4b4f-b36d-18b292a0784d.jpg",
+              avatarPath: avatarPath,
+              verify: verify,
+            ),
+          ),
+          const SizedBox(width: 4),
+        ],
         Expanded(
           child: Row(
             mainAxisSize: MainAxisSize.min,
