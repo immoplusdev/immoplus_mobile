@@ -98,7 +98,7 @@ class _ReservationProvider implements ReservationProvider {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/reservations',
+            '/v2/reservations',
             queryParameters: queryParameters,
             data: _data,
           )

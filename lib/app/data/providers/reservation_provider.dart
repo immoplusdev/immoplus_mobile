@@ -28,7 +28,7 @@ abstract class ReservationProvider {
       @Query("_order_dir") String? orderDir,
       [@Query('_where') List<String>? where]);
 
-  @POST("/reservations")
+  @POST("/v2/reservations")
   Future<ReservationResponse> createBookings(
       @Body() ReservationRequestBody body);
 
