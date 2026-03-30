@@ -182,7 +182,19 @@ class VideoFeedController extends GetxController {
     _cursor = page.cursor;
     _hasMore = page.hasMore;
     _initLikesFromItems(page.items);
-    videos.assignAll(page.items);
+
+    if (videos.isNotEmpty) {
+      // #23 — Deep-link robustness: if a video was already inserted (via prepareDeepLink),
+      // we append the new ones avoiding duplicates to prevent the deep-link video
+      // from being wiped out by the initial feed fetch.
+      final existingIds = videos.map((v) => v.id).toSet();
+      final toAdd =
+          page.items.where((v) => !existingIds.contains(v.id)).toList();
+      videos.addAll(toAdd);
+    } else {
+      videos.assignAll(page.items);
+    }
+
     _logFeedItems('InitialFetch:$source', page.items);
 
     talker.info(
