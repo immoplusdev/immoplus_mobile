@@ -67,14 +67,16 @@ class FeedPiece {
 }
 
 class FeedItemStats {
-  const FeedItemStats({this.likes = 0, this.views = 0});
+  const FeedItemStats({this.likes = 0, this.views = 0, this.liked = false});
 
   final int likes;
   final int views;
+  final bool liked;
 
   factory FeedItemStats.fromJson(Map<String, dynamic> json) => FeedItemStats(
         likes: json['likes'] as int? ?? 0,
         views: json['views'] as int? ?? 0,
+        liked: json['liked'] as bool? ?? false,
       );
 }
 

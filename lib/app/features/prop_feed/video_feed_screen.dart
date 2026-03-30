@@ -17,7 +17,10 @@ const _statusBarStyle = SystemUiOverlayStyle(
 
 /// Écran principal du feed vidéo (Vivre). Scroll infini : boucle à la fin.
 class VideoFeedView extends StatefulWidget {
-  const VideoFeedView({super.key});
+  const VideoFeedView({super.key, this.initialVideoId});
+
+  /// Si non-null, le feed se positionne sur cette vidéo au démarrage (deep link).
+  final String? initialVideoId;
 
   @override
   State<VideoFeedView> createState() => _VideoFeedViewState();
@@ -40,7 +43,16 @@ class _VideoFeedViewState extends State<VideoFeedView>
     final n = controller.videos.length;
     final mid = n > 0 ? n * (_loopMultiplier ~/ 2) : 0;
     _pageController = PreloadPageController(initialPage: mid);
-    if (controller.hasBeenHidden) {
+
+    if (widget.initialVideoId != null) {
+      // Deep link : attendre que le feed soit prêt, puis jump sur la vidéo
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        final idx = await controller.prepareDeepLink(widget.initialVideoId!);
+        if (!mounted || idx == -1) return;
+        _jumpToVideoIndex(idx);
+      });
+    } else if (controller.hasBeenHidden) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _jumpToRandomPage();
@@ -59,6 +71,17 @@ class _VideoFeedViewState extends State<VideoFeedView>
     final targetPage = base >= mid ? base : base + n;
     _pageController.jumpToPage(targetPage);
     controller.onPageChanged(randomVideoIndex);
+  }
+
+  void _jumpToVideoIndex(int videoIndex) {
+    final controller = Get.find<VideoFeedController>();
+    final n = controller.videos.length;
+    if (n == 0 || videoIndex < 0 || videoIndex >= n) return;
+    final mid = n * (_loopMultiplier ~/ 2);
+    final base = (mid ~/ n) * n + videoIndex;
+    final targetPage = base >= mid ? base : base + n;
+    _pageController.jumpToPage(targetPage);
+    controller.onPageChanged(videoIndex);
   }
 
   void onFeedVisible() {

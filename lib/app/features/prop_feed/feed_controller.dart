@@ -95,6 +95,21 @@ class VideoFeedController extends GetxController {
     );
   }
 
+  /// Deep link : retourne l'index de la vidéo dans [videos].
+  /// -1 si introuvable (le feed démarre normalement).
+  Future<int> prepareDeepLink(String videoId) async {
+    // Déjà dans la liste ?
+    final existing = videos.indexWhere((v) => v.id == videoId);
+    if (existing != -1) return existing;
+
+    // Sinon, fetch et insert en tête
+    final video = await _repository.fetchVideoDetail(videoId);
+    if (video == null) return -1;
+    videos.insert(0, video);
+    _initLikesFromItems([video]);
+    return 0;
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -228,6 +243,7 @@ class VideoFeedController extends GetxController {
     for (final v in items) {
       if (!_likesCount.containsKey(v.id)) {
         _likesCount[v.id] = v.stats?.likes ?? 0;
+        _isLiked[v.id] = v.stats?.liked ?? false;
       }
     }
   }

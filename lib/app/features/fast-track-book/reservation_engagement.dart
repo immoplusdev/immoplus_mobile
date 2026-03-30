@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
+import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
@@ -65,6 +68,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
 
   // ── État local ──────────────────────────────────────────────────────────────
   ReservationBannerState _currentState = ReservationBannerState.idle;
+  late double _montantTotal;
+  bool _isFetchingReservation = false;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
   static const Color _primaryBlue = Color(0xFF2744DE);
@@ -80,6 +85,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     super.initState();
 
     _currentState = ReservationPendingBanner.bannerStateNotifier.value;
+    _montantTotal = widget.montantTotal;
 
     _messageController = AnimationController(
       vsync: this,
@@ -97,15 +103,21 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     }
 
     ReservationPendingBanner.bannerStateNotifier.addListener(_onStateChanged);
+    ReservationPendingBanner.pushNotifier.addListener(_onPushReceived);
 
-    // ── Polling agressif : soft refresh toutes les 5s ────────────────────────
+    // ── Polling agressif : fetch API directement toutes les 5s ──────────────
     _startAggressiveRefresh();
   }
 
-  // ── Polling agressif ───────────────────────────────────────────────────────
+  // ── Push notification → re-fetch immédiat ─────────────────────────────────
+  void _onPushReceived() {
+    if (!mounted || _isTerminal) return;
+    _pollReservation();
+  }
+
+  // ── Polling agressif — fetch API directement (le banner est démonté) ────────
   void _startAggressiveRefresh() {
-    // Force un refresh immédiat à l'ouverture de la frame
-    ReservationPendingBanner.softRefresh();
+    _pollReservation(); // refresh immédiat
 
     _aggressiveRefreshTimer?.cancel();
     _aggressiveRefreshTimer = Timer.periodic(_aggressiveInterval, (_) {
@@ -113,21 +125,85 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         _aggressiveRefreshTimer?.cancel();
         return;
       }
-      ReservationPendingBanner.softRefresh();
+      _pollReservation();
     });
   }
 
-  // ── Listener : changement de statut ────────────────────────────────────────
+  /// Fetch direct de la réservation depuis l'API et mise à jour du state.
+  Future<void> _pollReservation() async {
+    if (_isFetchingReservation) return;
+    _isFetchingReservation = true;
+    try {
+      final repo = getIt<ResidenceRepository>();
+      final response = await repo.getReservation(id: widget.reservationId);
+      if (!mounted) return;
+
+      final reservation = response.data;
+      final status = StatusReservation.fromString(
+          reservation.statusReservation);
+
+      // Détermine le nouvel état
+      ReservationBannerState newState;
+      switch (status) {
+        case StatusReservation.enAttenteReponseProprietaire:
+          newState = ReservationBannerState.waitingOwner;
+          break;
+        case StatusReservation.enAttentePaiementClient:
+          newState = ReservationBannerState.waitingPayment;
+          break;
+        case StatusReservation.rejete:
+        case StatusReservation.proprietaireAnnuleReservation:
+          newState = ReservationBannerState.endedRefused;
+          break;
+        case StatusReservation.proprietaireSansReponse:
+          newState = ReservationBannerState.endedWaitingExpired;
+          break;
+        case StatusReservation.clientSansReponse:
+          newState = ReservationBannerState.endedPaymentExpired;
+          break;
+        default:
+          newState = ReservationBannerState.idle;
+      }
+
+      // Met à jour le montant frais
+      _montantTotal = reservation.montantTotalReservation;
+
+      // Met à jour le notifier (pour cohérence) + état local
+      ReservationPendingBanner.bannerStateNotifier.value = newState;
+
+      if (_currentState != newState) {
+        setState(() {
+          _currentState = newState;
+          _messageIndex = 0;
+        });
+        _handleNewState(newState);
+      }
+    } catch (_) {
+      // En cas d'erreur réseau, on garde l'état actuel
+    } finally {
+      _isFetchingReservation = false;
+    }
+  }
+
+  // ── Listener : changement de statut (backup si banner remonté) ─────────────
   void _onStateChanged() {
     if (!mounted) return;
     final newState = ReservationPendingBanner.bannerStateNotifier.value;
+    if (_currentState == newState) return;
     setState(() {
       _currentState = newState;
       _messageIndex = 0;
     });
+    _handleNewState(newState);
+  }
 
+  // ── Gestion centralisée d'un changement d'état ────────────────────────────
+  void _handleNewState(ReservationBannerState newState) {
     switch (newState) {
       case ReservationBannerState.waitingOwner:
+        _startMessageRotation();
+        break;
+
       case ReservationBannerState.waitingPayment:
         _startMessageRotation();
         break;
@@ -136,7 +212,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
       case ReservationBannerState.endedWaitingExpired:
       case ReservationBannerState.endedPaymentExpired:
         _messageRotationTimer?.cancel();
-        _aggressiveRefreshTimer?.cancel(); // Plus besoin de poller
+        _aggressiveRefreshTimer?.cancel();
         break;
 
       case ReservationBannerState.idle:
@@ -180,6 +256,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     _messageRotationTimer?.cancel();
     ReservationPendingBanner.bannerStateNotifier
         .removeListener(_onStateChanged);
+    ReservationPendingBanner.pushNotifier.removeListener(_onPushReceived);
     _messageController.dispose();
     super.dispose();
   }
@@ -199,7 +276,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Confirmation de réservation',
+          'Demande de réservation',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -222,9 +299,11 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
             right: 0,
             height: 580,
             child: Lottie.asset(
-              'assets/lotties/agenda.json',
+              _currentState == ReservationBannerState.waitingPayment
+                  ? 'assets/lotties/success.json'
+                  : 'assets/lotties/agenda.json',
               fit: BoxFit.contain,
-              repeat: !_isTerminal,
+              repeat: _currentState != ReservationBannerState.waitingPayment && !_isTerminal,
               animate: true,
             ),
           ),
@@ -545,7 +624,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                 extra: PaymentPageAdapter(
                   itemId: widget.reservationId,
                   collection: ProductType.reservations.name,
-                  amount: widget.montantTotal.toInt(),
+                  amount: _montantTotal.toInt(),
                 ),
               ),
             ),

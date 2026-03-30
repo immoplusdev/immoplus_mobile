@@ -6,6 +6,7 @@ import 'package:immoplus/app/core/enums/push_notification_type.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/extensions/go_router_extensions.dart';
 
+import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/firebase_options.dart';
 import 'package:injectable/injectable.dart';
@@ -42,11 +43,13 @@ class NotificationService {
         if (type == PushNotificationType.reservationAccepted) {
           log('🔔 Reservation accepted → update UI instantly + refresh',
               name: 'NOTIFICATION');
+          ReservationPendingBanner.onPushReceived();
         }
 
         if (type == PushNotificationType.reservationRefused) {
           log('🔔 Reservation refused → update UI instantly + refresh',
               name: 'NOTIFICATION');
+          ReservationPendingBanner.onPushReceived();
         }
       }
 

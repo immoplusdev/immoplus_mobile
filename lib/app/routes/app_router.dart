@@ -325,6 +325,14 @@ class AppRouter {
             pageBuilder: (context, state) => NoTransitionPage(
               child: const VivrePage(),
             ),
+            routes: [
+              GoRoute(
+                path: ':videoId',
+                builder: (context, state) => VivrePage(
+                  initialVideoId: state.pathParameters['videoId'],
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/map',

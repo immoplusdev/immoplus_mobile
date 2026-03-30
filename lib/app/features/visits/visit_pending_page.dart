@@ -301,23 +301,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                       ),
                       const SizedBox(height: 20),
 
-                      // ── Identifiant de la demande ───────────────────────
-                      if (_visitData != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildIdSection(),
-                        ),
-                      if (_visitData != null) const SizedBox(height: 12),
-
-                      // ── Statuts (service + paiement) ────────────────────
-                      if (_visitData != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildStatusSection(),
-                        ),
-                      if (_visitData != null) const SizedBox(height: 12),
-
-                      // ── Jour de visite ──────────────────────────────────
+     // ── Jour de visite ──────────────────────────────────
                       if (_visitData != null)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -330,6 +314,23 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: _buildDetailActions(),
                       ),
+                     
+
+                      // ── Statuts (service + paiement) ────────────────────
+                      if (_visitData != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: _buildStatusSection(),
+                        ),
+                      if (_visitData != null) const SizedBox(height: 12),
+
+                  // ── Identifiant de la demande ───────────────────────
+                      if (_visitData != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: _buildIdSection(),
+                        ),
+                      if (_visitData != null) const SizedBox(height: 12),
                       const SizedBox(height: 24),
 
                       // ── Boutons ───────────────────────────────────────────
