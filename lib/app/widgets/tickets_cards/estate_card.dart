@@ -67,9 +67,9 @@ class _EstateCardState extends State<EstateCard> {
                                       color: Colors.grey.shade200,
                                       width: double.infinity,
                                       child: CachedNetworkImage(
-                                        imageUrl: Utils.getImagePath(
-                                            id: e), //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
-
+                                        imageUrl: Utils.getImagePath(id: e),
+                                        fadeInDuration: Duration.zero,
+                                        fadeOutDuration: Duration.zero,
                                         placeholder: (context, url) =>
                                             Shimmer.fromColors(
                                           baseColor: Colors.grey.shade300,

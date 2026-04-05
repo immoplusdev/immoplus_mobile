@@ -75,6 +75,8 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                               child: CachedNetworkImage(
                                 imageUrl: Utils.getImagePath(
                                     id: widget.residenceModel.images.first),
+                                fadeInDuration: Duration.zero,
+                                fadeOutDuration: Duration.zero,
                                 placeholder: (context, url) =>
                                     Shimmer.fromColors(
                                   baseColor: Colors.grey.shade300,

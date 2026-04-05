@@ -73,6 +73,8 @@ class _FurnitureCardState extends State<FurnitureCard> {
                                   ),
                                   child: CachedNetworkImage(
                                     imageUrl: Utils.getImagePath(id: e),
+                                    fadeInDuration: Duration.zero,
+                                    fadeOutDuration: Duration.zero,
                                     placeholder: (context, url) =>
                                         Shimmer.fromColors(
                                       baseColor: Colors.grey.shade300,
