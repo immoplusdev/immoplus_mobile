@@ -33,7 +33,7 @@ import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
-import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
+import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
@@ -278,8 +278,8 @@ class AppRouter {
       ),
       GoRoute(
         path: '/otp-confirm',
-        name: OtpPageTest.name,
-        builder: (context, state) => OtpPageTest(
+        name: OtpPage.name,
+        builder: (context, state) => OtpPage(
           currentPhoneNumber: state.extra as String,
         ),
       ),

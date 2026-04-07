@@ -119,6 +119,21 @@ class AuthRepository {
     }
   }
 
+  Future<HttpResponse> sendWhatsappOtp({required SendOptModel body}) async {
+    try {
+      final response = await AuthProvider(dioClient).sendWhatsappOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send WhatsApp OTP: ${dioError.message}');
+    } catch (error) {
+      inspect(error);
+      log('Error: $error');
+      throw Exception('Failed to send WhatsApp OTP: $error');
+    }
+  }
+
   Future<HttpResponse> updatePassword({required UpdatePasswordDto body}) async {
     try {
       final response = await AuthProvider(dioClient).updatePassword(body);
