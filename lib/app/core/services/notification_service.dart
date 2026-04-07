@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus/app/core/enums/push_notification_type.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/extensions/go_router_extensions.dart';
+
+import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/firebase_options.dart';
 import 'package:injectable/injectable.dart';
@@ -30,6 +32,33 @@ class NotificationService {
   }
 
   void setupNotificationListener() {
+    /// Notification reçue quand l'app est ouverte
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      final data = event.notification.additionalData;
+
+      if (data != null) {
+        final typeString = data['type'] as String?;
+        final type = PushNotificationType.fromString(typeString);
+
+        if (type == PushNotificationType.reservationAccepted) {
+          log('🔔 Reservation accepted → update UI instantly + refresh',
+              name: 'NOTIFICATION');
+          ReservationPendingBanner.onPushReceived();
+        }
+
+        if (type == PushNotificationType.reservationRefused) {
+          log('🔔 Reservation refused → update UI instantly + refresh',
+              name: 'NOTIFICATION');
+          ReservationPendingBanner.onPushReceived();
+        }
+      }
+
+      /// important : afficher quand même la notif
+      event.preventDefault();
+      event.notification.display();
+    });
+
+    /// Notification cliquée
     OneSignal.Notifications.addClickListener((event) {
       final data = event.notification.additionalData;
       if (data != null) {

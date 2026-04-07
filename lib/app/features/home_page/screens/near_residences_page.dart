@@ -84,7 +84,7 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'À Deux Pas de Vous',
+              'Près De Vous',
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,

@@ -56,6 +56,7 @@ mixin _$BienImmobilierModel {
   int? get nombreMaxOccupants => throw _privateConstructorUsedError;
   @JsonKey(defaultValue: false)
   bool? get fetesAutorises => throw _privateConstructorUsedError;
+  num? get score => throw _privateConstructorUsedError;
 
   /// Serializes this BienImmobilierModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -102,7 +103,8 @@ abstract class $BienImmobilierModelCopyWith<$Res> {
       @JsonKey(fromJson: toDouble) double? latitude,
       @JsonKey(fromJson: toDouble) double? longitude,
       @JsonKey(fromJson: toInt) int? nombreMaxOccupants,
-      @JsonKey(defaultValue: false) bool? fetesAutorises});
+      @JsonKey(defaultValue: false) bool? fetesAutorises,
+      num? score});
 
   $PositionModelCopyWith<$Res> get position;
   $VilleModelCopyWith<$Res>? get villeModel;
@@ -153,6 +155,7 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
     Object? longitude = freezed,
     Object? nombreMaxOccupants = freezed,
     Object? fetesAutorises = freezed,
+    Object? score = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -271,6 +274,10 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.fetesAutorises
           : fetesAutorises // ignore: cast_nullable_to_non_nullable
               as bool?,
+      score: freezed == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as num?,
     ) as $Val);
   }
 
@@ -350,7 +357,8 @@ abstract class _$$BienImmobilierModelImplCopyWith<$Res>
       @JsonKey(fromJson: toDouble) double? latitude,
       @JsonKey(fromJson: toDouble) double? longitude,
       @JsonKey(fromJson: toInt) int? nombreMaxOccupants,
-      @JsonKey(defaultValue: false) bool? fetesAutorises});
+      @JsonKey(defaultValue: false) bool? fetesAutorises,
+      num? score});
 
   @override
   $PositionModelCopyWith<$Res> get position;
@@ -402,6 +410,7 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
     Object? longitude = freezed,
     Object? nombreMaxOccupants = freezed,
     Object? fetesAutorises = freezed,
+    Object? score = freezed,
   }) {
     return _then(_$BienImmobilierModelImpl(
       id: null == id
@@ -520,6 +529,10 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.fetesAutorises
           : fetesAutorises // ignore: cast_nullable_to_non_nullable
               as bool?,
+      score: freezed == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as num?,
     ));
   }
 }
@@ -556,7 +569,8 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
       @JsonKey(fromJson: toDouble) this.latitude,
       @JsonKey(fromJson: toDouble) this.longitude,
       @JsonKey(fromJson: toInt) this.nombreMaxOccupants,
-      @JsonKey(defaultValue: false) this.fetesAutorises})
+      @JsonKey(defaultValue: false) this.fetesAutorises,
+      this.score})
       : _amentities = amentities,
         _tags = tags,
         _images = images,
@@ -674,10 +688,12 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
   @override
   @JsonKey(defaultValue: false)
   final bool? fetesAutorises;
+  @override
+  final num? score;
 
   @override
   String toString() {
-    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, villeModel: $villeModel, communeModel: $communeModel, video: $video, aLouer: $aLouer, latitude: $latitude, longitude: $longitude, nombreMaxOccupants: $nombreMaxOccupants, fetesAutorises: $fetesAutorises)';
+    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, villeModel: $villeModel, communeModel: $communeModel, video: $video, aLouer: $aLouer, latitude: $latitude, longitude: $longitude, nombreMaxOccupants: $nombreMaxOccupants, fetesAutorises: $fetesAutorises, score: $score)';
   }
 
   @override
@@ -732,7 +748,8 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
             (identical(other.nombreMaxOccupants, nombreMaxOccupants) ||
                 other.nombreMaxOccupants == nombreMaxOccupants) &&
             (identical(other.fetesAutorises, fetesAutorises) ||
-                other.fetesAutorises == fetesAutorises));
+                other.fetesAutorises == fetesAutorises) &&
+            (identical(other.score, score) || other.score == score));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -767,7 +784,8 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
         latitude,
         longitude,
         nombreMaxOccupants,
-        fetesAutorises
+        fetesAutorises,
+        score
       ]);
 
   /// Create a copy of BienImmobilierModel
@@ -789,36 +807,36 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
 
 abstract class _BienImmobilierModel implements BienImmobilierModel {
   factory _BienImmobilierModel(
-          {final String id,
-          final String nom,
-          final String typeBienImmobilier,
-          final String typeLocation,
-          final String description,
-          final List<CommoditeModel> amentities,
-          final List<String> tags,
-          final List<String> images,
-          final String adresse,
-          final PositionModel position,
-          final String statusValidation,
-          final int prix,
-          final bool featured,
-          final bool bienImmobilierDisponible,
-          final DateTime? createdAt,
-          final DateTime? updatedAt,
-          final DateTime? deletedAt,
-          final String miniatureId,
-          final List<PieceModel> pieces,
-          final String? ville,
-          final String? commune,
-          @JsonKey(name: 'ville_model') final VilleModel? villeModel,
-          @JsonKey(name: 'commune_model') final CommuneModel? communeModel,
-          final String? video,
-          final bool aLouer,
-          @JsonKey(fromJson: toDouble) final double? latitude,
-          @JsonKey(fromJson: toDouble) final double? longitude,
-          @JsonKey(fromJson: toInt) final int? nombreMaxOccupants,
-          @JsonKey(defaultValue: false) final bool? fetesAutorises}) =
-      _$BienImmobilierModelImpl;
+      {final String id,
+      final String nom,
+      final String typeBienImmobilier,
+      final String typeLocation,
+      final String description,
+      final List<CommoditeModel> amentities,
+      final List<String> tags,
+      final List<String> images,
+      final String adresse,
+      final PositionModel position,
+      final String statusValidation,
+      final int prix,
+      final bool featured,
+      final bool bienImmobilierDisponible,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final DateTime? deletedAt,
+      final String miniatureId,
+      final List<PieceModel> pieces,
+      final String? ville,
+      final String? commune,
+      @JsonKey(name: 'ville_model') final VilleModel? villeModel,
+      @JsonKey(name: 'commune_model') final CommuneModel? communeModel,
+      final String? video,
+      final bool aLouer,
+      @JsonKey(fromJson: toDouble) final double? latitude,
+      @JsonKey(fromJson: toDouble) final double? longitude,
+      @JsonKey(fromJson: toInt) final int? nombreMaxOccupants,
+      @JsonKey(defaultValue: false) final bool? fetesAutorises,
+      final num? score}) = _$BienImmobilierModelImpl;
 
   factory _BienImmobilierModel.fromJson(Map<String, dynamic> json) =
       _$BienImmobilierModelImpl.fromJson;
@@ -887,6 +905,8 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   @override
   @JsonKey(defaultValue: false)
   bool? get fetesAutorises;
+  @override
+  num? get score;
 
   /// Create a copy of BienImmobilierModel
   /// with the given fields replaced by the non-null parameter values.

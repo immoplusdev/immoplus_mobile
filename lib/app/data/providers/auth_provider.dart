@@ -21,6 +21,9 @@ import '../models/auth/update_password_dto.dart';
 import '../models/auth/update_user_dto.dart';
 import '../models/auth/update_user_response_model.dart';
 import '../models/remote/files/file_data_model.dart';
+import '../models/auth/demande_pro_particulier_body.dart';
+import '../models/auth/demande_pro_particulier_me_response.dart';
+import '../models/remote/user/contact_change_models.dart';
 
 part 'auth_provider.g.dart';
 
@@ -58,6 +61,10 @@ abstract class AuthProvider {
   @POST('/auth/update-password')
   Future<HttpResponse> updatePassword(@Body() UpdatePasswordDto updateUserDto);
 
+  @POST('/demandes-pro-particulier')
+  Future<HttpResponse> createDemandeProParticulier(
+      @Body() DemandeProParticulierBody body);
+
   @PATCH('/users/{id}')
   Future<UpdateUserResponseModel> updateUser(
       @Path() String id, @Body() UpdateUserDto updateUserDto);
@@ -85,4 +92,17 @@ abstract class AuthProvider {
   @POST('/auth/social-login')
   Future<AccountCreationResponse> socialLogin(
       @Body() SocialLoginBody socialLoginBody);
+
+  @GET('/demandes-pro-particulier/me')
+  Future<DemandeProParticulierMeResponse> getDemandeProParticulierMe();
+
+  @POST('/users/request-contact-change')
+  Future<ContactChangeResponse> requestContactChange(
+    @Body() RequestContactChangeBody body,
+  );
+
+  @POST('/users/confirm-contact-change')
+  Future<UpdateUserResponseModel> confirmContactChange(
+    @Body() ConfirmContactChangeBody body,
+  );
 }

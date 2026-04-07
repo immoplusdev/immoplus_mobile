@@ -50,8 +50,9 @@ class _ReservationProvider implements ReservationProvider {
     int page,
     int perPage,
     String? orderBy,
-    String? orderDir,
-  ) async {
+    String? orderDir, [
+    List<String>? where,
+  ]) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_search': search,
@@ -59,6 +60,7 @@ class _ReservationProvider implements ReservationProvider {
       r'_per_page': perPage,
       r'_order_by': orderBy,
       r'_order_dir': orderDir,
+      r'_where': where,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -96,7 +98,7 @@ class _ReservationProvider implements ReservationProvider {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/reservations',
+            '/v2/reservations',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -165,6 +167,37 @@ class _ReservationProvider implements ReservationProvider {
           .compose(
             _dio.options,
             '/reservations/action/annuler/${id}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ReservationResponse _value;
+    try {
+      _value = ReservationResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ReservationResponse> annulerReservationClient(
+    String id,
+    Map<String, dynamic> body,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _options = _setStreamType<ReservationResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reservations/action/annuler-client/${id}',
             queryParameters: queryParameters,
             data: _data,
           )

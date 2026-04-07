@@ -9,7 +9,8 @@ enum OrderDir {
 
 enum OrderByField {
   createdAt("createdAt"),
-  updatedAt("updatedAt");
+  updatedAt("updatedAt"),
+  score("score");
 
   final String value;
 

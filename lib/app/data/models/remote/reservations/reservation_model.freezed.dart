@@ -37,6 +37,8 @@ mixin _$ReservationModel {
   String get clientPhoneNumber => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
   String get updatedAt => throw _privateConstructorUsedError;
+  String? get delaisProprietaireReponse => throw _privateConstructorUsedError;
+  String? get delaisPaiementClient => throw _privateConstructorUsedError;
   ResidenceModel get residence => throw _privateConstructorUsedError;
   ClientModel get client => throw _privateConstructorUsedError;
   ProprietaireModel get proprietaire => throw _privateConstructorUsedError;
@@ -73,6 +75,8 @@ abstract class $ReservationModelCopyWith<$Res> {
       String clientPhoneNumber,
       String createdAt,
       String updatedAt,
+      String? delaisProprietaireReponse,
+      String? delaisPaiementClient,
       ResidenceModel residence,
       ClientModel client,
       ProprietaireModel proprietaire});
@@ -112,6 +116,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     Object? clientPhoneNumber = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? delaisProprietaireReponse = freezed,
+    Object? delaisPaiementClient = freezed,
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
@@ -177,6 +183,14 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      delaisProprietaireReponse: freezed == delaisProprietaireReponse
+          ? _value.delaisProprietaireReponse
+          : delaisProprietaireReponse // ignore: cast_nullable_to_non_nullable
+              as String?,
+      delaisPaiementClient: freezed == delaisPaiementClient
+          ? _value.delaisPaiementClient
+          : delaisPaiementClient // ignore: cast_nullable_to_non_nullable
+              as String?,
       residence: null == residence
           ? _value.residence
           : residence // ignore: cast_nullable_to_non_nullable
@@ -247,6 +261,8 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
       String clientPhoneNumber,
       String createdAt,
       String updatedAt,
+      String? delaisProprietaireReponse,
+      String? delaisPaiementClient,
       ResidenceModel residence,
       ClientModel client,
       ProprietaireModel proprietaire});
@@ -287,6 +303,8 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
     Object? clientPhoneNumber = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? delaisProprietaireReponse = freezed,
+    Object? delaisPaiementClient = freezed,
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
@@ -352,6 +370,14 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      delaisProprietaireReponse: freezed == delaisProprietaireReponse
+          ? _value.delaisProprietaireReponse
+          : delaisProprietaireReponse // ignore: cast_nullable_to_non_nullable
+              as String?,
+      delaisPaiementClient: freezed == delaisPaiementClient
+          ? _value.delaisPaiementClient
+          : delaisPaiementClient // ignore: cast_nullable_to_non_nullable
+              as String?,
       residence: null == residence
           ? _value.residence
           : residence // ignore: cast_nullable_to_non_nullable
@@ -387,6 +413,8 @@ class _$ReservationModelImpl implements _ReservationModel {
       this.clientPhoneNumber = '',
       this.createdAt = '',
       this.updatedAt = '',
+      this.delaisProprietaireReponse = null,
+      this.delaisPaiementClient = null,
       this.residence = const ResidenceModel(),
       this.client = const ClientModel(),
       this.proprietaire = const ProprietaireModel()})
@@ -449,6 +477,12 @@ class _$ReservationModelImpl implements _ReservationModel {
   final String updatedAt;
   @override
   @JsonKey()
+  final String? delaisProprietaireReponse;
+  @override
+  @JsonKey()
+  final String? delaisPaiementClient;
+  @override
+  @JsonKey()
   final ResidenceModel residence;
   @override
   @JsonKey()
@@ -459,7 +493,7 @@ class _$ReservationModelImpl implements _ReservationModel {
 
   @override
   String toString() {
-    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, residence: $residence, client: $client, proprietaire: $proprietaire)';
+    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, residence: $residence, client: $client, proprietaire: $proprietaire)';
   }
 
   @override
@@ -497,6 +531,11 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
+            (identical(other.delaisProprietaireReponse,
+                    delaisProprietaireReponse) ||
+                other.delaisProprietaireReponse == delaisProprietaireReponse) &&
+            (identical(other.delaisPaiementClient, delaisPaiementClient) ||
+                other.delaisPaiementClient == delaisPaiementClient) &&
             (identical(other.residence, residence) ||
                 other.residence == residence) &&
             (identical(other.client, client) || other.client == client) &&
@@ -506,26 +545,29 @@ class _$ReservationModelImpl implements _ReservationModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      statusReservation,
-      const DeepCollectionEquality().hash(_datesReservation),
-      dateDebut,
-      dateFin,
-      statusFacture,
-      retraitProEffectue,
-      montantTotalReservation,
-      montantReservationSansCommission,
-      montantPaye,
-      codeReservation,
-      notes,
-      clientPhoneNumber,
-      createdAt,
-      updatedAt,
-      residence,
-      client,
-      proprietaire);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        statusReservation,
+        const DeepCollectionEquality().hash(_datesReservation),
+        dateDebut,
+        dateFin,
+        statusFacture,
+        retraitProEffectue,
+        montantTotalReservation,
+        montantReservationSansCommission,
+        montantPaye,
+        codeReservation,
+        notes,
+        clientPhoneNumber,
+        createdAt,
+        updatedAt,
+        delaisProprietaireReponse,
+        delaisPaiementClient,
+        residence,
+        client,
+        proprietaire
+      ]);
 
   /// Create a copy of ReservationModel
   /// with the given fields replaced by the non-null parameter values.
@@ -561,6 +603,8 @@ abstract class _ReservationModel implements ReservationModel {
       final String clientPhoneNumber,
       final String createdAt,
       final String updatedAt,
+      final String? delaisProprietaireReponse,
+      final String? delaisPaiementClient,
       final ResidenceModel residence,
       final ClientModel client,
       final ProprietaireModel proprietaire}) = _$ReservationModelImpl;
@@ -598,6 +642,10 @@ abstract class _ReservationModel implements ReservationModel {
   String get createdAt;
   @override
   String get updatedAt;
+  @override
+  String? get delaisProprietaireReponse;
+  @override
+  String? get delaisPaiementClient;
   @override
   ResidenceModel get residence;
   @override

@@ -30,6 +30,9 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
       clientPhoneNumber: json['clientPhoneNumber'] as String? ?? '',
       createdAt: json['createdAt'] as String? ?? '',
       updatedAt: json['updatedAt'] as String? ?? '',
+      delaisProprietaireReponse:
+          json['delaisProprietaireReponse'] as String? ?? null,
+      delaisPaiementClient: json['delaisPaiementClient'] as String? ?? null,
       residence: json['residence'] == null
           ? const ResidenceModel()
           : ResidenceModel.fromJson(json['residence'] as Map<String, dynamic>),
@@ -61,6 +64,8 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
       'clientPhoneNumber': instance.clientPhoneNumber,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
+      'delaisProprietaireReponse': instance.delaisProprietaireReponse,
+      'delaisPaiementClient': instance.delaisPaiementClient,
       'residence': instance.residence,
       'client': instance.client,
       'proprietaire': instance.proprietaire,

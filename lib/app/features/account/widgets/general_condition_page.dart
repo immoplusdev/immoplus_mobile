@@ -24,7 +24,7 @@ class GeneralConditionPage extends StatelessWidget {
           <h2>2. Accès et inscription</h2>
           <p>L’accès à certaines fonctionnalités de l’application nécessite une inscription préalable. Lors de la création d’un compte, l’utilisateur s’engage à fournir des informations exactes et à jour.</p>
       
-          <h2>3. Utilisation de l’application</h2>
+          <h2>3. Utilisation de l’application</h2>D
           <p>ImmoPlus permet aux utilisateurs de rechercher des propriétés, réserver des logements, contacter des agents immobiliers, organiser des visites et acheter des meubles. L’utilisateur doit utiliser l’application de manière responsable et s’engage à ne pas utiliser les services à des fins illégales ou frauduleuses.</p>
       
           <h2>4. Réservation et paiement</h2>

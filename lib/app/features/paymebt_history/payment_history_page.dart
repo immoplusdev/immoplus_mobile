@@ -1,11 +1,11 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
@@ -29,60 +29,55 @@ class PaymentHistoryPage extends StatefulWidget {
   State<PaymentHistoryPage> createState() => _PaymentHistoryPageState();
 }
 
-Widget getIconStatus({required String status}) {
-  if (status == PaymentStatus.successful.name) {
-    return const Icon(
-      Icons.check_circle_outline,
-      color: Colors.green,
-    );
+IconData _getStatusIcon(String status) {
+  if (status == PaymentStatus.successful.name || status == PaymentStatus.paye.name) {
+    return Iconsax.tick_circle;
   } else if (status == PaymentStatus.pending.name) {
-    return const Icon(
-      Icons.access_time_filled,
-      color: Colors.grey,
-    );
+    return Iconsax.clock;
   } else if (status == PaymentStatus.action_required.name) {
-    return const Icon(
-      Icons.timer,
-      color: Colors.orange,
-    );
+    return Iconsax.warning_2;
   } else if (status == PaymentStatus.payment_required.name) {
-    return const Icon(
-      Icons.payments_outlined,
-      color: Colors.purple,
-    );
+    return Iconsax.wallet_1;
   } else if (status == PaymentStatus.failed.name) {
-    return const Icon(
-      Icons.close,
-      color: Colors.red,
-    );
+    return Iconsax.close_circle;
   } else if (status == PaymentStatus.processing.name) {
-    return const Icon(
-      Icons.rocket_launch_outlined,
-      color: Colors.blue,
-    );
-  } else if (status == PaymentStatus.paye.name) {
-    return const Icon(Icons.check_circle_outline, color: Colors.green);
+    return Iconsax.refresh_circle;
   }
-  return const Icon(Icons.close, color: Colors.red);
+  return Iconsax.close_circle;
 }
 
-Color getColorStatus({required String status}) {
-  if (status == PaymentStatus.successful.name) {
-    return Colors.green.shade100;
+Color _getStatusColor(String status) {
+  if (status == PaymentStatus.successful.name || status == PaymentStatus.paye.name) {
+    return const Color(0xFF12B76A);
   } else if (status == PaymentStatus.pending.name) {
-    return Colors.grey.shade100;
+    return const Color(0xFF667085);
   } else if (status == PaymentStatus.action_required.name) {
-    return Colors.orange.shade100;
+    return const Color(0xFFF79009);
   } else if (status == PaymentStatus.payment_required.name) {
-    return Colors.purple.shade100;
+    return const Color(0xFF7A5AF8);
   } else if (status == PaymentStatus.failed.name) {
-    return Colors.red.shade100;
+    return const Color(0xFFF04438);
   } else if (status == PaymentStatus.processing.name) {
-    return Colors.blue.shade100;
-  } else if (status == PaymentStatus.paye.name) {
-    return Colors.green.shade100;
+    return const Color(0xFF2E90FA);
   }
-  return Colors.red.shade200;
+  return const Color(0xFFF04438);
+}
+
+Color _getStatusBgColor(String status) {
+  if (status == PaymentStatus.successful.name || status == PaymentStatus.paye.name) {
+    return const Color(0xFFECFDF3);
+  } else if (status == PaymentStatus.pending.name) {
+    return const Color(0xFFF2F4F7);
+  } else if (status == PaymentStatus.action_required.name) {
+    return const Color(0xFFFFFAEB);
+  } else if (status == PaymentStatus.payment_required.name) {
+    return const Color(0xFFF4F3FF);
+  } else if (status == PaymentStatus.failed.name) {
+    return const Color(0xFFFEF3F2);
+  } else if (status == PaymentStatus.processing.name) {
+    return const Color(0xFFEFF8FF);
+  }
+  return const Color(0xFFFEF3F2);
 }
 
 String getPaymentStatusName({required String status}) {
@@ -104,6 +99,15 @@ String getPaymentStatusName({required String status}) {
   return "Échoué";
 }
 
+// Keep legacy helpers for backward compatibility
+Widget getIconStatus({required String status}) {
+  return Icon(_getStatusIcon(status), color: _getStatusColor(status), size: 18);
+}
+
+Color getColorStatus({required String status}) {
+  return _getStatusBgColor(status);
+}
+
 late PagingController<int, PaymentItentData> _pagingController;
 Future<void> loadPage(int page) async {
   PaymentRepository()
@@ -119,7 +123,6 @@ Future<void> loadPage(int page) async {
     } else {
       _pagingController.appendLastPage(value.data ?? []);
     }
-    //change(value, status: RxStatus.success());
   }).onError((error, stackTrace) {
     _pagingController.error = error.toString();
   });
@@ -137,176 +140,288 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _pagingController.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scafold,
+      backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             title: const Text('Historique des paiements'),
-            titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-            backgroundColor: AppColors.scafold,
+            // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            //       fontWeight: FontWeight.w700,
+            //     ),
+             elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left, size: 24),
+              onPressed: () => context.pop(),
+            ),
+            centerTitle: true,
+            backgroundColor: AppColors.whiteBackground,
+            surfaceTintColor: Colors.transparent,
             pinned: true,
           ),
           CupertinoSliverRefreshControl(
-            //      backgroundColor: Colors.white,
-            // color: Theme.of(context).colorScheme.primary,
             onRefresh: () async {
               _pagingController.refresh();
             },
           ),
           SliverPadding(
-            padding: const EdgeInsets.all(appPadding),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             sliver: PagedSliverList<int, PaymentItentData>(
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate(
-                  firstPageProgressIndicatorBuilder: (context) => Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: List.generate(
-                        10,
-                        (index) => Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          period: const Duration(milliseconds: 500),
-                          child: ListTile(
-                              tileColor: Colors.white,
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(29)),
-                              leading: CircleAvatar(
-                                foregroundImage: NetworkImage(
-                                    OrderPaymentController
-                                        .selectedOperator.logo),
-                              ),
-                              title: const Text(
-                                '•••••••••••••••',
-                              ),
-                              subtitle: const Text(
-                                "••••• F",
-                              ),
-                              titleTextStyle:
-                                  Theme.of(context).textTheme.bodyLarge,
-                              subtitleTextStyle:
-                                  Theme.of(context).textTheme.titleMedium,
-                              trailing: Chip(
-                                avatar: getIconStatus(
-                                    status: PaymentStatus.failed.name),
-                                backgroundColor: getColorStatus(
-                                    status: PaymentStatus.failed.name),
-                                label: const Text('En attente'),
-                              )),
-                        ),
-                      ),
+                  firstPageProgressIndicatorBuilder: (context) => Column(
+                    children: List.generate(
+                      6,
+                      (index) => _buildShimmerCard(context),
                     ),
                   ),
-                  noItemsFoundIndicatorBuilder: (context) => Center(
-                      child: Text(
-                    "Aucun élément trouvé",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  )),
-                  itemBuilder: (context, item, index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: ListTile(
-                        onTap: () {
-                          showModalBottomSheet(
-                            backgroundColor: AppColors.scafold,
-                            showDragHandle: true,
-                            enableDrag: true,
-                            isScrollControlled: true,
-                            useRootNavigator: true,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            context: context,
-                            builder: (context) => SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.85,
-                              child: (item.collection ==
-                                      ServicesCollection.reservations.name)
-                                  ? BookingDetailPage(
-                                      id: item.itemId,
-                                    )
-                                  : VisitDetailPage(
-                                      id: item.itemId,
-                                    ),
-                            ),
-                          );
-                        },
-                        tileColor: Colors.white,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 5),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(29)),
-                        leading: CircleAvatar(
-                          foregroundImage: NetworkImage(
-                              OrderPaymentController.getLogoURL(
-                                  item.paymentMethod)),
-                        ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(Utils.getServiceName(item.collection)),
-                            const Gap(3),
-                            SelectableText(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: Colors.purple,
-                                  ),
-                              onTap: () {
-                                Clipboard.setData(ClipboardData(text: item.id))
-                                    .then((value) {
-                                  //Vibrate.feedback(FeedbackType.impact);
-                                  EasyLoading.showToast('Identifiant copié');
-                                }).catchError((err) {
-                                  EasyLoading.showToast(err.toString());
-                                });
-                              },
-                              item.itemId,
-                            ),
-                          ],
-                        ),
-                        subtitle: Text(
-                          Utils.formatCurrency(item.amount),
-                        ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyLarge,
-                        subtitleTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary),
-                        trailing: SizedBox(
-                          height: 100,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              AutoSizeText(
-                                  Utils.formatDate(dateTime: item.updatedAt!)),
-                              Flexible(
-                                child: Chip(
-                                  avatar:
-                                      getIconStatus(status: item.paymentStatus),
-                                  backgroundColor: getColorStatus(
-                                      status: item.paymentStatus),
-                                  label: Text(getPaymentStatusName(
-                                      status: item.paymentStatus)),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
+                  noItemsFoundIndicatorBuilder: (context) => _buildEmptyState(context),
+                  itemBuilder: (context, item, index) => _buildPaymentCard(context, item),
                 )),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerCard(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade200,
+        highlightColor: Colors.grey.shade50,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const Gap(12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(width: 120, height: 14, color: Colors.white),
+                    const Gap(6),
+                    Container(width: 80, height: 12, color: Colors.white),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(width: 70, height: 14, color: Colors.white),
+                  const Gap(6),
+                  Container(width: 60, height: 22, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6))),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const Gap(80),
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.primaryLite,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(Iconsax.receipt_item, size: 36, color: AppColors.primary),
+          ),
+          const Gap(24),
+          Text(
+            "Aucun paiement",
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+          const Gap(8),
+          Text(
+            "Vos transactions apparaîtront ici une fois que vous aurez effectué un paiement.",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF667085),
+                  height: 1.5,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentCard(BuildContext context, PaymentItentData item) {
+    final statusColor = _getStatusColor(item.paymentStatus);
+    final statusBg = _getStatusBgColor(item.paymentStatus);
+    final statusIcon = _getStatusIcon(item.paymentStatus);
+    final statusName = getPaymentStatusName(status: item.paymentStatus);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+            backgroundColor: AppColors.whiteBackground,
+            showDragHandle: true,
+            enableDrag: true,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            context: context,
+            builder: (context) => SizedBox(
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: (item.collection == ServicesCollection.reservations.name)
+                  ? BookingDetailPage(id: item.itemId)
+                  : VisitDetailPage(id: item.itemId),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFF2F4F7)),
+          ),
+          child: Row(
+            children: [
+              // Logo opérateur
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFFF9FAFB),
+                  border: Border.all(color: const Color(0xFFF2F4F7)),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(11),
+                  child: Image.network(
+                    OrderPaymentController.getLogoURL(item.paymentMethod),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Icon(
+                      Iconsax.card,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+              const Gap(12),
+              // Infos
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Utils.getServiceName(item.collection),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    const Gap(4),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: item.id)).then((_) {
+                          EasyLoading.showToast('Identifiant copié');
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Iconsax.copy, size: 12, color: const Color(0xFF667085)),
+                          const Gap(4),
+                          Flexible(
+                            child: Text(
+                              item.itemId,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: const Color(0xFF667085),
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(8),
+              // Montant + statut
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    Utils.formatCurrency(item.amount),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
+                  ),
+                  const Gap(6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: statusBg,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(statusIcon, size: 12, color: statusColor),
+                        const Gap(4),
+                        Text(
+                          statusName,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: statusColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(4),
+                  Text(
+                    Utils.formatDate(dateTime: item.updatedAt!),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: const Color(0xFF98A2B3),
+                        ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

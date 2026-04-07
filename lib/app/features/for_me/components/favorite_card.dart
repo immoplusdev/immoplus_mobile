@@ -52,7 +52,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.primary.withOpacity(0.05), width: 1),
+          border:
+              Border.all(color: AppColors.primary.withOpacity(0.05), width: 1),
           // boxShadow: [
           //   BoxShadow(
           //     color: Colors.black.withOpacity(0.06),
@@ -83,7 +84,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
                     ),
                   ),
                   const Gap(8),
-                  _buildRating(),
+                  _buildRating(widget.favotiteModel.itemScore ?? 0.0),
                   const Gap(8),
                   Row(
                     children: [
@@ -178,10 +179,10 @@ class _FavoriteCardState extends State<FavoriteCard> {
               left: 8,
               bottom: 8,
               child: CustomChip(
-                        label: widget.favotiteModel.type!,
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
-                        backgroundColor: Colors.white,
-                      ),
+                label: widget.favotiteModel.type!,
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                backgroundColor: Colors.white,
+              ),
             ),
           ],
         ),
@@ -210,7 +211,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
   }
 
   /// Rating: star #C9A84C, 14px weight 600.
-  Widget _buildRating() {
+  Widget _buildRating(num? score) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -221,7 +222,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
         ),
         const Gap(4),
         Text(
-          '5.0',
+          score?.toStringAsFixed(1) ?? '0.0',
           style: GoogleFonts.dmSans(
             fontSize: 14,
             fontWeight: FontWeight.w600,

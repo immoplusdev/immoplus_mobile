@@ -8,6 +8,7 @@ class FovoriteModel {
   String? name;
   @Index(type: IndexType.value, unique: true)
   String? itemId;
+  double? itemScore;
   List<String>? images;
   String? type;
   String? adress;

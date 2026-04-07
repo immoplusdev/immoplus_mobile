@@ -130,8 +130,6 @@ class FilterHandler {
     return search != null ||
         startDate != null ||
         endDate != null ||
-        lat != null ||
-        long != null ||
         minPrice > minPriceLimit ||
         maxPrice < maxPriceLimit;
   }
@@ -154,22 +152,22 @@ class FilterHandler {
       );
     }
 
-    if (locationName != null) {
-      chips.add(
-        Chip(
-          backgroundColor: Colors.grey.shade300,
-          label: Text('Lieu: $locationName'),
-          deleteIcon: const Icon(Icons.close, size: 18),
-          onDeleted: () {
-            lat = null;
-            long = null;
-            locationName = null;
-            notifyChange();
-            onRefresh?.call();
-          },
-        ),
-      );
-    }
+    // if (locationName != null) {
+    //   chips.add(
+    //     Chip(
+    //       backgroundColor: Colors.grey.shade300,
+    //       label: Text('Lieu: $locationName'),
+    //       deleteIcon: const Icon(Icons.close, size: 18),
+    //       onDeleted: () {
+    //         lat = null;
+    //         long = null;
+    //         locationName = null;
+    //         notifyChange();
+    //         onRefresh?.call();
+    //       },
+    //     ),
+    //   );
+    // }
 
     if (startDate != null || endDate != null) {
       String dateText;

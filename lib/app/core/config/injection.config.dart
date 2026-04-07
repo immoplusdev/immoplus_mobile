@@ -24,6 +24,9 @@ import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
     as _i415;
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
+import 'package:immoplus/app/core/services/auth_redirect_service.dart' as _i944;
+import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart'
+    as _i99;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
@@ -36,6 +39,8 @@ import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
     as _i237;
 import 'package:immoplus/app/features/booking/logic/booking_services.dart'
     as _i946;
+import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_cubit.dart'
+    as _i527;
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart'
     as _i488;
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart' as _i79;
@@ -44,6 +49,8 @@ import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
 import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart'
     as _i123;
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
+import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart'
+    as _i529;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
 import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart'
@@ -73,6 +80,8 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final dioConfig = _$DioConfig();
+    gh.factory<_i529.LocationPermissionCubit>(
+        () => _i529.LocationPermissionCubit());
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit());
     gh.factory<_i430.NotificationCubit>(() => _i430.NotificationCubit());
     gh.factory<_i872.PaymentCubit>(() => _i872.PaymentCubit());
@@ -87,6 +96,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i242.EnvHandler>(() => _i242.EnvHandler());
     gh.lazySingleton<_i57.RemoteConfigService>(
         () => _i57.RemoteConfigService());
+    gh.lazySingleton<_i944.AuthRedirectService>(
+        () => _i944.AuthRedirectService());
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
     gh.singleton<_i374.FavoriesUtils>(
@@ -114,6 +125,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i745.VisitCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i488.EstateCubit>(
         () => _i488.EstateCubit(gh<_i398.BienImmobilierRepository>()));
+    gh.factory<_i527.PendingPaymentReservationsCubit>(() =>
+        _i527.PendingPaymentReservationsCubit(gh<_i143.ResidenceRepository>()));
     gh.factory<_i946.BookingServices>(
         () => _i946.BookingServices(gh<_i361.Dio>()));
     gh.factory<_i1028.MapViwerCubit>(() => _i1028.MapViwerCubit(
@@ -122,15 +135,22 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i123.FurnitureCubit>(
         () => _i123.FurnitureCubit(gh<_i976.FurnitureRepository>()));
+    gh.lazySingleton<_i99.ClientReservationOverlayService>(
+        () => _i99.ClientReservationOverlayService(
+              gh<_i143.ResidenceRepository>(),
+              gh<_i22.SessionManager>(),
+            ));
     gh.factory<_i783.RgistrationCubitCubit>(() => _i783.RgistrationCubitCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
           gh<_i640.NotificationService>(),
+          gh<_i944.AuthRedirectService>(),
         ));
     gh.factory<_i888.LoginCubit>(() => _i888.LoginCubit(
           gh<_i22.SessionManager>(),
           gh<_i361.Dio>(),
           gh<_i640.NotificationService>(),
+          gh<_i944.AuthRedirectService>(),
         ));
     gh.factory<_i85.ResidenceCubit>(
         () => _i85.ResidenceCubit(gh<_i143.ResidenceRepository>()));

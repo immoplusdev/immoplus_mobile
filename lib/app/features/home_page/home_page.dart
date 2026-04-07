@@ -49,6 +49,9 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
+      // if (mounted) {
+      //   getIt<ClientReservationOverlayService>().checkAndShowOverlay(context);
+      // }
     });
     super.initState();
   }
@@ -62,13 +65,22 @@ class _HomePageState extends State<HomePage>
   void dispose() {
     super.dispose();
     FilterHandler.search = null;
+    FilterHandler.lat = null;
+    FilterHandler.long = null;
+    FilterHandler.locationName = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomePageCubit, HomePageState>(
+    return BlocConsumer<HomePageCubit, HomePageState>(
+      listenWhen: (previous, current) =>
+          previous.indexPage != current.indexPage,
+      listener: (context, state) {
+        if (_tabController.index != state.indexPage && mounted) {
+          _tabController.animateTo(state.indexPage);
+        }
+      },
       builder: (context, state) {
-        _tabController.animateTo(state.indexPage);
         return EnvironmentsBadge(
           child: Scaffold(
             backgroundColor: AppColors.whiteBackground,
@@ -76,8 +88,12 @@ class _HomePageState extends State<HomePage>
               length: 4,
               child: RefreshIndicator(
                 onRefresh: () async {
-                  HomePageState.getPageListController(state.indexPage)
-                      .refresh();
+                  if (state.indexPage == 0) {
+                    HomePageState.refreshResidences();
+                  } else {
+                    HomePageState.getPageListController(state.indexPage)
+                        .refresh();
+                  }
                 },
                 child: CustomScrollView(
                   keyboardDismissBehavior:

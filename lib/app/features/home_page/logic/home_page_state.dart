@@ -17,24 +17,40 @@ class HomePageState {
       PagingController(firstPageKey: 1);
   static PagingController<int, FurnitureModel> pagingControllerFurniture =
       PagingController(firstPageKey: 1);
+
+  // Token pour invalider les requêtes périmées (race condition fix)
+  static int _residenceToken = 0;
+  static int get residenceToken => _residenceToken;
+  static void refreshResidences() {
+    _residenceToken++;
+    pagingControllerResidence.refresh();
+  }
+
+  /// Refresh sécurisé : incrémente le token pour l'index 0 (résidences)
+  static void refreshPage(int index) {
+    if (index == 0) {
+      refreshResidences();
+    } else {
+      getPageListController(index).refresh();
+    }
+  }
+
   int indexPage;
   HomePageState({required this.indexPage});
 
   static Widget getPageListFromIndex(int index) => switch (index) {
         0 => const ResidencesList(),
-        1 => const FurnituresList(),
-        2 => const EstatesList(),
+        1 => const EstatesList(),
+        2 => const FurnituresList(),
         3 => const LandsList(),
-        //4 => const ResidencesList(),
         _ => const ResidencesList(),
       };
 
   static PagingController getPageListController(int index) => switch (index) {
         0 => pagingControllerResidence,
-        1 => pagingControllerFurniture,
-        2 => pagingControllerEstate,
+        1 => pagingControllerEstate,
+        2 => pagingControllerFurniture,
         3 => pagingControllerLand,
-        //4 => const ResidencesList(),
         _ => pagingControllerResidence,
       };
 }

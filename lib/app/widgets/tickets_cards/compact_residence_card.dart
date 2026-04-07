@@ -13,22 +13,28 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
+import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
 import 'package:shimmer/shimmer.dart';
 
-class NearResidenceCard extends StatefulWidget {
-  const NearResidenceCard({
+class CompactResidenceCard extends StatefulWidget {
+  const CompactResidenceCard({
     super.key,
     required this.residence,
+    this.showRating = true,
+    this.showName = true,
+    this.showLocation = true,
   });
 
   final ResidenceModel residence;
+  final bool showRating;
+  final bool showName;
+  final bool showLocation;
 
   @override
-  State<NearResidenceCard> createState() => _NearResidenceCardState();
+  State<CompactResidenceCard> createState() => _CompactResidenceCardState();
 }
 
-class _NearResidenceCardState extends State<NearResidenceCard> {
+class _CompactResidenceCardState extends State<CompactResidenceCard> {
   final favoriesUtils = getIt<FavoriesUtils>();
   final ValueNotifier<bool> _liked = ValueNotifier(false);
 
@@ -70,6 +76,16 @@ class _NearResidenceCardState extends State<NearResidenceCard> {
               // Gradient overlay pour rendre le texte lisible
               _buildGradientOverlay(),
 
+              // Rating en haut à gauche (optionnel)
+              if (widget.showRating)
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child: RatingComponent(
+                    rating: (widget.residence.score ?? 0).toDouble(),
+                  ),
+                ),
+
               // Badge de prix en haut à droite
               Positioned(
                 top: 16,
@@ -83,13 +99,6 @@ class _NearResidenceCardState extends State<NearResidenceCard> {
                 right: 16,
                 bottom: 16,
                 child: _buildResidenceInfo(context),
-              ),
-
-              // Bouton favori en bas à droite
-              Positioned(
-                right: 16,
-                bottom: 16,
-                child: _buildFavoriteButton(),
               ),
             ],
           ),
@@ -192,73 +201,78 @@ class _NearResidenceCardState extends State<NearResidenceCard> {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Nom de la résidence
-        Text(
-          widget.residence.nom.capitalizeFirst(),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 4,
-                offset: const Offset(0, 1),
+        if (widget.showName)
+          Text(
+            widget.residence.nom.capitalizeFirst(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        // Localisation
+
+        if (widget.showLocation) ...[
+          const Gap(8),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on_outlined,
+                size: 12,
+                color: Colors.white.withOpacity(0.9),
+              ),
+              const Gap(4),
+              Expanded(
+                child: Text(
+                  "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 11,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
-          ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const Gap(8),
-        // Localisation
-        Row(
-          children: [
-            Icon(
-              Icons.location_on_outlined,
-              size: 16,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            const Gap(4),
-            Expanded(
-              child: Text(
-                "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
+          )
+        ],
       ],
     );
   }
 
-  /// Bouton favori
-  Widget _buildFavoriteButton() {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _liked,
-      builder: (context, isLiked, _) {
-        return ResidenceFavoriteButton(
-          isFavorite: isLiked,
-          onTap: () async {
-            if (_liked.value) {
-              await favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
-            } else {
-              await favoriesUtils.addResidenceToFavorites(widget.residence);
-            }
-            _liked.value = !isLiked;
-          },
-        );
-      },
-    );
-  }
+  /// Bouton favori (commenté)
+  // Widget _buildFavoriteButton() {
+  //   return ValueListenableBuilder<bool>(
+  //     valueListenable: _liked,
+  //     builder: (context, isLiked, _) {
+  //       return ResidenceFavoriteButton(
+  //         isFavorite: isLiked,
+  //         onTap: () async {
+  //           if (_liked.value) {
+  //             await favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
+  //           } else {
+  //             await favoriesUtils.addResidenceToFavorites(widget.residence);
+  //           }
+  //           _liked.value = !isLiked;
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 }

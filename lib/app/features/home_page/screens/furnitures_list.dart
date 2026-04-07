@@ -16,6 +16,8 @@ class FurnituresList extends StatefulWidget {
 }
 
 class _FurnituresListState extends State<FurnituresList> {
+  void _onPageRequest(int pageKey) => loadPage(pageKey);
+
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(PropertyType.furniture);
     FurnitureRepository furnitureRepository = getIt<FurnitureRepository>();
@@ -32,7 +34,7 @@ class _FurnituresListState extends State<FurnituresList> {
         .then((value) {
       if (value.hasNext == true) {
         HomePageState.pagingControllerFurniture
-            .appendPage(value.data ?? [], (value.currentPage)! + 1);
+            .appendPage(value.data ?? [], (value.currentPage)! + 1); 
       } else {
         HomePageState.pagingControllerFurniture
             .appendLastPage(value.data ?? []);
@@ -44,17 +46,16 @@ class _FurnituresListState extends State<FurnituresList> {
 
   @override
   void initState() {
-    HomePageState.pagingControllerFurniture =
-        PagingController(firstPageKey: 1);
-    HomePageState.pagingControllerFurniture.addPageRequestListener((pageKey) {
-      loadPage(pageKey);
-    });
     super.initState();
+    HomePageState.pagingControllerFurniture
+        .addPageRequestListener(_onPageRequest);
+    HomePageState.pagingControllerFurniture.refresh();
   }
 
   @override
   void dispose() {
-    HomePageState.pagingControllerFurniture.dispose();
+    HomePageState.pagingControllerFurniture
+        .removePageRequestListener(_onPageRequest);
     super.dispose();
   }
 

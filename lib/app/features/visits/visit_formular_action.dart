@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -17,6 +17,8 @@ import 'package:immoplus/app/modules/country_phone_number/country_phone_number.d
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/widgets/bottom_immoplus.dart';
 import 'package:immoplus/app/widgets/client_service_chip.dart';
 
@@ -33,6 +35,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
   final sessionManager = getIt<SessionManager>();
 
   String time = '';
+  String? _selectedType; // 'express' | 'normal'
+
   @override
   void initState() {
     super.initState();
@@ -60,199 +64,185 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+  }
+
+  void _showConfirmDialog({
+    required String type,
+    required String message,
+    required TypeDemandeVisite typeDemandeVisite,
+  }) {
+    if (!_formKey.currentState!.validate()) return;
+
+    _selectedType = type;
+    _formController.setServiceOption = type;
+
+    AppDialog.show(
+      title: 'Confirmation',
+      description: message,
+      primaryButtonText: 'Confirmer',
+      secondButtonText: 'Annuler',
+      onPrimary: () => context.read<VisitCubit>().visitRequest(
+            body: DemandeVisitRequestBody(
+              bienImmobilier: widget.bienImmoModel.id,
+              typeDemandeVisite: typeDemandeVisite.name,
+              clientPhoneNumber: phoneNumberWithCountryCode,
+            ),
+          ),
+    );
+    
   }
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return BlocListener<VisitCubit, VisitRequestState>(
       listener: (context, state) {
         state.when(
           loadingList: () {},
           initial: () {},
-          loading: () {
-            // Optionnel : Afficher un loading dans la popup
-          },
+          loading: () {},
           receive: (data) {
-            // Fermer la popup
-            // context.pop();
-            // Afficher un message de succès
-
-            ToastUtils.success('Demande de visite envoyée');
-            context.pop();
-            context.pop();
-            // context.pushNamed(
-            //   OperatorsSelectorPage.name,
-            //   extra: PaymentPageAdapter(
-            //     itemId: data.id,
-            //     collection: "demandes_visites",
-            //     amount: data.montantTotalDemandeVisite.toInt(),
-            //   ),
-            // );
+            context.pop(); // ferme le dialog de confirmation
+            context.pushReplacementNamed(
+              VisitPendingPage.name,
+              extra: VisitPendingPage(
+                bienImmo: widget.bienImmoModel,
+                visitType: _selectedType ?? 'normal',
+                visitId: data.id,
+              ),
+            );
           },
           error: (message) {
-            // Fermer la popup
             context.pop();
-            // Afficher le message d'erreur
-            // ToastUtils.error(message);
           },
           receiveId: (data) {},
         );
       },
       child: Scaffold(
-        backgroundColor: AppColors.scafold,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: AppColors.scafold,
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
           automaticallyImplyLeading: true,
-          title: const Text('Demande de visite'),
-          actions: const [
-            ClientServiceChip(),
-            Gap(8),
-            // IconButton(
-            //     onPressed: () {
-            //       ContactUtils(productDetailModel: ProductDetailModel())
-            //           .showDialog(context: context);
-            //     },
-            //     icon: Icon(CupertinoIcons.phone))
-          ],
+          centerTitle: true,
+          title: Text(
+            'Demande de visite',
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: Colors.black,
+            ),
+          ),
+          // actions: const [
+          //   ClientServiceChip(),
+          //   Gap(12),
+          // ],
         ),
-        //backgroundColor: Colors.white,
         body: SafeArea(
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Article"),
+                  // ── Section Article ──
+                  _SectionLabel(title: 'Bien concerné', icon: Iconsax.home_hashtag, color: primaryColor),
                   const Gap(10),
-                  ProductInfo(
-                    bienImmobilierModel: widget.bienImmoModel,
-                  ),
-                  const Gap(30),
-                  // Text("Vos information"),
-                  // PersonalInfoEditor(formController: _formController),
-                  CountryPhoneNumberInput(
-                      controller: _formController.phoneNumber!),
+                  ProductInfo(bienImmobilierModel: widget.bienImmoModel),
 
-                  Text(
-                    "Numéro de téléphone sur lequel vous préférez être contacté, de préférence un numéro WhatsApp actif.",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inder(
-                      fontSize: 14,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const Divider(),
-                  const Gap(30),
-                  const Text("Type de demande de visite"),
+                  const Gap(28),
+
+                  // ── Section Contact ──
+                  _SectionLabel(title: 'Contact', icon: Iconsax.call, color: primaryColor),
                   const Gap(10),
-                  VisitListTileAction(
-                    backgroundImage:
-                        const AssetImage('assets/icon/express.webp'),
-                    price:
-                        (sessionManager.configModel?.data?.expressVisitPrice ??
-                                "_")
-                            .toString(),
-                    title: 'Visite Expresse',
-                    subTiltle:
-                        "Vous serez programmé le plus vite possible voire le même jour pour la visite et un véhicule sera mis à votre disposition pour le transport.",
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formController.setServiceOption = 'express';
-                        showCupertinoModalPopup<void>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              CupertinoAlertDialog(
-                            //title: const Text('Alert'),
-                            content: const Text(
-                                'Confirmez-vous cette demande de visite expresse ?'),
-                            actions: <CupertinoDialogAction>[
-                              CupertinoDialogAction(
-                                isDefaultAction: false,
-                                isDestructiveAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Annuer'),
-                              ),
-                              CupertinoDialogAction(
-                                isDefaultAction: true,
-                                isDestructiveAction: false,
-                                onPressed: () {
-                                  context.read<VisitCubit>().visitRequest(
-                                      body: DemandeVisitRequestBody(
-                                          bienImmobilier:
-                                              widget.bienImmoModel.id,
-                                          typeDemandeVisite:
-                                              TypeDemandeVisite.express.name,
-                                          clientPhoneNumber:
-                                              phoneNumberWithCountryCode));
-                                },
-                                child: const Text('Confirmer'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  const Gap(30),
-                  VisitListTileAction(
-                    backgroundImage: const AssetImage(
-                      'assets/icon/normal.png',
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.grey.shade200),
                     ),
-                    price:
-                        (sessionManager.configModel?.data?.normalVisitPrice ??
-                                "_")
-                            .toString(),
-                    title: 'Visite normale',
-                    subTiltle:
-                        "Vous serez programmé pour la visite et nous vous notifierons le jour et l'heure de votre passage.",
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formController.setServiceOption = 'normal';
-                        showCupertinoModalPopup<void>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              CupertinoAlertDialog(
-                            //title: const Text('Alert'),
-                            content: const Text(
-                                'Confirmez-vous cette demande de visite standard ?'),
-                            actions: <CupertinoDialogAction>[
-                              CupertinoDialogAction(
-                                isDefaultAction: false,
-                                isDestructiveAction: true,
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Annuer'),
+                    child: Column(
+                      children: [
+                        CountryPhoneNumberInput(
+                          controller: _formController.phoneNumber!,
+                        ),
+                        const Gap(12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(0.06),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Icon(
+                                  Iconsax.info_circle,
+                                  size: 16,
+                                  color: primaryColor,
+                                ),
                               ),
-                              CupertinoDialogAction(
-                                isDefaultAction: true,
-                                isDestructiveAction: false,
-                                onPressed: () {
-                                  context.read<VisitCubit>().visitRequest(
-                                      body: DemandeVisitRequestBody(
-                                          bienImmobilier:
-                                              widget.bienImmoModel.id,
-                                          typeDemandeVisite:
-                                              TypeDemandeVisite.normal.name,
-                                          clientPhoneNumber:
-                                              phoneNumberWithCountryCode));
-                                },
-                                child: const Text('Confirmer'),
+                              const Gap(8),
+                              Expanded(
+                                child: Text(
+                                  "Numéro sur lequel vous préférez être contacté, de préférence un numéro WhatsApp actif.",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: primaryColor,
+                                    height: 1.45,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                        );
-                      }
-                    },
+                        ),
+                      ],
+                    ),
                   ),
+
+                  const Gap(28),
+
+                  // ── Section Type de visite ──
+                  _SectionLabel(title: 'Type de demande de visite', icon: Iconsax.routing_2, color: primaryColor),
+                  const Gap(10),
+
+                  VisitListTileAction(
+                    icon: Iconsax.flash,
+                    price: (sessionManager.configModel?.data?.expressVisitPrice ?? "_").toString(),
+                    title: 'Visite Express',
+                    subtitle:
+                        "Votre visite sera planifiée dans les plus brefs délais, avec possibilité d'intervention le jour même.",
+                    onTap: () => _showConfirmDialog(
+                      type: 'express',
+                      message: 'Confirmez-vous cette demande de visite expresse ?',
+                      typeDemandeVisite: TypeDemandeVisite.express,
+                    ),
+                  ),
+
+                  const Gap(14),
+
+                  VisitListTileAction(
+                    icon: Iconsax.calendar_search,
+                    price: (sessionManager.configModel?.data?.normalVisitPrice ?? "_").toString(),
+                    title: 'Visite normale',
+                    subtitle:
+                        "Vous serez programmé pour la visite et nous vous notifierons la date et l'heure de votre passage.",
+                    onTap: () => _showConfirmDialog(
+                      type: 'normal',
+                      message: 'Confirmez-vous cette demande de visite standard ?',
+                      typeDemandeVisite: TypeDemandeVisite.normal,
+                    ),
+                  ),
+
+                  const Gap(30),
                 ],
               ),
             ),
@@ -260,6 +250,37 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
         ),
         bottomNavigationBar: const BottomImmoPlus(),
       ),
+    );
+  }
+}
+
+// ── Widget réutilisable pour les labels de section ──
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({
+    required this.title,
+    required this.icon,
+    required this.color,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        // Icon(icon, size: 18, color: color),
+        // const Gap(6),
+        Text(
+          title,
+          style: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
+      ],
     );
   }
 }

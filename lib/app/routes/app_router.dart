@@ -1,20 +1,34 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
+import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
+import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
+import 'package:immoplus/app/features/settings/contact_change/view/confirm_contact_change_page.dart';
+import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
+import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/pages/permission_page.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/features/become_pro/pages/become_pro_intro_page.dart';
+import 'package:immoplus/app/features/become_pro/pages/become_pro_form_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -32,9 +46,14 @@ import 'package:immoplus/app/features/reset_password/pages/reset_password_page.d
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
+import 'package:immoplus/app/features/vivre/vivre_page.dart';
+import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
+import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/force_update_required_page.dart';
+import 'package:immoplus/app/logic/authentification/login_cubit.dart';
+import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 
@@ -67,28 +86,142 @@ class AppRouter {
         name: PaymentHistoryPage.name,
         builder: (context, state) => const PaymentHistoryPage(),
       ),
-      GoRoute(
-        path: '/login_page',
-        name: LoginPage.name,
-        builder: (context, state) => const LoginPage(),
-      ),
-      GoRoute(
-        path: '/${RegisterPage.name}',
-        name: RegisterPage.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return const RegisterPage();
+      // ShellRoute auth — sans navigatorKey, sans UI wrapper
+      ShellRoute(
+        builder: (context, state, child) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<LoginCubit>()),
+              BlocProvider(create: (_) => getIt<RgistrationCubitCubit>()),
+            ],
+            child: child,
+          );
         },
+        routes: [
+          GoRoute(
+            path: '/${AuthenticationPage.name}',
+            name: AuthenticationPage.name,
+            builder: (context, state) => AuthenticationPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
+          ),
+          GoRoute(
+            path: LoginPage.routePath(),
+            name: LoginPage.name,
+            builder: (context, state) => const LoginPage(),
+          ),
+          GoRoute(
+            path: '/${RegisterPage.name}',
+            name: RegisterPage.name,
+            builder: (context, state) => const RegisterPage(),
+          ),
+          GoRoute(
+            path: SendEmailOptPage.routePath(),
+            name: SendEmailOptPage.name,
+            builder: (context, state) => const SendEmailOptPage(),
+          ),
+          GoRoute(
+            path: VerifyEmailOtpPage.routePath(),
+            name: VerifyEmailOtpPage.name,
+            builder: (context, state) => VerifyEmailOtpPage(
+              email: state.extra as String,
+            ),
+          ),
+          GoRoute(
+            path: CustomerRegistration.routePath(),
+            name: CustomerRegistration.name,
+            builder: (context, state) => CustomerRegistration(
+              data: state.extra as DataRouterRegistration,
+            ),
+          ),
+        ],
       ),
-      GoRoute(
-        path: '/${AuthenticationPage.name}',
-        name: AuthenticationPage.name,
-        builder: (context, state) => const AuthenticationPage(),
-      ),
+      // GoRoute(
+      //   path: '/login_page',
+      //   name: LoginPage.name,
+      //   builder: (context, state) => LoginPage(
+      //     redirectData: state.extra as AuthRedirectData?,
+      //   ),
+      // ),
+      // GoRoute(
+      //   path: '/${RegisterPage.name}',
+      //   name: RegisterPage.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const RegisterPage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/${AuthenticationPage.name}',
+      //   name: AuthenticationPage.name,
+      //   builder: (context, state) => AuthenticationPage(
+      //     redirectData: state.extra as AuthRedirectData?,
+      //   ),
+      // ),
+      // GoRoute(
+      //   path: '/send-email-otp',
+      //   name: SendEmailOptPage.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return const SendEmailOptPage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/verify-email-otp',
+      //   name: VerifyEmailOtpPage.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return VerifyEmailOtpPage(email: state.extra as String);
+      //   },
+      // ),
+      // GoRoute(
+      //   path: '/registration',
+      //   name: CustomerRegistration.name,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return CustomerRegistration(
+      //       data: state.extra as DataRouterRegistration,
+      //     );
+      //   },
+      // ),
 
       GoRoute(
         path: '/edit_account',
         name: EditAccountPage.name,
         builder: (context, state) => const EditAccountPage(),
+      ),
+      GoRoute(
+        path: '/become_pro_intro',
+        name: BecomeProIntroPage.name,
+        builder: (context, state) => const BecomeProIntroPage(),
+      ),
+      GoRoute(
+        path: '/become_pro_form',
+        name: BecomeProFormPage.name,
+        builder: (context, state) => const BecomeProFormPage(),
+      ),
+      GoRoute(
+        path: ChangeCredentialsPage.path,
+        name: ChangeCredentialsPage.name,
+        builder: (context, state) => const ChangeCredentialsPage(),
+      ),
+      GoRoute(
+        path: '/settings/change-contact',
+        name: RequestContactChangePage.name,
+        builder: (context, state) => BlocProvider(
+          create: (_) => ContactChangeCubit(),
+          child: RequestContactChangePage(
+            type: state.extra as ContactChangeType,
+          ),
+        ),
+        routes: [
+          GoRoute(
+            path: 'confirm',
+            name: ConfirmContactChangePage.name,
+            builder: (context, state) => BlocProvider(
+              create: (_) => ContactChangeCubit(),
+              child: ConfirmContactChangePage(
+                type: state.extra as ContactChangeType,
+              ),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/change_password',
@@ -122,6 +255,13 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: PendingPaymentReservationsPage.routePath(),
+        name: PendingPaymentReservationsPage.name,
+        builder: (context, state) => PendingPaymentReservationsPage(
+          reservationId: state.uri.queryParameters['reservationId'],
+        ),
+      ),
+      GoRoute(
         path: ForceUpdateRequiredPage.routePath(),
         name: ForceUpdateRequiredPage.name,
         builder: (context, state) {
@@ -143,6 +283,22 @@ class AppRouter {
           currentPhoneNumber: state.extra as String,
         ),
       ),
+      GoRoute(
+        path: '/visit-pending',
+        name: VisitPendingPage.name,
+        builder: (context, state) {
+          final page = state.extra as VisitPendingPage;
+          return page;
+        },
+      ),
+      GoRoute(
+        path: '/reservation-engagement',
+        name: ReservationEngagementFrame.name,
+        builder: (context, state) {
+          final reservation = state.extra as ReservationEngagementFrame;
+          return reservation;
+        },
+      ),
       ShellRoute(
         navigatorKey: _rootNavigatorKey,
         builder: (context, state, child) {
@@ -162,6 +318,21 @@ class AppRouter {
             pageBuilder: (context, state) => NoTransitionPage(
               child: const FavoritePage(),
             ),
+          ),
+          GoRoute(
+            path: '/vivre',
+            name: VivrePage.name,
+            pageBuilder: (context, state) => NoTransitionPage(
+              child: const VivrePage(),
+            ),
+            routes: [
+              GoRoute(
+                path: ':videoId',
+                builder: (context, state) => VivrePage(
+                  initialVideoId: state.pathParameters['videoId'],
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: '/map',
@@ -199,6 +370,12 @@ class AppRouter {
             radius: extra['radius'] as double? ?? 50,
           );
         },
+      ),
+
+      GoRoute(
+        path: BestRatedResidencesPage.routePath,
+        name: BestRatedResidencesPage.routeName,
+        builder: (context, state) => const BestRatedResidencesPage(),
       ),
 
       GoRoute(
@@ -310,29 +487,7 @@ class AppRouter {
       //         orderCashModel: state.extra as OrderCashModel,
       //       );
       //     }),
-      GoRoute(
-        path: '/send-email-otp',
-        name: SendEmailOptPage.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return const SendEmailOptPage();
-        },
-      ),
-      GoRoute(
-        path: '/verify-email-otp',
-        name: VerifyEmailOtpPage.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return VerifyEmailOtpPage(email: state.extra as String);
-        },
-      ),
-      GoRoute(
-        path: '/registration',
-        name: CustomerRegistration.name,
-        builder: (BuildContext context, GoRouterState state) {
-          return CustomerRegistration(
-            data: state.extra as DataRouterRegistration,
-          );
-        },
-      ),
+
       GoRoute(
         path: '/${NotificationsPage.name}',
         name: NotificationsPage.name,

@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/data/models/auth/account_creation_response.dart';
 import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
@@ -20,12 +22,29 @@ import '../../data/models/auth/customer_registration_body.dart';
 
 @injectable
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
-  RgistrationCubitCubit(this.sessionManager, this.dio, this.notificationService)
+  RgistrationCubitCubit(this.sessionManager, this.dio, this.notificationService,
+      this.authRedirectService)
       : super(const RegistrationCubitState.initial());
   SessionManager sessionManager;
   Dio dio;
 
   NotificationService notificationService;
+  final AuthRedirectService authRedirectService;
+
+  void _navigateAfterRegistration() {
+    final context = NavigationService.navigatorKey.currentContext!;
+    final redirectData = authRedirectService.get();
+    if (redirectData != null) {
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == redirectData.popUntilRouteName,
+      );
+      redirectData.callback();
+      authRedirectService.clear();
+    } else {
+      context.goNamed(HomePage.name);
+    }
+  }
+
   createCustomerAccount({
     required CustomerRegistrationBody customerRegistrationBody,
     //required String? fileID,
@@ -59,10 +78,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(RegistrationCubitState.success(accountCreationResponse: response));
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      _navigateAfterRegistration();
     } catch (e) {
       log(e.toString(), name: "ERROR BLOC");
 

@@ -103,25 +103,12 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
               children: [
                 TextButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => ResetPassword(),
-                      //     ));
                       context.pushNamed(ResetPasswordPage.name);
                     },
                     child: Text(
                       'Mot de passe oublié',
                       style: GoogleFonts.inter(color: AppColors.primary),
                     )),
-                // TextButton(
-                //     onPressed: () {
-                //       context.pushNamed(SendEmailOptPage.name);
-                //     },
-                //     child: Text(
-                //       'S\'inscrire',
-                //       style: GoogleFonts.inter(color: AppColors.primary),
-                //     )),
               ],
             ),
             const Gap(5),
@@ -145,8 +132,6 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                                   body: body,
                                 );
                           }
-
-                          //context.go('/homePage');
                         },
                   text: 'Connexion'.toUpperCase(),
                 );
