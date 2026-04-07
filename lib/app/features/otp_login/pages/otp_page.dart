@@ -14,6 +14,7 @@ import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
@@ -46,7 +47,20 @@ class _OtpPageState extends State<OtpPage> {
     super.dispose();
   }
 
-  Future<void> _resendOtp() async {
+  Future<void> _showResendChannelChoice() async {
+    if (_isResending) return;
+    await AppDialog.show(
+      title: 'Renvoyer le code par',
+      description:
+          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
+      primaryButtonText: 'WhatsApp',
+      secondButtonText: 'SMS',
+      onPrimary: () => _resendOtp(useWhatsapp: true),
+      onSecond: () => _resendOtp(useWhatsapp: false),
+    );
+  }
+
+  Future<void> _resendOtp({bool useWhatsapp = false}) async {
     if (_isResending) return;
 
     setState(() {
@@ -56,13 +70,14 @@ class _OtpPageState extends State<OtpPage> {
     EasyLoadingHandler.showLoagingToast(text: 'En cours...');
 
     try {
-      final response = await AuthRepository().sendOtp(
-        body: SendOptModel(
-          phoneNumber: PhoneNumberHandler.formatPhoneNumber(
-            widget.currentPhoneNumber,
-          ),
+      final model = SendOptModel(
+        phoneNumber: PhoneNumberHandler.formatPhoneNumber(
+          widget.currentPhoneNumber,
         ),
       );
+      final response = useWhatsapp
+          ? await AuthRepository().sendWhatsappOtp(body: model)
+          : await AuthRepository().sendOtp(body: model);
 
       if (!mounted) return;
 
@@ -175,7 +190,7 @@ class _OtpPageState extends State<OtpPage> {
               ),
 
               TextButton(
-                onPressed: _isResending ? null : _resendOtp,
+                onPressed: _isResending ? null : _showResendChannelChoice,
                 child: Text(
                   _isResending ? 'Envoi en cours...' : 'Renvoyer',
                   style: TextStyle(
