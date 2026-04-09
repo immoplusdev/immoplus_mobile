@@ -1,18 +1,20 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
+import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
+import 'package:immoplus/app/features/prop_feed/video_feed_warmup_service.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/features/filter/filter_page.dart';
+
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/immo_icons.dart';
 
 class HomePageWrapper extends StatefulWidget {
   const HomePageWrapper({super.key, required this.child});
@@ -23,71 +25,114 @@ class HomePageWrapper extends StatefulWidget {
 }
 
 class _HomePageWrapperState extends State<HomePageWrapper> {
-  int _selectedIndex = 0;
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
+  Timer? _videoFeedWarmupTimer;
 
-  void _onItemTapped({required int index, required PageState pageState}) {
-    if (index == 4) {
-      if (sessionManager.currentUser == null) {
-        context.pushNamed(AuthenticationPage.name);
-        return;
-      }
-    }
-    if (index == 2 && pageState == PageState.home) {
-      _showFilterDialog();
-    } else if (index != 2) {
-      _selectedIndex = index;
-      navigationHandler.switchPage(id: index, context: context);
+  int _indexForState(PageState state) {
+    switch (state) {
+      case PageState.home:
+        return 0;
+      case PageState.forMe:
+        return 1;
+      case PageState.vivre:
+        return 2;
+      case PageState.explore:
+        return 3;
+      case PageState.account:
+        return 4;
+      case PageState.history:
+      case PageState.map:
+        return 0;
     }
   }
 
-  void _showFilterDialog() {
-    showModalBottomSheet(
-      backgroundColor: AppColors.whiteBackground,
-      showDragHandle: true,
-      enableDrag: true,
-      isScrollControlled: true,
-      useRootNavigator: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      context: context,
-      builder: (context) => SizedBox(
-          height: MediaQuery.of(context).size.height * 0.88,
-          child: const FilterPage()),
-    );
+  static const int _vivreTabIndex = 2;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _videoFeedWarmupTimer?.cancel();
+      _videoFeedWarmupTimer = Timer(const Duration(milliseconds: 2500), () {
+        if (!mounted) return;
+
+        // Si l'utilisateur est déjà sur "Vivre" ou si le feed a déjà été créé,
+        // aucun intérêt de préchauffer.
+        final current = context.read<NavigationCubit>().state;
+        if (current == PageState.vivre) return;
+        if (Get.isRegistered<VideoFeedController>()) return;
+
+        final warmup = Get.isRegistered<VideoFeedWarmupService>()
+            ? Get.find<VideoFeedWarmupService>()
+            : Get.put(VideoFeedWarmupService(), permanent: true);
+
+        // Best-effort (pas d'await) : ne doit jamais impacter l'UI.
+        unawaited(warmup.warmup());
+      });
+    });
+  }
+
+  void _onItemTapped({required int index, required PageState pageState}) {
+    if (_indexForState(pageState) == index) {
+      return;
+    }
+    if (Get.isRegistered<VideoFeedController>()) {
+      final feedCtrl = Get.find<VideoFeedController>();
+      if (pageState == PageState.vivre && index != _vivreTabIndex) {
+        feedCtrl.onFeedHidden();
+        feedCtrl.saveSessionTimestamp(); // timestamp pour la logique 30 min au retour
+      } else if (index == _vivreTabIndex) {
+        feedCtrl.onFeedVisible();
+      }
+    }
+    navigationHandler.switchPage(id: index, context: context);
+  }
+
+  @override
+  void dispose() {
+    _videoFeedWarmupTimer?.cancel();
+    _videoFeedWarmupTimer = null;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationCubit, PageState>(
       builder: (context, state) {
-        return Scaffold(
-          body: widget.child,
-          bottomNavigationBar: Container(
+        return ValueListenableBuilder<bool>(
+          valueListenable: Constantes.hideBottomNavNotifier,
+          builder: (context, hideBottomNav, _) {
+            return Scaffold(
+              body: widget.child,
+              bottomNavigationBar: hideBottomNav
+                  ? null
+                  : Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
+              // borderRadius: const BorderRadius.only(
+              //   topLeft: Radius.circular(20),
+              //   topRight: Radius.circular(20),
+              // ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   spreadRadius: 1,
                   blurRadius: 10,
                 ),
               ],
             ),
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
+              // borderRadius: const BorderRadius.only(
+              //   topLeft: Radius.circular(20),
+              //   topRight: Radius.circular(20),
+              // ),
               child: SizedBox(
                 height: Platform.isAndroid ? 105 : null,
                 child: BottomNavigationBar(
                   type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.white,
-                  currentIndex: _selectedIndex,
+                  backgroundColor:
+                      state == PageState.vivre ? Colors.black : Colors.white,
+                  currentIndex: _indexForState(state),
                   onTap: (value) =>
                       _onItemTapped(index: value, pageState: state),
                   selectedFontSize: 12,
@@ -95,96 +140,98 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                   showSelectedLabels: true,
                   showUnselectedLabels: true,
                   selectedItemColor: AppColors.primary,
-                  unselectedItemColor: Colors.grey,
+                  unselectedItemColor: state == PageState.vivre
+                      ? Colors.white
+                      : Colors.grey,
                   items: [
                     _buildNavItem(
-                        icon: ImmoIcons.home,
-                        label: "Accueil",
-                        isActive: state == PageState.home //_selectedIndex == 0,
-                        ),
+                      icon: Iconsax.home,
+                      label: "Accueil",
+                      isActive: state == PageState.home,
+                      immoMode: state == PageState.vivre,
+                    ),
                     _buildNavItem(
-                      icon: ImmoIcons.coeur,
+                      icon: Iconsax.heart,
                       label: "Favoris",
-                      isActive: state == PageState.forMe, //_selectedIndex == 1,
+                      isActive: state == PageState.forMe,
+                      immoMode: state == PageState.vivre,
                     ),
-                    BottomNavigationBarItem(
-                      icon: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        height: (state.name == PageState.home.name) ? 20 : 40,
-                        child: Icon(
-                          FontAwesomeIcons.sliders,
-                          color: (state.name == PageState.home.name)
-                              ? Colors.transparent
-                              : Colors.grey.shade300,
-                        ),
-                      ), // Espace pour le bouton flottant
-
-                      label: "Filtre",
+                    _buildNavItemVivre(isActive: state == PageState.vivre),
+                    _buildNavItem(
+                      icon: Iconsax.location,
+                      label: "Explorer",
+                      isActive: state == PageState.explore,
+                      immoMode: state == PageState.vivre,
                     ),
                     _buildNavItem(
-                        icon: ImmoIcons.visua,
-                        label: "Explorer",
-                        isActive:
-                            state == PageState.explore //_selectedIndex == 3,
-                        ),
-                    _buildNavItem(
-                      icon: ImmoIcons.compte,
+                      icon: Iconsax.user,
                       label: "Compte",
-                      isActive:
-                          state == PageState.acount, // _selectedIndex == 4,
+                      isActive: state == PageState.account,
+                      immoMode: state == PageState.vivre,
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: (state.name == PageState.home.name)
-              ? FloatingActionButton(
-                  backgroundColor: AppColors.scafold,
-                  onPressed: _showFilterDialog,
-                  child: Icon(
-                    FontAwesomeIcons.sliders,
-                    color: AppColors.primary,
-                  ),
-                )
-              : null,
+            );
+          },
         );
       },
     );
   }
 
   BottomNavigationBarItem _buildNavItem({
-    required ImmoIcons icon,
+    required IconData icon,
     required String label,
     required bool isActive,
+    required bool immoMode,
   }) {
+    final inactiveColor = immoMode ? Colors.white : Colors.grey.shade600;
     return BottomNavigationBarItem(
       icon: isActive
           ? Container(
               height: 40,
-              //width: 20,
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ImmoIcon(
+              decoration: immoMode
+                  ? BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    )
+                  : null,
+              child: Icon(
                 icon,
                 color: AppColors.primary,
-                size: 25,
+                size: 24,
               ),
             )
           : SizedBox(
               height: 40,
-              child: ImmoIcon(
+              child: Icon(
                 icon,
-                color: Colors.grey.shade600,
+                color: inactiveColor,
                 size: 25,
               ),
             ),
       label: label,
     );
   }
+
+  BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
+  return BottomNavigationBarItem(
+    icon: Container(
+      height: 40,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: isActive ? AppColors.primary.withOpacity(0.2) : null,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon( Iconsax.play5,
+        color: AppColors.primary ,
+        size: 28,
+      ),
+    ),
+    label: 'Video',
+  );
+}
 }

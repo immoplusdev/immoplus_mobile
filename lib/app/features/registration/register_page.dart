@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -11,7 +14,9 @@ import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({super.key, this.redirectData});
+  final AuthRedirectData? redirectData;
+
   static String name = "REGISTER_PAGE";
 
   @override
@@ -80,6 +85,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   context.read<LoginCubit>().signInWithGoogle();
                 },
               ),
+              const Gap(16),
+              // Bouton Apple (iOS uniquement)
+              if (Platform.isIOS)
+                AuthButton(
+                  icon: const Icon(
+                    Icons.apple,
+                    color: Colors.black,
+                    size: 24,
+                  ),
+                  label: "Apple",
+                  onTap: () => context.read<LoginCubit>().signInWithApple(),
+                ),
             ],
           ),
         ),

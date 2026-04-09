@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -16,8 +14,7 @@ import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
-import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:immoplus/app/widgets/tickets_cards/components/card_image_carousel.dart';
 
 class ResidenceCard extends StatefulWidget {
   const ResidenceCard({super.key, required this.residence});
@@ -56,72 +53,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: AspectRatio(
-                      aspectRatio: 1.70, // Rectangle paysage
-                      child: FlutterCarousel(
-                        items: widget.residence.images
-                            .map((e) => Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: Utils.getImagePath(id: e),
-                                    placeholder: (context, url) =>
-                                        Shimmer.fromColors(
-                                      baseColor: Colors.grey.shade300,
-                                      highlightColor: Colors.grey.shade100,
-                                      period: const Duration(milliseconds: 500),
-                                      child: Container(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) => Icon(
-                                      FontAwesomeIcons.images,
-                                      size: 100,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    fit: BoxFit
-                                        .cover, // Ajuste l'image au conteneur
-                                  ),
-                                ))
-                            .toList(),
-                        options: FlutterCarouselOptions(
-                          aspectRatio: 1, // Assure le rectangle paysage
-                          viewportFraction:
-                              1.0, // Pas de découpage ou chevauchement
-                          initialPage: 0,
-                          enableInfiniteScroll: true,
-
-                          reverse: false,
-                          autoPlay: false,
-                          enlargeCenterPage: false,
-                          scrollDirection: Axis.horizontal,
-                          showIndicator: true,
-                          indicatorMargin: 20,
-                          slideIndicator: CircularSlideIndicator(
-                            slideIndicatorOptions: const SlideIndicatorOptions(
-                              indicatorRadius: 4,
-                              enableHalo: true,
-                              enableAnimation: true,
-                              itemSpacing: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: RatingComponent(rating: 5),
-                  )
-                ],
-              ),
+              CardImageCarousel(images: widget.residence.images),
               Gap(10),
               Container(
                 //color: Colors.grey,
@@ -137,7 +69,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            widget.residence.nom.capitalizeFirst(),
+                            widget.residence.nom.capitalizeWords(),
                             overflow: TextOverflow.fade,
                             style: Theme.of(context)
                                 .textTheme
@@ -207,29 +139,31 @@ class _ResidenceCardState extends State<ResidenceCard> {
                   ],
                 ),
               ),
+               Gap(10),
             ],
           ),
         ),
-        Positioned(
-          right: 10,
-          top: 10,
-          child: ValueListenableBuilder(
-            valueListenable: _liked,
-            builder: (context, value, child) => ResidenceFavoriteButton(
-              isFavorite: value,
-              onTap: () async {
-                if (_liked.value == false) {
-                  favoriesUtils
-                      .addResidenceToFavorites(widget.residence)
-                      .then((value) {});
-                } else {
-                  favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
-                }
-                _liked.value = !value;
-              },
-            ),
-          ),
-        ),
+        // Bouton cœur (commenté)
+        // Positioned(
+        //   right: 10,
+        //   bottom: 160,
+        //   child: ValueListenableBuilder(
+        //     valueListenable: _liked,
+        //     builder: (context, value, child) => ResidenceFavoriteButton(
+        //       isFavorite: value,
+        //       onTap: () async {
+        //         if (_liked.value == false) {
+        //           favoriesUtils
+        //               .addResidenceToFavorites(widget.residence)
+        //               .then((value) {});
+        //         } else {
+        //           favoriesUtils.deleteFavoriteByItemId(widget.residence.id);
+        //         }
+        //         _liked.value = !value;
+        //       },
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

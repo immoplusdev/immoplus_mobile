@@ -49,13 +49,51 @@ class LocationService {
     }
   }
 
+  // ─── Méthodes de vérification de permission ──────────────────────────────
+
+  /// Vérifie l'état actuel de la permission sans la demander
+  static Future<LocationPermission> checkPermission() async {
+    return await Geolocator.checkPermission();
+  }
+
+  /// Demande la permission de localisation
+  static Future<LocationPermission> requestPermission() async {
+    return await Geolocator.requestPermission();
+  }
+
+  /// Vérifie si la permission est accordée (whileInUse ou always)
+  static Future<bool> get isPermissionGranted async {
+    final permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+  }
+
+  /// Vérifie si la permission est refusée (denied ou permanentlyDenied)
+  static Future<bool> get isPermissionDenied async {
+    final permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever;
+  }
+
+  /// Vérifie si la permission n'a jamais été demandée
+  static Future<bool> get isPermissionNotDetermined async {
+    final permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.denied;
+  }
+
   static Future<Position> getCurrentPosition() async {
     try {
       await _ensureServiceEnabled();
       await _ensurePermission();
+
+      // Essayer d'abord la dernière position connue (instantané)
+      final lastKnown = await Geolocator.getLastKnownPosition();
+      if (lastKnown != null) return lastKnown;
+
+      // Sinon, demander une nouvelle position avec un timeout
       return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+        desiredAccuracy: LocationAccuracy.medium,
+      ).timeout(const Duration(seconds: 10));
     } on LocationException {
       rethrow;
     } catch (e) {
@@ -124,7 +162,7 @@ class LocationService {
       final List<Placemark> placemarks =
           await placemarkFromCoordinates(latitude, longitude);
 
-      if (placemarks.isEmpty) return 'Position actuelle';
+      if (placemarks.isEmpty) return 'Partager ma position';
 
       final Placemark place = placemarks.first;
       final String address = place.street?.isNotEmpty == true
@@ -135,13 +173,13 @@ class LocationService {
                   ? place.locality!
                   : place.administrativeArea?.isNotEmpty == true
                       ? place.administrativeArea!
-                      : 'Position actuelle';
+                      : 'Partager ma position';
 
       return address.length > maxLength
           ? '${address.substring(0, maxLength)}...'
           : address;
     } catch (_) {
-      return 'Position indisponible';
+      return 'Partager ma position';
     }
   }
 

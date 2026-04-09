@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
@@ -12,7 +13,9 @@ enum PushNotificationType {
   bienImmobilier, // Biens immobiliers
   demandeVisite, // Demandes de visite
   payment, // Paiements
-  wallet; // Wallet
+  wallet, // Wallet
+  reservationAccepted, // Pro a accepté → overlay paiement
+  reservationRefused; // Pro a refusé → booking history
 
   /// 🎯 Retourne la route correspondante
   String? getRoute(String? id) {
@@ -31,6 +34,12 @@ enum PushNotificationType {
 
       case PushNotificationType.payment:
         return PaymentHistoryPage.route();
+
+      case PushNotificationType.reservationAccepted:
+        return PendingPaymentReservationsPage.route(reservationId: id);
+
+      case PushNotificationType.reservationRefused:
+        return PendingPaymentReservationsPage.route();
 
       case PushNotificationType.wallet:
       case PushNotificationType.auth:
@@ -67,6 +76,12 @@ enum PushNotificationType {
 
       case 'wallet':
         return PushNotificationType.wallet;
+
+      case 'reservation_accepted':
+        return PushNotificationType.reservationAccepted;
+
+      case 'reservation_refused':
+        return PushNotificationType.reservationRefused;
 
       default:
         return null;

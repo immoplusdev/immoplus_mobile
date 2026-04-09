@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus/app/data/enums/validation_status.dart';
 import 'package:immoplus/app/data/models/remote/configs/commune_model.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 
@@ -21,6 +22,7 @@ class ResidenceModel with _$ResidenceModel {
     @Default('') String adresse,
     @Default('') String ville,
     @Default('') String commune,
+    @Default('') String statusValidation,
     @JsonKey(name: 'ville_model') VilleModel? villeModel,
     @JsonKey(name: 'commune_model') CommuneModel? communeModel,
     @Default(PositionModel()) PositionModel position,
@@ -36,10 +38,16 @@ class ResidenceModel with _$ResidenceModel {
     @Default(false) bool animauxAutorises,
     @Default(false) bool fetesAutorises,
     @Default('') String reglesSupplementaires,
+    num? score,
     //ClientModel? proprietaire,
     @Default(true) bool residenceDisponible,
   }) = _ResidenceModel;
 
   factory ResidenceModel.fromJson(Map<String, dynamic> json) =>
       _$ResidenceModelFromJson(json);
+}
+
+extension ResidenceModelX on ResidenceModel {
+  ValidationStatus get validationStatus =>
+      ValidationStatus.fromString(statusValidation);
 }

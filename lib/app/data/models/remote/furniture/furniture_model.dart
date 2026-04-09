@@ -22,6 +22,7 @@ class FurnitureModel with _$FurnitureModel {
     @Default('') String? category,
     @Default('') String? etat,
     @Default('') String? status,
+    String? codeFurniture,
     DateTime? createdAt,
     DateTime? updatedAt,
     @Default('') String? ville,

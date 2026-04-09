@@ -17,7 +17,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 # for new deployment use 1.0.9+12 (INCREMENT !!!) POUR UNIFORMISER IOS ET ANDROID CAR SUR ANDROID ON EST A 1.0.7 pourtant usr ios  1.0.7 y etait deja
-version: 1.0.17+22
+version: 1.0.19+25
 
 environment:
   sdk: ^3.6.0
@@ -46,6 +46,8 @@ dependencies:
       url: https://github.com/Shahidbangash/intl_phone_number_input.git
       ref: develop
   dio: ^5.8.0+1
+  talker: ^5.1.15
+  talker_dio_logger: ^5.1.15
   asset_cache: ^2.1.0
   auto_size_text: ^3.0.0
   bloc: ^9.0.0
@@ -75,17 +77,22 @@ dependencies:
   flutter_widget_from_html: ^0.15.3
   fluttertoast: ^8.2.12
   font_awesome_flutter: ^10.8.0
+  
   gap: ^3.0.1
   geojson_vi: ^2.2.5
   get: ^4.7.2
   get_it: ^8.0.3
   gif: ^2.3.0
   go_router: ^17.1.0
-  google_fonts: ^6.2.1
+  google_fonts: ^8.0.2
   grouped_list: ^6.0.0
   hexcolor: ^3.0.1
+  iconsax: ^0.0.8
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.1.0
+  instagram_like_animation_button:
+    git:
+      url: https://github.com/iambhabha/instagram_like_animation_button.git
   injectable: ^2.5.0
   intl: ^0.20.1
   intro_slider: ^4.2.1
@@ -115,6 +122,10 @@ dependencies:
   timeago: ^3.7.0
   url_launcher: ^6.3.1
   video_player: ^2.9.2
+  video_thumbnail: ^0.5.6
+  flutter_cache_manager: ^3.3.1
+  shared_preferences: ^2.2.2
+  visibility_detector: ^0.4.0+2
   toastification: ^2.3.0
   country_code_picker: ^3.2.0
   google_maps_custom_marker: ^1.0.3
@@ -134,6 +145,18 @@ dependencies:
   widget_to_marker: ^1.0.6
   http: ^1.6.0
   ez_circle_avatar: ^0.0.5
+  # UI & animations
+  shadcn_ui:
+    git:
+      url: https://github.com/nank1ro/flutter-shadcn-ui.git
+      ref: main
+  animate_do: ^4.2.0
+  smooth_sheets: ^0.17.0
+  preload_page_view: ^0.2.0
+  socket_io_client: ^3.0.0
+  sliver_tools: ^0.2.12
+  flutter_video_caching: ^1.1.1
+
 
 dev_dependencies:
   flutter_test:
@@ -178,7 +201,6 @@ flutter:
     - assets/lotties/
     - assets/icons/empty.svg
     - assets/img/
-    - assets/img/piece/
     - assets/img/onboarding/
     - assets/icon/
     - assets/icon/icon_large.png
@@ -186,8 +208,11 @@ flutter:
     - assets/icon/leading.json
     - assets/img/onboarding/
     - assets/img/panorama.jpg
+    - assets/img/modal/
     - assets/gif/
     - assets/svgs/icons/
+    - assets/3d/
+    - assets/promo/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -215,3 +240,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+

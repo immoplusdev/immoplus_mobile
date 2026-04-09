@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/enums/api_error_code.dart';
@@ -54,12 +55,29 @@ class SocialLoginUser {
 
 @injectable
 class LoginCubit extends Cubit<LoginCubitState> {
-  LoginCubit(this.sessionManager, this.dio, this.notificationService)
+  LoginCubit(this.sessionManager, this.dio, this.notificationService,
+      this.authRedirectService)
       : super(const LoginCubitState.initial());
   SessionManager sessionManager;
   NotificationService notificationService;
+  final AuthRedirectService authRedirectService;
   Dio dio;
   SocialLoginUser? socialLoginUser;
+
+  void _navigateAfterLogin() {
+    final context = NavigationService.navigatorKey.currentContext!;
+    final redirectData = authRedirectService.get();
+    if (redirectData != null) {
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == redirectData.popUntilRouteName,
+      );
+      redirectData.callback();
+      authRedirectService.clear();
+    } else {
+      context.goNamed(HomePage.name);
+    }
+  }
+
   onSendData({required LoginBodyModel body}) async {
     emit(const LOGIN_LOADING());
     try {
@@ -90,10 +108,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      _navigateAfterLogin();
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -147,7 +162,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
+      _navigateAfterLogin();
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -396,10 +411,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      _navigateAfterLogin();
     } on DioException catch (e) {
       final errorData = e.response?.data;
       final errorResponse = ApiErrorResponse.fromJson(errorData);

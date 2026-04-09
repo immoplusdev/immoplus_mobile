@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
-import 'package:immoplus/app/features/otp_login/pages/otp_page_test.dart';
+import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
@@ -14,6 +14,7 @@ import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/social_button_widget.dart';
 
 class PhoneNumberPage extends StatefulWidget {
@@ -39,7 +40,20 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     });
   }
 
-  Future<void> _sendOtpCode() async {
+  Future<void> _showChannelChoice() async {
+    if (_isLoading || !isPhoneNumberValid || phoneNumber.isEmpty) return;
+    await AppDialog.show(
+      title: 'Recevoir le code par',
+      description:
+          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
+      primaryButtonText: 'WhatsApp',
+      secondButtonText: 'SMS',
+      onPrimary: () => _sendOtpCode(useWhatsapp: true),
+      onSecond: () => _sendOtpCode(useWhatsapp: false),
+    );
+  }
+
+  Future<void> _sendOtpCode({bool useWhatsapp = false}) async {
     if (_isLoading) return;
 
     setState(() {
@@ -47,16 +61,17 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     });
 
     try {
-      final response = await AuthRepository().sendOtp(
-        body: SendOptModel(
-          phoneNumber: PhoneNumberHandler.formatPhoneNumber(phoneNumber),
-        ),
+      final model = SendOptModel(
+        phoneNumber: PhoneNumberHandler.formatPhoneNumber(phoneNumber),
       );
+      final response = useWhatsapp
+          ? await AuthRepository().sendWhatsappOtp(body: model)
+          : await AuthRepository().sendOtp(body: model);
 
       if (!mounted) return;
 
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
-        context.pushNamed(OtpPageTest.name, extra: phoneNumber);
+        context.pushNamed(OtpPage.name, extra: phoneNumber);
       } else {
         CustomPopup.showErrorToast(
           text: 'Envoi du code échoué, veuillez ressayer',
@@ -103,7 +118,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
 
           CustomLoadingButtom(
             text: "Envoyer le code",
-            onClick: _sendOtpCode,
+            onClick: _showChannelChoice,
             isLoading: _isLoading,
             clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
             color: isPhoneNumberValid

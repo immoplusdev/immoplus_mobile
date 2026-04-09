@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ErrorIndicator extends StatelessWidget {
   const ErrorIndicator({Key? key, this.description, this.title})
@@ -10,45 +11,59 @@ class ErrorIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (GetUtils.isNullOrBlank(title) == false ||
-            GetUtils.isNullOrBlank(description) == false)
-        ? Align(
-            alignment: Alignment.topCenter,
-            child: Card(
-              margin: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(),
-              color: const Color(0xFFEF4444),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (title != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Text(
-                          title ?? "",
-                          style: Get.theme.textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+    final hasContent = GetUtils.isNullOrBlank(title) == false ||
+        GetUtils.isNullOrBlank(description) == false;
+
+    if (!hasContent) return const SizedBox();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFEF2F2),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFFECACA), width: 1),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Iconsax.warning_2,
+              size: 20,
+              color: Color(0xFFEF4444),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (title != null)
+                    Text(
+                      title!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFB91C1C),
+                        height: 1.3,
                       ),
-                    if (description != null)
-                      Text(
-                        description ?? "",
-                        style: Get.theme.textTheme.titleLarge?.copyWith(
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        textAlign: TextAlign.center,
+                    ),
+                  if (description != null)
+                    Text(
+                      description!,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFFDC2626),
+                        height: 1.3,
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
-          )
-        : const SizedBox();
+          ],
+        ),
+      ),
+    );
   }
 }

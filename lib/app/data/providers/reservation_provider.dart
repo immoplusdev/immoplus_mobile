@@ -25,9 +25,10 @@ abstract class ReservationProvider {
       @Query("_page") int page,
       @Query("_per_page") int perPage,
       @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir);
+      @Query("_order_dir") String? orderDir,
+      [@Query('_where') List<String>? where]);
 
-  @POST("/reservations")
+  @POST("/v2/reservations")
   Future<ReservationResponse> createBookings(
       @Body() ReservationRequestBody body);
 
@@ -42,4 +43,10 @@ abstract class ReservationProvider {
 
   @POST("/reservations/action/annuler/{id}")
   Future<ReservationResponse> annulerBookings(@Path() String id);
+
+  @POST("/reservations/action/annuler-client/{id}")
+  Future<ReservationResponse> annulerReservationClient(
+    @Path() String id,
+    @Body() Map<String, dynamic> body,
+  );
 }

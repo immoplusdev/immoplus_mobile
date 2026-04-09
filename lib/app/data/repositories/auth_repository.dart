@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
@@ -25,21 +24,24 @@ import '../models/auth/update_password_dto.dart';
 import '../models/auth/update_user_dto.dart';
 import '../models/remote/files/file_data_model.dart';
 import '../providers/auth_provider.dart';
+import '../models/auth/demande_pro_particulier_body.dart';
+import '../models/auth/demande_pro_particulier_me_response.dart';
+import '../models/remote/user/contact_change_models.dart';
 
 class AuthRepository {
   final dioClient = getIt<Dio>();
   Future<FileDataModel> uplaodFile({required File file}) async {
     try {
-      final response = await compute(AuthProvider(dioClient).uploadImage, file);
+      final response = await AuthProvider(dioClient).uploadImage(file);
       inspect(response);
       return response;
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
-    } catch (error) {
+    } catch (error, s) {
       // Gérer d'autres types d'exceptions ici
-      log('Error: $error');
+      log('Error: $error $s');
       throw Exception('Failed to load users: $error');
     }
   }
@@ -114,6 +116,21 @@ class AuthRepository {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
       throw Exception('Failed to load users: $error');
+    }
+  }
+
+  Future<HttpResponse> sendWhatsappOtp({required SendOptModel body}) async {
+    try {
+      final response = await AuthProvider(dioClient).sendWhatsappOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send WhatsApp OTP: ${dioError.message}');
+    } catch (error) {
+      inspect(error);
+      log('Error: $error');
+      throw Exception('Failed to send WhatsApp OTP: $error');
     }
   }
 
@@ -300,6 +317,83 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to social login: $error');
+    }
+  }
+
+  Future<HttpResponse> createDemandeProParticulier(
+      {required DemandeProParticulierBody body}) async {
+    try {
+      final response =
+          await AuthProvider(dioClient).createDemandeProParticulier(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      final data = dioError.response?.data;
+      if (data is Map && data['message'] != null) {
+        final message = data['message'].toString();
+        throw Exception(message);
+      }
+      throw Exception('Failed to create demande pro: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to create demande pro: $error');
+    }
+  }
+
+  Future<DemandeProParticulierMeResponse> getDemandeProParticulierMe() async {
+    try {
+      final response =
+          await AuthProvider(dioClient).getDemandeProParticulierMe();
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      final data = dioError.response?.data;
+      if (data is Map && data['message'] != null) {
+        throw Exception(data['message'].toString());
+      }
+      throw Exception('Failed to get demande pro: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to get demande pro: $error');
+    }
+  }
+
+  Future<ContactChangeResponse> requestContactChange(
+      RequestContactChangeBody body) async {
+    try {
+      return await AuthProvider(dioClient).requestContactChange(body);
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      final data = dioError.response?.data;
+      if (data is Map && data['message'] != null) {
+        throw RequestResponseExeption(data['message'].toString());
+      }
+      throw RequestResponseExeption(dioError.message ?? 'Erreur réseau');
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<UpdateUserResponseModel> confirmContactChange(
+      ConfirmContactChangeBody body) async {
+    try {
+      return await AuthProvider(dioClient).confirmContactChange(body);
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      final data = dioError.response?.data;
+      if (data is Map && data['message'] != null) {
+        throw RequestResponseExeption(data['message'].toString());
+      }
+      throw RequestResponseExeption(dioError.message ?? 'Erreur réseau');
+    } catch (error) {
+      log('Error: $error');
+      rethrow;
     }
   }
 }

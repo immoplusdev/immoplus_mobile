@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
@@ -14,116 +14,138 @@ class ContactUtils {
   static showContact({String? id}) => showModalBottomSheet(
         context: NavigationService.navigatorKey.currentContext!,
         showDragHandle: true,
-        backgroundColor: AppColors.scafold,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        builder: (context) => FractionallySizedBox(
-          heightFactor: 0.6,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(bottom: 10),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(20),
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+        backgroundColor: AppColors.whiteBackground,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        builder: (context) {
+          final phone = getIt<SessionManager>().configModel?.data?.contactPhoneNumber ?? '';
+          final email = getIt<SessionManager>().configModel?.data?.contactEmail ?? '';
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 40),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 4, bottom: 20),
+                  child: Text(
+                    "Nous contacter",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF0D0D0D),
                     ),
-                    leading: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        FontAwesomeIcons.whatsapp,
-                        color: Colors.green,
+                  ),
+                ),
+                _contactTile(
+                  context: context,
+                  leading: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF25D366).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Iconsax.message, size: 18, color: Color(0xFF25D366)),
+                  ),
+                  title: "WhatsApp",
+                  subtitle: "Écrivez-nous sur WhatsApp",
+                  accentColor: const Color(0xFF25D366),
+                  onTap: () => Utils.whatsapp(phoneNumber: phone),
+                ),
+                const Gap(10),
+                _contactTile(
+                  context: context,
+                  leading: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(Iconsax.call, size: 18, color: AppColors.primary),
+                  ),
+                  title: "Appel téléphonique",
+                  subtitle: "Appeler notre service client",
+                  accentColor: AppColors.primary,
+                  onTap: () => Utils.makePhoneCall(phone),
+                ),
+                const Gap(10),
+                _contactTile(
+                  context: context,
+                  leading: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEA4335).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(9),
+                      child: SvgPicture.asset(SVGMap.map['gmail']!),
+                    ),
+                  ),
+                  title: "Email",
+                  subtitle: "Envoyez-nous un e-mail",
+                  accentColor: const Color(0xFFEA4335),
+                  onTap: () async {
+                    final uri = Uri(scheme: 'mailto', path: email);
+                    await launchUrl(uri);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+  static Widget _contactTile({
+    required BuildContext context,
+    required Widget leading,
+    required String title,
+    required String subtitle,
+    required Color accentColor,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: const Color(0xFFF9FAFB),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              leading,
+              const Gap(14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF1E1E1E),
                       ),
                     ),
-                    title: const Text("Écrivez-nous sur WhatsApp"),
-                    titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.green,
+                    const Gap(2),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF9CA3AF),
+                      ),
                     ),
-                    onTap: () async {
-                      Utils.whatsapp(
-                          phoneNumber: getIt<SessionManager>()
-                              .configModel!
-                              .data!
-                              .contactPhoneNumber);
-                    },
-                  ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(bottom: 10),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(20),
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    leading: const Icon(
-                      FontAwesomeIcons.headset,
-                      color: Colors.black,
-                    ),
-                    title: const Text("Appeller notre service client"),
-                    titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.black,
-                    ),
-                    onTap: () async {
-                      Utils.makePhoneCall(getIt<SessionManager>()
-                          .configModel!
-                          .data!
-                          .contactPhoneNumber);
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(bottom: 10),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(20),
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    leading: SvgPicture.asset(
-                      SVGMap.map['gmail']!,
-                      height: 30,
-                    ),
-                    title: const Text("Envoyez-nous un e-mail"),
-                    titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.red,
-                    ),
-                    onTap: () async {
-                      final Uri emailLaunchUri = Uri(
-                        scheme: 'mailto',
-                        path: getIt<SessionManager>()
-                            .configModel!
-                            .data!
-                            .contactEmail,
-                      );
-
-                      await launchUrl(emailLaunchUri);
-                    },
-                  ),
-                ),
-              ),
+              Icon(Icons.chevron_right_rounded, color: const Color(0xFFD1D5DB), size: 20),
             ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }

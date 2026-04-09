@@ -10,10 +10,11 @@ import 'package:intl/intl.dart';
 
 enum PageState {
   home,
+  vivre,
   explore,
   history,
   map,
-  acount,
+  account,
   forMe,
 }
 
@@ -64,11 +65,13 @@ class Constantes {
     PageState.home: const HomePage(),
     PageState.explore: Container(), //SearchPage(),
     PageState.map: Container(), //MapViewer(),
-    PageState.acount: AccountPage(),
+    PageState.account: AccountPage(),
     PageState.history: Container(), //HistoricalPage(),
   };
   //static ConfigModel? configApp;
   static ValueNotifier<bool> buildNotifier = ValueNotifier<bool>(true);
+  /// Masquer la bottom navigation bar (ex: quand le sheet Réserver est ouvert).
+  static ValueNotifier<bool> hideBottomNavNotifier = ValueNotifier<bool>(false);
   static ValueNotifier<VilleModel> villeUser =
       ValueNotifier<VilleModel>(const VilleModel(id: "0000", name: ''));
 

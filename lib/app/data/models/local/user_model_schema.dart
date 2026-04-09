@@ -25,8 +25,12 @@ class UserModelSchema {
 
 // Getter qui retourne le numéro sans le +225
   String? get number {
-    if ((phoneNumber ?? "").startsWith('+225')) {
-      return phoneNumber?.substring(4);
+    if (phoneNumber == null) return null;
+    if (phoneNumber!.startsWith('+225') && phoneNumber!.length > 4) {
+      return phoneNumber!.substring(4);
+    }
+    if (phoneNumber!.startsWith('225') && phoneNumber!.length > 3) {
+      return phoneNumber!.substring(3);
     }
     return phoneNumber;
   }

@@ -32,7 +32,6 @@ class _LoadingPageState extends State<LoadingPage>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     controller.dispose();
     super.dispose();
   }

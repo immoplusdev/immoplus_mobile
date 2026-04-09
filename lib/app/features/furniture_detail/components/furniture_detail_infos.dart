@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 
 class FurnitureDetailInfos extends StatelessWidget {
   const FurnitureDetailInfos({super.key, required this.furnitureModel});
@@ -21,6 +23,37 @@ class FurnitureDetailInfos extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const Gap(14),
+            if (furnitureModel.codeFurniture != null) ...[
+              GestureDetector(
+                onTap: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: furnitureModel.codeFurniture ?? ""),
+                  );
+                  ToastUtils.success('Code du meuble copié');
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF7F8FA),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFFEAECEF),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "CODE DU MEUBLE : ${furnitureModel.codeFurniture}"
+                                .toUpperCase(),
+                          ),
+                        ),
+                        Icon(Icons.copy, size: 16, color: Colors.grey.shade600),
+                      ],
+                    )),
+              ),
+              const Gap(14),
+            ],
             LayoutBuilder(
               builder: (context, constraints) {
                 const spacing = 12.0;

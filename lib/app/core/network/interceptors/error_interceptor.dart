@@ -9,6 +9,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/auth_service.dart';
 import 'package:immoplus/app/data/enums/api_error_code.dart';
 import 'package:immoplus/app/data/error/api_error_response.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:injectable/injectable.dart';
 import 'package:toastification/toastification.dart';
 
@@ -38,7 +39,8 @@ class ErrorInterceptor extends Interceptor {
     }
 
     // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
-    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
+    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode) &&
+        !_isActiveReservationBlock(err.response)) {
       _showErrorToast(apiErrorResponse, err.response);
     }
 
@@ -93,6 +95,15 @@ class ErrorInterceptor extends Interceptor {
     return false; // Indique que l'erreur n'a pas pu être traitée
   }
 
+  /// Retourne true si c'est un blocage "réservation active" — géré par le modal dédié
+  bool _isActiveReservationBlock(Response? response) {
+    if (response?.statusCode != 400) return false;
+    final data = response?.data;
+    if (data is! Map) return false;
+    final inner = data['data'];
+    return inner is Map && inner['reservationId'] != null;
+  }
+
   /// Affiche le toast d'erreur approprié
   void _showErrorToast(ApiErrorResponse? apiErrorResponse, Response? response) {
     final context = NavigationService.navigatorKey.currentContext;
@@ -106,18 +117,9 @@ class ErrorInterceptor extends Interceptor {
       return;
     }
 
-    toastification.show(
-      type: ToastificationType.error,
-      context: context,
-      title: const Text("Oops, quelque chose s'est mal passé."),
-      description: Text(
-        message,
-        maxLines: 6,
-      ),
-      autoCloseDuration: const Duration(seconds: 5),
-      showProgressBar: false,
-      alignment: Alignment.bottomCenter,
-      style: ToastificationStyle.flatColored,
+    ToastUtils.showError(
+      title: "Oops, quelque chose s'est mal passé.",
+      description: message,
     );
   }
 

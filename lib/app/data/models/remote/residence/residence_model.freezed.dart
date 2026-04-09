@@ -29,6 +29,7 @@ mixin _$ResidenceModel {
   String get adresse => throw _privateConstructorUsedError;
   String get ville => throw _privateConstructorUsedError;
   String get commune => throw _privateConstructorUsedError;
+  String get statusValidation => throw _privateConstructorUsedError;
   @JsonKey(name: 'ville_model')
   VilleModel? get villeModel => throw _privateConstructorUsedError;
   @JsonKey(name: 'commune_model')
@@ -45,7 +46,8 @@ mixin _$ResidenceModel {
   int get nombreMaxOccupants => throw _privateConstructorUsedError;
   bool get animauxAutorises => throw _privateConstructorUsedError;
   bool get fetesAutorises => throw _privateConstructorUsedError;
-  String get reglesSupplementaires =>
+  String get reglesSupplementaires => throw _privateConstructorUsedError;
+  num? get score =>
       throw _privateConstructorUsedError; //ClientModel? proprietaire,
   bool get residenceDisponible => throw _privateConstructorUsedError;
 
@@ -75,6 +77,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
       String adresse,
       String ville,
       String commune,
+      String statusValidation,
       @JsonKey(name: 'ville_model') VilleModel? villeModel,
       @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       PositionModel position,
@@ -90,6 +93,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
       bool animauxAutorises,
       bool fetesAutorises,
       String reglesSupplementaires,
+      num? score,
       bool residenceDisponible});
 
   $VilleModelCopyWith<$Res>? get villeModel;
@@ -121,6 +125,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? adresse = null,
     Object? ville = null,
     Object? commune = null,
+    Object? statusValidation = null,
     Object? villeModel = freezed,
     Object? communeModel = freezed,
     Object? position = null,
@@ -136,6 +141,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? animauxAutorises = null,
     Object? fetesAutorises = null,
     Object? reglesSupplementaires = null,
+    Object? score = freezed,
     Object? residenceDisponible = null,
   }) {
     return _then(_value.copyWith(
@@ -174,6 +180,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
       commune: null == commune
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusValidation: null == statusValidation
+          ? _value.statusValidation
+          : statusValidation // ignore: cast_nullable_to_non_nullable
               as String,
       villeModel: freezed == villeModel
           ? _value.villeModel
@@ -235,6 +245,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.reglesSupplementaires
           : reglesSupplementaires // ignore: cast_nullable_to_non_nullable
               as String,
+      score: freezed == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as num?,
       residenceDisponible: null == residenceDisponible
           ? _value.residenceDisponible
           : residenceDisponible // ignore: cast_nullable_to_non_nullable
@@ -299,6 +313,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       String adresse,
       String ville,
       String commune,
+      String statusValidation,
       @JsonKey(name: 'ville_model') VilleModel? villeModel,
       @JsonKey(name: 'commune_model') CommuneModel? communeModel,
       PositionModel position,
@@ -314,6 +329,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       bool animauxAutorises,
       bool fetesAutorises,
       String reglesSupplementaires,
+      num? score,
       bool residenceDisponible});
 
   @override
@@ -346,6 +362,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? adresse = null,
     Object? ville = null,
     Object? commune = null,
+    Object? statusValidation = null,
     Object? villeModel = freezed,
     Object? communeModel = freezed,
     Object? position = null,
@@ -361,6 +378,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? animauxAutorises = null,
     Object? fetesAutorises = null,
     Object? reglesSupplementaires = null,
+    Object? score = freezed,
     Object? residenceDisponible = null,
   }) {
     return _then(_$ResidenceModelImpl(
@@ -399,6 +417,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
       commune: null == commune
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusValidation: null == statusValidation
+          ? _value.statusValidation
+          : statusValidation // ignore: cast_nullable_to_non_nullable
               as String,
       villeModel: freezed == villeModel
           ? _value.villeModel
@@ -460,6 +482,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.reglesSupplementaires
           : reglesSupplementaires // ignore: cast_nullable_to_non_nullable
               as String,
+      score: freezed == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as num?,
       residenceDisponible: null == residenceDisponible
           ? _value.residenceDisponible
           : residenceDisponible // ignore: cast_nullable_to_non_nullable
@@ -481,6 +507,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.adresse = '',
       this.ville = '',
       this.commune = '',
+      this.statusValidation = '',
       @JsonKey(name: 'ville_model') this.villeModel,
       @JsonKey(name: 'commune_model') this.communeModel,
       this.position = const PositionModel(),
@@ -496,6 +523,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.animauxAutorises = false,
       this.fetesAutorises = false,
       this.reglesSupplementaires = '',
+      this.score,
       this.residenceDisponible = true})
       : _images = images,
         _commodites = commodites,
@@ -531,6 +559,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final String commune;
+  @override
+  @JsonKey()
+  final String statusValidation;
   @override
   @JsonKey(name: 'ville_model')
   final VilleModel? villeModel;
@@ -594,6 +625,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final String reglesSupplementaires;
+  @override
+  final num? score;
 //ClientModel? proprietaire,
   @override
   @JsonKey()
@@ -601,7 +634,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
 
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible)';
   }
 
   @override
@@ -622,6 +655,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.adresse, adresse) || other.adresse == adresse) &&
             (identical(other.ville, ville) || other.ville == ville) &&
             (identical(other.commune, commune) || other.commune == commune) &&
+            (identical(other.statusValidation, statusValidation) ||
+                other.statusValidation == statusValidation) &&
             (identical(other.villeModel, villeModel) ||
                 other.villeModel == villeModel) &&
             (identical(other.communeModel, communeModel) ||
@@ -649,6 +684,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
                 other.fetesAutorises == fetesAutorises) &&
             (identical(other.reglesSupplementaires, reglesSupplementaires) ||
                 other.reglesSupplementaires == reglesSupplementaires) &&
+            (identical(other.score, score) || other.score == score) &&
             (identical(other.residenceDisponible, residenceDisponible) ||
                 other.residenceDisponible == residenceDisponible));
   }
@@ -666,6 +702,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         adresse,
         ville,
         commune,
+        statusValidation,
         villeModel,
         communeModel,
         position,
@@ -681,6 +718,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         animauxAutorises,
         fetesAutorises,
         reglesSupplementaires,
+        score,
         residenceDisponible
       ]);
 
@@ -712,6 +750,7 @@ abstract class _ResidenceModel implements ResidenceModel {
       final String adresse,
       final String ville,
       final String commune,
+      final String statusValidation,
       @JsonKey(name: 'ville_model') final VilleModel? villeModel,
       @JsonKey(name: 'commune_model') final CommuneModel? communeModel,
       final PositionModel position,
@@ -727,6 +766,7 @@ abstract class _ResidenceModel implements ResidenceModel {
       final bool animauxAutorises,
       final bool fetesAutorises,
       final String reglesSupplementaires,
+      final num? score,
       final bool residenceDisponible}) = _$ResidenceModelImpl;
 
   factory _ResidenceModel.fromJson(Map<String, dynamic> json) =
@@ -750,6 +790,8 @@ abstract class _ResidenceModel implements ResidenceModel {
   String get ville;
   @override
   String get commune;
+  @override
+  String get statusValidation;
   @override
   @JsonKey(name: 'ville_model')
   VilleModel? get villeModel;
@@ -781,7 +823,9 @@ abstract class _ResidenceModel implements ResidenceModel {
   @override
   bool get fetesAutorises;
   @override
-  String get reglesSupplementaires; //ClientModel? proprietaire,
+  String get reglesSupplementaires;
+  @override
+  num? get score; //ClientModel? proprietaire,
   @override
   bool get residenceDisponible;
 

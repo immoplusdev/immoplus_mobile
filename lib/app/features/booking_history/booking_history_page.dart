@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
@@ -43,7 +45,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       perPage: 5,
       orderBy: OrderByField.createdAt.value,
       orderDir: OrderDir.desc.value,
-      //where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+      // where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
     )
         .then((value) {
       if (value.hasNext == true) {
@@ -95,8 +97,17 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historique des réservations'),
-      ),
+            automaticallyImplyLeading: false,
+            title: const Text('Historique De Réservations'),
+            backgroundColor: AppColors.whiteBackground,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Iconsax.arrow_left, size: 24),
+              onPressed: () => context.pop(),
+            ),
+            centerTitle: true,
+          ),
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
           child: CustomScrollView(
