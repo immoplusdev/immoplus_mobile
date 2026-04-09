@@ -23,7 +23,7 @@
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true"
         >
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAbgTH8ePamGZiP3DutyAkMupCeJzTrfqE"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBXXo7cd9K6HWY2RP0bhm5hrM_bJBS-LZg"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
         <activity
