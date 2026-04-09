@@ -75,6 +75,8 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                             child: CachedNetworkImage(
                               imageUrl: Utils.getImagePath(
                                   id: widget.bienImmobilier.images.first),
+                              fadeInDuration: Duration.zero,
+                              fadeOutDuration: Duration.zero,
                               placeholder: (context, url) => Shimmer.fromColors(
                                 baseColor: Colors.grey.shade300,
                                 highlightColor: Colors.grey.shade100,
