@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -349,6 +348,22 @@ class AppRouter {
             ),
           ),
         ],
+      ),
+
+      // Short URL redirect: /v/:code → API /short/:code → /vivre/:videoId
+      GoRoute(
+        path: '/v/:code',
+        redirect: (context, state) async {
+          final code = state.pathParameters['code']!;
+          try {
+            final res = await getIt<Dio>().get('/short/$code');
+            final videoId = res.data['entityId'] as String?;
+            if (videoId != null && videoId.isNotEmpty) {
+              return '/vivre/$videoId';
+            }
+          } catch (_) {}
+          return '/vivre';
+        },
       ),
 
       GoRoute(
