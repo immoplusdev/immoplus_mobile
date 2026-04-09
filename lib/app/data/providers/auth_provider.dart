@@ -41,6 +41,9 @@ abstract class AuthProvider {
   @POST('/auth/send-sms-otp')
   Future<HttpResponse> sendOtp(@Body() SendOptModel sendOptModel);
 
+  @POST('/auth/send-whatsapp-otp')
+  Future<HttpResponse> sendWhatsappOtp(@Body() SendOptModel sendOptModel);
+
   @POST('/auth/login-with-phone-number-otp')
   Future<AccountCreationResponse> loginOtp(@Body() LoginOtpBody loginOtpBody);
 
