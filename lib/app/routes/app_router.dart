@@ -73,7 +73,7 @@ class AppRouter {
 
       if (showOnboarding) return '/onboarding';
 
-      // Sync NavigationCubit when navigating to shell routes (deep links bypass tab taps)
+      // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
       final path = state.uri.path;
       if (path.startsWith('/vivre')) {
         context.read<NavigationCubit>().switchPage(PageState.vivre);
