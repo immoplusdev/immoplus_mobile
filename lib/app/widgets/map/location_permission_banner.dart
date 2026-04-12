@@ -61,52 +61,73 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
   Widget build(BuildContext context) {
     if (!isVisible) return const SizedBox.shrink();
 
-    return GestureDetector(
-      onTap: widget.showAction
-          ? null
-          : () {
-              _openSettings();
-            },
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOutCubic,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
             BoxShadow(
-              blurRadius: 3,
-              spreadRadius: 1,
-              color: Colors.grey,
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Column(
+        child: Row(
           children: [
-            const Text(
-              "Aucune permission de localisation accordée ! Allez dans paramètres et activer les permissions de localisation pour plus de précision",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.orange.shade50,
+                shape: BoxShape.circle,
               ),
-              textAlign: TextAlign.center,
+              child: Icon(Icons.location_off_rounded,
+                  size: 16, color: Colors.orange.shade700),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Activez la localisation pour plus de précision',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade700,
+                ),
+              ),
             ),
             if (widget.showAction) ...[
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: _closeBanner,
-                    child: const Text("Fermer"),
+              GestureDetector(
+                onTap: _openSettings,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  TextButton(
-                    onPressed: _openSettings,
-                    child: const Text("Paramètres"),
+                  child: Text(
+                    'Activer',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange.shade700,
+                    ),
                   ),
-                ],
+                ),
               ),
-            ]
+              const SizedBox(width: 6),
+              GestureDetector(
+                onTap: _closeBanner,
+                child: Icon(Icons.close_rounded,
+                    size: 18, color: Colors.grey.shade400),
+              ),
+            ],
           ],
         ),
       ),

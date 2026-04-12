@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 class _Constants {
@@ -26,10 +26,6 @@ class _Constants {
   // Timeout
   static const Duration requestTimeout = Duration(seconds: 5);
 
-  // HTTP
-  static const Map<String, String> httpHeaders = {
-    'Connection': 'keep-alive',
-  };
 }
 
 class MapMarkerWidget {
@@ -46,10 +42,10 @@ class MapMarkerWidget {
 
     Uint8List? imageBytes;
     try {
-      final response = await http
-          .get(Uri.parse(imageUrl), headers: _Constants.httpHeaders)
+      final file = await DefaultCacheManager()
+          .getSingleFile(imageUrl)
           .timeout(_Constants.requestTimeout);
-      if (response.statusCode == 200) imageBytes = response.bodyBytes;
+      imageBytes = await file.readAsBytes();
     } catch (_) {}
 
     final descriptor = await _MarkerWidget(
@@ -94,7 +90,7 @@ class _MarkerWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(_Constants.borderRadius),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.12),
+                color: Colors.black.withValues(alpha: 0.12),
                 blurRadius: 8,
                 spreadRadius: 0,
                 offset: const Offset(0, 2),
