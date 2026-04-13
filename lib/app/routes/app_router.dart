@@ -54,6 +54,7 @@ import 'package:immoplus/app/force_update_required_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
+import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 
 class AppRouter {
@@ -71,6 +72,21 @@ class AppRouter {
       print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
 
       if (showOnboarding) return '/onboarding';
+
+      // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
+      final path = state.uri.path;
+      if (path.startsWith('/vivre')) {
+        context.read<NavigationCubit>().switchPage(PageState.vivre);
+      } else if (path == '/homePage') {
+        context.read<NavigationCubit>().switchPage(PageState.home);
+      } else if (path == '/for_me') {
+        context.read<NavigationCubit>().switchPage(PageState.forMe);
+      } else if (path == '/map') {
+        context.read<NavigationCubit>().switchPage(PageState.explore);
+      } else if (path == '/account') {
+        context.read<NavigationCubit>().switchPage(PageState.account);
+      }
+
       return null;
     },
     routes: [

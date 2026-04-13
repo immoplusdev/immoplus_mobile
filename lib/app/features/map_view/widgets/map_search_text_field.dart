@@ -117,66 +117,94 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CupertinoTextField(
-          controller: _controller,
-          focusNode: widget.focusNode,
-          placeholder: "Rechercher un lieu",
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          prefix: const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Icon(CupertinoIcons.search, size: 20),
-          ),
-          onChanged: _onSearchChanged,
-          clearButtonMode: OverlayVisibilityMode.editing,
+        // ── Barre de recherche ──
+        Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                blurRadius: 8,
-                spreadRadius: 2,
-                color: Colors.grey.shade500,
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
+          child: CupertinoTextField(
+            controller: _controller,
+            focusNode: widget.focusNode,
+            placeholder: "Rechercher une adresse...",
+            placeholderStyle: TextStyle(
+              color: Colors.grey.shade400,
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+            prefix: Padding(
+              padding: const EdgeInsets.only(left: 14.0),
+              child: Icon(CupertinoIcons.search, size: 20, color: Colors.grey.shade500),
+            ),
+            onChanged: _onSearchChanged,
+            clearButtonMode: OverlayVisibilityMode.editing,
+            decoration: const BoxDecoration(), // géré par le Container parent
+          ),
         ),
+
+        // ── Résultats autocomplete ──
         if (_isFocused && _predictions.isNotEmpty)
           Container(
-            margin: const EdgeInsets.only(top: 20),
-            padding: const EdgeInsets.all(8),
+            margin: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
-              color: CupertinoColors.systemBackground.resolveFrom(context),
-              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  blurRadius: 8,
-                  spreadRadius: 1,
-                  color: Colors.grey.shade600,
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
-            child: ListView.builder(
+            child: ListView.separated(
               shrinkWrap: true,
-              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: _predictions.length,
               padding: EdgeInsets.zero,
+              separatorBuilder: (_, __) => Divider(
+                height: 1,
+                indent: 56,
+                color: Colors.grey.shade100,
+              ),
               itemBuilder: (context, index) {
                 final prediction = _predictions[index];
                 return CupertinoListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.grey.shade200,
+                  leading: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Icon(
                       FontAwesomeIcons.locationDot,
-                      size: 15,
-                      color: Colors.grey.shade500,
+                      size: 14,
+                      color: Colors.grey.shade600,
                     ),
                   ),
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 10),
                   onTap: () => _onPredictionTap(prediction),
                   title: Text(
                     prediction['description'] ?? "",
-                    maxLines: 1,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade800,
+                    ),
                   ),
                 );
               },
