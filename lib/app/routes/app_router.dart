@@ -75,15 +75,15 @@ class AppRouter {
 
       // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
       final path = state.uri.path;
-      if (path.startsWith('/vivre')) {
+      if (path.startsWith('/vivre') || path.startsWith('/v/')) {
         context.read<NavigationCubit>().switchPage(PageState.vivre);
-      } else if (path == '/homePage') {
+      } else if (path.startsWith('/homePage')) {
         context.read<NavigationCubit>().switchPage(PageState.home);
-      } else if (path == '/for_me') {
+      } else if (path.startsWith('/for_me')) {
         context.read<NavigationCubit>().switchPage(PageState.forMe);
-      } else if (path == '/map') {
+      } else if (path.startsWith('/map')) {
         context.read<NavigationCubit>().switchPage(PageState.explore);
-      } else if (path == '/account') {
+      } else if (path.startsWith('/account')) {
         context.read<NavigationCubit>().switchPage(PageState.account);
       }
 

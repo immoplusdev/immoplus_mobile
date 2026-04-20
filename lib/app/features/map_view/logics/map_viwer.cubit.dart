@@ -34,8 +34,9 @@ class _Constants {
   static const int staggerDelayMs = 60;
 
   // Seuils de déplacement (en % du radius visible)
-  static const double ignorePercent = 0.2;  // < 20% → rien
-  static const double buttonPercent = 0.5;  // > 50% → bouton "Voir les biens ici"
+  static const double ignorePercent = 0.2; // < 20% → rien
+  static const double buttonPercent =
+      0.5; // > 50% → bouton "Voir les biens ici"
 }
 
 /// Type de mouvement détecté sur la carte.
@@ -58,7 +59,8 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
   }
 
   /// Évalue le type de mouvement de la caméra.
-  CameraMoveType evaluateMove(LatLng newCenter, double newZoom, double? radiusKm) {
+  CameraMoveType evaluateMove(
+      LatLng newCenter, double newZoom, double? radiusKm) {
     // Changement de zoom significatif → auto-reload silencieux
     if (_lastFetchedZoom != null && (newZoom - _lastFetchedZoom!).abs() > 1.0) {
       return CameraMoveType.autoReload;
@@ -67,12 +69,14 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
     if (_lastFetchedCenter == null) return CameraMoveType.autoReload;
 
     final distanceMeters = _distanceBetween(_lastFetchedCenter!, newCenter);
-    final radiusMeters = (radiusKm ?? _Constants.defaultRadiusKm) * _Constants.kmToMeters;
+    final radiusMeters =
+        (radiusKm ?? _Constants.defaultRadiusKm) * _Constants.kmToMeters;
 
     final movePercent = distanceMeters / radiusMeters;
 
     if (movePercent < _Constants.ignorePercent) return CameraMoveType.ignore;
-    if (movePercent >= _Constants.buttonPercent) return CameraMoveType.showButton;
+    if (movePercent >= _Constants.buttonPercent)
+      return CameraMoveType.showButton;
     return CameraMoveType.autoReload;
   }
 
@@ -164,7 +168,9 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
   }
 
   Future<List<Marker>> _buildResidencesMarkers(
-      ResidencesCollection residencesCollection, BuildContext context, LatLng? userPosition) async {
+      ResidencesCollection residencesCollection,
+      BuildContext context,
+      LatLng? userPosition) async {
     final markers = await Future.wait(
       (residencesCollection.data ?? []).map((residence) async {
         final icon = await MapMarkerWidget.build(
@@ -201,8 +207,9 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                 onCardTap: () {
                   clearRoute();
                   MapCardOverlayService.hide();
-                  NavigationService.navigatorKey.currentContext
-                      ?.push(ResidencePage.route(residence.id), extra: residence);
+                  NavigationService.navigatorKey.currentContext?.push(
+                      ResidencePage.route(residence.id),
+                      extra: residence);
                 },
                 onShareTap: () {
                   ShareService.shareResidence(
@@ -221,7 +228,9 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
   }
 
   Future<List<Marker>> _buildBiensImmoMarkers(
-      BienImmobilierCollection bienimmobilier, BuildContext context, LatLng? userPosition) async {
+      BienImmobilierCollection bienimmobilier,
+      BuildContext context,
+      LatLng? userPosition) async {
     final markers = await Future.wait(
       (bienimmobilier.data ?? []).map((bien) async {
         final icon = await MapMarkerWidget.build(
@@ -297,8 +306,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
       final response = await http.get(url).timeout(const Duration(seconds: 8));
       final data = json.decode(response.body);
 
-      if (data['status'] != 'OK' ||
-          (data['routes'] as List).isEmpty) {
+      if (data['status'] != 'OK' || (data['routes'] as List).isEmpty) {
         return;
       }
 
@@ -306,14 +314,12 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
       final leg = route['legs'][0];
       final distance = leg['distance']['text'] as String;
       final duration = leg['duration']['text'] as String;
-      final encodedPolyline =
-          route['overview_polyline']['points'] as String;
+      final encodedPolyline = route['overview_polyline']['points'] as String;
 
       // Décoder le polyline
       final decoded = PolylinePoints.decodePolyline(encodedPolyline);
-      final routeCoords = decoded
-          .map((p) => LatLng(p.latitude, p.longitude))
-          .toList();
+      final routeCoords =
+          decoded.map((p) => LatLng(p.latitude, p.longitude)).toList();
 
       final routePolyline = Polyline(
         polylineId: const PolylineId('route'),
