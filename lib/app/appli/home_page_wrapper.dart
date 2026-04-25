@@ -186,7 +186,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                                   isActive: state == PageState.vivre),
                               _buildNavItem(
                                 icon: Iconsax.location,
-                                label: "Explorer",
+                                label: "Carte",
                                 isActive: state == PageState.explore,
                                 immoMode: state == PageState.vivre,
                               ),

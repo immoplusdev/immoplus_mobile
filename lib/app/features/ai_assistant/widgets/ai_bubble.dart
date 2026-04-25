@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
+import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
+import 'package:immoplus/app/widgets/tickets_cards/furniture_card.dart';
+import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 
 import '../models/chat_alert_payload.dart';
 import '../models/chat_clarification.dart';
 import '../models/chat_message.dart';
+import '../models/property_card_data.dart';
 import 'alert_card.dart';
 import 'chat_tokens.dart';
 import 'clarification_chips.dart';
 
 class AiBubble extends StatelessWidget {
-  const AiBubble({super.key, required this.message, this.onSend});
+  const AiBubble({
+    super.key,
+    required this.message,
+    this.onSend,
+  });
 
   final ChatMessage message;
   final void Function(String text)? onSend;
@@ -180,8 +191,14 @@ class _Content extends StatelessWidget {
       case AlertResponseType.error:
         if (onSend == null) return null;
         return ErrorReformulationChips(onSend: onSend!);
-      case AlertResponseType.alertDeleted:
       case AlertResponseType.propertyAnswer:
+        final cards = m.propertyCards;
+        if (cards == null || cards.isEmpty) return null;
+        return _FadeIn(
+          duration: const Duration(milliseconds: 300),
+          child: _PropertyCardsCarousel(propertyCards: cards),
+        );
+      case AlertResponseType.alertDeleted:
       case AlertResponseType.generalAdvice:
       case AlertResponseType.unknown:
         return null;
@@ -324,5 +341,62 @@ class _FadeInState extends State<_FadeIn> {
       curve: Curves.easeOut,
       child: widget.child,
     );
+  }
+}
+
+/// Affiche les cartes natives (EstateCard, ResidenceCard, FurnitureCard) en carrousel horizontal.
+class _PropertyCardsCarousel extends StatelessWidget {
+  const _PropertyCardsCarousel({
+    required this.propertyCards,
+  });
+
+  final List<PropertyCardData> propertyCards;
+
+  @override
+  Widget build(BuildContext context) {
+    if (propertyCards.isEmpty) return const SizedBox.shrink();
+
+    // Si une seule carte, l'afficher directement sans PageView
+    if (propertyCards.length == 1) {
+      return _buildCard(propertyCards.first);
+    }
+
+    // Carrousel horizontal pour 2+ cartes
+    return SizedBox(
+      height: 320,
+      child: PageView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: propertyCards.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: _buildCard(propertyCards[index]),
+          );
+        },
+      ),
+    );
+  }
+
+  /// Construit la bonne carte en fonction du type d'entité.
+  Widget _buildCard(PropertyCardData data) {
+    switch (data.entityType) {
+      case 'RESIDENCE':
+        if (data.model is ResidenceModel) {
+          return ResidenceCard(residence: data.model as ResidenceModel);
+        }
+        return const SizedBox.shrink();
+
+      case 'FURNITURE':
+        if (data.model is FurnitureModel) {
+          return FurnitureCard(furniture: data.model as FurnitureModel);
+        }
+        return const SizedBox.shrink();
+
+      default: // BIEN_IMMOBILIER
+        if (data.model is BienImmobilierModel) {
+          return EstateCard(bienImmobilierModel: data.model as BienImmobilierModel);
+        }
+        return const SizedBox.shrink();
+    }
   }
 }

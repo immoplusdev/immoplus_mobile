@@ -4,13 +4,15 @@ import 'package:flutter/foundation.dart';
 
 import '../models/chat_message.dart';
 import '../services/chat_socket_service.dart';
+import '../services/property_fetcher.dart';
 
 class ChatController extends ChangeNotifier {
-  ChatController(this._socket) {
+  ChatController(this._socket, {PropertyFetcher? fetcher}) : _fetcher = fetcher {
     _bind();
   }
 
   final ChatSocketService _socket;
+  final PropertyFetcher? _fetcher;
 
   final List<ChatMessage> _messages = [];
   List<ChatMessage> get messages => List.unmodifiable(_messages);
@@ -129,16 +131,22 @@ class ChatController extends ChangeNotifier {
     final typeStr = payload['type'] as String?;
     final data = _extractData(payload);
     final finalText = _extractText(payload) ?? current.text;
+    final responseType = typeStr != null
+        ? alertResponseTypeFromString(typeStr)
+        : current.responseType;
 
     _messages[idx] = current.copyWith(
       text: finalText,
       status: ChatStatus.complete,
-      responseType: typeStr != null
-          ? alertResponseTypeFromString(typeStr)
-          : current.responseType,
+      responseType: responseType,
       data: data,
     );
     notifyListeners();
+
+    // Fetch property details en arrière-plan si propertyAnswer
+    if (responseType == AlertResponseType.propertyAnswer) {
+      _fetchAndUpdateProperties(id, data);
+    }
   }
 
   void _onErrorEvent(Map<String, dynamic> payload) {
@@ -171,6 +179,27 @@ class ChatController extends ChangeNotifier {
       errorCode: code,
     );
     _messages.add(errMsg);
+    notifyListeners();
+  }
+
+  /// Fetch les détails des propriétés en arrière-plan et met à jour le message.
+  Future<void> _fetchAndUpdateProperties(
+    String msgId,
+    Map<String, dynamic>? data,
+  ) async {
+    final fetcher = _fetcher;
+    if (fetcher == null) return;
+
+    final sources = data?['sources'] as List? ?? [];
+    if (sources.isEmpty) return;
+
+    final cards = await fetcher.fetchSources(sources);
+    if (cards.isEmpty) return;
+
+    final idx = _messages.indexWhere((m) => m.id == msgId);
+    if (idx == -1) return;
+
+    _messages[idx] = _messages[idx].copyWith(propertyCards: cards);
     notifyListeners();
   }
 

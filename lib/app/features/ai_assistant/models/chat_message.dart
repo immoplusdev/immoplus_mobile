@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'property_card_data.dart';
+
 enum ChatRole { user, assistant }
 
 enum ChatStatus { sending, streaming, complete, error, stopped }
@@ -49,6 +51,7 @@ class ChatMessage {
     this.responseType,
     this.data,
     this.errorCode,
+    this.propertyCards,
   });
 
   final String id;
@@ -59,6 +62,7 @@ class ChatMessage {
   final AlertResponseType? responseType;
   final Map<String, dynamic>? data;
   final String? errorCode;
+  final List<PropertyCardData>? propertyCards;
 
   ChatMessage copyWith({
     String? text,
@@ -66,6 +70,7 @@ class ChatMessage {
     AlertResponseType? responseType,
     Map<String, dynamic>? data,
     String? errorCode,
+    List<PropertyCardData>? propertyCards,
   }) {
     return ChatMessage(
       id: id,
@@ -76,6 +81,7 @@ class ChatMessage {
       responseType: responseType ?? this.responseType,
       data: data ?? this.data,
       errorCode: errorCode ?? this.errorCode,
+      propertyCards: propertyCards ?? this.propertyCards,
     );
   }
 

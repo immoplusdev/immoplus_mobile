@@ -70,6 +70,10 @@ class _EmptyChatStateState extends State<EmptyChatState> {
   void initState() {
     super.initState();
     _controller.addListener(_onTextChanged);
+    // Auto-focus du champ texte à l'ouverture (bottom sheet)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _focusNode.requestFocus();
+    });
   }
 
   void _onTextChanged() {
@@ -104,9 +108,11 @@ class _EmptyChatStateState extends State<EmptyChatState> {
   }
 
   String get _greeting {
-    final raw = widget.firstName?.trim();
-    if (raw == null || raw.isEmpty) return 'Bonjour 👋';
-    return 'Bonjour, $raw 👋';
+    // ─── Ancien greeting "Bonjour" avec emoji (commenté) ───
+    // final raw = widget.firstName?.trim();
+    // if (raw == null || raw.isEmpty) return 'Bonjour 👋';
+    // return 'Bonjour, $raw 👋';
+    return 'Hôte AI';
   }
 
   @override
@@ -121,18 +127,7 @@ class _EmptyChatStateState extends State<EmptyChatState> {
             const SizedBox(height: 24),
             _HeroTitle(text: _greeting),
             const SizedBox(height: 32),
-            _HeroComposer(
-              controller: _controller,
-              focusNode: _focusNode,
-              onSubmit: _submit,
-              borderColor: _composerBorder,
-              ink: _ink,
-              placeholder: _placeholder,
-              sendBg: AppColors.primary,
-              showTypewriter: !_hasText,
-              typewriterPhrases: _typewriterPhrases,
-            ),
-            const SizedBox(height: 24),
+            // ─── Cards de suggestions (avant le composer) ───
             AnimatedOpacity(
               opacity: _cardsVisible ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 150),
@@ -145,6 +140,32 @@ class _EmptyChatStateState extends State<EmptyChatState> {
                 ),
               ),
             ),
+            const SizedBox(height: 24),
+            // ─── Composer (champ texte) en bas après les suggestions ───
+            _HeroComposer(
+              controller: _controller,
+              focusNode: _focusNode,
+              onSubmit: _submit,
+              borderColor: _composerBorder,
+              ink: _ink,
+              placeholder: _placeholder,
+              sendBg: AppColors.primary,
+              showTypewriter: !_hasText,
+              typewriterPhrases: _typewriterPhrases,
+            ),
+            // ─── Alternative : illustration cold_image (commentée) ───
+            // AnimatedOpacity(
+            //   opacity: _cardsVisible ? 1.0 : 0.0,
+            //   duration: const Duration(milliseconds: 150),
+            //   curve: Curves.easeOut,
+            //   child: SizedBox(
+            //     height: 200,
+            //     child: Image.asset(
+            //       'assets/img/cold_image.png',
+            //       fit: BoxFit.contain,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -285,7 +306,7 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                   ),
                   Center(
                     child: Image.asset(
-                      'assets/icon/icon_radius.png',
+                      'assets/img/bubble_2.png',
                       width: _logoSize,
                       height: _logoSize,
                     ),
@@ -516,20 +537,28 @@ class _SuggestionsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: cards.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        mainAxisExtent: 100,
+    // Carrousel horizontal : 2 cards visibles + peek de la 3ème pour signaler le scroll.
+    final mediaWidth = MediaQuery.of(context).size.width;
+    const parentHorizontalPadding = 24.0 * 2;
+    const gap = 10.0;
+    // Diviseur 2.2 → 2 cards complètes + ~20% de la 3ème visible.
+    final cardWidth = (mediaWidth - parentHorizontalPadding - gap) / 2.2;
+
+    return SizedBox(
+      height: 76,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: cards.length,
+        separatorBuilder: (_, __) => const SizedBox(width: gap),
+        itemBuilder: (context, i) {
+          final c = cards[i];
+          return SizedBox(
+            width: cardWidth,
+            child: _SuggestionCard(card: c, onTap: () => onTap(c.label)),
+          );
+        },
       ),
-      itemBuilder: (context, i) {
-        final c = cards[i];
-        return _SuggestionCard(card: c, onTap: () => onTap(c.label));
-      },
     );
   }
 }
@@ -546,32 +575,32 @@ class _SuggestionCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(14),
         child: Ink(
           decoration: BoxDecoration(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: AppColors.primary.withValues(alpha: 0.25),
               width: 1,
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(card.icon, size: 22, color: AppColors.primary),
-                const Spacer(),
+                Icon(card.icon, size: 16, color: AppColors.primary),
                 Text(
                   card.label,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: _EmptyChatStateState._ink,
-                    height: 1.25,
+                    height: 1.2,
                   ),
                 ),
               ],

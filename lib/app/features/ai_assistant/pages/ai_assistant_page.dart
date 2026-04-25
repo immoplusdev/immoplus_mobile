@@ -4,10 +4,14 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
+import 'package:immoplus/app/data/repositories/furniture_repository.dart';
+import 'package:immoplus/app/data/repositories/residence_repository.dart';
 
 import '../controllers/chat_controller.dart';
 import '../models/chat_message.dart';
 import '../services/chat_socket_service.dart';
+import '../services/property_fetcher.dart';
 import '../widgets/ai_bubble.dart';
 import '../widgets/chat_composer.dart';
 import '../widgets/chat_tokens.dart';
@@ -34,6 +38,11 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     _firstName = session.currentUser?.firstName;
     _chat = ChatController(
       ChatSocketService(session),
+      fetcher: PropertyFetcher(
+        getIt<BienImmobilierRepository>(),
+        getIt<ResidenceRepository>(),
+        getIt<FurnitureRepository>(),
+      ),
     );
     _chat.addListener(_onChatChange);
     _chat.init();
@@ -114,23 +123,43 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
       surfaceTintColor: Colors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: _AppBarIcon(
-        icon: Iconsax.arrow_left_2,
-        color: ChatTokens.neutral400,
+        icon: Iconsax.menu_1,
+        color: ChatTokens.neutral900,
         onTap: () {
           HapticFeedback.lightImpact();
-          Navigator.of(context).pop();
+          // TODO: ouvrir le drawer / historique conversations
         },
       ),
-      title: const Text(
-        'Immo AI',
-        style: TextStyle(
+      // ─── Ancien titre "Immo AI" (commenté) ───
+      // title: const Text(
+      //   'Immo AI',
+      //   style: TextStyle(
+      //     color: ChatTokens.neutral900,
+      //     fontSize: 16,
+      //     fontWeight: FontWeight.w500,
+      //     letterSpacing: -0.2,
+      //   ),
+      // ),
+      // centerTitle: true,
+      actions: [
+        _AppBarIcon(
+          icon: Iconsax.add,
           color: ChatTokens.neutral900,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          letterSpacing: -0.2,
+          onTap: () {
+            HapticFeedback.lightImpact();
+            // TODO: créer une nouvelle conversation
+          },
         ),
-      ),
-      centerTitle: true,
+        _AppBarIcon(
+          icon: Iconsax.close_circle,
+          color: ChatTokens.neutral900,
+          onTap: () {
+            HapticFeedback.lightImpact();
+            Navigator.of(context).pop();
+          },
+        ),
+        const SizedBox(width: 4),
+      ],
     );
   }
 
@@ -160,10 +189,14 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
         if (m.role == ChatRole.user) {
           return UserBubble(message: m);
         }
-        return AiBubble(message: m, onSend: _chat.send);
+        return AiBubble(
+          message: m,
+          onSend: _chat.send,
+        );
       },
     );
   }
+
 }
 
 class _AppBarIcon extends StatelessWidget {

@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import '../pages/ai_assistant_page.dart';
+// ignore: unused_import
+import 'ai_assistant_bottom_sheet.dart';
 
 const Map<int, String> _iaLabels = {
   0: 'Hôte IA',   // Résidences
@@ -22,6 +24,7 @@ final ValueNotifier<bool> aiFabCollapsedNotifier = ValueNotifier<bool>(false);
 
 /// Variante propre de ConcentricPageRoute : retire le clip dès que l'animation
 /// est terminée (évite le disque résiduel laissé par la formule du clipper).
+// ignore: unused_element
 class _CleanConcentricRoute<T> extends PageRoute<T> {
   _CleanConcentricRoute({required this.builder});
   final WidgetBuilder builder;
@@ -104,10 +107,25 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
   void _showAiModal(BuildContext context) {
     HapticFeedback.heavyImpact();
 
-    Navigator.of(context).push(
-      _CleanConcentricRoute(
+    // ─── Ancienne navigation vers AiAssistantPage (commentée) ───
+    // Navigator.of(context).push(
+    //   _CleanConcentricRoute(
+    //     builder: (context) => const AiAssistantPage(),
+    //   ),
+    // );
 
-        builder: (context) => const AiAssistantPage(),
+    // ─── Nouvelle approche : AiAssistantPage dans un bottom sheet ───
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useSafeArea: true,
+      builder: (_) => FractionallySizedBox(
+        heightFactor: 1.0,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          child: const AiAssistantPage(),
+        ),
       ),
     );
   }

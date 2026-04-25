@@ -13,6 +13,7 @@ class ChatProperty {
     this.surface,
     this.score,
     this.excerpt,
+    this.entityType,
   });
 
   final String id;
@@ -28,6 +29,9 @@ class ChatProperty {
 
   /// Extrait textuel (pour les sources RAG).
   final String? excerpt;
+
+  /// Type d'entité : 'BIEN_IMMOBILIER', 'RESIDENCE', 'FURNITURE'.
+  final String? entityType;
 
   /// Score normalisé 0..100.
   int? get scorePercent {
@@ -58,11 +62,12 @@ class ChatProperty {
           _str(m['commune']) ??
           _str(m['quartier']) ??
           _str(m['adresse']),
-      price: _num(m['price']) ?? _num(m['prix']) ?? _num(m['loyer']),
+      price: _num(m['price']) ?? _num(m['prix']) ?? _num(m['loyer']) ?? _num(m['prixReservation']),
       rooms: _int(m['rooms']) ?? _int(m['nbPieces']) ?? _int(m['pieces']),
       surface: _num(m['surface']) ?? _num(m['superficie']) ?? _num(m['area']),
       score: _double(m['score']) ?? _double(m['pertinence']),
       excerpt: _str(m['excerpt']) ?? _str(m['extrait']),
+      entityType: _str(m['entityType']),
     );
   }
 
