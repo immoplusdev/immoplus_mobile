@@ -244,41 +244,41 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     );
   }
 
-  // BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-  //   return BottomNavigationBarItem(
-  //     icon: Container(
-  //       height: 44,
-  //       padding: const EdgeInsets.all(4),
-  //       // decoration: BoxDecoration(
+  BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
+    return BottomNavigationBarItem(
+      icon: Container(
+        height: 44,
+        padding: const EdgeInsets.all(4),
+        // decoration: BoxDecoration(
 
-  //       //   borderRadius: BorderRadius.circular(12),
-  //       // ),
-  //       child: Image.asset(
-  //         'assets/img/icon_video_2.png',
-  //         width: 26,
-  //         height: 26,
-  //       ),
-  //     ),
-  //     label: 'Reels',
-  //   );
-  // }
-BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-  return BottomNavigationBarItem(
-    icon: Container(
-      height: 40,
-      padding: const EdgeInsets.all(8),
-      child: isActive
-          ? Icon(
-              Iconsax.play5,
-              color: AppColors.primary,
-              size: 28,
-            )
-          : Icon(
-              Iconsax.play,
-              size: 28,
-            ),
-    ),
-    label: 'Reels',
-  );
-}
+        //   borderRadius: BorderRadius.circular(12),
+        // ),
+        child: Image.asset(
+          'assets/img/icon_video_2.png',
+          width: 26,
+          height: 26,
+        ),
+      ),
+      label: 'Reels',
+    );
+  }
+// BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
+//   return BottomNavigationBarItem(
+//     icon: Container(
+//       height: 40,
+//       padding: const EdgeInsets.all(8),
+//       child: isActive
+//           ? Icon(
+//               Iconsax.play5,
+//               color: AppColors.primary,
+//               size: 28,
+//             )
+//           : Icon(
+//               Iconsax.play,
+//               size: 28,
+//             ),
+//     ),
+//     label: 'Reels',
+//   );
+// }
 }
