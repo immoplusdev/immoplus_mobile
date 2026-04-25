@@ -82,7 +82,8 @@ class _AuthProvider implements AuthProvider {
 
   @override
   Future<HttpResponse<dynamic>> sendWhatsappOtp(
-      SendOptModel sendOptModel) async {
+    SendOptModel sendOptModel,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

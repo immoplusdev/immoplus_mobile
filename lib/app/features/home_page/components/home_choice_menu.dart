@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/immo_icons.dart';
 
 class _Constants {
   static const double menuHeight = 50.0;
@@ -22,7 +22,7 @@ class _Constants {
 
 class MenuOption {
   final String label;
-  final ImmoIcons icon;
+  final IconData icon;
 
   MenuOption({required this.label, required this.icon});
 }
@@ -31,10 +31,10 @@ class HomeChoiceMenu extends StatelessWidget {
   HomeChoiceMenu({super.key});
 
   final List<MenuOption> _choices = [
-    MenuOption(label: 'Résidences', icon: ImmoIcons.home),
-    MenuOption(label: 'Locations', icon: ImmoIcons.location),
-    MenuOption(label: 'Meubles', icon: ImmoIcons.meubles),
-    MenuOption(label: 'Achats', icon: ImmoIcons.terrain),
+    MenuOption(label: 'Résidences', icon: Iconsax.home_2),
+    MenuOption(label: 'Locations', icon: Iconsax.key),
+    MenuOption(label: 'Meubles', icon: Iconsax.element_3),
+    MenuOption(label: 'Biens', icon: Iconsax.shopping_cart),
   ];
 
   @override
@@ -73,8 +73,8 @@ class HomeChoiceMenu extends StatelessWidget {
                         _Constants.borderRadius,
                       ),
                       border: Border.all(
-                        color: AppColors.primary.withOpacity(
-                          _Constants.borderOpacity,
+                        color: AppColors.primary.withValues(
+                          alpha: _Constants.borderOpacity,
                         ),
                         width: _Constants.borderWidth,
                       ),
@@ -91,11 +91,11 @@ class HomeChoiceMenu extends StatelessWidget {
                             borderRadius: BorderRadius.circular(
                               _Constants.borderRadius,
                             ),
-                            color: isSelected ? Colors.white : null,
-                          ),
-                          child: ImmoIcon(
-                            choice.icon,
                             color: AppColors.primary,
+                          ),
+                          child: Icon(
+                            choice.icon,
+                            color: Colors.white,
                             size: _Constants.iconSize,
                           ),
                         ),

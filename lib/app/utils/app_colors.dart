@@ -7,7 +7,7 @@ class AppColors {
   static Color green1CA53F = const Color(0xff1CA53F);
   static Color redFF0000 = const Color(0xffFF0000);
   static Color noSelected = CupertinoColors.inactiveGray;
-  static Color primaryLite = Color(0xFFEAF4FE);
+  static Color primaryLite = Color.fromRGBO(234, 244, 254, 1);
   static Color scafold = const Color.fromARGB(255, 238, 247, 255);
 
   static Color whiteBackground = const Color.fromARGB(
