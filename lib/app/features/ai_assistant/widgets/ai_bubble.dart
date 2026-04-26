@@ -345,7 +345,7 @@ class _FadeInState extends State<_FadeIn> {
 }
 
 /// Affiche les cartes natives (EstateCard, ResidenceCard, FurnitureCard) en carrousel horizontal.
-class _PropertyCardsCarousel extends StatelessWidget {
+class _PropertyCardsCarousel extends StatefulWidget {
   const _PropertyCardsCarousel({
     required this.propertyCards,
   });
@@ -353,31 +353,60 @@ class _PropertyCardsCarousel extends StatelessWidget {
   final List<PropertyCardData> propertyCards;
 
   @override
-  Widget build(BuildContext context) {
-    if (propertyCards.isEmpty) return const SizedBox.shrink();
+  State<_PropertyCardsCarousel> createState() => _PropertyCardsCarouselState();
+}
 
-    // Si une seule carte, l'afficher directement sans PageView
-    if (propertyCards.length == 1) {
-      return _buildCard(propertyCards.first);
+class _PropertyCardsCarouselState extends State<_PropertyCardsCarousel> {
+  late final PageController _controller;
+  int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController()
+      ..addListener(() {
+        final page = _controller.page?.round() ?? 0;
+        if (page != _index) setState(() => _index = page);
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cards = widget.propertyCards;
+    if (cards.isEmpty) return const SizedBox.shrink();
+
+    if (cards.length == 1) {
+      return _buildCard(cards.first);
     }
 
-    // Carrousel horizontal pour 2+ cartes
-    return SizedBox(
-      height: 320,
-      child: PageView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: propertyCards.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: _buildCard(propertyCards[index]),
-          );
-        },
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 320,
+          child: PageView.builder(
+            controller: _controller,
+            scrollDirection: Axis.horizontal,
+            itemCount: cards.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: _buildCard(cards[index]),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 12),
+        _DotsIndicator(count: cards.length, current: _index),
+      ],
     );
   }
 
-  /// Construit la bonne carte en fonction du type d'entité.
   Widget _buildCard(PropertyCardData data) {
     switch (data.entityType) {
       case 'RESIDENCE':
@@ -398,5 +427,33 @@ class _PropertyCardsCarousel extends StatelessWidget {
         }
         return const SizedBox.shrink();
     }
+  }
+}
+
+class _DotsIndicator extends StatelessWidget {
+  const _DotsIndicator({required this.count, required this.current});
+
+  final int count;
+  final int current;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(count, (i) {
+        final isActive = i == current;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          margin: const EdgeInsets.symmetric(horizontal: 3),
+          width: isActive ? 18 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: isActive ? ChatTokens.brand500 : ChatTokens.neutral200,
+            borderRadius: BorderRadius.circular(3),
+          ),
+        );
+      }),
+    );
   }
 }

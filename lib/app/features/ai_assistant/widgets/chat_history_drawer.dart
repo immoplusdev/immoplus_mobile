@@ -134,6 +134,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final showHeader = !_loading && _error == null && _conversations.isNotEmpty;
     return ColoredBox(
       color: ChatTokens.neutral0,
       child: SafeArea(
@@ -141,23 +142,24 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(
-                ChatTokens.s16,
-                ChatTokens.s4,
-                ChatTokens.s16,
-                ChatTokens.s8,
-              ),
-              child: Text(
-                'Récents',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: ChatTokens.neutral900,
-                  letterSpacing: -0.4,
+            if (showHeader)
+              const Padding(
+                padding: EdgeInsets.fromLTRB(
+                  ChatTokens.s16,
+                  ChatTokens.s4,
+                  ChatTokens.s16,
+                  ChatTokens.s8,
+                ),
+                child: Text(
+                  'Récents',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: ChatTokens.neutral900,
+                    letterSpacing: -0.4,
+                  ),
                 ),
               ),
-            ),
             Expanded(child: _buildBody()),
             if (_conversations.isNotEmpty) _buildFooter(),
           ],
