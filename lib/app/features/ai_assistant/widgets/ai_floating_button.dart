@@ -6,8 +6,12 @@ import 'package:concentric_transition/clipper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
+import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 import '../pages/ai_assistant_page.dart';
 // ignore: unused_import
 import 'ai_assistant_bottom_sheet.dart';
@@ -104,17 +108,20 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
     super.dispose();
   }
 
-  void _showAiModal(BuildContext context) {
+  Future<void> _showAiModal(BuildContext context) async {
     HapticFeedback.heavyImpact();
 
-    // ─── Ancienne navigation vers AiAssistantPage (commentée) ───
-    // Navigator.of(context).push(
-    //   _CleanConcentricRoute(
-    //     builder: (context) => const AiAssistantPage(),
-    //   ),
-    // );
+    // Guard : vérifier que l'utilisateur est connecté avant d'ouvrir le chat.
+    final session = getIt<SessionManager>();
+    final user = session.currentUser ?? await session.getCurrentUser();
 
-    // ─── Nouvelle approche : AiAssistantPage dans un bottom sheet ───
+    if (!context.mounted) return;
+
+    if (user == null) {
+      AppRouter.router.push(LoginPage.routePath());
+      return;
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

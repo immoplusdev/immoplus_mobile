@@ -35,6 +35,8 @@ import 'package:immoplus/app/data/repositories/furniture_repository.dart'
     as _i976;
 import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
+import 'package:immoplus/app/features/ai_assistant/services/chat_history_service.dart'
+    as _i342;
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
     as _i237;
 import 'package:immoplus/app/features/booking/logic/booking_services.dart'
@@ -133,6 +135,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i143.ResidenceRepository>(),
           gh<_i398.BienImmobilierRepository>(),
         ));
+    gh.lazySingleton<_i342.ChatHistoryService>(
+        () => _i342.ChatHistoryService(gh<_i361.Dio>()));
     gh.factory<_i123.FurnitureCubit>(
         () => _i123.FurnitureCubit(gh<_i976.FurnitureRepository>()));
     gh.lazySingleton<_i99.ClientReservationOverlayService>(

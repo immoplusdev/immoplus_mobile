@@ -7,13 +7,17 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/data/repositories/furniture_repository.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 
 import '../controllers/chat_controller.dart';
 import '../models/chat_message.dart';
+import '../services/chat_history_service.dart';
 import '../services/chat_socket_service.dart';
 import '../services/property_fetcher.dart';
 import '../widgets/ai_bubble.dart';
 import '../widgets/chat_composer.dart';
+import '../widgets/chat_history_drawer.dart';
 import '../widgets/chat_tokens.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/typing_indicator.dart';
@@ -26,16 +30,25 @@ class AiAssistantPage extends StatefulWidget {
   State<AiAssistantPage> createState() => _AiAssistantPageState();
 }
 
-class _AiAssistantPageState extends State<AiAssistantPage> {
+class _AiAssistantPageState extends State<AiAssistantPage>
+    with SingleTickerProviderStateMixin {
   late final ChatController _chat;
   final ScrollController _scroll = ScrollController();
   late final String? _firstName;
+  late final ChatHistoryService _historyService;
+  bool _authRedirected = false;
+
+  late final AnimationController _historyAnim;
+  late final Animation<Offset> _historySlide;
+  static const double _edgeWidth = 32;
+  bool _dragging = false;
 
   @override
   void initState() {
     super.initState();
     final session = getIt<SessionManager>();
     _firstName = session.currentUser?.firstName;
+    _historyService = getIt<ChatHistoryService>();
     _chat = ChatController(
       ChatSocketService(session),
       fetcher: PropertyFetcher(
@@ -43,9 +56,23 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
         getIt<ResidenceRepository>(),
         getIt<FurnitureRepository>(),
       ),
+      historyService: _historyService,
     );
     _chat.addListener(_onChatChange);
     _chat.init();
+
+    _historyAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 280),
+    );
+    _historySlide = Tween<Offset>(
+      begin: const Offset(-1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _historyAnim,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    ));
   }
 
   void _onChatChange() {
@@ -57,6 +84,17 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
         curve: Curves.easeOutCubic,
       );
     });
+
+    if (_chat.connection == ChatConnectionState.unauthenticated &&
+        !_authRedirected) {
+      _authRedirected = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        FocusScope.of(context).unfocus();
+        Navigator.of(context).pop();
+        AppRouter.router.push(LoginPage.routePath());
+      });
+    }
   }
 
   @override
@@ -64,14 +102,90 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     _chat.removeListener(_onChatChange);
     _chat.dispose();
     _scroll.dispose();
+    _historyAnim.dispose();
     super.dispose();
   }
+
+  // ─── History open/close ────────────────────────────────────────────────────
+
+  void _openHistory() {
+    HapticFeedback.lightImpact();
+    FocusScope.of(context).unfocus();
+    _historyAnim.forward();
+  }
+
+  void _closeHistory() {
+    _historyAnim.reverse();
+  }
+
+  // ─── Edge-swipe gesture ───────────────────────────────────────────────────
+
+  void _onDragStart(DragStartDetails d) {
+    final fromLeftEdge = d.globalPosition.dx < _edgeWidth;
+    final fromAnywhereWhenOpen = _historyAnim.value > 0;
+    if (fromLeftEdge || fromAnywhereWhenOpen) {
+      _dragging = true;
+    }
+  }
+
+  void _onDragUpdate(DragUpdateDetails d) {
+    if (!_dragging) return;
+    final width = MediaQuery.of(context).size.width;
+    _historyAnim.value += d.primaryDelta! / width;
+  }
+
+  void _onDragEnd(DragEndDetails d) {
+    if (!_dragging) return;
+    _dragging = false;
+    final v = d.primaryVelocity ?? 0;
+    if (v > 500) {
+      _historyAnim.forward();
+    } else if (v < -500) {
+      _historyAnim.reverse();
+    } else {
+      if (_historyAnim.value > 0.5) {
+        _historyAnim.forward();
+      } else {
+        _historyAnim.reverse();
+      }
+    }
+  }
+
+  // ─── Build ────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ChatTokens.neutral0,
-      appBar: _buildAppBar(context),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onHorizontalDragStart: _onDragStart,
+        onHorizontalDragUpdate: _onDragUpdate,
+        onHorizontalDragEnd: _onDragEnd,
+        child: Stack(
+          children: [
+            _buildChatView(context),
+            AnimatedBuilder(
+              animation: _historyAnim,
+              builder: (context, child) {
+                if (_historyAnim.value == 0) return const SizedBox.shrink();
+                return SlideTransition(
+                  position: _historySlide,
+                  child: child,
+                );
+              },
+              child: _buildHistoryView(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChatView(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ChatTokens.neutral0,
+      appBar: _buildChatAppBar(context),
       body: SafeArea(
         top: false,
         child: AnimatedBuilder(
@@ -79,18 +193,17 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
           builder: (context, _) {
             final isStreaming = _chat.typing ||
                 _chat.messages.any((m) => m.status == ChatStatus.streaming);
-            final isEmpty =
-                _chat.messages.isEmpty && !_chat.typing;
+            final isEmpty = _chat.messages.isEmpty &&
+                !_chat.typing &&
+                !_chat.loadingHistory;
 
             return Column(
               children: [
-                _ConnectionBanner(state: _chat.connection),
                 Expanded(
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
-                        maxWidth: ChatTokens.threadMaxWidth,
-                      ),
+                          maxWidth: ChatTokens.threadMaxWidth),
                       child: _buildThread(),
                     ),
                   ),
@@ -99,8 +212,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                   Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
-                        maxWidth: ChatTokens.threadMaxWidth,
-                      ),
+                          maxWidth: ChatTokens.threadMaxWidth),
                       child: ChatComposer(
                         isStreaming: isStreaming,
                         onSend: _chat.send,
@@ -115,7 +227,29 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  Widget _buildHistoryView(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ChatTokens.neutral0,
+      appBar: _buildHistoryAppBar(context),
+      body: AnimatedBuilder(
+        animation: _chat,
+        builder: (context, _) => ChatHistoryDrawer(
+          service: _historyService,
+          currentSessionId: _chat.currentSessionId,
+          onSessionSelected: (sessionId) async {
+            _closeHistory();
+            await _chat.loadSession(sessionId);
+          },
+          onNewConversation: () {
+            _closeHistory();
+            _chat.startNewConversation();
+          },
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildChatAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -124,37 +258,21 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: _AppBarIcon(
         icon: Iconsax.menu_1,
-        color: ChatTokens.neutral900,
-        onTap: () {
-          HapticFeedback.lightImpact();
-          // TODO: ouvrir le drawer / historique conversations
-        },
+        onTap: _openHistory,
       ),
-      // ─── Ancien titre "Immo AI" (commenté) ───
-      // title: const Text(
-      //   'Immo AI',
-      //   style: TextStyle(
-      //     color: ChatTokens.neutral900,
-      //     fontSize: 16,
-      //     fontWeight: FontWeight.w500,
-      //     letterSpacing: -0.2,
-      //   ),
-      // ),
-      // centerTitle: true,
       actions: [
         _AppBarIcon(
           icon: Iconsax.add,
-          color: ChatTokens.neutral900,
           onTap: () {
             HapticFeedback.lightImpact();
-            // TODO: créer une nouvelle conversation
+            _chat.startNewConversation();
           },
         ),
         _AppBarIcon(
           icon: Iconsax.close_circle,
-          color: ChatTokens.neutral900,
           onTap: () {
             HapticFeedback.lightImpact();
+            FocusScope.of(context).unfocus();
             Navigator.of(context).pop();
           },
         ),
@@ -163,11 +281,41 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     );
   }
 
-  Widget _buildThread() {
-    final messages = _chat.messages;
-    final showEmpty = messages.isEmpty && !_chat.typing;
+  PreferredSizeWidget _buildHistoryAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      leading: _AppBarIcon(
+        icon: Iconsax.arrow_left_2,
+        onTap: _closeHistory,
+      ),
+      actions: [
+        _AppBarIcon(
+          icon: Iconsax.add,
+          onTap: () {
+            HapticFeedback.lightImpact();
+            _closeHistory();
+            _chat.startNewConversation();
+          },
+        ),
+        const SizedBox(width: 4),
+      ],
+    );
+  }
 
-    if (showEmpty) {
+  Widget _buildThread() {
+    if (_chat.loadingHistory) {
+      return const Center(
+        child: CircularProgressIndicator(
+            strokeWidth: 2, color: ChatTokens.brand500),
+      );
+    }
+
+    final messages = _chat.messages;
+    if (messages.isEmpty && !_chat.typing) {
       return EmptyChatState(
         firstName: _firstName,
         onSuggestionTap: _chat.send,
@@ -177,151 +325,31 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     return ListView.builder(
       controller: _scroll,
       padding: const EdgeInsets.only(
-        top: ChatTokens.s8,
-        bottom: ChatTokens.s16,
-      ),
+          top: ChatTokens.s8, bottom: ChatTokens.s16),
       itemCount: messages.length + (_chat.typing ? 1 : 0),
       itemBuilder: (context, index) {
         if (_chat.typing && index == messages.length) {
           return TypingIndicator(label: _chat.typingLabel);
         }
         final m = messages[index];
-        if (m.role == ChatRole.user) {
-          return UserBubble(message: m);
-        }
-        return AiBubble(
-          message: m,
-          onSend: _chat.send,
-        );
+        if (m.role == ChatRole.user) return UserBubble(message: m);
+        return AiBubble(message: m, onSend: _chat.send);
       },
     );
   }
-
 }
 
 class _AppBarIcon extends StatelessWidget {
-  const _AppBarIcon({
-    required this.icon,
-    required this.onTap,
-    this.color,
-  });
+  const _AppBarIcon({required this.icon, required this.onTap});
   final IconData icon;
   final VoidCallback onTap;
-  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       splashRadius: 22,
-      icon: Icon(icon, color: color ?? ChatTokens.neutral900, size: 22),
+      icon: Icon(icon, color: ChatTokens.neutral900, size: 22),
       onPressed: onTap,
     );
   }
-}
-
-/// Bandeau de connexion (spec §1) — 32px · slide down 200ms / slide up 200ms.
-class _ConnectionBanner extends StatelessWidget {
-  const _ConnectionBanner({required this.state});
-  final ChatConnectionState state;
-
-  @override
-  Widget build(BuildContext context) {
-    final cfg = _config();
-
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 200),
-      switchInCurve: Curves.easeOut,
-      switchOutCurve: Curves.easeIn,
-      transitionBuilder: (child, anim) {
-        final slide = Tween<Offset>(
-          begin: const Offset(0, -1),
-          end: Offset.zero,
-        ).animate(anim);
-        return ClipRect(
-          child: SlideTransition(
-            position: slide,
-            child: FadeTransition(opacity: anim, child: child),
-          ),
-        );
-      },
-      child: cfg == null
-          ? const SizedBox(key: ValueKey('none'), width: double.infinity)
-          : Container(
-              key: ValueKey(state),
-              width: double.infinity,
-              height: 32,
-              color: cfg.bg,
-              padding: const EdgeInsets.symmetric(horizontal: ChatTokens.s16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(cfg.icon, size: 14, color: cfg.fg),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      cfg.label,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: cfg.fg,
-                        letterSpacing: -0.1,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-    );
-  }
-
-  _BannerConfig? _config() {
-    switch (state) {
-      case ChatConnectionState.connecting:
-        return const _BannerConfig(
-          'Connexion…',
-          ChatTokens.bannerNeutralBg,
-          ChatTokens.bannerNeutralFg,
-          Iconsax.wifi,
-        );
-      case ChatConnectionState.reconnecting:
-        return const _BannerConfig(
-          'Reconnexion…',
-          ChatTokens.bannerWarnBg,
-          ChatTokens.bannerWarnFg,
-          Iconsax.wifi_square,
-        );
-      case ChatConnectionState.disconnected:
-        return const _BannerConfig(
-          'Hors ligne — messages envoyés à la reconnexion',
-          ChatTokens.bannerErrorBg,
-          ChatTokens.bannerErrorFg,
-          Iconsax.wifi_square,
-        );
-      case ChatConnectionState.unauthenticated:
-        return const _BannerConfig(
-          'Connecte-toi pour utiliser l\'assistant',
-          ChatTokens.bannerErrorBg,
-          ChatTokens.bannerErrorFg,
-          Iconsax.lock_1,
-        );
-      case ChatConnectionState.error:
-        return const _BannerConfig(
-          'Impossible de joindre le serveur',
-          ChatTokens.bannerErrorBg,
-          ChatTokens.bannerErrorFg,
-          Iconsax.close_circle,
-        );
-      case ChatConnectionState.connected:
-        return null;
-    }
-  }
-}
-
-class _BannerConfig {
-  const _BannerConfig(this.label, this.bg, this.fg, this.icon);
-  final String label;
-  final Color bg;
-  final Color fg;
-  final IconData icon;
 }

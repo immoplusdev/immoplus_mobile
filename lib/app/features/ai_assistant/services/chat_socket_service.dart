@@ -120,13 +120,15 @@ class ChatSocketService {
     }
   }
 
-  void sendMessage(String message) {
+  void sendMessage(String message, {String? sessionId}) {
     final s = _socket;
     if (s == null || !s.connected) {
       dev.log('sendMessage ignore : socket non connecte', name: 'ChatSocket');
       return;
     }
-    s.emit('send_message', {'message': message});
+    final payload = <String, dynamic>{'message': message};
+    if (sessionId != null) payload['sessionId'] = sessionId;
+    s.emit('send_message', payload);
   }
 
   Future<void> disconnect() async {

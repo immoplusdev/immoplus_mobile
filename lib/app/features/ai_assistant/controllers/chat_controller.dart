@@ -1,18 +1,30 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/chat_message.dart';
+import '../services/chat_history_service.dart';
 import '../services/chat_socket_service.dart';
 import '../services/property_fetcher.dart';
 
+const _kSessionId = 'ai_chat_session_id';
+const _kLastActive = 'ai_chat_last_active';
+const _kSessionTimeout = Duration(minutes: 30);
+
 class ChatController extends ChangeNotifier {
-  ChatController(this._socket, {PropertyFetcher? fetcher}) : _fetcher = fetcher {
+  ChatController(
+    this._socket, {
+    PropertyFetcher? fetcher,
+    ChatHistoryService? historyService,
+  })  : _fetcher = fetcher,
+        _historyService = historyService {
     _bind();
   }
 
   final ChatSocketService _socket;
   final PropertyFetcher? _fetcher;
+  final ChatHistoryService? _historyService;
 
   final List<ChatMessage> _messages = [];
   List<ChatMessage> get messages => List.unmodifiable(_messages);
@@ -27,6 +39,12 @@ class ChatController extends ChangeNotifier {
   ChatConnectionState _connection = ChatConnectionState.connecting;
   ChatConnectionState get connection => _connection;
 
+  String? _currentSessionId;
+  String? get currentSessionId => _currentSessionId;
+
+  bool _loadingHistory = false;
+  bool get loadingHistory => _loadingHistory;
+
   StreamSubscription? _connSub;
   StreamSubscription? _typingSub;
   StreamSubscription? _startSub;
@@ -34,7 +52,6 @@ class ChatController extends ChangeNotifier {
   StreamSubscription? _endSub;
   StreamSubscription? _errSub;
 
-  // ID de la bulle IA en cours de stream (1 à la fois).
   String? _currentAssistantId;
 
   void _bind() {
@@ -50,8 +67,102 @@ class ChatController extends ChangeNotifier {
   }
 
   Future<void> init() async {
+    await _tryRestoreSession();
     await _socket.connect();
   }
+
+  // ─── Session persistence ───────────────────────────────────────────────────
+
+  Future<void> _tryRestoreSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final sessionId = prefs.getString(_kSessionId);
+    final lastActiveStr = prefs.getString(_kLastActive);
+    if (sessionId == null || lastActiveStr == null) return;
+
+    final lastActive = DateTime.tryParse(lastActiveStr);
+    if (lastActive == null) return;
+
+    if (DateTime.now().difference(lastActive) > _kSessionTimeout) {
+      await prefs.remove(_kSessionId);
+      await prefs.remove(_kLastActive);
+      return;
+    }
+
+    await _loadSessionMessages(sessionId);
+  }
+
+  Future<void> _saveSession() async {
+    final id = _currentSessionId;
+    if (id == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kSessionId, id);
+    await prefs.setString(_kLastActive, DateTime.now().toIso8601String());
+  }
+
+  Future<void> _clearSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kSessionId);
+    await prefs.remove(_kLastActive);
+  }
+
+  // ─── Load session (T5) ────────────────────────────────────────────────────
+
+  Future<void> loadSession(String sessionId) async {
+    await _loadSessionMessages(sessionId);
+    await _saveSession();
+  }
+
+  Future<void> _loadSessionMessages(String sessionId) async {
+    final service = _historyService;
+    if (service == null) return;
+
+    try {
+      _loadingHistory = true;
+      notifyListeners();
+
+      final historyMessages = await service.getSessionMessages(sessionId);
+      _currentSessionId = sessionId;
+      _messages.clear();
+      _messages.addAll(historyMessages.map((m) => m.toChatMessage()));
+      notifyListeners();
+
+      // Re-fetch property cards en arrière-plan
+      for (var i = 0; i < _messages.length; i++) {
+        final msg = _messages[i];
+        if (msg.responseType == AlertResponseType.propertyAnswer &&
+            msg.data != null &&
+            msg.propertyCards == null) {
+          final sources = msg.data!['sources'] as List? ?? [];
+          if (sources.isNotEmpty && _fetcher != null) {
+            final cards = await _fetcher.fetchSources(sources);
+            if (cards.isNotEmpty) {
+              _messages[i] = msg.copyWith(propertyCards: cards);
+              notifyListeners();
+            }
+          }
+        }
+      }
+    } catch (_) {
+      _messages.clear();
+      _currentSessionId = null;
+    } finally {
+      _loadingHistory = false;
+      notifyListeners();
+    }
+  }
+
+  // ─── Nouvelle conversation (T6) ───────────────────────────────────────────
+
+  Future<void> startNewConversation() async {
+    _messages.clear();
+    _currentSessionId = null;
+    _currentAssistantId = null;
+    _stopTyping();
+    notifyListeners();
+    await _clearSession();
+  }
+
+  // ─── Envoi de message ─────────────────────────────────────────────────────
 
   void send(String raw) {
     final text = raw.trim();
@@ -61,15 +172,16 @@ class ChatController extends ChangeNotifier {
     _messages.add(userMsg);
     notifyListeners();
 
-    _socket.sendMessage(text);
+    _socket.sendMessage(text, sessionId: _currentSessionId);
 
-    // Optimistic : marquer le message user comme envoyé juste après émission.
     final idx = _messages.indexWhere((m) => m.id == userMsg.id);
     if (idx != -1) {
       _messages[idx] = userMsg.copyWith(status: ChatStatus.complete);
       notifyListeners();
     }
   }
+
+  // ─── Gestion du typing ────────────────────────────────────────────────────
 
   void _startTyping() {
     _typing = true;
@@ -94,8 +206,17 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ─── Événements WebSocket ─────────────────────────────────────────────────
+
   void _onStreamStart(Map<String, dynamic> payload) {
     _stopTyping();
+
+    final sessionId = payload['sessionId'] as String?;
+    if (sessionId != null) {
+      _currentSessionId = sessionId;
+      _saveSession();
+    }
+
     final typeStr = payload['type'] as String?;
     final placeholder = ChatMessage.assistantPlaceholder().copyWith(
       responseType: alertResponseTypeFromString(typeStr),
@@ -123,6 +244,13 @@ class ChatController extends ChangeNotifier {
     _currentAssistantId = null;
     _stopTyping();
 
+    // Mettre à jour sessionId si pas encore capturé
+    final sessionId = payload['sessionId'] as String?;
+    if (sessionId != null && _currentSessionId == null) {
+      _currentSessionId = sessionId;
+    }
+    _saveSession();
+
     if (id == null) return;
     final idx = _messages.indexWhere((m) => m.id == id);
     if (idx == -1) return;
@@ -143,7 +271,6 @@ class ChatController extends ChangeNotifier {
     );
     notifyListeners();
 
-    // Fetch property details en arrière-plan si propertyAnswer
     if (responseType == AlertResponseType.propertyAnswer) {
       _fetchAndUpdateProperties(id, data);
     }
@@ -182,7 +309,6 @@ class ChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Fetch les détails des propriétés en arrière-plan et met à jour le message.
   Future<void> _fetchAndUpdateProperties(
     String msgId,
     Map<String, dynamic>? data,
@@ -206,8 +332,7 @@ class ChatController extends ChangeNotifier {
   Map<String, dynamic>? _extractData(Map<String, dynamic> payload) {
     final data = payload['data'];
     if (data is Map) return Map<String, dynamic>.from(data);
-    // Le backend peut aussi renvoyer le payload à plat
-    final reserved = {'type', 'chunk', 'message', 'code'};
+    final reserved = {'type', 'chunk', 'message', 'code', 'sessionId'};
     final rest = <String, dynamic>{};
     for (final e in payload.entries) {
       if (!reserved.contains(e.key)) rest[e.key] = e.value;
