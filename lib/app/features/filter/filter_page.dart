@@ -69,8 +69,8 @@ class _FilterPageState extends State<FilterPage> {
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
-                      enableDrag: false,
-                      showDragHandle: true,
+                      enableDrag: true,
+                      showDragHandle: false,
                       backgroundColor: AppColors.whiteBackground,
                       shape: const RoundedRectangleBorder(
                           borderRadius:
@@ -120,17 +120,15 @@ class _FilterPageState extends State<FilterPage> {
                             currentAddress == null
                                 ? 'Sélectionner un lieu'
                                 : currentAddress!.description.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                  fontWeight: currentAddress == null
-                                      ? FontWeight.w400
-                                      : FontWeight.w600,
-                                  color: currentAddress == null
-                                      ? const Color(0xFF98A2B3)
-                                      : const Color(0xFF344054),
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontWeight: currentAddress == null
+                                          ? FontWeight.w400
+                                          : FontWeight.w600,
+                                      color: currentAddress == null
+                                          ? const Color(0xFF98A2B3)
+                                          : const Color(0xFF344054),
+                                    ),
                           ),
                         ),
                         Icon(

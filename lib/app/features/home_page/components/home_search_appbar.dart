@@ -320,6 +320,74 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     );
   }
 
+  Widget _buildSubCategoryTabs() {
+    if (widget.currentIndex == 0) return const SizedBox.shrink();
+
+    final isFurniture = widget.currentIndex == 2;
+    final items =
+        isFurniture ? FurnitureSubCategory.values : EstateSubCategory.values;
+
+    final selectedValue = isFurniture
+        ? FilterHandler.furnitureSubCategory
+        : FilterHandler.estateSubCategory;
+
+    return Container(
+      height: 30,
+      width: double.infinity,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: items.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 20),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          final isSelected = selectedValue == item;
+          final label = isFurniture
+              ? (item as FurnitureSubCategory).label
+              : (item as EstateSubCategory).label;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                if (isFurniture) {
+                  FilterHandler.furnitureSubCategory =
+                      item as FurnitureSubCategory;
+                } else {
+                  FilterHandler.estateSubCategory = item as EstateSubCategory;
+                }
+              });
+              FilterHandler.notifyChange();
+              HomePageState.refreshPage(widget.currentIndex);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                border: isSelected
+                    ? Border(
+                        bottom: BorderSide(
+                          color: AppColors.primary,
+                          width: 2,
+                        ),
+                      )
+                    : null,
+              ),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color:
+                          isSelected ? AppColors.primary : Colors.grey.shade600,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                    ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocationPermissionCubit, LocationPermissionState>(
@@ -482,8 +550,18 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(50),
-                  child: HomeChoiceMenu(),
+                  preferredSize:
+                      Size.fromHeight(widget.currentIndex == 0 ? 50 : 100),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      HomeChoiceMenu(),
+                      if (widget.currentIndex != 0) ...[
+                        Gap(15),
+                        _buildSubCategoryTabs()
+                      ],
+                    ],
+                  ),
                 ),
               );
             },

@@ -305,7 +305,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue.shade100),
+            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -322,8 +322,6 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                   ),
                 ),
               ),
-              Icon(Icons.arrow_forward_ios,
-                  color: Colors.blue.shade300, size: 16),
             ],
           ),
         ),

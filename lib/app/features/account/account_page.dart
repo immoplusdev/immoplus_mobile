@@ -395,6 +395,21 @@ class _AccountPageState extends State<AccountPage> {
           onTap: () => context.pushNamed(BookingHistoryPage.name),
         ),
         SettingsTile(
+          shape: SettingsTile.shapeLast,
+          leading:
+              _iconLeading(Icon(Iconsax.reserve, size: 18, color: _kIconColor)),
+          title: 'Mes demandes',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(AlertListPage.name),
+        ),
+        SettingsTile(
           shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(
               Icon(FontAwesomeIcons.creditCard, size: 18, color: _kIconColor)),
@@ -438,21 +453,6 @@ class _AccountPageState extends State<AccountPage> {
             height: 1.25,
           ),
           onTap: () => context.pushNamed(PaymentHistoryPage.name),
-        ),
-        SettingsTile(
-          shape: SettingsTile.shapeLast,
-          leading: _iconLeading(
-              Icon(Iconsax.document_text, size: 18, color: _kIconColor)),
-          title: 'Mes demandes',
-          titleColor: _kLabelColor,
-          trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: _kLabelColor,
-            height: 1.25,
-          ),
-          onTap: () => context.pushNamed(AlertListPage.name),
         ),
       ]),
     );

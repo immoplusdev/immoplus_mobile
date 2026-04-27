@@ -15,6 +15,44 @@ enum FilterField {
   price,
 }
 
+enum EstateSubCategory {
+  all('Tous', null),
+  appartement('Appartement', 'appartement'),
+  maison('Maison', 'maison'),
+  villa('Villa', 'villa'),
+  studio('Studio', 'studio'),
+  duplex('Duplex', 'duplex'),
+  bureau('Bureau', 'bureau'),
+  terrain('Terrain', 'terrain');
+
+  final String label;
+  final String? value;
+  const EstateSubCategory(this.label, this.value);
+}
+
+enum FurnitureSubCategory {
+  all('Tous', null),
+  salon('Salon', 'salon'),
+  chambre('Chambre', 'chambre'),
+  literie('Literie', 'literie'),
+  cuisineSalleAManger('Cuisine & Salle à manger', 'cuisine-salle-a-manger'),
+  salleDeBain('Salle de bain', 'salle-de-bain'),
+  bureau('Bureau', 'bureau'),
+  rangement('Rangement', 'rangement'),
+  decoration('Décoration', 'decoration'),
+  eclairage('Éclairage', 'eclairage'),
+  mobilierExterieur('Mobilier extérieur', 'mobilier-exterieur'),
+  enfantBebe('Enfant & Bébé', 'enfant-bebe'),
+  electromenager('Électroménager', 'electromenager'),
+  multimedia('Multimédia', 'multimedia'),
+  evenementiel('Événementiel', 'evenementiel'),
+  commerceProfessionnel('Commerce & Pro', 'commerce-professionnel');
+
+  final String label;
+  final String? value;
+  const FurnitureSubCategory(this.label, this.value);
+}
+
 class FilterHandler {
   static String? search;
   static String? startDate;
@@ -24,6 +62,8 @@ class FilterHandler {
   static int minPrice = minPriceLimit;
   static int maxPrice = maxPriceLimit;
   static String? locationName;
+  static EstateSubCategory estateSubCategory = EstateSubCategory.all;
+  static FurnitureSubCategory furnitureSubCategory = FurnitureSubCategory.all;
 
   static final ValueNotifier<int> _notifier = ValueNotifier<int>(0);
   static ValueNotifier<int> get notifier => _notifier;
@@ -42,6 +82,9 @@ class FilterHandler {
 
     minPrice = minPriceLimit;
     maxPrice = maxPriceLimit;
+
+    estateSubCategory = EstateSubCategory.all;
+    furnitureSubCategory = FurnitureSubCategory.all;
 
     notifyChange();
   }
@@ -96,6 +139,11 @@ class FilterHandler {
           '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
           '{"_field": "aLouer", "_op": "eq", "_val": true}',
         ]);
+        if (estateSubCategory != EstateSubCategory.all &&
+            estateSubCategory.value != null) {
+          allFilters.add(
+              '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${estateSubCategory.value}"}');
+        }
         break;
 
       case PropertyType.land:
@@ -104,6 +152,19 @@ class FilterHandler {
           '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
           '{"_field": "aLouer", "_op": "eq", "_val": false}'
         ]);
+        if (estateSubCategory != EstateSubCategory.all &&
+            estateSubCategory.value != null) {
+          allFilters.add(
+              '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${estateSubCategory.value}"}');
+        }
+        break;
+
+      case PropertyType.furniture:
+        if (furnitureSubCategory != FurnitureSubCategory.all &&
+            furnitureSubCategory.value != null) {
+          allFilters.add(
+              '{"_field": "category", "_op": "eq", "_val": "${furnitureSubCategory.value}"}');
+        }
         break;
 
       // Autres types...
@@ -131,7 +192,9 @@ class FilterHandler {
         startDate != null ||
         endDate != null ||
         minPrice > minPriceLimit ||
-        maxPrice < maxPriceLimit;
+        maxPrice < maxPriceLimit ||
+        estateSubCategory != EstateSubCategory.all ||
+        furnitureSubCategory != FurnitureSubCategory.all;
   }
 
   static List<Widget> getActiveFiltersChips({VoidCallback? onRefresh}) {

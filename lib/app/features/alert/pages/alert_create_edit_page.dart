@@ -71,8 +71,8 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       useRootNavigator: true,
       context: context,
       isScrollControlled: true,
-      enableDrag: false,
-      showDragHandle: true,
+      enableDrag: true,
+      showDragHandle: false,
       backgroundColor: AppColors.whiteBackground,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
