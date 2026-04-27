@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/repositories/notification_repository.dart';
 import 'package:immoplus/app/features/notification/cubit/notification_cubit_state.dart';
-import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/model/notifications_response.dart';
 import 'package:injectable/injectable.dart';
 
@@ -14,94 +13,6 @@ class NotificationCubit extends Cubit<NotificationCubitState> {
       : super(const NotificationCubitState.loading());
 
   NotificationsResponse? _currentNotifications;
-  int _currentPage = 1;
-  bool _hasMore = true;
-
-  /// Charger les notifications
-  Future<void> loadNotifications({bool refresh = false}) async {
-    try {
-      if (refresh) {
-        _currentPage = 1;
-        _hasMore = true;
-        _currentNotifications = null;
-        emit(const NotificationCubitState.loading());
-      } else if (_currentNotifications != null) {
-        emit(NotificationCubitState.loaded(
-          notifications: _currentNotifications!,
-          isLoadingMore: false,
-        ));
-        return;
-      } else {
-        emit(const NotificationCubitState.loading());
-      }
-
-      final response = await _repository.getNotifications(page: _currentPage);
-
-      if (refresh || _currentNotifications == null) {
-        _currentNotifications = response;
-      } else {
-        final updatedData =
-            List<NotificationModel>.from(_currentNotifications!.data)
-              ..addAll(response.data);
-
-        _currentNotifications = _currentNotifications!.copyWith(
-          data: updatedData,
-          currentPage: response.currentPage,
-          hasNext: response.hasNext,
-        );
-      }
-
-      _hasMore = response.hasNext;
-      _currentPage++;
-
-      emit(NotificationCubitState.loaded(
-        notifications: _currentNotifications!,
-        isLoadingMore: false,
-      ));
-    } catch (e) {
-      log(e.toString(), name: "NOTIFICATION_ERROR");
-      emit(NotificationCubitState.error(
-          e.toString().replaceFirst('Exception: ', '')));
-    }
-  }
-
-  /// Charger plus (pagination)
-  Future<void> loadMore() async {
-    if (!_hasMore || _currentNotifications == null) return;
-
-    emit(NotificationCubitState.loaded(
-      notifications: _currentNotifications!,
-      isLoadingMore: true,
-    ));
-
-    try {
-      final response = await _repository.getNotifications(page: _currentPage);
-
-      final updatedData =
-          List<NotificationModel>.from(_currentNotifications!.data)
-            ..addAll(response.data);
-
-      _currentNotifications = _currentNotifications!.copyWith(
-        data: updatedData,
-        currentPage: response.currentPage,
-        hasNext: response.hasNext,
-      );
-
-      _hasMore = response.hasNext;
-      _currentPage++;
-
-      emit(NotificationCubitState.loaded(
-        notifications: _currentNotifications!,
-        isLoadingMore: false,
-      ));
-    } catch (e) {
-      log(e.toString(), name: "LOAD_MORE_ERROR");
-      emit(NotificationCubitState.loaded(
-        notifications: _currentNotifications!,
-        isLoadingMore: false,
-      ));
-    }
-  }
 
   /// Marquer comme lu
   Future<void> markAsRead(String notificationId) async {
@@ -176,6 +87,4 @@ class NotificationCubit extends Cubit<NotificationCubitState> {
       log(e.toString(), name: "DELETE_ERROR");
     }
   }
-
-  Future<void> refresh() => loadNotifications(refresh: true);
 }
