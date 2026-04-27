@@ -22,11 +22,13 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) {
 mixin _$NotificationModel {
   String get id => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
+  String? get pushType => throw _privateConstructorUsedError;
   String? get subject => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   String? get collection => throw _privateConstructorUsedError;
   String? get item => throw _privateConstructorUsedError;
   String? get recipient => throw _privateConstructorUsedError;
+  DateTime? get readAt => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
@@ -50,11 +52,13 @@ abstract class $NotificationModelCopyWith<$Res> {
   $Res call(
       {String id,
       String? type,
+      String? pushType,
       String? subject,
       String? message,
       String? collection,
       String? item,
       String? recipient,
+      DateTime? readAt,
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt});
@@ -77,11 +81,13 @@ class _$NotificationModelCopyWithImpl<$Res, $Val extends NotificationModel>
   $Res call({
     Object? id = null,
     Object? type = freezed,
+    Object? pushType = freezed,
     Object? subject = freezed,
     Object? message = freezed,
     Object? collection = freezed,
     Object? item = freezed,
     Object? recipient = freezed,
+    Object? readAt = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
@@ -94,6 +100,10 @@ class _$NotificationModelCopyWithImpl<$Res, $Val extends NotificationModel>
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pushType: freezed == pushType
+          ? _value.pushType
+          : pushType // ignore: cast_nullable_to_non_nullable
               as String?,
       subject: freezed == subject
           ? _value.subject
@@ -115,6 +125,10 @@ class _$NotificationModelCopyWithImpl<$Res, $Val extends NotificationModel>
           ? _value.recipient
           : recipient // ignore: cast_nullable_to_non_nullable
               as String?,
+      readAt: freezed == readAt
+          ? _value.readAt
+          : readAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -142,11 +156,13 @@ abstract class _$$NotificationModelImplCopyWith<$Res>
   $Res call(
       {String id,
       String? type,
+      String? pushType,
       String? subject,
       String? message,
       String? collection,
       String? item,
       String? recipient,
+      DateTime? readAt,
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt});
@@ -167,11 +183,13 @@ class __$$NotificationModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? type = freezed,
+    Object? pushType = freezed,
     Object? subject = freezed,
     Object? message = freezed,
     Object? collection = freezed,
     Object? item = freezed,
     Object? recipient = freezed,
+    Object? readAt = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
@@ -184,6 +202,10 @@ class __$$NotificationModelImplCopyWithImpl<$Res>
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pushType: freezed == pushType
+          ? _value.pushType
+          : pushType // ignore: cast_nullable_to_non_nullable
               as String?,
       subject: freezed == subject
           ? _value.subject
@@ -205,6 +227,10 @@ class __$$NotificationModelImplCopyWithImpl<$Res>
           ? _value.recipient
           : recipient // ignore: cast_nullable_to_non_nullable
               as String?,
+      readAt: freezed == readAt
+          ? _value.readAt
+          : readAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -223,18 +249,21 @@ class __$$NotificationModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$NotificationModelImpl implements _NotificationModel {
+class _$NotificationModelImpl extends _NotificationModel {
   const _$NotificationModelImpl(
       {required this.id,
       required this.type,
+      required this.pushType,
       required this.subject,
       required this.message,
       required this.collection,
       required this.item,
       required this.recipient,
+      required this.readAt,
       required this.createdAt,
       required this.updatedAt,
-      this.deletedAt});
+      this.deletedAt})
+      : super._();
 
   factory _$NotificationModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$NotificationModelImplFromJson(json);
@@ -243,6 +272,8 @@ class _$NotificationModelImpl implements _NotificationModel {
   final String id;
   @override
   final String? type;
+  @override
+  final String? pushType;
   @override
   final String? subject;
   @override
@@ -254,6 +285,8 @@ class _$NotificationModelImpl implements _NotificationModel {
   @override
   final String? recipient;
   @override
+  final DateTime? readAt;
+  @override
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
@@ -262,7 +295,7 @@ class _$NotificationModelImpl implements _NotificationModel {
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, type: $type, subject: $subject, message: $message, collection: $collection, item: $item, recipient: $recipient, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+    return 'NotificationModel(id: $id, type: $type, pushType: $pushType, subject: $subject, message: $message, collection: $collection, item: $item, recipient: $recipient, readAt: $readAt, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
 
   @override
@@ -272,6 +305,8 @@ class _$NotificationModelImpl implements _NotificationModel {
             other is _$NotificationModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.type, type) || other.type == type) &&
+            (identical(other.pushType, pushType) ||
+                other.pushType == pushType) &&
             (identical(other.subject, subject) || other.subject == subject) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.collection, collection) ||
@@ -279,6 +314,7 @@ class _$NotificationModelImpl implements _NotificationModel {
             (identical(other.item, item) || other.item == item) &&
             (identical(other.recipient, recipient) ||
                 other.recipient == recipient) &&
+            (identical(other.readAt, readAt) || other.readAt == readAt) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -289,8 +325,20 @@ class _$NotificationModelImpl implements _NotificationModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, type, subject, message,
-      collection, item, recipient, createdAt, updatedAt, deletedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      type,
+      pushType,
+      subject,
+      message,
+      collection,
+      item,
+      recipient,
+      readAt,
+      createdAt,
+      updatedAt,
+      deletedAt);
 
   /// Create a copy of NotificationModel
   /// with the given fields replaced by the non-null parameter values.
@@ -309,18 +357,21 @@ class _$NotificationModelImpl implements _NotificationModel {
   }
 }
 
-abstract class _NotificationModel implements NotificationModel {
+abstract class _NotificationModel extends NotificationModel {
   const factory _NotificationModel(
       {required final String id,
       required final String? type,
+      required final String? pushType,
       required final String? subject,
       required final String? message,
       required final String? collection,
       required final String? item,
       required final String? recipient,
+      required final DateTime? readAt,
       required final DateTime? createdAt,
       required final DateTime? updatedAt,
       final DateTime? deletedAt}) = _$NotificationModelImpl;
+  const _NotificationModel._() : super._();
 
   factory _NotificationModel.fromJson(Map<String, dynamic> json) =
       _$NotificationModelImpl.fromJson;
@@ -329,6 +380,8 @@ abstract class _NotificationModel implements NotificationModel {
   String get id;
   @override
   String? get type;
+  @override
+  String? get pushType;
   @override
   String? get subject;
   @override
@@ -339,6 +392,8 @@ abstract class _NotificationModel implements NotificationModel {
   String? get item;
   @override
   String? get recipient;
+  @override
+  DateTime? get readAt;
   @override
   DateTime? get createdAt;
   @override

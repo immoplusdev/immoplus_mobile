@@ -5,11 +5,15 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/providers/notification_provider.dart';
+import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/model/notifications_response.dart';
+import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
+@injectable
 class NotificationRepository {
-  final dioClient = getIt<Dio>();
+  final Dio dioClient;
+  NotificationRepository(this.dioClient);
 
   Future<NotificationsResponse> getNotifications({
     int page = 1,
@@ -22,14 +26,12 @@ class NotificationRepository {
         orderBy: OrderByField.createdAt.value,
         orderDir: OrderDir.desc.value,
       );
-      inspect(response);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load notifications: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
       EasyLoading.showError(requestResponseExeption.toString());
-      log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
@@ -37,20 +39,30 @@ class NotificationRepository {
     }
   }
 
+  Future<NotificationModel> getNotificationById(String id) async {
+    try {
+      final response =
+          await NotificationProvider(dioClient).getNotificationById(id);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception(
+          'Failed to load notification detail: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to load notification detail: $error');
+    }
+  }
+
   Future<HttpResponse> markAsRead(String notificationId) async {
     try {
       final response =
           await NotificationProvider(dioClient).markAsRead(notificationId);
-      inspect(response);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       throw Exception(
           'Failed to mark notification as read: ${dioError.message}');
-    } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
-      log("RequestResponseExeption");
-      throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to mark notification as read: $error');
@@ -60,16 +72,11 @@ class NotificationRepository {
   Future<HttpResponse> markAllAsRead() async {
     try {
       final response = await NotificationProvider(dioClient).markAllAsRead();
-      inspect(response);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       throw Exception(
           'Failed to mark all notifications as read: ${dioError.message}');
-    } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
-      log("RequestResponseExeption");
-      throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to mark all notifications as read: $error');
@@ -79,16 +86,11 @@ class NotificationRepository {
   Future<HttpResponse> deleteNotification(String notificationId) async {
     try {
       final response = await NotificationProvider(dioClient)
-          .deleteNotification(notificationId);
-      inspect(response);
+          .deleteMyNotification(notificationId);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to delete notification: ${dioError.message}');
-    } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
-      log("RequestResponseExeption");
-      throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to delete notification: $error');
@@ -98,16 +100,14 @@ class NotificationRepository {
   Future<int> getUnreadCount() async {
     try {
       final response = await NotificationProvider(dioClient).getUnreadCount();
-      inspect(response);
-      // Supposons que la réponse contient un champ 'count'
-      return response.data['count'] ?? 0;
+      // Supposons que la réponse contient un champ 'count' ou 'unread_count'
+      if (response.data is Map) {
+        return response.data['count'] ?? response.data['unread_count'] ?? 0;
+      }
+      return 0;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to get unread count: ${dioError.message}');
-    } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
-      log("RequestResponseExeption");
-      throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to get unread count: $error');

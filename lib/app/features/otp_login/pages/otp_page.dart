@@ -67,7 +67,7 @@ class _OtpPageState extends State<OtpPage> {
       _isResending = true;
     });
 
-    EasyLoadingHandler.showLoagingToast(text: 'En cours...');
+    EasyLoadingHandler.showLoadingToast(text: 'En cours...');
 
     try {
       final model = SendOptModel(

@@ -9,6 +9,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
+import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/confirm_contact_change_page.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
@@ -31,6 +32,8 @@ import 'package:immoplus/app/features/home_page/screens/best_rated_residences_pa
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
+import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
+import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
@@ -56,6 +59,12 @@ import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
+import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
+import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -527,6 +536,13 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/user_preference',
+        name: UserPreferencePage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const UserPreferencePage();
+        },
+      ),
+      GoRoute(
         path: '/${PermissionPage.name}',
         name: PermissionPage.name,
         builder: (BuildContext context, GoRouterState state) {
@@ -539,6 +555,44 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const ResetPasswordPage();
         },
+      ),
+      GoRoute(
+        path: '/alerts',
+        name: AlertListPage.name,
+        builder: (context, state) => const AlertListPage(),
+      ),
+      GoRoute(
+        path: '/alerts/create',
+        name: AlertCreateEditPage.name,
+        builder: (context, state) => AlertCreateEditPage(
+          alert: state.extra as AlertModel?,
+        ),
+      ),
+      GoRoute(
+        path: '/alerts/:id/propositions',
+        name: AlertPropositionsPage.name,
+        builder: (context, state) => AlertPropositionsPage(
+          alertId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: '/alerts/success',
+        name: AlertSuccessPage.name,
+        builder: (context, state) => const AlertSuccessPage(),
+      ),
+      GoRoute(
+        path: '/alerts/detail',
+        name: AlertDetailPage.name,
+        builder: (context, state) => AlertDetailPage(
+          alert: state.extra as AlertModel,
+        ),
+      ),
+      GoRoute(
+        path: '/notifications/detail',
+        name: NotificationDetailPage.name,
+        builder: (context, state) => NotificationDetailPage(
+          notification: state.extra as NotificationModel,
+        ),
       ),
     ],
   );

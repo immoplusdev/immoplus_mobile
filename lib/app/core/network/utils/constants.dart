@@ -8,7 +8,7 @@ import 'easy_loading_handler.dart';
 
 Future<String?> uploadFile({required File file}) async {
   try {
-    EasyLoadingHandler.showLoagingToast(text: "Envoie des images");
+    EasyLoadingHandler.showLoadingToast(text: "Envoie des images");
     FileDataModel response = await AuthRepository().uplaodFile(file: file);
     EasyLoading.dismiss();
     return response.data!.id;

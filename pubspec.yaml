@@ -146,10 +146,6 @@ dependencies:
   http: ^1.6.0
   ez_circle_avatar: ^0.0.5
   # UI & animations
-  shadcn_ui:
-    git:
-      url: https://github.com/nank1ro/flutter-shadcn-ui.git
-      ref: main
   animate_do: ^4.2.0
   smooth_sheets: ^0.17.0
   preload_page_view: ^0.2.0
@@ -214,6 +210,7 @@ flutter:
     - assets/svgs/icons/
     - assets/3d/
     - assets/promo/
+    - assets/icons/property_type/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

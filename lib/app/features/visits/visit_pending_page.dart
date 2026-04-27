@@ -223,124 +223,151 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                     ),
                   ],
                 ),
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 12),
-                      Container(
-                        width: 36,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          SingleChildScrollView(
+                            controller: scrollController,
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Column(
+                              children: [
+                                _buildVisitTypeBadge(),
+                                const SizedBox(height: 16),
 
-                      // ── Badge type visite ─────────────────────────────────
-                      _buildVisitTypeBadge(),
-                      const SizedBox(height: 16),
+                                // ── Nom du bien ───────────────────────────────────────
+                                Text(
+                                  widget.bienImmo.nom,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: _textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
 
-                      // ── Nom du bien ───────────────────────────────────────
-                      Text(
-                        widget.bienImmo.nom,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: _textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
+                                // ── Adresse ───────────────────────────────────────────
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 32),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Iconsax.location,
+                                          size: 14, color: _textSecondary),
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: Text(
+                                          widget.bienImmo.adresse,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: _textSecondary,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
 
-                      // ── Adresse ───────────────────────────────────────────
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Iconsax.location,
-                                size: 14, color: _textSecondary),
-                            const SizedBox(width: 4),
-                            Flexible(
-                              child: Text(
-                                widget.bienImmo.adresse,
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: _textSecondary,
+                                // ── Status card ───────────────────────────────────────
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 400),
+                                  child: _isConfirmedByOwner
+                                      ? _buildConfirmedStatusCard()
+                                      : _buildWaitingStatusCard(),
+                                ),
+                                const SizedBox(height: 16),
+
+                                // ── Info contextuelle ─────────────────────────────────
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24),
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 400),
+                                    child: _isConfirmedByOwner
+                                        ? _buildConfirmedInfoCard()
+                                        : _buildWaitingInfoCard(),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+
+                                // ── Jour de visite ──────────────────────────────────
+                                if (_visitData != null)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: _buildVisitDateSection(),
+                                  ),
+                                if (_visitData != null)
+                                  const SizedBox(height: 12),
+
+                                // ── Actions (itinéraire, propriétaire, service client)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24),
+                                  child: _buildDetailActions(),
+                                ),
+
+                                // ── Statuts (service + paiement) ────────────────────
+                                if (_visitData != null)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: _buildStatusSection(),
+                                  ),
+                                if (_visitData != null)
+                                  const SizedBox(height: 12),
+
+                                // ── Identifiant de la demande ───────────────────────
+                                if (_visitData != null)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: _buildIdSection(),
+                                  ),
+                                if (_visitData != null)
+                                  const SizedBox(height: 12),
+                                const SizedBox(height: 24),
+                              ],
+                            ),
+                          ),
+
+                          // ── Poignée fixe (Drag handle) ──────────────────────
+                          Positioned(
+                            top: 12,
+                            left: 0,
+                            right: 0,
+                            child: IgnorePointer(
+                              child: Center(
+                                child: Container(
+                                  width: 36,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 24),
+                    ),
+                    const SizedBox(height: 8),
 
-                      // ── Status card ───────────────────────────────────────
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 400),
-                        child: _isConfirmedByOwner
-                            ? _buildConfirmedStatusCard()
-                            : _buildWaitingStatusCard(),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // ── Info contextuelle ─────────────────────────────────
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 400),
-                          child: _isConfirmedByOwner
-                              ? _buildConfirmedInfoCard()
-                              : _buildWaitingInfoCard(),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-     // ── Jour de visite ──────────────────────────────────
-                      if (_visitData != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildVisitDateSection(),
-                        ),
-                      if (_visitData != null) const SizedBox(height: 12),
-
-                      // ── Actions (itinéraire, propriétaire, service client)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: _buildDetailActions(),
-                      ),
-                     
-
-                      // ── Statuts (service + paiement) ────────────────────
-                      if (_visitData != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildStatusSection(),
-                        ),
-                      if (_visitData != null) const SizedBox(height: 12),
-
-                  // ── Identifiant de la demande ───────────────────────
-                      if (_visitData != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _buildIdSection(),
-                        ),
-                      if (_visitData != null) const SizedBox(height: 12),
-                      const SizedBox(height: 24),
-
-                      // ── Boutons ───────────────────────────────────────────
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 350),
-                        child: _buildActions(),
-                      ),
-                      const SizedBox(height: 32),
-                    ],
-                  ),
+                    // ── Boutons ───────────────────────────────────────────
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      child: _buildActions(),
+                    ),
+                    const SizedBox(height: 32),
+                  ],
                 ),
               );
             },
@@ -446,8 +473,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           children: [
             const Padding(
               padding: EdgeInsets.only(top: 2),
-              child:
-                  Icon(Iconsax.tick_circle, color: _successGreen, size: 20),
+              child: Icon(Iconsax.tick_circle, color: _successGreen, size: 20),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -500,8 +526,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               color: _primaryBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Iconsax.notification,
-                color: _primaryBlue, size: 18),
+            child:
+                const Icon(Iconsax.notification, color: _primaryBlue, size: 18),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -734,11 +760,13 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(widget.fromHistory ? Iconsax.arrow_left : Iconsax.save_2, size: 18),
+              Icon(widget.fromHistory ? Iconsax.arrow_left : Iconsax.save_2,
+                  size: 18),
               const SizedBox(width: 8),
               Text(
                 widget.fromHistory ? 'Retour' : 'Sauvegarder et Quitter',
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -765,7 +793,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               color: AppColors.primaryLite,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(Iconsax.document_text, size: 18, color: AppColors.primary),
+            child:
+                Icon(Iconsax.document_text, size: 18, color: AppColors.primary),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -979,7 +1008,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: hasDate ? AppColors.primary : const Color(0xFFB54708),
+                    color:
+                        hasDate ? AppColors.primary : const Color(0xFFB54708),
                   ),
                 ),
               ],
@@ -1010,8 +1040,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             child: _buildActionTile(
               icon: Iconsax.user,
               title: "Propriétaire",
-              subtitle:
-                  _visitData!.proprietaire!.phoneNumber.split('-').last,
+              subtitle: _visitData!.proprietaire!.phoneNumber.split('-').last,
               trailing: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -1022,8 +1051,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                     size: 18, color: Color(0xFF12B76A)),
               ),
               onTap: () {
-                final phone =
-                    _visitData!.proprietaire!.phoneNumber.split('-');
+                final phone = _visitData!.proprietaire!.phoneNumber.split('-');
                 Utils.makePhoneCall(phone.last);
               },
             ),

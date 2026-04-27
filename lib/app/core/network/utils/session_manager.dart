@@ -1,4 +1,5 @@
 import 'package:immoplus/app/core/config/isar_config.dart';
+import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/routes/app_router.dart';
@@ -125,6 +126,26 @@ class SessionManager {
   Future<void> resetOnboarding() async {
     await isarConfig.instance.writeTxn(() async {
       await isarConfig.instance.onboardingSchemas.clear();
+    });
+  }
+
+  /// Sauvegarder les préférences locales
+  Future<void> saveLocalPreferences(UserPreferenceSchema prefs) async {
+    await isarConfig.instance.writeTxn(() async {
+      await isarConfig.instance.userPreferenceSchemas.clear();
+      await isarConfig.instance.userPreferenceSchemas.put(prefs);
+    });
+  }
+
+  /// Récupérer les préférences locales
+  Future<UserPreferenceSchema?> getLocalPreferences() async {
+    return await isarConfig.instance.userPreferenceSchemas.where().findFirst();
+  }
+
+  /// Supprimer les préférences locales
+  Future<void> clearLocalPreferences() async {
+    await isarConfig.instance.writeTxn(() async {
+      await isarConfig.instance.userPreferenceSchemas.clear();
     });
   }
 }

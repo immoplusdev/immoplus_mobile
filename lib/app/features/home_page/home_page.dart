@@ -49,9 +49,9 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
-      // if (mounted) {
-      //   getIt<ClientReservationOverlayService>().checkAndShowOverlay(context);
-      // }
+      if (mounted) {
+        await context.read<HomePageCubit>().syncUserPreferences();
+      }
     });
     super.initState();
   }

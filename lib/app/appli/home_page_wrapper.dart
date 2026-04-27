@@ -81,7 +81,8 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
       final feedCtrl = Get.find<VideoFeedController>();
       if (pageState == PageState.vivre && index != _vivreTabIndex) {
         feedCtrl.onFeedHidden();
-        feedCtrl.saveSessionTimestamp(); // timestamp pour la logique 30 min au retour
+        feedCtrl
+            .saveSessionTimestamp(); // timestamp pour la logique 30 min au retour
       } else if (index == _vivreTabIndex) {
         feedCtrl.onFeedVisible();
       }
@@ -108,72 +109,74 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               bottomNavigationBar: hideBottomNav
                   ? null
                   : Container(
-            decoration: BoxDecoration(
-              // borderRadius: const BorderRadius.only(
-              //   topLeft: Radius.circular(20),
-              //   topRight: Radius.circular(20),
-              // ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              // borderRadius: const BorderRadius.only(
-              //   topLeft: Radius.circular(20),
-              //   topRight: Radius.circular(20),
-              // ),
-              child: SizedBox(
-                height: Platform.isAndroid ? 105 : null,
-                child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor:
-                      state == PageState.vivre ? Colors.black : Colors.white,
-                  currentIndex: _indexForState(state),
-                  onTap: (value) =>
-                      _onItemTapped(index: value, pageState: state),
-                  selectedFontSize: 12,
-                  unselectedFontSize: 12,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: state == PageState.vivre
-                      ? Colors.white
-                      : Colors.grey,
-                  items: [
-                    _buildNavItem(
-                      icon: Iconsax.home,
-                      label: "Accueil",
-                      isActive: state == PageState.home,
-                      immoMode: state == PageState.vivre,
+                      decoration: BoxDecoration(
+                        // borderRadius: const BorderRadius.only(
+                        //   topLeft: Radius.circular(20),
+                        //   topRight: Radius.circular(20),
+                        // ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        // borderRadius: const BorderRadius.only(
+                        //   topLeft: Radius.circular(20),
+                        //   topRight: Radius.circular(20),
+                        // ),
+                        child: SizedBox(
+                          height: Platform.isAndroid ? 105 : null,
+                          child: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            backgroundColor: state == PageState.vivre
+                                ? Colors.black
+                                : Colors.white,
+                            currentIndex: _indexForState(state),
+                            onTap: (value) =>
+                                _onItemTapped(index: value, pageState: state),
+                            selectedFontSize: 12,
+                            unselectedFontSize: 12,
+                            showSelectedLabels: true,
+                            showUnselectedLabels: true,
+                            selectedItemColor: AppColors.primary,
+                            unselectedItemColor: state == PageState.vivre
+                                ? Colors.white
+                                : Colors.grey,
+                            items: [
+                              _buildNavItem(
+                                icon: Iconsax.home,
+                                label: "Accueil",
+                                isActive: state == PageState.home,
+                                immoMode: state == PageState.vivre,
+                              ),
+                              _buildNavItem(
+                                icon: Iconsax.heart,
+                                label: "Favoris",
+                                isActive: state == PageState.forMe,
+                                immoMode: state == PageState.vivre,
+                              ),
+                              _buildNavItemVivre(
+                                  isActive: state == PageState.vivre),
+                              _buildNavItem(
+                                icon: Iconsax.location,
+                                label: "Explorer",
+                                isActive: state == PageState.explore,
+                                immoMode: state == PageState.vivre,
+                              ),
+                              _buildNavItem(
+                                icon: Iconsax.user,
+                                label: "Compte",
+                                isActive: state == PageState.account,
+                                immoMode: state == PageState.vivre,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    _buildNavItem(
-                      icon: Iconsax.heart,
-                      label: "Favoris",
-                      isActive: state == PageState.forMe,
-                      immoMode: state == PageState.vivre,
-                    ),
-                    _buildNavItemVivre(isActive: state == PageState.vivre),
-                    _buildNavItem(
-                      icon: Iconsax.location,
-                      label: "Explorer",
-                      isActive: state == PageState.explore,
-                      immoMode: state == PageState.vivre,
-                    ),
-                    _buildNavItem(
-                      icon: Iconsax.user,
-                      label: "Compte",
-                      isActive: state == PageState.account,
-                      immoMode: state == PageState.vivre,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
             );
           },
         );
@@ -218,20 +221,21 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   }
 
   BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-  return BottomNavigationBarItem(
-    icon: Container(
-      height: 40,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.primary.withOpacity(0.2) : null,
-        borderRadius: BorderRadius.circular(12),
+    return BottomNavigationBarItem(
+      icon: Container(
+        height: 40,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isActive ? AppColors.primary.withOpacity(0.2) : null,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          Iconsax.play5,
+          color: AppColors.primary,
+          size: 28,
+        ),
       ),
-      child: Icon( Iconsax.play5,
-        color: AppColors.primary ,
-        size: 28,
-      ),
-    ),
-    label: 'Video',
-  );
-}
+      label: 'réel',
+    );
+  }
 }

@@ -27,6 +27,7 @@ import 'package:immoplus/app/features/booking_history/booking_history_page.dart'
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,7 +66,7 @@ class _AccountPageState extends State<AccountPage> {
       return;
     }
     try {
-      EasyLoadingHandler.showLoagingToast(text: "Vérification de votre statut");
+      EasyLoadingHandler.showLoadingToast(text: "Vérification de votre statut");
       final response = await AuthRepository().getDemandeProParticulierMe();
       final hasPending = response.data.any(
         (d) => d.status == DemandeProParticulierStatus.pending.value,
@@ -424,7 +425,7 @@ class _AccountPageState extends State<AccountPage> {
           onTap: () => context.pushNamed(VisitHistoryPage.name),
         ),
         SettingsTile(
-          shape: SettingsTile.shapeLast,
+          shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(
               Icon(FontAwesomeIcons.moneyBills, size: 18, color: _kIconColor)),
           title: 'Paiements',
@@ -437,6 +438,21 @@ class _AccountPageState extends State<AccountPage> {
             height: 1.25,
           ),
           onTap: () => context.pushNamed(PaymentHistoryPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeLast,
+          leading: _iconLeading(
+              Icon(Iconsax.document_text, size: 18, color: _kIconColor)),
+          title: 'Mes demandes',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(AlertListPage.name),
         ),
       ]),
     );
