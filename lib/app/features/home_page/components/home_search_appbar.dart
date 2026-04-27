@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -469,7 +470,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                                 shape: BoxShape.circle,
                                 color: AppColors.F2F2F2,
                               ),
-                              child: Icon(Icons.notifications_none_rounded),
+                              child: Icon(FontAwesomeIcons.bell),
                             ),
                           ),
                         ],

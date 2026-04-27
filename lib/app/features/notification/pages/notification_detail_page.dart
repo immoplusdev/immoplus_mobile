@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 
 class NotificationDetailPage extends StatelessWidget {

@@ -19,17 +19,17 @@ class _NotificationProvider implements NotificationProvider {
 
   @override
   Future<NotificationsResponse> getNotifications({
+    String? pushType,
+    bool? onlyUnread,
     int page = 1,
-    int pageSize = 10,
-    String? orderBy,
-    String? orderDir,
+    int pageSize = 20,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'page': page,
-      r'pageSize': pageSize,
-      r'_order_by': orderBy,
-      r'_order_dir': orderDir,
+      r'pushType': pushType,
+      r'onlyUnread': onlyUnread,
+      r'_page': page,
+      r'_per_page': pageSize,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
