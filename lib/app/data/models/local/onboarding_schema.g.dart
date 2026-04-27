@@ -26,6 +26,11 @@ const OnboardingSchemaSchema = CollectionSchema(
       id: 1,
       name: r'readAt',
       type: IsarType.dateTime,
+    ),
+    r'version': PropertySchema(
+      id: 2,
+      name: r'version',
+      type: IsarType.long,
     )
   },
   estimateSize: _onboardingSchemaEstimateSize,
@@ -59,6 +64,7 @@ void _onboardingSchemaSerialize(
 ) {
   writer.writeBool(offsets[0], object.hasReadOnboarding);
   writer.writeDateTime(offsets[1], object.readAt);
+  writer.writeLong(offsets[2], object.version);
 }
 
 OnboardingSchema _onboardingSchemaDeserialize(
@@ -71,6 +77,7 @@ OnboardingSchema _onboardingSchemaDeserialize(
   object.hasReadOnboarding = reader.readBool(offsets[0]);
   object.id = id;
   object.readAt = reader.readDateTimeOrNull(offsets[1]);
+  object.version = reader.readLong(offsets[2]);
   return object;
 }
 
@@ -85,6 +92,8 @@ P _onboardingSchemaDeserializeProp<P>(
       return (reader.readBool(offset)) as P;
     case 1:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 2:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -323,6 +332,62 @@ extension OnboardingSchemaQueryFilter
       ));
     });
   }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      versionEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      versionGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      versionLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'version',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterFilterCondition>
+      versionBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'version',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension OnboardingSchemaQueryObject
@@ -358,6 +423,20 @@ extension OnboardingSchemaQuerySortBy
       sortByReadAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'readAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      sortByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      sortByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
     });
   }
 }
@@ -404,6 +483,20 @@ extension OnboardingSchemaQuerySortThenBy
       return query.addSortBy(r'readAt', Sort.desc);
     });
   }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      thenByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QAfterSortBy>
+      thenByVersionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'version', Sort.desc);
+    });
+  }
 }
 
 extension OnboardingSchemaQueryWhereDistinct
@@ -419,6 +512,13 @@ extension OnboardingSchemaQueryWhereDistinct
       distinctByReadAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'readAt');
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, OnboardingSchema, QDistinct>
+      distinctByVersion() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'version');
     });
   }
 }
@@ -441,6 +541,12 @@ extension OnboardingSchemaQueryProperty
   QueryBuilder<OnboardingSchema, DateTime?, QQueryOperations> readAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'readAt');
+    });
+  }
+
+  QueryBuilder<OnboardingSchema, int, QQueryOperations> versionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'version');
     });
   }
 }
