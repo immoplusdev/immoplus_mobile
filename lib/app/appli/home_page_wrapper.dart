@@ -15,19 +15,36 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
 
 class HomePageWrapper extends StatefulWidget {
   const HomePageWrapper({super.key, required this.child});
   final Widget child;
 
   @override
-  _HomePageWrapperState createState() => _HomePageWrapperState();
+  State<HomePageWrapper> createState() => _HomePageWrapperState();
 }
 
 class _HomePageWrapperState extends State<HomePageWrapper> {
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
   Timer? _videoFeedWarmupTimer;
+  // Scroll-to-right désactivé : la pilule reste centrée.
+  // Timer? _scrollIdleTimer;
+  //
+  // bool _handleScrollNotification(ScrollNotification notification) {
+  //   if (notification is ScrollUpdateNotification ||
+  //       notification is ScrollStartNotification) {
+  //     if (!aiFabCollapsedNotifier.value) {
+  //       aiFabCollapsedNotifier.value = true;
+  //     }
+  //     _scrollIdleTimer?.cancel();
+  //     _scrollIdleTimer = Timer(const Duration(milliseconds: 400), () {
+  //       if (mounted) aiFabCollapsedNotifier.value = false;
+  //     });
+  //   }
+  //   return false;
+  // }
 
   int _indexForState(PageState state) {
     switch (state) {
@@ -94,6 +111,8 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   void dispose() {
     _videoFeedWarmupTimer?.cancel();
     _videoFeedWarmupTimer = null;
+    // _scrollIdleTimer?.cancel();
+    // _scrollIdleTimer = null;
     super.dispose();
   }
 
@@ -106,6 +125,10 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
           builder: (context, hideBottomNav, _) {
             return Scaffold(
               body: widget.child,
+              floatingActionButton:
+                  state == PageState.vivre ? null : const AiFloatingButton(),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
                   ? null
                   : Container(
@@ -162,7 +185,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                                   isActive: state == PageState.vivre),
                               _buildNavItem(
                                 icon: Iconsax.location,
-                                label: "Explorer",
+                                label: "Carte",
                                 isActive: state == PageState.explore,
                                 immoMode: state == PageState.vivre,
                               ),
@@ -198,7 +221,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               padding: const EdgeInsets.all(8),
               decoration: immoMode
                   ? BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.2),
+                      color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     )
                   : null,
@@ -223,19 +246,38 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
   BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
     return BottomNavigationBarItem(
       icon: Container(
-        height: 40,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: isActive ? AppColors.primary.withOpacity(0.2) : null,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(
-          Iconsax.play5,
-          color: AppColors.primary,
-          size: 28,
+        height: 44,
+        padding: const EdgeInsets.all(4),
+        // decoration: BoxDecoration(
+
+        //   borderRadius: BorderRadius.circular(12),
+        // ),
+        child: Image.asset(
+          'assets/img/icon_video_2.png',
+          width: 26,
+          height: 26,
         ),
       ),
-      label: 'réel',
+      label: 'Reels',
     );
   }
+// BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
+//   return BottomNavigationBarItem(
+//     icon: Container(
+//       height: 40,
+//       padding: const EdgeInsets.all(8),
+//       child: isActive
+//           ? Icon(
+//               Iconsax.play5,
+//               color: AppColors.primary,
+//               size: 28,
+//             )
+//           : Icon(
+//               Iconsax.play,
+//               size: 28,
+//             ),
+//     ),
+//     label: 'Reels',
+//   );
+// }
 }

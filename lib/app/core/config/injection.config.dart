@@ -40,6 +40,8 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
 import 'package:immoplus/app/data/repositories/user_preference_repository.dart'
     as _i715;
+import 'package:immoplus/app/features/ai_assistant/services/chat_history_service.dart'
+    as _i342;
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
     as _i237;
 import 'package:immoplus/app/features/booking/logic/booking_services.dart'
@@ -146,6 +148,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i715.UserPreferenceRepository>(
         () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
+    gh.lazySingleton<_i342.ChatHistoryService>(
+        () => _i342.ChatHistoryService(gh<_i361.Dio>()));
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit(
           gh<_i715.UserPreferenceRepository>(),
           gh<_i22.SessionManager>(),

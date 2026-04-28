@@ -34,7 +34,7 @@ class HomeChoiceMenu extends StatelessWidget {
     MenuOption(label: 'Résidences', icon: ImmoIcons.home),
     MenuOption(label: 'Locations', icon: ImmoIcons.location),
     MenuOption(label: 'Meubles', icon: ImmoIcons.meubles),
-    MenuOption(label: 'Achats', icon: ImmoIcons.terrain),
+    MenuOption(label: 'Biens', icon: ImmoIcons.terrain),
   ];
 
   @override
