@@ -5,7 +5,8 @@ import 'package:immoplus/app/core/network/exceptions/request_response_exeption.d
 import 'package:immoplus/app/data/models/remote/alert/alert_request.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_response.dart';
 import 'package:immoplus/app/data/models/remote/alert/alerts_response.dart';
-import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_collection.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_matches_api_response.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_matches_response.dart';
 import 'package:immoplus/app/data/providers/alert_provider.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
@@ -120,7 +121,7 @@ class AlertRepository {
     }
   }
 
-  Future<BienImmobilierCollection> getAlertMatches({
+  Future<AlertMatchesResponse> getAlertMatches({
     required String id,
     int page = 1,
     int pageSize = 10,
@@ -131,7 +132,7 @@ class AlertRepository {
         page: page,
         pageSize: pageSize,
       );
-      return response;
+      return response.data;
     } on DioException catch (dioError) {
       log('DioError (getAlertMatches): ${dioError.message}');
       throw Exception('Failed to load alert matches: ${dioError.message}');

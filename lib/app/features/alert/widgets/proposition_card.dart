@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PropositionCard extends StatelessWidget {
-  final BienImmobilierModel property;
+  final AlertMatchModel property;
   const PropositionCard({super.key, required this.property});
 
   @override
@@ -25,7 +25,7 @@ class PropositionCard extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: CachedNetworkImage(
-              imageUrl: property.images.isNotEmpty ? property.images.first : '',
+              imageUrl: property.miniature ?? '',
               fit: BoxFit.cover,
               placeholder: (context, url) => Container(color: Colors.grey[200]),
               errorWidget: (context, url, error) => Container(
@@ -56,7 +56,7 @@ class PropositionCard extends StatelessWidget {
                       const Gap(4),
                       Expanded(
                         child: Text(
-                          property.adresse,
+                          property.location,
                           style: GoogleFonts.dmSans(
                               fontSize: 13, color: Colors.grey),
                           maxLines: 1,

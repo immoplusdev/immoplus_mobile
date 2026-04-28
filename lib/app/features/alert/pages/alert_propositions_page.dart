@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/widgets/proposition_card.dart';
@@ -19,7 +20,7 @@ class AlertPropositionsPage extends StatefulWidget {
 
 class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
   final alertRepository = getIt<AlertRepository>();
-  List<BienImmobilierModel> _propositions = [];
+  List<AlertMatchModel> _propositions = [];
   bool _isLoading = true;
 
   @override
@@ -27,77 +28,79 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
     super.initState();
     _fetchPropositions();
   }
-  //   Future<void> _fetchPropositions() async {
-  //   setState(() => _isLoading = true);
-  //   try {
-  //     final response = await alertRepository.getAlertMatches(id: widget.alertId);
-  //     _propositions = response.data ?? [];
-  //     // Mark as viewed if there are propositions
-  //     if (_propositions.isNotEmpty) {
-  //       await alertRepository.markAsViewed(widget.alertId);
-  //     }
-  //   } catch (e) {
-  //     // Error handled by repo/EasyLoading
-  //   } finally {
-  //     if (mounted) setState(() => _isLoading = false);
-  //   }
-  // }
 
   Future<void> _fetchPropositions() async {
     setState(() => _isLoading = true);
-    // Simulation d'un délai réseau
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    final mockPropositions = [
-      BienImmobilierModel(
-        id: 'b1',
-        nom: 'Appartement de luxe - Plateau',
-        typeBienImmobilier: 'appartement',
-        adresse: 'Plateau, Avenue Chardy',
-        prix: 850000,
-        images: [
-          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=1000'
-        ],
-        description: 'Magnifique appartement avec vue sur la lagune.',
-      ),
-      BienImmobilierModel(
-        id: 'b2',
-        nom: 'Studio moderne - Cocody',
-        typeBienImmobilier: 'appartement',
-        adresse: 'Cocody, Angré 7ème tranche',
-        prix: 350000,
-        images: [
-          'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000'
-        ],
-        description: 'Studio entièrement équipé et sécurisé.',
-      ),
-      BienImmobilierModel(
-        id: 'b3',
-        nom: 'Appartement F3 - Marcory',
-        typeBienImmobilier: 'appartement',
-        adresse: 'Marcory, Zone 4C',
-        prix: 950000,
-        images: [
-          'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1000'
-        ],
-        description: 'Bel appartement spacieux proche des commerces.',
-      ),
-    ];
-
-    if (mounted) {
-      setState(() {
-        _propositions = mockPropositions;
-        _isLoading = false;
-      });
-
-      // Simulation de l'appel pour marquer comme vu
-      try {
+    try {
+      final response =
+          await alertRepository.getAlertMatches(id: widget.alertId);
+      _propositions = response.matches ;
+      // Mark as viewed if there are propositions
+      if (_propositions.isNotEmpty) {
         await alertRepository.markAsViewed(widget.alertId);
-      } catch (e) {
-        debugPrint('Error marking as viewed: $e');
       }
+    } catch (e) {
+      // Error handled by repo/EasyLoading
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
+
+  // Future<void> _fetchPropositions() async {
+  //   setState(() => _isLoading = true);
+  //   // Simulation d'un délai réseau
+  //   await Future.delayed(const Duration(milliseconds: 1000));
+
+  //   final mockPropositions = [
+  //     BienImmobilierModel(
+  //       id: 'b1',
+  //       nom: 'Appartement de luxe - Plateau',
+  //       typeBienImmobilier: 'appartement',
+  //       adresse: 'Plateau, Avenue Chardy',
+  //       prix: 850000,
+  //       images: [
+  //         'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=1000'
+  //       ],
+  //       description: 'Magnifique appartement avec vue sur la lagune.',
+  //     ),
+  //     BienImmobilierModel(
+  //       id: 'b2',
+  //       nom: 'Studio moderne - Cocody',
+  //       typeBienImmobilier: 'appartement',
+  //       adresse: 'Cocody, Angré 7ème tranche',
+  //       prix: 350000,
+  //       images: [
+  //         'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1000'
+  //       ],
+  //       description: 'Studio entièrement équipé et sécurisé.',
+  //     ),
+  //     BienImmobilierModel(
+  //       id: 'b3',
+  //       nom: 'Appartement F3 - Marcory',
+  //       typeBienImmobilier: 'appartement',
+  //       adresse: 'Marcory, Zone 4C',
+  //       prix: 950000,
+  //       images: [
+  //         'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1000'
+  //       ],
+  //       description: 'Bel appartement spacieux proche des commerces.',
+  //     ),
+  //   ];
+
+  //   if (mounted) {
+  //     setState(() {
+  //       _propositions = mockPropositions;
+  //       _isLoading = false;
+  //     });
+
+  //     // Simulation de l'appel pour marquer comme vu
+  //     try {
+  //       await alertRepository.markAsViewed(widget.alertId);
+  //     } catch (e) {
+  //       debugPrint('Error marking as viewed: $e');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

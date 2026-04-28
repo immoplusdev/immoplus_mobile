@@ -2,7 +2,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:immoplus/app/data/models/remote/alert/alert_request.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_response.dart';
 import 'package:immoplus/app/data/models/remote/alert/alerts_response.dart';
-import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_collection.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_matches_api_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'alert_provider.g.dart';
@@ -37,7 +37,7 @@ abstract class AlertProvider {
   Future<HttpResponse> markAsViewed(@Path('id') String id);
 
   @GET('/alerts/{id}/matches')
-  Future<BienImmobilierCollection> getAlertMatches({
+  Future<AlertMatchesApiResponse> getAlertMatches({
     @Path('id') required String id,
     @Query('page') int page = 1,
     @Query('pageSize') int pageSize = 10,
