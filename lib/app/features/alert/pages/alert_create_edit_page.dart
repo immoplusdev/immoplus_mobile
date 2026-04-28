@@ -101,6 +101,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
     }
 
     final request = AlertRequest(
+      targetType: TargetTypeEnum.bienImmobilier.value,
       title:
           '${(_selectedPropertyType ?? 'Bien').toUpperCase()} à ${_selectedAddress?.description ?? 'Abidjan'}',
       descriptionClient: _descriptionController.text,

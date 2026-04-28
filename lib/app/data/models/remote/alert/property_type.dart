@@ -1,3 +1,12 @@
+enum TargetTypeEnum {
+  bienImmobilier("bien_immobilier"),
+  residence("residence"),
+  furniture("furniture");
+
+  final String value;
+  const TargetTypeEnum(this.value);
+}
+
 class AlertPropertyType {
   final String icon;
   final String backendSlug;

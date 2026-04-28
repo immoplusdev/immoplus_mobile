@@ -35,6 +35,7 @@ class _AlertListPageState extends State<AlertListPage>
   final alertRepository = getIt<AlertRepository>();
   late TabController _tabController;
   final ValueNotifier<int> _refreshNotifier = ValueNotifier<int>(0);
+  List<AlertModel> _allAlerts = [];
 
   @override
   void initState() {
@@ -116,6 +117,9 @@ class _AlertListPageState extends State<AlertListPage>
                   .map((tab) => _AlertListContent(
                         status: tab.value,
                         refreshNotifier: _refreshNotifier,
+                        onAlertsLoaded: tab.value == null
+                            ? (alerts) => setState(() => _allAlerts = alerts)
+                            : null,
                       ))
                   .toList(),
             ),
@@ -136,9 +140,15 @@ class _AlertListPageState extends State<AlertListPage>
   }
 
   Widget _buildSummaryText() {
-    // In a real app, this would be reactive to the alerts count
+    final total = _allAlerts.length;
+    final withPropositions =
+        _allAlerts.fold<int>(0, (sum, a) => sum + (a.matchCount ?? 0));
+    final demandesLabel = total == 1 ? 'demande' : 'demandes';
+    final propositionsLabel = withPropositions == 1
+        ? 'nouvelle proposition'
+        : 'nouvelles propositions';
     return Text(
-      '3 demandes · 1 nouvelle proposition',
+      '$total $demandesLabel · $withPropositions $propositionsLabel',
       style: GoogleFonts.dmSans(
         fontSize: 15,
         color: Colors.grey.shade500,
@@ -173,7 +183,12 @@ class _AlertListPageState extends State<AlertListPage>
 class _AlertListContent extends StatefulWidget {
   final String? status;
   final ValueNotifier<int> refreshNotifier;
-  const _AlertListContent({this.status, required this.refreshNotifier});
+  final void Function(List<AlertModel> alerts)? onAlertsLoaded;
+  const _AlertListContent({
+    this.status,
+    required this.refreshNotifier,
+    this.onAlertsLoaded,
+  });
 
   @override
   State<_AlertListContent> createState() => _AlertListContentState();
@@ -203,89 +218,13 @@ class _AlertListContentState extends State<_AlertListContent> {
     try {
       final response = await alertRepository.getAlerts(status: widget.status);
       _alerts = response.data;
+      widget.onAlertsLoaded?.call(_alerts);
     } catch (e) {
       // Handle error
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
-
-  // Future<void> _fetchAlerts() async {
-  //   setState(() => _isLoading = true);
-  //   // Simulation d'un délai réseau
-  //   await Future.delayed(const Duration(milliseconds: 800));
-
-  //   final mockAlerts = [
-  //     AlertModel(
-  //       id: '1',
-  //       userId: 'u1',
-  //       title: 'Appartement · Plateau',
-  //       targetType: 'bien_immobilier',
-  //       status: 'propositions',
-  //       matchCount: 3,
-  //       createdAt: DateTime(2026, 3, 28),
-  //       updatedAt: DateTime.now(),
-  //       expiresAt: DateTime.now().add(const Duration(days: 30)),
-  //       criteria: const AlertCriteriaModel(
-  //         propertyType: 'appartement',
-  //         location: 'Plateau',
-  //         transactionType: 'louer',
-  //         roomsMin: 2,
-  //         priceMin: 50000,
-  //         priceMax: 100000,
-  //       ),
-  //     ),
-  //     AlertModel(
-  //       id: '2',
-  //       userId: 'u1',
-  //       title: 'Maison · Abobo',
-  //       targetType: 'bien_immobilier',
-  //       status: 'pending',
-  //       matchCount: 0,
-  //       createdAt: DateTime(2026, 4, 12),
-  //       updatedAt: DateTime.now(),
-  //       expiresAt: DateTime.now().add(const Duration(days: 45)),
-  //       criteria: const AlertCriteriaModel(
-  //         propertyType: 'duplex',
-  //         location: 'Abobo',
-  //         transactionType: 'acheter',
-  //         roomsMin: 4,
-  //         priceMin: 5000000,
-  //         priceMax: 50000000,
-  //       ),
-  //     ),
-  //     AlertModel(
-  //       id: '3',
-  //       userId: 'u1',
-  //       title: 'Terrain · Assini',
-  //       targetType: 'bien_immobilier',
-  //       status: 'closed',
-  //       matchCount: 0,
-  //       createdAt: DateTime(2026, 3, 8),
-  //       updatedAt: DateTime.now(),
-  //       expiresAt: DateTime.now().add(const Duration(days: 10)),
-  //       criteria: const AlertCriteriaModel(
-  //         propertyType: 'terrain',
-  //         location: 'Assini',
-  //         transactionType: 'louer',
-  //         surfaceMin: 500,
-  //         priceMin: 50000,
-  //         priceMax: 100000,
-  //       ),
-  //     ),
-  //   ];
-
-  //   if (mounted) {
-  //     setState(() {
-  //       if (widget.status == null) {
-  //         _alerts = mockAlerts;
-  //       } else {
-  //         _alerts = mockAlerts.where((a) => a.status == widget.status).toList();
-  //       }
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

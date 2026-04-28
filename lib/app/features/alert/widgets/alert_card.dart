@@ -109,7 +109,7 @@ class AlertCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '${alert.matchCount} nouvelles propositions disponibles',
+                        '${alert.matchCount} ${(alert.matchCount ?? 0) > 1 ? 'nouvelles propositions disponibles' : 'nouvelle proposition disponible'}',
                         style: GoogleFonts.dmSans(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
@@ -29,8 +30,7 @@ class PropositionCard extends StatelessWidget {
               fit: BoxFit.cover,
               placeholder: (context, url) => Container(color: Colors.grey[200]),
               errorWidget: (context, url, error) => Container(
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.image_not_supported)),
+                  color: Colors.grey.shade100, child: Icon(Iconsax.image)),
             ),
           ),
         ),
