@@ -76,7 +76,10 @@ class AlertSuccessPage extends StatelessWidget {
     return CustomLoadingButtom(
       text: 'Retourner à l\'accueil',
       isLoading: false,
-      onClick: () => context.go('/'),
+      onClick: () {
+        context.pop(true);
+      },
+      // onClick: () => context.go('/'),
     );
   }
 }

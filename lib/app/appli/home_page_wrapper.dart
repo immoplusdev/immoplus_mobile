@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
@@ -126,7 +127,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
             return Scaffold(
               body: widget.child,
               floatingActionButton:
-                  state == PageState.vivre ? null : const AiFloatingButton(),
+                  state == PageState.home ? const AiFloatingButton() : null,
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
@@ -177,9 +178,10 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                               ),
                               _buildNavItem(
                                 icon: Iconsax.heart,
-                                label: "Favoris",
+                                label: "Mes choix",
                                 isActive: state == PageState.forMe,
                                 immoMode: state == PageState.vivre,
+                                svgAsset: 'assets/svgs/icons/choice.svg',
                               ),
                               _buildNavItemVivre(
                                   isActive: state == PageState.vivre),
@@ -212,8 +214,29 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     required String label,
     required bool isActive,
     required bool immoMode,
+    String? svgAsset,
   }) {
     final inactiveColor = immoMode ? Colors.white : Colors.grey.shade600;
+
+    Widget buildIcon({required bool active}) {
+      if (svgAsset != null) {
+        return SvgPicture.asset(
+          svgAsset,
+          width: active ? 24 : 25,
+          height: active ? 24 : 25,
+          colorFilter: ColorFilter.mode(
+            active ? AppColors.primary : inactiveColor,
+            BlendMode.srcIn,
+          ),
+        );
+      }
+      return Icon(
+        icon,
+        color: active ? AppColors.primary : inactiveColor,
+        size: active ? 24 : 25,
+      );
+    }
+
     return BottomNavigationBarItem(
       icon: isActive
           ? Container(
@@ -225,19 +248,11 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                       borderRadius: BorderRadius.circular(12),
                     )
                   : null,
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 24,
-              ),
+              child: buildIcon(active: true),
             )
           : SizedBox(
               height: 40,
-              child: Icon(
-                icon,
-                color: inactiveColor,
-                size: 25,
-              ),
+              child: buildIcon(active: false),
             ),
       label: label,
     );

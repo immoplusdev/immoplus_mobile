@@ -11,6 +11,11 @@ import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:isar_community/isar.dart';
 
+import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:immoplus/app/widgets/custom_empty_state.dart';
+
 // White Luxury — fond blanc, pas de noir
 const Color _kBg = Color(0xFFFFFFFF);
 const Color _kGold = Color(0xFFC9A84C);
@@ -19,7 +24,8 @@ const Color _kTextSecondary = Color(0xFF6B7280);
 const Color _kSeparator = Color(0xFFE5E7EB);
 
 class FavoritePage extends StatefulWidget {
-  const FavoritePage({super.key});
+  final bool embedded;
+  const FavoritePage({super.key, this.embedded = false});
   static String name = 'FavoritePage';
 
   @override
@@ -62,66 +68,78 @@ class _FavoritePageState extends State<FavoritePage> {
         }
         final favorites = snapshot.data ?? [];
         if (favorites.isEmpty) {
-          return const EmptyIndicator();
+          return CustomEmptyState(
+            icon: Iconsax.heart,
+            title: "Tu n'as rien trouvé",
+            description:
+                "Votre liste de favoris est vide Parcourez nos annonces et gardez un œil sur les biens qui vous intéressent.",
+            buttonText: 'Explorer les biens',
+            onButtonPressed: () {
+              context.go('/homePage');
+            },
+          );
         }
         return Scaffold(
           backgroundColor: _kBg,
-          appBar: AppBar(
-            backgroundColor: _kBg,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            centerTitle: false,
-            title: Text(
-              'Favoris',
-              style: GoogleFonts.dmSans(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
-                color: _kTextPrimary,
-                letterSpacing: -0.5,
-              ),
-            ),
-            leading: _isSelectionMode
-                ? IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        _isSelectionMode = false;
-                        _selectedItems.clear();
-                      });
-                    },
-                    color: _kTextPrimary,
-                  )
-                : null,
-            actions: [
-              if (_isSelectionMode) ...[
-                IconButton(
-                  icon: const Icon(Icons.select_all),
-                  onPressed: () {
-                    setState(() {
-                      if (_selectedItems.length == favorites.length) {
-                        _selectedItems.clear();
-                      } else {
-                        _selectedItems.addAll(favorites.map((f) => f.id));
-                      }
-                    });
-                  },
-                  color: Colors.black,
+          appBar: widget.embedded
+              ? null
+              : AppBar(
+                  backgroundColor: _kBg,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  centerTitle: false,
+                  title: Text(
+                    'Favoris',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      color: _kTextPrimary,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  leading: _isSelectionMode
+                      ? IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            setState(() {
+                              _isSelectionMode = false;
+                              _selectedItems.clear();
+                            });
+                          },
+                          color: _kTextPrimary,
+                        )
+                      : null,
+                  actions: [
+                    if (_isSelectionMode) ...[
+                      IconButton(
+                        icon: const Icon(Icons.select_all),
+                        onPressed: () {
+                          setState(() {
+                            if (_selectedItems.length == favorites.length) {
+                              _selectedItems.clear();
+                            } else {
+                              _selectedItems.addAll(favorites.map((f) => f.id));
+                            }
+                          });
+                        },
+                        color: Colors.black,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: _selectedItems.isEmpty
+                            ? null
+                            : () => _showDeleteDialog(favorites),
+                        color: Colors.red,
+                      ),
+                    ] else
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: () =>
+                            setState(() => _isSelectionMode = true),
+                        color: _kTextSecondary,
+                      ),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: _selectedItems.isEmpty
-                      ? null
-                      : () => _showDeleteDialog(favorites),
-                  color: Colors.red,
-                ),
-              ] else
-                IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: () => setState(() => _isSelectionMode = true),
-                  color: _kTextSecondary,
-                ),
-            ],
-          ),
           body: ListView.builder(
             itemCount: favorites.length,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

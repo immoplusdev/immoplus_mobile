@@ -28,6 +28,7 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
+import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
@@ -338,9 +339,9 @@ class AppRouter {
           ),
           GoRoute(
             path: '/for_me',
-            name: FavoritePage.name,
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: const FavoritePage(),
+            name: MyChoicePage.name,
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: MyChoicePage(),
             ),
           ),
           GoRoute(

@@ -124,7 +124,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       } else {
         await alertRepository.createAlert(request);
         if (mounted) {
-          context.pushReplacementNamed(AlertSuccessPage.name);
+          context.pop(true);
         }
       }
     } catch (e) {

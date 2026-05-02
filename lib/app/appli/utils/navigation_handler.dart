@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
-import 'package:immoplus/app/features/for_me/favorite_page.dart';
+import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:injectable/injectable.dart';
 
@@ -44,7 +44,7 @@ class NavigationHandler {
         context.go('/homePage');
         break;
       case 1:
-        context.goNamed(FavoritePage.name);
+        context.goNamed(MyChoicePage.name);
         break;
       case 2:
         context.go('/vivre');

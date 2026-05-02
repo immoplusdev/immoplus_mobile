@@ -8,11 +8,16 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/widgets/alert_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 class AlertListPage extends StatefulWidget {
-  const AlertListPage({super.key});
+  final bool embedded;
+  const AlertListPage({super.key, this.embedded = false});
   static const String name = 'ALERT_LIST_PAGE';
 
   @override
@@ -64,36 +69,41 @@ class _AlertListPageState extends State<AlertListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      appBar: widget.embedded
+          ? null
+          : AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios,
+                    color: Colors.black, size: 20),
+                onPressed: () => context.pop(),
+              ),
+            ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Mes demandes',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          if (!widget.embedded) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Mes demandes',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                const Gap(4),
-                _buildSummaryText(),
-              ],
+                  const Gap(4),
+                  _buildSummaryText(),
+                ],
+              ),
             ),
-          ),
-          const Gap(24),
+            const Gap(24),
+          ],
           TabBar(
             controller: _tabController,
             isScrollable: true,
@@ -126,16 +136,22 @@ class _AlertListPageState extends State<AlertListPage>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await context.pushNamed(AlertCreateEditPage.name);
-          _refresh();
-        },
-        backgroundColor: AppColors.primary,
-        shape: const CircleBorder(),
-        elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 32),
-      ),
+      floatingActionButton: _allAlerts.isEmpty
+          ? null
+          : FloatingActionButton(
+              onPressed: () async {
+                final result =
+                    await context.pushNamed(AlertCreateEditPage.name);
+                if (result == true && context.mounted) {
+                  await context.pushNamed(AlertSuccessPage.name);
+                }
+                _refresh();
+              },
+              backgroundColor: AppColors.primary,
+              shape: const CircleBorder(),
+              elevation: 4,
+              child: const Icon(Icons.add, color: Colors.white, size: 32),
+            ),
     );
   }
 
@@ -228,24 +244,26 @@ class _AlertListContentState extends State<_AlertListContent> {
 
   @override
   Widget build(BuildContext context) {
+    final bool alertIsEmpty = _alerts.isEmpty;
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (_alerts.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.notifications_off_outlined,
-                size: 80, color: Colors.grey[300]),
-            const Gap(16),
-            Text(
-              'Aucune demande trouvée',
-              style: GoogleFonts.dmSans(fontSize: 16, color: Colors.grey),
-            ),
-          ],
-        ),
+    if (alertIsEmpty) {
+      return CustomEmptyState(
+        icon: Iconsax.reserve,
+        title: 'Aucune demande pour le moment',
+        description:
+            "Vous n'avez pas encore fait de demande Décrivez le bien idéal et laissez les professionnels venir à vous.",
+        buttonText: 'Faire une demande',
+        buttonIcon: const Icon(Icons.add, color: Colors.white, size: 20),
+        onButtonPressed: () async {
+          final result = await context.pushNamed(AlertCreateEditPage.name);
+          if (result == true && context.mounted) {
+            await context.pushNamed(AlertSuccessPage.name);
+          }
+          widget.refreshNotifier.value++;
+        },
       );
     }
 
