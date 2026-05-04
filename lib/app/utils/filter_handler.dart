@@ -18,7 +18,7 @@ enum FilterField {
 enum EstateSubCategory {
   all('Tous', null),
   appartement('Appartement', 'appartement'),
-  maison('Maison', 'maison'),
+  // maison('Maison', 'maison'),
   villa('Villa', 'villa'),
   studio('Studio', 'studio'),
   duplex('Duplex', 'duplex'),
@@ -42,9 +42,9 @@ enum FurnitureSubCategory {
   decoration('Décoration', 'decoration'),
   eclairage('Éclairage', 'eclairage'),
   mobilierExterieur('Mobilier extérieur', 'mobilier-exterieur'),
-  enfantBebe('Enfant & Bébé', 'enfant-bebe'),
-  electromenager('Électroménager', 'electromenager'),
-  multimedia('Multimédia', 'multimedia'),
+  // enfantBebe('Enfant & Bébé', 'enfant-bebe'),
+  // electromenager('Électroménager', 'electromenager'),
+  // multimedia('Multimédia', 'multimedia'),
   evenementiel('Événementiel', 'evenementiel'),
   commerceProfessionnel('Commerce & Pro', 'commerce-professionnel');
 
