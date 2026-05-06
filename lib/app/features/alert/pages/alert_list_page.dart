@@ -12,7 +12,6 @@ import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/widgets/alert_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 class AlertListPage extends StatefulWidget {

@@ -16,6 +16,9 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
 
 class HomePageWrapper extends StatefulWidget {
@@ -95,6 +98,23 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     if (_indexForState(pageState) == index) {
       return;
     }
+
+    // Si on clique sur "Mes choix" (index 1), on vérifie si l'utilisateur est connecté
+    if (index == 1 && sessionManager.currentUser == null) {
+      context.pushNamed(
+        AuthenticationPage.name,
+        extra: (
+          callback: () {
+            // Une fois connecté, on switch sur la page "Mes choix"
+            navigationHandler.switchPage(id: index, context: context);
+          },
+          popUntilRouteName:
+              null, // On ne pop pas, on veut juste revenir/continuer
+        ) as AuthRedirectData,
+      );
+      return;
+    }
+
     if (Get.isRegistered<VideoFeedController>()) {
       final feedCtrl = Get.find<VideoFeedController>();
       if (pageState == PageState.vivre && index != _vivreTabIndex) {

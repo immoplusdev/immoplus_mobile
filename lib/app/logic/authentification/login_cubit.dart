@@ -68,9 +68,11 @@ class LoginCubit extends Cubit<LoginCubitState> {
     final context = NavigationService.navigatorKey.currentContext!;
     final redirectData = authRedirectService.get();
     if (redirectData != null) {
-      Navigator.of(context).popUntil(
-        (route) => route.settings.name == redirectData.popUntilRouteName,
-      );
+      if (redirectData.popUntilRouteName != null) {
+        Navigator.of(context).popUntil(
+          (route) => route.settings.name == redirectData.popUntilRouteName,
+        );
+      }
       redirectData.callback();
       authRedirectService.clear();
     } else {

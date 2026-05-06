@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage>
                   ),
                   Positioned(
                     right: 20,
-                    bottom: 118,
+                    bottom: 15,
                     child: IgnorePointer(
                       ignoring: !_showScrollToTopButton,
                       child: AnimatedOpacity(

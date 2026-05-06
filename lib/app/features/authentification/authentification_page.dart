@@ -29,6 +29,9 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    if (widget.redirectData != null) {
+      getIt<AuthRedirectService>().set(widget.redirectData);
+    }
   }
 
   @override

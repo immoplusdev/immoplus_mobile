@@ -31,6 +31,12 @@ class _MyChoicePageState extends State<MyChoicePage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          'Mes choix',
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: [
