@@ -106,7 +106,14 @@ class ChatSocketService {
     final s = _socket!;
     s.on('alert_typing', (data) => _emit(_typing, data));
     s.on('alert_stream_start', (data) => _emit(_streamStart, data));
-    s.on('alert_stream_chunk', (data) => _emit(_streamChunk, data));
+    s.on('alert_stream_chunk', (data) {
+      // Le serveur peut envoyer le chunk en String brut ou en Map {chunk: "..."}
+      if (data is String) {
+        _streamChunk.add({'chunk': data});
+      } else {
+        _emit(_streamChunk, data);
+      }
+    });
     s.on('alert_stream_end', (data) => _emit(_streamEnd, data));
     s.on('error', (data) => _emit(_errorEvent, data));
     s.on('alert_error', (data) => _emit(_errorEvent, data));

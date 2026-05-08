@@ -17,6 +17,7 @@ class AlertCard extends StatefulWidget {
     this.onSeeAll,
     this.onManage,
     this.onPropertyTap,
+    this.onNavigateToPropositions,
     this.maxInline = 3,
   });
 
@@ -25,6 +26,7 @@ class AlertCard extends StatefulWidget {
   final VoidCallback? onSeeAll;
   final VoidCallback? onManage;
   final void Function(String propertyId)? onPropertyTap;
+  final void Function(String alertId)? onNavigateToPropositions;
   final int maxInline;
 
   @override
@@ -131,6 +133,8 @@ class _AlertCardState extends State<AlertCard>
                   ),
                   _Footer(
                     extraCount: extra > 0 ? extra : 0,
+                    alertId: widget.payload.alertId,
+                    onNavigateToPropositions: widget.onNavigateToPropositions,
                     onSeeAll: _handleSeeAll,
                     onManage: _handleManage,
                   ),
@@ -269,11 +273,25 @@ class _Footer extends StatelessWidget {
     required this.extraCount,
     required this.onSeeAll,
     required this.onManage,
+    this.alertId,
+    this.onNavigateToPropositions,
   });
 
   final int extraCount;
   final VoidCallback onSeeAll;
   final VoidCallback onManage;
+  final String? alertId;
+  final void Function(String alertId)? onNavigateToPropositions;
+
+  void _handleSeeAll() {
+    HapticFeedback.lightImpact();
+    final id = alertId;
+    if (id != null && onNavigateToPropositions != null) {
+      onNavigateToPropositions!(id);
+    } else {
+      onSeeAll();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +302,7 @@ class _Footer extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: onSeeAll,
+              onTap: _handleSeeAll,
               child: Text(
                 extraCount > 0
                     ? 'Voir tous les matches ($extraCount)'

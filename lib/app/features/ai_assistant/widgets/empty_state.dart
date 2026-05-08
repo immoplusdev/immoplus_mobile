@@ -108,11 +108,9 @@ class _EmptyChatStateState extends State<EmptyChatState> {
   }
 
   String get _greeting {
-    // ─── Ancien greeting "Bonjour" avec emoji (commenté) ───
-    // final raw = widget.firstName?.trim();
-    // if (raw == null || raw.isEmpty) return 'Bonjour 👋';
-    // return 'Bonjour, $raw 👋';
-    return 'Hôte AI';
+    final raw = widget.firstName?.trim();
+    if (raw == null || raw.isEmpty) return 'Bonjour 👋';
+    return 'Bonjour, $raw 👋';
   }
 
   @override
