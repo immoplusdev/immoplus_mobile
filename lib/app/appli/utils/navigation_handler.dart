@@ -18,11 +18,11 @@ class NavigationHandler {
             id == 0
                 ? PageState.home
                 : id == 1
-                    ? PageState.forMe
+                    ? PageState.explore
                     : id == 2
                         ? PageState.vivre
                         : id == 3
-                            ? PageState.explore
+                            ? PageState.forMe
                             : PageState.account,
           );
     } else {
@@ -30,11 +30,11 @@ class NavigationHandler {
             id == 0
                 ? PageState.home
                 : id == 1
-                    ? PageState.forMe
+                    ? PageState.explore
                     : id == 2
                         ? PageState.vivre
                         : id == 3
-                            ? PageState.explore
+                            ? PageState.forMe
                             : PageState.account,
           );
     }
@@ -44,13 +44,13 @@ class NavigationHandler {
         context.go('/homePage');
         break;
       case 1:
-        context.goNamed(MyChoicePage.name);
+        context.go('/map');
         break;
       case 2:
         context.go('/vivre');
         break;
       case 3:
-        context.go('/map');
+        context.goNamed(MyChoicePage.name);
         break;
       default:
         context.goNamed(AccountPage.name);
