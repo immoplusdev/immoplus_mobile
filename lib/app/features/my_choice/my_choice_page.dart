@@ -33,7 +33,7 @@ class _MyChoicePageState extends State<MyChoicePage>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Mes choix',
+          'Imatch',
         ),
         centerTitle: true,
       ),

@@ -11,10 +11,12 @@ class ClarificationBlock extends StatefulWidget {
     super.key,
     required this.clarification,
     required this.onSend,
+    this.quickReplies = const [],
   });
 
   final ChatClarification clarification;
   final void Function(String text) onSend;
+  final List<String> quickReplies;
 
   @override
   State<ClarificationBlock> createState() => _ClarificationBlockState();
@@ -56,10 +58,13 @@ class _ClarificationBlockState extends State<ClarificationBlock>
     final options = _optionsFor(widget.clarification.askedField);
     if (understood.isEmpty && options.isEmpty) return const SizedBox.shrink();
 
+    final totalSteps =
+        understood.length + widget.clarification.missingFields.length;
+    final doneSteps = understood.length;
+
     final fade = CurvedAnimation(parent: _enter, curve: Curves.easeOut);
-    final slide =
-        Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
-            .animate(fade);
+    final slide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(fade);
 
     return Padding(
       padding: const EdgeInsets.only(top: ChatTokens.s10),
@@ -85,6 +90,10 @@ class _ClarificationBlockState extends State<ClarificationBlock>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (totalSteps > 1) ...[
+                    _ProgressIndicator(done: doneSteps, total: totalSteps),
+                    const SizedBox(height: 12),
+                  ],
                   if (understood.isNotEmpty) ...[
                     const _SectionLabel(
                       icon: Iconsax.tick_circle,
@@ -130,6 +139,12 @@ class _ClarificationBlockState extends State<ClarificationBlock>
   }
 
   List<_ChipOption> _optionsFor(String? askedField) {
+    if (widget.quickReplies.isNotEmpty) {
+      return widget.quickReplies
+          .map((value) => _ChipOption(value, value))
+          .toList(growable: false);
+    }
+
     switch (askedField?.toLowerCase()) {
       case 'transaction_type':
       case 'transactiontype':
@@ -165,6 +180,33 @@ class _ClarificationBlockState extends State<ClarificationBlock>
           _ChipOption('Sécurité', 'Avec sécurité'),
           _ChipOption('Climatisation', 'Avec climatisation'),
         ];
+      case 'location':
+        return const [
+          _ChipOption('Cocody', 'Cocody'),
+          _ChipOption('Plateau', 'Plateau'),
+          _ChipOption('Yopougon', 'Yopougon'),
+          _ChipOption('Marcory', 'Marcory'),
+          _ChipOption('Bingerville', 'Bingerville'),
+          _ChipOption('Abobo', 'Abobo'),
+        ];
+      case 'price_max':
+      case 'pricemax':
+        return const [
+          _ChipOption('300k F', '300 000 FCFA'),
+          _ChipOption('500k F', '500 000 FCFA'),
+          _ChipOption('1M F', '1 000 000 FCFA'),
+          _ChipOption('2M F', '2 000 000 FCFA'),
+          _ChipOption('Pas de limite', 'Pas de limite'),
+        ];
+      case 'surface_min':
+      case 'surfacemin':
+        return const [
+          _ChipOption('30 m²', '30 m²'),
+          _ChipOption('50 m²', '50 m²'),
+          _ChipOption('70 m²', '70 m²'),
+          _ChipOption('100 m²', '100 m²'),
+          _ChipOption('150 m²', '150 m²'),
+        ];
       default:
         return const [];
     }
@@ -175,6 +217,43 @@ class _ChipOption {
   const _ChipOption(this.label, this.value);
   final String label;
   final String value;
+}
+
+class _ProgressIndicator extends StatelessWidget {
+  const _ProgressIndicator({required this.done, required this.total});
+  final int done;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (var i = 0; i < total; i++) ...[
+          if (i > 0) const SizedBox(width: 4),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeOut,
+            width: i < done ? 18 : 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: i < done ? ChatTokens.success500 : ChatTokens.neutral200,
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+        ],
+        const SizedBox(width: 8),
+        Text(
+          '$done/$total critères',
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: ChatTokens.neutral400,
+            letterSpacing: 0.1,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _SectionLabel extends StatelessWidget {
@@ -253,8 +332,7 @@ class ChoiceChip extends StatelessWidget {
             border: Border.all(color: ChatTokens.brandBorder20, width: 0.5),
           ),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Text(
               label,
               style: const TextStyle(

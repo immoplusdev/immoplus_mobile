@@ -419,9 +419,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (sessionManager.currentUser != null)
-                        ReservationPendingBanner(),
-                      if (hasReservation) Gap(14),
                       Row(
                         children: [
                           BlocBuilder<LocationPermissionCubit,
@@ -547,6 +544,10 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                           ),
                         ),
                       ),
+                      if (sessionManager.currentUser != null && hasReservation) ...[
+                        Gap(14),
+                        ReservationPendingBanner(),
+                      ],
                     ],
                   ),
                 ),

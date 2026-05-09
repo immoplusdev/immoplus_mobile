@@ -54,11 +54,11 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     switch (state) {
       case PageState.home:
         return 0;
-      case PageState.forMe:
+      case PageState.explore:
         return 1;
       case PageState.vivre:
         return 2;
-      case PageState.explore:
+      case PageState.forMe:
         return 3;
       case PageState.account:
         return 4;
@@ -99,8 +99,8 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
       return;
     }
 
-    // Si on clique sur "Mes choix" (index 1), on vérifie si l'utilisateur est connecté
-    if (index == 1 && sessionManager.currentUser == null) {
+    // Si on clique sur "Imatch" (index 3), on vérifie si l'utilisateur est connecté
+    if (index == 3 && sessionManager.currentUser == null) {
       context.pushNamed(
         AuthenticationPage.name,
         extra: (
@@ -197,19 +197,19 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                                 immoMode: state == PageState.vivre,
                               ),
                               _buildNavItem(
-                                icon: Iconsax.heart,
-                                label: "Mes choix",
-                                isActive: state == PageState.forMe,
-                                immoMode: state == PageState.vivre,
-                                svgAsset: 'assets/svgs/icons/choice.svg',
-                              ),
-                              _buildNavItemVivre(
-                                  isActive: state == PageState.vivre),
-                              _buildNavItem(
                                 icon: Iconsax.location,
                                 label: "Carte",
                                 isActive: state == PageState.explore,
                                 immoMode: state == PageState.vivre,
+                              ),
+                              _buildNavItemVivre(
+                                  isActive: state == PageState.vivre),
+                              _buildNavItem(
+                                icon: Iconsax.heart,
+                                label: "Imatch",
+                                isActive: state == PageState.forMe,
+                                immoMode: state == PageState.vivre,
+                                svgAsset: 'assets/svgs/icons/immomacth.svg',
                               ),
                               _buildNavItem(
                                 icon: Iconsax.user,

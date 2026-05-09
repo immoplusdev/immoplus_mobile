@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -11,6 +12,7 @@ import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 
 import '../controllers/chat_controller.dart';
+import '../models/chat_action.dart';
 import '../models/chat_message.dart';
 import '../services/chat_history_service.dart';
 import '../services/chat_socket_service.dart';
@@ -118,6 +120,71 @@ class _AiAssistantPageState extends State<AiAssistantPage>
     _historyAnim.reverse();
   }
 
+  void _handleChatAction(ChatActionModel action, ChatMessage _) {
+    switch (action.id) {
+      case 'confirm':
+        _chat.send('Oui, confirmer');
+        return;
+      case 'modify':
+        _chat.send('Non, modifier les critères');
+        return;
+      case 'cancel':
+        _chat.send('Annuler');
+        return;
+      case 'create_alert':
+        _chat.send('Créer cette alerte');
+        return;
+      case 'continue_alert':
+        _chat.send('Continuer');
+        return;
+      case 'search_properties':
+        _chat.send('Chercher un bien');
+        return;
+      case 'search_other_properties':
+        _chat.send('Voir d\'autres biens');
+        return;
+      case 'contact_support':
+        _handleSend('Contacter le support');
+        return;
+      default:
+        _chat.send(action.label);
+    }
+  }
+
+  void _navigateToPropositions(String alertId) {
+    HapticFeedback.lightImpact();
+    AppRouter.router.push('/alerts/$alertId/propositions');
+  }
+
+  Future<void> _openPaymentUrl(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  /// Wrapper send — intercepte les quickReplies spéciaux avant d'envoyer au serveur.
+  void _handleSend(String text) {
+    final normalized = text.trim().toLowerCase();
+    if (normalized == 'contacter le support' ||
+        normalized == 'contacter le service client') {
+      _openSupportContact();
+      return;
+    }
+    _chat.send(text);
+  }
+
+  void _openSupportContact() {
+    HapticFeedback.lightImpact();
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => const _SupportSheet(),
+    );
+  }
+
   // ─── Edge-swipe gesture ───────────────────────────────────────────────────
 
   void _onDragStart(DragStartDetails d) {
@@ -199,6 +266,7 @@ class _AiAssistantPageState extends State<AiAssistantPage>
 
             return Column(
               children: [
+                _ConnectionBanner(connection: _chat.connection),
                 Expanded(
                   child: Center(
                     child: ConstrainedBox(
@@ -215,7 +283,8 @@ class _AiAssistantPageState extends State<AiAssistantPage>
                           maxWidth: ChatTokens.threadMaxWidth),
                       child: ChatComposer(
                         isStreaming: isStreaming,
-                        onSend: _chat.send,
+                        onSend: _handleSend,
+                        hint: _chat.composerHint,
                       ),
                     ),
                   ),
@@ -318,14 +387,14 @@ class _AiAssistantPageState extends State<AiAssistantPage>
     if (messages.isEmpty && !_chat.typing) {
       return EmptyChatState(
         firstName: _firstName,
-        onSuggestionTap: _chat.send,
+        onSuggestionTap: _handleSend,
       );
     }
 
     return ListView.builder(
       controller: _scroll,
-      padding: const EdgeInsets.only(
-          top: ChatTokens.s8, bottom: ChatTokens.s16),
+      padding:
+          const EdgeInsets.only(top: ChatTokens.s8, bottom: ChatTokens.s16),
       itemCount: messages.length + (_chat.typing ? 1 : 0),
       itemBuilder: (context, index) {
         if (_chat.typing && index == messages.length) {
@@ -333,8 +402,88 @@ class _AiAssistantPageState extends State<AiAssistantPage>
         }
         final m = messages[index];
         if (m.role == ChatRole.user) return UserBubble(message: m);
-        return AiBubble(message: m, onSend: _chat.send);
+        final isLastAi = index == messages.length - 1;
+        return AiBubble(
+          message: m,
+          isLast: isLastAi,
+          onSend: _handleSend,
+          onActionTap: _handleChatAction,
+          onPaymentTap: (url) => _openPaymentUrl(url),
+          onNavigateToPropositions: _navigateToPropositions,
+        );
       },
+    );
+  }
+}
+
+class _ConnectionBanner extends StatelessWidget {
+  const _ConnectionBanner({required this.connection});
+  final ChatConnectionState connection;
+
+  @override
+  Widget build(BuildContext context) {
+    final (label, showSpinner, bg, fg) = switch (connection) {
+      ChatConnectionState.connecting => (
+          'Connexion en cours…',
+          true,
+          ChatTokens.bannerNeutralBg,
+          ChatTokens.bannerNeutralFg,
+        ),
+      ChatConnectionState.reconnecting => (
+          'Reconnexion…',
+          true,
+          ChatTokens.bannerWarnBg,
+          ChatTokens.bannerWarnFg,
+        ),
+      ChatConnectionState.disconnected => (
+          'Hors ligne — vérifie ta connexion',
+          false,
+          ChatTokens.bannerErrorBg,
+          ChatTokens.bannerErrorFg,
+        ),
+      ChatConnectionState.error => (
+          'Erreur de connexion',
+          false,
+          ChatTokens.bannerErrorBg,
+          ChatTokens.bannerErrorFg,
+        ),
+      _ => (null, false, Colors.transparent, Colors.transparent),
+    };
+
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
+      child: label == null
+          ? const SizedBox.shrink()
+          : Container(
+              width: double.infinity,
+              color: bg,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (showSpinner) ...[
+                    SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.5,
+                        color: fg,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: fg,
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
@@ -350,6 +499,169 @@ class _AppBarIcon extends StatelessWidget {
       splashRadius: 22,
       icon: Icon(icon, color: ChatTokens.neutral900, size: 22),
       onPressed: onTap,
+    );
+  }
+}
+
+class _SupportSheet extends StatelessWidget {
+  const _SupportSheet();
+
+  static const _email = 'support@immoplus.ci';
+
+  Future<void> _launchEmail() async {
+    final uri = Uri(scheme: 'mailto', path: _email, queryParameters: {
+      'subject': 'Demande de support ImmoPlus',
+    });
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  Future<void> _launchWhatsApp() async {
+    const phone = '2250779801183';
+    final uri = Uri.parse('https://wa.me/$phone');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: ChatTokens.neutral200,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Contacter le support',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: ChatTokens.neutral900,
+                letterSpacing: -0.3,
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Notre équipe répond en moins de 24h.',
+              style: TextStyle(
+                fontSize: 14,
+                color: ChatTokens.neutral400,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 24),
+            _SupportOption(
+              icon: Iconsax.sms,
+              label: 'Email',
+              value: _email,
+              onTap: _launchEmail,
+            ),
+            const SizedBox(height: 12),
+            _SupportOption(
+              icon: Iconsax.message,
+              label: 'WhatsApp',
+              value: 'Ouvrir WhatsApp',
+              onTap: _launchWhatsApp,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SupportOption extends StatelessWidget {
+  const _SupportOption({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(14),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: ChatTokens.neutral50,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: ChatTokens.borderStandard, width: 0.8),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: ChatTokens.brandSurface,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, size: 18, color: ChatTokens.brand500),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: ChatTokens.neutral900,
+                          letterSpacing: -0.1,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        value,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: ChatTokens.neutral400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Iconsax.arrow_right_3,
+                  size: 16,
+                  color: ChatTokens.neutral400,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

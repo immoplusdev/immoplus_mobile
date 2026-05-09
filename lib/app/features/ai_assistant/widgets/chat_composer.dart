@@ -12,12 +12,13 @@ class ChatComposer extends StatefulWidget {
     super.key,
     required this.onSend,
     required this.isStreaming,
-    this.hint = 'Demande quoi que ce soit sur l\'immo…',
+    this.hint,
   });
 
   final void Function(String text) onSend;
   final bool isStreaming;
-  final String hint;
+  /// Hint contextuel — null affiche le placeholder par défaut.
+  final String? hint;
 
   @override
   State<ChatComposer> createState() => _ChatComposerState();
@@ -127,7 +128,7 @@ class _ChatComposerState extends State<ChatComposer> {
                         height: 1.3,
                       ),
                       decoration: InputDecoration(
-                        hintText: widget.hint,
+                        hintText: widget.hint ?? 'Demande quoi que ce soit sur l\'immo…',
                         hintStyle: const TextStyle(
                           fontSize: 14,
                           color: ChatTokens.placeholder,

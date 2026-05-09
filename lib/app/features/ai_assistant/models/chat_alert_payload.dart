@@ -9,6 +9,9 @@ class ChatAlertPayload {
     this.matches = const [],
     this.totalMatches,
     this.message,
+    this.missingFields = const [],
+    this.origin,
+    this.fromCache,
   });
 
   final String? alertId;
@@ -16,6 +19,9 @@ class ChatAlertPayload {
   final List<ChatProperty> matches;
   final int? totalMatches;
   final String? message;
+  final List<String> missingFields;
+  final String? origin;
+  final bool? fromCache;
 
   bool get hasMatches => matches.isNotEmpty;
 
@@ -30,7 +36,8 @@ class ChatAlertPayload {
     final pt = _str(c['propertyType'] ?? c['property_type']);
     if (pt != null) out.add(_labelProperty(pt));
 
-    final loc = _str(c['location']) ?? _str(c['commune']) ?? _str(c['quartier']);
+    final loc =
+        _str(c['location']) ?? _str(c['commune']) ?? _str(c['quartier']);
     if (loc != null) out.add(loc);
 
     final rooms = c['roomsMin'] ?? c['rooms_min'] ?? c['rooms'];
@@ -46,15 +53,29 @@ class ChatAlertPayload {
     final surfaceMin = c['surfaceMin'] ?? c['surface_min'];
     if (surfaceMin is num) out.add('${surfaceMin.round()} m²+');
 
+    final extrasRaw = c['extras'];
+    if (extrasRaw is List) {
+      for (final extra in extrasRaw.take(3)) {
+        final label = _str(extra);
+        if (label != null) out.add(label);
+      }
+    }
+
     return out;
   }
+
+  List<String> get missingFieldLabels => missingFields
+      .map(_fieldLabel)
+      .where((value) => value.isNotEmpty)
+      .toList(growable: false);
 
   static ChatAlertPayload fromData(Map<String, dynamic>? data) {
     if (data == null) return const ChatAlertPayload();
 
-    final crit = data['criteria'];
+    final crit = data['criteria'] ?? data['partialCriteria'];
     final matchesRaw =
         data['immediateMatches'] ?? data['matches'] ?? data['biens'];
+    final missing = data['missingFields'] ?? data['missing_fields'];
 
     return ChatAlertPayload(
       alertId: _str(data['alertId']) ?? _str(data['id']),
@@ -62,6 +83,16 @@ class ChatAlertPayload {
       matches: ChatProperty.parseList(matchesRaw),
       totalMatches: _int(data['totalMatches']) ?? _int(data['total']),
       message: _str(data['message']),
+      missingFields: missing is List
+          ? missing
+              .map((value) => _str(value))
+              .whereType<String>()
+              .toList(growable: false)
+          : const [],
+      origin: _str(data['origin']),
+      fromCache: data['fromCache'] is bool
+          ? data['fromCache'] as bool
+          : data['fromCache']?.toString() == 'true',
     );
   }
 
@@ -116,6 +147,25 @@ class ChatAlertPayload {
     if (v is num) return v.round();
     if (v is String) return int.tryParse(v);
     return null;
+  }
+
+  static String _fieldLabel(String raw) {
+    switch (raw.toLowerCase()) {
+      case 'location':
+        return 'Zone';
+      case 'property_type':
+        return 'Type';
+      case 'price_max':
+        return 'Budget max';
+      case 'rooms_min':
+        return 'Pièces';
+      case 'extras':
+        return 'Équipements';
+      case 'surface_min':
+        return 'Surface';
+      default:
+        return raw;
+    }
   }
 }
 

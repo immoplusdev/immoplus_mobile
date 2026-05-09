@@ -1,4 +1,5 @@
 import 'chat_message.dart';
+import 'chat_action.dart';
 
 class HistoryMessage {
   const HistoryMessage({
@@ -20,7 +21,7 @@ class HistoryMessage {
   final DateTime createdAt;
   final AlertResponseType? type;
 
-  /// `{ "answer": "...", "sources": [...] }` — null pour les messages user.
+  /// Payload JSON attaché au message assistant.
   final Map<String, dynamic>? sources;
 
   factory HistoryMessage.fromJson(Map<String, dynamic> json) {
@@ -47,6 +48,20 @@ class HistoryMessage {
   /// Convertit en ChatMessage affichable dans le thread.
   /// Les propertyCards sont null ici — le controller les charge via PropertyFetcher.
   ChatMessage toChatMessage() {
+    final payloadData = sources?['data'] is Map
+        ? Map<String, dynamic>.from(sources!['data'] as Map)
+        : sources;
+    final quickReplies = parseQuickReplies(
+      sources?['quickReplies'] ??
+          sources?['quick_replies'] ??
+          payloadData?['quickReplies'] ??
+          payloadData?['quick_replies'],
+    );
+    final actions = ChatActionModel.parseList(
+      sources?['actions'] ?? payloadData?['actions'],
+    );
+    final metaSource = sources?['meta'] ?? payloadData?['meta'];
+
     return ChatMessage(
       id: id,
       role: role,
@@ -54,7 +69,10 @@ class HistoryMessage {
       status: ChatStatus.complete,
       createdAt: createdAt,
       responseType: type,
-      data: sources,
+      data: payloadData,
+      quickReplies: quickReplies,
+      actions: actions,
+      meta: metaSource is Map ? Map<String, dynamic>.from(metaSource) : null,
     );
   }
 }

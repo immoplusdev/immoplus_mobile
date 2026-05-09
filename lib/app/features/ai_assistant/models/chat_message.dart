@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'chat_action.dart';
 import 'property_card_data.dart';
 
 enum ChatRole { user, assistant }
@@ -7,6 +8,7 @@ enum ChatRole { user, assistant }
 enum ChatStatus { sending, streaming, complete, error, stopped }
 
 enum AlertResponseType {
+  alertConfirmation,
   alertCreated,
   alertUpdated,
   alertDeleted,
@@ -14,12 +16,21 @@ enum AlertResponseType {
   showResults,
   propertyAnswer,
   generalAdvice,
+  visitCreated,
+  bookingCreated,
+  bookingStatus,
+  bookingCancelled,
+  paymentCreated,
+  transactionClarification,
+  propertyMatch,
   error,
   unknown,
 }
 
 AlertResponseType alertResponseTypeFromString(String? raw) {
   switch (raw) {
+    case 'alert_confirmation':
+      return AlertResponseType.alertConfirmation;
     case 'alert_created':
       return AlertResponseType.alertCreated;
     case 'alert_updated':
@@ -34,6 +45,20 @@ AlertResponseType alertResponseTypeFromString(String? raw) {
       return AlertResponseType.propertyAnswer;
     case 'general_advice':
       return AlertResponseType.generalAdvice;
+    case 'visit_created':
+      return AlertResponseType.visitCreated;
+    case 'booking_created':
+      return AlertResponseType.bookingCreated;
+    case 'booking_status':
+      return AlertResponseType.bookingStatus;
+    case 'booking_cancelled':
+      return AlertResponseType.bookingCancelled;
+    case 'payment_created':
+      return AlertResponseType.paymentCreated;
+    case 'transaction_clarification':
+      return AlertResponseType.transactionClarification;
+    case 'property_match':
+      return AlertResponseType.propertyMatch;
     case 'error':
       return AlertResponseType.error;
     default:
@@ -52,6 +77,9 @@ class ChatMessage {
     this.data,
     this.errorCode,
     this.propertyCards,
+    this.quickReplies = const [],
+    this.actions = const [],
+    this.meta,
   });
 
   final String id;
@@ -63,6 +91,9 @@ class ChatMessage {
   final Map<String, dynamic>? data;
   final String? errorCode;
   final List<PropertyCardData>? propertyCards;
+  final List<String> quickReplies;
+  final List<ChatActionModel> actions;
+  final Map<String, dynamic>? meta;
 
   ChatMessage copyWith({
     String? text,
@@ -71,6 +102,9 @@ class ChatMessage {
     Map<String, dynamic>? data,
     String? errorCode,
     List<PropertyCardData>? propertyCards,
+    List<String>? quickReplies,
+    List<ChatActionModel>? actions,
+    Map<String, dynamic>? meta,
   }) {
     return ChatMessage(
       id: id,
@@ -82,6 +116,9 @@ class ChatMessage {
       data: data ?? this.data,
       errorCode: errorCode ?? this.errorCode,
       propertyCards: propertyCards ?? this.propertyCards,
+      quickReplies: quickReplies ?? this.quickReplies,
+      actions: actions ?? this.actions,
+      meta: meta ?? this.meta,
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/chat_message.dart';
+import '../models/chat_action.dart';
 import '../services/chat_history_service.dart';
 import '../services/chat_socket_service.dart';
 import '../services/property_fetcher.dart';
@@ -44,6 +45,48 @@ class ChatController extends ChangeNotifier {
 
   bool _loadingHistory = false;
   bool get loadingHistory => _loadingHistory;
+
+  /// Hint contextuel pour le composer, basé sur le dernier message IA.
+  String get composerHint {
+    ChatMessage? last;
+    for (var i = _messages.length - 1; i >= 0; i--) {
+      final m = _messages[i];
+      if (m.role == ChatRole.assistant && m.status == ChatStatus.complete) {
+        last = m;
+        break;
+      }
+    }
+    if (last == null) return 'Demande quoi que ce soit sur l\'immo…';
+    switch (last.responseType) {
+      case AlertResponseType.alertClarification:
+        return _hintForField(last.data?['askedField'] as String?);
+      case AlertResponseType.alertConfirmation:
+        return 'Confirmer, modifier ou annuler…';
+      case AlertResponseType.error:
+        return 'Reformule ta demande…';
+      default:
+        return 'Demande quoi que ce soit sur l\'immo…';
+    }
+  }
+
+  String _hintForField(String? field) {
+    switch (field?.toLowerCase()) {
+      case 'location':
+        return 'Ex : Cocody, Plateau, Yopougon…';
+      case 'property_type':
+        return 'Ex : Appartement, Villa, Studio…';
+      case 'price_max':
+        return 'Ex : 500 000 FCFA, 1 000 000 FCFA…';
+      case 'rooms_min':
+        return 'Ex : 2 pièces, 3 pièces…';
+      case 'extras':
+        return 'Ex : piscine, parking, meublé…';
+      case 'surface_min':
+        return 'Ex : 50 m², 80 m²…';
+      default:
+        return 'Réponds à la question de l\'IA…';
+    }
+  }
 
   StreamSubscription? _connSub;
   StreamSubscription? _typingSub;
@@ -172,6 +215,20 @@ class ChatController extends ChangeNotifier {
     _messages.add(userMsg);
     notifyListeners();
 
+    if (!_socket.isConnected) {
+      final idx = _messages.indexWhere((m) => m.id == userMsg.id);
+      if (idx != -1) {
+        _messages[idx] = userMsg.copyWith(status: ChatStatus.complete);
+      }
+      _messages.add(ChatMessage.assistantPlaceholder().copyWith(
+        text: 'Connexion perdue. Vérifie ta connexion et réessaie.',
+        status: ChatStatus.error,
+        responseType: AlertResponseType.error,
+      ));
+      notifyListeners();
+      return;
+    }
+
     _socket.sendMessage(text, sessionId: _currentSessionId);
 
     final idx = _messages.indexWhere((m) => m.id == userMsg.id);
@@ -240,7 +297,7 @@ class ChatController extends ChangeNotifier {
   }
 
   void _onStreamEnd(Map<String, dynamic> payload) {
-    final id = _currentAssistantId;
+    var id = _currentAssistantId;
     _currentAssistantId = null;
     _stopTyping();
 
@@ -251,7 +308,17 @@ class ChatController extends ChangeNotifier {
     }
     _saveSession();
 
-    if (id == null) return;
+    // §4 ContentModerationService : stream_end peut arriver sans stream_start.
+    // On crée le placeholder à la volée pour ne pas perdre le message.
+    if (id == null) {
+      final typeStr = payload['type'] as String?;
+      final placeholder = ChatMessage.assistantPlaceholder().copyWith(
+        responseType: alertResponseTypeFromString(typeStr),
+      );
+      _messages.add(placeholder);
+      id = placeholder.id;
+    }
+
     final idx = _messages.indexWhere((m) => m.id == id);
     if (idx == -1) return;
 
@@ -268,6 +335,9 @@ class ChatController extends ChangeNotifier {
       status: ChatStatus.complete,
       responseType: responseType,
       data: data,
+      quickReplies: _extractQuickReplies(payload),
+      actions: _extractActions(payload),
+      meta: _extractMeta(payload),
     );
     notifyListeners();
 
@@ -332,12 +402,58 @@ class ChatController extends ChangeNotifier {
   Map<String, dynamic>? _extractData(Map<String, dynamic> payload) {
     final data = payload['data'];
     if (data is Map) return Map<String, dynamic>.from(data);
-    final reserved = {'type', 'chunk', 'message', 'code', 'sessionId'};
+    final reserved = {
+      'type',
+      'chunk',
+      'message',
+      'code',
+      'sessionId',
+      'quickReplies',
+      'quick_replies',
+      'actions',
+      'meta',
+    };
     final rest = <String, dynamic>{};
     for (final e in payload.entries) {
       if (!reserved.contains(e.key)) rest[e.key] = e.value;
     }
     return rest.isEmpty ? null : rest;
+  }
+
+  List<String> _extractQuickReplies(Map<String, dynamic> payload) {
+    final data = payload['data'];
+    if (data is Map) {
+      final nested = parseQuickReplies(
+        data['quickReplies'] ?? data['quick_replies'],
+      );
+      if (nested.isNotEmpty) return nested;
+    }
+
+    return parseQuickReplies(
+      payload['quickReplies'] ?? payload['quick_replies'],
+    );
+  }
+
+  List<ChatActionModel> _extractActions(Map<String, dynamic> payload) {
+    final data = payload['data'];
+    if (data is Map) {
+      final nested = ChatActionModel.parseList(data['actions']);
+      if (nested.isNotEmpty) return nested;
+    }
+
+    return ChatActionModel.parseList(payload['actions']);
+  }
+
+  Map<String, dynamic>? _extractMeta(Map<String, dynamic> payload) {
+    final data = payload['data'];
+    if (data is Map && data['meta'] is Map) {
+      return Map<String, dynamic>.from(data['meta'] as Map);
+    }
+    final meta = payload['meta'];
+    if (meta is Map) {
+      return Map<String, dynamic>.from(meta);
+    }
+    return null;
   }
 
   String? _extractText(Map<String, dynamic> payload) {
