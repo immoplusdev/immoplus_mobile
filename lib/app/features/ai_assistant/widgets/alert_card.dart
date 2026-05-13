@@ -6,7 +6,7 @@ import '../models/chat_alert_payload.dart';
 import 'chat_tokens.dart';
 import 'property_mini_card.dart';
 
-enum AlertCardVariant { created, updated }
+enum AlertCardVariant { created, updated, results }
 
 /// AlertCard (spec §8) — animation slide up 300ms + fade post stream.
 class AlertCard extends StatefulWidget {
@@ -25,7 +25,7 @@ class AlertCard extends StatefulWidget {
   final AlertCardVariant variant;
   final VoidCallback? onSeeAll;
   final VoidCallback? onManage;
-  final void Function(String propertyId)? onPropertyTap;
+  final void Function(String propertyId, String entityType)? onPropertyTap;
   final void Function(String alertId)? onNavigateToPropositions;
   final int maxInline;
 
@@ -121,8 +121,10 @@ class _AlertCardState extends State<AlertCard>
                         property: inline[i],
                         onTap: widget.onPropertyTap == null
                             ? null
-                            : () =>
-                                widget.onPropertyTap!(inline[i].id),
+                            : () => widget.onPropertyTap!(
+                                  inline[i].id,
+                                  inline[i].entityType ?? 'BIEN_IMMOBILIER',
+                                ),
                       ),
                     ),
                   ],
@@ -164,6 +166,7 @@ class _Header extends StatelessWidget {
     final (icon, label) = switch (variant) {
       AlertCardVariant.created => (Iconsax.notification_bing, 'Alerte active'),
       AlertCardVariant.updated => (Iconsax.refresh, 'Alerte mise à jour'),
+      AlertCardVariant.results => (Iconsax.search_normal, 'Résultats trouvés'),
     };
 
     return Padding(

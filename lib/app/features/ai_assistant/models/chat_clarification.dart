@@ -106,6 +106,10 @@ class ChatClarification {
       case 'office':
       case 'bureau':
         return 'Bureau';
+      case 'maison':
+        return 'Maison';
+      case 'duplex':
+        return 'Duplex';
       case 'land':
       case 'terrain':
         return 'Terrain';

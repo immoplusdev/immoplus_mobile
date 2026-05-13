@@ -120,9 +120,7 @@ class _Info extends StatelessWidget {
       if (property.surface != null) '${property.surface!.round()} m²',
     ].join(' · ');
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -165,8 +163,7 @@ class _Info extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
+      );
   }
 }
 

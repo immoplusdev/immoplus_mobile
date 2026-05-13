@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../models/chat_action.dart';
 import 'chat_tokens.dart';
 
-class ChatResponseActions extends StatelessWidget {
+class ChatResponseActions extends StatefulWidget {
   const ChatResponseActions({
     super.key,
     required this.quickReplies,
@@ -19,50 +19,68 @@ class ChatResponseActions extends StatelessWidget {
   final void Function(ChatActionModel action)? onActionTap;
 
   @override
+  State<ChatResponseActions> createState() => _ChatResponseActionsState();
+}
+
+class _ChatResponseActionsState extends State<ChatResponseActions> {
+  bool _used = false;
+
+  @override
   Widget build(BuildContext context) {
-    if (quickReplies.isEmpty && actions.isEmpty) {
+    if (widget.quickReplies.isEmpty && widget.actions.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: ChatTokens.s12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (actions.isNotEmpty)
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: actions
-                  .map(
-                    (action) => _ActionButton(
-                      action: action,
-                      onTap: onActionTap == null
-                          ? null
-                          : () => onActionTap!(action),
-                    ),
-                  )
-                  .toList(),
-            ),
-          if (actions.isNotEmpty && quickReplies.isNotEmpty)
-            const SizedBox(height: ChatTokens.s10),
-          if (quickReplies.isNotEmpty)
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: quickReplies
-                  .map(
-                    (reply) => _QuickReplyChip(
-                      label: reply,
-                      onTap: onQuickReplyTap == null
-                          ? null
-                          : () => onQuickReplyTap!(reply),
-                    ),
-                  )
-                  .toList(),
-            ),
-        ],
+    return AnimatedOpacity(
+      opacity: _used ? 0.4 : 1.0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      child: Padding(
+        padding: const EdgeInsets.only(top: ChatTokens.s12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.actions.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: widget.actions
+                    .map(
+                      (action) => _ActionButton(
+                        action: action,
+                        onTap: _used || widget.onActionTap == null
+                            ? null
+                            : () {
+                                setState(() => _used = true);
+                                widget.onActionTap!(action);
+                              },
+                      ),
+                    )
+                    .toList(),
+              ),
+            if (widget.actions.isNotEmpty && widget.quickReplies.isNotEmpty)
+              const SizedBox(height: ChatTokens.s10),
+            if (widget.quickReplies.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: widget.quickReplies
+                    .map(
+                      (reply) => _QuickReplyChip(
+                        label: reply,
+                        onTap: _used || widget.onQuickReplyTap == null
+                            ? null
+                            : () {
+                                setState(() => _used = true);
+                                widget.onQuickReplyTap!(reply);
+                              },
+                      ),
+                    )
+                    .toList(),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/chat_message.dart';
@@ -96,6 +98,8 @@ class ChatController extends ChangeNotifier {
   StreamSubscription? _errSub;
 
   String? _currentAssistantId;
+  Timer? _streamStartTimeout;
+  DateTime? _lastStreamHaptic;
 
   void _bind() {
     _connSub = _socket.connectionState.listen((s) {
@@ -132,6 +136,18 @@ class ChatController extends ChangeNotifier {
     }
 
     await _loadSessionMessages(sessionId);
+  }
+
+  static String _generateSessionId() {
+    final rng = math.Random.secure();
+    final bytes = List.generate(16, (_) => rng.nextInt(256));
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    final hex =
+        bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-'
+        '${hex.substring(12, 16)}-${hex.substring(16, 20)}-'
+        '${hex.substring(20)}';
   }
 
   Future<void> _saveSession() async {
@@ -205,11 +221,31 @@ class ChatController extends ChangeNotifier {
     await _clearSession();
   }
 
+  // ─── Stop streaming ──────────────────────────────────────────────────────
+
+  void stopStreaming() {
+    final id = _currentAssistantId;
+    _currentAssistantId = null;
+    _streamStartTimeout?.cancel();
+    _streamStartTimeout = null;
+    _stopTyping();
+    if (id != null) {
+      final idx = _messages.indexWhere((m) => m.id == id);
+      if (idx != -1) {
+        _messages[idx] = _messages[idx].copyWith(status: ChatStatus.stopped);
+      }
+    }
+    notifyListeners();
+  }
+
   // ─── Envoi de message ─────────────────────────────────────────────────────
 
   void send(String raw) {
     final text = raw.trim();
     if (text.isEmpty) return;
+
+    // Générer le sessionId côté client si c'est le premier message (doc §12.1).
+    _currentSessionId ??= _generateSessionId();
 
     final userMsg = ChatMessage.user(text);
     _messages.add(userMsg);
@@ -230,6 +266,9 @@ class ChatController extends ChangeNotifier {
     }
 
     _socket.sendMessage(text, sessionId: _currentSessionId);
+
+    _streamStartTimeout?.cancel();
+    _streamStartTimeout = Timer(const Duration(seconds: 10), _onStreamTimeout);
 
     final idx = _messages.indexWhere((m) => m.id == userMsg.id);
     if (idx != -1) {
@@ -265,7 +304,21 @@ class ChatController extends ChangeNotifier {
 
   // ─── Événements WebSocket ─────────────────────────────────────────────────
 
+  void _onStreamTimeout() {
+    _stopTyping();
+    _currentAssistantId = null;
+    _messages.add(ChatMessage.assistantPlaceholder().copyWith(
+      text: 'La réponse prend trop de temps. Vérifie ta connexion et réessaie.',
+      status: ChatStatus.error,
+      responseType: AlertResponseType.error,
+    ));
+    notifyListeners();
+  }
+
   void _onStreamStart(Map<String, dynamic> payload) {
+    _streamStartTimeout?.cancel();
+    _streamStartTimeout = null;
+    _lastStreamHaptic = null;
     _stopTyping();
 
     final sessionId = payload['sessionId'] as String?;
@@ -294,11 +347,39 @@ class ChatController extends ChangeNotifier {
     final current = _messages[idx];
     _messages[idx] = current.copyWith(text: current.text + chunk);
     notifyListeners();
+
+    // Haptic léger à chaque frontière de mot (espace, saut de ligne, ponctuation forte).
+    // Throttlé à 80 ms — même rythme que ChatGPT sur iOS.
+    final hasWordBoundary = chunk.contains(' ') ||
+        chunk.contains('\n') ||
+        chunk.contains('.') ||
+        chunk.contains(',') ||
+        chunk.contains('!') ||
+        chunk.contains('?');
+    if (hasWordBoundary) {
+      final now = DateTime.now();
+      final last = _lastStreamHaptic;
+      if (last == null || now.difference(last).inMilliseconds >= 80) {
+        _lastStreamHaptic = now;
+        HapticFeedback.selectionClick();
+      }
+    }
   }
 
-  void _onStreamEnd(Map<String, dynamic> payload) {
+  Future<void> _onStreamEnd(Map<String, dynamic> payload) async {
     var id = _currentAssistantId;
     _currentAssistantId = null;
+
+    // Si la réponse vient du cache Redis et qu'aucun chunk n'a été streamé,
+    // simuler un bref délai pour ne pas désorienter l'utilisateur (doc §12.8).
+    final meta = _extractMeta(payload);
+    final isCached = (meta?['cached'] as bool?) == true;
+    final hasNoChunks = id == null ||
+        _messages.indexWhere((m) => m.id == id && m.text.isNotEmpty) == -1;
+    if (isCached && hasNoChunks) {
+      await Future.delayed(const Duration(milliseconds: 600));
+    }
+
     _stopTyping();
 
     // Mettre à jour sessionId si pas encore capturé
@@ -387,7 +468,14 @@ class ChatController extends ChangeNotifier {
     if (fetcher == null) return;
 
     final sources = data?['sources'] as List? ?? [];
-    if (sources.isEmpty) return;
+    if (sources.isEmpty) {
+      final idx = _messages.indexWhere((m) => m.id == msgId);
+      if (idx != -1) {
+        _messages[idx] = _messages[idx].copyWith(propertyCards: []);
+        notifyListeners();
+      }
+      return;
+    }
 
     final cards = await fetcher.fetchSources(sources);
     if (cards.isEmpty) return;
@@ -478,6 +566,7 @@ class ChatController extends ChangeNotifier {
     _endSub?.cancel();
     _errSub?.cancel();
     _typingLabelTimer?.cancel();
+    _streamStartTimeout?.cancel();
     _socket.dispose();
     super.dispose();
   }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/data/repositories/furniture_repository.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
+import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 
 import '../controllers/chat_controller.dart';
@@ -132,10 +135,10 @@ class _AiAssistantPageState extends State<AiAssistantPage>
         _chat.send('Annuler');
         return;
       case 'create_alert':
-        _chat.send('Créer cette alerte');
+        _chat.send(action.label);
         return;
       case 'continue_alert':
-        _chat.send('Continuer');
+        _chat.send(action.label);
         return;
       case 'search_properties':
         _chat.send('Chercher un bien');
@@ -147,13 +150,30 @@ class _AiAssistantPageState extends State<AiAssistantPage>
         _handleSend('Contacter le support');
         return;
       default:
-        _chat.send(action.label);
+        _handleSend(action.label);
     }
   }
 
   void _navigateToPropositions(String alertId) {
+    _navigateToImatch();
+  }
+
+  void _navigateToImatch() {
     HapticFeedback.lightImpact();
-    AppRouter.router.push('/alerts/$alertId/propositions');
+    if (!mounted) return;
+    Navigator.of(context).pop();
+    context.read<NavigationCubit>().switchPage(PageState.forMe);
+  }
+
+  void _navigateToProperty(String id, String entityType) {
+    HapticFeedback.lightImpact();
+    final route = switch (entityType) {
+      'RESIDENCE' => '/residence_detail/$id',
+      'FURNITURE' => '/furniture_detail/$id',
+      _ => '/estate_detail/$id',
+    };
+    if (mounted) Navigator.of(context).pop();
+    AppRouter.router.push(route);
   }
 
   Future<void> _openPaymentUrl(String url) async {
@@ -162,14 +182,38 @@ class _AiAssistantPageState extends State<AiAssistantPage>
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  /// Wrapper send — intercepte les quickReplies spéciaux avant d'envoyer au serveur.
+  // Phrases qui ouvrent l'onglet Imatch au lieu d'envoyer un message au chat.
+  static const _imatchPhrases = {
+    'voir les résultats',
+    'voir résultats',
+    'voir mes résultats',
+    'gérer mon alerte',
+    'gérer l\'alerte',
+    'gérer mes alertes',
+    'voir mon alerte',
+    'voir mes alertes',
+    'voir les alertes',
+    'voir alertes',
+    'modifier l\'alerte',
+    'modifier mes alertes',
+    'mes alertes',
+  };
+
+  /// Intercepte les quickReplies spéciaux avant d'envoyer au serveur.
   void _handleSend(String text) {
     final normalized = text.trim().toLowerCase();
+
     if (normalized == 'contacter le support' ||
         normalized == 'contacter le service client') {
       _openSupportContact();
       return;
     }
+
+    if (_imatchPhrases.contains(normalized)) {
+      _navigateToImatch();
+      return;
+    }
+
     _chat.send(text);
   }
 
@@ -284,6 +328,7 @@ class _AiAssistantPageState extends State<AiAssistantPage>
                       child: ChatComposer(
                         isStreaming: isStreaming,
                         onSend: _handleSend,
+                        onStop: _chat.stopStreaming,
                         hint: _chat.composerHint,
                       ),
                     ),
@@ -410,6 +455,7 @@ class _AiAssistantPageState extends State<AiAssistantPage>
           onActionTap: _handleChatAction,
           onPaymentTap: (url) => _openPaymentUrl(url),
           onNavigateToPropositions: _navigateToPropositions,
+          onPropertyTap: _navigateToProperty,
         );
       },
     );
@@ -424,10 +470,10 @@ class _ConnectionBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final (label, showSpinner, bg, fg) = switch (connection) {
       ChatConnectionState.connecting => (
-          'Connexion en cours…',
-          true,
-          ChatTokens.bannerNeutralBg,
-          ChatTokens.bannerNeutralFg,
+          null,
+          false,
+          Colors.transparent,
+          Colors.transparent,
         ),
       ChatConnectionState.reconnecting => (
           'Reconnexion…',
