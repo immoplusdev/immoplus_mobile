@@ -24,7 +24,7 @@ class AlertCard extends StatelessWidget {
         if (status == AlertStatus.pending) {
           await context.pushNamed(AlertDetailPage.name, extra: alert);
           onRefresh?.call();
-        } else if ((alert.unreadMatchCount ?? 0) > 0) {
+        } else {
           await context.pushNamed(
             AlertPropositionsPage.name,
             pathParameters: {'id': alert.id},

@@ -34,6 +34,41 @@ enum BannerAction {
   }
 }
 
+// final List<BannerModel> testBanners = [
+//   BannerModel(
+//     id: 1,
+//     title: 'Paiement Express',
+//     subtitle: 'Réglez votre visite en un clic',
+//     ctaLabel: 'Payer 5 000 FCFA',
+//     ctaUrl: '/payer_express',
+//     metadata: {
+//       'demande_visite_id': 'VISIT-123',
+//       'montant_total': 5000,
+//     },
+//   ),
+//   BannerModel(
+//     id: 2,
+//     title: 'Mes propositions',
+//     subtitle: '5 nouvelles offres correspondent à vos critères',
+//     ctaLabel: 'Voir les offres',
+//     ctaUrl: '/mes_alertes',
+//     metadata: {
+//       'alert_id': 'ALERT-456',
+//       'nb_propositions': 5,
+//     },
+//   ),
+//   BannerModel(
+//     id: 3,
+//     title: 'Gérer mes alertes',
+//     subtitle: 'Modifiez vos critères de recherche',
+//     ctaLabel: 'Mes alertes',
+//     ctaUrl: '/mes_alertes',
+//     metadata: {
+//       'nb_propositions': 0,
+//     },
+//   ),
+// ];
+
 class BannerItem extends StatelessWidget {
   final BannerModel banner;
 
@@ -44,11 +79,11 @@ class BannerItem extends StatelessWidget {
 
     final action = BannerAction.fromUrl(url);
     final metadata = banner.metadata ?? {};
-    final reservationId = metadata['reservation_id']?.toString();
-    final amount = metadata['montant_paye'];
 
     switch (action) {
       case BannerAction.payerReservation:
+        final reservationId = metadata['reservation_id']?.toString();
+        final amount = metadata['montant_paye'];
         if (reservationId != null && amount != null) {
           context.pushNamed(
             OperatorsSelectorPage.name,
@@ -62,6 +97,7 @@ class BannerItem extends StatelessWidget {
         }
         break;
       case BannerAction.annulerReservation:
+        final reservationId = metadata['reservation_id']?.toString();
         if (reservationId != null) {
           _showCancelConfirmation(context, reservationId);
         }

@@ -120,8 +120,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i983.NavigationHandler(gh<_i22.SessionManager>()));
     gh.lazySingleton<_i1023.ErrorInterceptor>(
         () => _i1023.ErrorInterceptor(gh<_i22.SessionManager>()));
-    gh.lazySingleton<_i640.NotificationService>(
-        () => _i640.NotificationService(gh<_i22.SessionManager>()));
     gh.lazySingleton<_i361.Dio>(() => dioConfig.dio(
           gh<_i180.AuthInterceptor>(),
           gh<_i1023.ErrorInterceptor>(),
@@ -143,6 +141,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i488.EstateCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i527.PendingPaymentReservationsCubit>(() =>
         _i527.PendingPaymentReservationsCubit(gh<_i143.ResidenceRepository>()));
+    gh.lazySingleton<_i640.NotificationService>(() => _i640.NotificationService(
+          gh<_i22.SessionManager>(),
+          gh<_i443.AlertRepository>(),
+        ));
     gh.factory<_i430.NotificationCubit>(
         () => _i430.NotificationCubit(gh<_i371.NotificationRepository>()));
     gh.factory<_i946.BookingServices>(
