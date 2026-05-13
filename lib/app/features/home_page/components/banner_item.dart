@@ -11,10 +11,15 @@ import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart'
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 
 enum BannerAction {
   annulerReservation('/annuler_reservation'),
   payerReservation('/payer_reservation'),
+  payerExpress('/payer_express'),
+  // annulerVisite('/annuler_visite'),
+  mesAlertes('/mes_alertes'),
   unknown('');
 
   final String url;
@@ -61,11 +66,74 @@ class BannerItem extends StatelessWidget {
           _showCancelConfirmation(context, reservationId);
         }
         break;
+      case BannerAction.payerExpress:
+        final visiteId = metadata['demande_visite_id']?.toString();
+        final montant = metadata['montant_total'];
+        if (visiteId != null && montant != null) {
+          context.pushNamed(
+            OperatorsSelectorPage.name,
+            extra: PaymentPageAdapter(
+              itemId: visiteId,
+              collection: ProductType.demandes_visites.name,
+              amount: montant is int
+                  ? montant
+                  : int.tryParse(montant.toString()) ?? 0,
+            ),
+          );
+        }
+        break;
+      // case BannerAction.annulerVisite:
+      //   final visiteId = metadata['demande_visite_id']?.toString();
+      //   final bienNom = metadata['bien_nom']?.toString();
+      //   if (visiteId != null) {
+      //     _showCancelVisiteConfirmation(context, visiteId, bienNom);
+      //   }
+      //   break;
+      case BannerAction.mesAlertes:
+        final alertId = metadata['alert_id']?.toString();
+        final nbPropositions =
+            int.tryParse(metadata['nb_propositions']?.toString() ?? '0') ?? 0;
+
+        if (alertId != null && nbPropositions > 0) {
+          context.pushNamed(
+            AlertPropositionsPage.name,
+            pathParameters: {'id': alertId},
+          );
+        } else {
+          context.pushNamed(AlertListPage.name);
+        }
+        break;
       default:
         // Gérer d'autres URLs ou liens profonds ici
         break;
     }
   }
+
+  // void _showCancelVisiteConfirmation(
+  //     BuildContext context, String visiteId, String? bienNom) {
+  //   AppDialog.show(
+  //     title: 'Annuler la visite',
+  //     description:
+  //         'Voulez-vous vraiment annuler votre demande de visite pour ${bienNom ?? "ce bien"} ?',
+  //     primaryButtonText: 'Oui, annuler',
+  //     secondButtonText: 'Non',
+  //     onPrimary: () async {
+  //       try {
+  //         await getIt<BienImmobilierRepository>().annulerVisiteClient(
+  //           visiteId: visiteId,
+  //           notes: 'Annulé depuis la bannière promotionnelle',
+  //         );
+  //         ToastUtils.showSuccess(
+  //           description: 'Demande de visite annulée avec succès',
+  //         );
+  //       } catch (e) {
+  //         ToastUtils.showError(
+  //           description: 'Erreur lors de l\'annulation de la visite',
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 
   void _showCancelConfirmation(BuildContext context, String reservationId) {
     AppDialog.show(

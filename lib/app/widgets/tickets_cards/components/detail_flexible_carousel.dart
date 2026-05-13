@@ -118,6 +118,10 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
               onTap: widget.onImageTap != null
                   ? () => widget.onImageTap!(imageId)
                   : null,
+              onLongPress: () async {
+                // TODO TO DEBUG
+                await Clipboard.setData(ClipboardData(text: url));
+              },
               child: Hero(
                 tag: imageId,
                 child: Container(
@@ -182,16 +186,11 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
     );
   }
 
-  Widget _buildPlaceholder(String url) {
-    return GestureDetector(
-      onLongPress: () async {
-        await Clipboard.setData(ClipboardData(text: url));
-      },
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: Container(color: Colors.white),
-      ),
+  Widget _buildPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(color: Colors.white),
     );
   }
 
@@ -199,7 +198,7 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        _buildPlaceholder(url),
+        _buildPlaceholder(),
         // Column(
         //   mainAxisAlignment: MainAxisAlignment.center,
         //   children: [
