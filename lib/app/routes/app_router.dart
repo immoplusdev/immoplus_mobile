@@ -574,6 +574,7 @@ class AppRouter {
         name: AlertPropositionsPage.name,
         builder: (context, state) => AlertPropositionsPage(
           alertId: state.pathParameters['id']!,
+          unreadMatchCount: (state.extra as int?) ?? 0,
         ),
       ),
       GoRoute(

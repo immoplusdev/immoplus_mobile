@@ -14,6 +14,8 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
+import 'package:immoplus/app/appli/widgets/nav_badge.dart';
+import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -29,9 +31,11 @@ class HomePageWrapper extends StatefulWidget {
   State<HomePageWrapper> createState() => _HomePageWrapperState();
 }
 
-class _HomePageWrapperState extends State<HomePageWrapper> {
+class _HomePageWrapperState extends State<HomePageWrapper>
+    with WidgetsBindingObserver {
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
+  final _alertRepository = getIt<AlertRepository>();
   Timer? _videoFeedWarmupTimer;
   // Scroll-to-right désactivé : la pilule reste centrée.
   // Timer? _scrollIdleTimer;
@@ -70,9 +74,25 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
 
   static const int _vivreTabIndex = 2;
 
+  void _fetchImatchBadge() {
+    if (sessionManager.currentUser == null) return;
+    _alertRepository.getImatchBadgeCount().then((count) {
+      if (mounted) Constantes.imatchBadgeCount.value = count;
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _fetchImatchBadge();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _fetchImatchBadge();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _videoFeedWarmupTimer?.cancel();
       _videoFeedWarmupTimer = Timer(const Duration(milliseconds: 2500), () {
@@ -105,7 +125,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
         AuthenticationPage.name,
         extra: (
           callback: () {
-            // Une fois connecté, on switch sur la page "Mes choix"
+            _fetchImatchBadge();
             navigationHandler.switchPage(id: index, context: context);
           },
           popUntilRouteName:
@@ -130,6 +150,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _videoFeedWarmupTimer?.cancel();
     _videoFeedWarmupTimer = null;
     // _scrollIdleTimer?.cancel();
@@ -210,6 +231,7 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
                                 isActive: state == PageState.forMe,
                                 immoMode: state == PageState.vivre,
                                 svgAsset: 'assets/svgs/icons/immomacth.svg',
+                                badgeWidget: NavBadge(notifier: Constantes.imatchBadgeCount),
                               ),
                               _buildNavItem(
                                 icon: Iconsax.user,
@@ -235,12 +257,14 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     required bool isActive,
     required bool immoMode,
     String? svgAsset,
+    Widget? badgeWidget,
   }) {
     final inactiveColor = immoMode ? Colors.white : Colors.grey.shade600;
 
     Widget buildIcon({required bool active}) {
+      Widget base;
       if (svgAsset != null) {
-        return SvgPicture.asset(
+        base = SvgPicture.asset(
           svgAsset,
           width: active ? 24 : 25,
           height: active ? 24 : 25,
@@ -249,12 +273,26 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
             BlendMode.srcIn,
           ),
         );
+      } else {
+        base = Icon(
+          icon,
+          color: active ? AppColors.primary : inactiveColor,
+          size: active ? 24 : 25,
+        );
       }
-      return Icon(
-        icon,
-        color: active ? AppColors.primary : inactiveColor,
-        size: active ? 24 : 25,
-      );
+
+      if (badgeWidget != null) {
+        return Center(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              base,
+              Positioned(top: -4, right: -6, child: badgeWidget),
+            ],
+          ),
+        );
+      }
+      return base;
     }
 
     return BottomNavigationBarItem(

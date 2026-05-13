@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
@@ -11,7 +14,12 @@ import 'package:immoplus/app/utils/app_colors.dart';
 
 class AlertPropositionsPage extends StatefulWidget {
   final String alertId;
-  const AlertPropositionsPage({super.key, required this.alertId});
+  final int unreadMatchCount;
+  const AlertPropositionsPage({
+    super.key,
+    required this.alertId,
+    this.unreadMatchCount = 0,
+  });
   static const String name = 'ALERT_PROPOSITIONS_PAGE';
 
   @override
@@ -26,7 +34,17 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
   @override
   void initState() {
     super.initState();
+    _markViewedAndRefreshBadge(); // lancé immédiatement, sans attendre les propositions
     _fetchPropositions();
+  }
+
+  /// PATCH /alerts/:id/view dès l'ouverture de la page.
+  /// Badge rafraîchi après succès. Silencieux en cas d'erreur réseau.
+  void _markViewedAndRefreshBadge() {
+    alertRepository.markAsViewed(widget.alertId).then((_) {
+      Constantes.imatchBadgeCount.value =
+          max(0, Constantes.imatchBadgeCount.value - widget.unreadMatchCount);
+    }).ignore();
   }
 
   Future<void> _fetchPropositions() async {
@@ -34,11 +52,7 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
     try {
       final response =
           await alertRepository.getAlertMatches(id: widget.alertId);
-      _propositions = response.matches ;
-      // Mark as viewed if there are propositions
-      if (_propositions.isNotEmpty) {
-        await alertRepository.markAsViewed(widget.alertId);
-      }
+      _propositions = response.matches;
     } catch (e) {
       // Error handled by repo/EasyLoading
     } finally {

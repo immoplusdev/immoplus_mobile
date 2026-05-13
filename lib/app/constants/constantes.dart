@@ -72,6 +72,8 @@ class Constantes {
   static ValueNotifier<bool> buildNotifier = ValueNotifier<bool>(true);
   /// Masquer la bottom navigation bar (ex: quand le sheet Réserver est ouvert).
   static ValueNotifier<bool> hideBottomNavNotifier = ValueNotifier<bool>(false);
+  /// Nombre de propositions non vues pour le badge Imatch.
+  static ValueNotifier<int> imatchBadgeCount = ValueNotifier<int>(0);
   static ValueNotifier<VilleModel> villeUser =
       ValueNotifier<VilleModel>(const VilleModel(id: "0000", name: ''));
 

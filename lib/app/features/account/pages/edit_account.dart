@@ -196,15 +196,17 @@ class _EditAccountPageState extends State<EditAccountPage> {
                           _buildSectionHeader(context, "Identité"),
                           const Gap(12),
 
+                          _buildFieldLabel('Nom'),
                           CustomTextField(
-                            controller: _formController.firstName,
+                            controller: _formController.lastName,
                             prefixIcon: const Icon(Iconsax.user, size: 20),
                             labelText: 'Nom',
                             validator: (String? value) =>
                                 FormUtils.fieldValidator(value: value),
                           ),
+                          _buildFieldLabel('Prénom'),
                           CustomTextField(
-                            controller: _formController.lastName,
+                            controller: _formController.firstName,
                             prefixIcon: const Icon(Iconsax.user, size: 20),
                             labelText: 'Prénom',
                             validator: (String? value) =>
@@ -366,6 +368,23 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFieldLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF344054),
           ),
         ),
       ),
