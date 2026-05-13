@@ -30,6 +30,7 @@ class AiBubble extends StatelessWidget {
     this.onActionTap,
     this.onPaymentTap,
     this.onNavigateToPropositions,
+    this.onPropertyTap,
   });
 
   final ChatMessage message;
@@ -39,6 +40,8 @@ class AiBubble extends StatelessWidget {
   final void Function(ChatActionModel action, ChatMessage message)? onActionTap;
   final void Function(String url)? onPaymentTap;
   final void Function(String alertId)? onNavigateToPropositions;
+  /// Callback navigation vers la fiche d'un bien — ferme le modal avant de naviguer.
+  final void Function(String id, String entityType)? onPropertyTap;
 
   bool get _isError =>
       message.status == ChatStatus.error ||
@@ -75,6 +78,7 @@ class AiBubble extends StatelessWidget {
                   onActionTap: onActionTap,
                   onPaymentTap: onPaymentTap,
                   onNavigateToPropositions: onNavigateToPropositions,
+                  onPropertyTap: onPropertyTap,
                 ),
               ),
             ],
@@ -142,6 +146,7 @@ class _Content extends StatelessWidget {
     this.onActionTap,
     this.onPaymentTap,
     this.onNavigateToPropositions,
+    this.onPropertyTap,
   });
 
   final ChatMessage message;
@@ -151,6 +156,7 @@ class _Content extends StatelessWidget {
   final void Function(ChatActionModel action, ChatMessage message)? onActionTap;
   final void Function(String url)? onPaymentTap;
   final void Function(String alertId)? onNavigateToPropositions;
+  final void Function(String id, String entityType)? onPropertyTap;
 
   @override
   Widget build(BuildContext context) {
@@ -214,6 +220,7 @@ class _Content extends StatelessWidget {
         return AlertCard(
           payload: payload,
           onNavigateToPropositions: onNavigateToPropositions,
+          onPropertyTap: onPropertyTap,
           onSeeAll:
               onSend == null ? null : () => onSend!('Voir les résultats'),
           onManage:
@@ -225,6 +232,7 @@ class _Content extends StatelessWidget {
           payload: payload,
           variant: AlertCardVariant.updated,
           onNavigateToPropositions: onNavigateToPropositions,
+          onPropertyTap: onPropertyTap,
           onSeeAll:
               onSend == null ? null : () => onSend!('Voir les résultats'),
           onManage:
@@ -234,8 +242,10 @@ class _Content extends StatelessWidget {
         final payload = ChatAlertPayload.fromData(m.data);
         return AlertCard(
           payload: payload,
+          variant: AlertCardVariant.results,
           maxInline: 5,
           onNavigateToPropositions: onNavigateToPropositions,
+          onPropertyTap: onPropertyTap,
           onSeeAll:
               onSend == null ? null : () => onSend!('Voir les résultats'),
           onManage:
@@ -254,12 +264,14 @@ class _Content extends StatelessWidget {
         return ErrorReformulationChips(onSend: onSend!);
       case AlertResponseType.propertyAnswer:
         final cards = m.propertyCards;
-        if (cards == null || cards.isEmpty) {
-          return const _PropertyCardsSkeleton();
-        }
+        if (cards == null) return const _PropertyCardsSkeleton();
+        if (cards.isEmpty) return null;
         return _FadeIn(
           duration: const Duration(milliseconds: 300),
-          child: _PropertyCardsCarousel(propertyCards: cards),
+          child: _PropertyCardsCarousel(
+            propertyCards: cards,
+            onPropertyTap: onPropertyTap,
+          ),
         );
       case AlertResponseType.alertDeleted:
         if (onSend == null || !isLast) return null;
@@ -453,9 +465,11 @@ class _FadeInState extends State<_FadeIn> {
 class _PropertyCardsCarousel extends StatefulWidget {
   const _PropertyCardsCarousel({
     required this.propertyCards,
+    this.onPropertyTap,
   });
 
   final List<PropertyCardData> propertyCards;
+  final void Function(String id, String entityType)? onPropertyTap;
 
   @override
   State<_PropertyCardsCarousel> createState() => _PropertyCardsCarouselState();
@@ -513,26 +527,42 @@ class _PropertyCardsCarouselState extends State<_PropertyCardsCarousel> {
   }
 
   Widget _buildCard(PropertyCardData data) {
-    switch (data.entityType) {
+    final Widget inner;
+    final String entityType = data.entityType;
+
+    switch (entityType) {
       case 'RESIDENCE':
-        if (data.model is ResidenceModel) {
-          return ResidenceCard(residence: data.model as ResidenceModel);
-        }
-        return const SizedBox.shrink();
-
+        if (data.model is! ResidenceModel) return const SizedBox.shrink();
+        inner = ResidenceCard(residence: data.model as ResidenceModel);
       case 'FURNITURE':
-        if (data.model is FurnitureModel) {
-          return FurnitureCard(furniture: data.model as FurnitureModel);
-        }
-        return const SizedBox.shrink();
-
-      default: // BIEN_IMMOBILIER
-        if (data.model is BienImmobilierModel) {
-          return EstateCard(
-              bienImmobilierModel: data.model as BienImmobilierModel);
-        }
-        return const SizedBox.shrink();
+        if (data.model is! FurnitureModel) return const SizedBox.shrink();
+        inner = FurnitureCard(furniture: data.model as FurnitureModel);
+      default:
+        if (data.model is! BienImmobilierModel) return const SizedBox.shrink();
+        inner = EstateCard(
+            bienImmobilierModel: data.model as BienImmobilierModel);
     }
+
+    final onTap = widget.onPropertyTap;
+    if (onTap == null) return inner;
+
+    final id = _idFromModel(data.model);
+    if (id == null) return inner;
+
+    // AbsorbPointer désactive la navigation interne de la card ;
+    // GestureDetector extérieur ferme le modal avant de naviguer.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onTap(id, entityType),
+      child: AbsorbPointer(child: inner),
+    );
+  }
+
+  static String? _idFromModel(dynamic model) {
+    if (model is BienImmobilierModel) return model.id;
+    if (model is ResidenceModel) return model.id;
+    if (model is FurnitureModel) return model.id;
+    return null;
   }
 }
 

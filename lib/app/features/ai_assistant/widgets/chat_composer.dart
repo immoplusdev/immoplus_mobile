@@ -12,11 +12,13 @@ class ChatComposer extends StatefulWidget {
     super.key,
     required this.onSend,
     required this.isStreaming,
+    this.onStop,
     this.hint,
   });
 
   final void Function(String text) onSend;
   final bool isStreaming;
+  final VoidCallback? onStop;
   /// Hint contextuel — null affiche le placeholder par défaut.
   final String? hint;
 
@@ -163,7 +165,10 @@ class _ChatComposerState extends State<ChatComposer> {
                             icon: Iconsax.stop,
                             iconSize: 16,
                             background: ChatTokens.neutral900,
-                            onTap: () => HapticFeedback.mediumImpact(),
+                            onTap: () {
+                              HapticFeedback.mediumImpact();
+                              widget.onStop?.call();
+                            },
                           )
                         : _PrimaryButton(
                             key: const ValueKey('send'),

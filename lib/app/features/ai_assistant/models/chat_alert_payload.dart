@@ -128,6 +128,10 @@ class ChatAlertPayload {
       case 'office':
       case 'bureau':
         return 'Bureau';
+      case 'maison':
+        return 'Maison';
+      case 'duplex':
+        return 'Duplex';
       case 'land':
       case 'terrain':
         return 'Terrain';
@@ -192,5 +196,5 @@ String formatPriceLong(num value) {
     if (i > 0 && (s.length - i) % 3 == 0) buf.write(' ');
     buf.write(s[i]);
   }
-  return '${buf.toString()} F';
+  return '${buf.toString()} FCFA';
 }

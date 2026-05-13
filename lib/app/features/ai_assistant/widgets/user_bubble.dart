@@ -117,10 +117,10 @@ class _UserBubbleState extends State<UserBubble>
                     padding: const EdgeInsets.only(top: 4, right: 4),
                     child: Text(
                       _timeLabel,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
-                        color: Colors.white.withValues(alpha: 0.45),
+                        color: ChatTokens.neutral400,
                       ),
                     ),
                   ),

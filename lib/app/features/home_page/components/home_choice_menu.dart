@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/immo_icons.dart';
 
 class _Constants {
   static const double menuHeight = 50.0;
@@ -15,26 +14,26 @@ class _Constants {
   static const double borderRadius = 20.0;
   static const double borderWidth = 1.0;
   static const double borderOpacity = 0.3;
-  static const double iconContainerPadding = 6.0;
-  static const double iconSize = 16.0;
-  static const double textIconGap = 4.0;
+  static const double imageSize = 32.0;
+  static const double imageBorderWidth = 2.0;
+  static const double textIconGap = 6.0;
 }
 
 class MenuOption {
   final String label;
-  final ImmoIcons icon;
+  final String imagePath;
 
-  MenuOption({required this.label, required this.icon});
+  MenuOption({required this.label, required this.imagePath});
 }
 
 class HomeChoiceMenu extends StatelessWidget {
   HomeChoiceMenu({super.key});
 
   final List<MenuOption> _choices = [
-    MenuOption(label: 'Résidences', icon: ImmoIcons.home),
-    MenuOption(label: 'Locations', icon: ImmoIcons.location),
-    MenuOption(label: 'Meubles', icon: ImmoIcons.meubles),
-    MenuOption(label: 'Biens', icon: ImmoIcons.terrain),
+    MenuOption(label: 'Résidences', imagePath: 'assets/img/menu_residence.jpg'),
+    MenuOption(label: 'Locations', imagePath: 'assets/img/menu_location.png'),
+    MenuOption(label: 'Meubles', imagePath: 'assets/img/menu_meubles.jpg'),
+    MenuOption(label: 'Biens', imagePath: 'assets/img/menu_biens.jpg'),
   ];
 
   @override
@@ -82,21 +81,25 @@ class HomeChoiceMenu extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Conteneur pour l'icône
                         Container(
-                          padding: const EdgeInsets.all(
-                            _Constants.iconContainerPadding,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              _Constants.borderRadius,
+                          width: _Constants.imageSize,
+                          height: _Constants.imageSize,
+                          // decoration: BoxDecoration(
+                          //   shape: BoxShape.circle,
+                          //   border: Border.all(
+                          //     color: Colors.white,
+                          //     width: _Constants.imageBorderWidth,
+                          //   ),
+                          // ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              choice.imagePath,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                color: AppColors.primary.withOpacity(0.15),
+                              ),
                             ),
-                            color: isSelected ? Colors.white : null,
-                          ),
-                          child: ImmoIcon(
-                            choice.icon,
-                            color: AppColors.primary,
-                            size: _Constants.iconSize,
                           ),
                         ),
                         const Gap(_Constants.textIconGap),

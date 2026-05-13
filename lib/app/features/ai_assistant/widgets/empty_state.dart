@@ -70,10 +70,6 @@ class _EmptyChatStateState extends State<EmptyChatState> {
   void initState() {
     super.initState();
     _controller.addListener(_onTextChanged);
-    // Auto-focus du champ texte à l'ouverture (bottom sheet)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _focusNode.requestFocus();
-    });
   }
 
   void _onTextChanged() {
@@ -489,9 +485,13 @@ class _HeroComposer extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          _SendButton(
-            onTap: () => onSubmit(controller.text),
-            background: sendBg,
+          ListenableBuilder(
+            listenable: controller,
+            builder: (_, __) => _SendButton(
+              onTap: () => onSubmit(controller.text),
+              background: sendBg,
+              enabled: controller.text.trim().isNotEmpty,
+            ),
           ),
         ],
       ),
@@ -499,28 +499,47 @@ class _HeroComposer extends StatelessWidget {
   }
 }
 
-class _SendButton extends StatelessWidget {
-  const _SendButton({required this.onTap, required this.background});
+class _SendButton extends StatefulWidget {
+  const _SendButton({required this.onTap, required this.background, required this.enabled});
 
   final VoidCallback onTap;
   final Color background;
+  final bool enabled;
+
+  @override
+  State<_SendButton> createState() => _SendButtonState();
+}
+
+class _SendButtonState extends State<_SendButton> {
+  bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      customBorder: const CircleBorder(),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: background,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Iconsax.arrow_up_3,
-          size: 18,
-          color: Colors.white,
+    return GestureDetector(
+      onTapDown: widget.enabled ? (_) => setState(() => _pressed = true) : null,
+      onTapUp: widget.enabled ? (_) => setState(() => _pressed = false) : null,
+      onTapCancel: widget.enabled ? () => setState(() => _pressed = false) : null,
+      onTap: widget.enabled ? widget.onTap : null,
+      child: AnimatedScale(
+        scale: _pressed ? 0.92 : 1.0,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+        child: AnimatedOpacity(
+          opacity: widget.enabled ? 1.0 : 0.35,
+          duration: const Duration(milliseconds: 180),
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: widget.background,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Iconsax.arrow_up_3,
+              size: 18,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );

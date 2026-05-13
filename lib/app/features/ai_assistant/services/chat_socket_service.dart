@@ -86,9 +86,13 @@ class ChatSocketService {
       dev.log('WS connected', name: 'ChatSocket');
       _stateController.add(ChatConnectionState.connected);
     });
-    s.onDisconnect((_) {
-      dev.log('WS disconnected', name: 'ChatSocket');
-      _stateController.add(ChatConnectionState.disconnected);
+    s.on('disconnect', (reason) {
+      dev.log('WS disconnected: $reason', name: 'ChatSocket');
+      if (reason == 'io server disconnect') {
+        _stateController.add(ChatConnectionState.unauthenticated);
+      } else {
+        _stateController.add(ChatConnectionState.disconnected);
+      }
     });
     s.onConnectError((err) {
       dev.log('WS connect_error: $err', name: 'ChatSocket');

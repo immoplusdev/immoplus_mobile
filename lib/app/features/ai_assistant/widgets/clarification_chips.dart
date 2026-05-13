@@ -66,75 +66,77 @@ class _ClarificationBlockState extends State<ClarificationBlock>
     final slide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
         .animate(fade);
 
-    return Padding(
-      padding: const EdgeInsets.only(top: ChatTokens.s10),
-      child: AnimatedOpacity(
-        opacity: _dismissed ? 0 : 1,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeIn,
-        child: FadeTransition(
-          opacity: fade,
-          child: SlideTransition(
-            position: slide,
-            child: Container(
-              decoration: BoxDecoration(
-                color: ChatTokens.neutral0,
-                borderRadius: BorderRadius.circular(ChatTokens.cardRadius),
-                border: Border.all(
-                  color: ChatTokens.borderStandard,
-                  width: 0.5,
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      alignment: Alignment.topCenter,
+      child: _dismissed
+          ? const SizedBox.shrink()
+          : Padding(
+              padding: const EdgeInsets.only(top: ChatTokens.s10),
+              child: FadeTransition(
+                opacity: fade,
+                child: SlideTransition(
+                  position: slide,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: ChatTokens.neutral0,
+                      borderRadius: BorderRadius.circular(ChatTokens.cardRadius),
+                      border: Border.all(
+                        color: ChatTokens.borderStandard,
+                        width: 0.5,
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (totalSteps > 1) ...[
+                          _ProgressIndicator(done: doneSteps, total: totalSteps),
+                          const SizedBox(height: 12),
+                        ],
+                        if (understood.isNotEmpty) ...[
+                          const _SectionLabel(
+                            icon: Iconsax.tick_circle,
+                            label: 'Compris',
+                            color: ChatTokens.success500,
+                          ),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: understood
+                                .map((c) => _ReadOnlyChip(label: c))
+                                .toList(),
+                          ),
+                          if (options.isNotEmpty) ...[
+                            const SizedBox(height: 12),
+                            const Divider(
+                              height: 1,
+                              thickness: 0.5,
+                              color: ChatTokens.divider,
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                        ],
+                        if (options.isNotEmpty)
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: options
+                                .map((o) => ChoiceChip(
+                                      label: o.label,
+                                      onTap: () => _handleTap(o.value),
+                                    ))
+                                .toList(),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (totalSteps > 1) ...[
-                    _ProgressIndicator(done: doneSteps, total: totalSteps),
-                    const SizedBox(height: 12),
-                  ],
-                  if (understood.isNotEmpty) ...[
-                    const _SectionLabel(
-                      icon: Iconsax.tick_circle,
-                      label: 'Compris',
-                      color: ChatTokens.success500,
-                    ),
-                    const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: understood
-                          .map((c) => _ReadOnlyChip(label: c))
-                          .toList(),
-                    ),
-                    if (options.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      const Divider(
-                        height: 1,
-                        thickness: 0.5,
-                        color: ChatTokens.divider,
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                  ],
-                  if (options.isNotEmpty)
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: options
-                          .map((o) => ChoiceChip(
-                                label: o.label,
-                                onTap: () => _handleTap(o.value),
-                              ))
-                          .toList(),
-                    ),
-                ],
-              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -158,7 +160,9 @@ class _ClarificationBlockState extends State<ClarificationBlock>
         return const [
           _ChipOption('Appart', 'Appartement'),
           _ChipOption('Villa', 'Villa'),
+          _ChipOption('Maison', 'Maison'),
           _ChipOption('Studio', 'Studio'),
+          _ChipOption('Duplex', 'Duplex'),
           _ChipOption('Bureau', 'Bureau'),
           _ChipOption('Terrain', 'Terrain'),
         ];
