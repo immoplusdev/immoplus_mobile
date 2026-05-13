@@ -125,7 +125,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
         AuthenticationPage.name,
         extra: (
           callback: () {
-            // Une fois connecté, on switch sur la page "Mes choix"
+            _fetchImatchBadge();
             navigationHandler.switchPage(id: index, context: context);
           },
           popUntilRouteName:
@@ -150,6 +150,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _videoFeedWarmupTimer?.cancel();
     _videoFeedWarmupTimer = null;
     // _scrollIdleTimer?.cancel();

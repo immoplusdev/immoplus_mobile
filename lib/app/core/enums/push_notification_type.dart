@@ -15,7 +15,8 @@ enum PushNotificationType {
   payment, // Paiements
   wallet, // Wallet
   reservationAccepted, // Pro a accepté → overlay paiement
-  reservationRefused; // Pro a refusé → booking history
+  reservationRefused, // Pro a refusé → booking history
+  newProposal; // Admin a ajouté une proposition → badge Imatch
 
   /// 🎯 Retourne la route correspondante
   String? getRoute(String? id) {
@@ -44,6 +45,7 @@ enum PushNotificationType {
       case PushNotificationType.wallet:
       case PushNotificationType.auth:
       case PushNotificationType.user:
+      case PushNotificationType.newProposal:
         return null;
     }
   }
@@ -82,6 +84,9 @@ enum PushNotificationType {
 
       case 'reservation_refused':
         return PushNotificationType.reservationRefused;
+
+      case 'new_proposal':
+        return PushNotificationType.newProposal;
 
       default:
         return null;
