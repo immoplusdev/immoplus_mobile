@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/image_counter_badge.dart';
 import 'package:shimmer/shimmer.dart';
@@ -180,11 +182,16 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
     );
   }
 
-  Widget _buildPlaceholder() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Container(color: Colors.white),
+  Widget _buildPlaceholder(String url) {
+    return GestureDetector(
+      onLongPress: () async {
+        await Clipboard.setData(ClipboardData(text: url));
+      },
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Container(color: Colors.white),
+      ),
     );
   }
 
@@ -192,35 +199,35 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        _buildPlaceholder(),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 30,
-              height: 30,
-              child: CircularProgressIndicator(
-                value: progress,
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.white.withOpacity(0.5)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SelectableText(
-                url,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white70,
-                  backgroundColor: Colors.black26,
-                ),
-              ),
-            ),
-          ],
-        ),
+        _buildPlaceholder(url),
+        // Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     SizedBox(
+        //       width: 30,
+        //       height: 30,
+        //       child: CircularProgressIndicator(
+        //         value: progress,
+        //         strokeWidth: 2,
+        //         valueColor: AlwaysStoppedAnimation<Color>(
+        //             Colors.white.withOpacity(0.5)),
+        //       ),
+        //     ),
+        //     const SizedBox(height: 10),
+        //     Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 20),
+        //       child: SelectableText(
+        //         url,
+        //         textAlign: TextAlign.center,
+        //         style: const TextStyle(
+        //           fontSize: 18,
+        //           color: Colors.white70,
+        //           backgroundColor: Colors.black26,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }
