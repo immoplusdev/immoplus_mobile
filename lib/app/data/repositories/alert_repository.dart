@@ -5,7 +5,6 @@ import 'package:immoplus/app/core/network/exceptions/request_response_exeption.d
 import 'package:immoplus/app/data/models/remote/alert/alert_request.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_response.dart';
 import 'package:immoplus/app/data/models/remote/alert/alerts_response.dart';
-import 'package:immoplus/app/data/models/remote/alert/alert_matches_api_response.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_matches_response.dart';
 import 'package:immoplus/app/data/providers/alert_provider.dart';
 import 'package:injectable/injectable.dart';
