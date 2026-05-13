@@ -24,10 +24,11 @@ class AlertCard extends StatelessWidget {
         if (status == AlertStatus.pending) {
           await context.pushNamed(AlertDetailPage.name, extra: alert);
           onRefresh?.call();
-        } else if ((alert.matchCount ?? 0) > 0) {
+        } else if ((alert.unreadMatchCount ?? 0) > 0) {
           await context.pushNamed(
             AlertPropositionsPage.name,
             pathParameters: {'id': alert.id},
+            extra: alert.unreadMatchCount ?? 0,
           );
           onRefresh?.call();
         }
@@ -96,7 +97,7 @@ class AlertCard extends StatelessWidget {
                     '${NumberFormat.compact().format(alert.criteria.priceMin ?? 0)} - ${NumberFormat.compact().format(alert.criteria.priceMax ?? 0)} fcfa'),
               ],
             ),
-            if ((alert.matchCount ?? 0) > 0) ...[
+            if ((alert.unreadMatchCount ?? 0) > 0) ...[
               const Gap(16),
               Container(
                 padding:
@@ -109,7 +110,7 @@ class AlertCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '${alert.matchCount} ${(alert.matchCount ?? 0) > 1 ? 'nouvelles propositions disponibles' : 'nouvelle proposition disponible'}',
+                        '${alert.unreadMatchCount} ${(alert.unreadMatchCount ?? 0) > 1 ? 'nouvelles propositions disponibles' : 'nouvelle proposition disponible'}',
                         style: GoogleFonts.dmSans(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -125,11 +126,12 @@ class AlertCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if ((alert.matchCount ?? 0) > 0)
+                if ((alert.unreadMatchCount ?? 0) > 0)
                   ElevatedButton(
                     onPressed: () => context.pushNamed(
                       AlertPropositionsPage.name,
                       pathParameters: {'id': alert.id},
+                      extra: alert.unreadMatchCount ?? 0,
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,

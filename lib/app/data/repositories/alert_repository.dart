@@ -121,6 +121,15 @@ class AlertRepository {
     }
   }
 
+  Future<int> getImatchBadgeCount() async {
+    try {
+      final response = await dioClient.get('/alerts/badge-count');
+      return (response.data['data']['count'] as num?)?.toInt() ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
   Future<AlertMatchesResponse> getAlertMatches({
     required String id,
     int page = 1,
