@@ -146,8 +146,8 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
           builder: (context, hideBottomNav, _) {
             return Scaffold(
               body: widget.child,
-              floatingActionButton:
-                  state == PageState.home ? const AiFloatingButton() : null,
+              // floatingActionButton:
+              //     state == PageState.home ? const AiFloatingButton() : null,
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav

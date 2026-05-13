@@ -127,7 +127,7 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
                     imageUrl: url,
                     memCacheWidth: _targetWidth,
                     fadeInDuration: const Duration(milliseconds: 200),
-                    progressIndicatorBuilder: (context, url, progress) => 
+                    progressIndicatorBuilder: (context, url, progress) =>
                         _buildProgressIndicator(progress.progress, url),
                     errorWidget: (context, url, error) =>
                         _buildErrorWidget(index),
@@ -184,33 +184,33 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
       alignment: Alignment.center,
       children: [
         _buildPlaceholder(),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 30,
-              height: 30,
-              child: CircularProgressIndicator(
-                value: progress,
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade300),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SelectableText(
-                url,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 8,
-                  color: Colors.black54,
-                  backgroundColor: Colors.white70,
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     SizedBox(
+        //       width: 30,
+        //       height: 30,
+        //       child: CircularProgressIndicator(
+        //         value: progress,
+        //         strokeWidth: 2,
+        //         valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade300),
+        //       ),
+        //     ),
+        //     const SizedBox(height: 10),
+        //     Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 20),
+        //       child: SelectableText(
+        //         url,
+        //         textAlign: TextAlign.center,
+        //         style: const TextStyle(
+        //           fontSize: 8,
+        //           color: Colors.black54,
+        //           backgroundColor: Colors.white70,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

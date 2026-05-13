@@ -37,10 +37,13 @@ class ErrorInterceptor extends Interceptor {
       final handled = await _handleTokenExpired(err, handler);
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
+    final isUserPrefPUT = err.requestOptions.method == 'PUT' &&
+        err.requestOptions.path.contains('/user-preferences/me');
 
     // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
     if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode) &&
-        !_isActiveReservationBlock(err.response)) {
+        !_isActiveReservationBlock(err.response) &&
+        !isUserPrefPUT) {
       _showErrorToast(apiErrorResponse, err.response);
     }
 
