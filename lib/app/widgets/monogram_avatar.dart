@@ -50,7 +50,8 @@ class MonogramAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveFontSize = fontSize ?? size * 0.375;
-    final hasImage = imageUrl != null && imageUrl!.isNotEmpty || imageProvider != null;
+    final hasImage =
+        imageUrl != null && imageUrl!.isNotEmpty || imageProvider != null;
 
     Widget avatar;
     if (hasImage) {
@@ -86,7 +87,8 @@ class MonogramAvatar extends StatelessWidget {
 
   Widget _buildWithImage(double effectiveFontSize) {
     final monogram = _buildMonogram(effectiveFontSize);
-    final provider = imageProvider ?? (imageUrl != null ? NetworkImage(imageUrl!) : null);
+    final provider =
+        imageProvider ?? (imageUrl != null ? NetworkImage(imageUrl!) : null);
 
     if (provider == null) return monogram;
 
@@ -194,7 +196,8 @@ class SkeuomorphicAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveFontSize = fontSize ?? size * 0.375;
-    final hasImage = imageUrl != null && imageUrl!.isNotEmpty || imageProvider != null;
+    final hasImage =
+        imageUrl != null && imageUrl!.isNotEmpty || imageProvider != null;
 
     if (hasImage) {
       return _buildWithImage(effectiveFontSize);
@@ -204,7 +207,8 @@ class SkeuomorphicAvatar extends StatelessWidget {
 
   Widget _buildWithImage(double effectiveFontSize) {
     final monogram = _buildSkeuomorphic(effectiveFontSize);
-    final provider = imageProvider ?? (imageUrl != null ? NetworkImage(imageUrl!) : null);
+    final provider =
+        imageProvider ?? (imageUrl != null ? NetworkImage(imageUrl!) : null);
 
     if (provider == null) return monogram;
 

@@ -89,6 +89,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                         fit: BoxFit.cover,
                         placeholder: (_, __) =>
                             Container(color: Colors.grey.shade100),
+                        memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
                           color: Colors.grey.shade100,
                           child: Icon(FontAwesomeIcons.images,

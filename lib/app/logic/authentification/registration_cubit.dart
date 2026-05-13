@@ -75,8 +75,6 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(RegistrationCubitState.success(accountCreationResponse: response));
       _navigateAfterRegistration();
     } catch (e) {

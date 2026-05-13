@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +21,22 @@ class CardImageCarousel extends StatefulWidget {
 class _CardImageCarouselState extends State<CardImageCarousel> {
   final ValueNotifier<int> _currentIndex = ValueNotifier(0);
   final Set<String> _preloaded = {};
+  // Track retry count per image index to force reload on error
+  final Map<int, int> _retryKeys = {};
   int _lastPreloadedIndex = -1;
+
+  // Target width for memory optimization (approx. screen width * dpr)
+  int? _targetWidth;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (_targetWidth == null) {
+      final dpr = MediaQuery.devicePixelRatioOf(context);
+      final width = MediaQuery.sizeOf(context).width;
+      // We limit to approx 1000px for carousels to save RAM while keeping quality
+      _targetWidth = (width * dpr).toInt().clamp(0, 1000);
+    }
     if (_lastPreloadedIndex == -1) {
       _preloadBatch(0);
     }
@@ -32,33 +45,54 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
   @override
   void didUpdateWidget(CardImageCarousel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Use listEquals to avoid clearing cache when the list content is the same
     if (!listEquals(widget.images, oldWidget.images)) {
       _preloaded.clear();
+      _retryKeys.clear();
       _lastPreloadedIndex = -1;
       _preloadBatch(0);
     }
   }
 
-  void _preloadBatch(int start) {
+  Future<void> _preloadBatch(int start) async {
     if (widget.images.isEmpty) return;
-    final end = (start + 5).clamp(0, widget.images.length);
+    final end = (start + 3)
+        .clamp(0, widget.images.length); // Reduced to 3 to be less aggressive
+
+    final List<Future<void>> preloads = [];
+    final List<String> newlyPreloaded = [];
+
     for (int i = start; i < end; i++) {
       final url = Utils.getImagePath(id: widget.images[i]);
       if (!_preloaded.contains(url)) {
-        precacheImage(
-          CachedNetworkImageProvider(url),
-          context,
-        ).then((_) {
-          if (mounted) {
-            setState(() => _preloaded.add(url));
-          }
-        }).catchError((e) {
-          debugPrint('Error preloading image: $e');
-        });
+        final provider = CachedNetworkImageProvider(
+          url,
+          maxWidth: _targetWidth, // Optimization: only preload what we need
+        );
+
+        preloads.add(
+          precacheImage(provider, context).then((_) {
+            newlyPreloaded.add(url);
+          }).catchError((e) {
+            debugPrint('Error preloading image: $e');
+          }),
+        );
+      }
+    }
+
+    if (preloads.isNotEmpty) {
+      await Future.wait(preloads);
+      if (mounted && newlyPreloaded.isNotEmpty) {
+        // Only one setState for the whole batch
+        setState(() => _preloaded.addAll(newlyPreloaded));
       }
     }
     _lastPreloadedIndex = end - 1;
+  }
+
+  void _onRetry(int index) {
+    setState(() {
+      _retryKeys[index] = (_retryKeys[index] ?? 0) + 1;
+    });
   }
 
   @override
@@ -83,30 +117,22 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
               itemCount: widget.images.length,
               itemBuilder: (context, index, realIndex) {
                 final url = Utils.getImagePath(id: widget.images[index]);
-                final isCached = _preloaded.contains(url);
+                final retryCount = _retryKeys[index] ?? 0;
 
-                // Use Image.network with provider directly if already preloaded
-                // to avoid CachedNetworkImage's internal state machine (shimmer/fade issues)
                 return Container(
+                  key: ValueKey('${url}_$retryCount'),
                   width: double.infinity,
                   color: Colors.grey.shade100,
-                  child: isCached
-                      ? Image(
-                          image: CachedNetworkImageProvider(url),
-                          fit: BoxFit.cover,
-                          gaplessPlayback: true,
-                          errorBuilder: (context, error, stackTrace) =>
-                              _buildErrorWidget(),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: url,
-                          fadeInDuration: Duration.zero,
-                          fadeOutDuration: Duration.zero,
-                          placeholder: (context, url) => _buildPlaceholder(),
-                          errorWidget: (context, url, error) =>
-                              _buildErrorWidget(),
-                          fit: BoxFit.cover,
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: url,
+                    memCacheWidth: _targetWidth,
+                    fadeInDuration: const Duration(milliseconds: 200),
+                    progressIndicatorBuilder: (context, url, progress) => 
+                        _buildProgressIndicator(progress.progress, url),
+                    errorWidget: (context, url, error) =>
+                        _buildErrorWidget(index),
+                    fit: BoxFit.cover,
+                  ),
                 );
               },
               options: FlutterCarouselOptions(
@@ -119,18 +145,8 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
                 enlargeCenterPage: false,
                 scrollDirection: Axis.horizontal,
                 showIndicator: false,
-                indicatorMargin: 20,
-                slideIndicator: CircularSlideIndicator(
-                  slideIndicatorOptions: const SlideIndicatorOptions(
-                    indicatorRadius: 4,
-                    enableHalo: true,
-                    enableAnimation: true,
-                    itemSpacing: 12,
-                  ),
-                ),
                 onPageChanged: (index, _) {
                   _currentIndex.value = index;
-                  // Preload next batch if we reach the second-to-last preloaded image
                   if (index >= _lastPreloadedIndex - 1 &&
                       _lastPreloadedIndex < widget.images.length - 1) {
                     _preloadBatch(_lastPreloadedIndex + 1);
@@ -163,13 +179,67 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
     );
   }
 
-  Widget _buildErrorWidget() {
-    return Container(
-      color: Colors.grey.shade200,
-      child: Icon(
-        FontAwesomeIcons.images,
-        size: 50,
-        color: Colors.grey.shade400,
+  Widget _buildProgressIndicator(double? progress, String url) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        _buildPlaceholder(),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(
+                value: progress,
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade300),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SelectableText(
+                url,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 8,
+                  color: Colors.black54,
+                  backgroundColor: Colors.white70,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildErrorWidget(int index) {
+    return GestureDetector(
+      onTap: () => _onRetry(index),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        color: Colors.grey.shade200,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              FontAwesomeIcons.circleExclamation,
+              size: 40,
+              color: Colors.grey.shade400,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Erreur de chargement\nAppuyez pour réessayer",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

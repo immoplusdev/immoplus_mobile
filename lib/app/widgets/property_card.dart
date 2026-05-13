@@ -28,7 +28,7 @@ class BookNowButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical:  14,
+          vertical: 14,
           horizontal: 22,
         ),
         decoration: BoxDecoration(
@@ -39,7 +39,7 @@ class BookNowButton extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontSize:  16,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.white,
               letterSpacing: 0.3,
@@ -313,6 +313,7 @@ class PropertyImage extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl!,
                       fit: BoxFit.cover,
+                      memCacheWidth: (width * MediaQuery.devicePixelRatioOf(context)).toInt(),
                       placeholder: (_, __) =>
                           Container(color: const Color(0xFFEEEEEE)),
                       errorWidget: (_, __, ___) => _ImagePlaceholder(),
@@ -422,7 +423,6 @@ class PropertyInfo extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-
               const SizedBox(height: 4),
               if (location != null && location!.isNotEmpty)
                 LocationRow(location: location!),
@@ -533,7 +533,8 @@ class PropertyCommodites extends StatelessWidget {
       spacing: 8,
       runSpacing: 6,
       children: commodites.map((c) {
-        final color = _commoditeColors[c.icon.toLowerCase()] ?? AppColors.primary;
+        final color =
+            _commoditeColors[c.icon.toLowerCase()] ?? AppColors.primary;
         return _CommoditeChip(
           icon: _commoditeIcon(c.icon),
           label: c.text,
@@ -695,9 +696,7 @@ class _PieceCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: iconSize, color: color),
-
           SizedBox(height: fontSize * 0.5),
-          
           Text(
             label,
             style: TextStyle(

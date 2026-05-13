@@ -107,8 +107,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
       //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } catch (e) {
@@ -161,8 +159,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
       // OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } catch (e) {
@@ -410,8 +406,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } on DioException catch (e) {

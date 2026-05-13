@@ -32,8 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // ✅ Configurer l'authentification si nécessaire
     if (sessionManager.currentUser != null) {
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
       notificationService.suscribeCurrentUser();
     }
 

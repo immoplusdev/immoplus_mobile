@@ -48,8 +48,8 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
 
     // Compter chambres, salles de bain, cuisines depuis les pièces
     int countPiece(String name) {
-      final match = residence.pieces.where(
-          (p) => p.nom.toLowerCase().contains(name.toLowerCase()));
+      final match = residence.pieces
+          .where((p) => p.nom.toLowerCase().contains(name.toLowerCase()));
       if (match.isEmpty) return 0;
       return match.fold<int>(0, (sum, p) => sum + p.nombre);
     }
@@ -95,6 +95,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         fit: BoxFit.cover,
                         placeholder: (_, __) =>
                             Container(color: Colors.grey.shade100),
+                        memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
                           color: Colors.grey.shade100,
                           child: Icon(FontAwesomeIcons.images,
@@ -133,8 +134,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         builder: (_, liked, __) => GestureDetector(
                           onTap: () {
                             if (!liked) {
-                              favoriesUtils
-                                  .addResidenceToFavorites(residence);
+                              favoriesUtils.addResidenceToFavorites(residence);
                             } else {
                               favoriesUtils
                                   .deleteFavoriteByItemId(residence.id);
@@ -153,9 +153,8 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                                   ? FontAwesomeIcons.solidHeart
                                   : FontAwesomeIcons.heart,
                               size: 12,
-                              color: liked
-                                  ? Colors.redAccent
-                                  : AppColors.primary,
+                              color:
+                                  liked ? Colors.redAccent : AppColors.primary,
                             ),
                           ),
                         ),

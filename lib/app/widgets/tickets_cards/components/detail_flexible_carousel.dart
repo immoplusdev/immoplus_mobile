@@ -23,11 +23,19 @@ class DetailFlexibleCarousel extends StatefulWidget {
 class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
   final ValueNotifier<int> _currentIndex = ValueNotifier(0);
   final Set<String> _preloaded = {};
+  final Map<int, int> _retryKeys = {};
   int _lastPreloadedIndex = -1;
+  int? _targetWidth;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (_targetWidth == null) {
+      final dpr = MediaQuery.devicePixelRatioOf(context);
+      final width = MediaQuery.sizeOf(context).width;
+      // Detailed view can use slightly higher resolution but still limited to save memory
+      _targetWidth = (width * dpr).toInt().clamp(0, 1200);
+    }
     if (_lastPreloadedIndex == -1) {
       _preloadBatch(0);
     }
@@ -38,30 +46,48 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
     super.didUpdateWidget(oldWidget);
     if (!listEquals(widget.images, oldWidget.images)) {
       _preloaded.clear();
+      _retryKeys.clear();
       _lastPreloadedIndex = -1;
       _preloadBatch(0);
     }
   }
 
-  void _preloadBatch(int start) {
+  Future<void> _preloadBatch(int start) async {
     if (widget.images.isEmpty) return;
-    final end = (start + 5).clamp(0, widget.images.length);
+    final end = (start + 3).clamp(0, widget.images.length);
+
+    final List<Future<void>> preloads = [];
+    final List<String> newlyPreloaded = [];
+
     for (int i = start; i < end; i++) {
       final url = Utils.getImagePath(id: widget.images[i]);
       if (!_preloaded.contains(url)) {
-        precacheImage(
-          CachedNetworkImageProvider(url),
-          context,
-        ).then((_) {
-          if (mounted) {
-            setState(() => _preloaded.add(url));
-          }
-        }).catchError((e) {
-          debugPrint('Error preloading image: $e');
-        });
+        preloads.add(
+          precacheImage(
+            CachedNetworkImageProvider(url, maxWidth: _targetWidth),
+            context,
+          ).then((_) {
+            newlyPreloaded.add(url);
+          }).catchError((e) {
+            debugPrint('Error preloading image: $e');
+          }),
+        );
+      }
+    }
+
+    if (preloads.isNotEmpty) {
+      await Future.wait(preloads);
+      if (mounted && newlyPreloaded.isNotEmpty) {
+        setState(() => _preloaded.addAll(newlyPreloaded));
       }
     }
     _lastPreloadedIndex = end - 1;
+  }
+
+  void _onRetry(int index) {
+    setState(() {
+      _retryKeys[index] = (_retryKeys[index] ?? 0) + 1;
+    });
   }
 
   @override
@@ -84,7 +110,7 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
           itemBuilder: (context, index, realIndex) {
             final imageId = widget.images[index];
             final url = Utils.getImagePath(id: imageId);
-            final isCached = _preloaded.contains(url);
+            final retryCount = _retryKeys[index] ?? 0;
 
             return GestureDetector(
               onTap: widget.onImageTap != null
@@ -93,33 +119,30 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
               child: Hero(
                 tag: imageId,
                 child: Container(
+                  key: ValueKey('${url}_$retryCount'),
                   foregroundDecoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.grey.shade700, Colors.transparent],
+                      colors: [
+                        Colors.black.withOpacity(0.5),
+                        Colors.transparent
+                      ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      stops: const [0, 0.4],
+                      stops: const [0, 0.3],
                     ),
                   ),
                   width: double.infinity,
                   color: Colors.grey.shade100,
-                  child: isCached
-                      ? Image(
-                          image: CachedNetworkImageProvider(url),
-                          fit: BoxFit.cover,
-                          gaplessPlayback: true,
-                          errorBuilder: (context, error, stackTrace) =>
-                              _buildErrorWidget(),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: url,
-                          fadeInDuration: Duration.zero,
-                          fadeOutDuration: Duration.zero,
-                          placeholder: (context, url) => _buildPlaceholder(),
-                          errorWidget: (context, url, error) =>
-                              _buildErrorWidget(),
-                          fit: BoxFit.cover,
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: url,
+                    memCacheWidth: _targetWidth,
+                    fadeInDuration: const Duration(milliseconds: 200),
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        _buildProgressIndicator(progress.progress, url),
+                    errorWidget: (context, url, error) =>
+                        _buildErrorWidget(index),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             );
@@ -133,8 +156,6 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
             enlargeCenterPage: false,
             scrollDirection: Axis.horizontal,
             showIndicator: false,
-            floatingIndicator: false,
-            indicatorMargin: 20,
             onPageChanged: (index, _) {
               _currentIndex.value = index;
               if (index >= _lastPreloadedIndex - 1 &&
@@ -167,13 +188,65 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
     );
   }
 
-  Widget _buildErrorWidget() {
-    return Container(
-      color: Colors.grey.shade200,
-      child: const Icon(
-        Icons.error,
-        size: 50,
-        color: Colors.grey,
+  Widget _buildProgressIndicator(double? progress, String url) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        _buildPlaceholder(),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(
+                value: progress,
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.white.withOpacity(0.5)),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SelectableText(
+                url,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white70,
+                  backgroundColor: Colors.black26,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildErrorWidget(int index) {
+    return GestureDetector(
+      onTap: () => _onRetry(index),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        color: Colors.grey.shade200,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.cloud_off,
+              size: 50,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 8),
+            Text(
+              "Erreur de chargement\nAppuyez pour réessayer",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+          ],
+        ),
       ),
     );
   }

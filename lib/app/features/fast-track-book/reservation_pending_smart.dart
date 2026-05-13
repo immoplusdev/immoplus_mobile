@@ -521,93 +521,91 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Ajoutez votre condition ici.
+                  // Si la condition est fausse, le Container ne sera pas rendu et l'Expanded prendra sa place.
+                  // if (showContainer == true)
+                  // Container(
+                  //   width: 64,
+                  //   color: const Color.fromARGB(255, 255, 255, 255),
+                  //   child: Center(
+                  //     child: ScaleTransition(
+                  //       scale: _pulseAnimation,
+                  //       child: Container(
+                  //         width: 38,
+                  //         height: 38,
+                  //         decoration: BoxDecoration(
+                  //           color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.25),
+                  //           borderRadius: BorderRadius.circular(10),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
-
-IntrinsicHeight(
-  child: Row(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      
-      // Ajoutez votre condition ici. 
-      // Si la condition est fausse, le Container ne sera pas rendu et l'Expanded prendra sa place.
-      // if (showContainer == true) 
-        // Container(
-        //   width: 64,
-        //   color: const Color.fromARGB(255, 255, 255, 255),
-        //   child: Center(
-        //     child: ScaleTransition(
-        //       scale: _pulseAnimation,
-        //       child: Container(
-        //         width: 38,
-        //         height: 38,
-        //         decoration: BoxDecoration(
-        //           color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.25),
-        //           borderRadius: BorderRadius.circular(10),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-
-      // L'Expanded va automatiquement s'étirer pour prendre la place du Container si le "if" ci-dessus est faux.
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _status == StatusReservation.enAttentePaiementClient
-                    ? 'Propriétaire a confirmé votre demande'
-                    : 'Le propriétaire regarde votre demande',
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: _textPrimary,
-                  height: 1.25,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 3),
-              FadeTransition(
-                opacity: _messageOpacity,
-                child: Text(
-                  _status == StatusReservation.enAttentePaiementClient
-                      ? 'Finalisez votre paiement pour confirmer'
-                      : _rotatingMessages[_messageIndex],
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: _textMuted,
-                    height: 1.3,
+                  // L'Expanded va automatiquement s'étirer pour prendre la place du Container si le "if" ci-dessus est faux.
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _status == StatusReservation.enAttentePaiementClient
+                                ? 'Propriétaire a confirmé votre demande'
+                                : 'Le propriétaire regarde votre demande',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: _textPrimary,
+                              height: 1.25,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3),
+                          FadeTransition(
+                            opacity: _messageOpacity,
+                            child: Text(
+                              _status ==
+                                      StatusReservation.enAttentePaiementClient
+                                  ? 'Finalisez votre paiement pour confirmer'
+                                  : _rotatingMessages[_messageIndex],
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: _textMuted,
+                                height: 1.3,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          color: _textMuted,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-      
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: _textMuted,
-              size: 18,
-            ),
-          ],
-        ),
-      ),
-    ],
-  ),
-)
+            )
 
             // _buildProgressBar(),
           ],

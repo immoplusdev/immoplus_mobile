@@ -69,22 +69,20 @@ class ResidenceRepository {
   }
 
   Future<ReservationModel> annulerReservationClient({
-  required String reservationId,
-  required String notes,
-}) async {
-  try {
-    final response = await ReservationProvider(dioClient)
-        .annulerReservationClient(
-          reservationId,
-          {'notes': notes},
-        );
-    return response.data;
-  } on DioException catch (e) {
-    throw Exception('Erreur annulation: ${e.message}');
+    required String reservationId,
+    required String notes,
+  }) async {
+    try {
+      final response =
+          await ReservationProvider(dioClient).annulerReservationClient(
+        reservationId,
+        {'notes': notes},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception('Erreur annulation: ${e.message}');
+    }
   }
-}
-
-
 
   /// Récupère les réservations en attente de paiement client
   Future<ReservationsCollection> getReservationsEnAttentePaiement({
@@ -103,8 +101,6 @@ class ResidenceRepository {
       orderDir: OrderDir.desc.value,
     );
   }
-
-
 
   Future<ReservationsCollection> getReservationsOwner({
     required String id,
@@ -173,17 +169,17 @@ class ResidenceRepository {
       inspect(response);
       return response;
     } on DioException catch (dioError) {
-      if (dioError.response?.statusCode == 400) {
-        final data = dioError.response?.data;
-        final reservationId = data?['data']?['reservationId'] as String?;
-        final message = data?['message'] as String? ?? 'Une réservation est déjà en cours.';
-        if (reservationId != null) {
-          throw ActiveReservationException(
-            message: message,
-            reservationId: reservationId,
-          );
-        }
-      }
+      // if (dioError.response?.statusCode == 400) {
+      //   final data = dioError.response?.data;
+      //   final reservationId = data?['data']?['reservationId'] as String?;
+      //   final message = data?['message'] as String? ?? 'Une réservation est déjà en cours.';
+      //   if (reservationId != null) {
+      //     throw ActiveReservationException(
+      //       message: message,
+      //       reservationId: reservationId,
+      //     );
+      //   }
+      // }
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } catch (error) {
