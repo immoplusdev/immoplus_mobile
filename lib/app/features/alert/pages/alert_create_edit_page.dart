@@ -100,8 +100,13 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       return;
     }
 
+    final isReservation =
+        _selectedTransactionType == AlertTransactionType.reserve.value;
+
     final request = AlertRequest(
-      targetType: TargetTypeEnum.bienImmobilier.value,
+      targetType: isReservation
+          ? TargetTypeEnum.residence.value
+          : TargetTypeEnum.bienImmobilier.value,
       title:
           '${(_selectedPropertyType ?? 'Bien').toUpperCase()} à ${_selectedAddress?.description ?? 'Abidjan'}',
       descriptionClient: _descriptionController.text,
