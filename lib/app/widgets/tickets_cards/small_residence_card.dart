@@ -5,6 +5,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
+import 'package:immoplus/app/services/share_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
@@ -12,7 +13,7 @@ class SmallResidenceCard extends StatefulWidget {
   final VoidCallback? closeTap;
   final VoidCallback? onCardTap;
   final VoidCallback? onNavigateTap;
-  final VoidCallback? onShareTap;
+  final Function(Rect?)? onShareTap;
   final VoidCallback? onCallTap;
   const SmallResidenceCard({
     super.key,
@@ -31,6 +32,7 @@ class SmallResidenceCard extends StatefulWidget {
 class _SmallResidenceCardState extends State<SmallResidenceCard> {
   final favoriesUtils = getIt<FavoriesUtils>();
   final ValueNotifier<bool> _liked = ValueNotifier(false);
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   @override
   void initState() {
@@ -38,6 +40,11 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
     favoriesUtils.isFavorite(widget.residenceModel.id).then((v) {
       _liked.value = v;
     });
+  }
+
+  void _handleShareTap() {
+    final origin = ShareService.getSharePositionFromKey(_shareButtonKey);
+    widget.onShareTap?.call(origin);
   }
 
   @override
@@ -311,8 +318,9 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         const SizedBox(width: 8),
                         // Partager
                         _ActionIconButton(
+                          key: _shareButtonKey,
                           icon: Icons.share_outlined,
-                          onTap: widget.onShareTap,
+                          onTap: _handleShareTap,
                         ),
                         const SizedBox(width: 8),
                         // Fermer
@@ -378,7 +386,8 @@ class _AmenityItem extends StatelessWidget {
 }
 
 class _ActionIconButton extends StatelessWidget {
-  const _ActionIconButton({required this.icon, this.onTap});
+  const _ActionIconButton({required this.icon, this.onTap, Key? key})
+      : super(key: key);
   final IconData icon;
   final VoidCallback? onTap;
 

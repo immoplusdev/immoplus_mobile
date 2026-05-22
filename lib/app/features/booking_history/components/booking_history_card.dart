@@ -140,8 +140,9 @@ class BookingHistoryCard extends StatelessWidget {
                                 color: Colors.black),
                           ),
                           AutoSizeText(
-                              maxLines: 1,
-                              "${formatDate.format(Utils.toDateTime(reservationModel.dateDebut))} à ${reservationModel.residence.heureEntree}")
+                            maxLines: 1,
+                            "${formatDate.format(Utils.toDateTime(reservationModel.dateDebut))} à ${reservationModel.residence.heureEntree}",
+                          )
                         ],
                       ),
                     ),
