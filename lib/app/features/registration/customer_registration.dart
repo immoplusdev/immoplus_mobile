@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/auth/customer_registration_body.dart';
 import 'package:immoplus/app/data/models/remote/files/file_data_model.dart';
@@ -23,7 +22,7 @@ import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
 
 class DataRouterRegistration {
-  String email;
+  String? email;
   String token;
   final String? firstName;
   final String? lastName;
@@ -60,7 +59,6 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
       FileUploaderController();
 
   final FocusNode _focusNode = FocusNode();
-  final PageController _pageController = PageController();
   final ValueNotifier<bool> _passwordNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<bool> _passwordConfirmNotifier =
       ValueNotifier<bool>(false);
@@ -74,7 +72,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
         firstName: TextEditingController(text: widget.data.firstName ?? ''),
         lastName: TextEditingController(text: widget.data.lastName ?? ''),
         phoneNumber: TextEditingController(text: widget.data.phoneNumber ?? ''),
-        email: TextEditingController(text: widget.data.email),
+        email: TextEditingController(text: widget.data.email ?? ''),
         password: TextEditingController(text: ''));
 
     super.initState();
@@ -82,6 +80,11 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isPhoneNumberEmpty =
+        widget.data.phoneNumber == null || widget.data.phoneNumber!.isEmpty;
+    final bool isEmailEmpty =
+        widget.data.email == null || widget.data.email!.isEmpty;
+
     return Form(
       key: _formKey,
       child: CustomPageImmo(
@@ -93,8 +96,13 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
               children: [
                 InternationalPhoneInput(
                   backgroundColor: AppColors.primaryLite,
+                  initialPhoneNumber: !isPhoneNumberEmpty
+                      ? (widget.data.phoneNumber!.startsWith('+')
+                          ? widget.data.phoneNumber
+                          : '+${widget.data.phoneNumber}')
+                      : null,
+                  isEnabled: isPhoneNumberEmpty,
                   onValidPhoneNumber: (value) {
-                    print(value);
                     if (value != _formController.phoneNumber!.text) {
                       _formController.phoneNumber!.text = value;
                     }
@@ -105,7 +113,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                 ),
                 Gap(10),
                 CustomTextField(
-                  isEnabled: false,
+                  isEnabled: isEmailEmpty,
                   controller: _formController.email,
                   prefixIcon: const Icon(CupertinoIcons.mail),
                   labelText: 'Email',
@@ -276,10 +284,11 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                                       phoneNumber:
                                           PhoneNumberHandler.formatPhoneNumber(
                                               _formController.phoneNumber!.text
-                                                ..replaceAll(" ", "")),
+                                                  .replaceAll(" ", "")),
                                       password: _formController.password!.text,
                                       provider: widget.data.provider);
 
+                                  if (!context.mounted) return;
                                   context
                                       .read<RgistrationCubitCubit>()
                                       .createCustomerAccount(

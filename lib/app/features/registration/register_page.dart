@@ -7,7 +7,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
-import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
+import 'package:immoplus/app/data/enums/registration_type.dart';
+import 'package:immoplus/app/features/registration/screens/send_email_or_number_opt_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
@@ -73,7 +74,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 label: "Adresse e-mail",
                 borderColor: AppColors.color65BAF0,
                 onTap: () {
-                  context.pushNamed(SendEmailOptPage.name);
+                  context.pushNamed(SendEmailOrNumberOptPage.name, extra: RegistrationType.email);
+                },
+              ),
+              const Gap(16),
+              AuthButton(
+                icon: const Icon(
+                  Icons.phone_outlined,
+                  color: Colors.green,
+                  size: 24,
+                ),
+                label: "Numéro de téléphone",
+                borderColor: AppColors.color65BAF0,
+                onTap: () {
+                  context.pushNamed(SendEmailOrNumberOptPage.name, extra: RegistrationType.number);
                 },
               ),
               const Gap(16),

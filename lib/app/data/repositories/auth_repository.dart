@@ -229,21 +229,21 @@ class AuthRepository {
     }
   }
 
-  Future<HttpResponse> sendEmailOTP({required SendEmailOtpBody body}) async {
+  Future<HttpResponse> sendRegistrationOTP({required SendEmailOtpBody body}) async {
     try {
-      final response = await AuthProvider(dioClient).sendEmailOTP(body);
+      final response = await AuthProvider(dioClient).sendRegistrationOTP(body);
       inspect(response);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to send email OTP: ${dioError.message}');
+      throw Exception('Failed to send registration OTP: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
       EasyLoading.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to send email OTP: $error');
+      throw Exception('Failed to send registration OTP: $error');
     }
   }
 

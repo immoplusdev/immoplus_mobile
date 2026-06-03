@@ -25,7 +25,6 @@ import 'package:immoplus/app/features/booking_history/booking_history_page.dart'
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
-import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
@@ -43,7 +42,9 @@ import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/registration/register_page.dart';
-import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
+import 'package:immoplus/app/data/enums/registration_type.dart';
+import 'package:immoplus/app/data/models/auth/verify_otp_extra.dart';
+import 'package:immoplus/app/features/registration/screens/send_email_or_number_opt_page.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
@@ -141,15 +142,17 @@ class AppRouter {
             builder: (context, state) => const RegisterPage(),
           ),
           GoRoute(
-            path: SendEmailOptPage.routePath(),
-            name: SendEmailOptPage.name,
-            builder: (context, state) => const SendEmailOptPage(),
+            path: SendEmailOrNumberOptPage.routePath(),
+            name: SendEmailOrNumberOptPage.name,
+            builder: (context, state) => SendEmailOrNumberOptPage(
+              type: state.extra as RegistrationType? ?? RegistrationType.email,
+            ),
           ),
           GoRoute(
             path: VerifyEmailOtpPage.routePath(),
             name: VerifyEmailOtpPage.name,
             builder: (context, state) => VerifyEmailOtpPage(
-              email: state.extra as String,
+              extra: state.extra as VerifyOtpExtra,
             ),
           ),
           GoRoute(

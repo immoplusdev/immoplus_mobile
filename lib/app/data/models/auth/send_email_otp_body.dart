@@ -4,9 +4,15 @@ part 'send_email_otp_body.g.dart';
 
 @JsonSerializable()
 class SendEmailOtpBody {
-  final String email;
+  final String? email;
+  final String? phoneNumber;
+  final bool? is_whatssap;
 
-  SendEmailOtpBody({required this.email});
+  SendEmailOtpBody({
+    this.email,
+    this.phoneNumber,
+    this.is_whatssap,
+  });
 
   factory SendEmailOtpBody.fromJson(Map<String, Object?> json) =>
       _$SendEmailOtpBodyFromJson(json);

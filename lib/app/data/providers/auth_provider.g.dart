@@ -402,7 +402,7 @@ class _AuthProvider implements AuthProvider {
   }
 
   @override
-  Future<HttpResponse<dynamic>> sendEmailOTP(
+  Future<HttpResponse<dynamic>> sendRegistrationOTP(
     SendEmailOtpBody sendEmailOtpBody,
   ) async {
     final _extra = <String, dynamic>{};
