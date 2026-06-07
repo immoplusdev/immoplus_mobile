@@ -8,6 +8,7 @@ import 'package:immoplus/app/data/models/remote/reservations/reservation_model.d
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservation_card.dart';
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_cubit.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_loading_card.dart';
+import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -58,7 +59,13 @@ class _PendingPaymentReservationsPageState
           elevation: 0,
             leading: IconButton(
               icon: const Icon(Iconsax.arrow_left, size: 24),
-              onPressed: () => context.pop(),
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.goNamed(HomePage.name);
+                }
+              },
             ),
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: Colors.transparent,

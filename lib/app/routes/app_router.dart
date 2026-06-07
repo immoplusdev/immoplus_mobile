@@ -67,6 +67,7 @@ import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -77,15 +78,32 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
-    redirect: (context, state) {
+    redirect: (context, state) async {
       print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
       print('🔍 GoRouter redirect - Path: ${state.uri.path}');
       print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
 
       if (showOnboarding) return '/onboarding';
 
-      // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
+      // Load user session if not already loaded (e.g. on direct deep-link launch)
+      final sessionManager = getIt<SessionManager>();
+      if (sessionManager.currentUser == null) {
+        await sessionManager.getCurrentUser();
+      }
+
+      if (!context.mounted) return null;
+
       final path = state.uri.path;
+
+      if (path == PendingPaymentReservationsPage.routePath()) {
+        if (sessionManager.currentUser == null) {
+          print(
+              '🔒 User not authenticated, redirecting from pending-payment-reservations to homePage');
+          return state.namedLocation(HomePage.name);
+        }
+      }
+
+      // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
       if (path.startsWith('/vivre') || path.startsWith('/v/')) {
         context.read<NavigationCubit>().switchPage(PageState.vivre);
       } else if (path.startsWith('/homePage')) {
