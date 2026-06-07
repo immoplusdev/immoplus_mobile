@@ -68,8 +68,9 @@ class _BannerCardState extends State<BannerCard> {
             children: [
               Container(
                 width: double.infinity,
-                height: 190,
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                height: 169.5,
+                padding: const EdgeInsets.only(
+                    left: 15, right: 15, top: 10, bottom: 0),
                 decoration: BoxDecoration(
                   color: _getBackgroundColor(apiBanners),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),

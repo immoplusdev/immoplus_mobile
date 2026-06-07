@@ -573,7 +573,7 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/alerts/:id/propositions',
+        path: AlertPropositionsPage.routePath(),
         name: AlertPropositionsPage.name,
         builder: (context, state) => AlertPropositionsPage(
           alertId: state.pathParameters['id']!,

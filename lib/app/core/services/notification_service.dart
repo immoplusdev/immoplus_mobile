@@ -55,8 +55,10 @@ class NotificationService {
           ReservationPendingBanner.onPushReceived();
         }
 
-        if (type == PushNotificationType.newProposal) {
-          log('🔔 New proposal → refresh badge count', name: 'NOTIFICATION');
+        if (type == PushNotificationType.newProposal ||
+            type == PushNotificationType.alert) {
+          log('🔔 New proposal/alert → refresh badge count',
+              name: 'NOTIFICATION');
           alertRepository.getImatchBadgeCount().then((count) {
             Constantes.imatchBadgeCount.value = count;
           });
@@ -73,7 +75,7 @@ class NotificationService {
       final data = event.notification.additionalData;
       if (data != null) {
         final typeString = data['type'] as String?;
-        final id = data['id'] as String?;
+        final id = data['id']?.toString() ?? data['alertId']?.toString();
 
         final type = PushNotificationType.fromString(typeString);
 

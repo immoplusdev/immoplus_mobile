@@ -21,6 +21,10 @@ class AlertPropositionsPage extends StatefulWidget {
   });
   static const String name = 'ALERT_PROPOSITIONS_PAGE';
 
+  static String routePath() => '/alerts/:id/propositions';
+
+  static String route(String id) => '/alerts/$id/propositions';
+
   @override
   State<AlertPropositionsPage> createState() => _AlertPropositionsPageState();
 }
