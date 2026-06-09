@@ -3,11 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'dart:io';
+import 'package:go_router/go_router.dart';
 import 'package:didit_sdk/sdk_flutter.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
 import 'package:immoplus/app/data/models/remote/kyc/kyc_session_create_model.dart';
+import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
@@ -151,64 +154,126 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //   }
   // }
 
+  Future<void> _startVerificationIOS() async {
+    String url = '';
+    if (widget.initialKycSession != null &&
+        widget.initialKycSession!.diditUrl.isNotEmpty) {
+      url = widget.initialKycSession!.diditUrl;
+    } else {
+      log("No valid session URL found, calling createKycSession");
+      final sessionCreate = await _kycRepository.createKycSession();
+      url = sessionCreate.url;
+    }
+
+    if (url.isEmpty) {
+      throw Exception("Session URL was empty");
+    }
+
+    log("_startVerificationIOS WebView URL: $url");
+
+    if (!mounted) return;
+
+    final result = await context.pushNamed<KycStatus>(
+      KycWebViewPage.routeName,
+      extra: url,
+    );
+
+    log("WebView verification result: $result");
+
+    if (result != null) {
+      if (result == KycStatus.approved) {
+        if (mounted) {
+          Navigator.pop(context);
+          ToastUtils.showSuccess(
+              description: "Vérification d'identité approuvée !");
+          widget.onSuccess();
+        }
+      } else if (result == KycStatus.inReview) {
+        if (mounted) {
+          Navigator.pop(context);
+          ToastUtils.showSuccess(
+            description:
+                "Votre vérification d'identité a été complétée et est en cours d'examen.",
+          );
+          widget.onSuccess();
+        }
+      } else if (result == KycStatus.declined) {
+        ToastUtils.showError(description: "Vérification Didit refusée.");
+      } else {
+        ToastUtils.showError(description: "Vérification Didit échouée.");
+      }
+    } else {
+      ToastUtils.showError(description: "Vérification Didit annulée.");
+    }
+  }
+
+  Future<void> _startVerificationAndroid() async {
+    String token = widget.initialKycSession?.token ?? '';
+
+    if (token.isEmpty) {
+      log("No valid session token found, calling createKycSession");
+      final sessionCreate = await _kycRepository.createKycSession();
+      token = sessionCreate.token;
+    }
+
+    if (token.isEmpty) {
+      throw Exception("Session token was empty");
+    }
+
+    log("_startVerificationAndroid SDK Token: $token");
+
+    // Launch Didit SDK
+    final result = await DiditSdk.startVerification(
+      token,
+      config: DiditConfig(
+        languageCode: 'fr',
+        loggingEnabled: true,
+      ),
+    );
+
+    // Handle results
+    switch (result) {
+      case VerificationCompleted(:final session):
+        if (session.status == VerificationStatus.approved) {
+          if (mounted) {
+            Navigator.pop(context);
+            ToastUtils.showSuccess(
+                description: "Vérification d'identité approuvée !");
+            widget.onSuccess();
+          }
+        } else {
+          if (mounted) {
+            Navigator.pop(context);
+            ToastUtils.showSuccess(
+              description:
+                  "Votre vérification d'identité a été complétée et est en cours d'examen.",
+            );
+            widget.onSuccess();
+          }
+        }
+        break;
+      case VerificationCancelled():
+        ToastUtils.showError(description: "Vérification Didit annulée.");
+        break;
+      case VerificationFailed(:final error):
+        log("Didit Verification Failed - Type: ${error.type}, Message: ${error.message}");
+        ToastUtils.showError(
+            description:
+                "Échec de la vérification Didit [${error.type}]: ${error.message}");
+        break;
+    }
+  }
+
   Future<void> _startDiditVerification() async {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      String token = widget.initialKycSession?.token ?? '';
-
-      if (token.isEmpty) {
-        log("No valid session token found, calling createKycSession");
-        final sessionCreate = await _kycRepository.createKycSession();
-        token = sessionCreate.token;
-      }
-
-      if (token.isEmpty) {
-        throw Exception("Session token was empty");
-      }
-
-      log("_startDiditVerification $token");
-
-      // 2. Launch Didit SDK
-      final result = await DiditSdk.startVerification(
-        token,
-        config: DiditConfig(
-          languageCode: 'fr',
-          loggingEnabled: true,
-        ),
-      );
-
-      // 3. Handle results
-      switch (result) {
-        case VerificationCompleted(:final session):
-          if (session.status == VerificationStatus.approved) {
-            if (mounted) {
-              Navigator.pop(context);
-              ToastUtils.showSuccess(
-                  description: "Vérification d'identité approuvée !");
-              widget.onSuccess();
-            }
-          } else {
-            if (mounted) {
-              Navigator.pop(context);
-              ToastUtils.showSuccess(
-                description:
-                    "Votre vérification d'identité a été complétée et est en cours d'examen.",
-              );
-              widget.onSuccess();
-            }
-          }
-          break;
-        case VerificationCancelled():
-          ToastUtils.showError(description: "Vérification Didit annulée.");
-          break;
-        case VerificationFailed(:final error):
-          log("Didit Verification Failed - Type: ${error.type}, Message: ${error.message}");
-          ToastUtils.showError(
-              description:
-                  "Échec de la vérification Didit [${error.type}]: ${error.message}");
-          break;
-      }
+      await _startVerificationAndroid();
+      // if (Platform.isIOS) {
+      //   await _startVerificationIOS();
+      // } else {
+      //   await _startVerificationAndroid();
+      // }
     } catch (e, s) {
       log("Error: $e $s");
       ToastUtils.showError(

@@ -93,6 +93,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
     required int amount,
     bool force = false,
   }) async {
+    if (state is LOADING_BOOKING) return;
     emit(const LOADING_BOOKING());
     try {
       if (!force) {

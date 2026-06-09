@@ -63,6 +63,34 @@ enum KycStatus {
         return KycStatus.unknown;
     }
   }
+
+  static KycStatus fromUrlStatus(String statusStr) {
+    final clean = statusStr.trim().replaceAll('_', ' ').toLowerCase();
+    switch (clean) {
+      case 'not started':
+        return KycStatus.notStarted;
+      case 'in progress':
+        return KycStatus.inProgress;
+      case 'approved':
+        return KycStatus.approved;
+      case 'declined':
+        return KycStatus.declined;
+      case 'in review':
+        return KycStatus.inReview;
+      case 'awaiting user':
+        return KycStatus.awaitingUser;
+      case 'resubmitted':
+        return KycStatus.resubmitted;
+      case 'expired':
+        return KycStatus.expired;
+      case 'abandoned':
+        return KycStatus.abandoned;
+      case 'kyc expired':
+        return KycStatus.kycExpired;
+      default:
+        return KycStatus.unknown;
+    }
+  }
 }
 
 extension KycSessionModelX on KycSessionModel {

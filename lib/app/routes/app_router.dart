@@ -68,6 +68,7 @@ import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -615,6 +616,13 @@ class AppRouter {
         name: NotificationDetailPage.name,
         builder: (context, state) => NotificationDetailPage(
           notification: state.extra as NotificationModel,
+        ),
+      ),
+      GoRoute(
+        path: '/kyc-webview',
+        name: KycWebViewPage.routeName,
+        builder: (context, state) => KycWebViewPage(
+          url: state.extra as String? ?? '',
         ),
       ),
     ],
