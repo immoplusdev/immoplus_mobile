@@ -12,14 +12,22 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/data/repositories/kyc_repository.dart';
+import 'package:immoplus/app/data/repositories/auth_repository.dart';
+import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'dart:developer';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class BookingCubit extends Cubit<BookingRequestState> {
   BookingServices bookingServices;
   ResidenceRepository residenceRepository;
+  KycRepository kycRepository;
 
-  BookingCubit(this.bookingServices, this.residenceRepository)
+  BookingCubit(
+      this.bookingServices, this.residenceRepository, this.kycRepository)
       : super(const BookingRequestState.initial());
 
   // getBookings() async {
@@ -80,19 +88,54 @@ class BookingCubit extends Cubit<BookingRequestState> {
     }
   }
 
-  orderBooking(
-      {required ReservationRequestBody body, required int amount}) async {
+  orderBooking({
+    required ReservationRequestBody body,
+    required int amount,
+    bool force = false,
+  }) async {
     emit(const LOADING_BOOKING());
     try {
+      if (!force) {
+        try {
+          final sessionManager = getIt<SessionManager>();
+          final currentUser = await sessionManager.getCurrentUser();
+          bool isVerified = false;
+          final userId = currentUser?.userId;
+          if (userId != null) {
+            try {
+              final userProfile =
+                  await AuthRepository().getUserById(userId: userId);
+              if (userProfile.data.identityVerified == true) {
+                isVerified = true;
+              }
+            } catch (e) {
+              log("Failed to fetch user profile by ID: $e");
+            }
+          }
+
+          if (!isVerified) {
+            final kycSession = await kycRepository.getKycSessionMe();
+            if (kycSession == null || kycSession.kycStatus != KycStatus.approved) {
+              emit(BookingRequestState.kycRequired(kycSession: kycSession));
+              return;
+            }
+          }
+        } catch (kycError) {
+          log("KYC or profile check failed: $kycError");
+          // Si aucune session n'existe ou s'il y a une erreur, on requiert le KYC
+          emit(const BookingRequestState.kycRequired());
+          return;
+        }
+      }
+
       ReservationResponse reservationResponse =
           await residenceRepository.createBooking(model: body);
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
       ToastUtils.showSuccess(
-  description: "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
-);
-
-
+        description:
+            "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
+      );
 
       // Navigue vers ReservationEngagementFrame
       final context = NavigationService.navigatorKey.currentContext;

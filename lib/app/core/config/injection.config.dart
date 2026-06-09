@@ -35,6 +35,7 @@ import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
     as _i398;
 import 'package:immoplus/app/data/repositories/furniture_repository.dart'
     as _i976;
+import 'package:immoplus/app/data/repositories/kyc_repository.dart' as _i184;
 import 'package:immoplus/app/data/repositories/notification_repository.dart'
     as _i371;
 import 'package:immoplus/app/data/repositories/residence_repository.dart'
@@ -135,6 +136,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i398.BienImmobilierRepository(gh<_i361.Dio>()));
     gh.factory<_i143.ResidenceRepository>(
         () => _i143.ResidenceRepository(gh<_i361.Dio>()));
+    gh.factory<_i184.KycRepository>(() => _i184.KycRepository(gh<_i361.Dio>()));
     gh.factory<_i745.VisitCubit>(
         () => _i745.VisitCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i488.EstateCubit>(
@@ -189,6 +191,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(
           gh<_i946.BookingServices>(),
           gh<_i143.ResidenceRepository>(),
+          gh<_i184.KycRepository>(),
         ));
     return this;
   }

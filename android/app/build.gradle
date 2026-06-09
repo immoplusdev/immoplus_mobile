@@ -29,6 +29,10 @@ android {
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
+    packagingOptions {
+        pickFirst 'META-INF/versions/9/OSGI-INF/MANIFEST.MF'
+    }
+
     compileOptions {
        sourceCompatibility = JavaVersion.VERSION_11
        targetCompatibility = JavaVersion.VERSION_11

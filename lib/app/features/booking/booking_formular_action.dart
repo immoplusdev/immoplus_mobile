@@ -27,6 +27,7 @@ import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
+import 'package:immoplus/app/features/booking/widgets/kyc_verification_modal.dart';
 import 'package:intl/intl.dart';
 
 class BookingFormularAction extends StatefulWidget {
@@ -147,7 +148,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   }
 
   final bookingServices = getIt<BookingServices>();
-  
+
   @override
   void initState() {
     _formController = FormController(
@@ -258,8 +259,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                     controller: _formController.phoneNumber!),
                 const Gap(4),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: AppColors.primaryLite,
                     borderRadius: BorderRadius.circular(8),
@@ -272,13 +273,11 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                       Expanded(
                         child: Text(
                           "De préférence un numéro WhatsApp actif.",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                color: AppColors.primary,
-                                fontSize: 11,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.primary,
+                                    fontSize: 11,
+                                  ),
                         ),
                       ),
                     ],
@@ -348,9 +347,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                           firstDate: DateTime.now(),
                                           selectedDayHighlightColor:
                                               AppColors.primary,
-                                          selectedRangeHighlightColor:
-                                              AppColors.primary
-                                                  .withValues(alpha: 0.1),
+                                          selectedRangeHighlightColor: AppColors
+                                              .primary
+                                              .withValues(alpha: 0.1),
                                           controlsTextStyle: Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
@@ -368,9 +367,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                             isToday,
                                             textStyle,
                                           }) {
-                                            final bool isBooked = bookedDates
-                                                .any((b) =>
-                                                    isSameDate(b, date));
+                                            final bool isBooked =
+                                                bookedDates.any(
+                                                    (b) => isSameDate(b, date));
                                             if (isBooked) {
                                               return IgnorePointer(
                                                 ignoring: true,
@@ -454,8 +453,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
 
                                             _formController.dates!.clear();
 
-                                            for (var element
-                                                in selectedDates) {
+                                            for (var element in selectedDates) {
                                               _formController.addDate(
                                                   date: element!
                                                       .toIso8601String());
@@ -467,8 +465,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                               .estimateCost(
                                                 residenceId:
                                                     widget.residenceModel.id,
-                                                dateDebut:
-                                                    startDateCalculated,
+                                                dateDebut: startDateCalculated,
                                                 dateFin: endDateCalculated,
                                               );
                                           setState(() {});
@@ -537,7 +534,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12).copyWith(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12).copyWith(
           bottom: MediaQuery.of(context).padding.bottom > 0
               ? MediaQuery.of(context).padding.bottom
               : 16,
@@ -548,6 +546,28 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
               setState(() {
                 estimateCost = state.estimateCost.data;
               });
+            }
+            if (state is KYC_REQUIRED) {
+              KycVerificationModal.show(
+                context,
+                initialKycSession: state.kycSession,
+                onSuccess: () {
+                  if (estimateCost != null) {
+                    context.read<BookingCubit>().orderBooking(
+                          amount: estimateCost!.total.toInt(),
+                          force: true,
+                          body: ReservationRequestBody(
+                            residence: widget.residenceModel.id,
+                            datesReservation: selectedDates
+                                .map((e) => DatesReservationModel(date: e))
+                                .toList(),
+                            clientPhoneNumber:
+                                _formController.phoneNumber!.text,
+                          ),
+                        );
+                  }
+                },
+              );
             }
           },
           builder: (context, state) {
@@ -578,10 +598,11 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                           const Gap(6),
                           Text(
                             'Total estimé',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF667085),
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF667085),
+                                    ),
                           ),
                         ],
                       ),
@@ -590,45 +611,50 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                         AutoSizeText(
                           Utils.formatCurrency(estimateCost!.total.toInt()),
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primary,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.primary,
+                                  ),
                         ),
                         AutoSizeText(
                           'Dont ${Utils.formatCurrency(estimateCost!.frais.toInt())} de frais',
                           maxLines: 1,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: const Color(0xFF98A2B3),
-                                fontSize: 10,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: const Color(0xFF98A2B3),
+                                    fontSize: 10,
+                                  ),
                         ),
                       ] else ...[
                         Text(
                           '-- FCFA',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: const Color(0xFFD0D5DD),
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: const Color(0xFFD0D5DD),
+                                  ),
                         ),
                         Text(
                           'Sélectionnez vos dates',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: const Color(0xFF98A2B3),
-                                fontSize: 10,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: const Color(0xFF98A2B3),
+                                    fontSize: 10,
+                                  ),
                         ),
                       ],
                     ],
                   ),
                 ),
                 const Gap(12),
-                
+
                 // DROITE : Bouton Réserver
                 Expanded(
                   flex: 4,
                   child: SizedBox(
-                    height: 52, // Fixe la hauteur du bouton pour un rendu uniforme
+                    height:
+                        52, // Fixe la hauteur du bouton pour un rendu uniforme
                     child: CustomLoadingButtom(
                       textColor: Colors.white,
                       text: 'Réserver',
@@ -636,13 +662,15 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                       onClick: (state is INITIAL_BOOKING)
                           ? null
                           : () {
-                              if (totalDays < widget.residenceModel.dureeMinSejour) {
+                              if (totalDays <
+                                  widget.residenceModel.dureeMinSejour) {
                                 ToastUtils.showError(
                                     description:
                                         "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
                                 return;
                               }
-                              if (totalDays > widget.residenceModel.dureeMaxSejour) {
+                              if (totalDays >
+                                  widget.residenceModel.dureeMaxSejour) {
                                 ToastUtils.showError(
                                     description:
                                         "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
@@ -680,9 +708,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                                             date: e),
                                                   )
                                                   .toList(),
-                                              clientPhoneNumber:
-                                                  _formController
-                                                      .phoneNumber!.text));
+                                              clientPhoneNumber: _formController
+                                                  .phoneNumber!.text));
                                     },
                                   );
                                 }

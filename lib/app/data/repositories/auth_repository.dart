@@ -190,6 +190,24 @@ class AuthRepository {
     }
   }
 
+  Future<UpdateUserResponseModel> getUserById({required String userId}) async {
+    try {
+      final response = await AuthProvider(dioClient).getUserById(userId);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load user: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to load user: $error');
+    }
+  }
+
   Future<ConfigModel> getConfig() async {
     try {
       final response = await AuthProvider(dioClient).getCongig();

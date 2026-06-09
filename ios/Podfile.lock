@@ -18,6 +18,10 @@ PODS:
     - FlutterMacOS
   - device_info_plus (0.0.1):
     - Flutter
+  - didit_sdk (4.0.4):
+    - DiditSDK/All (= 4.0.4)
+    - Flutter
+  - DiditSDK/All (4.0.4)
   - FBAEMKit (18.0.2):
     - FBSDKCoreKit_Basics (= 18.0.2)
   - FBSDKCoreKit (18.0.2):
@@ -240,6 +244,8 @@ DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - cupertino_http (from `.symlinks/plugins/cupertino_http/darwin`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - didit_sdk (from `.symlinks/plugins/didit_sdk/ios`)
+  - DiditSDK/All (from `https://raw.githubusercontent.com/didit-protocol/sdk-ios/4.0.4/DiditSDK.podspec`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `Flutter`)
@@ -312,6 +318,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cupertino_http/darwin"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
+  didit_sdk:
+    :path: ".symlinks/plugins/didit_sdk/ios"
+  DiditSDK:
+    :podspec: https://raw.githubusercontent.com/didit-protocol/sdk-ios/4.0.4/DiditSDK.podspec
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_remote_config:
@@ -388,6 +398,8 @@ SPEC CHECKSUMS:
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
+  didit_sdk: 3385d47d2fd3f6d73e4321e4a106c663b2fbb558
+  DiditSDK: 050bd3ebad2cf9491febf5a9dffe59349ff4b1b9
   FBAEMKit: 56a4f5a9607957b547b6458b17a98c5bb2736367
   FBSDKCoreKit: 54f1240567e16862ab71c53c33dc347db5c524c5
   FBSDKCoreKit_Basics: eb530cd6a79030dbb11df460aafb2767bcad9028
@@ -445,6 +457,6 @@ SPEC CHECKSUMS:
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
 
-PODFILE CHECKSUM: 6b8928c7fc44ff03303f2cc44dc85827075ad021
+PODFILE CHECKSUM: 98ae69268ab91a33d2413541665ae7afa5abc75c
 
 COCOAPODS: 1.16.2

@@ -193,7 +193,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
                         //   topRight: Radius.circular(20),
                         // ),
                         child: SizedBox(
-                          height: Platform.isAndroid ? 105 : null,
+                          height: Platform.isAndroid
+                              ? 80 + MediaQuery.of(context).padding.bottom
+                              : null,
                           child: BottomNavigationBar(
                             type: BottomNavigationBarType.fixed,
                             backgroundColor: state == PageState.vivre
@@ -231,7 +233,8 @@ class _HomePageWrapperState extends State<HomePageWrapper>
                                 isActive: state == PageState.forMe,
                                 immoMode: state == PageState.vivre,
                                 svgAsset: 'assets/svgs/icons/immomacth.svg',
-                                badgeWidget: NavBadge(notifier: Constantes.imatchBadgeCount),
+                                badgeWidget: NavBadge(
+                                    notifier: Constantes.imatchBadgeCount),
                               ),
                               _buildNavItem(
                                 icon: Iconsax.user,
