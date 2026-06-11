@@ -15,7 +15,22 @@ import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
-enum OPERATOR_NAME { Orange, MTN, Moov, Ecobank, Wave, Cash, visa }
+enum OPERATOR_NAME {
+  Orange,
+  MTN,
+  Moov,
+  Ecobank,
+  Wave,
+  Cash,
+  visa,
+  stripe;
+
+  /// Valeur envoyée au backend (et stockée dans OperatorModel.value).
+  String get apiValue {
+    if (this == stripe) return 'visa_card';
+    return name.toLowerCase();
+  }
+}
 
 extension StringExtension on String {
   String capitalize() {

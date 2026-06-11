@@ -24,6 +24,8 @@ _$PaymentItentDataImpl _$$PaymentItentDataImplFromJson(
           : Hub2NextAction.fromJson(
               json['hub2NextAction'] as Map<String, dynamic>),
       hub2Token: json['hub2Token'] as String? ?? '',
+      stripePaymentIntentId: json['stripePaymentIntentId'] as String?,
+      stripeClientSecret: json['stripeClientSecret'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -50,6 +52,8 @@ Map<String, dynamic> _$$PaymentItentDataImplToJson(
       'hub2Exception': instance.hub2Exception,
       'hub2NextAction': instance.hub2NextAction,
       'hub2Token': instance.hub2Token,
+      'stripePaymentIntentId': instance.stripePaymentIntentId,
+      'stripeClientSecret': instance.stripeClientSecret,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'deletedAt': instance.deletedAt?.toIso8601String(),

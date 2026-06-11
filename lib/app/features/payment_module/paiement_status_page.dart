@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/features/payment_module/components/moov/moov_page.dart';
 import 'package:immoplus/app/features/payment_module/components/mtn/mtn_page.dart';
 import 'package:immoplus/app/features/payment_module/components/orange/orange_page.dart';
+import 'package:immoplus/app/features/payment_module/components/stripe/stripe_page.dart';
 import 'package:immoplus/app/features/payment_module/components/wave/wave_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
@@ -47,6 +48,13 @@ class _PaiementStatusPageState extends State<PaiementStatusPage> {
           else if (OrderPaymentController.selectedOperator.value ==
               OPERATOR_NAME.MTN.name.toLowerCase())
             MtnPage(
+              amount: widget.paymentPageAdapter.amount,
+              orderID: widget.paymentPageAdapter.itemId,
+              productType: widget.paymentPageAdapter.collection,
+            )
+          else if (OrderPaymentController.selectedOperator.value ==
+              OPERATOR_NAME.stripe.apiValue)
+            StripePage(
               amount: widget.paymentPageAdapter.amount,
               orderID: widget.paymentPageAdapter.itemId,
               productType: widget.paymentPageAdapter.collection,

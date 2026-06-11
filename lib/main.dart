@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/appli/my_app.dart';
@@ -10,7 +12,10 @@ final talker = Talker();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // dotenv est chargé dans configureDependencies() → Stripe s'init après
   await configureDependencies();
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
+  await Stripe.instance.applySettings();
   await GoogleFonts.pendingFonts([
     GoogleFonts.sen(),
     GoogleFonts.inter(),

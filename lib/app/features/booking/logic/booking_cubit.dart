@@ -116,7 +116,8 @@ class BookingCubit extends Cubit<BookingRequestState> {
 
           if (!isVerified) {
             final kycSession = await kycRepository.getKycSessionMe();
-            if (kycSession == null || kycSession.kycStatus != KycStatus.approved) {
+            if (kycSession == null ||
+                kycSession.kycStatus != KycStatus.approved) {
               emit(BookingRequestState.kycRequired(kycSession: kycSession));
               return;
             }

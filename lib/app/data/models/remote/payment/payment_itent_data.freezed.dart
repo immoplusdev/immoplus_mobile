@@ -33,6 +33,8 @@ mixin _$PaymentItentData {
   Hub2NextAction? get hub2NextAction => throw _privateConstructorUsedError;
   String get hub2Token =>
       throw _privateConstructorUsedError; //Hub2Metadata? hub2Metadata,
+  String? get stripePaymentIntentId => throw _privateConstructorUsedError;
+  String? get stripeClientSecret => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
@@ -66,6 +68,8 @@ abstract class $PaymentItentDataCopyWith<$Res> {
       String? hub2Exception,
       Hub2NextAction? hub2NextAction,
       String hub2Token,
+      String? stripePaymentIntentId,
+      String? stripeClientSecret,
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt});
@@ -100,6 +104,8 @@ class _$PaymentItentDataCopyWithImpl<$Res, $Val extends PaymentItentData>
     Object? hub2Exception = freezed,
     Object? hub2NextAction = freezed,
     Object? hub2Token = null,
+    Object? stripePaymentIntentId = freezed,
+    Object? stripeClientSecret = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
@@ -153,6 +159,14 @@ class _$PaymentItentDataCopyWithImpl<$Res, $Val extends PaymentItentData>
           ? _value.hub2Token
           : hub2Token // ignore: cast_nullable_to_non_nullable
               as String,
+      stripePaymentIntentId: freezed == stripePaymentIntentId
+          ? _value.stripePaymentIntentId
+          : stripePaymentIntentId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stripeClientSecret: freezed == stripeClientSecret
+          ? _value.stripeClientSecret
+          : stripeClientSecret // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -204,6 +218,8 @@ abstract class _$$PaymentItentDataImplCopyWith<$Res>
       String? hub2Exception,
       Hub2NextAction? hub2NextAction,
       String hub2Token,
+      String? stripePaymentIntentId,
+      String? stripeClientSecret,
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt});
@@ -237,6 +253,8 @@ class __$$PaymentItentDataImplCopyWithImpl<$Res>
     Object? hub2Exception = freezed,
     Object? hub2NextAction = freezed,
     Object? hub2Token = null,
+    Object? stripePaymentIntentId = freezed,
+    Object? stripeClientSecret = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
@@ -290,6 +308,14 @@ class __$$PaymentItentDataImplCopyWithImpl<$Res>
           ? _value.hub2Token
           : hub2Token // ignore: cast_nullable_to_non_nullable
               as String,
+      stripePaymentIntentId: freezed == stripePaymentIntentId
+          ? _value.stripePaymentIntentId
+          : stripePaymentIntentId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stripeClientSecret: freezed == stripeClientSecret
+          ? _value.stripeClientSecret
+          : stripeClientSecret // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -322,6 +348,8 @@ class _$PaymentItentDataImpl implements _PaymentItentData {
       this.hub2Exception,
       this.hub2NextAction,
       this.hub2Token = '',
+      this.stripePaymentIntentId,
+      this.stripeClientSecret,
       this.createdAt,
       this.updatedAt,
       this.deletedAt});
@@ -365,6 +393,10 @@ class _$PaymentItentDataImpl implements _PaymentItentData {
   final String hub2Token;
 //Hub2Metadata? hub2Metadata,
   @override
+  final String? stripePaymentIntentId;
+  @override
+  final String? stripeClientSecret;
+  @override
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
@@ -373,7 +405,7 @@ class _$PaymentItentDataImpl implements _PaymentItentData {
 
   @override
   String toString() {
-    return 'PaymentItentData(id: $id, amount: $amount, amountNoFees: $amountNoFees, paymentType: $paymentType, collection: $collection, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, itemId: $itemId, hub2PaymentId: $hub2PaymentId, hub2Exception: $hub2Exception, hub2NextAction: $hub2NextAction, hub2Token: $hub2Token, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+    return 'PaymentItentData(id: $id, amount: $amount, amountNoFees: $amountNoFees, paymentType: $paymentType, collection: $collection, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, itemId: $itemId, hub2PaymentId: $hub2PaymentId, hub2Exception: $hub2Exception, hub2NextAction: $hub2NextAction, hub2Token: $hub2Token, stripePaymentIntentId: $stripePaymentIntentId, stripeClientSecret: $stripeClientSecret, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
 
   @override
@@ -402,6 +434,10 @@ class _$PaymentItentDataImpl implements _PaymentItentData {
                 other.hub2NextAction == hub2NextAction) &&
             (identical(other.hub2Token, hub2Token) ||
                 other.hub2Token == hub2Token) &&
+            (identical(other.stripePaymentIntentId, stripePaymentIntentId) ||
+                other.stripePaymentIntentId == stripePaymentIntentId) &&
+            (identical(other.stripeClientSecret, stripeClientSecret) ||
+                other.stripeClientSecret == stripeClientSecret) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -426,6 +462,8 @@ class _$PaymentItentDataImpl implements _PaymentItentData {
       hub2Exception,
       hub2NextAction,
       hub2Token,
+      stripePaymentIntentId,
+      stripeClientSecret,
       createdAt,
       updatedAt,
       deletedAt);
@@ -461,6 +499,8 @@ abstract class _PaymentItentData implements PaymentItentData {
       final String? hub2Exception,
       final Hub2NextAction? hub2NextAction,
       final String hub2Token,
+      final String? stripePaymentIntentId,
+      final String? stripeClientSecret,
       final DateTime? createdAt,
       final DateTime? updatedAt,
       final DateTime? deletedAt}) = _$PaymentItentDataImpl;
@@ -492,6 +532,10 @@ abstract class _PaymentItentData implements PaymentItentData {
   Hub2NextAction? get hub2NextAction;
   @override
   String get hub2Token; //Hub2Metadata? hub2Metadata,
+  @override
+  String? get stripePaymentIntentId;
+  @override
+  String? get stripeClientSecret;
   @override
   DateTime? get createdAt;
   @override

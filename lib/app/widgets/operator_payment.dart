@@ -74,10 +74,10 @@ class OrderPaymentController {
     ),
     OperatorModel(
       id: 0,
-      name: "Visa card",
-      value: 'visa',
+      name: "Carte bancaire",
+      value: 'visa_card',
       logo:
-          "https://play-lh.googleusercontent.com/lKebetEHVDuBrbq5KJJ4MK6V6BaFuo0Mj9Qy9YZkoenrEDZVU-IzLrbAuoKMaCT4nA",
+          "https://img.freepik.com/vecteurs-libre/appartement-securite-pour-carte-credit_78370-3588.jpg?semt=ais_hybrid&w=740&q=80",
       prefix: '',
       fee: 2,
     ),

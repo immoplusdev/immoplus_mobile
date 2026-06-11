@@ -71,50 +71,9 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                           OrderPaymentController.retraitOperatorsItems[index];
                     });
 
-                    if (OrderPaymentController.selectedOperator.value ==
-                        OPERATOR_NAME.visa.name.toLowerCase()) {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        // enableDrag: false,
-                        // isDismissible: false,
-
-                        useSafeArea: true,
-                        useRootNavigator: true,
-                        backgroundColor: AppColors.scafold,
-                        scrollControlDisabledMaxHeightRatio:
-                            BorderSide.strokeAlignCenter,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        //showDragHandle: true,
-                        context: context,
-                        builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15)
-                                .copyWith(bottom: 30),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.moneyBill,
-                                  size: 50,
-                                  color: Colors.grey,
-                                ),
-                                Text(
-                                  "Le paiement par ${OrderPaymentController.selectedOperator.name} n'est pas disponible pour le moment. Veuillez si possible essayer un autre moyen de paiement ou contacter notre service client.",
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      // TODO
-                      context.pushNamed(PaiementStatusPage.name,
-                          extra: widget.paymentPageAdapter);
-                    }
+                    // TODO
+                    context.pushNamed(PaiementStatusPage.name,
+                        extra: widget.paymentPageAdapter);
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
