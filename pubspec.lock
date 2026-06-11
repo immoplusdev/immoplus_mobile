@@ -484,10 +484,9 @@ packages:
   didit_sdk:
     dependency: "direct main"
     description:
-      name: didit_sdk
-      sha256: da9766d59e893b03007c535ec264f608d1d2c29c6b589b8d989ae32117a78021
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/didit_sdk"
+      relative: true
+    source: path
     version: "4.0.4"
   diff_match_patch:
     dependency: transitive

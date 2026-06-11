@@ -207,7 +207,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
     }
   }
 
-  Future<void> _startVerificationAndroid() async {
+  Future<void> _startVerificationNative() async {
     String token = widget.initialKycSession?.token ?? '';
 
     if (token.isEmpty) {
@@ -220,7 +220,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
       throw Exception("Session token was empty");
     }
 
-    log("_startVerificationAndroid SDK Token: $token");
+    log("_startVerificationNative SDK Token: $token");
 
     // Launch Didit SDK
     final result = await DiditSdk.startVerification(
@@ -268,12 +268,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      await _startVerificationAndroid();
-      // if (Platform.isIOS) {
-      //   await _startVerificationIOS();
-      // } else {
-      //   await _startVerificationAndroid();
-      // }
+      await _startVerificationNative();
     } catch (e, s) {
       log("Error: $e $s");
       ToastUtils.showError(
