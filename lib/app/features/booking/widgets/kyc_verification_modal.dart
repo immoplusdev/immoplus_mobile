@@ -253,7 +253,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
         }
         break;
       case VerificationCancelled():
-        ToastUtils.showError(description: "Vérification Didit annulée.");
+        // ToastUtils.showError(description: "Vérification Didit annulée.");
         break;
       case VerificationFailed(:final error):
         log("Didit Verification Failed - Type: ${error.type}, Message: ${error.message}");
@@ -409,7 +409,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                             ),
                             Gap(8),
                             Text(
-                              "Vérification automatisée (Didit)",
+                              "Vérification automatisée",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
