@@ -20,8 +20,13 @@ class PaiementStatusPage extends StatefulWidget {
 class _PaiementStatusPageState extends State<PaiementStatusPage> {
   @override
   Widget build(BuildContext context) {
+    // Pas d'AppBar pour Stripe : StripeCardPage a son propre bouton ✕
+    // et StripeResultPage ne doit pas avoir de retour arrière.
+    final isStripe = OrderPaymentController.selectedOperator.value ==
+        OPERATOR_NAME.stripe.apiValue;
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: isStripe ? null : AppBar(),
       body: SingleChildScrollView(
         child: Column(children: [
           if (OrderPaymentController.selectedOperator.value ==

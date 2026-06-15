@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/payment_module/components/stripe/stripe_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/routes/app_router.dart';
@@ -59,10 +60,14 @@ class _StripeCardPageState extends State<StripeCardPage> {
         ),
       );
 
-      // 3. Afficher la payment sheet (Stripe gère carte, Apple Pay, Google Pay, 3DS)
+      // 3. Stopper le polling avant que Stripe prenne le premier plan,
+      //    sinon les ticks accumulés se déclenchent au retour et causent des 504.
+      ReservationEngagementFrame.onPaymentCompleted();
+
+      // 4. Afficher la payment sheet (Stripe gère carte, Apple Pay, Google Pay, 3DS)
       await Stripe.instance.presentPaymentSheet();
 
-      // 4. Succès → étape résultat
+      // 5. Succès → afficher résultat
       if (!mounted) return;
       widget.controller.goToResult(model.data);
     } on StripeException catch (e) {

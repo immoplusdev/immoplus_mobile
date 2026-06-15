@@ -92,11 +92,14 @@ class _StripePageState extends State<StripePage> {
               key: ValueKey(_controller.currentStep),
               height: _controller.currentStep == StripePaymentStep.cardEntry
                   ? 280 + MediaQuery.of(context).viewInsets.bottom
-                  : 400 + MediaQuery.of(context).viewInsets.bottom,
+                  : MediaQuery.of(context).size.height * 0.80,
               child: _controller.currentStep == StripePaymentStep.cardEntry
                   ? StripeCardPage(controller: _controller)
-                  : StripeResultPage(
-                      paymentIntentData: _controller.paymentIntentData!,
+                  : PopScope(
+                      canPop: false,
+                      child: StripeResultPage(
+                        paymentIntentData: _controller.paymentIntentData!,
+                      ),
                     ),
             ),
           );

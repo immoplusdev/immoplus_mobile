@@ -21,6 +21,11 @@ import 'package:immoplus/app/constants/constantes.dart';
 class ReservationEngagementFrame extends StatefulWidget {
   static const String name = 'reservation_engagement';
 
+  // Déclenché par StripeCardPage dès que presentPaymentSheet() réussit.
+  // Arrête le polling agressif pour éviter les requêtes concurrentes.
+  static final ValueNotifier<int> paymentDoneNotifier = ValueNotifier<int>(0);
+  static void onPaymentCompleted() => paymentDoneNotifier.value++;
+
   final String ownerName;
   final String reservationId;
   final double montantTotal;
@@ -104,9 +109,16 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
 
     ReservationPendingBanner.bannerStateNotifier.addListener(_onStateChanged);
     ReservationPendingBanner.pushNotifier.addListener(_onPushReceived);
+    ReservationEngagementFrame.paymentDoneNotifier.addListener(_onPaymentDone);
 
     // ── Polling agressif : fetch API directement toutes les 5s ──────────────
     _startAggressiveRefresh();
+  }
+
+  // ── Paiement Stripe confirmé → stopper le polling immédiatement ───────────
+  void _onPaymentDone() {
+    _aggressiveRefreshTimer?.cancel();
+    _messageRotationTimer?.cancel();
   }
 
   // ── Push notification → re-fetch immédiat ─────────────────────────────────
@@ -159,8 +171,17 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           newState = ReservationBannerState.endedWaitingExpired;
           break;
         case StatusReservation.clientSansReponse:
+        case StatusReservation.clientAnnuleReservation:
           newState = ReservationBannerState.endedPaymentExpired;
           break;
+        case StatusReservation.valide:
+        case StatusReservation.enCours:
+        case StatusReservation.terminee:
+          // Paiement confirmé — on arrête le polling sans rediriger vers l'accueil
+          // (l'utilisateur est sur l'écran de succès du paiement)
+          _aggressiveRefreshTimer?.cancel();
+          _messageRotationTimer?.cancel();
+          return;
         default:
           newState = ReservationBannerState.idle;
       }
@@ -257,6 +278,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     ReservationPendingBanner.bannerStateNotifier
         .removeListener(_onStateChanged);
     ReservationPendingBanner.pushNotifier.removeListener(_onPushReceived);
+    ReservationEngagementFrame.paymentDoneNotifier.removeListener(_onPaymentDone);
     _messageController.dispose();
     super.dispose();
   }
