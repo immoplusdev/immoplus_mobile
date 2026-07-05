@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
@@ -8,9 +7,8 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/widgets/custom_text_field.dart';
-import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
+import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
+import 'package:immoplus/app/features/suggest/pages/components/suggest_result_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 
 class SearchResultPage extends StatefulWidget {
@@ -146,58 +144,16 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
-      appBar: AppBar(
-        backgroundColor: AppColors.whiteBackground,
-        elevation: 0,
-        leading: IconButton(
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: AppColors.primary,
-            size: 22,
-          ),
-          onPressed: () => context.pop(),
-        ),
-        titleSpacing: 0,
-        title: GestureDetector(
-          onTap: () => context.pop(), // Go back to search suggestions page
-          child: AbsorbPointer(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: SizedBox(
-                height: 48,
-                child: CustomTextField(
-                  readOnly: true,
-                  bottomPadding: 0,
-                  controller: _searchController,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  prefixIcon: const Icon(
-                    Iconsax.search_normal_1,
-                    color: Colors.black,
-                    size: 18,
-                  ),
-                  sufixIcon: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.cancel,
-                      color: AppColors.primary,
-                      size: 18,
-                    ),
-                    onPressed: () => context.pop(),
-                  ),
-                  fillColor: Colors.white,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                ),
-              ),
-            ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: SafeArea(
+          child: SuggestSearchBar(
+            controller: _searchController,
+            readOnly: true,
+            onTap: () => context.pop(), // Go back to search suggestions page
+            showClearButton: true,
+            onClear: () => context.pop(),
+            onBackPressed: () => context.pop(),
           ),
         ),
       ),
@@ -219,7 +175,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     ),
                     itemBuilder: (context, item, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
-                      child: ResidenceCard(residence: item),
+                      child: SuggestResultCard(item: item),
                     ),
                   ),
                 )
@@ -238,7 +194,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     ),
                     itemBuilder: (context, item, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
-                      child: EstateCard(bienImmobilierModel: item),
+                      child: SuggestResultCard(item: item),
                     ),
                   ),
                 ),

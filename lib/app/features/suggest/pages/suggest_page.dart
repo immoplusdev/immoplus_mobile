@@ -15,6 +15,7 @@ import 'package:immoplus/app/features/suggest/logic/suggest_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggestion_tile.dart';
+import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 
 class SuggestPage extends StatefulWidget {
   final String? category;
@@ -174,88 +175,17 @@ class _SuggestPageState extends State<SuggestPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Top Search Bar
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Back Button
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: AppColors.primary,
-                      size: 22,
-                    ),
-                    onPressed: () => context.pop(),
-                  ),
-
-                  const Gap(8),
-
-                  // Text Field
-                  Expanded(
-                    child: SizedBox(
-                      height: 48,
-                      child: CustomTextField(
-                        controller: _searchController,
-                        focusNode: _focusNode,
-                        labelText: 'Recherche...',
-                        bottomPadding: 0,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                        prefixIcon: Icon(
-                          Iconsax.search_normal_1,
-                          color: AppColors.primary,
-                          size: 18,
-                        ),
-                        sufixIcon: _showClearButton
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.cancel,
-                                  color: Colors.grey.shade600,
-                                  size: 18,
-                                ),
-                                onPressed: () {
-                                  _searchController.clear();
-                                },
-                              )
-                            : null,
-                        textInputAction: TextInputAction.search,
-                        onFieldSubmitted: _handleSearchSubmit,
-                        fillColor: Colors.grey.shade100,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey.shade200),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const Gap(12),
-
-                  // Search Text Button
-                  GestureDetector(
-                    onTap: () => _handleSearchSubmit(_searchController.text),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        'Recherche',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+             SuggestSearchBar(
+              controller: _searchController,
+              focusNode: _focusNode,
+              showClearButton: _showClearButton,
+              showSearchButton: true,
+              onClear: () {
+                _searchController.clear();
+              },
+              onFieldSubmitted: _handleSearchSubmit,
+              onSearchPressed: () => _handleSearchSubmit(_searchController.text),
+              onBackPressed: () => context.pop(),
             ),
 
             const Divider(height: 1),
