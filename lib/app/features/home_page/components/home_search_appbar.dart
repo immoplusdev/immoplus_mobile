@@ -14,6 +14,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
@@ -32,6 +33,7 @@ import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/logic/banners/banners_state.dart';
 import 'package:immoplus/app/features/home_page/components/banner_card.dart';
+import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
 class HomeSearchAppbar extends StatefulWidget {
@@ -163,10 +165,16 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
 
   // Réagir aux changements externes de FilterHandler (ex: suppression du chip)
   void _onFilterChanged() {
-    if (FilterHandler.search == null && _searchController.text.isNotEmpty) {
-      EasyDebounce.cancel(_searchDebounceKey);
-      _searchController.clear();
-      HomePageState.refreshPage(widget.currentIndex);
+    if (FilterHandler.search == null) {
+      if (_searchController.text.isNotEmpty) {
+        EasyDebounce.cancel(_searchDebounceKey);
+        _searchController.clear();
+        HomePageState.refreshPage(widget.currentIndex);
+      }
+    } else {
+      if (_searchController.text != FilterHandler.search) {
+        _searchController.text = FilterHandler.search!;
+      }
     }
   }
 
@@ -408,9 +416,26 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       },
       child: BlocBuilder<FilterCubit, FilterHandler>(
         builder: (context, filterState) {
+          final isFurnitureTab = widget.currentIndex == HomeTab.furniture.value;
+
           final searchField = SizedBox(
             height: 57.5,
             child: CustomTextField(
+              readOnly: !isFurnitureTab,
+              onTap: isFurnitureTab
+                  ? null
+                  : () {
+                      final category =
+                          HomeTab.values[widget.currentIndex].category;
+                      context.pushNamed(
+                        SuggestPage.routeName,
+                        extra: {
+                          'category': category,
+                          'lat': FilterHandler.lat,
+                          'lng': FilterHandler.long,
+                        },
+                      );
+                    },
               contentPadding: const EdgeInsets.symmetric(vertical: 0),
               labelText: 'Que cherchez-vous ?',
               prefixIcon: Icon(
@@ -439,31 +464,35 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                       ),
                       onPressed: _showFilterDialog,
                     ),
-              onFieldSubmitted: (keyword) {
-                if (FilterHandler.search != null) {
-                  if (FilterHandler.search!.isNotEmpty) {
-                    log(keyword);
-                    HomePageState.refreshPage(widget.currentIndex);
-                  } else {
-                    FilterHandler.search = null;
-                    FilterHandler.notifyChange();
-                    HomePageState.refreshPage(widget.currentIndex);
-                  }
-                }
-              },
-              onChanged: (text) {
-                EasyDebounce.debounce(
-                  _searchDebounceKey,
-                  const Duration(milliseconds: _searchDeboucemillisecond),
-                  () {
-                    final search = text.isNotEmpty ? text : null;
-                    FilterHandler.search = search;
-                    FilterHandler.notifyChange();
-                    if (search != null) log(text);
-                    HomePageState.refreshPage(widget.currentIndex);
-                  },
-                );
-              },
+              onFieldSubmitted: isFurnitureTab
+                  ? (keyword) {
+                      if (FilterHandler.search != null) {
+                        if (FilterHandler.search!.isNotEmpty) {
+                          log(keyword);
+                          HomePageState.refreshPage(widget.currentIndex);
+                        } else {
+                          FilterHandler.search = null;
+                          FilterHandler.notifyChange();
+                          HomePageState.refreshPage(widget.currentIndex);
+                        }
+                      }
+                    }
+                  : null,
+              onChanged: isFurnitureTab
+                  ? (text) {
+                      EasyDebounce.debounce(
+                        _searchDebounceKey,
+                        const Duration(milliseconds: _searchDeboucemillisecond),
+                        () {
+                          final search = text.isNotEmpty ? text : null;
+                          FilterHandler.search = search;
+                          FilterHandler.notifyChange();
+                          if (search != null) log(text);
+                          HomePageState.refreshPage(widget.currentIndex);
+                        },
+                      );
+                    }
+                  : null,
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
@@ -576,13 +605,15 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize:
-                      Size.fromHeight(widget.currentIndex == 0 ? 50 : 100),
+                  preferredSize: Size.fromHeight(
+                      widget.currentIndex == HomeTab.residence.value
+                          ? 50
+                          : 100),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       HomeChoiceMenu(),
-                      if (widget.currentIndex != 0) ...[
+                      if (widget.currentIndex != HomeTab.residence.value) ...[
                         const Gap(15),
                         _buildSubCategoryTabs()
                       ],

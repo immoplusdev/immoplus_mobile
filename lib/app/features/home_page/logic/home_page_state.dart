@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/home_page/screens/estates_list.dart';
 import 'package:immoplus/app/features/home_page/screens/furnitures_list.dart';
 import 'package:immoplus/app/features/home_page/screens/lands_list.dart';
@@ -26,9 +27,9 @@ class HomePageState {
     pagingControllerResidence.refresh();
   }
 
-  /// Refresh sécurisé : incrémente le token pour l'index 0 (résidences)
+  /// Refresh sécurisé : incrémente le token pour l'index de la tab résidences
   static void refreshPage(int index) {
-    if (index == 0) {
+    if (index == HomeTab.residence.value) {
       refreshResidences();
     } else {
       getPageListController(index).refresh();
@@ -38,19 +39,29 @@ class HomePageState {
   int indexPage;
   HomePageState({required this.indexPage});
 
-  static Widget getPageListFromIndex(int index) => switch (index) {
-        0 => const ResidencesList(),
-        1 => const EstatesList(),
-        2 => const FurnituresList(),
-        3 => const LandsList(),
-        _ => const ResidencesList(),
-      };
+  static Widget getPageListFromIndex(int index) {
+    final tab = HomeTab.values.firstWhere(
+      (t) => t.value == index,
+      orElse: () => HomeTab.residence,
+    );
+    return switch (tab) {
+      HomeTab.residence => const ResidencesList(),
+      HomeTab.location => const EstatesList(),
+      HomeTab.furniture => const FurnituresList(),
+      HomeTab.bien => const LandsList(),
+    };
+  }
 
-  static PagingController getPageListController(int index) => switch (index) {
-        0 => pagingControllerResidence,
-        1 => pagingControllerEstate,
-        2 => pagingControllerFurniture,
-        3 => pagingControllerLand,
-        _ => pagingControllerResidence,
-      };
+  static PagingController getPageListController(int index) {
+    final tab = HomeTab.values.firstWhere(
+      (t) => t.value == index,
+      orElse: () => HomeTab.residence,
+    );
+    return switch (tab) {
+      HomeTab.residence => pagingControllerResidence,
+      HomeTab.location => pagingControllerEstate,
+      HomeTab.furniture => pagingControllerFurniture,
+      HomeTab.bien => pagingControllerLand,
+    };
+  }
 }

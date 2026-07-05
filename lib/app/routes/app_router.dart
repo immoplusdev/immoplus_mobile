@@ -69,6 +69,8 @@ import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
+import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -322,6 +324,32 @@ class AppRouter {
         path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
+      ),
+      GoRoute(
+        path: SuggestPage.routePath,
+        name: SuggestPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SuggestPage(
+            category: extra['category'] as String?,
+            lat: extra['lat'] as double?,
+            lng: extra['lng'] as double?,
+          );
+        },
+      ),
+      GoRoute(
+        path: SearchResultPage.routePath,
+        name: SearchResultPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SearchResultPage(
+            category: extra['category'] as String,
+            search: extra['search'] as String?,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+            displayText: extra['displayText'] as String,
+          );
+        },
       ),
       GoRoute(
         path: '/otp-confirm',

@@ -40,6 +40,8 @@ import 'package:immoplus/app/data/repositories/notification_repository.dart'
     as _i371;
 import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
+import 'package:immoplus/app/data/repositories/suggest_repository.dart'
+    as _i743;
 import 'package:immoplus/app/data/repositories/user_preference_repository.dart'
     as _i715;
 import 'package:immoplus/app/features/ai_assistant/services/chat_history_service.dart'
@@ -68,6 +70,8 @@ import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart'
     as _i872;
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart'
     as _i85;
+import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart'
+    as _i672;
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit.dart'
     as _i57;
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart' as _i745;
@@ -134,6 +138,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i443.AlertRepository(gh<_i361.Dio>()));
     gh.factory<_i398.BienImmobilierRepository>(
         () => _i398.BienImmobilierRepository(gh<_i361.Dio>()));
+    gh.factory<_i743.SuggestRepository>(
+        () => _i743.SuggestRepository(gh<_i361.Dio>()));
     gh.factory<_i143.ResidenceRepository>(
         () => _i143.ResidenceRepository(gh<_i361.Dio>()));
     gh.factory<_i184.KycRepository>(() => _i184.KycRepository(gh<_i361.Dio>()));
@@ -188,6 +194,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i715.UserPreferenceRepository>(),
           gh<_i22.SessionManager>(),
         ));
+    gh.factory<_i672.SuggestCubit>(
+        () => _i672.SuggestCubit(gh<_i743.SuggestRepository>()));
     gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(
           gh<_i946.BookingServices>(),
           gh<_i143.ResidenceRepository>(),
