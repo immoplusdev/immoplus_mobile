@@ -13,7 +13,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
+import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ResidencesList extends StatefulWidget {
@@ -153,8 +153,8 @@ class _ResidencesListState extends State<ResidencesList> {
               itemBuilder: (context, item, index) => Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 1)
                     .copyWith(bottom: 13),
-                child: ResidenceCard(
-                  residence: item,
+                child: UnifiedPropertyCard(
+                  item: item,
                 ),
               ),
             ),

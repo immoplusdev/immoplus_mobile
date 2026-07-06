@@ -6,7 +6,7 @@ import 'package:immoplus/app/features/home_page/components/empty_elements_indica
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
+import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class LandsList extends StatefulWidget {
@@ -87,8 +87,8 @@ class _LandsListState extends State<LandsList> {
           ),
           itemBuilder: (context, item, index) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: EstateCard(
-              bienImmobilierModel: item,
+            child: UnifiedPropertyCard(
+              item: item,
             ),
           ),
         ),

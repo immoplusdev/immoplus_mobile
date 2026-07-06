@@ -12,10 +12,10 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 
-class SuggestResultCard extends StatelessWidget {
+class UnifiedPropertyCard extends StatelessWidget {
   final dynamic item; // Can be ResidenceModel or BienImmobilierModel
 
-  const SuggestResultCard({super.key, required this.item})
+  const UnifiedPropertyCard({super.key, required this.item})
       : assert(item is ResidenceModel || item is BienImmobilierModel);
 
   String get name => item is ResidenceModel
@@ -94,19 +94,6 @@ class SuggestResultCard extends StatelessWidget {
     return "Disponible";
   }
 
-  // String get durationText {
-  //   if (isResidence) {
-  //     // Formats stay info or default stay dates
-  //     final min = (item as ResidenceModel).dureeMinSejour;
-  //     return min > 0 ? "Min. $min nuits" : "Flexible";
-  //   }
-  //   if (item is BienImmobilierModel) {
-  //     final b = item as BienImmobilierModel;
-  //     return b.aLouer ? "Location" : "Vente";
-  //   }
-  //   return "Disponible";
-  // }
-
   @override
   Widget build(BuildContext context) {
     final list = item is ResidenceModel
@@ -116,6 +103,9 @@ class SuggestResultCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
+        // color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade100, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
@@ -154,14 +144,14 @@ class SuggestResultCard extends StatelessWidget {
                     children: [
                       // Title
                       Text(
-                        name,
+                        name.capitalize(),
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
                                   fontSize: 16,
                                 ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
 
@@ -198,6 +188,7 @@ class SuggestResultCard extends StatelessWidget {
                       const Gap(8),
                       Divider(height: 1, color: Colors.grey.withOpacity(.4)),
                       const Gap(8),
+
                       // Bottom Row: Date / Price
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

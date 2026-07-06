@@ -524,9 +524,9 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                 toolbarHeight: hasVisibleBanners
                     ? _Constants.toolbarHeightWithBanner
                     : _Constants.toolbarHeightWithoutBanner,
-                backgroundColor: AppColors.whiteBackground,
+                backgroundColor: AppColors.white,
                 title: Container(
-                  color: AppColors.whiteBackground,
+                  color: AppColors.white,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -606,9 +606,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                 ),
                 bottom: PreferredSize(
                   preferredSize: Size.fromHeight(
-                      widget.currentIndex == HomeTab.residence.value
-                          ? 50
-                          : 100),
+                      widget.currentIndex == HomeTab.residence.value ? 50 : 95),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

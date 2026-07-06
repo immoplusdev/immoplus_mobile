@@ -19,7 +19,6 @@ import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'components/home_search_appbar.dart';
-import 'components/home_choice_menu.dart';
 
 // part 'widgets/about_secton.dart';
 // part 'widgets/custom_app_bar.dart';
@@ -114,7 +113,7 @@ class _HomePageState extends State<HomePage>
         builder: (context, state) {
           return EnvironmentsBadge(
             child: Scaffold(
-              backgroundColor: AppColors.whiteBackground,
+              backgroundColor: AppColors.white,
               body: DefaultTabController(
                 length: 4,
                 child: Stack(

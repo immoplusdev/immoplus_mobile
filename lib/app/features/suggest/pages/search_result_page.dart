@@ -8,7 +8,7 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
-import 'package:immoplus/app/features/suggest/pages/components/suggest_result_card.dart';
+import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 
 class SearchResultPage extends StatefulWidget {
@@ -175,7 +175,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     ),
                     itemBuilder: (context, item, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
-                      child: SuggestResultCard(item: item),
+                      child: UnifiedPropertyCard(item: item),
                     ),
                   ),
                 )
@@ -194,7 +194,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     ),
                     itemBuilder: (context, item, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
-                      child: SuggestResultCard(item: item),
+                      child: UnifiedPropertyCard(item: item),
                     ),
                   ),
                 ),
