@@ -143,7 +143,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     final isResidence = widget.category == 'residence';
 
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
+      backgroundColor: AppColors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: SafeArea(

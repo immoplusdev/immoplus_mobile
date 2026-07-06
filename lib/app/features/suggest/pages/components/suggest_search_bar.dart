@@ -103,7 +103,7 @@ class SuggestSearchBar extends StatelessWidget {
                         : null,
                     textInputAction: TextInputAction.search,
                     onFieldSubmitted: onFieldSubmitted,
-                    fillColor: AppColors.whiteBackground,
+                    fillColor: AppColors.white,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide(color: Colors.grey.shade300),

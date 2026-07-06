@@ -171,11 +171,11 @@ class _SuggestPageState extends State<SuggestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
-             SuggestSearchBar(
+            SuggestSearchBar(
               controller: _searchController,
               focusNode: _focusNode,
               showClearButton: _showClearButton,
@@ -184,7 +184,8 @@ class _SuggestPageState extends State<SuggestPage> {
                 _searchController.clear();
               },
               onFieldSubmitted: _handleSearchSubmit,
-              onSearchPressed: () => _handleSearchSubmit(_searchController.text),
+              onSearchPressed: () =>
+                  _handleSearchSubmit(_searchController.text),
               onBackPressed: () => context.pop(),
             ),
 
@@ -258,5 +259,3 @@ class _SuggestPageState extends State<SuggestPage> {
     );
   }
 }
-
-

@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
+import 'package:immoplus/svgs_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
@@ -45,24 +48,6 @@ class SuggestResultCard extends StatelessWidget {
 
   bool get isResidence => item is ResidenceModel;
 
-  bool get hasWifi {
-    final list = item is ResidenceModel
-        ? (item as ResidenceModel).commodites
-        : (item as BienImmobilierModel).amentities;
-    return list.any((c) =>
-        c.icon.toLowerCase().contains('wifi') ||
-        c.text.toLowerCase().contains('wifi'));
-  }
-
-  bool get hasAc {
-    final list = item is ResidenceModel
-        ? (item as ResidenceModel).commodites
-        : (item as BienImmobilierModel).amentities;
-    return list.any((c) =>
-        c.icon.toLowerCase().contains('ac') ||
-        c.text.toLowerCase().contains('clim'));
-  }
-
   String get priceText => Utils.formatCurrency(price);
 
   String get priceSuffix {
@@ -74,11 +59,33 @@ class SuggestResultCard extends StatelessWidget {
     return '';
   }
 
-  String get durationText {
+  String get formattedDuration {
     if (isResidence) {
-      // Formats stay info or default stay dates
+      final now = DateTime.now();
       final min = (item as ResidenceModel).dureeMinSejour;
-      return min > 0 ? "Min. $min nuits" : "Flexible";
+      final duration = min > 0 ? min : 1;
+      final end = now.add(Duration(days: duration));
+
+      const frenchMonths = [
+        'janv.',
+        'févr.',
+        'mars',
+        'avr.',
+        'mai',
+        'juin',
+        'juil.',
+        'août',
+        'sept.',
+        'oct.',
+        'nov.',
+        'déc.'
+      ];
+
+      if (now.month == end.month) {
+        return "${now.day}-${end.day} ${frenchMonths[now.month - 1]}";
+      } else {
+        return "${now.day} ${frenchMonths[now.month - 1]} - ${end.day} ${frenchMonths[end.month - 1]}";
+      }
     }
     if (item is BienImmobilierModel) {
       final b = item as BienImmobilierModel;
@@ -87,13 +94,28 @@ class SuggestResultCard extends StatelessWidget {
     return "Disponible";
   }
 
+  // String get durationText {
+  //   if (isResidence) {
+  //     // Formats stay info or default stay dates
+  //     final min = (item as ResidenceModel).dureeMinSejour;
+  //     return min > 0 ? "Min. $min nuits" : "Flexible";
+  //   }
+  //   if (item is BienImmobilierModel) {
+  //     final b = item as BienImmobilierModel;
+  //     return b.aLouer ? "Location" : "Vente";
+  //   }
+  //   return "Disponible";
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final list = item is ResidenceModel
+        ? (item as ResidenceModel).commodites
+        : (item as BienImmobilierModel).amentities;
+    final displayList = list.take(3).toList();
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade100, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
@@ -125,112 +147,102 @@ class SuggestResultCard extends StatelessWidget {
 
               // Right Info Details
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    Text(
-                      name,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                            fontSize: 16,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                child: SizedBox(
+                  height: SuggestCardConstants.imageSize,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Text(
+                        name,
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
 
-                    const Gap(2),
+                      const Gap(2),
 
-                    // Location / Commune
-                    Text(
-                      location,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.grey.shade600,
-                            fontSize: 14,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      // Location / Commune
+                      Text(
+                        location,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
 
-                    const Gap(6),
+                      const Gap(6),
 
-                    // Icons row (Wifi, Air conditioning, Guests)
-                    Row(
-                      children: [
-                        if (hasWifi) ...[
-                          Icon(Icons.wifi_rounded,
-                              size: 14, color: Colors.grey.shade700),
-                          const Gap(8),
+                      // Icons row (first 3 amenities/commodities)
+                      Row(
+                        children: [
+                          for (int i = 0; i < displayList.length; i++) ...[
+                            _buildAmenityIcon(displayList[i].icon),
+                            if (i < displayList.length - 1) const Gap(8),
+                          ],
                         ],
-                        if (hasAc) ...[
-                          Icon(Icons.air_rounded,
-                              size: 14, color: Colors.grey.shade700),
-                          const Gap(8),
-                        ],
-                        Icon(Icons.people_outline_rounded,
-                            size: 14, color: Colors.grey.shade700),
-                        const Gap(4),
-                        Text(
-                          '$maxOccupants',
-                          style: TextStyle(
-                              color: Colors.grey.shade700, fontSize: 13),
-                        ),
-                      ],
-                    ),
+                      ),
 
-                    const Gap(10),
+                      const Spacer(),
 
-                    const RecommandeBadge(),
+                      const RecommandeBadge(),
 
-                    const Gap(12),
-
-                    // Divider
-                    Divider(height: 1, color: Colors.grey.shade200),
-
-                    const Gap(10),
-
-                    // Bottom Row: Date / Price
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            durationText,
+                      // Divider
+                      const Gap(8),
+                      Divider(height: 1, color: Colors.grey.withOpacity(.4)),
+                      const Gap(8),
+                      // Bottom Row: Date / Price
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            formattedDuration,
                             style: TextStyle(
                                 color: Colors.grey.shade600, fontSize: 13),
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const Gap(8),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Text(
-                              priceText,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            if (priceSuffix.isNotEmpty)
-                              Text(
-                                priceSuffix,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade600,
+                          const Gap(8),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    priceText,
+                                    style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                                if (priceSuffix.isNotEmpty)
+                                  Text(
+                                    priceSuffix,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -243,10 +255,11 @@ class SuggestResultCard extends StatelessWidget {
   Widget _buildImageCollage(List<String> images) {
     if (images.isEmpty) {
       return SizedBox(
-        width: 130,
-        height: 130,
+        width: SuggestCardConstants.imageSize,
+        height: SuggestCardConstants.imageSize,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius:
+              BorderRadius.circular(SuggestCardConstants.borderRadius),
           child: _buildImageWidget(''),
         ),
       );
@@ -254,10 +267,11 @@ class SuggestResultCard extends StatelessWidget {
 
     if (images.length == 1) {
       return SizedBox(
-        width: 130,
-        height: 130,
+        width: SuggestCardConstants.imageSize,
+        height: SuggestCardConstants.imageSize,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius:
+              BorderRadius.circular(SuggestCardConstants.borderRadius),
           child: _buildImageWidget(images[0]),
         ),
       );
@@ -265,10 +279,11 @@ class SuggestResultCard extends StatelessWidget {
 
     if (images.length == 2) {
       return SizedBox(
-        width: 130,
-        height: 130,
+        width: SuggestCardConstants.imageSize,
+        height: SuggestCardConstants.imageSize,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius:
+              BorderRadius.circular(SuggestCardConstants.borderRadius),
           child: Column(
             children: [
               Expanded(child: _buildImageWidget(images[0])),
@@ -286,10 +301,10 @@ class SuggestResultCard extends StatelessWidget {
     final img3 = images[2];
 
     return Container(
-      width: 130,
-      height: 130,
+      width: SuggestCardConstants.imageSize,
+      height: SuggestCardConstants.imageSize,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(SuggestCardConstants.borderRadius),
         child: Column(
           children: [
             // Top large image
@@ -345,4 +360,34 @@ class SuggestResultCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildAmenityIcon(String iconKey) {
+    final iconsaxIcon = SVGMap.iconsaxMap[iconKey];
+    final svgPath = SVGMap.map[iconKey];
+
+    if (iconsaxIcon != null) {
+      return Icon(
+        iconsaxIcon,
+        size: 15,
+        color: Colors.grey.shade700,
+      );
+    } else if (svgPath != null) {
+      return SvgPicture.asset(
+        svgPath,
+        height: 15,
+        width: 15,
+        colorFilter: ColorFilter.mode(
+          Colors.grey.shade700,
+          BlendMode.srcIn,
+        ),
+      );
+    } else {
+      return Icon(Iconsax.element_4, size: 15, color: Colors.grey.shade700);
+    }
+  }
+}
+
+class SuggestCardConstants {
+  static const double imageSize = 170.0;
+  static const double borderRadius = 14.0;
 }

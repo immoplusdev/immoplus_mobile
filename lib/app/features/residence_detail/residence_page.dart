@@ -54,8 +54,8 @@ class _ResidencePageState extends State<ResidencePage> {
 
         if (state is REQUEST_RESIDENCE_DATA) {
           final data = state.data;
-          final hasPieces = data.pieces.isNotEmpty &&
-              data.pieces.any((p) => p.nombre > 0);
+          final hasPieces =
+              data.pieces.isNotEmpty && data.pieces.any((p) => p.nombre > 0);
 
           return Scaffold(
             backgroundColor: Colors.white,
@@ -79,24 +79,22 @@ class _ResidencePageState extends State<ResidencePage> {
 
                 // ── Name, Rating, Location ──
                 DetailLogmentName(residenceModel: data),
-                      if (hasPieces) ...[
+                if (hasPieces) ...[
                   // const DetailLogmentTitle2(title: 'Lits et chambres'),
                   const SliverGap(10),
                   DetailLogmentRooms(logmentModel: data),
                   const _SliverDivider(),
                 ],
 
-
-                         // ── Description with "Lire la suite" ──
+                // ── Description with "Lire la suite" ──
                 const DetailLogmentTitle2(title: 'Description'),
                 const SliverGap(4),
                 _ExpandableDescription(description: data.description),
 
                 const _SliverDivider(),
 
-                 // ── Amenities ──
-                const DetailLogmentTitle2(
-                    title: 'Commodités'),
+                // ── Amenities ──
+                const DetailLogmentTitle2(title: 'Commodités'),
                 const SliverGap(8),
                 DetailLogmentAmentities(residenceModel: data),
                 const SliverGap(12),
@@ -108,30 +106,18 @@ class _ResidencePageState extends State<ResidencePage> {
                       padding:
                           const EdgeInsets.symmetric(horizontal: appPadding),
                       child: _ViewAllLink(
-                        label:
-                            'Voir les ${data.commodites.length} équipements',
+                        label: 'Voir les ${data.commodites.length} équipements',
                         onTap: () => _showAllAmenities(context, data),
                       ),
                     ),
                   ),
 
                 const _SliverDivider(),
-          
-
-
-                
-
 
                 // ── Highlights (Arrivée autonome, etc.) ──
                 DetailHighlights(residenceModel: data),
 
                 const _SliverDivider(),
-            
-
-
-           
-
-               
 
                 // ── Video ──
                 if (data.video.isNotEmpty) ...[
@@ -140,8 +126,7 @@ class _ResidencePageState extends State<ResidencePage> {
                 ],
 
                 // ── Map ──
-                const DetailLogmentTitle2(
-                    title: 'Où se situe le logement'),
+                const DetailLogmentTitle2(title: 'Où se situe le logement'),
                 const SliverGap(8),
                 DetailLogmentMap(residence: data),
 
@@ -202,7 +187,8 @@ class _ResidencePageState extends State<ResidencePage> {
             Expanded(
               child: ListView.separated(
                 controller: scrollController,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                 itemCount: data.commodites.length,
                 separatorBuilder: (_, __) => Divider(
                   height: 1,
@@ -234,7 +220,8 @@ class _ResidencePageState extends State<ResidencePage> {
                             ),
                           )
                         else
-                          Icon(Iconsax.element_4, size: 24, color: Colors.grey.shade700),
+                          Icon(Iconsax.element_4,
+                              size: 24, color: Colors.grey.shade700),
                         const Gap(16),
                         Expanded(
                           child: Text(
@@ -281,7 +268,6 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Titre "À propos du logement"
-
 
             // Texte tronqué à 4 lignes
             LayoutBuilder(
@@ -343,7 +329,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                     Icon(
                       Icons.chevron_right,
                       size: 15,
-                      color:const Color(0xff2744de).withOpacity(0.80),
+                      color: const Color(0xff2744de).withOpacity(0.80),
                     ),
                   ],
                 ),
@@ -412,8 +398,8 @@ class _SliverDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: appPadding, vertical: 24),
+        padding:
+            const EdgeInsets.symmetric(horizontal: appPadding, vertical: 24),
         child: Divider(
           height: 1,
           thickness: 0.5,
@@ -437,24 +423,20 @@ class _ViewAllLink extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xff2744de),
-                      )
-          ),
+          Text(label,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xff2744de),
+              )),
           const SizedBox(width: 4),
           Icon(
-             Icons.chevron_right,
+            Icons.chevron_right,
             size: 15,
-            color: const  Color(0xff2744de),
+            color: const Color(0xff2744de),
           ),
         ],
       ),
     );
   }
 }
-
-
