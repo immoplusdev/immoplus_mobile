@@ -19,6 +19,13 @@ enum ApiErrorCode {
   // Erreurs de validation
   invalidOtp('INVALID_OTP'),
 
+  // UserNotFoundException (404) : aucun compte pour cet email/téléphone —
+  // proposer de s'inscrire.
+  userNotFound('NOT_FOUND'),
+  // UserEmailAlreadyTakenException / UserPhoneNumberAlreadyTakenException
+  // (409) : un compte existe déjà à l'inscription — proposer de se connecter.
+  conflict('CONFLICT'),
+
   // Erreur inconnue
   unknown('UNKNOWN');
 

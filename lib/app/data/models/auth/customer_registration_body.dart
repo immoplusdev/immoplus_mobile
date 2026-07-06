@@ -14,6 +14,7 @@ class CustomerRegistrationBody with _$CustomerRegistrationBody {
     String? password,
     String? token,
     String? provider,
+    String? birthDate,
   }) = _CustomerRegistrationBody;
 
   factory CustomerRegistrationBody.fromJson(Map<String, dynamic> json) =>
