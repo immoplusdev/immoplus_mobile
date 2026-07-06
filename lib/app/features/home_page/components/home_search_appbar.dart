@@ -469,7 +469,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                       if (FilterHandler.search != null) {
                         if (FilterHandler.search!.isNotEmpty) {
                           log(keyword);
-                          HomePageState.refreshPage(widget.currentIndex);
+                                                    HomePageState.refreshPage(widget.currentIndex);
                         } else {
                           FilterHandler.search = null;
                           FilterHandler.notifyChange();
@@ -496,11 +496,11 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
             ),
           );
@@ -595,10 +595,10 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                           });
                           context.read<BannersCubit>().setDismissed(true);
                         },
-                        secondChild: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: searchField,
-                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            15, hasVisibleBanners ? 12 : 0, 15, 0),
                         child: searchField,
                       ),
                     ],
@@ -628,6 +628,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
 }
 
 class _Constants {
-  static const double toolbarHeightWithBanner = 300;
+  static const double toolbarHeightWithBanner = 217;
   static const double toolbarHeightWithoutBanner = 145;
 }

@@ -44,6 +44,7 @@ import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/registration/register_page.dart';
 import 'package:immoplus/app/data/enums/registration_type.dart';
 import 'package:immoplus/app/data/models/auth/verify_otp_extra.dart';
+import 'package:immoplus/app/features/registration/screens/register_number_otp.dart';
 import 'package:immoplus/app/features/registration/screens/send_email_or_number_opt_page.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
@@ -71,6 +72,8 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
+import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
+import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -160,7 +163,16 @@ class AppRouter {
           GoRoute(
             path: '/${RegisterPage.name}',
             name: RegisterPage.name,
-            builder: (context, state) => const RegisterPage(),
+            builder: (context, state) => RegisterPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
+          ),
+          GoRoute(
+            path: RegisterNumberOtpPage.routePath(),
+            name: RegisterNumberOtpPage.name,
+            builder: (context, state) => RegisterNumberOtpPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
           ),
           GoRoute(
             path: SendEmailOrNumberOptPage.routePath(),
@@ -289,6 +301,13 @@ class AppRouter {
         name: PaiementStatusPage.name,
         builder: (context, state) => PaiementStatusPage(
           paymentPageAdapter: state.extra as PaymentPageAdapter,
+        ),
+      ),
+      GoRoute(
+        path: StripeResultRoute.path,
+        name: StripeResultRoute.name,
+        builder: (context, state) => StripeResultRoute(
+          paymentIntentData: state.extra as PaymentItentData,
         ),
       ),
       GoRoute(
@@ -651,6 +670,13 @@ class AppRouter {
         name: KycWebViewPage.routeName,
         builder: (context, state) => KycWebViewPage(
           url: state.extra as String? ?? '',
+        ),
+      ),
+      GoRoute(
+        path: '/reservation/:id',
+        name: 'reservation_detail',
+        builder: (context, state) => BookingDetailPage(
+          id: state.pathParameters['id']!,
         ),
       ),
     ],

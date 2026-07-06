@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
-import 'package:immoplus/app/features/login_page/pages/login_with_email_screen.dart';
-import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
+import 'package:immoplus/app/features/otp_login/pages/phone_number_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/widgets/custom_page_immo.dart';
-import 'package:immoplus/app/widgets/custom_tab_selector.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   final AuthRedirectData? redirectData;
   const LoginPage({super.key, this.redirectData});
   static String name = "LOGIN_PAGE";
@@ -16,81 +12,37 @@ class LoginPage extends StatefulWidget {
   static String routePath() => '/login_page';
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  PageController _pageController = PageController();
-  late ValueNotifier<int> _currentPageNotifier;
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-    _currentPageNotifier = ValueNotifier<int>(0);
-
-    // Écouter les changements de page
-    _pageController.addListener(() {
-      final page = _pageController.page?.round() ?? 0;
-      if (_currentPageNotifier.value != page) {
-        _currentPageNotifier.value = page;
-      }
-    });
-  }
-
-  void _onTabSelected(int index) {
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return CustomPageImmo(
-      title: "Se connecter",
-      content: Container(
-        padding: const EdgeInsets.all(appPadding),
-        child: Column(
-          children: [
-            ValueListenableBuilder<int>(
-              valueListenable: _currentPageNotifier,
-              builder: (context, currentPage, child) {
-                return CustomTabSelector(
-                  selectedIndex: currentPage,
-                  tabs: const ['E-mail', 'Numero'],
-                  onTabSelected: _onTabSelected,
-                  selectedColor: AppColors.lightBlue,
-                );
-              },
-            ),
-            const Gap(20),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: PageView(
-                  controller: _pageController,
-                  scrollDirection: Axis.horizontal,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    LoginWithEmailScreen(
-                      onSwitchMode: () => _onTabSelected(1),
-                    ),
-                    OTPLoginPage(
-                      onSwitchMode: () => _onTabSelected(0),
-                    ),
-                  ],
-                ),
+    // Email, réseaux sociaux et mot de passe oublié sont désactivés :
+    // seule la connexion par numéro de téléphone est proposée.
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leadingWidth: 64,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 24),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primary,
               ),
-            )
-          ],
+              child: const Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
+            ),
+          ),
         ),
+      ),
+      body: const SafeArea(
+        child: PhoneNumberPage(),
       ),
     );
   }
