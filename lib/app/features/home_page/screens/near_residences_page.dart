@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/services/analytics_service.dart';
+// import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
@@ -39,7 +39,7 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
   @override
   void initState() {
     super.initState();
-    getIt<AnalyticsService>().logNearResidencesViewed();
+    // getIt<AnalyticsService>().logNearResidencesViewed();
     _pagingController.addPageRequestListener(_loadPage);
   }
 
