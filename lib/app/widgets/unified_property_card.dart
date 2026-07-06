@@ -48,7 +48,20 @@ class UnifiedPropertyCard extends StatelessWidget {
 
   bool get isResidence => item is ResidenceModel;
 
-  String get priceText => Utils.formatCurrency(price);
+  String get priceText {
+    if (price >= 1000000000) {
+      final double val = price / 1000000000;
+      final cleanVal =
+          val.toStringAsFixed(val.truncateToDouble() == val ? 0 : 1);
+      return "$cleanVal Mrd F";
+    } else if (price >= 1000000) {
+      final double val = price / 1000000;
+      final cleanVal =
+          val.toStringAsFixed(val.truncateToDouble() == val ? 0 : 1);
+      return "$cleanVal M F";
+    }
+    return Utils.formatCurrency(price);
+  }
 
   String get priceSuffix {
     if (isResidence) return '/nuit';
