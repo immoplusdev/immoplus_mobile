@@ -9,14 +9,10 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:gap/gap.dart';
 
 class BannerCard extends StatefulWidget {
-  final Widget child;
-  final Widget? secondChild;
   final VoidCallback? onDismiss;
 
   const BannerCard({
     super.key,
-    required this.child,
-    this.secondChild,
     this.onDismiss,
   });
 
@@ -39,24 +35,10 @@ class _BannerCardState extends State<BannerCard> {
           orElse: () => <BannerModel>[],
         );
 
-        // Si pas de bannières ou si l'utilisateur a fermé, on affiche le secondChild ou le child par défaut
+        // Pas de bannières ou fermée par l'utilisateur : rien à afficher, la
+        // banniere est totalement dissociée de la barre de recherche.
         if (apiBanners.isEmpty || _isDismissed) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 400),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, -0.1),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: child,
-                ),
-              );
-            },
-            child: widget.secondChild ?? widget.child,
-          );
+          return const SizedBox.shrink(key: ValueKey('banner_hidden'));
         }
 
         return AnimatedSwitcher(
@@ -68,12 +50,9 @@ class _BannerCardState extends State<BannerCard> {
             children: [
               Container(
                 width: double.infinity,
-                height: 175,
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 15, bottom: 0),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
                   color: _getBackgroundColor(apiBanners),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -82,7 +61,7 @@ class _BannerCardState extends State<BannerCard> {
                       carouselController: _carouselController,
                       itemCount: apiBanners.length,
                       options: CarouselOptions(
-                        height: 86,
+                        height: 52,
                         viewportFraction: 1.0,
                         enableInfiniteScroll: false,
                         onPageChanged: (index, reason) {
@@ -92,13 +71,14 @@ class _BannerCardState extends State<BannerCard> {
                         },
                       ),
                       itemBuilder: (context, index, realIndex) {
-                        return BannerItem(banner: apiBanners[index]);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: BannerItem(banner: apiBanners[index]),
+                        );
                       },
                     ),
                     const Gap(2),
                     _buildDots(apiBanners.length),
-                    const Gap(10),
-                    widget.child,
                   ],
                 ),
               ),
@@ -107,6 +87,8 @@ class _BannerCardState extends State<BannerCard> {
                 right: 0,
                 child: IconButton(
                   icon: const Icon(Icons.close, color: Colors.white, size: 15),
+                  padding: const EdgeInsets.all(6),
+                  constraints: const BoxConstraints(),
                   onPressed: () {
                     setState(() {
                       _isDismissed = true;
@@ -143,12 +125,12 @@ class _BannerCardState extends State<BannerCard> {
       children: List.generate(count, (index) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          width: _currentIndex == index ? 20 : 8,
-          height: 4,
-          margin: const EdgeInsets.symmetric(horizontal: 2),
+          width: _currentIndex == index ? 14 : 5,
+          height: 3,
+          margin: const EdgeInsets.symmetric(horizontal: 1.5),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(_currentIndex == index ? 1.0 : 0.4),
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(1.5),
           ),
         );
       }),

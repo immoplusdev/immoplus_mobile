@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
@@ -122,7 +123,6 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
                 ),
               ),
             ),
-            
             TextButton(
               onPressed: _bestRatedResidences.isNotEmpty
                   ? () {
@@ -142,7 +142,7 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
           ],
         ),
         SizedBox(
-          height: 170,
+          height: 255,
           child: _buildContent(),
         ),
         const Gap(15),
@@ -171,7 +171,6 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
         return CompactResidenceCard(
           residence: _bestRatedResidences[index],
           showRating: false,
-          showLocation: false,
         );
       },
     );

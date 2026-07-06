@@ -1,8 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
-import 'package:immoplus/app/features/home_page/components/banner_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -197,64 +198,74 @@ class BannerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasCta = banner.ctaLabel != null;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (banner.icon != null) ...[
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: 6.0),
             child: Icon(
               _getIconData(banner.icon!),
               color: Colors.white,
-              size: 24,
+              size: 20,
             ),
           ),
-          const Gap(10),
+          const Gap(8),
         ],
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Text(
                 banner.title ?? '',
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: GoogleFonts.plusJakartaSans(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const Gap(4),
-              Text(
-                banner.subtitle ?? '',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 11,
-                    ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (banner.ctaLabel != null) ...[
-                const Gap(7),
-                Row(
+              const Gap(2),
+              // Le subtitle porte déjà toute l'information (ex: "en attente
+              // de réponse du propriétaire") ; l'action (cta) s'affiche juste
+              // à côté en texte gras cliquable, plus de gros bouton.
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    BannerButton(
-                      label: banner.ctaLabel!,
-                      onPressed: () => _handleAction(context, banner.ctaUrl),
-                      isPrimary: true,
+                    Expanded(
+                      child: Text(
+                        banner.subtitle ?? '',
+                        style: GoogleFonts.plusJakartaSans(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    if (hasCta) ...[
+                      const Gap(8),
+                      _InlineActionText(
+                        label: banner.ctaLabel!,
+                        onTap: () => _handleAction(context, banner.ctaUrl),
+                      ),
+                    ],
                     if (banner.cta2Label != null) ...[
-                      const Gap(12),
-                      BannerButton(
+                      const Gap(10),
+                      _InlineActionText(
                         label: banner.cta2Label!,
-                        onPressed: () => _handleAction(context, banner.cta2Url),
-                        isPrimary: false,
+                        onTap: () => _handleAction(context, banner.cta2Url),
                       ),
                     ],
                   ],
                 ),
-              ],
+              ),
             ],
           ),
         ),
@@ -271,5 +282,54 @@ class BannerItem extends StatelessWidget {
       default:
         return Iconsax.notification;
     }
+  }
+}
+
+/// Remplace le gros bouton CTA par un simple mot cliquable et en gras,
+/// affiché juste à côté du subtitle.
+class _InlineActionText extends StatefulWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _InlineActionText({
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  State<_InlineActionText> createState() => _InlineActionTextState();
+}
+
+class _InlineActionTextState extends State<_InlineActionText> {
+  late final TapGestureRecognizer _recognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _recognizer = TapGestureRecognizer()..onTap = widget.onTap;
+  }
+
+  @override
+  void dispose() {
+    _recognizer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: widget.label,
+        recognizer: _recognizer,
+        style: GoogleFonts.plusJakartaSans(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -204,10 +205,6 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
                 ),
               ),
             ),
-
-
-                
-                 
             TextButton(
               onPressed: _nearResidences.isNotEmpty
                   ? () {
@@ -236,7 +233,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           ],
         ),
         SizedBox(
-          height: _locationError ? null : 170,
+          height: _locationError ? null : 255,
           child: _buildContent(),
         ),
         const Gap(15),
@@ -269,7 +266,6 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         return CompactResidenceCard(
           residence: _nearResidences[index],
           showRating: false,
-          showName: false,
         );
       },
     );
