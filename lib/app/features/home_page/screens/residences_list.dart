@@ -9,12 +9,12 @@ import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.
 import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_best_rated_list.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/configs/theme_config.dart';
 
 class ResidencesList extends StatefulWidget {
   const ResidencesList({super.key});
@@ -104,23 +104,7 @@ class _ResidencesListState extends State<ResidencesList> {
                         );
                       },
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        "Ce qu'il vous faut",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                    ),
+                    const HomeSectionTitle(title: "Ce qu'il vous faut"),
                     const Gap(13),
                   ],
                 ),

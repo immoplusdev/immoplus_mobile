@@ -5,11 +5,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 
 class ThemeConfig {
   static ThemeData lightTheme({required BuildContext context}) => ThemeData(
-        textTheme: GoogleFonts.senTextTheme().apply(
-            // decorationColor: Colors.red,
-            // bodyColor: CupertinoColors.black,
-            // displayColor: Colors.blue,
-            ),
+        textTheme: GoogleFonts.plusJakartaSansTextTheme().apply(),
         useMaterial3: false,
         primaryColor: CupertinoColors.white,
         scaffoldBackgroundColor: CupertinoColors.white,
@@ -69,11 +65,9 @@ class ThemeConfig {
   static ThemeData darkTheme({required BuildContext context}) =>
       ThemeData.dark().copyWith(
         primaryColor: CupertinoColors.systemFill,
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(
-            color: CupertinoColors.white,
-          ),
-        ).apply(
+        textTheme:
+            GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme)
+                .apply(
           decorationColor: Colors.red,
           bodyColor: CupertinoColors.white,
           displayColor: Colors.blue,
@@ -127,4 +121,22 @@ class ThemeConfig {
               //: Colors.blue,
             ),
       );
+}
+
+class HomeSectionTitle extends StatelessWidget {
+  final String title;
+
+  const HomeSectionTitle({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: GoogleFonts.plusJakartaSans(
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.3,
+          color: Color(0xff0B1C30)),
+    );
+  }
 }
