@@ -50,9 +50,12 @@ class _BannerCardState extends State<BannerCard> {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.only(
+                    top: 8, bottom: 4, left: 16, right: 40),
                 decoration: BoxDecoration(
                   color: _getBackgroundColor(apiBanners),
+                  borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -71,10 +74,7 @@ class _BannerCardState extends State<BannerCard> {
                         },
                       ),
                       itemBuilder: (context, index, realIndex) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: BannerItem(banner: apiBanners[index]),
-                        );
+                        return BannerItem(banner: apiBanners[index]);
                       },
                     ),
                     const Gap(2),
@@ -84,17 +84,21 @@ class _BannerCardState extends State<BannerCard> {
               ),
               Positioned(
                 top: 0,
-                right: 0,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white, size: 15),
-                  padding: const EdgeInsets.all(6),
-                  constraints: const BoxConstraints(),
-                  onPressed: () {
-                    setState(() {
-                      _isDismissed = true;
-                    });
-                    widget.onDismiss?.call();
-                  },
+                bottom: 0,
+                right: 24,
+                child: Center(
+                  child: IconButton(
+                    icon:
+                        const Icon(Icons.close, color: Colors.white, size: 16),
+                    padding: const EdgeInsets.all(6),
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      setState(() {
+                        _isDismissed = true;
+                      });
+                      widget.onDismiss?.call();
+                    },
+                  ),
                 ),
               ),
             ],
@@ -129,7 +133,8 @@ class _BannerCardState extends State<BannerCard> {
           height: 3,
           margin: const EdgeInsets.symmetric(horizontal: 1.5),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(_currentIndex == index ? 1.0 : 0.4),
+            color: Colors.white
+                .withValues(alpha: _currentIndex == index ? 1.0 : 0.4),
             borderRadius: BorderRadius.circular(1.5),
           ),
         );

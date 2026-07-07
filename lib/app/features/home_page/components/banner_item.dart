@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -119,13 +118,6 @@ class BannerItem extends StatelessWidget {
           );
         }
         break;
-      // case BannerAction.annulerVisite:
-      //   final visiteId = metadata['demande_visite_id']?.toString();
-      //   final bienNom = metadata['bien_nom']?.toString();
-      //   if (visiteId != null) {
-      //     _showCancelVisiteConfirmation(context, visiteId, bienNom);
-      //   }
-      //   break;
       case BannerAction.mesAlertes:
         final alertId = metadata['alert_id']?.toString();
         final nbPropositions =
@@ -141,36 +133,9 @@ class BannerItem extends StatelessWidget {
         }
         break;
       default:
-        // Gérer d'autres URLs ou liens profonds ici
         break;
     }
   }
-
-  // void _showCancelVisiteConfirmation(
-  //     BuildContext context, String visiteId, String? bienNom) {
-  //   AppDialog.show(
-  //     title: 'Annuler la visite',
-  //     description:
-  //         'Voulez-vous vraiment annuler votre demande de visite pour ${bienNom ?? "ce bien"} ?',
-  //     primaryButtonText: 'Oui, annuler',
-  //     secondButtonText: 'Non',
-  //     onPrimary: () async {
-  //       try {
-  //         await getIt<BienImmobilierRepository>().annulerVisiteClient(
-  //           visiteId: visiteId,
-  //           notes: 'Annulé depuis la bannière promotionnelle',
-  //         );
-  //         ToastUtils.showSuccess(
-  //           description: 'Demande de visite annulée avec succès',
-  //         );
-  //       } catch (e) {
-  //         ToastUtils.showError(
-  //           description: 'Erreur lors de l\'annulation de la visite',
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 
   void _showCancelConfirmation(BuildContext context, String reservationId) {
     AppDialog.show(
@@ -196,140 +161,78 @@ class BannerItem extends StatelessWidget {
     );
   }
 
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'calendar-check':
+        return Iconsax.calendar_tick5;
+      case 'notification':
+        return Iconsax.notification5;
+      default:
+        return Iconsax.notification5;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final hasCta = banner.ctaLabel != null;
+    final textStyle = GoogleFonts.plusJakartaSans(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+    );
+    final ctaStyle = GoogleFonts.plusJakartaSans(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      decoration: TextDecoration.underline,
+    );
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (banner.icon != null) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 6.0),
-            child: Icon(
-              _getIconData(banner.icon!),
-              color: Colors.white,
-              size: 20,
-            ),
+          Icon(
+            _getIconData(banner.icon!),
+            color: Colors.white,
+            size: 24,
           ),
-          const Gap(8),
+          const Gap(10),
         ],
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                banner.title ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.plusJakartaSans(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                child: Text(
+                  banner.subtitle ?? '',
+                  style: textStyle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Gap(2),
-              // Le subtitle porte déjà toute l'information (ex: "en attente
-              // de réponse du propriétaire") ; l'action (cta) s'affiche juste
-              // à côté en texte gras cliquable, plus de gros bouton.
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        banner.subtitle ?? '',
-                        style: GoogleFonts.plusJakartaSans(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 11,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    if (hasCta) ...[
-                      const Gap(8),
-                      _InlineActionText(
-                        label: banner.ctaLabel!,
-                        onTap: () => _handleAction(context, banner.ctaUrl),
-                      ),
-                    ],
-                    if (banner.cta2Label != null) ...[
-                      const Gap(10),
-                      _InlineActionText(
-                        label: banner.cta2Label!,
-                        onTap: () => _handleAction(context, banner.cta2Url),
-                      ),
-                    ],
-                  ],
+              if (banner.ctaLabel != null) ...[
+                const Gap(8),
+                GestureDetector(
+                  onTap: () => _handleAction(context, banner.ctaUrl),
+                  child: Text(
+                    banner.ctaLabel!,
+                    style: ctaStyle,
+                  ),
                 ),
-              ),
+              ],
+              if (banner.cta2Label != null) ...[
+                const Gap(8),
+                GestureDetector(
+                  onTap: () => _handleAction(context, banner.cta2Url),
+                  child: Text(
+                    banner.cta2Label!,
+                    style: ctaStyle,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
       ],
-    );
-  }
-
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'calendar-check':
-        return Iconsax.calendar_tick;
-      case 'notification':
-        return Iconsax.notification;
-      default:
-        return Iconsax.notification;
-    }
-  }
-}
-
-/// Remplace le gros bouton CTA par un simple mot cliquable et en gras,
-/// affiché juste à côté du subtitle.
-class _InlineActionText extends StatefulWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _InlineActionText({
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  State<_InlineActionText> createState() => _InlineActionTextState();
-}
-
-class _InlineActionTextState extends State<_InlineActionText> {
-  late final TapGestureRecognizer _recognizer;
-
-  @override
-  void initState() {
-    super.initState();
-    _recognizer = TapGestureRecognizer()..onTap = widget.onTap;
-  }
-
-  @override
-  void dispose() {
-    _recognizer.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        text: widget.label,
-        recognizer: _recognizer,
-        style: GoogleFonts.plusJakartaSans(
-          color: Colors.white,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          decoration: TextDecoration.underline,
-        ),
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
     );
   }
 }

@@ -469,7 +469,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                       if (FilterHandler.search != null) {
                         if (FilterHandler.search!.isNotEmpty) {
                           log(keyword);
-                                                    HomePageState.refreshPage(widget.currentIndex);
+                          HomePageState.refreshPage(widget.currentIndex);
                         } else {
                           FilterHandler.search = null;
                           FilterHandler.notifyChange();
@@ -496,11 +496,13 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
-                borderSide: BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+                borderSide:
+                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
-                borderSide: BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+                borderSide:
+                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
             ),
           );
