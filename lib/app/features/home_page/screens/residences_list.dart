@@ -10,7 +10,6 @@ import 'package:immoplus/app/features/home_page/logic/location_permission_state.
 import 'package:immoplus/app/features/home_page/screens/residences_best_rated_list.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
@@ -28,15 +27,15 @@ class ResidencesList extends StatefulWidget {
 }
 
 class _ResidencesListState extends State<ResidencesList> {
+  bool _isParentLoading = true;
+  List<_LocationSectionData> _activeSections = [];
+  List<dynamic> _displayList = [];
+
   void _onPageRequest(int pageKey) => loadPage(pageKey);
 
   Future<void> loadPage(int page) async {
     final myToken = HomePageState.residenceToken;
 
-    // utiliser le token pour invalider les requêtes périmées
-    // si le token est différent, la requête est périmée et on ne la charge pas
-    // cela permet d`eviter d`avoir des requêtes périmées en arrière-plan
-    // qui rendent la liste de résidences invalide et vide
     final whereFilters = FilterHandler.getAllFilters(PropertyType.residence);
     final residenceRepository = getIt<ResidenceRepository>();
     try {
@@ -46,7 +45,6 @@ class _ResidencesListState extends State<ResidencesList> {
         long: FilterHandler.long,
         startDate: FilterHandler.startDate,
         endDate: FilterHandler.endDate,
-        // radius: (FilterHandler.lat != null) ? 100 : null,
         where: whereFilters,
         page: page,
       );
@@ -70,6 +68,7 @@ class _ResidencesListState extends State<ResidencesList> {
     HomePageState.pagingControllerResidence
         .addPageRequestListener(_onPageRequest);
     HomePageState.refreshResidences();
+    _loadAllSections();
   }
 
   @override
@@ -77,6 +76,92 @@ class _ResidencesListState extends State<ResidencesList> {
     HomePageState.pagingControllerResidence
         .removePageRequestListener(_onPageRequest);
     super.dispose();
+  }
+
+  Future<void> _loadAllSections() async {
+    if (!mounted) return;
+    setState(() {
+      _isParentLoading = true;
+    });
+
+    try {
+      final futures = _residencesHomeItems.map((item) async {
+        if (item.isHeader) return null;
+
+        final Map<String, dynamic> where = {};
+        if (item.villeId != null) {
+          where['_villeId'] = item.villeId;
+        }
+        if (item.communeId != null) {
+          where['_communeId'] = item.communeId;
+        }
+
+        try {
+          final result = await getIt<ResidenceRepository>().getResidences(
+            page: 1,
+            perPage: 10,
+            where: where,
+          );
+          final list = result.data ?? [];
+          // if (list.isNotEmpty) {
+          return _LocationSectionData(
+            title: item.title,
+            villeId: item.villeId,
+            communeId: item.communeId,
+            residences: list,
+          );
+          // }
+        } catch (e) {
+          debugPrint('Error loading section ${item.title}: $e');
+        }
+        return null;
+      }).toList();
+
+      final results = await Future.wait(futures);
+
+      final List<_LocationSectionData> active = [];
+      for (var r in results) {
+        if (r != null) {
+          active.add(r);
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _activeSections = active;
+          _displayList = _buildDisplayList();
+          _isParentLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isParentLoading = false;
+        });
+      }
+    }
+  }
+
+  List<dynamic> _buildDisplayList() {
+    final List<dynamic> list = [];
+    for (var item in _residencesHomeItems) {
+      if (item.isHeader) continue;
+
+      final loaded = _activeSections.cast<_LocationSectionData?>().firstWhere(
+            (s) =>
+                s != null &&
+                s.villeId == item.villeId &&
+                s.communeId == item.communeId,
+            orElse: () => null,
+          );
+      bool isLoad = loaded != null && loaded.residences.isNotEmpty;
+      // bool isLoad = loaded != null; pour afficher les empty state
+
+      if (isLoad) {
+        list.add(loaded);
+      }
+    }
+    return list;
   }
 
   @override
@@ -116,39 +201,70 @@ class _ResidencesListState extends State<ResidencesList> {
             );
           },
         ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final item = _residencesHomeItems[index];
-                if (item.isHeader) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 24, bottom: 12),
-                    child: Text(
-                      item.title,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.grey.shade500,
-                        letterSpacing: 1.2,
-                      ),
+        if (_isParentLoading)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                children: List.generate(
+                  3,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(15),
+                        const SizedBox(
+                          width: 150,
+                          height: 20,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
+                            ),
+                          ),
+                        ),
+                        const Gap(10),
+                        SizedBox(
+                          height: 255,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            separatorBuilder: (context, index) => const Gap(12),
+                            itemBuilder: (context, index) => SizedBox(
+                              width: neirResidenceCardWidth,
+                              child: LoadProductCard(),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                } else {
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (!_isParentLoading)
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final item = _displayList[index] as _LocationSectionData;
                   return ResidencesHorizontalListByLocation(
                     key: ValueKey(
                         'location_residences_${item.villeId ?? item.communeId}'),
                     title: item.title,
                     villeId: item.villeId,
                     communeId: item.communeId,
+                    residences: item.residences,
                   );
-                }
-              },
-              childCount: _residencesHomeItems.length,
+                },
+                childCount: _displayList.length,
+              ),
             ),
           ),
-        ),
         // SliverPadding(
         //   padding: const EdgeInsets.symmetric(horizontal: 12),
         //   sliver: PagedSliverList<int, ResidenceModel>(
@@ -204,6 +320,12 @@ final List<ResidencesHomeListItem> _residencesHomeItems = [
   // --- Section 1 : Villes populaires ---
   const ResidencesHomeListItem(title: "VILLES POPULAIRES", isHeader: true),
   const ResidencesHomeListItem(
+      title: "Abidjan", villeId: "8b97b9ce-a507-11ef-8b44-0e595bc2ce41"),
+  const ResidencesHomeListItem(
+      title: "Aboisso", villeId: "8b981afc-a507-11ef-8b44-0e595bc2ce41"),
+  const ResidencesHomeListItem(
+      title: "Anyama", villeId: "8b9806f9-a507-11ef-8b44-0e595bc2ce41"),
+  const ResidencesHomeListItem(
       title: "Grand-Bassam", villeId: "8b981ba8-a507-11ef-8b44-0e595bc2ce41"),
   const ResidencesHomeListItem(
       title: "Yamoussoukro", villeId: "8b97d0b3-a507-11ef-8b44-0e595bc2ce41"),
@@ -211,7 +333,7 @@ final List<ResidencesHomeListItem> _residencesHomeItems = [
       title: "San-Pédro", villeId: "8b97ea35-a507-11ef-8b44-0e595bc2ce41"),
 
   // --- Section 2 : Communes d'Abidjan ---
-  const ResidencesHomeListItem(title: "COMMUNES D'ABIDJAN", isHeader: true),
+  // const ResidencesHomeListItem(title: "COMMUNES D'ABIDJAN", isHeader: true),
   const ResidencesHomeListItem(
       title: "Abobo", communeId: "8bb4b211-a507-11ef-8b44-0e595bc2ce41"),
   const ResidencesHomeListItem(
@@ -242,7 +364,7 @@ final List<ResidencesHomeListItem> _residencesHomeItems = [
       title: "Bonoua", communeId: "8bb80dca-a507-11ef-8b44-0e595bc2ce41"),
 
   // --- Section 3 : Villes extérieures ---
-  const ResidencesHomeListItem(title: "VILLES EXTÉRIEURES", isHeader: true),
+  // const ResidencesHomeListItem(title: "VILLES EXTÉRIEURES", isHeader: true),
   const ResidencesHomeListItem(
       title: "Abengourou", villeId: "8b980686-a507-11ef-8b44-0e595bc2ce41"),
   const ResidencesHomeListItem(
@@ -277,89 +399,22 @@ final List<ResidencesHomeListItem> _residencesHomeItems = [
       title: "Toumodi", villeId: "8b981aa6-a507-11ef-8b44-0e595bc2ce41"),
 ];
 
-class ResidencesHorizontalListByLocation extends StatefulWidget {
+class ResidencesHorizontalListByLocation extends StatelessWidget {
   final String title;
   final String? villeId;
   final String? communeId;
+  final List<ResidenceModel> residences;
 
   const ResidencesHorizontalListByLocation({
     super.key,
     required this.title,
     this.villeId,
     this.communeId,
+    required this.residences,
   });
 
   @override
-  State<ResidencesHorizontalListByLocation> createState() =>
-      _ResidencesHorizontalListByLocationState();
-}
-
-class _ResidencesHorizontalListByLocationState
-    extends State<ResidencesHorizontalListByLocation> {
-  final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
-
-  bool _isLoading = true;
-  bool _hasError = false;
-  String? _errorMessage;
-  List<ResidenceModel> _residences = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadResidences();
-  }
-
-  Future<void> _loadResidences() async {
-    if (!mounted) return;
-    setState(() {
-      _isLoading = true;
-      _hasError = false;
-    });
-
-    try {
-      final Map<String, dynamic> where = {};
-      if (widget.villeId != null) {
-        where['_villeId'] = widget.villeId;
-      }
-      if (widget.communeId != null) {
-        where['_communeId'] = widget.communeId;
-      }
-
-      final result = await _residenceRepository.getResidences(
-        page: 1,
-        perPage: 10,
-        where: where,
-      );
-
-      if (mounted) {
-        setState(() {
-          _residences = result.data ?? [];
-          _isLoading = false;
-        });
-      }
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          _hasError = true;
-          _errorMessage = error.toString();
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Si en cours de chargement et pas encore de données, hauteur 0 pour éviter les sauts de scroll
-    if (_isLoading && _residences.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    // Si pas de données après chargement, hauteur 0
-    if (!_isLoading && !_hasError && _residences.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -368,16 +423,16 @@ class _ResidencesHorizontalListByLocationState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            HomeSectionTitle(title: widget.title),
+            HomeSectionTitle(title: title),
             TextButton(
-              onPressed: _residences.isNotEmpty
+              onPressed: residences.isNotEmpty
                   ? () {
                       context.push(
                         LocationResidencesPage.routePath,
                         extra: {
-                          'title': widget.title,
-                          'villeId': widget.villeId,
-                          'communeId': widget.communeId,
+                          'title': title,
+                          'villeId': villeId,
+                          'communeId': communeId,
                         },
                       );
                     }
@@ -387,94 +442,77 @@ class _ResidencesHorizontalListByLocationState
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: residences.isNotEmpty
+                      ? AppColors.primary
+                      : Colors.grey.shade400,
                   letterSpacing: -0.1,
                 ),
               ),
             ),
           ],
         ),
-        SizedBox(
-          height: 255,
-          child: _buildContent(),
-        ),
+        if (residences.isEmpty)
+          Container(
+            height: 100,
+            width: double.infinity,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.location_off_outlined,
+                  color: Colors.grey.shade400,
+                  size: 28,
+                ),
+                const Gap(6),
+                Text(
+                  "Aucune résidence disponible dans cette localité",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          SizedBox(
+            height: 255,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: residences.length,
+              separatorBuilder: (context, index) => const Gap(12),
+              itemBuilder: (context, index) {
+                return CompactResidenceCard(
+                  residence: residences[index],
+                  showRating: false,
+                );
+              },
+            ),
+          ),
       ],
     );
   }
+}
 
-  Widget _buildContent() {
-    if (_isLoading) {
-      return _buildLoadingState();
-    }
+class _LocationSectionData {
+  final String title;
+  final String? villeId;
+  final String? communeId;
+  final List<ResidenceModel> residences;
 
-    if (_hasError) {
-      return _buildErrorState();
-    }
-
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: _residences.length,
-      separatorBuilder: (context, index) => const Gap(12),
-      itemBuilder: (context, index) {
-        return CompactResidenceCard(
-          residence: _residences[index],
-          showRating: false,
-        );
-      },
-    );
-  }
-
-  Widget _buildLoadingState() {
-    return SizedBox(
-      height: 280,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        separatorBuilder: (context, index) => const Gap(12),
-        itemBuilder: (context, index) {
-          return SizedBox(
-            width: neirResidenceCardWidth,
-            child: LoadProductCard(),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildErrorState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Erreur de chargement',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red.shade700,
-                ),
-          ),
-          const Gap(6),
-          Text(
-            _errorMessage ?? 'Une erreur est survenue',
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.red.shade600,
-                ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Gap(12),
-          TextButton(
-            onPressed: _loadResidences,
-            child: Text(
-              'Réessayer',
-              style: TextStyle(color: Colors.red.shade700),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  _LocationSectionData({
+    required this.title,
+    this.villeId,
+    this.communeId,
+    required this.residences,
+  });
 }
 
 class AppPrimaryColors {
