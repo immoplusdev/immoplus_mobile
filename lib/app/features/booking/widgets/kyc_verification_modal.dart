@@ -154,58 +154,58 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //   }
   // }
 
-  Future<void> _startVerificationIOS() async {
-    String url = '';
-    if (widget.initialKycSession != null &&
-        widget.initialKycSession!.diditUrl.isNotEmpty) {
-      url = widget.initialKycSession!.diditUrl;
-    } else {
-      log("No valid session URL found, calling createKycSession");
-      final sessionCreate = await _kycRepository.createKycSession();
-      url = sessionCreate.url;
-    }
+  // Future<void> _startVerificationIOS() async {
+  //   String url = '';
+  //   if (widget.initialKycSession != null &&
+  //       widget.initialKycSession!.diditUrl.isNotEmpty) {
+  //     url = widget.initialKycSession!.diditUrl;
+  //   } else {
+  //     log("No valid session URL found, calling createKycSession");
+  //     final sessionCreate = await _kycRepository.createKycSession();
+  //     url = sessionCreate.url;
+  //   }
 
-    if (url.isEmpty) {
-      throw Exception("Session URL was empty");
-    }
+  //   if (url.isEmpty) {
+  //     throw Exception("Session URL was empty");
+  //   }
 
-    log("_startVerificationIOS WebView URL: $url");
+  //   log("_startVerificationIOS WebView URL: $url");
 
-    if (!mounted) return;
+  //   if (!mounted) return;
 
-    final result = await context.pushNamed<KycStatus>(
-      KycWebViewPage.routeName,
-      extra: url,
-    );
+  //   final result = await context.pushNamed<KycStatus>(
+  //     KycWebViewPage.routeName,
+  //     extra: url,
+  //   );
 
-    log("WebView verification result: $result");
+  //   log("WebView verification result: $result");
 
-    if (result != null) {
-      if (result == KycStatus.approved) {
-        if (mounted) {
-          Navigator.pop(context);
-          ToastUtils.showSuccess(
-              description: "Vérification d'identité approuvée !");
-          widget.onSuccess();
-        }
-      } else if (result == KycStatus.inReview) {
-        if (mounted) {
-          Navigator.pop(context);
-          ToastUtils.showSuccess(
-            description:
-                "Votre vérification d'identité a été complétée et est en cours d'examen.",
-          );
-          widget.onSuccess();
-        }
-      } else if (result == KycStatus.declined) {
-        ToastUtils.showError(description: "Vérification Didit refusée.");
-      } else {
-        ToastUtils.showError(description: "Vérification Didit échouée.");
-      }
-    } else {
-      ToastUtils.showError(description: "Vérification Didit annulée.");
-    }
-  }
+  //   if (result != null) {
+  //     if (result == KycStatus.approved) {
+  //       if (mounted) {
+  //         Navigator.pop(context);
+  //         ToastUtils.showSuccess(
+  //             description: "Vérification d'identité approuvée !");
+  //         widget.onSuccess();
+  //       }
+  //     } else if (result == KycStatus.inReview) {
+  //       if (mounted) {
+  //         Navigator.pop(context);
+  //         ToastUtils.showSuccess(
+  //           description:
+  //               "Votre vérification d'identité a été complétée et est en cours d'examen.",
+  //         );
+  //         widget.onSuccess();
+  //       }
+  //     } else if (result == KycStatus.declined) {
+  //       ToastUtils.showError(description: "Vérification Didit refusée.");
+  //     } else {
+  //       ToastUtils.showError(description: "Vérification Didit échouée.");
+  //     }
+  //   } else {
+  //     ToastUtils.showError(description: "Vérification Didit annulée.");
+  //   }
+  // }
 
   Future<void> _startVerificationNative() async {
     String token = widget.initialKycSession?.token ?? '';

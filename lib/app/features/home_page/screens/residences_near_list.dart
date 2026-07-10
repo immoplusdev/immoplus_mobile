@@ -14,9 +14,9 @@ import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/empty_state_card.dart';
-import 'package:immoplus/app/widgets/section_title.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
+import 'package:immoplus/app/configs/theme_config.dart';
 
 class NearResidencesConstants {
   NearResidencesConstants._();
@@ -188,26 +188,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                NearResidencesConstants.sectionTitle,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
-                  letterSpacing: 0.3,
-                ),
-              ),
-            ),
-
-
-                
-                 
+            HomeSectionTitle(title: NearResidencesConstants.sectionTitle),
             TextButton(
               onPressed: _nearResidences.isNotEmpty
                   ? () {
@@ -236,7 +217,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           ],
         ),
         SizedBox(
-          height: _locationError ? null : 170,
+          height: _locationError ? null : 255,
           child: _buildContent(),
         ),
         const Gap(15),
@@ -269,7 +250,6 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         return CompactResidenceCard(
           residence: _nearResidences[index],
           showRating: false,
-          showName: false,
         );
       },
     );

@@ -2,36 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-// import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
-import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class NearResidencesPage extends StatefulWidget {
-  const NearResidencesPage({
+class LocationResidencesPage extends StatefulWidget {
+  final String title;
+  final String? villeId;
+  final String? communeId;
+
+  const LocationResidencesPage({
     super.key,
-    required this.latitude,
-    required this.longitude,
-    this.radius = NearResidencesConstants.defaultRadius,
+    required this.title,
+    this.villeId,
+    this.communeId,
   });
 
-  // Constantes pour éviter les magic values
-  static const String routePath = '/near-residences';
-  static const String routeName = 'near-residences';
-
-  final double latitude;
-  final double longitude;
-  final double radius;
+  static const String routePath = '/location-residences';
+  static const String routeName = 'location-residences';
 
   @override
-  State<NearResidencesPage> createState() => _NearResidencesPageState();
+  State<LocationResidencesPage> createState() => _LocationResidencesPageState();
 }
 
-class _NearResidencesPageState extends State<NearResidencesPage> {
+class _LocationResidencesPageState extends State<LocationResidencesPage> {
   final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
   final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
@@ -39,17 +36,22 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
   @override
   void initState() {
     super.initState();
-    // getIt<AnalyticsService>().logNearResidencesViewed();
     _pagingController.addPageRequestListener(_loadPage);
   }
 
   Future<void> _loadPage(int pageKey) async {
     try {
+      final Map<String, dynamic> where = {};
+      if (widget.villeId != null) {
+        where['_villeId'] = widget.villeId;
+      }
+      if (widget.communeId != null) {
+        where['_communeId'] = widget.communeId;
+      }
+
       final result = await _residenceRepository.getResidences(
-        lat: widget.latitude,
-        long: widget.longitude,
-        radius: widget.radius,
         page: pageKey,
+        where: where,
       );
 
       if (result.hasNext == true) {
@@ -82,23 +84,12 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
           onPressed: () => context.pop(),
         ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Près De Vous',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-            ),
-            Text(
-              'Résidences dans un rayon de ${widget.radius.toInt()} km',
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
-            ),
-          ],
+        title: Text(
+          widget.title,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
         ),
       ),
       body: RefreshIndicator(
@@ -153,12 +144,6 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
                                 .copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
-                          ),
-                          const Gap(10),
-                          Text(
-                            "Il n'y a pas de résidences dans un rayon de ${widget.radius.toInt()} km",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

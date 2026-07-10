@@ -17,6 +17,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'components/home_search_appbar.dart';
 
 // part 'widgets/about_secton.dart';
@@ -112,7 +113,7 @@ class _HomePageState extends State<HomePage>
         builder: (context, state) {
           return EnvironmentsBadge(
             child: Scaffold(
-              backgroundColor: AppColors.whiteBackground,
+              backgroundColor: AppColors.white,
               body: DefaultTabController(
                 length: 4,
                 child: Stack(
@@ -120,7 +121,7 @@ class _HomePageState extends State<HomePage>
                     RefreshIndicator(
                       onRefresh: () async {
                         await context.read<BannersCubit>().fetchBanners();
-                        if (state.indexPage == 0) {
+                        if (state.indexPage == HomeTab.residence.value) {
                           HomePageState.refreshResidences();
                         } else {
                           HomePageState.getPageListController(state.indexPage)

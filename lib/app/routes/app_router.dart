@@ -27,6 +27,7 @@ import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
@@ -44,6 +45,7 @@ import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/registration/register_page.dart';
 import 'package:immoplus/app/data/enums/registration_type.dart';
 import 'package:immoplus/app/data/models/auth/verify_otp_extra.dart';
+import 'package:immoplus/app/features/registration/screens/register_number_otp.dart';
 import 'package:immoplus/app/features/registration/screens/send_email_or_number_opt_page.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
@@ -69,6 +71,10 @@ import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
+import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
+import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
+import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -158,7 +164,16 @@ class AppRouter {
           GoRoute(
             path: '/${RegisterPage.name}',
             name: RegisterPage.name,
-            builder: (context, state) => const RegisterPage(),
+            builder: (context, state) => RegisterPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
+          ),
+          GoRoute(
+            path: RegisterNumberOtpPage.routePath(),
+            name: RegisterNumberOtpPage.name,
+            builder: (context, state) => RegisterNumberOtpPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
           ),
           GoRoute(
             path: SendEmailOrNumberOptPage.routePath(),
@@ -290,6 +305,13 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: StripeResultRoute.path,
+        name: StripeResultRoute.name,
+        builder: (context, state) => StripeResultRoute(
+          paymentIntentData: state.extra as PaymentItentData,
+        ),
+      ),
+      GoRoute(
         path: '/onboarding',
         name: OnboardingNewPage.name,
         builder: (context, state) => const OnboardingNewPage(),
@@ -322,6 +344,32 @@ class AppRouter {
         path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
+      ),
+      GoRoute(
+        path: SuggestPage.routePath,
+        name: SuggestPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SuggestPage(
+            category: extra['category'] as String?,
+            lat: extra['lat'] as double?,
+            lng: extra['lng'] as double?,
+          );
+        },
+      ),
+      GoRoute(
+        path: SearchResultPage.routePath,
+        name: SearchResultPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SearchResultPage(
+            category: extra['category'] as String,
+            search: extra['search'] as String?,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+            displayText: extra['displayText'] as String,
+          );
+        },
       ),
       GoRoute(
         path: '/otp-confirm',
@@ -431,6 +479,19 @@ class AppRouter {
             latitude: extra['lat'] as double,
             longitude: extra['long'] as double,
             radius: extra['radius'] as double? ?? 50,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: LocationResidencesPage.routePath,
+        name: LocationResidencesPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return LocationResidencesPage(
+            title: extra['title'] as String,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
           );
         },
       ),
@@ -623,6 +684,13 @@ class AppRouter {
         name: KycWebViewPage.routeName,
         builder: (context, state) => KycWebViewPage(
           url: state.extra as String? ?? '',
+        ),
+      ),
+      GoRoute(
+        path: '/reservation/:id',
+        name: 'reservation_detail',
+        builder: (context, state) => BookingDetailPage(
+          id: state.pathParameters['id']!,
         ),
       ),
     ],

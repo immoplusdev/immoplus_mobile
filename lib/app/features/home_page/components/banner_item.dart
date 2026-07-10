@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
-import 'package:immoplus/app/features/home_page/components/banner_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -118,13 +118,6 @@ class BannerItem extends StatelessWidget {
           );
         }
         break;
-      // case BannerAction.annulerVisite:
-      //   final visiteId = metadata['demande_visite_id']?.toString();
-      //   final bienNom = metadata['bien_nom']?.toString();
-      //   if (visiteId != null) {
-      //     _showCancelVisiteConfirmation(context, visiteId, bienNom);
-      //   }
-      //   break;
       case BannerAction.mesAlertes:
         final alertId = metadata['alert_id']?.toString();
         final nbPropositions =
@@ -140,36 +133,9 @@ class BannerItem extends StatelessWidget {
         }
         break;
       default:
-        // Gérer d'autres URLs ou liens profonds ici
         break;
     }
   }
-
-  // void _showCancelVisiteConfirmation(
-  //     BuildContext context, String visiteId, String? bienNom) {
-  //   AppDialog.show(
-  //     title: 'Annuler la visite',
-  //     description:
-  //         'Voulez-vous vraiment annuler votre demande de visite pour ${bienNom ?? "ce bien"} ?',
-  //     primaryButtonText: 'Oui, annuler',
-  //     secondButtonText: 'Non',
-  //     onPrimary: () async {
-  //       try {
-  //         await getIt<BienImmobilierRepository>().annulerVisiteClient(
-  //           visiteId: visiteId,
-  //           notes: 'Annulé depuis la bannière promotionnelle',
-  //         );
-  //         ToastUtils.showSuccess(
-  //           description: 'Demande de visite annulée avec succès',
-  //         );
-  //       } catch (e) {
-  //         ToastUtils.showError(
-  //           description: 'Erreur lors de l\'annulation de la visite',
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 
   void _showCancelConfirmation(BuildContext context, String reservationId) {
     AppDialog.show(
@@ -195,64 +161,72 @@ class BannerItem extends StatelessWidget {
     );
   }
 
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'calendar-check':
+        return Iconsax.calendar_tick5;
+      case 'notification':
+        return Iconsax.notification5;
+      default:
+        return Iconsax.notification5;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final textStyle = GoogleFonts.plusJakartaSans(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+    );
+    final ctaStyle = GoogleFonts.plusJakartaSans(
+      color: Colors.white,
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+      decoration: TextDecoration.underline,
+    );
+
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (banner.icon != null) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Icon(
-              _getIconData(banner.icon!),
-              color: Colors.white,
-              size: 24,
-            ),
+          Icon(
+            _getIconData(banner.icon!),
+            color: Colors.white,
+            size: 24,
           ),
           const Gap(10),
         ],
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                banner.title ?? '',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const Gap(4),
-              Text(
-                banner.subtitle ?? '',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 11,
-                    ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              Flexible(
+                child: Text(
+                  banner.subtitle ?? '',
+                  style: textStyle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               if (banner.ctaLabel != null) ...[
-                const Gap(7),
-                Row(
-                  children: [
-                    BannerButton(
-                      label: banner.ctaLabel!,
-                      onPressed: () => _handleAction(context, banner.ctaUrl),
-                      isPrimary: true,
-                    ),
-                    if (banner.cta2Label != null) ...[
-                      const Gap(12),
-                      BannerButton(
-                        label: banner.cta2Label!,
-                        onPressed: () => _handleAction(context, banner.cta2Url),
-                        isPrimary: false,
-                      ),
-                    ],
-                  ],
+                const Gap(8),
+                GestureDetector(
+                  onTap: () => _handleAction(context, banner.ctaUrl),
+                  child: Text(
+                    banner.ctaLabel!,
+                    style: ctaStyle,
+                  ),
+                ),
+              ],
+              if (banner.cta2Label != null) ...[
+                const Gap(8),
+                GestureDetector(
+                  onTap: () => _handleAction(context, banner.cta2Url),
+                  child: Text(
+                    banner.cta2Label!,
+                    style: ctaStyle,
+                  ),
                 ),
               ],
             ],
@@ -260,16 +234,5 @@ class BannerItem extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'calendar-check':
-        return Iconsax.calendar_tick;
-      case 'notification':
-        return Iconsax.notification;
-      default:
-        return Iconsax.notification;
-    }
   }
 }

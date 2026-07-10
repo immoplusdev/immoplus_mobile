@@ -29,6 +29,8 @@ class CustomTextField extends StatefulWidget {
     this.enabledBorder,
     this.focusedBorder,
     this.contentPadding,
+    this.readOnly = false,
+    this.bottomPadding,
   });
   final String? labelText;
   final Widget? sufixIcon;
@@ -54,6 +56,8 @@ class CustomTextField extends StatefulWidget {
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
   final EdgeInsets? contentPadding;
+  final bool readOnly;
+  final double? bottomPadding;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
@@ -75,8 +79,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: widget.bottomPadding ?? 10),
       child: TextFormField(
+        readOnly: widget.readOnly,
         enabled: widget.isEnabled,
         style: (widget.fontSize != null)
             ? TextStyle(fontSize: widget.fontSize)

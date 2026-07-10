@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -25,16 +25,24 @@ class InternationalPhoneInput extends StatefulWidget {
   });
 
   @override
-  _InternationalPhoneInputState createState() =>
-      _InternationalPhoneInputState();
+  InternationalPhoneInputState createState() =>
+      InternationalPhoneInputState();
 }
 
-class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
+class InternationalPhoneInputState extends State<InternationalPhoneInput> {
   final TextEditingController _controller = TextEditingController();
+  final GlobalKey<FormFieldState<String>> _fieldKey =
+      GlobalKey<FormFieldState<String>>();
   late PhoneNumber _phoneNumber;
   late PhoneNumber
       _initialPhoneNumber; // AJOUT : Variable statique pour initialValue
   final ValueNotifier<bool?> _isValidNotifier = ValueNotifier<bool?>(null);
+
+  /// Force la validation visuelle du champ (bordure rouge / message d'erreur).
+  /// À appeler uniquement au moment de la soumission, pas pendant la saisie.
+  bool validate() {
+    return _fieldKey.currentState?.validate() ?? false;
+  }
 
   @override
   void initState() {
@@ -59,6 +67,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       padding: const EdgeInsets.only(bottom: 10),
       child: InternationalPhoneNumberInput(
         isEnabled: widget.isEnabled,
+        autoFocus: true,
+        fieldKey: _fieldKey,
         onInputChanged: (PhoneNumber number) {
           _phoneNumber = number;
         },
@@ -76,7 +86,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         // validator: widget.validator,
         validator: null,
         ignoreBlank: false,
-        autoValidateMode: AutovalidateMode.onUserInteraction,
+        autoValidateMode: AutovalidateMode.disabled,
         initialValue:
             _initialPhoneNumber, // MODIFICATION : Utiliser la valeur statique
         textFieldController: _controller,
@@ -101,20 +111,40 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         selectorTextStyle: Theme.of(context).textTheme.bodyLarge,
         inputDecoration: InputDecoration(
           hintStyle: Theme.of(context).textTheme.bodyMedium,
-          suffixIcon: const Icon(
-            FontAwesomeIcons.whatsapp,
-            size: 20,
-            color: Colors.green,
+          suffixIcon: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              if (_controller.text.isEmpty) return const SizedBox.shrink();
+              return IconButton(
+                icon: const Icon(
+                  Iconsax.close_circle,
+                  size: 20,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  _controller.clear();
+                  _phoneNumber = _initialPhoneNumber;
+                  _isValidNotifier.value = false;
+                  widget.onInputValidated?.call(false);
+                  widget.onValidPhoneNumber?.call('');
+                },
+              );
+            },
           ),
+          filled: true,
+          fillColor: Colors.transparent,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: BorderSide.none,
+            borderSide: const BorderSide(color: Color(0x1C000000)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radiusButton),
+            borderSide: const BorderSide(color: Color(0x1C000000)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: AppColors.primaryLite, width: 2),
           ),
-          fillColor: AppColors.ECECEC,
           errorStyle: const TextStyle(color: Colors.redAccent),
           contentPadding: const EdgeInsets.symmetric(vertical: 20),
           hintText: "Numéro de téléphone",

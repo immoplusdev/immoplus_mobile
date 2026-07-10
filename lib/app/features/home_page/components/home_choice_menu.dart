@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -15,26 +16,11 @@ class _Constants {
   static const double borderWidth = 1.0;
   static const double borderOpacity = 0.3;
   static const double imageSize = 32.0;
-  static const double imageBorderWidth = 2.0;
   static const double textIconGap = 6.0;
 }
 
-class MenuOption {
-  final String label;
-  final String imagePath;
-
-  MenuOption({required this.label, required this.imagePath});
-}
-
 class HomeChoiceMenu extends StatelessWidget {
-  HomeChoiceMenu({super.key});
-
-  final List<MenuOption> _choices = [
-    MenuOption(label: 'Résidences', imagePath: 'assets/img/menu_residence.jpg'),
-    MenuOption(label: 'Locations', imagePath: 'assets/img/menu_location.png'),
-    MenuOption(label: 'Meubles', imagePath: 'assets/img/menu_meubles.jpg'),
-    MenuOption(label: 'Biens', imagePath: 'assets/img/menu_biens.jpg'),
-  ];
+  const HomeChoiceMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +33,17 @@ class HomeChoiceMenu extends StatelessWidget {
           ),
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: _choices.length,
+            itemCount: HomeTab.values.length,
             separatorBuilder: (context, index) => const SizedBox(
               width: _Constants.itemSpacing,
             ),
             itemBuilder: (context, index) {
-              MenuOption choice = _choices[index];
-              bool isSelected = state.indexPage == index;
+              final tab = HomeTab.values[index];
+              bool isSelected = state.indexPage == tab.value;
 
               return GestureDetector(
                 onTap: () {
-                  context.read<HomePageCubit>().changeIndex(index);
+                  context.read<HomePageCubit>().changeIndex(tab.value);
                 },
                 child: UnconstrainedBox(
                   child: Container(
@@ -81,19 +67,12 @@ class HomeChoiceMenu extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
+                        SizedBox(
                           width: _Constants.imageSize,
                           height: _Constants.imageSize,
-                          // decoration: BoxDecoration(
-                          //   shape: BoxShape.circle,
-                          //   border: Border.all(
-                          //     color: Colors.white,
-                          //     width: _Constants.imageBorderWidth,
-                          //   ),
-                          // ),
                           child: ClipOval(
                             child: Image.asset(
-                              choice.imagePath,
+                              tab.imagePath,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
                                   Container(
@@ -105,7 +84,7 @@ class HomeChoiceMenu extends StatelessWidget {
                         const Gap(_Constants.textIconGap),
                         // Label
                         Text(
-                          choice.label,
+                          tab.label,
                           style:
                               Theme.of(context).textTheme.labelMedium!.copyWith(
                                     fontWeight: FontWeight.w600,
