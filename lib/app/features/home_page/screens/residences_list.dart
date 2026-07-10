@@ -85,7 +85,7 @@ class _ResidencesListState extends State<ResidencesList> {
     });
 
     try {
-      final futures = _residencesHomeItems.map((item) async {
+      final futures = _homeItems.map((item) async {
         if (item.isHeader) return null;
 
         final Map<String, dynamic> where = {};
@@ -144,7 +144,7 @@ class _ResidencesListState extends State<ResidencesList> {
 
   List<dynamic> _buildDisplayList() {
     final List<dynamic> list = [];
-    for (var item in _residencesHomeItems) {
+    for (var item in _homeItems) {
       if (item.isHeader) continue;
 
       final loaded = _activeSections.cast<_LocationSectionData?>().firstWhere(
@@ -302,13 +302,13 @@ class _ResidencesListState extends State<ResidencesList> {
   }
 }
 
-class ResidencesHomeListItem {
+class HomeListItem {
   final String title;
   final String? villeId;
   final String? communeId;
   final bool isHeader;
 
-  const ResidencesHomeListItem({
+  const HomeListItem({
     required this.title,
     this.villeId,
     this.communeId,
@@ -316,86 +316,86 @@ class ResidencesHomeListItem {
   });
 }
 
-final List<ResidencesHomeListItem> _residencesHomeItems = [
+final List<HomeListItem> _homeItems = [
   // --- Section 1 : Villes populaires ---
-  const ResidencesHomeListItem(title: "VILLES POPULAIRES", isHeader: true),
-  const ResidencesHomeListItem(
+  const HomeListItem(title: "VILLES POPULAIRES", isHeader: true),
+  const HomeListItem(
       title: "Abidjan", villeId: "8b97b9ce-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Aboisso", villeId: "8b981afc-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Anyama", villeId: "8b9806f9-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Grand-Bassam", villeId: "8b981ba8-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Yamoussoukro", villeId: "8b97d0b3-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "San-Pédro", villeId: "8b97ea35-a507-11ef-8b44-0e595bc2ce41"),
 
   // --- Section 2 : Communes d'Abidjan ---
-  // const ResidencesHomeListItem(title: "COMMUNES D'ABIDJAN", isHeader: true),
-  const ResidencesHomeListItem(
+  // const HomeListItem(title: "COMMUNES D'ABIDJAN", isHeader: true),
+  const HomeListItem(
       title: "Abobo", communeId: "8bb4b211-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Adjamé", communeId: "55a42f68-2867-11f1-a056-661ac3bf2f34"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Attécoubé", communeId: "8bb4d4d0-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Cocody", communeId: "8bb446ea-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Koumassi", communeId: "8bb4b588-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Marcory", communeId: "8bb498f3-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Plateau (Le Plateau)",
       communeId: "8bb48973-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Port-Bouët", communeId: "8bb4c15a-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Treichville", communeId: "8bb4a496-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Yopougon", communeId: "8bb47716-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Anyama (Commune)",
       communeId: "567aa860-2867-11f1-a056-661ac3bf2f34"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Bingerville", communeId: "8bb68343-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Bonoua", communeId: "8bb80dca-a507-11ef-8b44-0e595bc2ce41"),
 
   // --- Section 3 : Villes extérieures ---
-  // const ResidencesHomeListItem(title: "VILLES EXTÉRIEURES", isHeader: true),
-  const ResidencesHomeListItem(
+  // const HomeListItem(title: "VILLES EXTÉRIEURES", isHeader: true),
+  const HomeListItem(
       title: "Abengourou", villeId: "8b980686-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Adzopé", villeId: "8b981bef-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Agboville", villeId: "8b981b46-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Bondoukou", villeId: "8b980e6a-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Bouaké", villeId: "8b97dccc-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Daloa", villeId: "8b97e49c-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Divo", villeId: "8b97f856-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Ferkessédougou", villeId: "8b980eb7-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Gagnoa", villeId: "8b97f23e-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Issia", villeId: "8b981c4e-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Korhogo", villeId: "8b97ea95-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Man", villeId: "8b97f0aa-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Odienné", villeId: "8b9814b6-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Séguéla", villeId: "8b981507-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Soubré", villeId: "8b980dd8-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
+  const HomeListItem(
       title: "Toumodi", villeId: "8b981aa6-a507-11ef-8b44-0e595bc2ce41"),
 ];
 

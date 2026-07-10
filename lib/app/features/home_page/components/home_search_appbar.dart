@@ -24,7 +24,7 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/features/filter/filter_page.dart';
-import 'package:immoplus/app/features/notification/pages/notification_page.dart';
+import 'package:immoplus/app/widgets/notification_bell.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -568,24 +568,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                               },
                             ),
                             const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                if (sessionManager.currentUser != null) {
-                                  context.pushNamed(NotificationsPage.name);
-                                } else {
-                                  context.pushNamed(AuthenticationPage.name);
-                                }
-                              },
-                              child: Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.F2F2F2,
-                                ),
-                                child: const Icon(FontAwesomeIcons.bell),
-                              ),
-                            ),
+                            const NotificationBell(),
                           ],
                         ),
                       ),

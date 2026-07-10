@@ -18,3 +18,23 @@ samples, guidance on mobile development, and a full API reference.
 ## Build Runner
 `flutter pub run build_runner build --delete-conflicting-outputs`
 `flutter pub run build_runner watch --delete-conflicting-outputs`
+
+## Règles de Développement & Bonnes Pratiques
+### Routage / Navigation
+* **Pas de chemins codés en dur dans les pages :** Évitez d'écrire des chemins bruts directement lors de la navigation (ex. `context.push('/hotels/${hotel.id}/booking?roomId=${room.id}')`).
+* **Utilisation de getters de route statiques :** Chaque page (ex. `HotelDetailPage`, `HotelBookingSelectionPage`) doit implémenter une méthode de génération de route statique pour construire ses URLs de manière centralisée :
+  ```dart
+  static String route(String id) => '/hotels/$id';
+  ```
+  Et la navigation doit l'utiliser de la sorte : `context.push(HotelDetailPage.route(id))`.
+
+### Composants UI
+* **Pas de widgets natifs basiques (comme ElevatedButton, TextField, etc.) si des équivalents personnalisés existent :** Utilisez toujours les widgets réutilisables du projet (ex: `CustomButtom`, `CustomTextField`, `CustomRoundedTextField`, etc.) pour maintenir la cohérence visuelle.
+
+### Performance & Optimisation Réseau (Fluidité et Vitesse)
+* **Éviter les appels réseau redondants :** Lors du passage d'une vue parente à une vue enfant (ex. de `HotelDetailPage` à `HotelRoomDetailPage`), passez l'intégralité du modèle de données déjà chargé (ex. `HotelDetailModel`) via l'argument `extra` de GoRouter. Ne rechargez le modèle depuis le réseau qu'en secours (fallback) si le modèle reçu est nul (ex. lors d'un accès par lien profond / deep link). Cela garantit des transitions d'écran instantanées, fluides et économise la bande passante.
+
+### Notifications / Toasts
+* **Utilisation systématique de `ToastUtils` :** Évitez d'utiliser `ScaffoldMessenger.of(context).showSnackBar`. Utilisez toujours la classe utilitaire centralisée `ToastUtils` (ex. `ToastUtils.showError(...)`, `ToastUtils.warning(...)`) pour l'affichage des retours visuels à l'utilisateur afin de garantir un style et des animations unifiés.
+
+

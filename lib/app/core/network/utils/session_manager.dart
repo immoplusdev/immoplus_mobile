@@ -10,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../data/models/local/onboarding_schema.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 @singleton
 class SessionManager {
   //final isarConfig = getIt<IsarConfig>();
@@ -70,6 +72,12 @@ class SessionManager {
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
     await clearSession();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('recent_hotel_searches');
+    } catch (e) {
+      print('Error clearing hotel searches on logout: $e');
+    }
     OneSignal.logout();
     AppRouter.router.go('/');
     // AppRouter.router.goNamed(SplashScreen.name);
