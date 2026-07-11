@@ -1,8 +1,11 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
+import 'package:immoplus/app/features/hotel/widgets/free_anulation_card.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
@@ -37,8 +40,8 @@ class HotelCard extends StatelessWidget {
     final imageUrl = Utils.getImagePath(id: hotel.coverFileId);
 
     return Container(
-      width: 240,
-      height: 250,
+      width: 253,
+      height: 230,
       margin: const EdgeInsets.only(right: 16),
       child: Card(
         elevation: 0,
@@ -53,29 +56,13 @@ class HotelCard extends StatelessWidget {
             children: [
               // Background Image
               hotel.coverFileId.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
+                  ? CachedNetworkImage(
+                      imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
+                      errorWidget: (_, __, ___) =>
                           Container(color: Colors.grey.shade200),
                     )
                   : Container(color: Colors.grey.shade200),
-
-              // Shadow overlay from top to bottom for contrast
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.4)
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-              ),
 
               // Float overlay panel at the bottom (mockup inspired)
               Positioned(
@@ -93,57 +80,25 @@ class HotelCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  hotel.name,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.amber,
-                                  shape: BoxShape.circle,
-                                ),
-                                padding: const EdgeInsets.all(3),
-                                child: const Icon(Icons.star,
-                                    color: Colors.white, size: 10),
-                              ),
-                            ],
+                          Text(
+                            hotel.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const Gap(6),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.amber.shade400, width: 1),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 2),
-                                child: const Text(
-                                  "Annulation gratuite",
-                                  style: TextStyle(
-                                    color: Colors.amber,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                              FreeAnulationCard(),
                               Text(
                                 "${formatPrice(price)} F/nuit",
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: AppColors.D5D5D5,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 11,
                                 ),

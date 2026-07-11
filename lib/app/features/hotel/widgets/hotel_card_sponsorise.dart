@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
+import 'package:immoplus/app/features/hotel/widgets/free_anulation_card.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class HotelCardSponsorise extends StatelessWidget {
   final HotelModel hotel;
@@ -15,12 +18,10 @@ class HotelCardSponsorise extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double price = hotel.firstRoomPrice;
-
     final imageUrl = Utils.getImagePath(id: hotel.coverFileId);
 
     return Container(
-      width: 280,
+      width: 373,
       margin: const EdgeInsets.only(right: 16),
       child: Card(
         color: Colors.white,
@@ -39,91 +40,76 @@ class HotelCardSponsorise extends StatelessWidget {
             children: [
               // Image
               Container(
-                height: 140,
+                height: 200,
                 width: double.infinity,
                 color: Colors.grey.shade100,
                 child: hotel.coverFileId.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
+                        errorWidget: (_, __, ___) =>
                             Container(color: Colors.grey.shade200),
                       )
                     : Container(color: Colors.grey.shade200),
               ),
-
               // Content Area
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      hotel.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.black,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        hotel.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Gap(6),
-
-                    // Pills row
-                    Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.grey.shade800, width: 1),
-                            borderRadius: BorderRadius.circular(12),
+                      const Gap(6),
+                      Row(
+                        children: [
+                          FreeAnulationCard(
+                            color: AppColors.black,
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          child: const Text(
-                            "Annulation gratuite",
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
+                          const Gap(8),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xffFFC400)),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            child: const Text(
+                              "VIP",
+                              style: TextStyle(
+                                color: Color(0xffFFC400),
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                        const Gap(8),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.amber.shade700, width: 1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          child: const Text(
-                            "VIP",
-                            style: TextStyle(
-                              color: Colors.amber,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(8),
-
-                    // Description Short
-                    Text(
-                      hotel.descriptionShort,
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 11,
-                        height: 1.4,
+                        ],
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                      const Gap(8),
+
+                      // Description Short
+                      Expanded(
+                        child: Text(
+                          hotel.descriptionShort,
+                          style: TextStyle(
+                            fontSize: 11,
+                            height: 1.4,
+                          ),
+                          // maxLines: 2,
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

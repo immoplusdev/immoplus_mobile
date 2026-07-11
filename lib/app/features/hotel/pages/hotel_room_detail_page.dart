@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,12 +15,18 @@ import 'package:immoplus/app/features/hotel/cubit/hotel_state.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_room_cubit.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_room_state.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_booking_selection_page.dart';
+import 'package:immoplus/app/features/hotel/widgets/hotel_detail_header.dart';
+import 'package:immoplus/app/features/hotel/widgets/hotel_detail_shimmer.dart';
+import 'package:immoplus/app/features/residence_detail/components/detail_logment_title2.dart';
+import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
+import 'package:immoplus/app/widgets/image_collage.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:immoplus/app/widgets/circle_button.dart';
+import 'package:immoplus/app/services/share_service.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 
 class HotelRoomDetailPage extends StatefulWidget {
@@ -47,6 +52,7 @@ class HotelRoomDetailPage extends StatefulWidget {
 
 class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
   final ValueNotifier<bool> _liked = ValueNotifier(false);
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +91,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 );
 
                 if (isHotelLoading || isRoomLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Scaffold(body: HotelDetailShimmer());
                 }
 
                 HotelDetailModel? hotel = widget.hotel;
@@ -166,7 +172,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _CircleButton(
+              child: CircleButton(
                 icon: CupertinoIcons.chevron_back,
                 onTap: () {
                   if (context.canPop()) {
@@ -180,16 +186,27 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 4),
-                child: _CircleButton(
+                child: CircleButton(
+                  key: _shareButtonKey,
                   icon: Iconsax.send_2,
-                  onTap: () {},
+                  onTap: () async {
+                    final origin =
+                        ShareService.getSharePositionFromKey(_shareButtonKey);
+                    await ShareService.shareRoomHotel(
+                      hotelId: widget.hotelId,
+                      hotelRoomId: widget.roomTypeId,
+                      hotelRoomName: room.nom,
+                      context: context,
+                      sharePositionOrigin: origin,
+                    );
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: ValueListenableBuilder<bool>(
                   valueListenable: _liked,
-                  builder: (context, liked, _) => _CircleButton(
+                  builder: (context, liked, _) => CircleButton(
                     icon: liked ? Iconsax.heart5 : Iconsax.heart,
                     iconColor: liked ? Colors.red : null,
                     onTap: () => _liked.value = !liked,
@@ -209,108 +226,34 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                       ),
                     ),
             ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(20),
+              child: Container(
+                height: 30,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                ),
+              ),
+            ),
           ),
 
           // ── Title & Intro ──
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  appPadding, appPadding, appPadding, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    room.nom,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF111111),
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "${NumberFormat('#,###', 'fr_FR').format(room.tarification.prixParNuit).replaceAll(RegExp(r'\s+'), '.').replaceAll('\u00a0', '.')} FCFA / nuit",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Row(
-                        children: List.generate(
-                          5,
-                          (idx) => Icon(
-                            Icons.star,
-                            size: 16,
-                            color: idx < hotel.etoiles
-                                ? Colors.amber
-                                : Colors.grey.shade300,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "${hotel.etoiles.toDouble()}",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        "•  12 Commentaires",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            child: HotelDetailHeader(
+              title: room.nom,
+              price:
+                  "${NumberFormat('#,###', 'fr_FR').format(room.tarification.prixParNuit).replaceAll(RegExp(r'\s+'), '.').replaceAll('\u00a0', '.')} FCFA/nuit",
+              rating: hotel.etoiles.toDouble(),
+              commentCount: 12, // Hardcoded per user request
+              description: room.description,
             ),
           ),
 
           const _SliverDivider(),
 
-          // ── Description ──
-          if (room.description != null && room.description!.isNotEmpty) ...[
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: appPadding),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  "Description",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF222222),
-                  ),
-                ),
-              ),
-            ),
-            const SliverGap(8),
-            _ExpandableDescription(description: room.description!),
-            const _SliverDivider(),
-          ],
-
           // ── Features (Commodités) ──
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: appPadding),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                "Caractéristiques",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222),
-                ),
-              ),
-            ),
-          ),
+          const DetailLogmentTitle2(title: "Caractéristiques"),
           const SliverGap(12),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: appPadding),
@@ -339,35 +282,23 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           const _SliverDivider(),
 
           // ── Payment & Conditions ──
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: appPadding),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                "Paiement et conditions",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222),
-                ),
-              ),
-            ),
-          ),
+          const DetailLogmentTitle2(title: "Paiement et conditions"),
           const SliverGap(12),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: appPadding),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 _buildConditionRow("Acompte requis :", "${hotel.tauxAcompte}%"),
-                const Divider(height: 16, thickness: 0.5),
+                Gap(8),
                 _buildConditionRow("Taxe de séjour :",
                     "${NumberFormat('#,###', 'fr_FR').format(hotel.taxeSejour).replaceAll(RegExp(r'\s+'), '.').replaceAll('\u00a0', '.')} FCFA / nuit"),
-                const Divider(height: 16, thickness: 0.5),
+                Gap(8),
                 _buildConditionRow(
                   "Politique d'annulation :",
                   room.politiqueAnnulation.libelle,
                   isBoldValue: false,
                 ),
-                const Divider(height: 20, thickness: 0.5),
+                Gap(8),
                 Row(
                   children: [
                     const Text(
@@ -399,19 +330,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           const _SliverDivider(),
 
           // ── À savoir ──
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: appPadding),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                "À savoir",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222),
-                ),
-              ),
-            ),
-          ),
+          const DetailLogmentTitle2(title: "À savoir"),
           const SliverGap(12),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: appPadding),
@@ -432,19 +351,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           const _SliverDivider(),
 
           // ── Situation géographique (Lieux) ──
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: appPadding),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                "Lieux",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222),
-                ),
-              ),
-            ),
-          ),
+          const DetailLogmentTitle2(title: "Lieux"),
           const SliverGap(12),
           SliverToBoxAdapter(
             child: Padding(
@@ -478,46 +385,25 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           // ── Aperçus Gallery ──
           if (carouselImages.length > 1) ...[
             const _SliverDivider(),
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: appPadding),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  "Aperçus",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF222222),
-                  ),
-                ),
-              ),
-            ),
+            const DetailLogmentTitle2(title: "Aperçus"),
             const SliverGap(12),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: appPadding),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 1.2,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final imageUrl = carouselImages[index];
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        color: Colors.grey.shade100,
-                        child: Image.network(
-                          Utils.getImagePath(id: imageUrl),
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              Container(color: Colors.grey.shade300),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: appPadding),
+                child: ImageCollage(
+                  images: carouselImages,
+                  height: 350,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MosaicLogmentImages(
+                          tag: carouselImages.first,
+                          imageUrls: carouselImages,
                         ),
                       ),
                     );
                   },
-                  childCount: carouselImages.length.clamp(0, 4),
                 ),
               ),
             ),
@@ -733,40 +619,6 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           fontSize: 11,
           fontWeight: FontWeight.bold,
           color: Colors.black54,
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Circle Button ───────────────────────────────────────────────────────────
-class _CircleButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  final Color? iconColor;
-
-  const _CircleButton({
-    required this.icon,
-    required this.onTap,
-    this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: onTap,
-        child: Icon(
-          icon,
-          size: 20,
-          color: iconColor ?? Colors.black,
         ),
       ),
     );

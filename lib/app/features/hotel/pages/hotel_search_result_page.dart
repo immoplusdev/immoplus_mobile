@@ -11,20 +11,24 @@ import 'package:intl/intl.dart';
 
 class HotelSearchResultPage extends StatefulWidget {
   final String destination;
+  final double? lat;
+  final double? long;
   final DateTime? checkInDate;
   final DateTime? checkOutDate;
   final int adults;
   final int children;
-  final int rooms;
+  final int lits;
 
   const HotelSearchResultPage({
     super.key,
     required this.destination,
+    this.lat,
+    this.long,
     this.checkInDate,
     this.checkOutDate,
     required this.adults,
     required this.children,
-    required this.rooms,
+    required this.lits,
   });
 
   static const String routePath = '/hotels/search/results';
@@ -50,6 +54,9 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
     final dateFormat = DateFormat('yyyy-MM-dd');
     return repo
         .getHotels(
+      lat: widget.lat,
+      long: widget.long,
+      radius: (widget.lat != null && widget.long != null) ? 10 : null,
       checkInDate: widget.checkInDate != null
           ? dateFormat.format(widget.checkInDate!)
           : null,
@@ -58,7 +65,7 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
           : null,
       adults: widget.adults,
       children: widget.children,
-      lits: widget.rooms,
+      lits: widget.lits,
     )
         .catchError((e) {
       debugPrint('Hotel search error: $e');
@@ -136,7 +143,7 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                             size: 14, color: Colors.white70),
                         const Gap(4),
                         Text(
-                          '${widget.adults} Ad. • ${widget.rooms} Ch.',
+                          '${widget.adults} Ad. • ${widget.lits} Lit(s)',
                           style: const TextStyle(
                               color: Colors.white70, fontSize: 13),
                         ),

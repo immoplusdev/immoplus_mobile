@@ -530,11 +530,13 @@ class AppRouter {
             state.pageKey,
             HotelSearchResultPage(
               destination: extra['destination'] as String? ?? '',
+              lat: extra['lat'] as double?,
+              long: extra['long'] as double?,
               checkInDate: extra['checkInDate'] as DateTime?,
               checkOutDate: extra['checkOutDate'] as DateTime?,
               adults: extra['adults'] as int? ?? 2,
               children: extra['children'] as int? ?? 0,
-              rooms: extra['rooms'] as int? ?? 1,
+              lits: extra['lits'] as int? ?? 1,
             ),
           );
         },

@@ -25,7 +25,7 @@ class HotelRoomCard extends StatelessWidget {
         .replaceAll('\u00a0', '.');
 
     return SizedBox(
-      width: 260,
+      width: 184,
       child: GestureDetector(
         onTap: onTap,
         child: Column(
@@ -34,12 +34,13 @@ class HotelRoomCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(18),
                   child: Container(
-                    height: 180,
+                    height: 125,
                     width: double.infinity,
                     color: Colors.grey.shade100,
-                    child: room.images.isNotEmpty && room.images.first.trim().isNotEmpty
+                    child: room.images.isNotEmpty &&
+                            room.images.first.trim().isNotEmpty
                         ? Image.network(
                             Utils.getImagePath(id: room.images.first),
                             fit: BoxFit.cover,
@@ -71,7 +72,7 @@ class HotelRoomCard extends StatelessWidget {
                 ),
               ],
             ),
-            const Gap(14),
+            const Gap(7),
             Text(
               room.nom,
               style: const TextStyle(
@@ -83,7 +84,7 @@ class HotelRoomCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const Gap(4),
+            const Gap(2),
             Text(
               "$formattedPrice fcfa /nuits",
               style: TextStyle(

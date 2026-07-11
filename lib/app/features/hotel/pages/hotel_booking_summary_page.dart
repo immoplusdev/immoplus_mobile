@@ -6,7 +6,6 @@ import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_estimation_request.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -29,8 +28,6 @@ class HotelBookingSummaryPage extends StatefulWidget {
 }
 
 class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
-  String _selectedPaymentMethod = "Wave";
-
   HotelDetailModel get hotel => widget.data['hotel'] as HotelDetailModel;
   RoomTypeModel get room => widget.data['room'] as RoomTypeModel;
   HotelEstimationRequest get request =>
@@ -38,7 +35,6 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('dd MMMM yyyy', 'fr_FR');
     final checkIn = DateTime.parse(request.checkInDate);
     final checkOut = DateTime.parse(request.checkOutDate);
     final displayDates = checkIn.month == checkOut.month
@@ -63,7 +59,8 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+                icon:
+                    const Icon(Icons.arrow_back, color: Colors.black, size: 20),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -267,47 +264,6 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                             color: Color(0xFF2744DE),
                             fontWeight: FontWeight.bold,
                             fontSize: 14),
-                      ),
-                    ),
-
-                    const Gap(24),
-
-                    // ── MODE DE PAIEMENT Dropdown ──
-                    const Text(
-                      "MODE DE PAIEMENT",
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const Gap(8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade200),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: _selectedPaymentMethod,
-                          items: [
-                            "Wave",
-                            "Orange Money",
-                            "MTN Mobile Money",
-                            "Carte bancaire"
-                          ].map((m) {
-                            return DropdownMenuItem<String>(
-                              value: m,
-                              child: Text(m),
-                            );
-                          }).toList(),
-                          onChanged: (val) {
-                            if (val != null) {
-                              setState(() => _selectedPaymentMethod = val);
-                            }
-                          },
-                        ),
                       ),
                     ),
 

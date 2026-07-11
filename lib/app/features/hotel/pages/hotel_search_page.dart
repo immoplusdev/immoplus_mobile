@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -11,9 +12,13 @@ import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotels_collection.dart';
 import 'package:immoplus/app/data/repositories/hotel_repository.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_result_page.dart';
+import 'package:immoplus/app/features/hotel/widgets/adds_tag.dart';
+import 'package:immoplus/app/features/hotel/widgets/discover_card.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card.dart';
+import 'package:immoplus/app/features/hotel/widgets/hotel_shimmer_card.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card_sponsorise.dart';
-import 'package:immoplus/app/features/hotel/pages/hotel_destination_search_page.dart';
+import 'package:immoplus/app/features/location_module/location_page.dart';
+import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -38,6 +43,16 @@ class HomeListItem {
 final List<HomeListItem> _homeItems = [
   const HomeListItem(
       title: "Abidjan", villeId: "8b97b9ce-a507-11ef-8b44-0e595bc2ce41"),
+  const HomeListItem(
+      title: "Aboisso", villeId: "8b981afc-a507-11ef-8b44-0e595bc2ce41"),
+  const HomeListItem(
+      title: "Anyama", villeId: "8b9806f9-a507-11ef-8b44-0e595bc2ce41"),
+  const HomeListItem(
+      title: "Grand-Bassam", villeId: "8b981ba8-a507-11ef-8b44-0e595bc2ce41"),
+  const HomeListItem(
+      title: "Yamoussoukro", villeId: "8b97d0b3-a507-11ef-8b44-0e595bc2ce41"),
+  const HomeListItem(
+      title: "San-Pédro", villeId: "8b97ea35-a507-11ef-8b44-0e595bc2ce41"),
 ];
 
 class HotelSearchPage extends StatefulWidget {
@@ -56,7 +71,10 @@ class _HotelSearchPageState extends State<HotelSearchPage>
   DateTimeRange? _selectedDateRange;
   int _adults = 2;
   int _children = 0;
-  int _rooms = 1;
+  int _lits = 1;
+
+  double? _selectedLat;
+  double? _selectedLng;
 
   late Future<HotelsCollection> _closestHotelsFuture;
   late Future<HotelsCollection> _sponsoredHotelsFuture;
@@ -89,11 +107,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
 
   void _initFutures() {
     final repo = getIt<HotelRepository>();
-    _closestHotelsFuture =
-        repo.getHotels(lat: 5.3568, long: -3.9246, radius: 10).catchError((e) {
-      debugPrint('Closest hotels load failure: $e');
-      return HotelsCollection(data: []);
-    });
+    // Initialized as empty, will be overwritten by _fetchUserLocationAndRefresh
+    _closestHotelsFuture = Future.value(HotelsCollection(data: []));
     _sponsoredHotelsFuture = repo.getHotels(isSponsored: true).catchError((e) {
       debugPrint('Sponsored hotels load failure: $e');
       return HotelsCollection(data: []);
@@ -142,19 +157,28 @@ class _HotelSearchPageState extends State<HotelSearchPage>
 
   // ── Open the dedicated destination search page ──
   Future<void> _openDestinationSearch() async {
-    final result = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (_) => HotelDestinationSearchPage(
-          initialQuery: _destinationController.text,
-        ),
+    showModalBottomSheet(
+      useRootNavigator: true,
+      context: context,
+      isScrollControlled: true,
+      enableDrag: true,
+      showDragHandle: false,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) => const FractionallySizedBox(
+        heightFactor: 0.9,
+        child: LocationPage(),
       ),
-    );
-    if (result != null && result.isNotEmpty) {
-      setState(() {
-        _destinationController.text = result;
-      });
-    }
+    ).then((value) {
+      if (value is Address) {
+        setState(() {
+          _destinationController.text = value.description ?? '';
+          _selectedLat = value.latitude;
+          _selectedLng = value.longitude;
+        });
+      }
+    });
   }
 
   // ── Recent Searches ──
@@ -185,8 +209,10 @@ class _HotelSearchPageState extends State<HotelSearchPage>
 
     final newSearch = {
       'destination': destination,
+      'lat': _selectedLat,
+      'lng': _selectedLng,
       'dates': datesText,
-      'rooms': _rooms,
+      'lits': _lits,
       'adults': _adults,
       'children': _children,
     };
@@ -308,16 +334,12 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Gap(20),
-                  _buildCounterRow("Chambres", _rooms, (val) {
-                    if (val > 0) setModalState(() => _rooms = val);
+                  _buildCounterRow("Lits", _lits, (val) {
+                    if (val > 0) setModalState(() => _lits = val);
                   }),
                   const Divider(height: 30),
                   _buildCounterRow("Adultes", _adults, (val) {
                     if (val > 0) setModalState(() => _adults = val);
-                  }),
-                  const Divider(height: 30),
-                  _buildCounterRow("Enfants", _children, (val) {
-                    if (val >= 0) setModalState(() => _children = val);
                   }),
                   const Gap(30),
                   CustomButtom(
@@ -369,11 +391,13 @@ class _HotelSearchPageState extends State<HotelSearchPage>
       HotelSearchResultPage.routePath,
       extra: {
         'destination': _destinationController.text,
+        'lat': _selectedLat,
+        'long': _selectedLng,
         'checkInDate': _selectedDateRange?.start,
         'checkOutDate': _selectedDateRange?.end,
         'adults': _adults,
         'children': _children,
-        'rooms': _rooms,
+        'lits': _lits,
       },
     );
   }
@@ -387,435 +411,459 @@ class _HotelSearchPageState extends State<HotelSearchPage>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          // ── SliverAppBar ──
-          SliverAppBar(
-            expandedHeight: 100,
-            pinned: true,
-            backgroundColor: AppColors.primary,
-            elevation: 0,
-            leading: Center(
-              child: GestureDetector(
-                onTap: () => context.pop(),
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            _initFutures();
+          });
+          await Future.delayed(const Duration(milliseconds: 500));
+        },
+        child: CustomScrollView(
+          physics: const ClampingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          slivers: [
+            // ── SliverAppBar ──
+            SliverAppBar(
+              expandedHeight: 100,
+              pinned: true,
+              backgroundColor: AppColors.primary,
+              elevation: 0,
+              leading: Center(
+                child: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
                   ),
-                  child: const Icon(Icons.arrow_back, color: Colors.black),
                 ),
               ),
+              title: Text(
+                "Hôtel",
+                style: GoogleFonts.calSans(
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 22),
+              ),
+              centerTitle: true,
+              actions: const [
+                NotificationBell(),
+                Gap(16),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(color: AppColors.primary),
+              ),
             ),
-            title: const Text(
-              "Hôtel",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22),
-            ),
-            centerTitle: true,
-            actions: const [
-              NotificationBell(),
-              Gap(16),
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(color: AppColors.primary),
-            ),
-          ),
 
-          // ── Overlapping Search Card ──
-          SliverToBoxAdapter(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Blue header extension background
-                Positioned(
-                  top: -50,
-                  left: 0,
-                  right: 0,
-                  height: 100,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(24),
-                        bottomRight: Radius.circular(24),
+            // ── Overlapping Search Card ──
+            SliverToBoxAdapter(
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Blue header extension background
+                  Positioned(
+                    top: -50,
+                    left: 0,
+                    right: 0,
+                    height: 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(24),
+                          bottomRight: Radius.circular(24),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // The floating Card
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffFCFEFF),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.E9E9E9),
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ── Destination tap-to-search button ──
+                          InkWell(
+                            onTap: _openDestinationSearch,
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              height: 41,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                                border: Border.all(color: AppColors.D5D5D5),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Row(
+                                children: [
+                                  Icon(Iconsax.location,
+                                      color: AppColors.primary, size: 20),
+                                  const Gap(10),
+                                  Expanded(
+                                    child: Text(
+                                      _destinationController.text.isEmpty
+                                          ? 'Destination'
+                                          : _destinationController.text,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight:
+                                            _destinationController.text.isEmpty
+                                                ? FontWeight.normal
+                                                : FontWeight.w600,
+                                        color:
+                                            _destinationController.text.isEmpty
+                                                ? Colors.grey.shade400
+                                                : Colors.black,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  if (_destinationController.text.isNotEmpty)
+                                    GestureDetector(
+                                      onTap: () => setState(() {
+                                        _destinationController.clear();
+                                        _selectedLat = null;
+                                        _selectedLng = null;
+                                      }),
+                                      child: const Icon(Icons.close,
+                                          color: Colors.grey, size: 18),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const Gap(14),
+
+                          // ── Date & occupants row ──
+                          Row(
+                            children: [
+                              // Date range
+                              Expanded(
+                                flex: 12,
+                                child: InkWell(
+                                  onTap: () => _selectDates(context),
+                                  borderRadius: BorderRadius.circular(32),
+                                  child: Container(
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(32),
+                                      border:
+                                          Border.all(color: AppColors.D5D5D5),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Row(
+                                      children: [
+                                        Icon(Iconsax.calendar_1,
+                                            size: 18, color: AppColors.primary),
+                                        const Gap(8),
+                                        Expanded(
+                                          child: Text(
+                                            datesText,
+                                            style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Gap(8),
+
+                              // Adults
+                              Expanded(
+                                flex: 5,
+                                child: InkWell(
+                                  onTap: () => _showGuestsModal(context),
+                                  borderRadius: BorderRadius.circular(32),
+                                  child: Container(
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(32),
+                                      border:
+                                          Border.all(color: AppColors.D5D5D5),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Iconsax.user,
+                                            size: 18, color: AppColors.primary),
+                                        const Gap(6),
+                                        Flexible(
+                                          child: Text(
+                                            "$_adults",
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Gap(8),
+
+                              // Rooms
+                              Expanded(
+                                flex: 5,
+                                child: InkWell(
+                                  onTap: () => _showGuestsModal(context),
+                                  borderRadius: BorderRadius.circular(32),
+                                  child: Container(
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(32),
+                                      border:
+                                          Border.all(color: AppColors.D5D5D5),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.bed_outlined,
+                                            size: 18, color: AppColors.primary),
+                                        const Gap(6),
+                                        Flexible(
+                                          child: Text(
+                                            "$_lits",
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Gap(10),
+                          // ── Chercher Button ──
+                          CustomButtom(
+                            text: "Chercher",
+                            onClick: _onSearch,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // ── Recent searches (animated dismissal) ──
+            if (_recentSearches.isNotEmpty && _recentSearchesVisible) ...[
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                sliver: SliverToBoxAdapter(
+                  child: FadeTransition(
+                    opacity: _hideAnimation,
+                    child: SizeTransition(
+                      sizeFactor: _hideAnimation,
+                      axisAlignment: -1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Recherche récente",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          TextButton(
+                            onPressed: _clearRecentSearches,
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              "Supprimer",
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-
-                // The floating Card
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        )
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // ── Destination tap-to-search button ──
-                        InkWell(
-                          onTap: _openDestinationSearch,
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            height: 56,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF5F6F8),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Row(
-                              children: [
-                                const Icon(Iconsax.location,
-                                    color: Colors.blue, size: 20),
-                                const Gap(10),
-                                Expanded(
-                                  child: Text(
-                                    _destinationController.text.isEmpty
-                                        ? 'Destination'
-                                        : _destinationController.text,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight:
-                                          _destinationController.text.isEmpty
-                                              ? FontWeight.normal
-                                              : FontWeight.w600,
-                                      color: _destinationController.text.isEmpty
-                                          ? Colors.grey.shade400
-                                          : Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                if (_destinationController.text.isNotEmpty)
-                                  GestureDetector(
-                                    onTap: () => setState(
-                                        () => _destinationController.clear()),
-                                    child: const Icon(Icons.close,
-                                        color: Colors.grey, size: 18),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        const Gap(14),
-
-                        // ── Date & occupants row ──
-                        Row(
-                          children: [
-                            // Date range
-                            Expanded(
-                              child: InkWell(
-                                onTap: () => _selectDates(context),
-                                borderRadius: BorderRadius.circular(16),
-                                child: Container(
-                                  height: 56,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF5F6F8),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Iconsax.calendar_1,
-                                          size: 20, color: Colors.blue),
-                                      const Gap(8),
-                                      Expanded(
-                                        child: Text(
-                                          datesText,
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Gap(8),
-
-                            // Guests
-                            Expanded(
-                              child: InkWell(
-                                onTap: () => _showGuestsModal(context),
-                                borderRadius: BorderRadius.circular(16),
-                                child: Container(
-                                  height: 56,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF5F6F8),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Iconsax.user,
-                                          size: 20, color: Colors.blue),
-                                      const Gap(6),
-                                      Expanded(
-                                        child: Text(
-                                          "$_adults Ad. • $_rooms Ch.",
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const Gap(20),
-
-                        // ── Chercher Button ──
-                        CustomButtom(
-                          text: "Chercher",
-                          onClick: _onSearch,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ── Recent searches (animated dismissal) ──
-          if (_recentSearches.isNotEmpty && _recentSearchesVisible) ...[
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              sliver: SliverToBoxAdapter(
+              ),
+              SliverToBoxAdapter(
                 child: FadeTransition(
                   opacity: _hideAnimation,
                   child: SizeTransition(
                     sizeFactor: _hideAnimation,
                     axisAlignment: -1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Recherche récente",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        TextButton(
-                          onPressed: _clearRecentSearches,
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: Text(
-                            "Supprimer",
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        itemCount: _recentSearches.length,
+                        itemBuilder: (context, index) {
+                          final item = _recentSearches[index];
+                          return _buildRecentSearchCard(
+                            item,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: FadeTransition(
-                opacity: _hideAnimation,
-                child: SizeTransition(
-                  sizeFactor: _hideAnimation,
-                  axisAlignment: -1,
-                  child: SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      itemCount: _recentSearches.length,
-                      itemBuilder: (context, index) {
-                        final item = _recentSearches[index];
-                        return _buildRecentSearchCard(
-                          item['destination'] ?? '',
-                          item['dates'] ?? '',
-                          item['rooms'] as int? ?? 1,
-                          item['adults'] as int? ?? 2,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
 
-          // ── Closest Hotels Section ──
-          FutureBuilder<HotelsCollection>(
-            future: _closestHotelsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 50,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                );
-              }
-              final hotels = snapshot.data?.data ?? [];
-              if (hotels.isEmpty) {
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              }
-              return _buildSliverHotelSection("Les plus proches", hotels);
-            },
-          ),
-
-          // ── Sponsored Hotels Section ──
-          FutureBuilder<HotelsCollection>(
-            future: _sponsoredHotelsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 50,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                );
-              }
-              final hotels = snapshot.data?.data ?? [];
-              if (hotels.isEmpty) {
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              }
-              return _buildSliverHotelSection("Ads", hotels, isSponsored: true);
-            },
-          ),
-
-          // ── Dynamic City Hotels ──
-          ..._cityHotelsFutures.entries.map((entry) {
-            return FutureBuilder<HotelsCollection>(
-              future: entry.value,
+            // ── Closest Hotels Section ──
+            FutureBuilder<HotelsCollection>(
+              future: _closestHotelsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 50,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                  );
+                  return _buildShimmerSection("Les plus proches");
                 }
                 final hotels = snapshot.data?.data ?? [];
                 if (hotels.isEmpty) {
                   return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
-                return _buildSliverHotelSection(entry.key, hotels);
+                return _buildSliverHotelSection("Les plus proches", hotels);
               },
-            );
-          }),
+            ),
 
-          // ── Discover Côte d'Ivoire ──
-          const SliverPadding(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Côte d'ivoire",
-                    style: TextStyle(
-                        fontSize: 22,
+            // ── Sponsored Hotels Section ──
+            FutureBuilder<HotelsCollection>(
+              future: _sponsoredHotelsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildShimmerSection("Ads", isSponsored: true);
+                }
+                final hotels = snapshot.data?.data ?? [];
+                if (hotels.isEmpty) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
+                return _buildSliverHotelSection("Ads", hotels,
+                    isSponsored: true);
+              },
+            ),
+
+            // ── Dynamic City Hotels ──
+            ..._cityHotelsFutures.entries.map((entry) {
+              return FutureBuilder<HotelsCollection>(
+                future: entry.value,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return _buildShimmerSection(entry.key);
+                  }
+                  final hotels = snapshot.data?.data ?? [];
+                  if (hotels.isEmpty) {
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  }
+                  return _buildSliverHotelSection(entry.key, hotels);
+                },
+              );
+            }),
+
+            // ── Discover Côte d'Ivoire ──
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [AddsTag()],
+                    ),
+                    Text(
+                      "Côte d'ivoire",
+                      style: GoogleFonts.oswald(
+                        fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange),
-                  ),
-                  Text(
-                    "Découvrir la Côte d'ivoire",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Gap(4),
-                  Text(
-                    "Offrez-vous le confort d'un chez-soi sans les contraintes. Nos chambres sont pensées pour répondre à vos besoins.",
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                ],
+                        color: const Color(0xFFF08C00),
+                      ),
+                    ),
+                    Text(
+                      "Découvrir la Côte d'ivoire",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    Gap(8),
+                    Text(
+                      "Offrez-vous le confort d'un chez-soi sans les contraintes. Nos chambres sont pensées pour répondre à vos besoins.",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 40),
-            sliver: SliverGrid.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1.4,
-              children: [
-                _buildDiscoverCard(
-                    "assets/img/onb_1.jpeg", "Plages de Grand-Bassam"),
-                _buildDiscoverCard(
-                    "assets/img/onb_2.jpeg", "Basilique Yamoussoukro"),
-              ],
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  const DiscoverCard(assetPath: "assets/img/1.png"),
+                  const DiscoverCard(assetPath: "assets/img/2.png"),
+                  const DiscoverCard(assetPath: "assets/img/3.png"),
+                ]),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildRecentSearchCard(
-      String title, String dates, int rooms, int adults) {
+  Widget _buildRecentSearchCard(Map<String, dynamic> item) {
+    final title = item['destination'] ?? '';
+    final dates = item['dates'] ?? '';
+    final lits = item['lits'] as int? ?? 1;
+    final adults = item['adults'] as int? ?? 2;
+
     return GestureDetector(
       onTap: () {
         _destinationController.text = title;
+        _selectedLat = item['lat'] as double?;
+        _selectedLng = item['lng'] as double?;
         _onSearch();
       },
       child: Container(
         width: 250,
         margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade100),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            )
-          ],
+          border: Border.all(color: Color(0xFFE7E7E3)),
         ),
         padding: const EdgeInsets.all(14),
         child: Row(
           children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.08),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Iconsax.location, size: 16, color: AppColors.primary),
-            ),
+            Icon(Iconsax.location, size: 16, color: AppColors.primary),
             const Gap(10),
             Expanded(
               child: Column(
@@ -833,7 +881,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                       style:
                           TextStyle(color: Colors.grey.shade600, fontSize: 11),
                       overflow: TextOverflow.ellipsis),
-                  Text("$rooms Ch., $adults Ad.",
+                  Text("$lits Lit(s), $adults Ad.",
                       style:
                           TextStyle(color: Colors.grey.shade500, fontSize: 11)),
                 ],
@@ -842,6 +890,37 @@ class _HotelSearchPageState extends State<HotelSearchPage>
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildShimmerSection(String title, {bool isSponsored = false}) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+          child: isSponsored
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [AddsTag()],
+                )
+              : Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+        ),
+        SizedBox(
+          height: isSponsored ? 335 : 230,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return HotelShimmerCard(isSponsored: isSponsored);
+            },
+          ),
+        ),
+      ]),
     );
   }
 
@@ -854,25 +933,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
           child: isSponsored
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.grey.shade400, width: 1),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 4),
-                      child: const Text(
-                        "Ads",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
+                  children: [AddsTag()],
                 )
               : Text(
                   title,
@@ -881,7 +942,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                 ),
         ),
         SizedBox(
-          height: isSponsored ? 310 : 250,
+          height: isSponsored ? 335 : 230,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -895,35 +956,6 @@ class _HotelSearchPageState extends State<HotelSearchPage>
           ),
         ),
       ]),
-    );
-  }
-
-  Widget _buildDiscoverCard(String assetPath, String title) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        image: DecorationImage(
-          image: AssetImage(assetPath),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            colors: [Colors.black.withValues(alpha: 0.6), Colors.transparent],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
-        ),
-        padding: const EdgeInsets.all(14),
-        alignment: Alignment.bottomLeft,
-        child: Text(
-          title,
-          style: const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
-        ),
-      ),
     );
   }
 }
