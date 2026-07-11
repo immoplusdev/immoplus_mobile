@@ -9,6 +9,11 @@ import '../models/remote/hotel/hotel_estimation_request.dart';
 import '../models/remote/hotel/hotel_estimation_response.dart';
 import '../models/remote/hotel/hotel_villes_response.dart';
 import '../models/remote/hotel/hotel_room_detail_model.dart';
+import '../models/remote/hotel/hotel_reservation_request.dart';
+import '../models/remote/hotel/hotel_reservation_response.dart';
+import '../models/remote/hotel/hotel_payment_request.dart';
+import '../models/remote/hotel/hotel_payment_response.dart';
+import '../models/remote/hotel/hotel_payment_methods_response.dart';
 import '../providers/hotel_provider.dart';
 
 @injectable
@@ -16,9 +21,11 @@ class HotelRepository {
   final Dio dioClient;
   HotelRepository(this.dioClient);
 
-  Future<HotelRoomDetailModel> getRoomDetail(String hotelId, String roomTypeId) async {
+  Future<HotelRoomDetailModel> getRoomDetail(
+      String hotelId, String roomTypeId) async {
     try {
-      final response = await HotelProvider(dioClient).getRoomDetail(hotelId, roomTypeId);
+      final response =
+          await HotelProvider(dioClient).getRoomDetail(hotelId, roomTypeId);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
@@ -95,14 +102,65 @@ class HotelRepository {
     required HotelEstimationRequest request,
   }) async {
     try {
-      final response = await HotelProvider(dioClient).getEstimation(hotelId, request);
+      final response =
+          await HotelProvider(dioClient).getEstimation(hotelId, request);
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to get hotel reservation estimation: ${dioError.message}');
+      throw Exception(
+          'Failed to get hotel reservation estimation: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to get hotel reservation estimation: $error');
+    }
+  }
+
+  Future<HotelReservationResponse> createReservation({
+    required String hotelId,
+    required HotelReservationRequest request,
+  }) async {
+    try {
+      final response =
+          await HotelProvider(dioClient).createReservation(hotelId, request);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to create reservation: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to create reservation: $error');
+    }
+  }
+
+  Future<HotelPaymentMethodsResponse> getPaymentMethods(String hotelId) async {
+    try {
+      final response =
+          await HotelProvider(dioClient).getPaymentMethods(hotelId);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to get payment methods: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to get payment methods: $error');
+    }
+  }
+
+  Future<HotelPaymentResponse> initPayment({
+    required String hotelId,
+    required String reservationId,
+    required HotelPaymentRequest request,
+  }) async {
+    try {
+      final response = await HotelProvider(dioClient)
+          .initPayment(hotelId, reservationId, request);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to init payment: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to init payment: $error');
     }
   }
 }

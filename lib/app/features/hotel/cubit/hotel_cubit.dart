@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import '../../../data/models/remote/hotel/hotel_reservation_request.dart';
+import '../../../data/models/remote/hotel/hotel_reservation_response.dart';
+import '../../../data/models/remote/hotel/hotel_payment_methods_response.dart';
 import '../../../data/models/remote/hotel/hotel_estimation_request.dart';
 import '../../../data/repositories/hotel_repository.dart';
 import 'hotel_state.dart';
@@ -75,6 +78,27 @@ class HotelCubit extends Cubit<HotelState> {
       emit(HotelState.estimationLoaded(estimation: response));
     } catch (e) {
       emit(HotelState.error(message: e.toString()));
+    }
+  }
+
+  Future<HotelReservationResponse> createReservation({
+    required String hotelId,
+    required HotelReservationRequest request,
+  }) async {
+    try {
+      final response = await _hotelRepository.createReservation(
+          hotelId: hotelId, request: request);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<HotelPaymentMethodsResponse> getPaymentMethods(String hotelId) async {
+    try {
+      return await _hotelRepository.getPaymentMethods(hotelId);
+    } catch (e) {
+      rethrow;
     }
   }
 }

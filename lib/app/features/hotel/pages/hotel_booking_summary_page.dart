@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_estimation_request.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
@@ -11,6 +12,12 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_booking_card.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus/app/data/models/remote/hotel/hotel_reservation_request.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_payment_selector_page.dart';
+import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
 class HotelBookingSummaryPage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -273,8 +280,69 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                     CustomButtom(
                       text: "Réserver",
                       borderRadius: BorderRadius.circular(26),
-                      onClick: () {
-                        // TODO Finalize booking payment
+                      onClick: () async {
+                        final sessionManager = getIt<SessionManager>();
+                        final currentUser = sessionManager.currentUser;
+                        if (currentUser == null) {
+                          EasyLoadingHandler.toast(
+                              text: "Veuillez vous connecter pour réserver.");
+                          return;
+                        }
+
+                        EasyLoadingHandler.showLoadingToast(
+                            text: 'Création de la réservation...');
+                        try {
+                          final reservationRequest = HotelReservationRequest(
+                            roomTypeId: room.roomTypeId,
+                            checkInDate: request.checkInDate,
+                            checkOutDate: request.checkOutDate,
+                            adults: request.adults,
+                            children: request.children ?? 0,
+                            avecPetitDejeuner: request.avecPetitDejeuner,
+                            demandesSpeciales: "",
+                            voyageur: HotelVoyageur(
+                              prenom: currentUser.firstName ?? '',
+                              nom: currentUser.lastName ?? '',
+                              telephone: currentUser.phoneNumber ?? '',
+                              email: currentUser.email ?? '',
+                            ),
+                          );
+
+                          final response = await context
+                              .read<HotelCubit>()
+                              .createReservation(
+                                hotelId: hotel.hotelId,
+                                request: reservationRequest,
+                              );
+
+                          EasyLoadingHandler.hideLoadingToast();
+
+                          if (response.acompte != null &&
+                              response.acompte!.montant > 0) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HotelPaymentSelectorPage(
+                                  hotelId: hotel.hotelId,
+                                  paymentPageAdapter: PaymentPageAdapter(
+                                    collection: ProductType.hotel_reservation.name,
+                                    itemId: response.reservationId,
+                                    amount: response.acompte!.montant,
+                                    extra: {'hotelId': hotel.hotelId},
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            EasyLoadingHandler.showSuccessToast(
+                                text: "Réservation effectuée avec succès !");
+                            context.pop();
+                          }
+                        } catch (e) {
+                          EasyLoadingHandler.hideLoadingToast();
+                          EasyLoadingHandler.showErrorToast(
+                              text: "Erreur: ${e.toString()}");
+                        }
                       },
                     ),
                   ],

@@ -38,11 +38,13 @@ class StripePage extends StatefulWidget {
     required this.productType,
     required this.orderID,
     required this.amount,
+    this.extra,
   });
 
   final String productType;
   final String orderID;
   final int amount;
+  final Object? extra;
 
   @override
   State<StripePage> createState() => _StripePageState();
@@ -69,6 +71,7 @@ class _StripePageState extends State<StripePage> {
       productType: widget.productType,
       orderID: widget.orderID,
       amount: widget.amount,
+      extra: widget.extra,
       child: ListenableBuilder(
         listenable: _controller,
         builder: (context, _) {

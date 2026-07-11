@@ -8,6 +8,11 @@ import '../models/remote/hotel/hotel_estimation_request.dart';
 import '../models/remote/hotel/hotel_estimation_response.dart';
 import '../models/remote/hotel/hotel_villes_response.dart';
 import '../models/remote/hotel/hotel_room_detail_model.dart';
+import '../models/remote/hotel/hotel_reservation_request.dart';
+import '../models/remote/hotel/hotel_reservation_response.dart';
+import '../models/remote/hotel/hotel_payment_request.dart';
+import '../models/remote/hotel/hotel_payment_response.dart';
+import '../models/remote/hotel/hotel_payment_methods_response.dart';
 
 part 'hotel_provider.g.dart';
 
@@ -47,5 +52,23 @@ abstract class HotelProvider {
   Future<HotelEstimationResponse> getEstimation(
     @Path() String hotelId,
     @Body() HotelEstimationRequest request,
+  );
+
+  @POST("/pms/hotels/{hotelId}/reservations")
+  Future<HotelReservationResponse> createReservation(
+    @Path() String hotelId,
+    @Body() HotelReservationRequest request,
+  );
+
+  @GET("/pms/hotels/{hotelId}/payment-methods")
+  Future<HotelPaymentMethodsResponse> getPaymentMethods(
+    @Path() String hotelId,
+  );
+
+  @POST("/pms/hotels/{hotelId}/reservations/{reservationId}/paiement")
+  Future<HotelPaymentResponse> initPayment(
+    @Path() String hotelId,
+    @Path() String reservationId,
+    @Body() HotelPaymentRequest request,
   );
 }

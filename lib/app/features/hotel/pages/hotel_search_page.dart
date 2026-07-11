@@ -430,7 +430,13 @@ class _HotelSearchPageState extends State<HotelSearchPage>
               elevation: 0,
               leading: Center(
                 child: GestureDetector(
-                  onTap: () => context.pop(),
+                  onTap: () {
+                    if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go('/homePage');
+                    }
+                  },
                   child: Container(
                     width: 48,
                     height: 48,

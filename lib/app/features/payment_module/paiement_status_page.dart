@@ -35,6 +35,7 @@ class _PaiementStatusPageState extends State<PaiementStatusPage> {
               amount: widget.paymentPageAdapter.amount,
               orderID: widget.paymentPageAdapter.itemId,
               productType: widget.paymentPageAdapter.collection,
+              extra: widget.paymentPageAdapter.extra,
             )
           else if (OrderPaymentController.selectedOperator.value ==
               OPERATOR_NAME.Wave.name.toLowerCase())
@@ -42,6 +43,7 @@ class _PaiementStatusPageState extends State<PaiementStatusPage> {
               amount: widget.paymentPageAdapter.amount,
               orderID: widget.paymentPageAdapter.itemId,
               productType: widget.paymentPageAdapter.collection,
+              extra: widget.paymentPageAdapter.extra,
             )
           else if (OrderPaymentController.selectedOperator.value ==
               OPERATOR_NAME.Moov.name.toLowerCase())
@@ -49,6 +51,7 @@ class _PaiementStatusPageState extends State<PaiementStatusPage> {
               amount: widget.paymentPageAdapter.amount,
               orderID: widget.paymentPageAdapter.itemId,
               productType: widget.paymentPageAdapter.collection,
+              extra: widget.paymentPageAdapter.extra,
             )
           else if (OrderPaymentController.selectedOperator.value ==
               OPERATOR_NAME.MTN.name.toLowerCase())
@@ -56,6 +59,7 @@ class _PaiementStatusPageState extends State<PaiementStatusPage> {
               amount: widget.paymentPageAdapter.amount,
               orderID: widget.paymentPageAdapter.itemId,
               productType: widget.paymentPageAdapter.collection,
+              extra: widget.paymentPageAdapter.extra,
             )
           else if (OrderPaymentController.selectedOperator.value ==
               OPERATOR_NAME.stripe.apiValue)
@@ -63,6 +67,7 @@ class _PaiementStatusPageState extends State<PaiementStatusPage> {
               amount: widget.paymentPageAdapter.amount,
               orderID: widget.paymentPageAdapter.itemId,
               productType: widget.paymentPageAdapter.collection,
+              extra: widget.paymentPageAdapter.extra,
             ),
         ]),
       ),

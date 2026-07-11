@@ -6,6 +6,7 @@ import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_estimation_request.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_state.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_booking_summary_page.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_booking_room_card.dart';
@@ -108,7 +109,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
       checkOutDate: dateFormat.format(_checkOutDate!),
       adults: _adults,
       children: 0,
-      avecPetitDejeuner: true,
+      avecPetitDejeuner: false,
     );
 
     // Navigate to booking summary page
@@ -184,10 +185,10 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
               title: "Réservation",
               children: [
                 // ── TYPE DE CHAMBRES Section ──
-                const Text(
+                Text(
                   "TYPE DE CHAMBRES",
                   style: TextStyle(
-                      color: Colors.grey,
+                      color: AppColors.color8A8A86,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5),
@@ -219,10 +220,10 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 const Gap(24),
 
                 // ── SÉJOUR Section ──
-                const Text(
+                Text(
                   "SÉJOUR",
                   style: TextStyle(
-                      color: Colors.grey,
+                      color: AppColors.color8A8A86,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5),
@@ -230,8 +231,12 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 const Gap(16),
 
                 // Date Arrivée
-                const Text("Date d'arrivée *",
-                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text("Date d'arrivée *",
+                    style: TextStyle(
+                      color: AppColors.color8A8A86,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    )),
                 const Gap(6),
                 InkWell(
                   onTap: () => _selectCheckInDate(context),
@@ -259,8 +264,12 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 const Gap(16),
 
                 // Date Départ
-                const Text("Date de départ *",
-                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text("Date de départ *",
+                    style: TextStyle(
+                      color: AppColors.color8A8A86,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    )),
                 const Gap(6),
                 InkWell(
                   onTap: () => _selectCheckOutDate(context),
@@ -288,8 +297,12 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 const Gap(16),
 
                 // Durée
-                const Text("Durée",
-                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text("Durée",
+                    style: TextStyle(
+                      color: AppColors.color8A8A86,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    )),
                 const Gap(6),
                 Container(
                   width: double.infinity,
@@ -321,8 +334,12 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 const Gap(16),
 
                 // Occupants
-                const Text("Occupants",
-                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text("Occupants",
+                    style: TextStyle(
+                      color: AppColors.color8A8A86,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    )),
                 const Gap(6),
                 Container(
                   width: double.infinity,
