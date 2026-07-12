@@ -205,7 +205,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
               ),
               TextSpan(
                 text: '/nuit',
-                style: GoogleFonts.calSans(
+                style: GoogleFonts.plusJakartaSans(
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w200,
                   fontSize: 12,

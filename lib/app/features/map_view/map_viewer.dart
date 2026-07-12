@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,6 +87,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    getIt<AnalyticsService>().logMapViewOpened();
     focusNode = FocusNode();
 
     _estimationSlideController = AnimationController(

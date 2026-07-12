@@ -6,7 +6,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
+import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class LocationResidencesPage extends StatefulWidget {
@@ -76,9 +76,9 @@ class _LocationResidencesPageState extends State<LocationResidencesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteBackground,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
@@ -163,8 +163,8 @@ class _LocationResidencesPageState extends State<LocationResidencesPage> {
                   itemBuilder: (context, item, index) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 1)
                         .copyWith(bottom: 13),
-                    child: ResidenceCard(
-                      residence: item,
+                    child: UnifiedPropertyCard(
+                      item: item,
                     ),
                   ),
                 ),

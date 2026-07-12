@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:instagram_like_animation_button/instagram_like_animation_button.dart';
+// import 'package:instagram_like_animation_button/instagram_like_animation_button.dart'; // Commenté : package incompatible avec Dart SDK 3.8.0 (requiert ^3.10.7)
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_model.dart';
 import 'package:lottie/lottie.dart';
@@ -118,12 +120,16 @@ class _VideoPageItemState extends State<VideoPageItem>
   // Timer de vue (3 s de lecture → video:view)
   // ---------------------------------------------------------------------------
 
-  void _startViewTimer(String videoId) {
+  void _startViewTimer(String videoId, {String? relatedEntityId}) {
     _cancelViewTimer();
     _viewTimer = Timer(const Duration(seconds: 3), () {
       if (!mounted) return;
       widget.controller.sendViewEvent(videoId, 3000);
       widget.controller.cacheVideoInBackground(videoId);
+      getIt<AnalyticsService>().logResidenceVideoPlayed(
+        residenceId: relatedEntityId ?? '',
+        videoId: videoId,
+      );
     });
   }
 
@@ -152,7 +158,7 @@ class _VideoPageItemState extends State<VideoPageItem>
         widget.controller.currentIndex == widget.index) {
       widget.controller.playAt(widget.index);
       final video = widget.controller.videos[widget.index];
-      _startViewTimer(video.id);
+      _startViewTimer(video.id, relatedEntityId: video.relatedTo?.id);
     }
     if (info.visibleFraction < 0.1) {
       _cancelViewTimer();
@@ -275,10 +281,12 @@ class _VideoPageItemState extends State<VideoPageItem>
             //     ),
             //   ),
             // #1 — Play/pause icon isolated in ValueListenableBuilder
+            // Commenté : DoubleTapDetector & ReelAnimationLike proviennent du package instagram_like_animation_button (incompatible avec Dart SDK 3.8.0)
+            // Remplacé par un GestureDetector standard (simple tap = play/pause, double-tap = like)
             Positioned.fill(
-              child: DoubleTapDetector(
+              child: GestureDetector(
                 onTap: _onTapPlayPause,
-                onDoubleTap: (details) => _tapDetails.value = details,
+                onDoubleTapDown: (details) => _tapDetails.value = details,
                 behavior: HitTestBehavior.translucent,
                 child: Center(
                   child: ValueListenableBuilder<bool>(
@@ -313,34 +321,35 @@ class _VideoPageItemState extends State<VideoPageItem>
               ),
             ),
             // #1 — Double-tap heart isolated in ValueListenableBuilder
-            ValueListenableBuilder<TapDownDetails?>(
-              valueListenable: _tapDetails,
-              builder: (_, details, __) {
-                if (details == null) return const SizedBox.shrink();
-                return ReelAnimationLike(
-                  key: ValueKey(details),
-                  likeKey: _likeKey,
-                  position: details.globalPosition,
-                  config: const LikeAnimationConfig(
-                    duration: Duration(milliseconds: 600),
-                    hapticType: HapticFeedbackType.light,
-                    scaleMax: 1.8,
-                  ),
-                  style: const LikeAnimationStyle(
-                    iconSize: Size(70, 70),
-                    gradient: LinearGradient(
-                      colors: [Color(0xFFFF2D55), Color(0xFFFF6B6B)],
-                    ),
-                  ),
-                  onLikeCall: () {
-                    if (!isLiked) {
-                      widget.controller.toggleLike(video.id);
-                    }
-                  },
-                  onCompleteAnimation: () => _tapDetails.value = null,
-                );
-              },
-            ),
+            // ReelAnimationLike commenté (nécessite instagram_like_animation_button)
+            // ValueListenableBuilder<TapDownDetails?>(
+            //   valueListenable: _tapDetails,
+            //   builder: (_, details, __) {
+            //     if (details == null) return const SizedBox.shrink();
+            //     return ReelAnimationLike(
+            //       key: ValueKey(details),
+            //       likeKey: _likeKey,
+            //       position: details.globalPosition,
+            //       config: const LikeAnimationConfig(
+            //         duration: Duration(milliseconds: 600),
+            //         hapticType: HapticFeedbackType.light,
+            //         scaleMax: 1.8,
+            //       ),
+            //       style: const LikeAnimationStyle(
+            //         iconSize: Size(70, 70),
+            //         gradient: LinearGradient(
+            //           colors: [Color(0xFFFF2D55), Color(0xFFFF6B6B)],
+            //         ),
+            //       ),
+            //       onLikeCall: () {
+            //         if (!isLiked) {
+            //           widget.controller.toggleLike(video.id);
+            //         }
+            //       },
+            //       onCompleteAnimation: () => _tapDetails.value = null,
+            //     );
+            //   },
+            // ),
             // #1 — Description isolated in ValueListenableBuilder
             Positioned(
               left: 0,

@@ -3,50 +3,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/svgs_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 
 class UnifiedPropertyCard extends StatelessWidget {
-  final dynamic item; // Can be ResidenceModel or BienImmobilierModel
+  final dynamic item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
 
   const UnifiedPropertyCard({super.key, required this.item})
-      : assert(item is ResidenceModel || item is BienImmobilierModel);
+      : assert(item is ResidenceModel ||
+            item is BienImmobilierModel ||
+            item is FurnitureModel);
 
-  String get name => item is ResidenceModel
-      ? (item as ResidenceModel).nom
-      : (item as BienImmobilierModel).nom;
+  String get name => switch (item) {
+        ResidenceModel r => r.nom,
+        BienImmobilierModel b => b.nom,
+        FurnitureModel f => f.titre,
+        _ => '',
+      };
 
-  String get location => item is ResidenceModel
-      ? ((item as ResidenceModel).communeModel?.name ??
-          (item as ResidenceModel).adresse)
-      : ((item as BienImmobilierModel).communeModel?.name ??
-          (item as BienImmobilierModel).adresse);
+  String get location => switch (item) {
+        ResidenceModel r => r.communeModel?.name ?? r.adresse,
+        BienImmobilierModel b => b.communeModel?.name ?? b.adresse,
+        FurnitureModel f => f.communeModel?.name ?? f.adresse,
+        _ => '',
+      };
 
   List<String> get images {
-    final rawList = item is ResidenceModel
-        ? (item as ResidenceModel).images
-        : (item as BienImmobilierModel).images;
+    final rawList = switch (item) {
+      ResidenceModel r => r.images,
+      BienImmobilierModel b => b.images,
+      FurnitureModel f => f.images,
+      _ => <String>[],
+    };
     return rawList.where((img) {
       final s = img.trim().toLowerCase();
       return s.isNotEmpty && s != 'string' && s != 'null' && s != 'undefined';
     }).toList();
   }
 
-  int get maxOccupants => item is ResidenceModel
-      ? (item as ResidenceModel).nombreMaxOccupants
-      : ((item as BienImmobilierModel).nombreMaxOccupants ?? 0);
-
-  int get price => item is ResidenceModel
-      ? (item as ResidenceModel).prixReservation
-      : (item as BienImmobilierModel).prix;
+  int get price => switch (item) {
+        ResidenceModel r => r.prixReservation,
+        BienImmobilierModel b => b.prix,
+        FurnitureModel f => f.prix,
+        _ => 0,
+      };
 
   bool get isResidence => item is ResidenceModel;
+  bool get isFurniture => item is FurnitureModel;
 
   String get priceText {
     if (price >= 1000000000) {
@@ -104,14 +116,17 @@ class UnifiedPropertyCard extends StatelessWidget {
       final b = item as BienImmobilierModel;
       return b.aLouer ? "Location" : "Vente";
     }
+    if (isFurniture) return "Meubles";
     return "Disponible";
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = item is ResidenceModel
-        ? (item as ResidenceModel).commodites
-        : (item as BienImmobilierModel).amentities;
+    final list = switch (item) {
+      ResidenceModel r => r.commodites,
+      BienImmobilierModel b => b.amentities,
+      _ => const [],
+    };
     final displayList = list.take(3).toList();
 
     return Container(
@@ -133,6 +148,10 @@ class UnifiedPropertyCard extends StatelessWidget {
           Constantes.tempPage = Utils.getCurrentLocation();
           if (isResidence) {
             context.push(ResidencePage.route((item as ResidenceModel).id),
+                extra: item);
+          } else if (isFurniture) {
+            context.push(
+                FurnitureDetailPage.route((item as FurnitureModel).id),
                 extra: item);
           } else {
             context.push('/estate_detail/${(item as BienImmobilierModel).id}');
@@ -211,7 +230,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                           Text(
                             formattedDuration,
                             style: TextStyle(
-                                color: Colors.grey.shade600, fontSize: 13),
+                                color: Colors.grey.shade600, fontSize: 11),
                           ),
                           const Gap(8),
                           Expanded(
@@ -225,7 +244,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                   child: Text(
                                     priceText,
                                     style: const TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),
@@ -344,15 +363,11 @@ class UnifiedPropertyCard extends StatelessWidget {
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,
-      placeholder: (context, url) => Container(
-        color: Colors.grey.shade100,
-        child: const Center(
-          child: SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-        ),
+      placeholder: (context, url) => Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        period: const Duration(milliseconds: 500),
+        child: Container(color: Colors.grey.shade300),
       ),
       errorWidget: (context, url, error) => Container(
         color: Colors.grey.shade200,

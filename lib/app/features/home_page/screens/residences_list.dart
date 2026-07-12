@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/constants/home_location_items.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -17,7 +19,6 @@ import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class ResidencesList extends StatefulWidget {
   const ResidencesList({super.key});
@@ -85,7 +86,7 @@ class _ResidencesListState extends State<ResidencesList> {
     });
 
     try {
-      final futures = _residencesHomeItems.map((item) async {
+      final futures = kHomeLocationItems.map((item) async {
         if (item.isHeader) return null;
 
         final Map<String, dynamic> where = {};
@@ -144,7 +145,7 @@ class _ResidencesListState extends State<ResidencesList> {
 
   List<dynamic> _buildDisplayList() {
     final List<dynamic> list = [];
-    for (var item in _residencesHomeItems) {
+    for (var item in kHomeLocationItems) {
       if (item.isHeader) continue;
 
       final loaded = _activeSections.cast<_LocationSectionData?>().firstWhere(
@@ -302,103 +303,6 @@ class _ResidencesListState extends State<ResidencesList> {
   }
 }
 
-class ResidencesHomeListItem {
-  final String title;
-  final String? villeId;
-  final String? communeId;
-  final bool isHeader;
-
-  const ResidencesHomeListItem({
-    required this.title,
-    this.villeId,
-    this.communeId,
-    this.isHeader = false,
-  });
-}
-
-final List<ResidencesHomeListItem> _residencesHomeItems = [
-  // --- Section 1 : Villes populaires ---
-  const ResidencesHomeListItem(title: "VILLES POPULAIRES", isHeader: true),
-  const ResidencesHomeListItem(
-      title: "Abidjan", villeId: "8b97b9ce-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Aboisso", villeId: "8b981afc-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Anyama", villeId: "8b9806f9-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Grand-Bassam", villeId: "8b981ba8-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Yamoussoukro", villeId: "8b97d0b3-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "San-Pédro", villeId: "8b97ea35-a507-11ef-8b44-0e595bc2ce41"),
-
-  // --- Section 2 : Communes d'Abidjan ---
-  // const ResidencesHomeListItem(title: "COMMUNES D'ABIDJAN", isHeader: true),
-  const ResidencesHomeListItem(
-      title: "Abobo", communeId: "8bb4b211-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Adjamé", communeId: "55a42f68-2867-11f1-a056-661ac3bf2f34"),
-  const ResidencesHomeListItem(
-      title: "Attécoubé", communeId: "8bb4d4d0-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Cocody", communeId: "8bb446ea-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Koumassi", communeId: "8bb4b588-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Marcory", communeId: "8bb498f3-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Plateau (Le Plateau)",
-      communeId: "8bb48973-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Port-Bouët", communeId: "8bb4c15a-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Treichville", communeId: "8bb4a496-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Yopougon", communeId: "8bb47716-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Anyama (Commune)",
-      communeId: "567aa860-2867-11f1-a056-661ac3bf2f34"),
-  const ResidencesHomeListItem(
-      title: "Bingerville", communeId: "8bb68343-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Bonoua", communeId: "8bb80dca-a507-11ef-8b44-0e595bc2ce41"),
-
-  // --- Section 3 : Villes extérieures ---
-  // const ResidencesHomeListItem(title: "VILLES EXTÉRIEURES", isHeader: true),
-  const ResidencesHomeListItem(
-      title: "Abengourou", villeId: "8b980686-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Adzopé", villeId: "8b981bef-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Agboville", villeId: "8b981b46-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Bondoukou", villeId: "8b980e6a-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Bouaké", villeId: "8b97dccc-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Daloa", villeId: "8b97e49c-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Divo", villeId: "8b97f856-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Ferkessédougou", villeId: "8b980eb7-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Gagnoa", villeId: "8b97f23e-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Issia", villeId: "8b981c4e-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Korhogo", villeId: "8b97ea95-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Man", villeId: "8b97f0aa-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Odienné", villeId: "8b9814b6-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Séguéla", villeId: "8b981507-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Soubré", villeId: "8b980dd8-a507-11ef-8b44-0e595bc2ce41"),
-  const ResidencesHomeListItem(
-      title: "Toumodi", villeId: "8b981aa6-a507-11ef-8b44-0e595bc2ce41"),
-];
-
 class ResidencesHorizontalListByLocation extends StatelessWidget {
   final String title;
   final String? villeId;
@@ -424,7 +328,7 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             HomeSectionTitle(title: title),
-            TextButton(
+            IconButton(
               onPressed: residences.isNotEmpty
                   ? () {
                       context.push(
@@ -437,20 +341,20 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
                       );
                     }
                   : null,
-              child: Text(
-                'Voir plus',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: residences.isNotEmpty
-                      ? AppColors.primary
-                      : Colors.grey.shade400,
-                  letterSpacing: -0.1,
-                ),
+              icon: Icon(
+                Iconsax.arrow_right_1,
+                size: 20,
+                color: residences.isNotEmpty
+                    ? Colors.black
+                    : Colors.grey.shade400,
               ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              splashRadius: 20,
             ),
           ],
         ),
+        const Gap(12),
         if (residences.isEmpty)
           Container(
             height: 100,
