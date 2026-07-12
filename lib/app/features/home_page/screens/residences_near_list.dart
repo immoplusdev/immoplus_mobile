@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -12,7 +13,6 @@ import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/empty_state_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
@@ -189,7 +189,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             HomeSectionTitle(title: NearResidencesConstants.sectionTitle),
-            TextButton(
+            IconButton(
               onPressed: _nearResidences.isNotEmpty
                   ? () {
                       final lat = FilterHandler.lat ?? _userPosition?.latitude;
@@ -204,18 +204,20 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
                       }
                     }
                   : null,
-              child: Text(
-                'Voir plus',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
-                  letterSpacing: -0.1,
-                ),
+              icon: Icon(
+                Iconsax.arrow_right_1,
+                size: 20,
+                color: _nearResidences.isNotEmpty
+                    ? Colors.black
+                    : Colors.grey.shade400,
               ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              splashRadius: 20,
             ),
           ],
         ),
+        const Gap(12),
         SizedBox(
           height: _locationError ? null : 255,
           child: _buildContent(),

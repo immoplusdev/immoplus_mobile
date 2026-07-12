@@ -6,6 +6,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
@@ -57,27 +59,19 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
       // Stopper le polling avant que Stripe prenne l'écran
       ReservationEngagementFrame.onPaymentCompleted();
 
-      debugPrint('💳 presentPaymentSheet() → start');
       await Stripe.instance.presentPaymentSheet();
-      debugPrint('💳 presentPaymentSheet() → done, mounted=$mounted');
 
       if (!mounted) {
-        debugPrint('💳 NOT mounted — abandon navigation');
         return;
       }
       context.push(StripeResultRoute.path, extra: model.data);
     } on StripeException catch (e) {
-      debugPrint(
-          '💳 StripeException: ${e.error.code} ${e.error.localizedMessage}');
       if (e.error.code != FailureCode.Canceled) {
         EasyLoading.showToast(
           e.error.localizedMessage ?? 'Le paiement a échoué.',
         );
       }
     } catch (e, stack) {
-      debugPrint('💳 Error type: ${e.runtimeType}');
-      debugPrint('💳 Error: $e');
-      debugPrint('💳 Stack: $stack');
       EasyLoading.showToast("Une erreur s'est produite.");
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -140,6 +134,12 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                               OrderPaymentController.selectedOperator =
                                   operator;
                             });
+                            getIt<AnalyticsService>().logAddPaymentInfo(
+                              paymentType: operator.value,
+                              value:
+                                  widget.paymentPageAdapter.amount.toDouble(),
+                              itemId: widget.paymentPageAdapter.itemId,
+                            );
 
                             if (isStripe) {
                               _payWithStripe();

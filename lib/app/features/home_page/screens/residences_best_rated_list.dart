@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
@@ -107,24 +107,26 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
             // ),
 
             HomeSectionTitle(title: BestRatedResidencesConstants.sectionTitle),
-            TextButton(
+            IconButton(
               onPressed: _bestRatedResidences.isNotEmpty
                   ? () {
                       context.push(BestRatedResidencesPage.routePath);
                     }
                   : null,
-              child: Text(
-                'Voir plus',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
-                  letterSpacing: -0.1,
-                ),
+              icon: Icon(
+                Iconsax.arrow_right_1,
+                size: 20,
+                color: _bestRatedResidences.isNotEmpty
+                    ? Colors.black
+                    : Colors.grey.shade400,
               ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              splashRadius: 20,
             ),
           ],
         ),
+        const Gap(12),
         SizedBox(
           height: 255,
           child: _buildContent(),

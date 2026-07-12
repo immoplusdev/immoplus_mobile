@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
@@ -55,8 +57,20 @@ class _ResidencePageState extends State<ResidencePage> {
 
         if (state is REQUEST_RESIDENCE_DATA) {
           final data = state.data;
-          final hasPieces = data.pieces.isNotEmpty &&
-              data.pieces.any((p) => p.nombre > 0);
+          if (!_hasLoggedViewItem) {
+            _hasLoggedViewItem = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              getIt<AnalyticsService>().logViewResidence(
+                itemId: data.id,
+                itemName: data.nom,
+                itemCategory: data.typeResidence,
+                itemLocation: data.adresse,
+                price: data.prixReservation.toDouble(),
+              );
+            });
+          }
+          final hasPieces =
+              data.pieces.isNotEmpty && data.pieces.any((p) => p.nombre > 0);
 
           return Scaffold(
             backgroundColor: Colors.white,

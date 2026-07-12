@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/logger/immo_logger.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/services/navigation_service.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_request_body.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_response.dart';
@@ -50,6 +52,10 @@ class VisitCubit extends Cubit<VisitRequestState> {
       CustomPopup.showLoagingToast();
       DemandeVisitResponse demandeVisitResponse =
           await bienImmobilierRepository.createVisit(model: body);
+      getIt<AnalyticsService>().logVisitRequestSubmitted(
+        estateId: body.bienImmobilier,
+        estateName: demandeVisitResponse.data.bienImmobilier?.nom ?? '',
+      );
       emit(VisitRequestState.receive(demandeVisitResponse.data));
     } catch (e, s) {
       log(s.toString());

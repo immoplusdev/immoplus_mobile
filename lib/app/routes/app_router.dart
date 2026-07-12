@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,6 +30,9 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/location_biens_page.dart';
+import 'package:immoplus/app/features/home_page/screens/location_furnitures_page.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
@@ -92,6 +96,9 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
+    observers: [
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    ],
     redirect: (context, state) async {
       print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
       print('🔍 GoRouter redirect - Path: ${state.uri.path}');
@@ -573,6 +580,34 @@ class AppRouter {
         path: BestRatedResidencesPage.routePath,
         name: BestRatedResidencesPage.routeName,
         builder: (context, state) => const BestRatedResidencesPage(),
+      ),
+
+      GoRoute(
+        path: LocationBiensPage.routePath,
+        name: LocationBiensPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return LocationBiensPage(
+            title: extra['title'] as String,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+            propertyType:
+                extra['propertyType'] as PropertyType? ?? PropertyType.land,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: LocationFurnituresPage.routePath,
+        name: LocationFurnituresPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return LocationFurnituresPage(
+            title: extra['title'] as String,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+          );
+        },
       ),
 
       GoRoute(

@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/widgets/operator_payment.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 /// Frame C3 — L'Engagement Humain (L'Attente)
@@ -75,6 +77,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   ReservationBannerState _currentState = ReservationBannerState.idle;
   late double _montantTotal;
   bool _isFetchingReservation = false;
+  bool _hasPurchaseLogged = false;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
   static const Color _primaryBlue = Color(0xFF2744DE);
@@ -177,8 +180,16 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         case StatusReservation.valide:
         case StatusReservation.enCours:
         case StatusReservation.terminee:
-          // Paiement confirmé — on arrête le polling sans rediriger vers l'accueil
-          // (l'utilisateur est sur l'écran de succès du paiement)
+          if (!_hasPurchaseLogged) {
+            _hasPurchaseLogged = true;
+            getIt<AnalyticsService>().logPurchase(
+              transactionId: reservation.codeReservation,
+              value: reservation.montantTotalReservation,
+              paymentMethod: OrderPaymentController.selectedOperator.value,
+              itemId: widget.reservationId,
+              itemName: widget.ownerName,
+            );
+          }
           _aggressiveRefreshTimer?.cancel();
           _messageRotationTimer?.cancel();
           return;

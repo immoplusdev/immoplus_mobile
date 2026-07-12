@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/constants/home_location_items.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -17,7 +19,6 @@ import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class ResidencesList extends StatefulWidget {
   const ResidencesList({super.key});
@@ -424,7 +425,7 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             HomeSectionTitle(title: title),
-            TextButton(
+            IconButton(
               onPressed: residences.isNotEmpty
                   ? () {
                       context.push(
@@ -437,20 +438,19 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
                       );
                     }
                   : null,
-              child: Text(
-                'Voir plus',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: residences.isNotEmpty
-                      ? AppColors.primary
-                      : Colors.grey.shade400,
-                  letterSpacing: -0.1,
-                ),
+              icon: Icon(
+                Iconsax.arrow_right_1,
+                size: 20,
+                color:
+                    residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
               ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              splashRadius: 20,
             ),
           ],
         ),
+        const Gap(12),
         if (residences.isEmpty)
           Container(
             height: 100,

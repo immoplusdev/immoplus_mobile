@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/widgets/proposition_card.dart';
@@ -37,6 +38,7 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
   @override
   void initState() {
     super.initState();
+    getIt<AnalyticsService>().logAlertMatchesViewed(alertId: widget.alertId);
     _markViewedAndRefreshBadge(); // lancé immédiatement, sans attendre les propositions
     _fetchPropositions();
   }

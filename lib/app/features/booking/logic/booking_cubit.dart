@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
@@ -12,12 +13,14 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
-import 'package:immoplus/app/data/repositories/auth_repository.dart';
-import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
-import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/core/config/injection.dart';
-import 'dart:developer';
+// TODO(KYC): imports désactivés temporairement pour test Stripe
+// import 'package:immoplus/app/data/repositories/auth_repository.dart';
+// import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
+// import 'package:immoplus/app/core/network/utils/session_manager.dart';
+// import 'package:immoplus/app/core/config/injection.dart';
+// import 'dart:developer';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -25,9 +28,10 @@ class BookingCubit extends Cubit<BookingRequestState> {
   BookingServices bookingServices;
   ResidenceRepository residenceRepository;
   KycRepository kycRepository;
+  AnalyticsService analyticsService;
 
-  BookingCubit(
-      this.bookingServices, this.residenceRepository, this.kycRepository)
+  BookingCubit(this.bookingServices, this.residenceRepository,
+      this.kycRepository, this.analyticsService)
       : super(const BookingRequestState.initial());
 
   // getBookings() async {
@@ -97,6 +101,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
     try {
       ReservationResponse reservationResponse =
           await residenceRepository.createBooking(model: body);
+      analyticsService.logBeginCheckout(
+        itemId: reservationResponse.data.id,
+        itemName: reservationResponse.data.residence.nom,
+        value: reservationResponse.data.montantTotalReservation,
+      );
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
       ToastUtils.showSuccess(

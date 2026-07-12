@@ -63,9 +63,10 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  final FocusNode _textFieldFocus = FocusNode();
+  late final FocusNode _textFieldFocus;
   @override
   void initState() {
+    _textFieldFocus = widget.focusNode ?? FocusNode();
     _textFieldFocus.addListener(() {
       if (_textFieldFocus.hasFocus) {
         setState(() {});
@@ -74,6 +75,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.focusNode == null) {
+      _textFieldFocus.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -102,7 +111,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
         keyboardType: widget.textInputType,
         cursorColor: Theme.of(context).colorScheme.onSurface,
         cursorRadius: const Radius.circular(5),
-        //focusNode: widget.focusNode,
         inputFormatters: widget.inputFormatters,
         cursorHeight: 16,
         focusNode: _textFieldFocus,

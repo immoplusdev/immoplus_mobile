@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -335,73 +336,77 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     );
   }
 
-  Widget _buildSubCategoryTabs() {
-    if (widget.currentIndex == 0) return const SizedBox.shrink();
-
-    final isFurniture = widget.currentIndex == 2;
-    final items =
-        isFurniture ? FurnitureSubCategory.values : EstateSubCategory.values;
-
-    final selectedValue = isFurniture
-        ? FilterHandler.furnitureSubCategory
-        : FilterHandler.estateSubCategory;
-
-    return Container(
-      height: 30,
-      width: double.infinity,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: items.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 20),
-        itemBuilder: (context, index) {
-          final item = items[index];
-          final isSelected = selectedValue == item;
-          final label = isFurniture
-              ? (item as FurnitureSubCategory).label
-              : (item as EstateSubCategory).label;
-
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                if (isFurniture) {
-                  FilterHandler.furnitureSubCategory =
-                      item as FurnitureSubCategory;
-                } else {
-                  FilterHandler.estateSubCategory = item as EstateSubCategory;
-                }
-              });
-              FilterHandler.notifyChange();
-              HomePageState.refreshPage(widget.currentIndex);
-            },
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(bottom: 8),
-              decoration: BoxDecoration(
-                border: isSelected
-                    ? Border(
-                        bottom: BorderSide(
-                          color: AppColors.primary,
-                          width: 2,
-                        ),
-                      )
-                    : null,
-              ),
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color:
-                          isSelected ? AppColors.primary : Colors.grey.shade600,
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w500,
-                    ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  // Filtres de sous-catégorie désactivés pour tous les onglets : Locations,
+  // Biens et Meubles utilisent désormais la disposition par ville (comme
+  // Résidences).
+  //
+  // Ancienne pastille de filtre par sous-catégorie (Tous, Appartement, ...),
+  // conservée pour référence / réactivation éventuelle.
+  // Widget _buildSubCategoryTabsOld() {
+  //   final isFurniture = widget.currentIndex == 2;
+  //   final items =
+  //       isFurniture ? FurnitureSubCategory.values : EstateSubCategory.values;
+  //
+  //   final selectedValue = isFurniture
+  //       ? FilterHandler.furnitureSubCategory
+  //       : FilterHandler.estateSubCategory;
+  //
+  //   return Container(
+  //     height: 30,
+  //     width: double.infinity,
+  //     child: ListView.separated(
+  //       scrollDirection: Axis.horizontal,
+  //       padding: const EdgeInsets.symmetric(horizontal: 16),
+  //       itemCount: items.length,
+  //       separatorBuilder: (context, index) => const SizedBox(width: 20),
+  //       itemBuilder: (context, index) {
+  //         final item = items[index];
+  //         final isSelected = selectedValue == item;
+  //         final label = isFurniture
+  //             ? (item as FurnitureSubCategory).label
+  //             : (item as EstateSubCategory).label;
+  //
+  //         return GestureDetector(
+  //           onTap: () {
+  //             setState(() {
+  //               if (isFurniture) {
+  //                 FilterHandler.furnitureSubCategory =
+  //                     item as FurnitureSubCategory;
+  //               } else {
+  //                 FilterHandler.estateSubCategory = item as EstateSubCategory;
+  //               }
+  //             });
+  //             FilterHandler.notifyChange();
+  //             HomePageState.refreshPage(widget.currentIndex);
+  //           },
+  //           child: Container(
+  //             alignment: Alignment.center,
+  //             padding: const EdgeInsets.only(bottom: 8),
+  //             decoration: BoxDecoration(
+  //               border: isSelected
+  //                   ? Border(
+  //                       bottom: BorderSide(
+  //                         color: AppColors.primary,
+  //                         width: 2,
+  //                       ),
+  //                     )
+  //                   : null,
+  //             ),
+  //             child: Text(
+  //               label,
+  //               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+  //                     color:
+  //                         isSelected ? AppColors.primary : Colors.grey.shade600,
+  //                     fontWeight:
+  //                         isSelected ? FontWeight.w600 : FontWeight.w500,
+  //                   ),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -464,35 +469,40 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                       ),
                       onPressed: _showFilterDialog,
                     ),
-              onFieldSubmitted: isFurnitureTab
-                  ? (keyword) {
-                      if (FilterHandler.search != null) {
-                        if (FilterHandler.search!.isNotEmpty) {
-                          log(keyword);
-                          HomePageState.refreshPage(widget.currentIndex);
-                        } else {
-                          FilterHandler.search = null;
-                          FilterHandler.notifyChange();
-                          HomePageState.refreshPage(widget.currentIndex);
-                        }
-                      }
-                    }
-                  : null,
-              onChanged: isFurnitureTab
-                  ? (text) {
-                      EasyDebounce.debounce(
-                        _searchDebounceKey,
-                        const Duration(milliseconds: _searchDeboucemillisecond),
-                        () {
-                          final search = text.isNotEmpty ? text : null;
-                          FilterHandler.search = search;
-                          FilterHandler.notifyChange();
-                          if (search != null) log(text);
-                          HomePageState.refreshPage(widget.currentIndex);
-                        },
-                      );
-                    }
-                  : null,
+              onFieldSubmitted: (keyword) {
+                if (FilterHandler.search != null) {
+                  if (FilterHandler.search!.isNotEmpty) {
+                    log(keyword);
+                    getIt<AnalyticsService>().logSearch(
+                      searchTerm: keyword,
+                      searchLocation: FilterHandler.locationName,
+                      searchType: switch (widget.currentIndex) {
+                        1 => 'estate',
+                        2 => 'furniture',
+                        _ => 'residence',
+                      },
+                    );
+                    HomePageState.refreshPage(widget.currentIndex);
+                  } else {
+                    FilterHandler.search = null;
+                    FilterHandler.notifyChange();
+                    HomePageState.refreshPage(widget.currentIndex);
+                  }
+                }
+              },
+              onChanged: (text) {
+                EasyDebounce.debounce(
+                  _searchDebounceKey,
+                  const Duration(milliseconds: _searchDeboucemillisecond),
+                  () {
+                    final search = text.isNotEmpty ? text : null;
+                    FilterHandler.search = search;
+                    FilterHandler.notifyChange();
+                    if (search != null) log(text);
+                    HomePageState.refreshPage(widget.currentIndex);
+                  },
+                );
+              },
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
@@ -590,16 +600,15 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(
-                      widget.currentIndex == HomeTab.residence.value ? 50 : 95),
+                  preferredSize: const Size.fromHeight(50),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       HomeChoiceMenu(),
-                      if (widget.currentIndex != HomeTab.residence.value) ...[
-                        const Gap(15),
-                        _buildSubCategoryTabs()
-                      ],
+                      // Pastille de filtre par sous-catégorie désactivée pour
+                      // tous les onglets (disposition par ville partout).
+                      // const Gap(15),
+                      // _buildSubCategoryTabs(),
                     ],
                   ),
                 ),

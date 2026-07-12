@@ -1,4 +1,6 @@
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
@@ -71,6 +73,7 @@ class SessionManager {
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
+    getIt<AnalyticsService>().clearUserIdentity();
     await clearSession();
     try {
       final prefs = await SharedPreferences.getInstance();
