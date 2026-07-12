@@ -118,17 +118,21 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
     );
 
     if (getIt<SessionManager>().currentUser == null) {
-      getIt<AuthRedirectService>().set((
-        popUntilRouteName: HotelBookingSelectionPage.name,
-        callback: () => context.push(
-              HotelBookingSummaryPage.route(hotel.hotelId),
-              extra: {
-                'hotel': hotel,
-                'room': _selectedRoom,
-                'request': request,
-              },
-            ),
-      ));
+      getIt<AuthRedirectService>().set(
+        (
+          popUntilRouteName: HotelBookingSelectionPage.name,
+          callback: () {
+            //  context.push(
+            //     HotelBookingSummaryPage.route(hotel.hotelId),
+            //     extra: {
+            //       'hotel': hotel,
+            //       'room': _selectedRoom,
+            //       'request': request,
+            //     },
+            //   );
+          },
+        ),
+      );
       context.pushNamed(AuthenticationPage.name);
     } else {
       // Navigate to booking summary page

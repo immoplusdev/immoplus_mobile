@@ -37,4 +37,5 @@ samples, guidance on mobile development, and a full API reference.
 ### Notifications / Toasts
 * **Utilisation systématique de `ToastUtils` :** Évitez d'utiliser `ScaffoldMessenger.of(context).showSnackBar`. Utilisez toujours la classe utilitaire centralisée `ToastUtils` (ex. `ToastUtils.showError(...)`, `ToastUtils.warning(...)`) pour l'affichage des retours visuels à l'utilisateur afin de garantir un style et des animations unifiés.
 
-
+## To Do (Known Issues)
+* **Bug Navigation GoRouter (AuthRedirectService) :** L'utilisation de `context.push` directement à l'intérieur du `callback` de `AuthRedirectService` (comme dans `HotelBookingSelectionPage`) corrompt l'état interne de `GoRouter` après un `popUntil` lors de la connexion. Pour l'instant, le bloc `context.push(HotelBookingSummaryPage.route(...))` a été commenté dans `HotelBookingSelectionPage` en guise de palliatif. **Il faudra trouver une solution propre pour restaurer cette redirection automatique sans casser la pile de navigation de GoRouter (ex: utiliser l'API globale du routeur ou un délai).**

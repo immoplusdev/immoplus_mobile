@@ -505,8 +505,11 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
               child: CustomButtom(
                 borderRadius: BorderRadius.circular(60),
                 onClick: () {
-                  context.push(HotelBookingSelectionPage.route(hotel.hotelId,
-                      roomId: room.roomTypeId));
+                  context.pushNamed(
+                    HotelBookingSelectionPage.name,
+                    pathParameters: {'hotelId': hotel.hotelId},
+                    queryParameters: {'roomId': widget.roomTypeId},
+                  );
                 },
                 child: const Text(
                   "Réserver",

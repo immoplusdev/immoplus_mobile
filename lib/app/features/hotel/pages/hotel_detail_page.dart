@@ -535,7 +535,10 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                 buttonHeight: 60,
                 borderRadius: BorderRadius.circular(60),
                 onClick: () {
-                  context.push(HotelBookingSelectionPage.route(hotel.hotelId));
+                  context.pushNamed(
+                    HotelBookingSelectionPage.name,
+                    pathParameters: {'hotelId': hotel.hotelId},
+                  );
                 },
                 child: const Text(
                   "Choisir une chambre",
