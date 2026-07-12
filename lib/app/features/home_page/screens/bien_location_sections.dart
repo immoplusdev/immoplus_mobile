@@ -16,14 +16,11 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 /// Sections horizontales "par ville" pour les biens immobiliers (utilisé par
 /// les onglets Locations [PropertyType.estate, aLouer:true] et Biens
-/// [PropertyType.land, aLouer:false]). Remplace l'ancienne liste verticale
-/// filtrée pour ces deux onglets, comme fait précédemment pour Résidences.
+/// [PropertyType.land, aLouer:false]).
 class BienLocationSectionsList extends StatefulWidget {
   final PropertyType propertyType;
 
-  /// Ancien PagingController conservé pour compatibilité avec le
-  /// rafraîchissement générique déclenché depuis home_page.dart
-  /// (HomePageState.getPageListController(index).refresh()).
+
   final PagingController<int, BienImmobilierModel> legacyPagingController;
 
   const BienLocationSectionsList({
