@@ -39,3 +39,16 @@ samples, guidance on mobile development, and a full API reference.
 
 ## To Do (Known Issues)
 * **Bug Navigation GoRouter (AuthRedirectService) :** L'utilisation de `context.push` directement à l'intérieur du `callback` de `AuthRedirectService` (comme dans `HotelBookingSelectionPage`) corrompt l'état interne de `GoRouter` après un `popUntil` lors de la connexion. Pour l'instant, le bloc `context.push(HotelBookingSummaryPage.route(...))` a été commenté dans `HotelBookingSelectionPage` en guise de palliatif. **Il faudra trouver une solution propre pour restaurer cette redirection automatique sans casser la pile de navigation de GoRouter (ex: utiliser l'API globale du routeur ou un délai).**
+
+## Outils & Commandes Pratiques
+
+### Simuler un Deep Link (Lien profond)
+Pour tester l'ouverture d'un lien profond / lien universel lorsque l'application tourne sur le **simulateur iOS (Xcode)**, utilisez la commande suivante dans le terminal :
+
+```bash
+xcrun simctl openurl booted "https://votre-domaine.com/votre-chemin"
+
+xcrun simctl openurl booted "https://app.immoplus.ci/hotels/7e498f07-3b76-445f-93d4-e074c42707da/chambres/22512472-2718-430c-a5f9-7fc0e4eb0f46"
+
+```
+*(Remplacez l'URL par le lien exact que vous souhaitez tester).*
