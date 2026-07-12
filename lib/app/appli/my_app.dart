@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/list_bloc.dart';
 import 'package:immoplus/supported_locales.dart';
@@ -22,6 +24,38 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _trackDeepLinkOnColdStart();
+    AppRouter.router.routeInformationProvider.addListener(_onRouteChanged);
+  }
+
+  @override
+  void dispose() {
+    AppRouter.router.routeInformationProvider.removeListener(_onRouteChanged);
+    super.dispose();
+  }
+
+  void _trackDeepLinkOnColdStart() {
+    final uri = AppRouter.router.routeInformationProvider.value.uri;
+    if (uri.queryParameters.containsKey('utm_source')) {
+      getIt<AnalyticsService>().logDeepLinkOpened(
+        linkUrl: uri.toString(),
+        utmSource: uri.queryParameters['utm_source'] ?? 'direct',
+        utmMedium: uri.queryParameters['utm_medium'] ?? 'none',
+        utmCampaign: uri.queryParameters['utm_campaign'] ?? 'none',
+      );
+    }
+  }
+
+  void _onRouteChanged() {
+    final uri = AppRouter.router.routeInformationProvider.value.uri;
+    if (uri.queryParameters.containsKey('utm_source')) {
+      getIt<AnalyticsService>().logDeepLinkOpened(
+        linkUrl: uri.toString(),
+        utmSource: uri.queryParameters['utm_source'] ?? 'direct',
+        utmMedium: uri.queryParameters['utm_medium'] ?? 'none',
+        utmCampaign: uri.queryParameters['utm_campaign'] ?? 'none',
+      );
+    }
   }
 
   chekUser() async {}

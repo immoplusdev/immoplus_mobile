@@ -391,7 +391,6 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         }
 
         if (state is Error_BOOKINGS) {
-          debugPrint('❌ BookingDetailPage error for id=${widget.id}: ${state.message}');
           return Scaffold(
             appBar: AppBar(
               backgroundColor: AppColors.scafold,

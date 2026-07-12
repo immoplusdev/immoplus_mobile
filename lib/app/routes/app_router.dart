@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -88,6 +89,9 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
+    observers: [
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    ],
     redirect: (context, state) async {
       print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
       print('🔍 GoRouter redirect - Path: ${state.uri.path}');

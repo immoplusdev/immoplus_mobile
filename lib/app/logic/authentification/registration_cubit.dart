@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,13 +24,14 @@ import '../../data/models/auth/customer_registration_body.dart';
 @injectable
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit(this.sessionManager, this.dio, this.notificationService,
-      this.authRedirectService)
+      this.authRedirectService, this.analyticsService)
       : super(const RegistrationCubitState.initial());
   SessionManager sessionManager;
   Dio dio;
 
   NotificationService notificationService;
   final AuthRedirectService authRedirectService;
+  final AnalyticsService analyticsService;
 
   void _navigateAfterRegistration() {
     final context = NavigationService.navigatorKey.currentContext!;
@@ -75,6 +77,13 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
+      final provider = customerRegistrationBody.provider ?? 'email';
+      analyticsService.logSignUp(method: provider);
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: response.data.user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
       emit(RegistrationCubitState.success(accountCreationResponse: response));
       _navigateAfterRegistration();
     } catch (e) {

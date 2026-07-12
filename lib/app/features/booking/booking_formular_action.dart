@@ -27,7 +27,8 @@ import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
-import 'package:immoplus/app/features/booking/widgets/kyc_verification_modal.dart';
+// TODO(KYC): import désactivé temporairement pour test Stripe
+// import 'package:immoplus/app/features/booking/widgets/kyc_verification_modal.dart';
 import 'package:intl/intl.dart';
 
 class BookingFormularAction extends StatefulWidget {
@@ -547,28 +548,29 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                 estimateCost = state.estimateCost.data;
               });
             }
-            if (state is KYC_REQUIRED) {
-              KycVerificationModal.show(
-                context,
-                initialKycSession: state.kycSession,
-                onSuccess: () {
-                  if (estimateCost != null) {
-                    context.read<BookingCubit>().orderBooking(
-                          amount: estimateCost!.total.toInt(),
-                          force: true,
-                          body: ReservationRequestBody(
-                            residence: widget.residenceModel.id,
-                            datesReservation: selectedDates
-                                .map((e) => DatesReservationModel(date: e))
-                                .toList(),
-                            clientPhoneNumber:
-                                _formController.phoneNumber!.text,
-                          ),
-                        );
-                  }
-                },
-              );
-            }
+            // TODO(KYC): Modal KYC Didit désactivée temporairement pour test Stripe
+            // if (state is KYC_REQUIRED) {
+            //   KycVerificationModal.show(
+            //     context,
+            //     initialKycSession: state.kycSession,
+            //     onSuccess: () {
+            //       if (estimateCost != null) {
+            //         context.read<BookingCubit>().orderBooking(
+            //               amount: estimateCost!.total.toInt(),
+            //               force: true,
+            //               body: ReservationRequestBody(
+            //                 residence: widget.residenceModel.id,
+            //                 datesReservation: selectedDates
+            //                     .map((e) => DatesReservationModel(date: e))
+            //                     .toList(),
+            //                 clientPhoneNumber:
+            //                     _formController.phoneNumber!.text,
+            //               ),
+            //             );
+            //       }
+            //     },
+            //   );
+            // }
           },
           builder: (context, state) {
             return Row(

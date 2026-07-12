@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -230,6 +232,13 @@ class _FilterPageState extends State<FilterPage> {
                         FilterHandler.lat = currentAddress!.latitude;
                         FilterHandler.long = currentAddress!.longitude;
                       }
+                      getIt<AnalyticsService>().logFilterApplied(
+                        filterLocation: FilterHandler.locationName,
+                        filterDateStart: FilterHandler.startDate,
+                        filterDateEnd: FilterHandler.endDate,
+                        filterBudgetMin: FilterHandler.minPrice,
+                        filterBudgetMax: FilterHandler.maxPrice,
+                      );
                       FilterHandler.notifyChange();
 
                       HomePageState.getPageListController(state.indexPage)

@@ -11,6 +11,7 @@ import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'alert_success_page.dart';
@@ -128,6 +129,12 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         if (mounted) context.pop(true);
       } else {
         await alertRepository.createAlert(request);
+        getIt<AnalyticsService>().logAlertSubmitted(
+          propertyType: _selectedPropertyType,
+          location: _selectedAddress?.description,
+          budgetMin: _budgetRange.start.toInt(),
+          budgetMax: _budgetRange.end.toInt(),
+        );
         if (mounted) {
           context.pop(true);
         }

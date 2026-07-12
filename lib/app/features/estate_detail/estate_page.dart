@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
@@ -43,6 +45,8 @@ class EstatePage extends StatefulWidget {
 }
 
 class _EstatePageState extends State<EstatePage> {
+  bool _hasLoggedViewItem = false;
+
   @override
   void initState() {
     context.read<EstateCubit>().getEstate(id: widget.idProduct);
@@ -59,6 +63,17 @@ class _EstatePageState extends State<EstatePage> {
 
         if (state is REQUEST_BIEN_IMMOBILIER_DATA) {
           final data = state.data;
+          if (!_hasLoggedViewItem) {
+            _hasLoggedViewItem = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              getIt<AnalyticsService>().logViewEstate(
+                itemId: data.id,
+                itemName: data.nom,
+                itemCategory: data.typeBienImmobilier,
+                price: data.prix.toDouble(),
+              );
+            });
+          }
           final hasPieces =
               data.pieces.isNotEmpty && data.pieces.any((p) => p.nombre > 0);
 

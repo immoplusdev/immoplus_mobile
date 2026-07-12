@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus/app/core/enums/push_notification_type.dart';
@@ -38,6 +40,10 @@ class NotificationService {
     /// Notification reçue quand l'app est ouverte
     OneSignal.Notifications.addForegroundWillDisplayListener((event) {
       final data = event.notification.additionalData;
+      getIt<AnalyticsService>().logNotificationReceived(
+        notificationType: (data?['type'] as String?) ?? 'unknown',
+        notificationId: event.notification.notificationId,
+      );
 
       if (data != null) {
         final typeString = data['type'] as String?;
@@ -73,6 +79,10 @@ class NotificationService {
     /// Notification cliquée
     OneSignal.Notifications.addClickListener((event) {
       final data = event.notification.additionalData;
+      getIt<AnalyticsService>().logNotificationTapped(
+        notificationType: (data?['type'] as String?) ?? 'unknown',
+        notificationId: event.notification.notificationId,
+      );
       if (data != null) {
         final typeString = data['type'] as String?;
         final id = data['id']?.toString() ?? data['alertId']?.toString();
