@@ -8,7 +8,7 @@ import 'easy_loading_handler.dart';
 
 Future<String?> uploadFile({required File file}) async {
   try {
-    EasyLoadingHandler.showLoagingToast(text: "Envoie des images");
+    EasyLoadingHandler.showLoadingToast(text: "Envoie des images");
     FileDataModel response = await AuthRepository().uplaodFile(file: file);
     EasyLoading.dismiss();
     return response.data!.id;
@@ -22,4 +22,4 @@ Future<String?> uploadFile({required File file}) async {
 const double appPadding = 16.0;
 const double radiusButton = 43.0;
 const int maxLineAdress = 3;
-const double neirResidenceCardWidth = 250;
+const double neirResidenceCardWidth = 270;

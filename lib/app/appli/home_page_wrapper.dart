@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
@@ -13,31 +14,55 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
+import 'package:immoplus/app/appli/widgets/nav_badge.dart';
+import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/core/type/auth_redirect_data.dart';
+import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
 
 class HomePageWrapper extends StatefulWidget {
   const HomePageWrapper({super.key, required this.child});
   final Widget child;
 
   @override
-  _HomePageWrapperState createState() => _HomePageWrapperState();
+  State<HomePageWrapper> createState() => _HomePageWrapperState();
 }
 
-class _HomePageWrapperState extends State<HomePageWrapper> {
+class _HomePageWrapperState extends State<HomePageWrapper>
+    with WidgetsBindingObserver {
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
+  final _alertRepository = getIt<AlertRepository>();
   Timer? _videoFeedWarmupTimer;
+  // Scroll-to-right désactivé : la pilule reste centrée.
+  // Timer? _scrollIdleTimer;
+  //
+  // bool _handleScrollNotification(ScrollNotification notification) {
+  //   if (notification is ScrollUpdateNotification ||
+  //       notification is ScrollStartNotification) {
+  //     if (!aiFabCollapsedNotifier.value) {
+  //       aiFabCollapsedNotifier.value = true;
+  //     }
+  //     _scrollIdleTimer?.cancel();
+  //     _scrollIdleTimer = Timer(const Duration(milliseconds: 400), () {
+  //       if (mounted) aiFabCollapsedNotifier.value = false;
+  //     });
+  //   }
+  //   return false;
+  // }
 
   int _indexForState(PageState state) {
     switch (state) {
       case PageState.home:
         return 0;
-      case PageState.forMe:
+      case PageState.explore:
         return 1;
       case PageState.vivre:
         return 2;
-      case PageState.explore:
+      case PageState.forMe:
         return 3;
       case PageState.account:
         return 4;
@@ -49,9 +74,25 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
 
   static const int _vivreTabIndex = 2;
 
+  void _fetchImatchBadge() {
+    if (sessionManager.currentUser == null) return;
+    _alertRepository.getImatchBadgeCount().then((count) {
+      if (mounted) Constantes.imatchBadgeCount.value = count;
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _fetchImatchBadge();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _fetchImatchBadge();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _videoFeedWarmupTimer?.cancel();
       _videoFeedWarmupTimer = Timer(const Duration(milliseconds: 2500), () {
@@ -77,11 +118,29 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     if (_indexForState(pageState) == index) {
       return;
     }
+
+    // Si on clique sur "Imatch" (index 3), on vérifie si l'utilisateur est connecté
+    if (index == 3 && sessionManager.currentUser == null) {
+      context.pushNamed(
+        AuthenticationPage.name,
+        extra: (
+          callback: () {
+            _fetchImatchBadge();
+            navigationHandler.switchPage(id: index, context: context);
+          },
+          popUntilRouteName:
+              null, // On ne pop pas, on veut juste revenir/continuer
+        ) as AuthRedirectData,
+      );
+      return;
+    }
+
     if (Get.isRegistered<VideoFeedController>()) {
       final feedCtrl = Get.find<VideoFeedController>();
       if (pageState == PageState.vivre && index != _vivreTabIndex) {
         feedCtrl.onFeedHidden();
-        feedCtrl.saveSessionTimestamp(); // timestamp pour la logique 30 min au retour
+        feedCtrl
+            .saveSessionTimestamp(); // timestamp pour la logique 30 min au retour
       } else if (index == _vivreTabIndex) {
         feedCtrl.onFeedVisible();
       }
@@ -91,8 +150,11 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _videoFeedWarmupTimer?.cancel();
     _videoFeedWarmupTimer = null;
+    // _scrollIdleTimer?.cancel();
+    // _scrollIdleTimer = null;
     super.dispose();
   }
 
@@ -105,75 +167,86 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
           builder: (context, hideBottomNav, _) {
             return Scaffold(
               body: widget.child,
+              // floatingActionButton:
+              //     state == PageState.home ? const AiFloatingButton() : null,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
                   ? null
                   : Container(
-            decoration: BoxDecoration(
-              // borderRadius: const BorderRadius.only(
-              //   topLeft: Radius.circular(20),
-              //   topRight: Radius.circular(20),
-              // ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              // borderRadius: const BorderRadius.only(
-              //   topLeft: Radius.circular(20),
-              //   topRight: Radius.circular(20),
-              // ),
-              child: SizedBox(
-                height: Platform.isAndroid ? 105 : null,
-                child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor:
-                      state == PageState.vivre ? Colors.black : Colors.white,
-                  currentIndex: _indexForState(state),
-                  onTap: (value) =>
-                      _onItemTapped(index: value, pageState: state),
-                  selectedFontSize: 12,
-                  unselectedFontSize: 12,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  selectedItemColor: AppColors.primary,
-                  unselectedItemColor: state == PageState.vivre
-                      ? Colors.white
-                      : Colors.grey,
-                  items: [
-                    _buildNavItem(
-                      icon: Iconsax.home,
-                      label: "Accueil",
-                      isActive: state == PageState.home,
-                      immoMode: state == PageState.vivre,
+                      decoration: BoxDecoration(
+                        // borderRadius: const BorderRadius.only(
+                        //   topLeft: Radius.circular(20),
+                        //   topRight: Radius.circular(20),
+                        // ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        // borderRadius: const BorderRadius.only(
+                        //   topLeft: Radius.circular(20),
+                        //   topRight: Radius.circular(20),
+                        // ),
+                        child: SizedBox(
+                          height: Platform.isAndroid
+                              ? 80 + MediaQuery.of(context).padding.bottom
+                              : null,
+                          child: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            backgroundColor: state == PageState.vivre
+                                ? Colors.black
+                                : Colors.white,
+                            currentIndex: _indexForState(state),
+                            onTap: (value) =>
+                                _onItemTapped(index: value, pageState: state),
+                            selectedFontSize: 12,
+                            unselectedFontSize: 12,
+                            showSelectedLabels: true,
+                            showUnselectedLabels: true,
+                            selectedItemColor: AppColors.primary,
+                            unselectedItemColor: state == PageState.vivre
+                                ? Colors.white
+                                : Colors.grey,
+                            items: [
+                              _buildNavItem(
+                                icon: Iconsax.home,
+                                label: "Accueil",
+                                isActive: state == PageState.home,
+                                immoMode: state == PageState.vivre,
+                              ),
+                              _buildNavItem(
+                                icon: Iconsax.location,
+                                label: "Carte",
+                                isActive: state == PageState.explore,
+                                immoMode: state == PageState.vivre,
+                              ),
+                              _buildNavItemVivre(
+                                  isActive: state == PageState.vivre),
+                              _buildNavItem(
+                                icon: Iconsax.heart,
+                                label: "Imatch",
+                                isActive: state == PageState.forMe,
+                                immoMode: state == PageState.vivre,
+                                svgAsset: 'assets/svgs/icons/immomacth.svg',
+                                badgeWidget: NavBadge(
+                                    notifier: Constantes.imatchBadgeCount),
+                              ),
+                              _buildNavItem(
+                                icon: Iconsax.user,
+                                label: "Compte",
+                                isActive: state == PageState.account,
+                                immoMode: state == PageState.vivre,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    _buildNavItem(
-                      icon: Iconsax.heart,
-                      label: "Favoris",
-                      isActive: state == PageState.forMe,
-                      immoMode: state == PageState.vivre,
-                    ),
-                    _buildNavItemVivre(isActive: state == PageState.vivre),
-                    _buildNavItem(
-                      icon: Iconsax.location,
-                      label: "Explorer",
-                      isActive: state == PageState.explore,
-                      immoMode: state == PageState.vivre,
-                    ),
-                    _buildNavItem(
-                      icon: Iconsax.user,
-                      label: "Compte",
-                      isActive: state == PageState.account,
-                      immoMode: state == PageState.vivre,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
             );
           },
         );
@@ -186,8 +259,45 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
     required String label,
     required bool isActive,
     required bool immoMode,
+    String? svgAsset,
+    Widget? badgeWidget,
   }) {
     final inactiveColor = immoMode ? Colors.white : Colors.grey.shade600;
+
+    Widget buildIcon({required bool active}) {
+      Widget base;
+      if (svgAsset != null) {
+        base = SvgPicture.asset(
+          svgAsset,
+          width: active ? 24 : 25,
+          height: active ? 24 : 25,
+          colorFilter: ColorFilter.mode(
+            active ? AppColors.primary : inactiveColor,
+            BlendMode.srcIn,
+          ),
+        );
+      } else {
+        base = Icon(
+          icon,
+          color: active ? AppColors.primary : inactiveColor,
+          size: active ? 24 : 25,
+        );
+      }
+
+      if (badgeWidget != null) {
+        return Center(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              base,
+              Positioned(top: -4, right: -6, child: badgeWidget),
+            ],
+          ),
+        );
+      }
+      return base;
+    }
+
     return BottomNavigationBarItem(
       icon: isActive
           ? Container(
@@ -195,43 +305,55 @@ class _HomePageWrapperState extends State<HomePageWrapper> {
               padding: const EdgeInsets.all(8),
               decoration: immoMode
                   ? BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.2),
+                      color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     )
                   : null,
-              child: Icon(
-                icon,
-                color: AppColors.primary,
-                size: 24,
-              ),
+              child: buildIcon(active: true),
             )
           : SizedBox(
               height: 40,
-              child: Icon(
-                icon,
-                color: inactiveColor,
-                size: 25,
-              ),
+              child: buildIcon(active: false),
             ),
       label: label,
     );
   }
 
   BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-  return BottomNavigationBarItem(
-    icon: Container(
-      height: 40,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.primary.withOpacity(0.2) : null,
-        borderRadius: BorderRadius.circular(12),
+    return BottomNavigationBarItem(
+      icon: Container(
+        height: 44,
+        padding: const EdgeInsets.all(4),
+        // decoration: BoxDecoration(
+
+        //   borderRadius: BorderRadius.circular(12),
+        // ),
+        child: Image.asset(
+          'assets/img/icon_video_2.png',
+          width: 26,
+          height: 26,
+        ),
       ),
-      child: Icon( Iconsax.play5,
-        color: AppColors.primary ,
-        size: 28,
-      ),
-    ),
-    label: 'Video',
-  );
-}
+      label: 'Reels',
+    );
+  }
+// BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
+//   return BottomNavigationBarItem(
+//     icon: Container(
+//       height: 40,
+//       padding: const EdgeInsets.all(8),
+//       child: isActive
+//           ? Icon(
+//               Iconsax.play5,
+//               color: AppColors.primary,
+//               size: 28,
+//             )
+//           : Icon(
+//               Iconsax.play,
+//               size: 28,
+//             ),
+//     ),
+//     label: 'Reels',
+//   );
+// }
 }

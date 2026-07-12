@@ -44,9 +44,11 @@ class FormUtils {
     return RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
   }
 
+  // Email désormais optionnel côté backend : on ne bloque plus sur l'absence
+  // de valeur, on vérifie juste le format si l'utilisateur en saisit une.
   static String? emailValidator({String? email}) {
     if (email == null || email.isEmpty) {
-      return 'Aucune adresse mail';
+      return null;
     } else if (!RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
       caseSensitive: false,
@@ -57,9 +59,11 @@ class FormUtils {
     return null;
   }
 
+  // Mot de passe désormais optionnel côté backend : idem, on ne vérifie le
+  // format que si une valeur est saisie.
   static String? passwordValidator({String? password}) {
     if (password == null || password.isEmpty) {
-      return 'Aucun mot de passe';
+      return null;
     } else if (!RegExp(r'^.{4,}$').hasMatch(password)) {
       return 'Mot de passe trop court';
     }

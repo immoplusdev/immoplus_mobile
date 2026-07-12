@@ -15,6 +15,10 @@ class AuthInterceptor extends Interceptor {
     if (data != null) {
       final token = data.accessToken;
       options.headers['Authorization'] = 'Bearer $token';
+      // log('AuthInterceptor: Token added to request ${options.path}');
+    } else {
+      options.headers.remove('Authorization');
+      // log('AuthInterceptor: No token found, Authorization header removed.');
     }
     super.onRequest(options, handler);
   }

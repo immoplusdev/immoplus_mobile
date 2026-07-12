@@ -11,7 +11,6 @@ import 'package:immoplus/app/data/enums/api_error_code.dart';
 import 'package:immoplus/app/data/error/api_error_response.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:injectable/injectable.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../services/navigation_service.dart';
 
@@ -37,10 +36,21 @@ class ErrorInterceptor extends Interceptor {
       final handled = await _handleTokenExpired(err, handler);
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
+    final isUserPrefPUT = err.requestOptions.method == 'PUT' &&
+        err.requestOptions.path.contains('/user-preferences/me');
+
+    final isBannerGet = err.requestOptions.method == 'GET' &&
+        err.requestOptions.path.contains('/banners');
+
+    final isBadgeCountGet = err.requestOptions.method == 'GET' &&
+        err.requestOptions.path.contains('/alerts/badge-count');
 
     // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
     if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode) &&
-        !_isActiveReservationBlock(err.response)) {
+        !_isActiveReservationBlock(err.response) &&
+        !isUserPrefPUT &&
+        !isBannerGet &&
+        !isBadgeCountGet) {
       _showErrorToast(apiErrorResponse, err.response);
     }
 

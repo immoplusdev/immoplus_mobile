@@ -4,12 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../../utils/utils.dart';
+
 class PlaningBookingCardDetail extends StatelessWidget {
   PlaningBookingCardDetail({super.key, required this.reservationModel});
   final ReservationModel reservationModel;
   final DateFormat formatDate = DateFormat('d MMMM yyyy');
   @override
   Widget build(BuildContext context) {
+    final String dateHeureDebut =
+        "${formatDate.format(Utils.toDateTime(reservationModel.dateDebut))} à ${reservationModel.residence.heureEntree}";
+    final String dateHeureFin =
+        "${formatDate.format(Utils.toDateTime(reservationModel.dateFin))} avant ${reservationModel.residence.heureDepart} ";
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -29,10 +35,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-              subtitle: (reservationModel.datesReservation.isNotEmpty)
-                  ? AutoSizeText(
-                      "${formatDate.format(reservationModel.datesReservation.first.date!)} à ${reservationModel.residence.heureEntree}")
-                  : null,
+              subtitle: AutoSizeText(dateHeureDebut),
             ),
           ),
           const VerticalDivider(
@@ -48,7 +51,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
                   fontWeight: FontWeight.bold, color: Colors.black),
               subtitle: (reservationModel.datesReservation.isNotEmpty)
                   ? AutoSizeText(
-                      "${formatDate.format(reservationModel.datesReservation.last.date!)} avant ${reservationModel.residence.heureDepart} ",
+                      dateHeureFin,
                       maxLines: 1,
                     )
                   : null,

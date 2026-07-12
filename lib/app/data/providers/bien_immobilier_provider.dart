@@ -113,4 +113,10 @@ abstract class BienImmobilierProvider {
 
   @POST("/demandes-visites/action/programmer/{id}")
   Future<DemandeVisiteModel> programmer(@Body() VisitProgrammerBody programmer);
+
+  // @POST("/demandes-visites/action/annuler-client/{id}")
+  // Future<DemandeVisitResponse> annulerVisiteClient(
+  //   @Path() String id,
+  //   @Body() Map<String, dynamic> body,
+  // );
 }

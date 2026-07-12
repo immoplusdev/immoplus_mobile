@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_request_body.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/providers/bien_immobilier_provider.dart';
@@ -284,4 +283,20 @@ class BienImmobilierRepository {
       throw Exception('Failed to load users: $error');
     }
   }
+
+  // Future<DemandeVisitResponse> annulerVisiteClient({
+  //   required String visiteId,
+  //   required String notes,
+  // }) async {
+  //   try {
+  //     final response =
+  //         await BienImmobilierProvider(dioClient).annulerVisiteClient(
+  //       visiteId,
+  //       {'notes': notes},
+  //     );
+  //     return response;
+  //   } on DioException catch (e) {
+  //     throw Exception('Erreur annulation visite: ${e.message}');
+  //   }
+  // }
 }

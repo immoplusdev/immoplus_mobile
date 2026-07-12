@@ -21,6 +21,8 @@ class PaymentItentData with _$PaymentItentData {
     Hub2NextAction? hub2NextAction,
     @Default('') String hub2Token,
     //Hub2Metadata? hub2Metadata,
+    String? stripePaymentIntentId,
+    String? stripeClientSecret,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,

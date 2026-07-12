@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
@@ -73,6 +74,7 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
                 context: context,
                 sharePositionOrigin: origin,
               );
+              getIt<AnalyticsService>().logResidenceShared(residenceId: widget.logmentModel.id);
             },
           ),
         ),

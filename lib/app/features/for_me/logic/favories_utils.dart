@@ -1,4 +1,5 @@
 import 'package:immoplus/app/core/config/isar_config.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
@@ -11,7 +12,8 @@ import 'package:isar_community/isar.dart';
 @singleton
 class FavoriesUtils {
   IsarConfig isarConfig;
-  FavoriesUtils(this.isarConfig);
+  AnalyticsService analyticsService;
+  FavoriesUtils(this.isarConfig, this.analyticsService);
   Future<bool> isFavorite(String itemId) async {
     return await isarConfig.instance.fovoriteModels
             .where()
@@ -32,6 +34,11 @@ class FavoriesUtils {
         ..itemScore = residence.score?.toDouble()
         ..type = residence.typeResidence);
     });
+    analyticsService.logAddToWishlist(
+      itemId: residence.id,
+      itemName: residence.nom,
+      itemCategory: residence.typeResidence,
+    );
   }
 
   addEstateToFavorites(BienImmobilierModel bienImmobilierModel) async {
@@ -46,6 +53,11 @@ class FavoriesUtils {
         ..itemScore = bienImmobilierModel.score?.toDouble()
         ..type = bienImmobilierModel.typeBienImmobilier);
     });
+    analyticsService.logAddToWishlist(
+      itemId: bienImmobilierModel.id,
+      itemName: bienImmobilierModel.nom,
+      itemCategory: bienImmobilierModel.typeBienImmobilier,
+    );
   }
 
   addFurnitureToFavorites(FurnitureModel furnitureModel) async {
@@ -59,6 +71,11 @@ class FavoriesUtils {
         ..destination = FurnitureDetailPage.route(furnitureModel.id)
         ..type = furnitureModel.type);
     });
+    analyticsService.logAddToWishlist(
+      itemId: furnitureModel.id,
+      itemName: furnitureModel.titre,
+      itemCategory: furnitureModel.type ?? '',
+    );
   }
 
   Future<void> deleteFavoriteByItemId(String itemId) async {

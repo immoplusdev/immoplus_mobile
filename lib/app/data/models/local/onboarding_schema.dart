@@ -11,4 +11,7 @@ class OnboardingSchema {
 
   /// Date à laquelle l'utilisateur a vu l'onboarding
   DateTime? readAt;
+
+  /// Version de l'onboarding (utile pour forcer le réaffichage lors d'une refonte)
+  int version = 1;
 }

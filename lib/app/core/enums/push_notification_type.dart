@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -15,7 +16,9 @@ enum PushNotificationType {
   payment, // Paiements
   wallet, // Wallet
   reservationAccepted, // Pro a accepté → overlay paiement
-  reservationRefused; // Pro a refusé → booking history
+  reservationRefused, // Pro a refusé → booking history
+  newProposal, // Admin a ajouté une proposition → badge Imatch
+  alert; // Alerte reçue (match)
 
   /// 🎯 Retourne la route correspondante
   String? getRoute(String? id) {
@@ -41,9 +44,13 @@ enum PushNotificationType {
       case PushNotificationType.reservationRefused:
         return PendingPaymentReservationsPage.route();
 
+      case PushNotificationType.alert:
+        return id != null ? AlertPropositionsPage.route(id) : null;
+
       case PushNotificationType.wallet:
       case PushNotificationType.auth:
       case PushNotificationType.user:
+      case PushNotificationType.newProposal:
         return null;
     }
   }
@@ -82,6 +89,12 @@ enum PushNotificationType {
 
       case 'reservation_refused':
         return PushNotificationType.reservationRefused;
+
+      case 'new_proposal':
+        return PushNotificationType.newProposal;
+
+      case 'alert':
+        return PushNotificationType.alert;
 
       default:
         return null;

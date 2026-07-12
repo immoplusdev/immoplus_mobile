@@ -72,15 +72,15 @@ class OrderPaymentController {
       prefix: "01",
       fee: 2,
     ),
-    OperatorModel(
-      id: 0,
-      name: "Visa card",
-      value: 'visa',
-      logo:
-          "https://play-lh.googleusercontent.com/lKebetEHVDuBrbq5KJJ4MK6V6BaFuo0Mj9Qy9YZkoenrEDZVU-IzLrbAuoKMaCT4nA",
-      prefix: '',
-      fee: 2,
-    ),
+    // OperatorModel(
+    //   id: 0,
+    //   name: "Carte bancaire",
+    //   value: 'visa_card',
+    //   logo:
+    //       "https://img.freepik.com/vecteurs-libre/appartement-securite-pour-carte-credit_78370-3588.jpg?semt=ais_hybrid&w=740&q=80",
+    //   prefix: '',
+    //   fee: 2,
+    // ),
   ];
   static OperatorProviderModel electedOperator = const OperatorProviderModel();
   static OperatorProviderModel electedParamsItem =

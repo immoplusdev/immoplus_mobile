@@ -4,15 +4,18 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
@@ -28,6 +31,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
+import 'package:immoplus/app/logic/banners/banners_cubit.dart';
+import 'package:immoplus/app/logic/banners/banners_state.dart';
+import 'package:immoplus/app/features/home_page/components/banner_card.dart';
+import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
 class HomeSearchAppbar extends StatefulWidget {
@@ -46,6 +53,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   final double iconSize = 28;
   String _currentAddress = "Localisation...";
   bool _isLoadingAddress = true;
+  bool _isBannerDismissed = false;
   final sessionManager = getIt<SessionManager>();
 
   /// ✅ Utiliser LocationService
@@ -151,15 +159,23 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       if (cubit.state.isGranted) {
         await _loadCurrentLocation();
       }
+      // Fetch banners
+      context.read<BannersCubit>().fetchBanners();
     });
   }
 
   // Réagir aux changements externes de FilterHandler (ex: suppression du chip)
   void _onFilterChanged() {
-    if (FilterHandler.search == null && _searchController.text.isNotEmpty) {
-      EasyDebounce.cancel(_searchDebounceKey);
-      _searchController.clear();
-      HomePageState.refreshPage(widget.currentIndex);
+    if (FilterHandler.search == null) {
+      if (_searchController.text.isNotEmpty) {
+        EasyDebounce.cancel(_searchDebounceKey);
+        _searchController.clear();
+        HomePageState.refreshPage(widget.currentIndex);
+      }
+    } else {
+      if (_searchController.text != FilterHandler.search) {
+        _searchController.text = FilterHandler.search!;
+      }
     }
   }
 
@@ -320,6 +336,78 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
     );
   }
 
+  // Filtres de sous-catégorie désactivés pour tous les onglets : Locations,
+  // Biens et Meubles utilisent désormais la disposition par ville (comme
+  // Résidences).
+  //
+  // Ancienne pastille de filtre par sous-catégorie (Tous, Appartement, ...),
+  // conservée pour référence / réactivation éventuelle.
+  // Widget _buildSubCategoryTabsOld() {
+  //   final isFurniture = widget.currentIndex == 2;
+  //   final items =
+  //       isFurniture ? FurnitureSubCategory.values : EstateSubCategory.values;
+  //
+  //   final selectedValue = isFurniture
+  //       ? FilterHandler.furnitureSubCategory
+  //       : FilterHandler.estateSubCategory;
+  //
+  //   return Container(
+  //     height: 30,
+  //     width: double.infinity,
+  //     child: ListView.separated(
+  //       scrollDirection: Axis.horizontal,
+  //       padding: const EdgeInsets.symmetric(horizontal: 16),
+  //       itemCount: items.length,
+  //       separatorBuilder: (context, index) => const SizedBox(width: 20),
+  //       itemBuilder: (context, index) {
+  //         final item = items[index];
+  //         final isSelected = selectedValue == item;
+  //         final label = isFurniture
+  //             ? (item as FurnitureSubCategory).label
+  //             : (item as EstateSubCategory).label;
+  //
+  //         return GestureDetector(
+  //           onTap: () {
+  //             setState(() {
+  //               if (isFurniture) {
+  //                 FilterHandler.furnitureSubCategory =
+  //                     item as FurnitureSubCategory;
+  //               } else {
+  //                 FilterHandler.estateSubCategory = item as EstateSubCategory;
+  //               }
+  //             });
+  //             FilterHandler.notifyChange();
+  //             HomePageState.refreshPage(widget.currentIndex);
+  //           },
+  //           child: Container(
+  //             alignment: Alignment.center,
+  //             padding: const EdgeInsets.only(bottom: 8),
+  //             decoration: BoxDecoration(
+  //               border: isSelected
+  //                   ? Border(
+  //                       bottom: BorderSide(
+  //                         color: AppColors.primary,
+  //                         width: 2,
+  //                       ),
+  //                     )
+  //                   : null,
+  //             ),
+  //             child: Text(
+  //               label,
+  //               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+  //                     color:
+  //                         isSelected ? AppColors.primary : Colors.grey.shade600,
+  //                     fontWeight:
+  //                         isSelected ? FontWeight.w600 : FontWeight.w500,
+  //                   ),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LocationPermissionCubit, LocationPermissionState>(
@@ -332,158 +420,214 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
         await _loadCurrentLocation();
       },
       child: BlocBuilder<FilterCubit, FilterHandler>(
-        builder: (context, state) {
-          return ValueListenableBuilder<bool>(
-            valueListenable: ReservationPendingBanner.hasReservationNotifier,
-            builder: (context, hasReservation, _) {
+        builder: (context, filterState) {
+          final isFurnitureTab = widget.currentIndex == HomeTab.furniture.value;
+
+          final searchField = SizedBox(
+            height: 57.5,
+            child: CustomTextField(
+              readOnly: !isFurnitureTab,
+              onTap: isFurnitureTab
+                  ? null
+                  : () {
+                      final category =
+                          HomeTab.values[widget.currentIndex].category;
+                      context.pushNamed(
+                        SuggestPage.routeName,
+                        extra: {
+                          'category': category,
+                          'lat': FilterHandler.lat,
+                          'lng': FilterHandler.long,
+                        },
+                      );
+                    },
+              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+              labelText: 'Que cherchez-vous ?',
+              prefixIcon: Icon(
+                  color: AppColors.primary, size: 20, Iconsax.search_normal_1),
+              controller: _searchController,
+              sufixIcon: _showClearButton
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.cancel,
+                        color: Colors.grey.shade600,
+                        size: 18,
+                      ),
+                      onPressed: () {
+                        _searchController.clear();
+                        EasyDebounce.cancel(_searchDebounceKey);
+                        FilterHandler.search = null;
+                        FilterHandler.notifyChange();
+                        HomePageState.refreshPage(widget.currentIndex);
+                      },
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        Iconsax.setting_4,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
+                      onPressed: _showFilterDialog,
+                    ),
+              onFieldSubmitted: (keyword) {
+                if (FilterHandler.search != null) {
+                  if (FilterHandler.search!.isNotEmpty) {
+                    log(keyword);
+                    getIt<AnalyticsService>().logSearch(
+                      searchTerm: keyword,
+                      searchLocation: FilterHandler.locationName,
+                      searchType: switch (widget.currentIndex) {
+                        1 => 'estate',
+                        2 => 'furniture',
+                        _ => 'residence',
+                      },
+                    );
+                    HomePageState.refreshPage(widget.currentIndex);
+                  } else {
+                    FilterHandler.search = null;
+                    FilterHandler.notifyChange();
+                    HomePageState.refreshPage(widget.currentIndex);
+                  }
+                }
+              },
+              onChanged: (text) {
+                EasyDebounce.debounce(
+                  _searchDebounceKey,
+                  const Duration(milliseconds: _searchDeboucemillisecond),
+                  () {
+                    final search = text.isNotEmpty ? text : null;
+                    FilterHandler.search = search;
+                    FilterHandler.notifyChange();
+                    if (search != null) log(text);
+                    HomePageState.refreshPage(widget.currentIndex);
+                  },
+                );
+              },
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(radiusButton),
+                borderSide:
+                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(radiusButton),
+                borderSide:
+                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+              ),
+            ),
+          );
+
+          return BlocBuilder<BannersCubit, BannersState>(
+            builder: (context, bannerState) {
+              final apiBanners = bannerState.maybeWhen(
+                success: (banners) => banners,
+                orElse: () => <BannerModel>[],
+              );
+
+              final hasVisibleBanners =
+                  apiBanners.isNotEmpty && !_isBannerDismissed;
+
               return SliverAppBar(
                 automaticallyImplyLeading: false,
                 pinned: true,
                 snap: false,
                 floating: true,
                 titleSpacing: 0,
-                toolbarHeight: hasReservation ? 220 : 140,
-                backgroundColor: AppColors.whiteBackground,
+                toolbarHeight: hasVisibleBanners
+                    ? _Constants.toolbarHeightWithBanner
+                    : _Constants.toolbarHeightWithoutBanner,
+                backgroundColor: AppColors.white,
                 title: Container(
-                  color: AppColors.whiteBackground,
-                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  color: AppColors.white,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (sessionManager.currentUser != null)
-                        ReservationPendingBanner(),
-                      if (hasReservation) Gap(14),
-                      Row(
-                        children: [
-                          BlocBuilder<LocationPermissionCubit,
-                              LocationPermissionState>(
-                            builder: (context, permissionState) {
-                              return GestureDetector(
-                                onTap: () => _handleLocationTap(
-                                    context, permissionState),
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      Assets.img.locIc,
-                                      color: AppColors.primary,
-                                    ),
-                                    Gap(5),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 3),
-                                      constraints:
-                                          BoxConstraints(maxWidth: 200),
-                                      decoration: BoxDecoration(
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            BlocBuilder<LocationPermissionCubit,
+                                LocationPermissionState>(
+                              builder: (context, permissionState) {
+                                return GestureDetector(
+                                  onTap: () => _handleLocationTap(
+                                      context, permissionState),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        Assets.img.locIc,
                                         color: AppColors.primary,
-                                        borderRadius: BorderRadius.circular(39),
                                       ),
-                                      child: _buildLocationText(
-                                          context, permissionState),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              if (sessionManager.currentUser != null) {
-                                context.pushNamed(NotificationsPage.name);
-                              } else {
-                                context.pushNamed(AuthenticationPage.name);
-                              }
-                            },
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.F2F2F2,
-                              ),
-                              child: Icon(Icons.notifications_none_rounded),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Gap(14),
-                      SizedBox(
-                        height: 57.5,
-                        child: CustomTextField(
-                          contentPadding: EdgeInsets.symmetric(vertical: 0),
-                          labelText: 'Que cherchez-vous ?',
-                          prefixIcon: Icon(
-                              color: AppColors.primary,
-                              size: 20,
-                              Iconsax.search_normal_1),
-                          controller: _searchController,
-                          sufixIcon: _showClearButton
-                              ? IconButton(
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    color: Colors.grey.shade600,
-                                    size: 18,
+                                      const Gap(5),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 3),
+                                        constraints:
+                                            const BoxConstraints(maxWidth: 200),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(39),
+                                        ),
+                                        child: _buildLocationText(
+                                            context, permissionState),
+                                      ),
+                                    ],
                                   ),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    EasyDebounce.cancel(_searchDebounceKey);
-                                    FilterHandler.search = null;
-                                    FilterHandler.notifyChange();
-                                    HomePageState.refreshPage(
-                                        widget.currentIndex);
-                                  },
-                                )
-                              : IconButton(
-                                  icon: Icon(
-                                    Iconsax.setting_4,
-                                    color: AppColors.primary,
-                                    size: 18,
-                                  ),
-                                  onPressed: _showFilterDialog,
-                                ),
-                          onFieldSubmitted: (keyword) {
-                            if (FilterHandler.search != null) {
-                              if (FilterHandler.search!.isNotEmpty) {
-                                log(keyword);
-                                HomePageState.refreshPage(widget.currentIndex);
-                              } else {
-                                FilterHandler.search = null;
-                                FilterHandler.notifyChange();
-                                HomePageState.refreshPage(widget.currentIndex);
-                              }
-                            }
-                          },
-                          onChanged: (text) {
-                            EasyDebounce.debounce(
-                              _searchDebounceKey,
-                              const Duration(
-                                  milliseconds: _searchDeboucemillisecond),
-                              () {
-                                final search = text.isNotEmpty ? text : null;
-                                FilterHandler.search = search;
-                                FilterHandler.notifyChange();
-                                if (search != null) log(text);
-                                HomePageState.refreshPage(widget.currentIndex);
+                                );
                               },
-                            );
-                          },
-                          fillColor: Colors.transparent,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(radiusButton),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(radiusButton),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                if (sessionManager.currentUser != null) {
+                                  context.pushNamed(NotificationsPage.name);
+                                } else {
+                                  context.pushNamed(AuthenticationPage.name);
+                                }
+                              },
+                              child: Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.F2F2F2,
+                                ),
+                                child: const Icon(FontAwesomeIcons.bell),
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
+                      const Gap(14),
+                      BannerCard(
+                        onDismiss: () {
+                          setState(() {
+                            _isBannerDismissed = true;
+                          });
+                          context.read<BannersCubit>().setDismissed(true);
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            15, hasVisibleBanners ? 12 : 0, 15, 0),
+                        child: searchField,
                       ),
                     ],
                   ),
                 ),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(50),
-                  child: HomeChoiceMenu(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      HomeChoiceMenu(),
+                      // Pastille de filtre par sous-catégorie désactivée pour
+                      // tous les onglets (disposition par ville partout).
+                      // const Gap(15),
+                      // _buildSubCategoryTabs(),
+                    ],
+                  ),
                 ),
               );
             },
@@ -492,4 +636,9 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       ),
     );
   }
+}
+
+class _Constants {
+  static const double toolbarHeightWithBanner = 217;
+  static const double toolbarHeightWithoutBanner = 145;
 }

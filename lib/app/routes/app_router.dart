@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
+import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/confirm_contact_change_page.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
@@ -24,13 +26,19 @@ import 'package:immoplus/app/features/booking_history/booking_history_page.dart'
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
-import 'package:immoplus/app/features/for_me/favorite_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/location_biens_page.dart';
+import 'package:immoplus/app/features/home_page/screens/location_furnitures_page.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
+import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
+import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
+import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
@@ -39,7 +47,10 @@ import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/registration/register_page.dart';
-import 'package:immoplus/app/features/registration/screens/send_email_opt_page.dart';
+import 'package:immoplus/app/data/enums/registration_type.dart';
+import 'package:immoplus/app/data/models/auth/verify_otp_extra.dart';
+import 'package:immoplus/app/features/registration/screens/register_number_otp.dart';
+import 'package:immoplus/app/features/registration/screens/send_email_or_number_opt_page.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
@@ -56,6 +67,18 @@ import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
+import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
+import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
+import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
+import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
+import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
+import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
+import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -66,15 +89,35 @@ class AppRouter {
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
-    redirect: (context, state) {
+    observers: [
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    ],
+    redirect: (context, state) async {
       print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
       print('🔍 GoRouter redirect - Path: ${state.uri.path}');
       print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
 
       if (showOnboarding) return '/onboarding';
 
-      // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
+      // Load user session if not already loaded (e.g. on direct deep-link launch)
+      final sessionManager = getIt<SessionManager>();
+      if (sessionManager.currentUser == null) {
+        await sessionManager.getCurrentUser();
+      }
+
+      if (!context.mounted) return null;
+
       final path = state.uri.path;
+
+      if (path == PendingPaymentReservationsPage.routePath()) {
+        if (sessionManager.currentUser == null) {
+          print(
+              '🔒 User not authenticated, redirecting from pending-payment-reservations to homePage');
+          return state.namedLocation(HomePage.name);
+        }
+      }
+
+      // Synchronise l'onglet actif quand on arrive par deep link (sans passer par les tabs)
       if (path.startsWith('/vivre') || path.startsWith('/v/')) {
         context.read<NavigationCubit>().switchPage(PageState.vivre);
       } else if (path.startsWith('/homePage')) {
@@ -128,18 +171,29 @@ class AppRouter {
           GoRoute(
             path: '/${RegisterPage.name}',
             name: RegisterPage.name,
-            builder: (context, state) => const RegisterPage(),
+            builder: (context, state) => RegisterPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
           ),
           GoRoute(
-            path: SendEmailOptPage.routePath(),
-            name: SendEmailOptPage.name,
-            builder: (context, state) => const SendEmailOptPage(),
+            path: RegisterNumberOtpPage.routePath(),
+            name: RegisterNumberOtpPage.name,
+            builder: (context, state) => RegisterNumberOtpPage(
+              redirectData: state.extra as AuthRedirectData?,
+            ),
+          ),
+          GoRoute(
+            path: SendEmailOrNumberOptPage.routePath(),
+            name: SendEmailOrNumberOptPage.name,
+            builder: (context, state) => SendEmailOrNumberOptPage(
+              type: state.extra as RegistrationType? ?? RegistrationType.email,
+            ),
           ),
           GoRoute(
             path: VerifyEmailOtpPage.routePath(),
             name: VerifyEmailOtpPage.name,
             builder: (context, state) => VerifyEmailOtpPage(
-              email: state.extra as String,
+              extra: state.extra as VerifyOtpExtra,
             ),
           ),
           GoRoute(
@@ -258,6 +312,13 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: StripeResultRoute.path,
+        name: StripeResultRoute.name,
+        builder: (context, state) => StripeResultRoute(
+          paymentIntentData: state.extra as PaymentItentData,
+        ),
+      ),
+      GoRoute(
         path: '/onboarding',
         name: OnboardingNewPage.name,
         builder: (context, state) => const OnboardingNewPage(),
@@ -290,6 +351,32 @@ class AppRouter {
         path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
+      ),
+      GoRoute(
+        path: SuggestPage.routePath,
+        name: SuggestPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SuggestPage(
+            category: extra['category'] as String?,
+            lat: extra['lat'] as double?,
+            lng: extra['lng'] as double?,
+          );
+        },
+      ),
+      GoRoute(
+        path: SearchResultPage.routePath,
+        name: SearchResultPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return SearchResultPage(
+            category: extra['category'] as String,
+            search: extra['search'] as String?,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+            displayText: extra['displayText'] as String,
+          );
+        },
       ),
       GoRoute(
         path: '/otp-confirm',
@@ -329,9 +416,9 @@ class AppRouter {
           ),
           GoRoute(
             path: '/for_me',
-            name: FavoritePage.name,
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: const FavoritePage(),
+            name: MyChoicePage.name,
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: MyChoicePage(),
             ),
           ),
           GoRoute(
@@ -404,9 +491,50 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: LocationResidencesPage.routePath,
+        name: LocationResidencesPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return LocationResidencesPage(
+            title: extra['title'] as String,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+          );
+        },
+      ),
+
+      GoRoute(
         path: BestRatedResidencesPage.routePath,
         name: BestRatedResidencesPage.routeName,
         builder: (context, state) => const BestRatedResidencesPage(),
+      ),
+
+      GoRoute(
+        path: LocationBiensPage.routePath,
+        name: LocationBiensPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return LocationBiensPage(
+            title: extra['title'] as String,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+            propertyType:
+                extra['propertyType'] as PropertyType? ?? PropertyType.land,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: LocationFurnituresPage.routePath,
+        name: LocationFurnituresPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return LocationFurnituresPage(
+            title: extra['title'] as String,
+            villeId: extra['villeId'] as String?,
+            communeId: extra['communeId'] as String?,
+          );
+        },
       ),
 
       GoRoute(
@@ -527,6 +655,13 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/user_preference',
+        name: UserPreferencePage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const UserPreferencePage();
+        },
+      ),
+      GoRoute(
         path: '/${PermissionPage.name}',
         name: PermissionPage.name,
         builder: (BuildContext context, GoRouterState state) {
@@ -539,6 +674,59 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const ResetPasswordPage();
         },
+      ),
+      GoRoute(
+        path: '/alerts',
+        name: AlertListPage.name,
+        builder: (context, state) => const AlertListPage(),
+      ),
+      GoRoute(
+        path: '/alerts/create',
+        name: AlertCreateEditPage.name,
+        builder: (context, state) => AlertCreateEditPage(
+          alert: state.extra as AlertModel?,
+        ),
+      ),
+      GoRoute(
+        path: AlertPropositionsPage.routePath(),
+        name: AlertPropositionsPage.name,
+        builder: (context, state) => AlertPropositionsPage(
+          alertId: state.pathParameters['id']!,
+          unreadMatchCount: (state.extra as int?) ?? 0,
+        ),
+      ),
+      GoRoute(
+        path: '/alerts/success',
+        name: AlertSuccessPage.name,
+        builder: (context, state) => const AlertSuccessPage(),
+      ),
+      GoRoute(
+        path: '/alerts/detail',
+        name: AlertDetailPage.name,
+        builder: (context, state) => AlertDetailPage(
+          alert: state.extra as AlertModel,
+        ),
+      ),
+      GoRoute(
+        path: '/notifications/detail',
+        name: NotificationDetailPage.name,
+        builder: (context, state) => NotificationDetailPage(
+          notification: state.extra as NotificationModel,
+        ),
+      ),
+      GoRoute(
+        path: '/kyc-webview',
+        name: KycWebViewPage.routeName,
+        builder: (context, state) => KycWebViewPage(
+          url: state.extra as String? ?? '',
+        ),
+      ),
+      GoRoute(
+        path: '/reservation/:id',
+        name: 'reservation_detail',
+        builder: (context, state) => BookingDetailPage(
+          id: state.pathParameters['id']!,
+        ),
       ),
     ],
   );

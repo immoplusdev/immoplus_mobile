@@ -19,17 +19,17 @@ class _NotificationProvider implements NotificationProvider {
 
   @override
   Future<NotificationsResponse> getNotifications({
+    String? pushType,
+    bool? onlyUnread,
     int page = 1,
-    int pageSize = 10,
-    String? orderBy,
-    String? orderDir,
+    int pageSize = 20,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'page': page,
-      r'pageSize': pageSize,
-      r'_order_by': orderBy,
-      r'_order_dir': orderDir,
+      r'pushType': pushType,
+      r'onlyUnread': onlyUnread,
+      r'_page': page,
+      r'_per_page': pageSize,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -38,7 +38,7 @@ class _NotificationProvider implements NotificationProvider {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/notifications',
+            '/notifications/me',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -56,16 +56,16 @@ class _NotificationProvider implements NotificationProvider {
   }
 
   @override
-  Future<HttpResponse<dynamic>> markAsRead(String id) async {
+  Future<HttpResponse<dynamic>> getUnreadCount() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<dynamic>>(
-      Options(method: 'PUT', headers: _headers, extra: _extra)
+      Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/notifications/${id}/read',
+            '/notifications/me/unread-count',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -78,16 +78,47 @@ class _NotificationProvider implements NotificationProvider {
   }
 
   @override
-  Future<HttpResponse<dynamic>> markAllAsRead() async {
+  Future<NotificationModel> getNotificationById(String id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<dynamic>>(
-      Options(method: 'PUT', headers: _headers, extra: _extra)
+    final _options = _setStreamType<NotificationModel>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/notifications/mark-all-read',
+            '/notifications/${id}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late NotificationModel _value;
+    try {
+      _value = NotificationModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> updateNotification(
+    String id,
+    Map<String, dynamic> body,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _options = _setStreamType<HttpResponse<dynamic>>(
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/notifications/${id}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -122,16 +153,60 @@ class _NotificationProvider implements NotificationProvider {
   }
 
   @override
-  Future<HttpResponse<dynamic>> getUnreadCount() async {
+  Future<HttpResponse<dynamic>> markAsRead(String id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<dynamic>>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/notifications/unread-count',
+            '/notifications/${id}/read',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> markAllAsRead() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<HttpResponse<dynamic>>(
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/notifications/me/read-all',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> deleteMyNotification(String id) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<HttpResponse<dynamic>>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/notifications/me/${id}',
             queryParameters: queryParameters,
             data: _data,
           )

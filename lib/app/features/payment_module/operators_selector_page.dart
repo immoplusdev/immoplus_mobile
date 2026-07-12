@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
+import 'package:immoplus/app/data/repositories/payment_repository.dart';
+import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
+import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
@@ -20,6 +27,57 @@ class OperatorsSelectorPage extends StatefulWidget {
 }
 
 class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
+  bool _isLoading = false;
+
+  Future<void> _payWithStripe() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final model = await PaymentRepository().intent(
+        body: PaymentIntentBody(
+          collection: widget.paymentPageAdapter.collection,
+          itemId: widget.paymentPageAdapter.itemId,
+          paymentMethod: OrderPaymentController.selectedOperator.value,
+          paymentCredentials: '',
+        ),
+      );
+
+      final clientSecret = model.data.stripeClientSecret ?? '';
+      if (clientSecret.isEmpty) {
+        EasyLoading.showToast("Impossible d'initialiser le paiement.");
+        return;
+      }
+
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'ImmoPlus',
+          style: ThemeMode.light,
+        ),
+      );
+
+      // Stopper le polling avant que Stripe prenne l'écran
+      ReservationEngagementFrame.onPaymentCompleted();
+
+      await Stripe.instance.presentPaymentSheet();
+
+      if (!mounted) {
+        return;
+      }
+      context.push(StripeResultRoute.path, extra: model.data);
+    } on StripeException catch (e) {
+      if (e.error.code != FailureCode.Canceled) {
+        EasyLoading.showToast(
+          e.error.localizedMessage ?? 'Le paiement a échoué.',
+        );
+      }
+    } catch (e, stack) {
+      EasyLoading.showToast("Une erreur s'est produite.");
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +89,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
             backgroundColor: AppColors.scafold,
             title: const Text('Moyen de paiement'),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-            leading: BackButton(
-              color: Colors.black,
-            ),
+            leading: BackButton(color: Colors.black),
             actions: const [],
           ),
           SliverToBoxAdapter(
@@ -45,12 +101,13 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                 ),
                 tileColor: Colors.white,
                 title: Text(
-                    Utils.formatCurrency(widget.paymentPageAdapter.amount)),
-                titleTextStyle: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.w600),
-                subtitle: const Text('Montant a payer'),
+                  '${widget.paymentPageAdapter.amount} FCFA',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
+                subtitle: const Text('Montant à payer'),
                 trailing: const Icon(
                   FontAwesomeIcons.moneyBill,
                   color: Colors.green,
@@ -60,106 +117,63 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30)
-                    .copyWith(bottom: 10),
-                child: ListTile(
-                  onTap: () {
-                    context.read<PaymentCubit>().init();
-                    setState(() {
-                      OrderPaymentController.selectedOperator =
-                          OrderPaymentController.retraitOperatorsItems[index];
-                    });
+              (context, index) {
+                final operator =
+                    OrderPaymentController.retraitOperatorsItems[index];
+                final isStripe = operator.value == 'visa_card';
 
-                    if (OrderPaymentController.selectedOperator.value ==
-                        OPERATOR_NAME.visa.name.toLowerCase()) {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        // enableDrag: false,
-                        // isDismissible: false,
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30)
+                      .copyWith(bottom: 10),
+                  child: ListTile(
+                    onTap: _isLoading
+                        ? null
+                        : () {
+                            context.read<PaymentCubit>().init();
+                            setState(() {
+                              OrderPaymentController.selectedOperator = operator;
+                            });
+                            getIt<AnalyticsService>().logAddPaymentInfo(
+                              paymentType: operator.value,
+                              value: widget.paymentPageAdapter.amount.toDouble(),
+                              itemId: widget.paymentPageAdapter.itemId,
+                            );
 
-                        useSafeArea: true,
-                        useRootNavigator: true,
-                        backgroundColor: AppColors.scafold,
-                        scrollControlDisabledMaxHeightRatio:
-                            BorderSide.strokeAlignCenter,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        //showDragHandle: true,
-                        context: context,
-                        builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15)
-                                .copyWith(bottom: 30),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.moneyBill,
-                                  size: 50,
-                                  color: Colors.grey,
-                                ),
-                                Text(
-                                  "Le paiement par ${OrderPaymentController.selectedOperator.name} n'est pas disponible pour le moment. Veuillez si possible essayer un autre moyen de paiement ou contacter notre service client.",
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      // TODO
-                      context.pushNamed(PaiementStatusPage.name,
-                          extra: widget.paymentPageAdapter);
-                    }
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  leading: CircleAvatar(
-                    foregroundImage: NetworkImage(
-                      OrderPaymentController.retraitOperatorsItems[index].logo,
+                            if (isStripe) {
+                              _payWithStripe();
+                            } else {
+                              context.pushNamed(
+                                PaiementStatusPage.name,
+                                extra: widget.paymentPageAdapter,
+                              );
+                            }
+                          },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  tileColor: Colors.white,
-                  title: Text(
-                      OrderPaymentController.retraitOperatorsItems[index].name),
-                  titleTextStyle: GoogleFonts.inter(
+                    leading: CircleAvatar(
+                      foregroundImage: NetworkImage(operator.logo),
+                    ),
+                    tileColor: Colors.white,
+                    title: Text(operator.name),
+                    titleTextStyle: GoogleFonts.inter(
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
-                      fontSize: 16),
-                  // subtitle: Text(
-                  //     '${OrderPaymentController.retraitOperatorsItems[index].fee}% de frais'),
-                  trailing:
-                      const Icon(CupertinoIcons.chevron_right_circle_fill),
-                ),
-              ),
+                      fontSize: 16,
+                    ),
+                    trailing: _isLoading && isStripe
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(CupertinoIcons.chevron_right_circle_fill),
+                  ),
+                );
+              },
               childCount: OrderPaymentController.retraitOperatorsItems.length,
             ),
           ),
-          // SliverToBoxAdapter(
-          //   child: TextButton(
-          //     onPressed: () {
-          //       AppDialog.confirm(
-          //           context: context,
-          //           content:
-          //               "Votre demande risque d’être annulée dans moins de 12 heures si la facture n’est pas payée à temps. Veuillez contacter le service client pour plus d’informations.",
-          //           rollback: () {
-          //             AppRouter.router.goNamed(HomePage.name);
-          //           });
-          //     },
-          //     child: Text(
-          //       "Payer plus tard",
-          //       style: Theme.of(context)
-          //           .textTheme
-          //           .titleMedium!
-          //           .copyWith(color: Colors.red),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

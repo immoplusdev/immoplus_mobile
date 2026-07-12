@@ -1,5 +1,9 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '15.0'
+# Pick one: 'all', 'core', 'autodetection', 'nfc'
+$DiditSdkIosVariant = 'all'
+
+didit_sdk_ios_deployment_target = ['all', 'nfc'].include?($DiditSdkIosVariant) ? '15.0' : '13.0'
+platform :ios, didit_sdk_ios_deployment_target
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -25,11 +29,27 @@ end
 
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
+didit_sdk_ios_pod = case $DiditSdkIosVariant
+                    when 'all'
+                      'DiditSDK/All'
+                    when 'core'
+                      'DiditSDK/Core'
+                    when 'autodetection'
+                      'DiditSDK/AutoDetection'
+                    when 'nfc'
+                      'DiditSDK/NFC'
+                    else
+                      raise "Invalid $DiditSdkIosVariant '#{$DiditSdkIosVariant}'. Supported values: all, core, autodetection, nfc."
+                    end
+didit_sdk_ios_podspec = 'https://raw.githubusercontent.com/didit-protocol/sdk-ios/4.0.4/DiditSDK.podspec'
+
 flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
+
+  pod didit_sdk_ios_pod, :podspec => didit_sdk_ios_podspec
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
@@ -45,5 +65,8 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = didit_sdk_ios_deployment_target
+    end
   end
 end

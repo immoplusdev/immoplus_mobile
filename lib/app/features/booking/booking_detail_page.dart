@@ -1,35 +1,33 @@
 // ignore_for_file: prefer_is_empty
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
-import 'package:immoplus/app/features/booking/widgets/booking_payment_status.dart';
 import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
-import 'package:immoplus/app/features/booking/widgets/planing_booking_card_detail.dart';
-import 'package:immoplus/app/features/booking/widgets/reservation_status_section.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 class BookingDetailPage extends StatefulWidget {
   const BookingDetailPage({super.key, required this.id});
   static String name = 'BOOKING';
   final String id;
+
   @override
   State<BookingDetailPage> createState() => _BookingDetailPageState();
 }
@@ -41,445 +39,713 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
     context.read<BookingCubit>().getBooking(id: widget.id);
   }
 
-  /// verifier si la demande de visite est payé
-  bool hasPaid(ReservationResponse reservationResponse) {
-    return reservationResponse.data.statusFacture.toString() ==
-        PaymentStatus.paye.name;
-  }
+  bool hasPaid(ReservationResponse r) =>
+      r.data.statusFacture.toString() == PaymentStatus.paye.name;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BookingCubit, BookingRequestState>(
       builder: (context, state) {
         if (state is RECEIVE_BOOKING) {
+          final res = state.reservationResponse.data;
+          final paid = hasPaid(state.reservationResponse);
           return Scaffold(
-            backgroundColor: AppColors.scafold,
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(appPadding),
-                child: CustomScrollView(
-                  slivers: [
-                    CupertinoSliverRefreshControl(
-                      onRefresh: () async {
-                        this
-                            .context
-                            .read<BookingCubit>()
-                            .getBooking(id: widget.id);
-                      },
-                    ),
-
-                    SliverToBoxAdapter(
-                        child: LogmentInfo(
-                            logmentModel:
-                                state.reservationResponse.data.residence)),
-                    const SliverGap(10),
-                    SliverToBoxAdapter(
-                      child: ListTile(
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        title: const Text('Identifiant de la réservation:'),
-                        subtitle:
-                            SelectableText(state.reservationResponse.data.id),
-                        dense: true,
-                        trailing: IconButton(
-                          color: AppColors.primary,
-                          icon: const Icon(FontAwesomeIcons.copy),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(
-                                    text: state.reservationResponse.data.id))
-                                .then((value) {
-                              //Vibrate.feedback(FeedbackType.impact);
-                              EasyLoading.showToast('Identifiant copié');
-                            }).catchError((err) {
-                              EasyLoading.showToast(err.toString());
-                            });
-                          },
-                        ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                        subtitleTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: Colors.purple),
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Iconsax.arrow_left, color: Colors.black),
+                onPressed: () => context.canPop()
+                    ? context.pop()
+                    : context.go('/'),
+              ),
+              title: const Text('Détails réservation'),
+              titleTextStyle:
+                  Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
                       ),
-                    ),
-                    // SliverToBoxAdapter(
-                    //     child: Padding(
-                    //   padding: EdgeInsets.symmetric(horizontal: 10),
-                    //   child: ElevatedButton(
-                    //       onPressed: () {
-                    //         inspect(state.data.logement);
-                    //       },
-                    //       child: Text(
-                    //           'Teste')), // LogmentInfo(logmentModel: state.data.logement!),
-                    // )),
-                    const SliverToBoxAdapter(child: Divider()),
+              centerTitle: false,
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async =>
+                  context.read<BookingCubit>().getBooking(id: widget.id),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                children: [
+                  // ── Logement ──
+                  LogmentInfo(logmentModel: res.residence),
+                  const Gap(12),
 
-                    SliverToBoxAdapter(
-                      child: ListTile(
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        dense: true,
-                        title: Text(
-                          "Total pour ${state.reservationResponse.data.datesReservation.length} ${(state.reservationResponse.data.datesReservation.length >= 1) ? 'Jour' : 'Jours'}",
-                        ),
-                        trailing: Text(
-                          Utils.formatCurrency(
-                              state.reservationResponse.data.montantPaye),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: Colors.green),
-                        ),
+                  // ── Statuts ──
+                  _SectionCard(
+                    children: [
+                      // _StatusRow(
+                      //   icon: Iconsax.clipboard_tick,
+                      //   label: 'Statut réservation',
+                      //   status: res.statusReservation,
+                      // ),
+                      // const _CardDivider(),
+                      _StatusRow(
+                        icon: Iconsax.wallet,
+                        label: 'Statut paiement',
+                        status: res.statusFacture,
                       ),
-                    ),
+                    ],
+                  ),
+                  const Gap(12),
 
-                    SliverGap(10),
+                  // ── Dates ──
+                  _DatesCard(reservationModel: res),
+                  const Gap(12),
 
-                    SliverToBoxAdapter(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: (BookingUtils.getBookingStatus(
-                                      state.reservationResponse.data
-                                          .datesReservation.first.date!,
-                                      state.reservationResponse.data
-                                          .datesReservation.last.date!) ==
-                                  BookingStatus.ongoing)
-                              ? Colors.green.shade400
-                              : Colors.blueGrey,
-                          child: Icon(
-                              (BookingUtils.getBookingStatus(
-                                          state.reservationResponse.data
-                                              .datesReservation.first.date!,
-                                          state.reservationResponse.data
-                                              .datesReservation.last.date!) ==
-                                      BookingStatus.ongoing)
-                                  ? FontAwesomeIcons.personWalkingLuggage
-                                  : FontAwesomeIcons.calendarCheck,
-                              color: Colors.white),
-                        ),
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        dense: true,
-                        title: Text(
-                          BookingUtils.getStatusText(
-                              startDate: state.reservationResponse.data
-                                  .datesReservation.first.date!,
-                              endDate: state.reservationResponse.data
-                                  .datesReservation.last.date!),
-                        ),
-                      ),
-                    ),
-                    SliverGap(10),
-                    SliverToBoxAdapter(
-                      // color: Colors.white,
-                      // borderRadius: BorderRadius.circular(20),
-                      child: ReservationStatusSection(
-                          status: state
-                                  .reservationResponse.data.statusReservation ??
-                              ''),
-                    ),
-                    SliverGap(10),
-                    SliverToBoxAdapter(
-                        //  color: Colors.white,
-                        //   borderRadius: BorderRadius.circular(20),
-                        child: BookingPaymentStatus(
-                            reservationModel: state.reservationResponse.data)),
-                    const SliverGap(10),
-                    SliverToBoxAdapter(
-                        child: PlaningBookingCardDetail(
-                      reservationModel: state.reservationResponse.data,
-                    )),
-                    SliverGap(10),
-
-                    if (hasPaid(state.reservationResponse))
-                      // Proprietaire
-                      SliverToBoxAdapter(
-                        child: Material(
-                          elevation: 2,
-                          borderRadius: BorderRadius.circular(20),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            enabled: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            leading: const CircleAvatar(
-                              //backgroundColor: Colors.white,
-                              child: Icon(
-                                FontAwesomeIcons.userTie,
-                                //color: Colors.green,
+                  // ── Prix total ──
+                  _SectionCard(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              _IconBox(
+                                icon: Iconsax.receipt_item,
+                                color: AppColors.primary,
                               ),
-                            ),
-                            title: const Text("Propriétaire"),
-                            subtitle: Text(state.reservationResponse.data
-                                .proprietaire.phoneNumber
-                                .split('-')
-                                .last
-                                .toString()),
-                            titleTextStyle:
-                                Theme.of(context).textTheme.bodyMedium,
-                            trailing: Icon(
-                              FontAwesomeIcons.phoneVolume,
-                              color: AppColors.primary,
-                            ),
-                            subtitleTextStyle: Theme.of(context)
+                              const Gap(12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Total',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(color: Colors.grey[500]),
+                                  ),
+                                  Text(
+                                    '${res.datesReservation.length} '
+                                    '${res.datesReservation.length > 1 ? 'jours' : 'jour'}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Text(
+                            Utils.formatCurrency(res.montantPaye),
+                            style: Theme.of(context)
                                 .textTheme
-                                .titleMedium!
-                                .copyWith(color: AppColors.primary),
-                            onTap: () async {
-                              final phone = state.reservationResponse.data
-                                  .proprietaire.phoneNumber
-                                  .split('-');
-                              Utils.makePhoneCall(phone.last);
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: const Color(0xFF1CA53F),
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Gap(12),
+
+                  // ── Identifiant ──
+                  _SectionCard(
+                    children: [
+                      Row(
+                        children: [
+                          _IconBox(
+                              icon: Iconsax.tag, color: Colors.purple),
+                          const Gap(12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ID réservation',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(color: Colors.grey[500]),
+                                ),
+                                SelectableText(
+                                  res.id,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Colors.purple,
+                                        fontFamily: 'monospace',
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Iconsax.copy,
+                                color: AppColors.primary, size: 18),
+                            onPressed: () {
+                              Clipboard.setData(
+                                      ClipboardData(text: res.id))
+                                  .then((_) =>
+                                      EasyLoading.showToast('Identifiant copié'));
                             },
                           ),
-                        ),
+                        ],
                       ),
-                    SliverGap(10),
+                    ],
+                  ),
+                  const Gap(12),
 
-                    if (hasPaid(state.reservationResponse))
-                      // code reservation
-                      _customTile(
-                        icon: Icons.label_rounded,
-                        trailingIcon: Icons.content_copy_rounded,
-                        title:
-                            "CODE RÉSERVATION : ${state.reservationResponse.data.codeReservation}",
-                        onTap: () {
-                          Utils.copyToClipboard(
-                              state.reservationResponse.data.codeReservation);
-                        },
-                      ),
-                    SliverGap(10),
-
-                    // voir l'itinéraire
-                    SliverToBoxAdapter(
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: Icon(
-                            CupertinoIcons.location,
-                            color: AppColors.primary,
-                          ),
-                          title: const Text("Voir l'itinéraire"),
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: AppColors.primary),
-                          trailing: Icon(
-                            CupertinoIcons.chevron_right_circle_fill,
-                            color: AppColors.primary,
-                          ),
-                          onTap: () async {
-                            if (await MapLauncher.isMapAvailable(
-                                    MapType.google) ??
-                                false) {
-                              MapLauncher.showDirections(
-                                destinationTitle: state
-                                    .reservationResponse.data.residence.nom,
-                                destination: Coords(
-                                  state.reservationResponse.data.residence
-                                      .position.coordinates![1],
-                                  state.reservationResponse.data.residence
-                                      .position.coordinates![0],
+                  // ── Code réservation (si payé) ──
+                  if (paid) ...[
+                    _SectionCard(
+                      children: [
+                        InkWell(
+                          onTap: () =>
+                              Utils.copyToClipboard(res.codeReservation),
+                          borderRadius: BorderRadius.circular(12),
+                          child: Row(
+                            children: [
+                              _IconBox(
+                                  icon: Iconsax.password_check,
+                                  color: AppColors.primary),
+                              const Gap(12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Code réservation',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              color: Colors.grey[500]),
+                                    ),
+                                    Text(
+                                      res.codeReservation,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.primary,
+                                            letterSpacing: 2,
+                                          ),
+                                    ),
+                                  ],
                                 ),
-                                directionsMode: DirectionsMode.driving,
-                                mapType: MapType.google,
-                              );
-                            } else {
-                              final availableMaps =
-                                  await MapLauncher.installedMaps;
-                              print(availableMaps);
-                              await availableMaps.first.showDirections(
-                                destinationTitle: state
-                                    .reservationResponse.data.residence.nom,
+                              ),
+                              Icon(Iconsax.copy,
+                                  color: AppColors.primary, size: 18),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(12),
+
+                    // ── Propriétaire (si payé) ──
+                    _SectionCard(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            final phone = res.proprietaire.phoneNumber
+                                .split('-');
+                            Utils.makePhoneCall(phone.last);
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Row(
+                            children: [
+                              _IconBox(
+                                  icon: Iconsax.user,
+                                  color: Colors.orange),
+                              const Gap(12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Propriétaire',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              color: Colors.grey[500]),
+                                    ),
+                                    Text(
+                                      res.proprietaire.phoneNumber
+                                          .split('-')
+                                          .last,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.primary,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Icon(Iconsax.call,
+                                  color: AppColors.primary, size: 18),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(12),
+                  ],
+
+                  // ── Actions ──
+                  _SectionCard(
+                    children: [
+                      _ActionRow(
+                        icon: Iconsax.location,
+                        label: "Voir l'itinéraire",
+                        iconColor: AppColors.primary,
+                        onTap: () async {
+                          if (await MapLauncher.isMapAvailable(
+                                  MapType.google) ??
+                              false) {
+                            MapLauncher.showDirections(
+                              destinationTitle: res.residence.nom,
+                              destination: Coords(
+                                res.residence.position.coordinates![1],
+                                res.residence.position.coordinates![0],
+                              ),
+                              directionsMode: DirectionsMode.driving,
+                              mapType: MapType.google,
+                            );
+                          } else {
+                            final maps =
+                                await MapLauncher.installedMaps;
+                            if (maps.isNotEmpty) {
+                              maps.first.showDirections(
+                                destinationTitle: res.residence.nom,
                                 destination: Coords(
-                                  state.reservationResponse.data.residence
-                                      .position.coordinates![1],
-                                  state.reservationResponse.data.residence
-                                      .position.coordinates![0],
+                                  res.residence.position.coordinates![1],
+                                  res.residence.position.coordinates![0],
                                 ),
                                 directionsMode: DirectionsMode.driving,
                               );
                             }
-                          },
-                        ),
+                          }
+                        },
                       ),
-                    ),
-                    SliverGap(10),
-                    // Contactez nous
-                    SliverToBoxAdapter(
-                      child: Material(
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(20),
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          enabled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: Icon(
-                            FontAwesomeIcons.headset,
-                            color: AppColors.primary,
-                          ),
-                          title: const Text("Support client"),
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: AppColors.primary),
-                          trailing: Icon(
-                            CupertinoIcons.chevron_right_circle_fill,
-                            color: AppColors.primary,
-                          ),
-                          onTap: () async {
-                            ContactUtils.showContact(id: widget.id);
-                          },
-                        ),
+                      const _CardDivider(),
+                      _ActionRow(
+                        icon: Iconsax.headphone,
+                        label: 'Support client',
+                        iconColor: Colors.deepPurple,
+                        onTap: () => ContactUtils.showContact(id: widget.id),
                       ),
-                    ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
 
-                    SliverGap(50)
+            // ── Bottom CTA si non payé ──
+            bottomNavigationBar: res.statusFacture ==
+                    PaymentStatus.non_paye.name
+                ? SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                      child: FilledButton.icon(
+                        onPressed: () => context.pushNamed(
+                          OperatorsSelectorPage.name,
+                          extra: PaymentPageAdapter(
+                            itemId: res.id,
+                            collection: ProductType.reservations.name,
+                            amount: res.montantPaye.toInt(),
+                          ),
+                        ),
+                        icon: const Icon(Iconsax.wallet, size: 18),
+                        label: Text(
+                          'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
+                        ),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFF1CA53F),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          );
+        }
+
+        if (state is Error_BOOKINGS) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColors.scafold,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Iconsax.arrow_left, color: Colors.black),
+                onPressed: () => context.canPop()
+                    ? context.pop()
+                    : context.go('/'),
+              ),
+            ),
+            backgroundColor: AppColors.scafold,
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Iconsax.info_circle,
+                        size: 72, color: Colors.grey[400]),
+                    const Gap(16),
+                    Text(
+                      "Impossible de charger cette réservation.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(color: Colors.grey[600]),
+                    ),
+                    const Gap(24),
+                    FilledButton.icon(
+                      onPressed: () =>
+                          context.read<BookingCubit>().getBooking(id: widget.id),
+                      icon: const Icon(Iconsax.refresh, size: 16),
+                      label: const Text('Réessayer'),
+                    ),
                   ],
                 ),
               ),
             ),
-            bottomSheet: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: appPadding)
-                  .copyWith(bottom: 20),
-              child: Visibility(
-                visible: state.reservationResponse.data.statusFacture ==
-                    PaymentStatus.non_paye.name,
-                child: ListTile(
-                  tileColor: Colors.red.shade300,
-                  onTap: () {
-                    context.pushNamed(
-                      OperatorsSelectorPage.name,
-                      extra: PaymentPageAdapter(
-                          itemId: state.reservationResponse.data.id,
-                          collection: ProductType.reservations.name,
-                          amount: state.reservationResponse.data.montantPaye
-                              .toInt()),
-                    );
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  leading: const CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    radius: 15,
-                    child: Icon(
-                      FontAwesomeIcons.coins,
-                    ),
-                  ),
-                  horizontalTitleGap: 3,
-                  dense: true,
-                  title: Text(
-                      'Payer maintenant  ${state.reservationResponse.data.montantPaye} Fcfa'),
-                  titleTextStyle: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.white),
-                  trailing: const Icon(
-                    CupertinoIcons.chevron_right_circle_fill,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else if (state is Error_BOOKINGS) {
-          return Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: true,
-            ),
-            body: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.remove_circle,
-                    size: 100,
-                    color: Colors.grey,
-                  ),
-                  const SizedBox(
-                    width: 250,
-                    child: Text(
-                      "Vous n'avez pas accès à cet élément ou aucun élément correspondant",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const Gap(50),
-                  SizedBox(
-                    width: 300,
-                    child: ListTile(
-                      onTap: () {
-                        //context.goNamed(BookingPage.name);
-                      },
-                      horizontalTitleGap: 5,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      tileColor: AppColors.primaryLite,
-                      leading:
-                          const Icon(CupertinoIcons.chevron_left_circle_fill),
-                      title: const Text("Retour a la page d'historique"),
-                    ),
-                  )
-                ],
-              ),
-            ),
           );
         }
+
         return const LoadingPage();
       },
     );
   }
+}
 
-  Widget _customTile(
-      {IconData? icon,
-      required String title,
-      IconData? trailingIcon,
-      VoidCallback? onTap}) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
-        child: Material(
-          elevation: 2,
-          borderRadius: BorderRadius.circular(20),
-          child: ListTile(
-            tileColor: Colors.white,
-            enabled: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            leading: Icon(
-              icon,
-              color: AppColors.primary,
-            ),
-            title: Text(title),
-            titleTextStyle: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: AppColors.primary, fontSize: 15),
-            trailing: Icon(
-              trailingIcon,
-              color: AppColors.primary,
-            ),
-            onTap: onTap,
+// ── Carte conteneur ─────────────────────────────────────────────────────────
+
+class _SectionCard extends StatelessWidget {
+  const _SectionCard({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFEEEEEE)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      ),
+    );
+  }
+}
+
+class _CardDivider extends StatelessWidget {
+  const _CardDivider();
+  @override
+  Widget build(BuildContext context) =>
+      const Divider(height: 20, thickness: 0.5);
+}
+
+// ── Icône carrée ─────────────────────────────────────────────────────────────
+
+class _IconBox extends StatelessWidget {
+  const _IconBox({required this.icon, required this.color});
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(icon, size: 16, color: color),
+    );
+  }
+}
+
+// ── Ligne statut ─────────────────────────────────────────────────────────────
+
+class _StatusRow extends StatelessWidget {
+  const _StatusRow({
+    required this.icon,
+    required this.label,
+    required this.status,
+  });
+  final IconData icon;
+  final String label;
+  final String status;
+
+  Color _color() {
+    if (status == PaymentStatus.paye.name ||
+        status == 'accepte' ||
+        status == 'confirme') {
+      return const Color(0xFF1CA53F);
+    }
+    if (status == 'refuse' || status == 'annule') { return Colors.red; }
+    return Colors.orange;
+  }
+
+  String _text() => Utils.getServiceStatus(status);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _IconBox(icon: icon, color: _color()),
+        const Gap(12),
+        Expanded(
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey[700],
+                ),
           ),
         ),
+        Container(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: _color().withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            _text(),
+            style: TextStyle(
+              color: _color(),
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Ligne action ─────────────────────────────────────────────────────────────
+
+class _ActionRow extends StatelessWidget {
+  const _ActionRow({
+    required this.icon,
+    required this.label,
+    required this.iconColor,
+    required this.onTap,
+  });
+  final IconData icon;
+  final String label;
+  final Color iconColor;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Row(
+        children: [
+          _IconBox(icon: icon, color: iconColor),
+          const Gap(12),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          Icon(Iconsax.arrow_right_3, size: 16, color: Colors.grey[400]),
+        ],
       ),
+    );
+  }
+}
+
+// ── Carte dates ──────────────────────────────────────────────────────────────
+
+class _DatesCard extends StatelessWidget {
+  const _DatesCard({required this.reservationModel});
+  final ReservationModel reservationModel;
+
+  @override
+  Widget build(BuildContext context) {
+    final fmt = DateFormat('EEE d MMM yyyy');
+    final checkin =
+        Utils.toDateTime(reservationModel.dateDebut);
+    final checkout =
+        Utils.toDateTime(reservationModel.dateFin);
+
+    final bookingStatus = BookingUtils.getBookingStatus(
+      reservationModel.datesReservation.first.date!,
+      reservationModel.datesReservation.last.date!,
+    );
+    final statusText =
+        BookingUtils.getStatusText(
+          startDate: reservationModel.datesReservation.first.date!,
+          endDate: reservationModel.datesReservation.last.date!,
+        );
+    final statusColor = bookingStatus == BookingStatus.ongoing
+        ? const Color(0xFF1CA53F)
+        : AppColors.primary;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFEEEEEE)),
+      ),
+      child: Column(
+        children: [
+          // Badge statut
+          Container(
+            width: double.infinity,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: statusColor.withValues(alpha: 0.07),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  bookingStatus == BookingStatus.ongoing
+                      ? Iconsax.people
+                      : Iconsax.calendar_tick,
+                  size: 14,
+                  color: statusColor,
+                ),
+                const Gap(6),
+                Text(
+                  statusText,
+                  style: TextStyle(
+                    color: statusColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Arrivée / Départ
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _DateCell(
+                    label: 'ARRIVÉE',
+                    date: fmt.format(checkin),
+                    hour: reservationModel.residence.heureEntree,
+                    icon: Iconsax.login,
+                    color: const Color(0xFF1CA53F),
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 50,
+                  color: Colors.grey.shade200,
+                  margin: const EdgeInsets.symmetric(horizontal: 12),
+                ),
+                Expanded(
+                  child: _DateCell(
+                    label: 'DÉPART',
+                    date: fmt.format(checkout),
+                    hour: reservationModel.residence.heureDepart,
+                    icon: Iconsax.logout,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DateCell extends StatelessWidget {
+  const _DateCell({
+    required this.label,
+    required this.date,
+    required this.hour,
+    required this.icon,
+    required this.color,
+  });
+  final String label;
+  final String date;
+  final String? hour;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 12, color: color),
+            const Gap(4),
+            Text(
+              label,
+              style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                  letterSpacing: 0.5),
+            ),
+          ],
+        ),
+        const Gap(4),
+        Text(
+          date,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (hour != null && hour!.isNotEmpty) ...[
+          const Gap(2),
+          Text(
+            hour!,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: Colors.grey[500]),
+          ),
+        ],
+      ],
     );
   }
 }

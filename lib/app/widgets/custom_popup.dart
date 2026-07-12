@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
 
 class CustomPopup {
   static showLoagingToast({String? text, Color? color}) {
-    EasyLoading.instance.backgroundColor = color ?? Colors.blue.shade200;
-    EasyLoading.show(
-      status: text ?? "Envoie...",
-      maskType: EasyLoadingMaskType.clear,
+    EasyLoadingHandler.showLoadingToast(
+      text: text ?? "Envoie...",
     );
   }
 
@@ -16,11 +15,8 @@ class CustomPopup {
 
   static showErrorToast(
       {String? text, Color? color, Widget? errorWidget, bool? dismissOnTap}) {
-    EasyLoading.instance
-      ..errorWidget = errorWidget
-      ..backgroundColor = color ?? Colors.red.shade300;
-    EasyLoading.showError(
-      text ?? "error",
+    EasyLoadingHandler.showErrorToast(
+      text: text ?? "error",
       dismissOnTap: dismissOnTap,
     );
   }
@@ -31,11 +27,8 @@ class CustomPopup {
       Widget? errorWidget,
       bool? dismissOnTap,
       EasyLoadingToastPosition? toastPosition}) {
-    EasyLoading.instance
-      ..errorWidget = errorWidget
-      ..backgroundColor = color ?? Colors.red.shade300;
-    EasyLoading.showToast(
-      text ?? "error",
+    EasyLoadingHandler.toast(
+      text: text ?? "error",
       dismissOnTap: dismissOnTap,
       toastPosition: toastPosition,
     );
@@ -43,11 +36,8 @@ class CustomPopup {
 
   static showSuccesToast(
       {String? text, Color? color, Widget? errorWidget, bool? dismissOnTap}) {
-    EasyLoading.instance
-      ..errorWidget = errorWidget
-      ..backgroundColor = color ?? Colors.green.shade400;
-    EasyLoading.showSuccess(
-      text ?? "Success",
+    EasyLoadingHandler.showSuccessToast(
+      text: text ?? "Success",
       dismissOnTap: dismissOnTap,
     );
   }

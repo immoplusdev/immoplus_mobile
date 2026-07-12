@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -69,8 +71,8 @@ class _FilterPageState extends State<FilterPage> {
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
-                      enableDrag: false,
-                      showDragHandle: true,
+                      enableDrag: true,
+                      showDragHandle: false,
                       backgroundColor: AppColors.whiteBackground,
                       shape: const RoundedRectangleBorder(
                           borderRadius:
@@ -120,17 +122,15 @@ class _FilterPageState extends State<FilterPage> {
                             currentAddress == null
                                 ? 'Sélectionner un lieu'
                                 : currentAddress!.description.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                  fontWeight: currentAddress == null
-                                      ? FontWeight.w400
-                                      : FontWeight.w600,
-                                  color: currentAddress == null
-                                      ? const Color(0xFF98A2B3)
-                                      : const Color(0xFF344054),
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontWeight: currentAddress == null
+                                          ? FontWeight.w400
+                                          : FontWeight.w600,
+                                      color: currentAddress == null
+                                          ? const Color(0xFF98A2B3)
+                                          : const Color(0xFF344054),
+                                    ),
                           ),
                         ),
                         Icon(
@@ -232,6 +232,13 @@ class _FilterPageState extends State<FilterPage> {
                         FilterHandler.lat = currentAddress!.latitude;
                         FilterHandler.long = currentAddress!.longitude;
                       }
+                      getIt<AnalyticsService>().logFilterApplied(
+                        filterLocation: FilterHandler.locationName,
+                        filterDateStart: FilterHandler.startDate,
+                        filterDateEnd: FilterHandler.endDate,
+                        filterBudgetMin: FilterHandler.minPrice,
+                        filterBudgetMax: FilterHandler.maxPrice,
+                      );
                       FilterHandler.notifyChange();
 
                       HomePageState.getPageListController(state.indexPage)

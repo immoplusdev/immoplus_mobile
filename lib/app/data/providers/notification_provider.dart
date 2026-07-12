@@ -1,30 +1,42 @@
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
+import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/model/notifications_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'notification_provider.g.dart';
 
-@RestApi(baseUrl: null)
+@RestApi()
 abstract class NotificationProvider {
   factory NotificationProvider(Dio dio, {String baseUrl}) =
       _NotificationProvider;
 
-  @GET('/notifications')
-  Future<NotificationsResponse> getNotifications(
-      {@Query('page') int page = 1,
-      @Query('pageSize') int pageSize = 10,
-      @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir});
+  @GET('/notifications/me')
+  Future<NotificationsResponse> getNotifications({
+    @Query('pushType') String? pushType,
+    @Query('onlyUnread') bool? onlyUnread,
+    @Query('_page') int page = 1,
+    @Query('_per_page') int pageSize = 20,
+  });
 
-  @PUT('/notifications/{id}/read')
-  Future<HttpResponse> markAsRead(@Path() String id);
+  @GET('/notifications/me/unread-count')
+  Future<HttpResponse> getUnreadCount();
 
-  @PUT('/notifications/mark-all-read')
-  Future<HttpResponse> markAllAsRead();
+  @GET('/notifications/{id}')
+  Future<NotificationModel> getNotificationById(@Path('id') String id);
+
+  @PATCH('/notifications/{id}')
+  Future<HttpResponse> updateNotification(
+      @Path('id') String id, @Body() Map<String, dynamic> body);
 
   @DELETE('/notifications/{id}')
-  Future<HttpResponse> deleteNotification(@Path() String id);
+  Future<HttpResponse> deleteNotification(@Path('id') String id);
 
-  @GET('/notifications/unread-count')
-  Future<HttpResponse> getUnreadCount();
+  @PATCH('/notifications/{id}/read')
+  Future<HttpResponse> markAsRead(@Path('id') String id);
+
+  @PATCH('/notifications/me/read-all')
+  Future<HttpResponse> markAllAsRead();
+
+  @DELETE('/notifications/me/{id}')
+  Future<HttpResponse> deleteMyNotification(@Path('id') String id);
 }

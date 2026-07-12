@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/residences_near_list.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/residence_card.dart';
+import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class NearResidencesPage extends StatefulWidget {
@@ -38,6 +39,7 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
   @override
   void initState() {
     super.initState();
+    getIt<AnalyticsService>().logNearResidencesViewed();
     _pagingController.addPageRequestListener(_loadPage);
   }
 
@@ -72,9 +74,9 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteBackground,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
@@ -176,8 +178,8 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
                   itemBuilder: (context, item, index) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 1)
                         .copyWith(bottom: 13),
-                    child: ResidenceCard(
-                      residence: item,
+                    child: UnifiedPropertyCard(
+                      item: item,
                     ),
                   ),
                 ),

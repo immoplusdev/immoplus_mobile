@@ -72,6 +72,9 @@ abstract class AuthProvider {
   Future<UpdateUserResponseModel> updateUser(
       @Path() String id, @Body() UpdateUserDto updateUserDto);
 
+  @GET('/users/{id}')
+  Future<UpdateUserResponseModel> getUserById(@Path() String id);
+
   @GET('/configs')
   Future<ConfigModel> getCongig();
 
@@ -83,7 +86,7 @@ abstract class AuthProvider {
       @Body() ResetPasswordBody resetPasswordBody);
 
   @POST('/users/send-otp')
-  Future<HttpResponse> sendEmailOTP(@Body() SendEmailOtpBody sendEmailOtpBody);
+  Future<HttpResponse> sendRegistrationOTP(@Body() SendEmailOtpBody sendEmailOtpBody);
 
   @POST('/users/verify-otp')
   Future<VerifyEmailResponse> verifyOtp(

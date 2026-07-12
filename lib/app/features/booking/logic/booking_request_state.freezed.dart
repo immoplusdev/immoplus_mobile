@@ -28,6 +28,7 @@ mixin _$BookingRequestState {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ mixin _$BookingRequestState {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -52,6 +54,7 @@ mixin _$BookingRequestState {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -65,6 +68,7 @@ mixin _$BookingRequestState {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -77,6 +81,7 @@ mixin _$BookingRequestState {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -89,6 +94,7 @@ mixin _$BookingRequestState {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) =>
@@ -167,6 +173,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -182,6 +189,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -197,6 +205,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -216,6 +225,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return initial(this);
@@ -231,6 +241,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return initial?.call(this);
@@ -246,6 +257,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -311,6 +323,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -326,6 +339,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -341,6 +355,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -360,6 +375,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return loading(this);
@@ -375,6 +391,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return loading?.call(this);
@@ -390,6 +407,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -456,6 +474,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return loadingList();
@@ -471,6 +490,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return loadingList?.call();
@@ -486,6 +506,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -505,6 +526,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return loadingList(this);
@@ -520,6 +542,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return loadingList?.call(this);
@@ -535,6 +558,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -642,6 +666,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return receive(reservationResponse);
@@ -657,6 +682,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return receive?.call(reservationResponse);
@@ -672,6 +698,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -691,6 +718,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return receive(this);
@@ -706,6 +734,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return receive?.call(this);
@@ -721,6 +750,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -837,6 +867,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return receiveEstimation(estimation);
@@ -852,6 +883,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return receiveEstimation?.call(estimation);
@@ -867,6 +899,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -886,6 +919,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return receiveEstimation(this);
@@ -901,6 +935,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return receiveEstimation?.call(this);
@@ -916,6 +951,7 @@ class _$RECEIVE_ESTIMATIONImpl implements RECEIVE_ESTIMATION {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -1032,6 +1068,7 @@ class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return receiveEstimateCost(estimateCost);
@@ -1047,6 +1084,7 @@ class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return receiveEstimateCost?.call(estimateCost);
@@ -1062,6 +1100,7 @@ class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -1081,6 +1120,7 @@ class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return receiveEstimateCost(this);
@@ -1096,6 +1136,7 @@ class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return receiveEstimateCost?.call(this);
@@ -1111,6 +1152,7 @@ class _$RECEIVE_ESTIMATE_COSTImpl implements RECEIVE_ESTIMATE_COST {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -1227,6 +1269,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return receiveBooking(reservationResponse);
@@ -1242,6 +1285,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return receiveBooking?.call(reservationResponse);
@@ -1257,6 +1301,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -1276,6 +1321,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return receiveBooking(this);
@@ -1291,6 +1337,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return receiveBooking?.call(this);
@@ -1306,6 +1353,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {
@@ -1326,6 +1374,209 @@ abstract class RECEIVE_BOOKING implements BookingRequestState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RECEIVE_BOOKINGImplCopyWith<_$RECEIVE_BOOKINGImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$KYC_REQUIREDImplCopyWith<$Res> {
+  factory _$$KYC_REQUIREDImplCopyWith(
+          _$KYC_REQUIREDImpl value, $Res Function(_$KYC_REQUIREDImpl) then) =
+      __$$KYC_REQUIREDImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({KycSessionModel? kycSession});
+
+  $KycSessionModelCopyWith<$Res>? get kycSession;
+}
+
+/// @nodoc
+class __$$KYC_REQUIREDImplCopyWithImpl<$Res>
+    extends _$BookingRequestStateCopyWithImpl<$Res, _$KYC_REQUIREDImpl>
+    implements _$$KYC_REQUIREDImplCopyWith<$Res> {
+  __$$KYC_REQUIREDImplCopyWithImpl(
+      _$KYC_REQUIREDImpl _value, $Res Function(_$KYC_REQUIREDImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? kycSession = freezed,
+  }) {
+    return _then(_$KYC_REQUIREDImpl(
+      kycSession: freezed == kycSession
+          ? _value.kycSession
+          : kycSession // ignore: cast_nullable_to_non_nullable
+              as KycSessionModel?,
+    ));
+  }
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $KycSessionModelCopyWith<$Res>? get kycSession {
+    if (_value.kycSession == null) {
+      return null;
+    }
+
+    return $KycSessionModelCopyWith<$Res>(_value.kycSession!, (value) {
+      return _then(_value.copyWith(kycSession: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$KYC_REQUIREDImpl implements KYC_REQUIRED {
+  const _$KYC_REQUIREDImpl({this.kycSession});
+
+  @override
+  final KycSessionModel? kycSession;
+
+  @override
+  String toString() {
+    return 'BookingRequestState.kycRequired(kycSession: $kycSession)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$KYC_REQUIREDImpl &&
+            (identical(other.kycSession, kycSession) ||
+                other.kycSession == kycSession));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, kycSession);
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$KYC_REQUIREDImplCopyWith<_$KYC_REQUIREDImpl> get copyWith =>
+      __$$KYC_REQUIREDImplCopyWithImpl<_$KYC_REQUIREDImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() loadingList,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
+    required TResult Function(EstimatePriceModel estimation) receiveEstimation,
+    required TResult Function(EstimateCostModel estimateCost)
+        receiveEstimateCost,
+    required TResult Function(ReservationResponse reservationResponse)
+        receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
+    required TResult Function(String message) error,
+  }) {
+    return kycRequired(kycSession);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? loadingList,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
+    TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
+    TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
+    TResult? Function(String message)? error,
+  }) {
+    return kycRequired?.call(kycSession);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? loadingList,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
+    TResult Function(EstimatePriceModel estimation)? receiveEstimation,
+    TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
+    TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (kycRequired != null) {
+      return kycRequired(kycSession);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(INITIAL_BOOKING value) initial,
+    required TResult Function(LOADING_BOOKING value) loading,
+    required TResult Function(LOADING_BOOKING_LIST value) loadingList,
+    required TResult Function(RECEIVE_BOOKINGS value) receive,
+    required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
+    required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
+    required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
+    required TResult Function(Error_BOOKINGS value) error,
+  }) {
+    return kycRequired(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(INITIAL_BOOKING value)? initial,
+    TResult? Function(LOADING_BOOKING value)? loading,
+    TResult? Function(LOADING_BOOKING_LIST value)? loadingList,
+    TResult? Function(RECEIVE_BOOKINGS value)? receive,
+    TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
+    TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
+    TResult? Function(Error_BOOKINGS value)? error,
+  }) {
+    return kycRequired?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(INITIAL_BOOKING value)? initial,
+    TResult Function(LOADING_BOOKING value)? loading,
+    TResult Function(LOADING_BOOKING_LIST value)? loadingList,
+    TResult Function(RECEIVE_BOOKINGS value)? receive,
+    TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
+    TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
+    TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
+    TResult Function(Error_BOOKINGS value)? error,
+    required TResult orElse(),
+  }) {
+    if (kycRequired != null) {
+      return kycRequired(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class KYC_REQUIRED implements BookingRequestState {
+  const factory KYC_REQUIRED({final KycSessionModel? kycSession}) =
+      _$KYC_REQUIREDImpl;
+
+  KycSessionModel? get kycSession;
+
+  /// Create a copy of BookingRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$KYC_REQUIREDImplCopyWith<_$KYC_REQUIREDImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1408,6 +1659,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
         receiveEstimateCost,
     required TResult Function(ReservationResponse reservationResponse)
         receiveBooking,
+    required TResult Function(KycSessionModel? kycSession) kycRequired,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -1423,6 +1675,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult? Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult? Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult? Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult? Function(KycSessionModel? kycSession)? kycRequired,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -1438,6 +1691,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult Function(EstimatePriceModel estimation)? receiveEstimation,
     TResult Function(EstimateCostModel estimateCost)? receiveEstimateCost,
     TResult Function(ReservationResponse reservationResponse)? receiveBooking,
+    TResult Function(KycSessionModel? kycSession)? kycRequired,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -1457,6 +1711,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     required TResult Function(RECEIVE_ESTIMATION value) receiveEstimation,
     required TResult Function(RECEIVE_ESTIMATE_COST value) receiveEstimateCost,
     required TResult Function(RECEIVE_BOOKING value) receiveBooking,
+    required TResult Function(KYC_REQUIRED value) kycRequired,
     required TResult Function(Error_BOOKINGS value) error,
   }) {
     return error(this);
@@ -1472,6 +1727,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult? Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult? Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult? Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult? Function(KYC_REQUIRED value)? kycRequired,
     TResult? Function(Error_BOOKINGS value)? error,
   }) {
     return error?.call(this);
@@ -1487,6 +1743,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult Function(RECEIVE_ESTIMATION value)? receiveEstimation,
     TResult Function(RECEIVE_ESTIMATE_COST value)? receiveEstimateCost,
     TResult Function(RECEIVE_BOOKING value)? receiveBooking,
+    TResult Function(KYC_REQUIRED value)? kycRequired,
     TResult Function(Error_BOOKINGS value)? error,
     required TResult orElse(),
   }) {

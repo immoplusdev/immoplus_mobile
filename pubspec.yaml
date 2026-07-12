@@ -17,7 +17,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 # for new deployment use 1.0.9+12 (INCREMENT !!!) POUR UNIFORMISER IOS ET ANDROID CAR SUR ANDROID ON EST A 1.0.7 pourtant usr ios  1.0.7 y etait deja
-version: 1.0.21+27
+version: 1.0.22+32
 
 environment:
   sdk: ^3.6.0
@@ -32,6 +32,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  didit_sdk:
+    path: packages/didit_sdk
   isar_community: ^3.1.8
   isar_community_flutter_libs: ^3.1.8
   freezed_annotation: ^2.4.4
@@ -101,16 +103,19 @@ dependencies:
   localization: ^2.1.1
   location: ^8.0.0
   lottie: ^3.3.1
+  animated_text_kit: ^4.2.2
+  concentric_transition: ^1.0.3
   map_launcher: ^3.5.0
   mask_text_input_formatter: ^2.9.0
   otp_text_field: ^1.1.3
   path: ^1.9.0
   path_provider: ^2.1.5
+  pdf: ^3.10.8
   permission_handler: ^12.0.1
   persistent_bottom_nav_bar: ^6.2.1
   photo_view: ^0.15.0
   popup_banner: ^1.0.0
-  share_plus: 
+  share_plus: ^11.0.0
   shimmer: ^3.0.0
   simple_ripple_animation: ^0.1.0
   smooth_video_progress: ^0.0.4
@@ -131,6 +136,7 @@ dependencies:
   google_maps_custom_marker: ^1.0.3
   google_places_flutter: ^2.0.9
   firebase_core: ^4.3.0
+  firebase_analytics: ^12.4.2
   onesignal_flutter: ^5.3.3
   passwordfield: ^0.2.0
   pinput: ^5.0.1
@@ -146,10 +152,6 @@ dependencies:
   http: ^1.6.0
   ez_circle_avatar: ^0.0.5
   # UI & animations
-  shadcn_ui:
-    git:
-      url: https://github.com/nank1ro/flutter-shadcn-ui.git
-      ref: main
   animate_do: ^4.2.0
   smooth_sheets: ^0.17.0
   preload_page_view: ^0.2.0
@@ -157,6 +159,8 @@ dependencies:
   sliver_tools: ^0.2.12
   flutter_video_caching: ^1.1.1
   flutter_polyline_points: ^3.1.0
+  flutter_inappwebview: ^6.1.5
+  flutter_stripe: ^11.4.0
 
 
 dev_dependencies:
@@ -214,6 +218,7 @@ flutter:
     - assets/svgs/icons/
     - assets/3d/
     - assets/promo/
+    - assets/icons/property_type/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -211,10 +211,12 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                       ResidencePage.route(residence.id),
                       extra: residence);
                 },
-                onShareTap: () {
+                onShareTap: (origin) {
                   ShareService.shareResidence(
                     residenceId: residence.id,
                     residenceName: residence.nom,
+                    context: NavigationService.navigatorKey.currentContext,
+                    sharePositionOrigin: origin,
                   );
                 },
               ),
@@ -271,10 +273,12 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                       EstatePage.route(bien.id),
                     );
                   },
-                  onShareTap: () {
+                  onShareTap: (origin) {
                     ShareService.shareBien(
                       bienId: bien.id,
                       bienName: bien.nom,
+                      context: NavigationService.navigatorKey.currentContext,
+                      sharePositionOrigin: origin,
                     );
                   }),
             );

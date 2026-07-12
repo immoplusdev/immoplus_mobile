@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/widgets/operator_payment.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 /// Frame C3 — L'Engagement Humain (L'Attente)
@@ -20,6 +22,11 @@ import 'package:immoplus/app/constants/constantes.dart';
 ///   • Polling agressif (5s) via softRefresh tant que la frame est visible.
 class ReservationEngagementFrame extends StatefulWidget {
   static const String name = 'reservation_engagement';
+
+  // Déclenché par StripeCardPage dès que presentPaymentSheet() réussit.
+  // Arrête le polling agressif pour éviter les requêtes concurrentes.
+  static final ValueNotifier<int> paymentDoneNotifier = ValueNotifier<int>(0);
+  static void onPaymentCompleted() => paymentDoneNotifier.value++;
 
   final String ownerName;
   final String reservationId;
@@ -70,6 +77,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   ReservationBannerState _currentState = ReservationBannerState.idle;
   late double _montantTotal;
   bool _isFetchingReservation = false;
+  bool _hasPurchaseLogged = false;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
   static const Color _primaryBlue = Color(0xFF2744DE);
@@ -104,9 +112,16 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
 
     ReservationPendingBanner.bannerStateNotifier.addListener(_onStateChanged);
     ReservationPendingBanner.pushNotifier.addListener(_onPushReceived);
+    ReservationEngagementFrame.paymentDoneNotifier.addListener(_onPaymentDone);
 
     // ── Polling agressif : fetch API directement toutes les 5s ──────────────
     _startAggressiveRefresh();
+  }
+
+  // ── Paiement Stripe confirmé → stopper le polling immédiatement ───────────
+  void _onPaymentDone() {
+    _aggressiveRefreshTimer?.cancel();
+    _messageRotationTimer?.cancel();
   }
 
   // ── Push notification → re-fetch immédiat ─────────────────────────────────
@@ -159,8 +174,25 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           newState = ReservationBannerState.endedWaitingExpired;
           break;
         case StatusReservation.clientSansReponse:
+        case StatusReservation.clientAnnuleReservation:
           newState = ReservationBannerState.endedPaymentExpired;
           break;
+        case StatusReservation.valide:
+        case StatusReservation.enCours:
+        case StatusReservation.terminee:
+          if (!_hasPurchaseLogged) {
+            _hasPurchaseLogged = true;
+            getIt<AnalyticsService>().logPurchase(
+              transactionId: reservation.codeReservation,
+              value: reservation.montantTotalReservation,
+              paymentMethod: OrderPaymentController.selectedOperator.value,
+              itemId: widget.reservationId,
+              itemName: widget.ownerName,
+            );
+          }
+          _aggressiveRefreshTimer?.cancel();
+          _messageRotationTimer?.cancel();
+          return;
         default:
           newState = ReservationBannerState.idle;
       }
@@ -257,6 +289,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     ReservationPendingBanner.bannerStateNotifier
         .removeListener(_onStateChanged);
     ReservationPendingBanner.pushNotifier.removeListener(_onPushReceived);
+    ReservationEngagementFrame.paymentDoneNotifier.removeListener(_onPaymentDone);
     _messageController.dispose();
     super.dispose();
   }

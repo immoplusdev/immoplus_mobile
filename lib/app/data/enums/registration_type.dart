@@ -1,0 +1,4 @@
+enum RegistrationType {
+  email,
+  number,
+}

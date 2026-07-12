@@ -6,7 +6,8 @@ part 'verify_email_otp.g.dart';
 @freezed
 class VerifyEmailOtp with _$VerifyEmailOtp {
   factory VerifyEmailOtp({
-    required String email,
+    String? email,
+    String? phoneNumber,
     required String otp,
   }) = _VerifyEmailOtp;
 

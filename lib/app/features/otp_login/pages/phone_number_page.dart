@@ -1,189 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
-import 'package:immoplus/app/data/repositories/auth_repository.dart';
-import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
-import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
-import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/phone_number_handler.dart';
-import 'package:immoplus/app/utils/status_code_handler.dart';
+import 'package:immoplus/app/features/otp_login/widgets/login_otp_dialog.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
-import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
-import 'package:immoplus/app/widgets/social_button_widget.dart';
 
 class PhoneNumberPage extends StatefulWidget {
-  final PageController pageController;
-
   const PhoneNumberPage({
     super.key,
-    required this.pageController,
-    required this.onSwitchMode,
+    this.pageController,
+    this.onSwitchMode,
   });
-  final VoidCallback onSwitchMode;
+
+  final PageController? pageController;
+  final VoidCallback? onSwitchMode;
+
   @override
   State<PhoneNumberPage> createState() => _PhoneNumberPageState();
 }
 
 class _PhoneNumberPageState extends State<PhoneNumberPage> {
+  final _phoneFieldKey = GlobalKey<InternationalPhoneInputState>();
   bool isPhoneNumberValid = false;
   String phoneNumber = '';
-  bool _isLoading = false;
-  void onInputValidated(bool isValid) {
-    setState(() {
-      isPhoneNumberValid = isValid;
-    });
-  }
 
-  Future<void> _showChannelChoice() async {
-    if (_isLoading || !isPhoneNumberValid || phoneNumber.isEmpty) return;
-    await AppDialog.show(
-      title: 'Recevoir le code par',
-      description:
-          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
-      primaryButtonText: 'WhatsApp',
-      secondButtonText: 'SMS',
-      onPrimary: () => _sendOtpCode(useWhatsapp: true),
-      onSecond: () => _sendOtpCode(useWhatsapp: false),
-    );
-  }
-
-  Future<void> _sendOtpCode({bool useWhatsapp = false}) async {
-    if (_isLoading) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final model = SendOptModel(
-        phoneNumber: PhoneNumberHandler.formatPhoneNumber(phoneNumber),
-      );
-      final response = useWhatsapp
-          ? await AuthRepository().sendWhatsappOtp(body: model)
-          : await AuthRepository().sendOtp(body: model);
-
-      if (!mounted) return;
-
-      if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
-        context.pushNamed(OtpPage.name, extra: phoneNumber);
-      } else {
-        CustomPopup.showErrorToast(
-          text: 'Envoi du code échoué, veuillez ressayer',
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-      CustomPopup.toast(
-        color: Colors.red,
-        toastPosition: EasyLoadingToastPosition.bottom,
-        text: "Envoi de OTP code échoué, veuillez réessayer",
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+  Future<void> _openOtpDialog() async {
+    if (!isPhoneNumberValid || phoneNumber.isEmpty) return;
+    FocusScope.of(context).unfocus();
+    await showLoginOtpDialog(context: context, phoneNumber: phoneNumber);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Gap(50),
-          //const SizedBox(height: 20),
-          SizedBox(
-            height: 80,
-            child: InternationalPhoneInput(
-              backgroundColor: Colors.transparent,
-              onValidPhoneNumber: (value) {
-                phoneNumber = value;
-                OTPState.phoneNumber = phoneNumber;
-              },
-              onInputValidated: onInputValidated,
-            ),
-          ),
-          const Gap(10),
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Gap(24),
 
-          CustomLoadingButtom(
-            text: "Envoyer le code",
-            onClick: _showChannelChoice,
-            isLoading: _isLoading,
-            clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
-            color: isPhoneNumberValid
-                ? AppColors.primary
-                : Colors.blueGrey.shade200,
-          ),
+                Text(
+                  "Indiquez votre numéro",
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: const Color(0xFF1F1F1F),
+                      ),
+                  textAlign: TextAlign.left,
+                ),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => ResetPassword(),
-                    //     ));
-                    context.pushNamed(ResetPasswordPage.name);
-                  },
-                  child: Text(
-                    'Mot de passe oublié',
-                    style: GoogleFonts.inter(color: AppColors.primary),
-                  )),
-              // TextButton(
-              //     onPressed: () {
-              //       context.pushNamed(SendEmailOptPage.name);
-              //     },
-              //     child: Text(
-              //       'S\'inscrire',
-              //       style: GoogleFonts.inter(color: AppColors.primary),
-              //     )),
-            ],
-          ),
-          const Row(
-            children: [
-              Flexible(
-                child: SizedBox(
-                  width: 200,
-                  child: Divider(
-                    thickness: 1,
+                const Gap(16),
+
+                Text(
+                  "Nous vous enverrons un code pour vérifier votre téléphone",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFFA3A3A3),
+                      ),
+                  textAlign: TextAlign.left,
+                ),
+
+                const Gap(30),
+
+                SizedBox(
+                  height: 80,
+                  child: InternationalPhoneInput(
+                    key: _phoneFieldKey,
+                    backgroundColor: Colors.transparent,
+                    onValidPhoneNumber: (value) {
+                      phoneNumber = value;
+                    },
+                    onInputValidated: (isValid) {
+                      setState(() {
+                        isPhoneNumberValid = isValid;
+                      });
+                    },
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('ou'),
-              ),
-              Flexible(
-                  child: SizedBox(
-                      child: Divider(
-                thickness: 1,
-              ))),
-            ],
-          ),
-
-          const Gap(10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: SocialLoginButtons(
-              mode: LoginMode.phone,
-              onSwitchMode: widget.onSwitchMode,
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+
+        // Bouton "Envoyer le code" épinglé en pied de page
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          child: CustomLoadingButtom(
+            text: "Envoyer le code",
+            onClick: _openOtpDialog,
+            isLoading: false,
+            clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
+            color: isPhoneNumberValid
+                ? const Color(0xFF2744DE)
+                : Colors.blueGrey.shade200,
+          ),
+        ),
+      ],
     );
   }
 }

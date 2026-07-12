@@ -31,6 +31,7 @@ import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:retrofit/retrofit.dart';
@@ -56,11 +57,12 @@ class SocialLoginUser {
 @injectable
 class LoginCubit extends Cubit<LoginCubitState> {
   LoginCubit(this.sessionManager, this.dio, this.notificationService,
-      this.authRedirectService)
+      this.authRedirectService, this.analyticsService)
       : super(const LoginCubitState.initial());
   SessionManager sessionManager;
   NotificationService notificationService;
   final AuthRedirectService authRedirectService;
+  final AnalyticsService analyticsService;
   Dio dio;
   SocialLoginUser? socialLoginUser;
 
@@ -68,9 +70,11 @@ class LoginCubit extends Cubit<LoginCubitState> {
     final context = NavigationService.navigatorKey.currentContext!;
     final redirectData = authRedirectService.get();
     if (redirectData != null) {
-      Navigator.of(context).popUntil(
-        (route) => route.settings.name == redirectData.popUntilRouteName,
-      );
+      if (redirectData.popUntilRouteName != null) {
+        Navigator.of(context).popUntil(
+          (route) => route.settings.name == redirectData.popUntilRouteName,
+        );
+      }
       redirectData.callback();
       authRedirectService.clear();
     } else {
@@ -105,8 +109,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
       //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
+      analyticsService.logLogin(method: 'email');
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: response.data.user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } catch (e) {
@@ -159,8 +167,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
       // OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
+      analyticsService.logLogin(method: 'otp');
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: response.data.user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } catch (e) {
@@ -408,8 +420,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
+      analyticsService.logLogin(method: body.provider);
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: response.data.user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } on DioException catch (e) {

@@ -1,5 +1,6 @@
 import 'package:immoplus/app/data/models/local/onboarding_schema.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
+import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,6 +18,7 @@ class IsarConfig {
         UserModelSchemaSchema,
         OnboardingSchemaSchema,
         FovoriteModelSchema,
+        UserPreferenceSchemaSchema,
       ],
       directory:
           await getApplicationDocumentsDirectory().then((dir) => dir.path),

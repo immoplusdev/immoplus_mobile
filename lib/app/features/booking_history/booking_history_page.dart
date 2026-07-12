@@ -8,7 +8,6 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
-import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_history_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -39,23 +38,21 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   final ResidenceRepository residenceRepository = getIt<ResidenceRepository>();
 
   Future<void> loadPage(int page) async {
-    residenceRepository
-        .getReservations(
-      page: page,
-      perPage: 5,
-      orderBy: OrderByField.createdAt.value,
-      orderDir: OrderDir.desc.value,
-      // where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
-    )
-        .then((value) {
+    try {
+      final value = await residenceRepository.getReservations(
+        page: page,
+        perPage: 5,
+        orderBy: OrderByField.createdAt.value,
+        orderDir: OrderDir.desc.value,
+      );
       if (value.hasNext == true) {
-        _pagingController.appendPage(value.data, (value.currentPage) + 1);
+        _pagingController.appendPage(value.data, value.currentPage + 1);
       } else {
         _pagingController.appendLastPage(value.data);
       }
-    }).onError((error, stackTrace) {
-      _pagingController.error = error.toString();
-    });
+    } catch (e) {
+      _pagingController.error = e.toString();
+    }
   }
 
   @override
@@ -65,21 +62,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.reservationId != null) {
-        showModalBottomSheet(
-          backgroundColor: AppColors.scafold,
-          showDragHandle: true,
-          enableDrag: true,
-          isScrollControlled: true,
-          useRootNavigator: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          context: context,
-          builder: (context) => SizedBox(
-              height: MediaQuery.of(context).size.height * 0.85,
-              child: BookingDetailPage(
-                id: widget.reservationId!,
-              )),
-        );
+        context.push('/reservation/${widget.reservationId}');
       }
     });
 
@@ -104,7 +87,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Iconsax.arrow_left, size: 24),
-              onPressed: () => context.pop(),
+              onPressed: () =>
+                  context.canPop() ? context.pop() : context.go('/account'),
             ),
             centerTitle: true,
           ),

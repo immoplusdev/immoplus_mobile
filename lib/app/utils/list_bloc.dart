@@ -29,7 +29,7 @@ class AppBlocs {
     ),
 
     BlocProvider<HomePageCubit>(
-      create: (context) => HomePageCubit(),
+      create: (context) => getIt<HomePageCubit>(),
     ),
     BlocProvider<LocationPermissionCubit>(
       create: (context) => getIt<LocationPermissionCubit>()..checkPermission(),
@@ -68,7 +68,7 @@ class AppBlocs {
     //   create: (context) => MapViewerCubit(),
     // ),
     BlocProvider<NotificationCubit>(
-      create: (context) => NotificationCubit(),
+      create: (context) => getIt<NotificationCubit>(),
     ),
   ];
 }

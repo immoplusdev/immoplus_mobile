@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservations_collection.dart';
+import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
 import 'package:immoplus/app/features/booking/data/estimate_cost_model.dart';
 import 'package:immoplus/app/features/booking/data/estimate_price_model.dart';
 
@@ -19,5 +20,6 @@ class BookingRequestState with _$BookingRequestState {
       EstimateCostModel estimateCost) = RECEIVE_ESTIMATE_COST;
   const factory BookingRequestState.receiveBooking(
       ReservationResponse reservationResponse) = RECEIVE_BOOKING;
+  const factory BookingRequestState.kycRequired({KycSessionModel? kycSession}) = KYC_REQUIRED;
   const factory BookingRequestState.error(String message) = Error_BOOKINGS;
 }

@@ -1,4 +1,7 @@
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/routes/app_router.dart';
@@ -68,6 +71,7 @@ class SessionManager {
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
+    getIt<AnalyticsService>().clearUserIdentity();
     await clearSession();
     OneSignal.logout();
     AppRouter.router.go('/');
@@ -106,25 +110,56 @@ class SessionManager {
   /// Marque l'onboarding comme lu/vu par l'utilisateur
   Future<void> markOnboardingAsRead() async {
     await isarConfig.instance.writeTxn(() async {
+      // On vide l'ancienne collection pour éviter les doublons de version
+      await isarConfig.instance.onboardingSchemas.clear();
+
       await isarConfig.instance.onboardingSchemas.put(
         OnboardingSchema()
           ..hasReadOnboarding = true
-          ..readAt = DateTime.now(),
+          ..readAt = DateTime.now()
+          ..version = 2, // L'onboarding actuel est la version 2
       );
     });
   }
 
-  /// Vérifie si l'utilisateur a déjà vu l'onboarding
+  /// Vérifie si l'utilisateur a déjà vu l'onboarding (version la plus récente)
   Future<bool> hasReadOnboarding() async {
     final onboardingData =
         await isarConfig.instance.onboardingSchemas.where().findFirst();
-    return onboardingData?.hasReadOnboarding ?? false;
+
+    // On s'assure que l'utilisateur a vu la V2 de l'onboarding
+    if (onboardingData?.hasReadOnboarding == true) {
+      if (onboardingData!.version >= 2) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Réinitialise le statut de l'onboarding (utile pour les tests)
   Future<void> resetOnboarding() async {
     await isarConfig.instance.writeTxn(() async {
       await isarConfig.instance.onboardingSchemas.clear();
+    });
+  }
+
+  /// Sauvegarder les préférences locales
+  Future<void> saveLocalPreferences(UserPreferenceSchema prefs) async {
+    await isarConfig.instance.writeTxn(() async {
+      await isarConfig.instance.userPreferenceSchemas.clear();
+      await isarConfig.instance.userPreferenceSchemas.put(prefs);
+    });
+  }
+
+  /// Récupérer les préférences locales
+  Future<UserPreferenceSchema?> getLocalPreferences() async {
+    return await isarConfig.instance.userPreferenceSchemas.where().findFirst();
+  }
+
+  /// Supprimer les préférences locales
+  Future<void> clearLocalPreferences() async {
+    await isarConfig.instance.writeTxn(() async {
+      await isarConfig.instance.userPreferenceSchemas.clear();
     });
   }
 }

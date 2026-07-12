@@ -29,6 +29,8 @@ class CustomTextField extends StatefulWidget {
     this.enabledBorder,
     this.focusedBorder,
     this.contentPadding,
+    this.readOnly = false,
+    this.bottomPadding,
   });
   final String? labelText;
   final Widget? sufixIcon;
@@ -54,14 +56,17 @@ class CustomTextField extends StatefulWidget {
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
   final EdgeInsets? contentPadding;
+  final bool readOnly;
+  final double? bottomPadding;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  final FocusNode _textFieldFocus = FocusNode();
+  late final FocusNode _textFieldFocus;
   @override
   void initState() {
+    _textFieldFocus = widget.focusNode ?? FocusNode();
     _textFieldFocus.addListener(() {
       if (_textFieldFocus.hasFocus) {
         setState(() {});
@@ -73,10 +78,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   @override
+  void dispose() {
+    if (widget.focusNode == null) {
+      _textFieldFocus.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: widget.bottomPadding ?? 10),
       child: TextFormField(
+        readOnly: widget.readOnly,
         enabled: widget.isEnabled,
         style: (widget.fontSize != null)
             ? TextStyle(fontSize: widget.fontSize)
@@ -97,7 +111,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
         keyboardType: widget.textInputType,
         cursorColor: Theme.of(context).colorScheme.onSurface,
         cursorRadius: const Radius.circular(5),
-        //focusNode: widget.focusNode,
         inputFormatters: widget.inputFormatters,
         cursorHeight: 16,
         focusNode: _textFieldFocus,

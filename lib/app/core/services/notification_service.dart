@@ -1,9 +1,13 @@
 import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus/app/core/enums/push_notification_type.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/extensions/go_router_extensions.dart';
 
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
@@ -15,8 +19,9 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 @lazySingleton
 class NotificationService {
   SessionManager sessionManager;
+  AlertRepository alertRepository;
 
-  NotificationService(this.sessionManager);
+  NotificationService(this.sessionManager, this.alertRepository);
 
   initConfig() async {
     await Firebase.initializeApp(
@@ -35,6 +40,10 @@ class NotificationService {
     /// Notification reçue quand l'app est ouverte
     OneSignal.Notifications.addForegroundWillDisplayListener((event) {
       final data = event.notification.additionalData;
+      getIt<AnalyticsService>().logNotificationReceived(
+        notificationType: (data?['type'] as String?) ?? 'unknown',
+        notificationId: event.notification.notificationId,
+      );
 
       if (data != null) {
         final typeString = data['type'] as String?;
@@ -51,6 +60,15 @@ class NotificationService {
               name: 'NOTIFICATION');
           ReservationPendingBanner.onPushReceived();
         }
+
+        if (type == PushNotificationType.newProposal ||
+            type == PushNotificationType.alert) {
+          log('🔔 New proposal/alert → refresh badge count',
+              name: 'NOTIFICATION');
+          alertRepository.getImatchBadgeCount().then((count) {
+            Constantes.imatchBadgeCount.value = count;
+          });
+        }
       }
 
       /// important : afficher quand même la notif
@@ -61,9 +79,13 @@ class NotificationService {
     /// Notification cliquée
     OneSignal.Notifications.addClickListener((event) {
       final data = event.notification.additionalData;
+      getIt<AnalyticsService>().logNotificationTapped(
+        notificationType: (data?['type'] as String?) ?? 'unknown',
+        notificationId: event.notification.notificationId,
+      );
       if (data != null) {
         final typeString = data['type'] as String?;
-        final id = data['id'] as String?;
+        final id = data['id']?.toString() ?? data['alertId']?.toString();
 
         final type = PushNotificationType.fromString(typeString);
 

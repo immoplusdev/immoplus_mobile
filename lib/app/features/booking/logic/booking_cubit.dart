@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
@@ -12,14 +13,25 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/data/repositories/kyc_repository.dart';
+// TODO(KYC): imports désactivés temporairement pour test Stripe
+// import 'package:immoplus/app/data/repositories/auth_repository.dart';
+// import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
+// import 'package:immoplus/app/core/network/utils/session_manager.dart';
+// import 'package:immoplus/app/core/config/injection.dart';
+// import 'dart:developer';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class BookingCubit extends Cubit<BookingRequestState> {
   BookingServices bookingServices;
   ResidenceRepository residenceRepository;
+  KycRepository kycRepository;
+  AnalyticsService analyticsService;
 
-  BookingCubit(this.bookingServices, this.residenceRepository)
+  BookingCubit(this.bookingServices, this.residenceRepository,
+      this.kycRepository, this.analyticsService)
       : super(const BookingRequestState.initial());
 
   // getBookings() async {
@@ -80,19 +92,26 @@ class BookingCubit extends Cubit<BookingRequestState> {
     }
   }
 
-  orderBooking(
-      {required ReservationRequestBody body, required int amount}) async {
+  orderBooking({
+    required ReservationRequestBody body,
+    required int amount,
+    bool force = false,
+  }) async {
     emit(const LOADING_BOOKING());
     try {
       ReservationResponse reservationResponse =
           await residenceRepository.createBooking(model: body);
+      analyticsService.logBeginCheckout(
+        itemId: reservationResponse.data.id,
+        itemName: reservationResponse.data.residence.nom,
+        value: reservationResponse.data.montantTotalReservation,
+      );
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
       ToastUtils.showSuccess(
-  description: "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
-);
-
-
+        description:
+            "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
+      );
 
       // Navigue vers ReservationEngagementFrame
       final context = NavigationService.navigatorKey.currentContext;
@@ -141,4 +160,103 @@ class BookingCubit extends Cubit<BookingRequestState> {
       emit(BookingRequestState.error(e.toString()));
     }
   }
+
+  // orderBooking({
+  //   required ReservationRequestBody body,
+  //   required int amount,
+  //   bool force = false,
+  // }) async {
+  //   if (state is LOADING_BOOKING) return;
+  //   emit(const LOADING_BOOKING());
+  //   try {
+  //     if (!force) {
+  //       try {
+  //         final sessionManager = getIt<SessionManager>();
+  //         final currentUser = await sessionManager.getCurrentUser();
+  //         bool isVerified = false;
+  //         final userId = currentUser?.userId;
+  //         if (userId != null) {
+  //           try {
+  //             final userProfile =
+  //                 await AuthRepository().getUserById(userId: userId);
+  //             if (userProfile.data.identityVerified == true) {
+  //               isVerified = true;
+  //             }
+  //           } catch (e) {
+  //             log("Failed to fetch user profile by ID: $e");
+  //           }
+  //         }
+
+  //         if (!isVerified) {
+  //           final kycSession = await kycRepository.getKycSessionMe();
+  //           if (kycSession == null ||
+  //               kycSession.kycStatus != KycStatus.approved) {
+  //             emit(BookingRequestState.kycRequired(kycSession: kycSession));
+  //             return;
+  //           }
+  //         }
+  //       } catch (kycError) {
+  //         log("KYC or profile check failed: $kycError");
+  //         // Si aucune session n'existe ou s'il y a une erreur, on requiert le KYC
+  //         emit(const BookingRequestState.kycRequired());
+  //         return;
+  //       }
+  //     }
+
+  //     ReservationResponse reservationResponse =
+  //         await residenceRepository.createBooking(model: body);
+  //     emit(BookingRequestState.receiveBooking(reservationResponse));
+  //     ReservationPendingBanner.refresh();
+  //     ToastUtils.showSuccess(
+  //       description:
+  //           "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
+  //     );
+
+  //     // Navigue vers ReservationEngagementFrame
+  //     final context = NavigationService.navigatorKey.currentContext;
+  //     if (context != null) {
+  //       final ownerName = reservationResponse.data.residence.nom;
+  //       context.goNamed(
+  //         ReservationEngagementFrame.name,
+  //         extra: ReservationEngagementFrame(
+  //           ownerName: ownerName,
+  //           reservationId: reservationResponse.data.id,
+  //           montantTotal: reservationResponse.data.montantTotalReservation,
+  //         ),
+  //       );
+  //     }
+  //   } on ActiveReservationException catch (e) {
+  //     emit(const BookingRequestState.initial());
+  //     final context = NavigationService.navigatorKey.currentContext;
+  //     if (context == null) return;
+
+  //     // Pré-charger la réservation pour avoir ownerName + montantTotal
+  //     ReservationResponse? existing;
+  //     try {
+  //       existing =
+  //           await residenceRepository.getReservation(id: e.reservationId);
+  //     } catch (_) {}
+
+  //     if (!context.mounted) return;
+
+  //     ActiveReservationBlockedModal.showAsModal(
+  //       context,
+  //       message: e.message,
+  //       onViewReservation: () {
+  //         if (existing != null) {
+  //           context.goNamed(
+  //             ReservationEngagementFrame.name,
+  //             extra: ReservationEngagementFrame(
+  //               ownerName: existing.data.residence.nom,
+  //               reservationId: existing.data.id,
+  //               montantTotal: existing.data.montantTotalReservation,
+  //             ),
+  //           );
+  //         }
+  //       },
+  //     );
+  //   } catch (e) {
+  //     emit(BookingRequestState.error(e.toString()));
+  //   }
+  // }
 }

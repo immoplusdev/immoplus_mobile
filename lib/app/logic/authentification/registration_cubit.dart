@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,13 +24,14 @@ import '../../data/models/auth/customer_registration_body.dart';
 @injectable
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit(this.sessionManager, this.dio, this.notificationService,
-      this.authRedirectService)
+      this.authRedirectService, this.analyticsService)
       : super(const RegistrationCubitState.initial());
   SessionManager sessionManager;
   Dio dio;
 
   NotificationService notificationService;
   final AuthRedirectService authRedirectService;
+  final AnalyticsService analyticsService;
 
   void _navigateAfterRegistration() {
     final context = NavigationService.navigatorKey.currentContext!;
@@ -75,8 +77,13 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
-      dio.options.headers['Authorization'] =
-          'Bearer ${sessionManager.currentUser!.accessToken}';
+      final provider = customerRegistrationBody.provider ?? 'email';
+      analyticsService.logSignUp(method: provider);
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: response.data.user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
       emit(RegistrationCubitState.success(accountCreationResponse: response));
       _navigateAfterRegistration();
     } catch (e) {
@@ -86,11 +93,10 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     }
   }
 
-  Future<bool> sendEmailOTP({required String email}) async {
+  Future<bool> sendRegistrationOTP({required SendEmailOtpBody body}) async {
     emit(const RegistrationCubitState.loading());
     try {
-      final response = await AuthRepository()
-          .sendEmailOTP(body: SendEmailOtpBody(email: email));
+      final response = await AuthRepository().sendRegistrationOTP(body: body);
       emit(RegistrationCubitState.initial());
       if ([200, 201].contains(response.response.statusCode)) {
         return true;
@@ -108,12 +114,33 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     }
   }
 
-  Future<VerifyEmailResponse?> verifyOtp(
-      {required String email, required String otp}) async {
+  Future<bool> userSendOTP({
+    String? email,
+    String? phoneNumber,
+    bool? is_whatssap,
+  }) async {
+    return sendRegistrationOTP(
+      body: SendEmailOtpBody(
+        email: email,
+        phoneNumber: phoneNumber,
+        is_whatssap: is_whatssap,
+      ),
+    );
+  }
+
+  Future<VerifyEmailResponse?> verifyOtp({
+    String? email,
+    String? phoneNumber,
+    required String otp,
+  }) async {
     emit(const RegistrationCubitState.loading());
     try {
-      final response = await AuthRepository()
-          .verifyOtp(body: VerifyEmailOtp(email: email, otp: otp));
+      final body = VerifyEmailOtp(
+        email: email,
+        phoneNumber: phoneNumber,
+        otp: otp,
+      );
+      final response = await AuthRepository().verifyOtp(body: body);
       emit(RegistrationCubitState.initial());
       return response;
     } on DioException catch (dioError) {

@@ -16,7 +16,8 @@ import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
-
+import 'package:immoplus/app/logic/banners/banners_cubit.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'components/home_search_appbar.dart';
 
 // part 'widgets/about_secton.dart';
@@ -33,9 +34,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  static const double _scrollToTopThreshold = 420;
   late TabController _tabController;
+  late final ScrollController _scrollController;
   final sessionManager = getIt<SessionManager>();
   final _remoteConfig = getIt<RemoteConfigService>();
+  bool _showScrollToTopButton = false;
 
   @override
   void initState() {
@@ -44,14 +48,15 @@ class _HomePageState extends State<HomePage>
       HistoryPageState.refrechAll();
     }();
     _tabController = TabController(length: 4, vsync: this);
+    _scrollController = ScrollController()..addListener(_handleScrollChanged);
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
-      // if (mounted) {
-      //   getIt<ClientReservationOverlayService>().checkAndShowOverlay(context);
-      // }
+      if (mounted) {
+        await context.read<HomePageCubit>().syncUserPreferences();
+      }
     });
     super.initState();
   }
@@ -63,6 +68,10 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
+    _scrollController
+      ..removeListener(_handleScrollChanged)
+      ..dispose();
+    _tabController.dispose();
     super.dispose();
     FilterHandler.search = null;
     FilterHandler.lat = null;
@@ -70,76 +79,152 @@ class _HomePageState extends State<HomePage>
     FilterHandler.locationName = null;
   }
 
+  void _handleScrollChanged() {
+    if (!_scrollController.hasClients) return;
+    final shouldShow = _scrollController.offset > _scrollToTopThreshold;
+    if (shouldShow != _showScrollToTopButton && mounted) {
+      setState(() => _showScrollToTopButton = shouldShow);
+    }
+  }
+
+  Future<void> _scrollToTop() async {
+    if (!_scrollController.hasClients) return;
+    await _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 380),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomePageCubit, HomePageState>(
-      listenWhen: (previous, current) =>
-          previous.indexPage != current.indexPage,
-      listener: (context, state) {
-        if (_tabController.index != state.indexPage && mounted) {
-          _tabController.animateTo(state.indexPage);
-        }
-      },
-      builder: (context, state) {
-        return EnvironmentsBadge(
-          child: Scaffold(
-            backgroundColor: AppColors.whiteBackground,
-            body: DefaultTabController(
-              length: 4,
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  if (state.indexPage == 0) {
-                    HomePageState.refreshResidences();
-                  } else {
-                    HomePageState.getPageListController(state.indexPage)
-                        .refresh();
-                  }
-                },
-                child: CustomScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  slivers: [
-                    HomeSearchAppbar(
-                      currentIndex: state.indexPage,
-                      controller: _tabController,
+    return BlocProvider(
+      create: (context) => getIt<BannersCubit>()
+        ..fetchBanners()
+        ..startPolling(),
+      child: BlocConsumer<HomePageCubit, HomePageState>(
+        listenWhen: (previous, current) =>
+            previous.indexPage != current.indexPage,
+        listener: (context, state) {
+          if (_tabController.index != state.indexPage && mounted) {
+            _tabController.animateTo(state.indexPage);
+          }
+        },
+        builder: (context, state) {
+          return EnvironmentsBadge(
+            child: Scaffold(
+              backgroundColor: AppColors.white,
+              body: DefaultTabController(
+                length: 4,
+                child: Stack(
+                  children: [
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        await context.read<BannersCubit>().fetchBanners();
+                        if (state.indexPage == HomeTab.residence.value) {
+                          HomePageState.refreshResidences();
+                        } else {
+                          HomePageState.getPageListController(state.indexPage)
+                              .refresh();
+                        }
+                      },
+                      child: CustomScrollView(
+                        controller: _scrollController,
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics(),
+                        ),
+                        slivers: [
+                          HomeSearchAppbar(
+                            currentIndex: state.indexPage,
+                            controller: _tabController,
+                          ),
+                          ValueListenableBuilder<int>(
+                            valueListenable: FilterHandler.notifier,
+                            builder: (context, _, child) {
+                              return FilterHandler.hasActiveFilters
+                                  ? SliverToBoxAdapter(
+                                      child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                        ),
+                                        child: Row(
+                                          spacing: 8,
+                                          children: FilterHandler
+                                              .getActiveFiltersChips(
+                                            onRefresh: () async {
+                                              HomePageState
+                                                      .getPageListController(
+                                                          state.indexPage)
+                                                  .refresh();
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ))
+                                  : const SliverToBoxAdapter();
+                            },
+                          ),
+                          const SliverGap(10),
+                          HomePageState.getPageListFromIndex(state.indexPage),
+                        ],
+                      ),
                     ),
-                    ValueListenableBuilder<int>(
-                      valueListenable: FilterHandler.notifier,
-                      builder: (context, _, child) {
-                        return FilterHandler.hasActiveFilters
-                            ? SliverToBoxAdapter(
-                                child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: Row(
-                                    spacing: 8,
-                                    children:
-                                        FilterHandler.getActiveFiltersChips(
-                                      onRefresh: () async {
-                                        HomePageState.getPageListController(
-                                                state.indexPage)
-                                            .refresh();
-                                      },
-                                    ),
+                    Positioned(
+                      right: 20,
+                      bottom: 15,
+                      child: IgnorePointer(
+                        ignoring: !_showScrollToTopButton,
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 180),
+                          opacity: _showScrollToTopButton ? 1 : 0,
+                          child: AnimatedSlide(
+                            duration: const Duration(milliseconds: 180),
+                            offset: _showScrollToTopButton
+                                ? Offset.zero
+                                : const Offset(0, 0.2),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: _scrollToTop,
+                                borderRadius: BorderRadius.circular(18),
+                                child: Ink(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(18),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            Colors.black.withValues(alpha: 0.1),
+                                        blurRadius: 16,
+                                        offset: const Offset(0, 6),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.keyboard_arrow_up_rounded,
+                                    color: Colors.white,
+                                    size: 28,
                                   ),
                                 ),
-                              ))
-                            : const SliverToBoxAdapter();
-                      },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    const SliverGap(10),
-                    HomePageState.getPageListFromIndex(state.indexPage),
                   ],
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

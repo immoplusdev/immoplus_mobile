@@ -187,5 +187,14 @@
 	<true/> -->
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Nous avons besoin du microphone pour enregistrer des voix pour les appels audio.</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>L'NFC est utilisé pour lire les données de puce de votre passeport pour la vérification d'identité.</string>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>D23300000045737445494420763335</string>
+		<string>A0000002471001</string>
+		<string>A0000002472001</string>
+		<string>00000000000000</string>
+	</array>
 </dict>
 </plist>

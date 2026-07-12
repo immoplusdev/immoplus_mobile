@@ -11,6 +11,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking/booking_formular_action.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
@@ -111,6 +112,11 @@ class LogmentBottomBar extends StatelessWidget {
   }
 
   void _handleReservation(BuildContext context) {
+    getIt<AnalyticsService>().logResidenceBookingCtaTapped(
+      residenceId: residenceModel.id,
+      residenceName: residenceModel.nom,
+      price: residenceModel.prixReservation.toDouble(),
+    );
     if (sessionManager.currentUser == null) {
       getIt<AuthRedirectService>().set((
         popUntilRouteName: ResidencePage.name,
