@@ -18,6 +18,7 @@ class HotelDetailModel with _$HotelDetailModel {
     @Default('') String descriptionCourte,
     @Default('') String descriptionLongue,
     @Default([]) List<String> images,
+    @Default('') String videoFileId,
     @Default(HotelAmenities()) HotelAmenities amenities,
     @Default('') String heureArrivee,
     @Default('') String heureDepart,

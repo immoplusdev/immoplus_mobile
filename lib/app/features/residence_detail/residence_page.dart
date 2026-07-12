@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
@@ -38,6 +37,8 @@ class ResidencePage extends StatefulWidget {
 }
 
 class _ResidencePageState extends State<ResidencePage> {
+  bool _hasLoggedViewItem = false;
+
   @override
   void initState() {
     context.read<ResidenceCubit>().getResidence(id: widget.idProduct);
@@ -54,8 +55,8 @@ class _ResidencePageState extends State<ResidencePage> {
 
         if (state is REQUEST_RESIDENCE_DATA) {
           final data = state.data;
-          final hasPieces =
-              data.pieces.isNotEmpty && data.pieces.any((p) => p.nombre > 0);
+          final hasPieces = data.pieces.isNotEmpty &&
+              data.pieces.any((p) => p.nombre > 0);
 
           return Scaffold(
             backgroundColor: Colors.white,
@@ -121,7 +122,7 @@ class _ResidencePageState extends State<ResidencePage> {
 
                 // ── Video ──
                 if (data.video.isNotEmpty) ...[
-                  DetailLogmentVideo(logmentModel: data),
+                  DetailLogmentVideo(videoId: data.video),
                   const _SliverDivider(),
                 ],
 

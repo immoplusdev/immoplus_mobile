@@ -24,6 +24,7 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_title2.dart';
+import 'package:immoplus/app/features/residence_detail/components/detail_logment_video.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
@@ -369,6 +370,13 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
             ),
           ),
           const _SliverDivider(),
+
+          // ── Video Section ──
+          if (hotel.videoFileId.isNotEmpty) ...[
+            DetailLogmentVideo(videoId: hotel.videoFileId),
+            const _SliverDivider(),
+          ],
+
           // ── Map Section ──
           const DetailLogmentTitle2(title: "Lieux"),
           const SliverGap(12),

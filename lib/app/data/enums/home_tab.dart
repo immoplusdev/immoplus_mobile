@@ -26,7 +26,7 @@ enum HomeTab {
 
   String get imagePath => switch (this) {
         HomeTab.residence => 'assets/img/menu_residence.jpg',
-        HomeTab.hotel => 'assets/img/menu_hotels.jpeg',
+        HomeTab.hotel => 'assets/img/menu_hotel_1.jpg',
         HomeTab.location => 'assets/img/menu_location.png',
         HomeTab.furniture => 'assets/img/menu_meubles.jpg',
         HomeTab.bien => 'assets/img/menu_biens.jpg',
