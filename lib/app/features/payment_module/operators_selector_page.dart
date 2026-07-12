@@ -67,7 +67,8 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
       }
       context.push(StripeResultRoute.path, extra: model.data);
     } on StripeException catch (e) {
-      debugPrint('💳 StripeException: ${e.error.code} ${e.error.localizedMessage}');
+      debugPrint(
+          '💳 StripeException: ${e.error.code} ${e.error.localizedMessage}');
       if (e.error.code != FailureCode.Canceled) {
         EasyLoading.showToast(
           e.error.localizedMessage ?? 'Le paiement a échoué.',
@@ -136,7 +137,8 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                         : () {
                             context.read<PaymentCubit>().init();
                             setState(() {
-                              OrderPaymentController.selectedOperator = operator;
+                              OrderPaymentController.selectedOperator =
+                                  operator;
                             });
 
                             if (isStripe) {

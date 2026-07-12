@@ -18,6 +18,7 @@ class HotelSearchResultPage extends StatefulWidget {
   final int adults;
   final int children;
   final int lits;
+  final String? villeId;
 
   const HotelSearchResultPage({
     super.key,
@@ -29,6 +30,7 @@ class HotelSearchResultPage extends StatefulWidget {
     required this.adults,
     required this.children,
     required this.lits,
+    this.villeId,
   });
 
   static const String routePath = '/hotels/search/results';
@@ -66,6 +68,7 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
       adults: widget.adults,
       children: widget.children,
       lits: widget.lits,
+      villeId: widget.villeId,
     )
         .catchError((e) {
       debugPrint('Hotel search error: $e');

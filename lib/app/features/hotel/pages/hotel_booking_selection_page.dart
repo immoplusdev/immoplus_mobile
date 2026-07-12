@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/auth_redirect_service.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_estimation_request.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
@@ -112,15 +117,30 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
       avecPetitDejeuner: false,
     );
 
-    // Navigate to booking summary page
-    context.push(
-      HotelBookingSummaryPage.route(hotel.hotelId),
-      extra: {
-        'hotel': hotel,
-        'room': _selectedRoom,
-        'request': request,
-      },
-    );
+    if (getIt<SessionManager>().currentUser == null) {
+      getIt<AuthRedirectService>().set((
+        popUntilRouteName: HotelBookingSelectionPage.name,
+        callback: () => context.push(
+              HotelBookingSummaryPage.route(hotel.hotelId),
+              extra: {
+                'hotel': hotel,
+                'room': _selectedRoom,
+                'request': request,
+              },
+            ),
+      ));
+      context.pushNamed(AuthenticationPage.name);
+    } else {
+      // Navigate to booking summary page
+      context.push(
+        HotelBookingSummaryPage.route(hotel.hotelId),
+        extra: {
+          'hotel': hotel,
+          'room': _selectedRoom,
+          'request': request,
+        },
+      );
+    }
   }
 
   @override
@@ -201,7 +221,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    childAspectRatio: 1.43,
+                    childAspectRatio: 1.35,
                   ),
                   itemCount: hotel.typesChambres.length,
                   itemBuilder: (context, index) {

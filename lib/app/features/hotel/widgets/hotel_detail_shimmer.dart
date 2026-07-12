@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class HotelDetailShimmer extends StatelessWidget {
   const HotelDetailShimmer({super.key});
@@ -31,7 +30,8 @@ class HotelDetailShimmer extends StatelessWidget {
                   height: 200,
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
                   ),
                 ),
               ),
@@ -43,9 +43,15 @@ class HotelDetailShimmer extends StatelessWidget {
                   children: [
                     Container(height: 20, width: 120, color: Colors.white),
                     const Gap(12),
-                    Container(height: 14, width: double.infinity, color: Colors.white),
+                    Container(
+                        height: 14,
+                        width: double.infinity,
+                        color: Colors.white),
                     const Gap(8),
-                    Container(height: 14, width: double.infinity, color: Colors.white),
+                    Container(
+                        height: 14,
+                        width: double.infinity,
+                        color: Colors.white),
                     const Gap(8),
                     Container(height: 14, width: 200, color: Colors.white),
                   ],

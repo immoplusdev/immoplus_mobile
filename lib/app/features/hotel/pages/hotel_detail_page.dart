@@ -442,7 +442,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: 120,
+        height: 130,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border(top: BorderSide(color: Colors.grey.shade100)),

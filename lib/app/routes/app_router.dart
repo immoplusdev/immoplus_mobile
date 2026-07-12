@@ -537,6 +537,7 @@ class AppRouter {
               adults: extra['adults'] as int? ?? 2,
               children: extra['children'] as int? ?? 0,
               lits: extra['lits'] as int? ?? 1,
+              villeId: extra['villeId'] as String?,
             ),
           );
         },

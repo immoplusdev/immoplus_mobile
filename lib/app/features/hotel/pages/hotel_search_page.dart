@@ -834,9 +834,63 @@ class _HotelSearchPageState extends State<HotelSearchPage>
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  const DiscoverCard(assetPath: "assets/img/1.png"),
-                  const DiscoverCard(assetPath: "assets/img/2.png"),
-                  const DiscoverCard(assetPath: "assets/img/3.png"),
+                  DiscoverCard(
+                    assetPath: "assets/img/1.png",
+                    onTap: () {
+                      context.push(
+                        HotelSearchResultPage.routePath,
+                        extra: {
+                          'destination': '',
+                          'lat': null,
+                          'long': null,
+                          'checkInDate': _selectedDateRange?.start,
+                          'checkOutDate': _selectedDateRange?.end,
+                          'adults': _adults,
+                          'children': _children,
+                          'lits': _lits,
+                          'villeId': "8b97b9ce-a507-11ef-8b44-0e595bc2ce41",
+                        },
+                      );
+                    },
+                  ),
+                  DiscoverCard(
+                    assetPath: "assets/img/2.png",
+                    onTap: () {
+                      context.push(
+                        HotelSearchResultPage.routePath,
+                        extra: {
+                          'destination': '',
+                          'lat': null,
+                          'long': null,
+                          'checkInDate': _selectedDateRange?.start,
+                          'checkOutDate': _selectedDateRange?.end,
+                          'adults': _adults,
+                          'children': _children,
+                          'lits': _lits,
+                          'villeId': "8b981afc-a507-11ef-8b44-0e595bc2ce41",
+                        },
+                      );
+                    },
+                  ),
+                  DiscoverCard(
+                    assetPath: "assets/img/3.png",
+                    onTap: () {
+                      context.push(
+                        HotelSearchResultPage.routePath,
+                        extra: {
+                          'destination': '',
+                          'lat': null,
+                          'long': null,
+                          'checkInDate': _selectedDateRange?.start,
+                          'checkOutDate': _selectedDateRange?.end,
+                          'adults': _adults,
+                          'children': _children,
+                          'lits': _lits,
+                          'villeId': "8b9806f9-a507-11ef-8b44-0e595bc2ce41",
+                        },
+                      );
+                    },
+                  ),
                 ]),
               ),
             ),
