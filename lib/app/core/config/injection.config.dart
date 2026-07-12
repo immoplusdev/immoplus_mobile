@@ -24,6 +24,7 @@ import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
     as _i415;
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
+import 'package:immoplus/app/core/services/analytics_service.dart' as _i1058;
 import 'package:immoplus/app/core/services/auth_redirect_service.dart' as _i944;
 import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart'
     as _i99;
@@ -108,6 +109,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i415.EasyLoadingHandler>(
         () => _i415.EasyLoadingHandler());
     gh.lazySingleton<_i242.EnvHandler>(() => _i242.EnvHandler());
+    gh.lazySingleton<_i1058.AnalyticsService>(() => _i1058.AnalyticsService());
     gh.lazySingleton<_i57.RemoteConfigService>(
         () => _i57.RemoteConfigService());
     gh.lazySingleton<_i944.AuthRedirectService>(
@@ -115,10 +117,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
-    gh.singleton<_i374.FavoriesUtils>(
-        () => _i374.FavoriesUtils(gh<_i847.IsarConfig>()));
     gh.factory<_i974.BannersCubit>(
         () => _i974.BannersCubit(gh<_i39.BannerRepository>()));
+    gh.singleton<_i374.FavoriesUtils>(() => _i374.FavoriesUtils(
+          gh<_i847.IsarConfig>(),
+          gh<_i1058.AnalyticsService>(),
+        ));
     gh.factory<_i180.AuthInterceptor>(
         () => _i180.AuthInterceptor(gh<_i22.SessionManager>()));
     gh.singleton<_i983.NavigationHandler>(
@@ -165,6 +169,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
     gh.lazySingleton<_i342.ChatHistoryService>(
         () => _i342.ChatHistoryService(gh<_i361.Dio>()));
+    gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(
+          gh<_i946.BookingServices>(),
+          gh<_i143.ResidenceRepository>(),
+          gh<_i184.KycRepository>(),
+          gh<_i1058.AnalyticsService>(),
+        ));
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit(
           gh<_i715.UserPreferenceRepository>(),
           gh<_i22.SessionManager>(),
@@ -176,18 +186,6 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i143.ResidenceRepository>(),
               gh<_i22.SessionManager>(),
             ));
-    gh.factory<_i783.RgistrationCubitCubit>(() => _i783.RgistrationCubitCubit(
-          gh<_i22.SessionManager>(),
-          gh<_i361.Dio>(),
-          gh<_i640.NotificationService>(),
-          gh<_i944.AuthRedirectService>(),
-        ));
-    gh.factory<_i888.LoginCubit>(() => _i888.LoginCubit(
-          gh<_i22.SessionManager>(),
-          gh<_i361.Dio>(),
-          gh<_i640.NotificationService>(),
-          gh<_i944.AuthRedirectService>(),
-        ));
     gh.factory<_i85.ResidenceCubit>(
         () => _i85.ResidenceCubit(gh<_i143.ResidenceRepository>()));
     gh.factory<_i57.UserPreferenceCubit>(() => _i57.UserPreferenceCubit(
@@ -196,10 +194,19 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i672.SuggestCubit>(
         () => _i672.SuggestCubit(gh<_i743.SuggestRepository>()));
-    gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(
-          gh<_i946.BookingServices>(),
-          gh<_i143.ResidenceRepository>(),
-          gh<_i184.KycRepository>(),
+    gh.factory<_i783.RgistrationCubitCubit>(() => _i783.RgistrationCubitCubit(
+          gh<_i22.SessionManager>(),
+          gh<_i361.Dio>(),
+          gh<_i640.NotificationService>(),
+          gh<_i944.AuthRedirectService>(),
+          gh<_i1058.AnalyticsService>(),
+        ));
+    gh.factory<_i888.LoginCubit>(() => _i888.LoginCubit(
+          gh<_i22.SessionManager>(),
+          gh<_i361.Dio>(),
+          gh<_i640.NotificationService>(),
+          gh<_i944.AuthRedirectService>(),
+          gh<_i1058.AnalyticsService>(),
         ));
     return this;
   }
