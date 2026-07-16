@@ -8,6 +8,7 @@ import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
@@ -358,7 +359,7 @@ class AppRouter {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
           return SuggestPage(
-            category: extra['category'] as String?,
+            homeTab: extra['homeTab'] as HomeTab?,
             lat: extra['lat'] as double?,
             lng: extra['lng'] as double?,
           );

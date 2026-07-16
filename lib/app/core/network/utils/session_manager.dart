@@ -87,6 +87,16 @@ class SessionManager {
         currentUser = user;
       }
     }
+
+    if (currentUser != null &&
+        (currentUser!.accessToken == null ||
+            currentUser!.accessToken!.isEmpty)) {
+      getIt<AnalyticsService>().clearUserIdentity();
+      await clearSession();
+      OneSignal.logout();
+      return null;
+    }
+
     return currentUser;
   }
 
