@@ -29,8 +29,8 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
   @override
   void initState() {
     favoriesUtils.isFavorite(widget.logmentModel.id).then(
-      (value) => _liked.value = value,
-    );
+          (value) => _liked.value = value,
+        );
     super.initState();
   }
 
@@ -74,7 +74,8 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
                 context: context,
                 sharePositionOrigin: origin,
               );
-              getIt<AnalyticsService>().logResidenceShared(residenceId: widget.logmentModel.id);
+              getIt<AnalyticsService>()
+                  .logResidenceShared(residenceId: widget.logmentModel.id);
             },
           ),
         ),
@@ -88,11 +89,9 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
               iconColor: liked ? Colors.red : null,
               onTap: () {
                 if (!_liked.value) {
-                  favoriesUtils
-                      .addResidenceToFavorites(widget.logmentModel);
+                  favoriesUtils.addResidenceToFavorites(widget.logmentModel);
                 } else {
-                  favoriesUtils
-                      .deleteFavoriteByItemId(widget.logmentModel.id);
+                  favoriesUtils.deleteFavoriteByItemId(widget.logmentModel.id);
                 }
                 _liked.value = !liked;
               },

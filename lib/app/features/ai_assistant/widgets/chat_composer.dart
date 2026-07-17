@@ -19,6 +19,7 @@ class ChatComposer extends StatefulWidget {
   final void Function(String text) onSend;
   final bool isStreaming;
   final VoidCallback? onStop;
+
   /// Hint contextuel — null affiche le placeholder par défaut.
   final String? hint;
 
@@ -130,7 +131,8 @@ class _ChatComposerState extends State<ChatComposer> {
                         height: 1.3,
                       ),
                       decoration: InputDecoration(
-                        hintText: widget.hint ?? 'Demande quoi que ce soit sur l\'immo…',
+                        hintText: widget.hint ??
+                            'Demande quoi que ce soit sur l\'immo…',
                         hintStyle: const TextStyle(
                           fontSize: 14,
                           color: ChatTokens.placeholder,
@@ -214,12 +216,10 @@ class _PrimaryButtonState extends State<_PrimaryButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: widget.onTap == null
-          ? null
-          : (_) => setState(() => _pressed = true),
-      onTapUp: widget.onTap == null
-          ? null
-          : (_) => setState(() => _pressed = false),
+      onTapDown:
+          widget.onTap == null ? null : (_) => setState(() => _pressed = true),
+      onTapUp:
+          widget.onTap == null ? null : (_) => setState(() => _pressed = false),
       onTapCancel:
           widget.onTap == null ? null : () => setState(() => _pressed = false),
       onTap: widget.onTap,

@@ -18,9 +18,9 @@ class BecomeProCubit extends Cubit<BecomeProState> {
         photoIdentiteId: photoIdentiteId,
         pieceIdentiteId: pieceIdentiteId,
       );
-      
+
       await AuthRepository().createDemandeProParticulier(body: body);
-      
+
       emit(BecomeProSuccess());
     } catch (e) {
       emit(BecomeProFailure(e.toString()));

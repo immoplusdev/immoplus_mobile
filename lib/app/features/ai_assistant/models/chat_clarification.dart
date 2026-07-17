@@ -21,8 +21,7 @@ class ChatClarification {
   /// `origin`: raw / computed. Non utilisé pour l'instant.
   final String? origin;
 
-  bool get hasAskedField =>
-      askedField != null && askedField!.trim().isNotEmpty;
+  bool get hasAskedField => askedField != null && askedField!.trim().isNotEmpty;
 
   /// Résumé des critères compris, en chips courts.
   List<String> get partialChips {

@@ -51,7 +51,8 @@ class VisitHistoryCard extends StatelessWidget {
                 children: [
                   // Badge type visite
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: isExpress
                           ? const Color(0xFFFEF3F2)
@@ -70,7 +71,9 @@ class VisitHistoryCard extends StatelessWidget {
                         ),
                         const Gap(4),
                         Text(
-                          demandeVisiteModel.typeDemandeVisite.toString().toUpperCase(),
+                          demandeVisiteModel.typeDemandeVisite
+                              .toString()
+                              .toUpperCase(),
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -135,7 +138,8 @@ class VisitHistoryCard extends StatelessWidget {
               // Date de visite ou message "pas de date"
               if (!hasDates)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFFAEB),
                     borderRadius: BorderRadius.circular(8),
@@ -151,10 +155,11 @@ class VisitHistoryCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           "Aucune date de visite planifiée",
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: const Color(0xFFB54708),
-                                fontWeight: FontWeight.w500,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: const Color(0xFFB54708),
+                                    fontWeight: FontWeight.w500,
+                                  ),
                         ),
                       ),
                     ],
@@ -165,7 +170,8 @@ class VisitHistoryCard extends StatelessWidget {
                   children: [
                     // Date
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.primaryLite,
                         borderRadius: BorderRadius.circular(8),
@@ -173,7 +179,8 @@ class VisitHistoryCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Iconsax.calendar_1, size: 14, color: AppColors.primary),
+                          Icon(Iconsax.calendar_1,
+                              size: 14, color: AppColors.primary),
                           const Gap(6),
                           Text(
                             Utils.formatDatOnly(
@@ -191,7 +198,8 @@ class VisitHistoryCard extends StatelessWidget {
                     const Gap(8),
                     // Heure
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.primaryLite,
                         borderRadius: BorderRadius.circular(8),
@@ -199,7 +207,8 @@ class VisitHistoryCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Iconsax.clock, size: 14, color: AppColors.primary),
+                          Icon(Iconsax.clock,
+                              size: 14, color: AppColors.primary),
                           const Gap(6),
                           Text(
                             Utils.formatTimeOnly(
@@ -220,10 +229,11 @@ class VisitHistoryCard extends StatelessWidget {
                       children: [
                         Text(
                           "Détails",
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                         ),
                         const Gap(4),
                         Icon(

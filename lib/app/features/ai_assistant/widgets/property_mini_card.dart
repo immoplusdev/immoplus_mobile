@@ -121,49 +121,49 @@ class _Info extends StatelessWidget {
     ].join(' · ');
 
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          property.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: ChatTokens.neutral900,
+            letterSpacing: -0.1,
+          ),
+        ),
+        if (meta.isNotEmpty) ...[
+          const SizedBox(height: 2),
           Text(
-            property.title,
+            meta,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: ChatTokens.neutral400,
+              letterSpacing: -0.05,
+            ),
+          ),
+        ],
+        if (property.price != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            formatPriceLong(property.price!),
+            style: const TextStyle(
+              fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: ChatTokens.neutral900,
+              color: ChatTokens.brand500,
+              fontFeatures: [FontFeature.tabularFigures()],
               letterSpacing: -0.1,
             ),
           ),
-          if (meta.isNotEmpty) ...[
-            const SizedBox(height: 2),
-            Text(
-              meta,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: ChatTokens.neutral400,
-                letterSpacing: -0.05,
-              ),
-            ),
-          ],
-          if (property.price != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              formatPriceLong(property.price!),
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: ChatTokens.brand500,
-                fontFeatures: [FontFeature.tabularFigures()],
-                letterSpacing: -0.1,
-              ),
-            ),
-          ],
         ],
-      );
+      ],
+    );
   }
 }
 

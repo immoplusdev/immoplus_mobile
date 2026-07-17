@@ -20,6 +20,7 @@ class BookingRequestState with _$BookingRequestState {
       EstimateCostModel estimateCost) = RECEIVE_ESTIMATE_COST;
   const factory BookingRequestState.receiveBooking(
       ReservationResponse reservationResponse) = RECEIVE_BOOKING;
-  const factory BookingRequestState.kycRequired({KycSessionModel? kycSession}) = KYC_REQUIRED;
+  const factory BookingRequestState.kycRequired({KycSessionModel? kycSession}) =
+      KYC_REQUIRED;
   const factory BookingRequestState.error(String message) = Error_BOOKINGS;
 }

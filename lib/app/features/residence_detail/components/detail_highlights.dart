@@ -60,7 +60,8 @@ class DetailHighlights extends StatelessWidget {
       highlights.add(
         _HighlightData(
           icon: Iconsax.calendar_tick,
-          title: 'Séjour min. ${residenceModel.dureeMinSejour} nuit${residenceModel.dureeMinSejour > 1 ? 's' : ''}',
+          title:
+              'Séjour min. ${residenceModel.dureeMinSejour} nuit${residenceModel.dureeMinSejour > 1 ? 's' : ''}',
           subtitle: 'Le propriétaire requiert un séjour minimum.',
         ),
       );
@@ -120,13 +121,13 @@ class _HighlightTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color:  Color(0xff2744de).withOpacity(0.04),
+              color: Color(0xff2744de).withOpacity(0.04),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               data.icon,
               size: 22,
-              color:  Color(0xff2744de),
+              color: Color(0xff2744de),
             ),
           ),
           const SizedBox(width: 14),

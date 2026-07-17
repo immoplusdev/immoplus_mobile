@@ -500,7 +500,8 @@ class _HeroComposer extends StatelessWidget {
 }
 
 class _SendButton extends StatefulWidget {
-  const _SendButton({required this.onTap, required this.background, required this.enabled});
+  const _SendButton(
+      {required this.onTap, required this.background, required this.enabled});
 
   final VoidCallback onTap;
   final Color background;
@@ -518,7 +519,8 @@ class _SendButtonState extends State<_SendButton> {
     return GestureDetector(
       onTapDown: widget.enabled ? (_) => setState(() => _pressed = true) : null,
       onTapUp: widget.enabled ? (_) => setState(() => _pressed = false) : null,
-      onTapCancel: widget.enabled ? () => setState(() => _pressed = false) : null,
+      onTapCancel:
+          widget.enabled ? () => setState(() => _pressed = false) : null,
       onTap: widget.enabled ? widget.onTap : null,
       child: AnimatedScale(
         scale: _pressed ? 0.92 : 1.0,

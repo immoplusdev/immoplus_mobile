@@ -11,6 +11,7 @@ import 'package:immoplus/app/features/booking_history/components/booking_loading
 import 'package:immoplus/app/features/visit_history/components/visit_history_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class VisitHistoryPage extends StatefulWidget {
   const VisitHistoryPage({super.key});
@@ -22,11 +23,21 @@ class VisitHistoryPage extends StatefulWidget {
   State<VisitHistoryPage> createState() => _VisitHistoryPageState();
 }
 
-class _VisitHistoryPageState extends State<VisitHistoryPage> {
+class _VisitHistoryPageState extends State<VisitHistoryPage>
+    with ConnectivityMixin {
   final BienImmobilierRepository bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
   final PagingController<int, DemandeVisiteModel> _pagingController =
       PagingController(firstPageKey: 1);
+
+  @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
 
   Future<void> loadPage(int page) async {
     bienImmobilierRepository
@@ -43,7 +54,7 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
         _pagingController.appendLastPage(value.data ?? []);
       }
     }).onError((error, stackTrace) {
-      _pagingController.error = error.toString();
+      showConnectionErrorDialog();
     });
   }
 
@@ -53,10 +64,12 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
       loadPage(pageKey);
     });
     super.initState();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     super.dispose();
     _pagingController.dispose();
   }
@@ -65,19 +78,18 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
-      appBar: 
-      AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text('Historiques Des Visites'),
-            backgroundColor: AppColors.whiteBackground,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left, size: 24),
-              onPressed: () => context.pop(),
-            ),
-            centerTitle: true,
-          ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('Historiques Des Visites'),
+        backgroundColor: AppColors.whiteBackground,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Iconsax.arrow_left, size: 24),
+          onPressed: () => context.pop(),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
           child: CustomScrollView(
         slivers: [

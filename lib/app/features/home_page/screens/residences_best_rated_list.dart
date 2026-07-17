@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/widgets/unified_property_card.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
 
 class BestRatedResidencesConstants {
   BestRatedResidencesConstants._();
@@ -36,23 +42,32 @@ class ResidencesBestRatedList extends StatefulWidget {
       _ResidencesBestRatedListState();
 }
 
-class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
+class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
+    with ConnectivityMixin {
   final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
 
   bool _isLoading = true;
   bool _hasError = false;
   String? _errorMessage;
   List<ResidenceModel> _bestRatedResidences = [];
+  @override
+  void onConnectionRestored() {
+    if (_hasError) {
+      _loadBestRatedResidences();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     FilterHandler.notifier.addListener(_loadBestRatedResidences);
     _loadBestRatedResidences();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     FilterHandler.notifier.removeListener(_loadBestRatedResidences);
     super.dispose();
   }
@@ -84,8 +99,8 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
         setState(() {
           _hasError = true;
           _errorMessage = error.toString();
-          _isLoading = false;
         });
+        showConnectionErrorDialog();
       }
     }
   }
@@ -142,7 +157,8 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
     }
 
     if (_hasError) {
-      return _buildErrorState();
+      // Return shimmer as requested when there's an error
+      return _buildLoadingState();
     }
 
     if (_bestRatedResidences.isEmpty) {
@@ -212,41 +228,6 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildErrorState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Erreur de chargement',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red.shade700,
-                ),
-          ),
-          const Gap(6),
-          Text(
-            _errorMessage ?? 'Une erreur est survenue',
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.red.shade600,
-                ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Gap(12),
-          TextButton(
-            onPressed: _loadBestRatedResidences,
-            child: Text(
-              'Réessayer',
-              style: TextStyle(color: Colors.red.shade700),
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -13,6 +13,8 @@ import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_furniture_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 /// Sections horizontales "par ville" pour les meubles, sur le même principe
 /// que BienLocationSectionsList (résidences, locations, biens).
@@ -25,7 +27,7 @@ class FurnitureLocationSectionsList extends StatefulWidget {
 }
 
 class _FurnitureLocationSectionsListState
-    extends State<FurnitureLocationSectionsList> {
+    extends State<FurnitureLocationSectionsList> with ConnectivityMixin {
   final FurnitureRepository furnitureRepository = getIt<FurnitureRepository>();
 
   bool _isParentLoading = true;
@@ -33,6 +35,13 @@ class _FurnitureLocationSectionsListState
   List<FurnitureLocationSectionData> _displayList = [];
 
   void _onPageRequest(int pageKey) => loadPage(pageKey);
+
+  @override
+  void onConnectionRestored() {
+    if (_activeSections.isEmpty) {
+      _loadAllSections();
+    }
+  }
 
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(PropertyType.furniture);
@@ -66,10 +75,12 @@ class _FurnitureLocationSectionsListState
         .addPageRequestListener(_onPageRequest);
     HomePageState.pagingControllerFurniture.refresh();
     _loadAllSections();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     HomePageState.pagingControllerFurniture
         .removePageRequestListener(_onPageRequest);
     super.dispose();
@@ -82,7 +93,8 @@ class _FurnitureLocationSectionsListState
     });
 
     try {
-      final defaultFilters = FilterHandler.getAllFilters(PropertyType.furniture);
+      final defaultFilters =
+          FilterHandler.getAllFilters(PropertyType.furniture);
 
       final futures = kHomeLocationItems.map((item) async {
         if (item.isHeader) return null;
@@ -110,8 +122,8 @@ class _FurnitureLocationSectionsListState
           );
         } catch (e) {
           debugPrint('Error loading section ${item.title}: $e');
+          rethrow;
         }
-        return null;
       }).toList();
 
       final results = await Future.wait(futures);
@@ -132,9 +144,7 @@ class _FurnitureLocationSectionsListState
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isParentLoading = false;
-        });
+        showConnectionErrorDialog();
       }
     }
   }
@@ -144,15 +154,14 @@ class _FurnitureLocationSectionsListState
     for (var item in kHomeLocationItems) {
       if (item.isHeader) continue;
 
-      final loaded = _activeSections
-          .cast<FurnitureLocationSectionData?>()
-          .firstWhere(
-            (s) =>
-                s != null &&
-                s.villeId == item.villeId &&
-                s.communeId == item.communeId,
-            orElse: () => null,
-          );
+      final loaded =
+          _activeSections.cast<FurnitureLocationSectionData?>().firstWhere(
+                (s) =>
+                    s != null &&
+                    s.villeId == item.villeId &&
+                    s.communeId == item.communeId,
+                orElse: () => null,
+              );
       final isLoad = loaded != null && loaded.furnitures.isNotEmpty;
 
       if (isLoad) {
@@ -268,9 +277,8 @@ class FurnituresHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color: furnitures.isNotEmpty
-                    ? Colors.black
-                    : Colors.grey.shade400,
+                color:
+                    furnitures.isNotEmpty ? Colors.black : Colors.grey.shade400,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

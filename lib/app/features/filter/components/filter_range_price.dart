@@ -186,65 +186,65 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
     );
   }
 
-Widget _buildPriceInput(
-  BuildContext context, {
-  required String label,
-  required TextEditingController controller,
-  required IconData icon,
-  required ValueChanged<String> onChanged,
-  required VoidCallback onEditingComplete,
-}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    decoration: BoxDecoration(
-      color: const Color(0xFFF9FAFB),
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: const Color(0xFFF2F4F7)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF667085),
-          ),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF344054),
-                    ),
-                decoration: const InputDecoration(
-                  isDense: true,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.zero,
-                  // Ajoutez ces deux lignes :
-                  filled: true,
-                  fillColor: Colors.transparent,
-                  suffixText: ' F',
-                  suffixStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF667085),
-                  ),
-                ),
-                onChanged: onChanged,
-                onEditingComplete: onEditingComplete,
-                onTapOutside: (_) => onEditingComplete(),
-              ),
+  Widget _buildPriceInput(
+    BuildContext context, {
+    required String label,
+    required TextEditingController controller,
+    required IconData icon,
+    required ValueChanged<String> onChanged,
+    required VoidCallback onEditingComplete,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF9FAFB),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFF2F4F7)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF667085),
             ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF344054),
+                      ),
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                    // Ajoutez ces deux lignes :
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    suffixText: ' F',
+                    suffixStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF667085),
+                    ),
+                  ),
+                  onChanged: onChanged,
+                  onEditingComplete: onEditingComplete,
+                  onTapOutside: (_) => onEditingComplete(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

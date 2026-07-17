@@ -19,6 +19,7 @@ import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class ResidencesList extends StatefulWidget {
   const ResidencesList({super.key});
@@ -27,12 +28,20 @@ class ResidencesList extends StatefulWidget {
   State<ResidencesList> createState() => _ResidencesListState();
 }
 
-class _ResidencesListState extends State<ResidencesList> {
+class _ResidencesListState extends State<ResidencesList>
+    with ConnectivityMixin {
   bool _isParentLoading = true;
   List<_LocationSectionData> _activeSections = [];
   List<dynamic> _displayList = [];
 
   void _onPageRequest(int pageKey) => loadPage(pageKey);
+
+  @override
+  void onConnectionRestored() {
+    if (_activeSections.isEmpty) {
+      _loadAllSections();
+    }
+  }
 
   Future<void> loadPage(int page) async {
     final myToken = HomePageState.residenceToken;
@@ -70,10 +79,12 @@ class _ResidencesListState extends State<ResidencesList> {
         .addPageRequestListener(_onPageRequest);
     HomePageState.refreshResidences();
     _loadAllSections();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     HomePageState.pagingControllerResidence
         .removePageRequestListener(_onPageRequest);
     super.dispose();
@@ -114,8 +125,8 @@ class _ResidencesListState extends State<ResidencesList> {
           // }
         } catch (e) {
           debugPrint('Error loading section ${item.title}: $e');
+          rethrow;
         }
-        return null;
       }).toList();
 
       final results = await Future.wait(futures);
@@ -136,9 +147,7 @@ class _ResidencesListState extends State<ResidencesList> {
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isParentLoading = false;
-        });
+        showConnectionErrorDialog();
       }
     }
   }
@@ -266,38 +275,6 @@ class _ResidencesListState extends State<ResidencesList> {
               ),
             ),
           ),
-        // SliverPadding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 12),
-        //   sliver: PagedSliverList<int, ResidenceModel>(
-        //     pagingController: HomePageState.pagingControllerResidence,
-        //     builderDelegate: PagedChildBuilderDelegate(
-        //       firstPageProgressIndicatorBuilder: (context) => Padding(
-        //         padding: const EdgeInsets.all(10),
-        //         child: SizedBox(
-        //           child: Column(
-        //             children: List.generate(
-        //               10,
-        //               (index) => LoadProductCard(),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       noItemsFoundIndicatorBuilder: (context) => Center(
-        //         child: Text(
-        //           "Aucun élément trouvé",
-        //           style: Theme.of(context).textTheme.titleLarge,
-        //         ),
-        //       ),
-        //       itemBuilder: (context, item, index) => Padding(
-        //         padding: const EdgeInsets.symmetric(horizontal: 1)
-        //             .copyWith(bottom: 13),
-        //         child: UnifiedPropertyCard(
-        //           item: item,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -344,9 +321,8 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color: residences.isNotEmpty
-                    ? Colors.black
-                    : Colors.grey.shade400,
+                color:
+                    residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

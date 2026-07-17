@@ -90,7 +90,6 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
             ),
           ),
     );
-    
   }
 
   @override
@@ -151,14 +150,20 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Section Article ──
-                  _SectionLabel(title: 'Bien concerné', icon: Iconsax.home_hashtag, color: primaryColor),
+                  _SectionLabel(
+                      title: 'Bien concerné',
+                      icon: Iconsax.home_hashtag,
+                      color: primaryColor),
                   const Gap(10),
                   ProductInfo(bienImmobilierModel: widget.bienImmoModel),
 
                   const Gap(28),
 
                   // ── Section Contact ──
-                  _SectionLabel(title: 'Contact', icon: Iconsax.call, color: primaryColor),
+                  _SectionLabel(
+                      title: 'Contact',
+                      icon: Iconsax.call,
+                      color: primaryColor),
                   const Gap(10),
                   Container(
                     padding: const EdgeInsets.all(14),
@@ -174,7 +179,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                         ),
                         const Gap(12),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 10),
                           decoration: BoxDecoration(
                             color: primaryColor.withOpacity(0.06),
                             borderRadius: BorderRadius.circular(10),
@@ -211,18 +217,25 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                   const Gap(28),
 
                   // ── Section Type de visite ──
-                  _SectionLabel(title: 'Type de demande de visite', icon: Iconsax.routing_2, color: primaryColor),
+                  _SectionLabel(
+                      title: 'Type de demande de visite',
+                      icon: Iconsax.routing_2,
+                      color: primaryColor),
                   const Gap(10),
 
                   VisitListTileAction(
                     icon: Iconsax.flash,
-                    price: (sessionManager.configModel?.data?.expressVisitPrice ?? "_").toString(),
+                    price:
+                        (sessionManager.configModel?.data?.expressVisitPrice ??
+                                "_")
+                            .toString(),
                     title: 'Visite Express',
                     subtitle:
                         "Votre visite sera planifiée dans les plus brefs délais, avec possibilité d'intervention le jour même.",
                     onTap: () => _showConfirmDialog(
                       type: 'express',
-                      message: 'Confirmez-vous cette demande de visite expresse ?',
+                      message:
+                          'Confirmez-vous cette demande de visite expresse ?',
                       typeDemandeVisite: TypeDemandeVisite.express,
                     ),
                   ),
@@ -231,13 +244,17 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
 
                   VisitListTileAction(
                     icon: Iconsax.calendar_search,
-                    price: (sessionManager.configModel?.data?.normalVisitPrice ?? "_").toString(),
+                    price:
+                        (sessionManager.configModel?.data?.normalVisitPrice ??
+                                "_")
+                            .toString(),
                     title: 'Visite normale',
                     subtitle:
                         "Vous serez programmé pour la visite et nous vous notifierons la date et l'heure de votre passage.",
                     onTap: () => _showConfirmDialog(
                       type: 'normal',
-                      message: 'Confirmez-vous cette demande de visite standard ?',
+                      message:
+                          'Confirmez-vous cette demande de visite standard ?',
                       typeDemandeVisite: TypeDemandeVisite.normal,
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/models/remote/suggest/suggestion_model.dart';
@@ -19,11 +20,11 @@ import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 
 import 'package:immoplus/app/features/suggest/pages/components/search_history_tile.dart';
 import 'package:immoplus/app/features/suggest/pages/components/recommendation_for_you_tile.dart';
-import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/local/search_history_item.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:gap/gap.dart';
 
 class SuggestPage extends StatefulWidget {
@@ -45,7 +46,7 @@ class SuggestPage extends StatefulWidget {
   State<SuggestPage> createState() => _SuggestPageState();
 }
 
-class _SuggestPageState extends State<SuggestPage> {
+class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _showClearButton = false;
@@ -62,10 +63,20 @@ class _SuggestPageState extends State<SuggestPage> {
   bool _showAllHistory = false;
 
   @override
+  void onConnectionRestored() {
+    final state = _cubit.state;
+    state.maybeWhen(
+      error: (_) => _onSearchTextChanged(),
+      orElse: () {},
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _cubit = getIt<SuggestCubit>();
     _searchController.addListener(_onSearchTextChanged);
+    setupConnectivityListener();
 
     _loadInitialData();
 
@@ -150,6 +161,7 @@ class _SuggestPageState extends State<SuggestPage> {
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _searchController.removeListener(_onSearchTextChanged);
     _searchController.dispose();
     _focusNode.dispose();
@@ -294,8 +306,14 @@ class _SuggestPageState extends State<SuggestPage> {
 
             // Suggestion list
             Expanded(
-              child: BlocBuilder<SuggestCubit, SuggestState>(
+              child: BlocConsumer<SuggestCubit, SuggestState>(
                 bloc: _cubit,
+                listener: (context, state) {
+                  state.maybeWhen(
+                    error: (msg) => showConnectionErrorDialog(),
+                    orElse: () {},
+                  );
+                },
                 builder: (context, state) {
                   return state.when(
                     initial: () => _buildInitialState(),
@@ -340,9 +358,9 @@ class _SuggestPageState extends State<SuggestPage> {
                       );
                     },
                     error: (msg) => Center(
-                      child: Text(
-                        'Erreur: $msg',
-                        style: const TextStyle(color: Colors.redAccent),
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColors.primary),
                       ),
                     ),
                   );

@@ -95,8 +95,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: EstateInfo(
-                          bienImmobilierModel: data.bienImmobilier!),
+                      child:
+                          EstateInfo(bienImmobilierModel: data.bienImmobilier!),
                     ),
                   ),
                   const SliverGap(16),
@@ -195,7 +195,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                     Clipboard.setData(ClipboardData(
                                             text: data.id.toString()))
                                         .then((_) {
-                                      EasyLoading.showToast('Identifiant copié');
+                                      EasyLoading.showToast(
+                                          'Identifiant copié');
                                     }).catchError((err) {
                                       EasyLoading.showToast(err.toString());
                                     });
@@ -236,12 +237,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         child: Column(
                           children: [
                             ServiceStatusSection(
-                                status:
-                                    data.statusDemandeVisite ?? ''),
-                            Divider(
-                                height: 1, color: const Color(0xFFF2F4F7)),
-                            PaymentStatusSection(
-                                demandeVisitModel: data),
+                                status: data.statusDemandeVisite ?? ''),
+                            Divider(height: 1, color: const Color(0xFFF2F4F7)),
+                            PaymentStatusSection(demandeVisitModel: data),
                           ],
                         ),
                       ),
@@ -298,17 +296,14 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                     data.datesDemandeVisite.isEmpty
                                         ? "Aucune date programmée"
                                         : VisitUtils.formatDateTime(data
-                                            .datesDemandeVisite
-                                            .last
-                                            .date!
+                                            .datesDemandeVisite.last.date!
                                             .toIso8601String()),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge
                                         ?.copyWith(
                                           fontWeight: FontWeight.w600,
-                                          color: data
-                                                  .datesDemandeVisite.isEmpty
+                                          color: data.datesDemandeVisite.isEmpty
                                               ? const Color(0xFFB54708)
                                               : AppColors.primary,
                                         ),
@@ -347,9 +342,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           context,
                           icon: Iconsax.user,
                           title: "Propriétaire",
-                          subtitle: data.proprietaire!.phoneNumber
-                              .split('-')
-                              .last,
+                          subtitle:
+                              data.proprietaire!.phoneNumber.split('-').last,
                           trailing: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
@@ -363,8 +357,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                             ),
                           ),
                           onTap: () {
-                            final phone = data.proprietaire!.phoneNumber
-                                .split('-');
+                            final phone =
+                                data.proprietaire!.phoneNumber.split('-');
                             Utils.makePhoneCall(phone.last);
                           },
                         ),
@@ -417,11 +411,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                               OperatorsSelectorPage.name,
                               extra: PaymentPageAdapter(
                                   itemId: data.id,
-                                  collection:
-                                      ProductType.demandes_visites.name,
-                                  amount: data
-                                      .montantTotalDemandeVisite
-                                      .toInt()),
+                                  collection: ProductType.demandes_visites.name,
+                                  amount:
+                                      data.montantTotalDemandeVisite.toInt()),
                             );
                           },
                           icon: const Icon(Iconsax.card, size: 20),

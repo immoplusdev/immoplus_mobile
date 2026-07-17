@@ -56,16 +56,14 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               elevation: 0,
               leading: IconButton(
                 icon: const Icon(Iconsax.arrow_left, color: Colors.black),
-                onPressed: () => context.canPop()
-                    ? context.pop()
-                    : context.go('/'),
+                onPressed: () =>
+                    context.canPop() ? context.pop() : context.go('/'),
               ),
               title: const Text('Détails réservation'),
-              titleTextStyle:
-                  Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
+              titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
               centerTitle: false,
             ),
             body: RefreshIndicator(
@@ -156,8 +154,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     children: [
                       Row(
                         children: [
-                          _IconBox(
-                              icon: Iconsax.tag, color: Colors.purple),
+                          _IconBox(icon: Iconsax.tag, color: Colors.purple),
                           const Gap(12),
                           Expanded(
                             child: Column(
@@ -187,10 +184,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             icon: Icon(Iconsax.copy,
                                 color: AppColors.primary, size: 18),
                             onPressed: () {
-                              Clipboard.setData(
-                                      ClipboardData(text: res.id))
-                                  .then((_) =>
-                                      EasyLoading.showToast('Identifiant copié'));
+                              Clipboard.setData(ClipboardData(text: res.id))
+                                  .then((_) => EasyLoading.showToast(
+                                      'Identifiant copié'));
                             },
                           ),
                         ],
@@ -215,16 +211,14 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                               const Gap(12),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Code réservation',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(
-                                              color: Colors.grey[500]),
+                                          ?.copyWith(color: Colors.grey[500]),
                                     ),
                                     Text(
                                       res.codeReservation,
@@ -254,29 +248,26 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       children: [
                         InkWell(
                           onTap: () {
-                            final phone = res.proprietaire.phoneNumber
-                                .split('-');
+                            final phone =
+                                res.proprietaire.phoneNumber.split('-');
                             Utils.makePhoneCall(phone.last);
                           },
                           borderRadius: BorderRadius.circular(12),
                           child: Row(
                             children: [
                               _IconBox(
-                                  icon: Iconsax.user,
-                                  color: Colors.orange),
+                                  icon: Iconsax.user, color: Colors.orange),
                               const Gap(12),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Propriétaire',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(
-                                              color: Colors.grey[500]),
+                                          ?.copyWith(color: Colors.grey[500]),
                                     ),
                                     Text(
                                       res.proprietaire.phoneNumber
@@ -324,8 +315,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                               mapType: MapType.google,
                             );
                           } else {
-                            final maps =
-                                await MapLauncher.installedMaps;
+                            final maps = await MapLauncher.installedMaps;
                             if (maps.isNotEmpty) {
                               maps.first.showDirections(
                                 destinationTitle: res.residence.nom,
@@ -353,40 +343,39 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
             ),
 
             // ── Bottom CTA si non payé ──
-            bottomNavigationBar: res.statusFacture ==
-                    PaymentStatus.non_paye.name
-                ? SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                      child: FilledButton.icon(
-                        onPressed: () => context.pushNamed(
-                          OperatorsSelectorPage.name,
-                          extra: PaymentPageAdapter(
-                            itemId: res.id,
-                            collection: ProductType.reservations.name,
-                            amount: res.montantPaye.toInt(),
+            bottomNavigationBar:
+                res.statusFacture == PaymentStatus.non_paye.name
+                    ? SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                          child: FilledButton.icon(
+                            onPressed: () => context.pushNamed(
+                              OperatorsSelectorPage.name,
+                              extra: PaymentPageAdapter(
+                                itemId: res.id,
+                                collection: ProductType.reservations.name,
+                                amount: res.montantPaye.toInt(),
+                              ),
+                            ),
+                            icon: const Icon(Iconsax.wallet, size: 18),
+                            label: Text(
+                              'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
+                            ),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: const Color(0xFF1CA53F),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
                           ),
                         ),
-                        icon: const Icon(Iconsax.wallet, size: 18),
-                        label: Text(
-                          'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
-                        ),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF1CA53F),
-                          padding:
-                              const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : null,
+                      )
+                    : null,
           );
         }
 
@@ -397,9 +386,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               elevation: 0,
               leading: IconButton(
                 icon: const Icon(Iconsax.arrow_left, color: Colors.black),
-                onPressed: () => context.canPop()
-                    ? context.pop()
-                    : context.go('/'),
+                onPressed: () =>
+                    context.canPop() ? context.pop() : context.go('/'),
               ),
             ),
             backgroundColor: AppColors.scafold,
@@ -422,8 +410,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     ),
                     const Gap(24),
                     FilledButton.icon(
-                      onPressed: () =>
-                          context.read<BookingCubit>().getBooking(id: widget.id),
+                      onPressed: () => context
+                          .read<BookingCubit>()
+                          .getBooking(id: widget.id),
                       icon: const Icon(Iconsax.refresh, size: 16),
                       label: const Text('Réessayer'),
                     ),
@@ -509,7 +498,9 @@ class _StatusRow extends StatelessWidget {
         status == 'confirme') {
       return const Color(0xFF1CA53F);
     }
-    if (status == 'refuse' || status == 'annule') { return Colors.red; }
+    if (status == 'refuse' || status == 'annule') {
+      return Colors.red;
+    }
     return Colors.orange;
   }
 
@@ -530,8 +521,7 @@ class _StatusRow extends StatelessWidget {
           ),
         ),
         Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             color: _color().withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
@@ -597,20 +587,17 @@ class _DatesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fmt = DateFormat('EEE d MMM yyyy');
-    final checkin =
-        Utils.toDateTime(reservationModel.dateDebut);
-    final checkout =
-        Utils.toDateTime(reservationModel.dateFin);
+    final checkin = Utils.toDateTime(reservationModel.dateDebut);
+    final checkout = Utils.toDateTime(reservationModel.dateFin);
 
     final bookingStatus = BookingUtils.getBookingStatus(
       reservationModel.datesReservation.first.date!,
       reservationModel.datesReservation.last.date!,
     );
-    final statusText =
-        BookingUtils.getStatusText(
-          startDate: reservationModel.datesReservation.first.date!,
-          endDate: reservationModel.datesReservation.last.date!,
-        );
+    final statusText = BookingUtils.getStatusText(
+      startDate: reservationModel.datesReservation.first.date!,
+      endDate: reservationModel.datesReservation.last.date!,
+    );
     final statusColor = bookingStatus == BookingStatus.ongoing
         ? const Color(0xFF1CA53F)
         : AppColors.primary;
@@ -626,8 +613,7 @@ class _DatesCard extends StatelessWidget {
           // Badge statut
           Container(
             width: double.infinity,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
               color: statusColor.withValues(alpha: 0.07),
               borderRadius:

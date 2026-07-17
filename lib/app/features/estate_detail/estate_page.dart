@@ -19,6 +19,7 @@ import 'package:immoplus/app/features/residence_detail/components/detail_logment
 import 'package:immoplus/app/features/residence_detail/components/inititial_detail_screen.dart';
 import 'package:immoplus/app/logic/request_state.dart';
 import 'package:immoplus/svgs_icons.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 import 'components/detail_estate_amentities.dart';
 import 'components/detail_logment_appbar.dart';
@@ -44,20 +45,40 @@ class EstatePage extends StatefulWidget {
   State<EstatePage> createState() => _EstatePageState();
 }
 
-class _EstatePageState extends State<EstatePage> {
+class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
   bool _hasLoggedViewItem = false;
+
+  @override
+  void onConnectionRestored() {
+    final state = context.read<EstateCubit>().state;
+    if (state is REQUEST_ERROR || state is REQUEST_LOADING) {
+      context.read<EstateCubit>().getEstate(id: widget.idProduct);
+    }
+  }
 
   @override
   void initState() {
     context.read<EstateCubit>().getEstate(id: widget.idProduct);
     super.initState();
+    setupConnectivityListener();
+  }
+
+  @override
+  void dispose() {
+    disposeConnectivityListener();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EstateCubit, RequestState>(
+    return BlocConsumer<EstateCubit, RequestState>(
+      listener: (context, state) {
+        if (state is REQUEST_ERROR) {
+          showConnectionErrorDialog();
+        }
+      },
       builder: (context, state) {
-        if (state is REQUEST_LOADING) {
+        if (state is REQUEST_LOADING || state is REQUEST_ERROR) {
           return const LoadingPage();
         }
 
@@ -91,9 +112,7 @@ class _EstatePageState extends State<EstatePage> {
                 // ── Pull to refresh ──
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
-                    context
-                        .read<EstateCubit>()
-                        .getEstate(id: widget.idProduct);
+                    context.read<EstateCubit>().getEstate(id: widget.idProduct);
                   },
                 ),
 
@@ -124,16 +143,15 @@ class _EstatePageState extends State<EstatePage> {
 
                 // ── Amenities ──
                 if (data.amentities.isNotEmpty) ...[
-                  const DetailLogmentTitle2(
-                      title: 'Ce que propose ce bien'),
+                  const DetailLogmentTitle2(title: 'Ce que propose ce bien'),
                   const SliverGap(8),
                   DetailEstateAmentities(bienImmobilier: data),
                   const SliverGap(12),
                   if (data.amentities.length > 6)
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: appPadding),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: appPadding),
                         child: _ViewAllLink(
                           label:
                               'Voir les ${data.amentities.length} équipements',
@@ -268,8 +286,7 @@ class _ExpandableDescription extends StatefulWidget {
   final String description;
 
   @override
-  State<_ExpandableDescription> createState() =>
-      _ExpandableDescriptionState();
+  State<_ExpandableDescription> createState() => _ExpandableDescriptionState();
 }
 
 class _ExpandableDescriptionState extends State<_ExpandableDescription> {
@@ -409,8 +426,8 @@ class _SliverDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: appPadding, vertical: 24),
+        padding:
+            const EdgeInsets.symmetric(horizontal: appPadding, vertical: 24),
         child: Divider(
           height: 1,
           thickness: 0.5,

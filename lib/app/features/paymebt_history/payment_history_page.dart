@@ -16,6 +16,7 @@ import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class PaymentHistoryPage extends StatefulWidget {
   const PaymentHistoryPage({super.key});
@@ -30,7 +31,8 @@ class PaymentHistoryPage extends StatefulWidget {
 }
 
 IconData _getStatusIcon(String status) {
-  if (status == PaymentStatus.successful.name || status == PaymentStatus.paye.name) {
+  if (status == PaymentStatus.successful.name ||
+      status == PaymentStatus.paye.name) {
     return Iconsax.tick_circle;
   } else if (status == PaymentStatus.pending.name) {
     return Iconsax.clock;
@@ -47,7 +49,8 @@ IconData _getStatusIcon(String status) {
 }
 
 Color _getStatusColor(String status) {
-  if (status == PaymentStatus.successful.name || status == PaymentStatus.paye.name) {
+  if (status == PaymentStatus.successful.name ||
+      status == PaymentStatus.paye.name) {
     return const Color(0xFF12B76A);
   } else if (status == PaymentStatus.pending.name) {
     return const Color(0xFF667085);
@@ -64,7 +67,8 @@ Color _getStatusColor(String status) {
 }
 
 Color _getStatusBgColor(String status) {
-  if (status == PaymentStatus.successful.name || status == PaymentStatus.paye.name) {
+  if (status == PaymentStatus.successful.name ||
+      status == PaymentStatus.paye.name) {
     return const Color(0xFFECFDF3);
   } else if (status == PaymentStatus.pending.name) {
     return const Color(0xFFF2F4F7);
@@ -108,27 +112,39 @@ Color getColorStatus({required String status}) {
   return _getStatusBgColor(status);
 }
 
-late PagingController<int, PaymentItentData> _pagingController;
-Future<void> loadPage(int page) async {
-  PaymentRepository()
-      .getPayments(
-    page: page,
-    perPage: 5,
-    orderBy: OrderByField.updatedAt.value,
-    orderDir: OrderDir.desc.value,
-  )
-      .then((value) {
-    if (value.hasNext == true) {
-      _pagingController.appendPage(value.data ?? [], (value.currentPage)! + 1);
-    } else {
-      _pagingController.appendLastPage(value.data ?? []);
-    }
-  }).onError((error, stackTrace) {
-    _pagingController.error = error.toString();
-  });
-}
+class _PaymentHistoryPageState extends State<PaymentHistoryPage>
+    with ConnectivityMixin {
+  late PagingController<int, PaymentItentData> _pagingController;
 
-class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
+  @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
+
+  Future<void> loadPage(int page) async {
+    PaymentRepository()
+        .getPayments(
+      page: page,
+      perPage: 5,
+      orderBy: OrderByField.updatedAt.value,
+      orderDir: OrderDir.desc.value,
+    )
+        .then((value) {
+      if (value.hasNext == true) {
+        _pagingController.appendPage(
+            value.data ?? [], (value.currentPage)! + 1);
+      } else {
+        _pagingController.appendLastPage(value.data ?? []);
+      }
+    }).onError((error, stackTrace) {
+      showConnectionErrorDialog();
+    });
+  }
+
   @override
   void initState() {
     _pagingController = PagingController(firstPageKey: 1);
@@ -136,15 +152,15 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
       loadPage(pageKey);
     });
     super.initState();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     super.dispose();
     _pagingController.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +173,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
             // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
             //       fontWeight: FontWeight.w700,
             //     ),
-             elevation: 0,
+            elevation: 0,
             leading: IconButton(
               icon: const Icon(Iconsax.arrow_left, size: 24),
               onPressed: () => context.pop(),
@@ -183,8 +199,10 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                       (index) => _buildShimmerCard(context),
                     ),
                   ),
-                  noItemsFoundIndicatorBuilder: (context) => _buildEmptyState(context),
-                  itemBuilder: (context, item, index) => _buildPaymentCard(context, item),
+                  noItemsFoundIndicatorBuilder: (context) =>
+                      _buildEmptyState(context),
+                  itemBuilder: (context, item, index) =>
+                      _buildPaymentCard(context, item),
                 )),
           ),
         ],
@@ -230,7 +248,12 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                 children: [
                   Container(width: 70, height: 14, color: Colors.white),
                   const Gap(6),
-                  Container(width: 60, height: 22, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(6))),
+                  Container(
+                      width: 60,
+                      height: 22,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6))),
                 ],
               ),
             ],
@@ -253,7 +276,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
               color: AppColors.primaryLite,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(Iconsax.receipt_item, size: 36, color: AppColors.primary),
+            child:
+                Icon(Iconsax.receipt_item, size: 36, color: AppColors.primary),
           ),
           const Gap(24),
           Text(
@@ -351,20 +375,25 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                     const Gap(4),
                     GestureDetector(
                       onTap: () {
-                        Clipboard.setData(ClipboardData(text: item.id)).then((_) {
+                        Clipboard.setData(ClipboardData(text: item.id))
+                            .then((_) {
                           EasyLoading.showToast('Identifiant copié');
                         });
                       },
                       child: Row(
                         children: [
-                          Icon(Iconsax.copy, size: 12, color: const Color(0xFF667085)),
+                          Icon(Iconsax.copy,
+                              size: 12, color: const Color(0xFF667085)),
                           const Gap(4),
                           Flexible(
                             child: Text(
                               item.itemId,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
                                     color: const Color(0xFF667085),
                                   ),
                             ),
@@ -389,7 +418,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                   ),
                   const Gap(6),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: statusBg,
                       borderRadius: BorderRadius.circular(6),

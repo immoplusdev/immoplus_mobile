@@ -17,10 +17,10 @@ import '../pages/ai_assistant_page.dart';
 import 'ai_assistant_bottom_sheet.dart';
 
 const Map<int, String> _iaLabels = {
-  0: 'Hôte IA',   // Résidences
-  1: 'Hôte IA',   // Locations
-  2: 'Decor IA',   // Meubles
-  3: 'Deal IA',   // Achats
+  0: 'Hôte IA', // Résidences
+  1: 'Hôte IA', // Locations
+  2: 'Decor IA', // Meubles
+  3: 'Deal IA', // Achats
 };
 
 /// Notifier partagé : true quand l'utilisateur scrolle (pilule compactée à droite).
@@ -207,126 +207,125 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
                   child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.white.withOpacity(0.95),
-                          const Color(0xFFF5F3EF).withOpacity(0.85),
-                          const Color(0xFFE8E4DC).withOpacity(0.75),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.white.withOpacity(0.95),
+                            const Color(0xFFF5F3EF).withOpacity(0.85),
+                            const Color(0xFFE8E4DC).withOpacity(0.75),
+                          ],
+                          stops: const [0.0, 0.55, 1.0],
+                        ),
+                        borderRadius: BorderRadius.circular(60),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.9),
+                          width: 1,
+                        ),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // ORB (reste en background)
+                          Positioned.fill(
+                            child: AnimatedBuilder(
+                              animation: _orbController,
+                              builder: (context, _) {
+                                final t = _orbController.value;
+                                return Align(
+                                  alignment: Alignment(
+                                    math.sin(t * 2 * math.pi),
+                                    math.sin(t * 4 * math.pi) * 0.6,
+                                  ),
+                                  child: ImageFiltered(
+                                    imageFilter: ImageFilter.blur(
+                                        sigmaX: 10, sigmaY: 10),
+                                    child: Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Color.fromRGBO(0, 194, 255, 0),
+                                            Color(0xFFFF29C3),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
+                          // LIGHT OVERLAY (ne doit pas influencer le layout)
+                          IgnorePointer(
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                height: 14,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.white.withOpacity(0.95),
+                                      Colors.white.withOpacity(0),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(60),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // CONTENU CENTRÉ (clé du fix)
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18.0, vertical: 8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/img/bubble_2.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  BlocBuilder<HomePageCubit, HomePageState>(
+                                    buildWhen: (p, n) =>
+                                        p.indexPage != n.indexPage,
+                                    builder: (context, state) {
+                                      final label =
+                                          _iaLabels[state.indexPage] ?? 'AI';
+
+                                      return AnimatedSwitcher(
+                                        duration:
+                                            const Duration(milliseconds: 320),
+                                        child: Text(
+                                          label,
+                                          key: ValueKey(label),
+                                          style: _pillTextStyle,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
-                        stops: const [0.0, 0.55, 1.0],
-                      ),
-                      borderRadius: BorderRadius.circular(60),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.9),
-                        width: 1,
-                      ),
-                    ),
-                    child: 
-                    
-                    Stack(
-  alignment: Alignment.center,
-  children: [
-    // ORB (reste en background)
-    Positioned.fill(
-      child: AnimatedBuilder(
-        animation: _orbController,
-        builder: (context, _) {
-          final t = _orbController.value;
-          return Align(
-            alignment: Alignment(
-              math.sin(t * 2 * math.pi),
-              math.sin(t * 4 * math.pi) * 0.6,
-            ),
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromRGBO(0, 194, 255, 0),
-                      Color(0xFFFF29C3),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    ),
-
-    // LIGHT OVERLAY (ne doit pas influencer le layout)
-    IgnorePointer(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          height: 14,
-          margin: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.white.withOpacity(0.95),
-                Colors.white.withOpacity(0),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(60),
-          ),
-        ),
-      ),
-    ),
-
-    // CONTENU CENTRÉ (clé du fix)
-    Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 18.0, vertical: 8.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/img/bubble_2.png',
-              width: 24,
-              height: 24,
-            ),
-            const SizedBox(width: 8),
-
-            BlocBuilder<HomePageCubit, HomePageState>(
-              buildWhen: (p, n) => p.indexPage != n.indexPage,
-              builder: (context, state) {
-                final label = _iaLabels[state.indexPage] ?? 'AI';
-
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 320),
-                  child: Text(
-                    label,
-                    key: ValueKey(label),
-                    style: _pillTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    ),
-  ],
-)
-
-
-                  ),
+                      )),
                 ),
               ),
             ),

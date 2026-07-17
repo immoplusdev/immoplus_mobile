@@ -70,10 +70,10 @@ class BookingHistoryCard extends StatelessWidget {
                         child: reservationModel.residence.images.isNotEmpty
                             ? Image(
                                 image: Utils.getImage(
-                                    id: reservationModel.residence.images.first),
+                                    id: reservationModel
+                                        .residence.images.first),
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) =>
-                                    _placeholder(),
+                                errorBuilder: (_, __, ___) => _placeholder(),
                               )
                             : _placeholder(),
                       ),
@@ -123,8 +123,8 @@ class BookingHistoryCard extends StatelessWidget {
 
               // ── Dates ──
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 child: Row(
                   children: [
                     Expanded(
@@ -157,8 +157,8 @@ class BookingHistoryCard extends StatelessWidget {
 
               // ── Nuits + montant ──
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

@@ -25,8 +25,8 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
   @override
   void initState() {
     favoriesUtils.isFavorite(widget.bienImmobilier.id).then(
-      (value) => _liked.value = value,
-    );
+          (value) => _liked.value = value,
+        );
     super.initState();
   }
 
