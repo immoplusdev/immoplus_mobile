@@ -62,7 +62,10 @@ class ChatProperty {
           _str(m['commune']) ??
           _str(m['quartier']) ??
           _str(m['adresse']),
-      price: _num(m['price']) ?? _num(m['prix']) ?? _num(m['loyer']) ?? _num(m['prixReservation']),
+      price: _num(m['price']) ??
+          _num(m['prix']) ??
+          _num(m['loyer']) ??
+          _num(m['prixReservation']),
       rooms: _int(m['rooms']) ?? _int(m['nbPieces']) ?? _int(m['pieces']),
       surface: _num(m['surface']) ?? _num(m['superficie']) ?? _num(m['area']),
       score: _double(m['score']) ?? _double(m['pertinence']),

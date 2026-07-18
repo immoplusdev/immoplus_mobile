@@ -36,7 +36,7 @@ class DetailEstateKnowSection extends StatelessWidget {
             title: 'Propriété certifiée',
             items: [
               'Bien vérifié et conforme',
-'Agence certifiée et fiable',
+              'Agence certifiée et fiable',
             ],
           ),
 

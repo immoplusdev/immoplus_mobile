@@ -34,12 +34,14 @@ class AiBubble extends StatelessWidget {
   });
 
   final ChatMessage message;
+
   /// true uniquement pour le dernier message IA — active quickReplies/actions.
   final bool isLast;
   final void Function(String text)? onSend;
   final void Function(ChatActionModel action, ChatMessage message)? onActionTap;
   final void Function(String url)? onPaymentTap;
   final void Function(String alertId)? onNavigateToPropositions;
+
   /// Callback navigation vers la fiche d'un bien — ferme le modal avant de naviguer.
   final void Function(String id, String entityType)? onPropertyTap;
 
@@ -221,10 +223,8 @@ class _Content extends StatelessWidget {
           payload: payload,
           onNavigateToPropositions: onNavigateToPropositions,
           onPropertyTap: onPropertyTap,
-          onSeeAll:
-              onSend == null ? null : () => onSend!('Voir les résultats'),
-          onManage:
-              onSend == null ? null : () => onSend!('Gérer mon alerte'),
+          onSeeAll: onSend == null ? null : () => onSend!('Voir les résultats'),
+          onManage: onSend == null ? null : () => onSend!('Gérer mon alerte'),
         );
       case AlertResponseType.alertUpdated:
         final payload = ChatAlertPayload.fromData(m.data);
@@ -233,10 +233,8 @@ class _Content extends StatelessWidget {
           variant: AlertCardVariant.updated,
           onNavigateToPropositions: onNavigateToPropositions,
           onPropertyTap: onPropertyTap,
-          onSeeAll:
-              onSend == null ? null : () => onSend!('Voir les résultats'),
-          onManage:
-              onSend == null ? null : () => onSend!('Gérer mon alerte'),
+          onSeeAll: onSend == null ? null : () => onSend!('Voir les résultats'),
+          onManage: onSend == null ? null : () => onSend!('Gérer mon alerte'),
         );
       case AlertResponseType.showResults:
         final payload = ChatAlertPayload.fromData(m.data);
@@ -246,10 +244,8 @@ class _Content extends StatelessWidget {
           maxInline: 5,
           onNavigateToPropositions: onNavigateToPropositions,
           onPropertyTap: onPropertyTap,
-          onSeeAll:
-              onSend == null ? null : () => onSend!('Voir les résultats'),
-          onManage:
-              onSend == null ? null : () => onSend!('Gérer mon alerte'),
+          onSeeAll: onSend == null ? null : () => onSend!('Voir les résultats'),
+          onManage: onSend == null ? null : () => onSend!('Gérer mon alerte'),
         );
       case AlertResponseType.alertClarification:
         if (onSend == null || !isLast) return null;
@@ -311,7 +307,8 @@ class _Content extends StatelessWidget {
 
     // Si des actions structurées existent, les quickReplies sont redondants
     // (le backend les envoie parfois en double pour compatibilité).
-    final quickReplies = m.actions.isNotEmpty ? const <String>[] : m.quickReplies;
+    final quickReplies =
+        m.actions.isNotEmpty ? const <String>[] : m.quickReplies;
 
     return ChatResponseActions(
       quickReplies: quickReplies,
@@ -539,8 +536,8 @@ class _PropertyCardsCarouselState extends State<_PropertyCardsCarousel> {
         inner = FurnitureCard(furniture: data.model as FurnitureModel);
       default:
         if (data.model is! BienImmobilierModel) return const SizedBox.shrink();
-        inner = EstateCard(
-            bienImmobilierModel: data.model as BienImmobilierModel);
+        inner =
+            EstateCard(bienImmobilierModel: data.model as BienImmobilierModel);
     }
 
     final onTap = widget.onPropertyTap;
@@ -743,12 +740,15 @@ class _AlertCardSkeleton extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(height: 1, thickness: 0.5, color: ChatTokens.divider),
+              const Divider(
+                  height: 1, thickness: 0.5, color: ChatTokens.divider),
               for (var i = 0; i < 2; i++) ...[
                 if (i > 0)
-                  const Divider(height: 1, thickness: 0.5, color: ChatTokens.divider),
+                  const Divider(
+                      height: 1, thickness: 0.5, color: ChatTokens.divider),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   child: Row(children: const [
                     _Box(width: 48, height: 48, radius: 8),
                     SizedBox(width: 10),
@@ -765,7 +765,8 @@ class _AlertCardSkeleton extends StatelessWidget {
                   ]),
                 ),
               ],
-              const Divider(height: 1, thickness: 0.5, color: ChatTokens.divider),
+              const Divider(
+                  height: 1, thickness: 0.5, color: ChatTokens.divider),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(children: [

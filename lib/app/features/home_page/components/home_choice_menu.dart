@@ -34,12 +34,12 @@ class HomeChoiceMenu extends StatelessWidget {
           ),
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: HomeTab.values.length,
+            itemCount: HomeTab.valuestabs.length,
             separatorBuilder: (context, index) => const SizedBox(
               width: _Constants.itemSpacing,
             ),
             itemBuilder: (context, index) {
-              final tab = HomeTab.values[index];
+              final tab = HomeTab.valuestabs[index];
               bool isSelected = state.indexPage == tab.value;
 
               return GestureDetector(

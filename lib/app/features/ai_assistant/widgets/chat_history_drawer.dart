@@ -47,7 +47,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
       final list = await widget.service.getConversations(limit: 50);
       if (mounted) setState(() => _conversations = list);
     } catch (_) {
-      if (mounted) setState(() => _error = 'Impossible de charger l\'historique');
+      if (mounted)
+        setState(() => _error = 'Impossible de charger l\'historique');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -56,7 +57,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
   Future<void> _deleteSession(String sessionId) async {
     try {
       await widget.service.deleteSession(sessionId);
-      setState(() => _conversations.removeWhere((c) => c.sessionId == sessionId));
+      setState(
+          () => _conversations.removeWhere((c) => c.sessionId == sessionId));
       if (sessionId == widget.currentSessionId) {
         widget.onNewConversation();
       }
@@ -228,8 +230,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
     final grouped = _grouped();
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: ChatTokens.s8),
-      itemCount: grouped.entries
-          .fold<int>(0, (acc, e) => acc + 1 + e.value.length),
+      itemCount:
+          grouped.entries.fold<int>(0, (acc, e) => acc + 1 + e.value.length),
       itemBuilder: (context, index) {
         int cursor = 0;
         for (final entry in grouped.entries) {
@@ -407,8 +409,18 @@ class _ConversationTile extends StatelessWidget {
     if (diff == 1) return 'Hier';
     const months = [
       '',
-      'jan', 'fév', 'mar', 'avr', 'mai', 'juin',
-      'juil', 'août', 'sep', 'oct', 'nov', 'déc',
+      'jan',
+      'fév',
+      'mar',
+      'avr',
+      'mai',
+      'juin',
+      'juil',
+      'août',
+      'sep',
+      'oct',
+      'nov',
+      'déc',
     ];
     return '${date.day} ${months[date.month]}';
   }
@@ -419,15 +431,14 @@ class _SwipeBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerRight,
-      margin: const EdgeInsets.symmetric(
-          horizontal: ChatTokens.s8, vertical: 2),
+      margin:
+          const EdgeInsets.symmetric(horizontal: ChatTokens.s8, vertical: 2),
       padding: const EdgeInsets.only(right: ChatTokens.s16),
       decoration: BoxDecoration(
         color: ChatTokens.dangerSurface,
         borderRadius: BorderRadius.circular(ChatTokens.s12),
       ),
-      child: const Icon(Iconsax.trash,
-          color: ChatTokens.danger500, size: 20),
+      child: const Icon(Iconsax.trash, color: ChatTokens.danger500, size: 20),
     );
   }
 }

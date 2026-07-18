@@ -430,12 +430,11 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               onTap: isFurnitureTab
                   ? null
                   : () {
-                      final category =
-                          HomeTab.values[widget.currentIndex].category;
+                      final homeTab = HomeTab.values[widget.currentIndex];
                       context.pushNamed(
                         SuggestPage.routeName,
                         extra: {
-                          'category': category,
+                          'homeTab': homeTab,
                           'lat': FilterHandler.lat,
                           'lng': FilterHandler.long,
                         },
@@ -506,13 +505,11 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               fillColor: Colors.white,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
-                borderSide:
-                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+                borderSide: BorderSide(color: AppColors.primary, width: 1.5),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
-                borderSide:
-                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+                borderSide: BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           );

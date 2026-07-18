@@ -11,6 +11,7 @@ import 'package:immoplus/app/features/booking_history/components/booking_loading
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class PendingPaymentReservationsPage extends StatefulWidget {
   final String? reservationId;
@@ -32,18 +33,29 @@ class PendingPaymentReservationsPage extends StatefulWidget {
 }
 
 class _PendingPaymentReservationsPageState
-  extends State<PendingPaymentReservationsPage> {
+    extends State<PendingPaymentReservationsPage> with ConnectivityMixin {
   late final PendingPaymentReservationsCubit _cubit;
+
+  @override
+  void onConnectionRestored() {
+    if (_cubit.pagingController.itemList == null ||
+        _cubit.pagingController.itemList!.isEmpty) {
+      _cubit.pagingController.error = 'temporary_error_to_force_refresh';
+      _cubit.pagingController.refresh();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _cubit = getIt<PendingPaymentReservationsCubit>();
     _cubit.init();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _cubit.close();
     super.dispose();
   }
@@ -56,17 +68,17 @@ class _PendingPaymentReservationsPageState
         // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
         //       fontWeight: FontWeight.w700,
         //     ),
-          elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left, size: 24),
-              onPressed: () {
-                if (context.canPop()) {
-                  context.pop();
-                } else {
-                  context.goNamed(HomePage.name);
-                }
-              },
-            ),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Iconsax.arrow_left, size: 24),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.goNamed(HomePage.name);
+            }
+          },
+        ),
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: Colors.transparent,
         centerTitle: true,
@@ -116,18 +128,20 @@ class _PendingPaymentReservationsPageState
                         Text(
                           "Tout est à jour !",
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                         const Gap(8),
                         Text(
                           "Aucune réservation en attente de paiement. Toutes vos réservations sont réglées.",
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFF667085),
-                                height: 1.5,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: const Color(0xFF667085),
+                                    height: 1.5,
+                                  ),
                         ),
                       ],
                     ),

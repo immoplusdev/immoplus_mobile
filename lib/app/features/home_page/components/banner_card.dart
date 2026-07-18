@@ -45,63 +45,47 @@ class _BannerCardState extends State<BannerCard> {
           duration: const Duration(milliseconds: 500),
           switchInCurve: Curves.easeOutQuart,
           switchOutCurve: Curves.easeInQuart,
-          child: Stack(
+          child: Container(
             key: const ValueKey('banner_active'),
-            children: [
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 4, left: 16, right: 40),
-                decoration: BoxDecoration(
-                  color: _getBackgroundColor(apiBanners),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CarouselSlider.builder(
-                      carouselController: _carouselController,
-                      itemCount: apiBanners.length,
-                      options: CarouselOptions(
-                        height: 52,
-                        viewportFraction: 1.0,
-                        enableInfiniteScroll: false,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                      ),
-                      itemBuilder: (context, index, realIndex) {
-                        return BannerItem(banner: apiBanners[index]);
-                      },
-                    ),
-                    const Gap(2),
-                    _buildDots(apiBanners.length),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                bottom: 0,
-                right: 24,
-                child: Center(
-                  child: IconButton(
-                    icon:
-                        const Icon(Icons.close, color: Colors.white, size: 16),
-                    padding: const EdgeInsets.all(6),
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+            decoration: BoxDecoration(
+              color: _getBackgroundColor(apiBanners),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CarouselSlider.builder(
+                  carouselController: _carouselController,
+                  itemCount: apiBanners.length,
+                  options: CarouselOptions(
+                    height: 24,
+                    viewportFraction: 1.0,
+                    enableInfiniteScroll: false,
+                    onPageChanged: (index, reason) {
                       setState(() {
-                        _isDismissed = true;
+                        _currentIndex = index;
                       });
-                      widget.onDismiss?.call();
                     },
                   ),
+                  itemBuilder: (context, index, realIndex) {
+                    return BannerItem(
+                      banner: apiBanners[index],
+                      onDismiss: () {
+                        setState(() {
+                          _isDismissed = true;
+                        });
+                        widget.onDismiss?.call();
+                      },
+                    );
+                  },
                 ),
-              ),
-            ],
+                const Gap(2),
+                _buildDots(apiBanners.length),
+              ],
+            ),
           ),
         );
       },

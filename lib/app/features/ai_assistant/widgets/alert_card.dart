@@ -73,9 +73,8 @@ class _AlertCardState extends State<AlertCard>
         (widget.payload.totalMatches ?? matches.length) - inline.length;
 
     final fade = CurvedAnimation(parent: _enter, curve: Curves.easeOut);
-    final slide =
-        Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
-            .animate(fade);
+    final slide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(fade);
 
     return Padding(
       padding: const EdgeInsets.only(top: ChatTokens.s12),

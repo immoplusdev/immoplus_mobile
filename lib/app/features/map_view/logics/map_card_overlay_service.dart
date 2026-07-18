@@ -23,8 +23,7 @@ class MapCardOverlayService {
     _childNotifier.value = child;
 
     // Utiliser le navigatorKey global pour éviter le crash "deactivated widget"
-    final ctx = context ??
-        NavigationService.navigatorKey.currentContext;
+    final ctx = context ?? NavigationService.navigatorKey.currentContext;
     if (ctx == null) return;
 
     final overlay = Overlay.maybeOf(ctx);

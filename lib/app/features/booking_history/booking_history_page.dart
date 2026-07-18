@@ -12,6 +12,7 @@ import 'package:immoplus/app/features/booking_history/components/booking_history
 import 'package:immoplus/app/utils/app_colors.dart';
 
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 import 'components/booking_loading_card.dart';
 
@@ -32,10 +33,20 @@ class BookingHistoryPage extends StatefulWidget {
   State<BookingHistoryPage> createState() => _BookingHistoryPageState();
 }
 
-class _BookingHistoryPageState extends State<BookingHistoryPage> {
+class _BookingHistoryPageState extends State<BookingHistoryPage>
+    with ConnectivityMixin {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
   final ResidenceRepository residenceRepository = getIt<ResidenceRepository>();
+
+  @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
 
   Future<void> loadPage(int page) async {
     try {
@@ -51,7 +62,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
         _pagingController.appendLastPage(value.data);
       }
     } catch (e) {
-      _pagingController.error = e.toString();
+      showConnectionErrorDialog();
     }
   }
 
@@ -67,10 +78,12 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
     });
 
     super.initState();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     super.dispose();
 
     _pagingController.dispose();
@@ -80,18 +93,18 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text('Historique De Réservations'),
-            backgroundColor: AppColors.whiteBackground,
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left, size: 24),
-              onPressed: () =>
-                  context.canPop() ? context.pop() : context.go('/account'),
-            ),
-            centerTitle: true,
-          ),
+        automaticallyImplyLeading: false,
+        title: const Text('Historique De Réservations'),
+        backgroundColor: AppColors.whiteBackground,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Iconsax.arrow_left, size: 24),
+          onPressed: () =>
+              context.canPop() ? context.pop() : context.go('/account'),
+        ),
+        centerTitle: true,
+      ),
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
           child: CustomScrollView(

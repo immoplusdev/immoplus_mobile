@@ -29,6 +29,7 @@ class SuggestionTile extends StatelessWidget {
         color: Colors.grey.shade500,
         size: 20,
       ),
+      minLeadingWidth: 0,
       title: _buildHighlightText(suggestion.label ?? '', query),
       subtitle: (suggestion.sublabel != null && suggestion.sublabel!.isNotEmpty)
           ? Text(

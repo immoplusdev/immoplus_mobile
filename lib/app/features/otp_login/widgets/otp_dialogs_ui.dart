@@ -188,7 +188,8 @@ Future<String?> showOtpInputDialog(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.primary, width: 2),
+                          border:
+                              Border.all(color: AppColors.primary, width: 2),
                         ),
                       ),
                       onChanged: (value) {

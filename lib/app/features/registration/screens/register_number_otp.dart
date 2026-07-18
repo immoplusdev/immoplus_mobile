@@ -100,7 +100,6 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const Gap(24),
-
                         Text(
                           "Indiquez votre numéro",
                           style: Theme.of(context)
@@ -113,9 +112,7 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                               ),
                           textAlign: TextAlign.left,
                         ),
-
                         const Gap(16),
-
                         Text(
                           "Nous vous enverrons un code pour vérifier votre téléphone",
                           style:
@@ -126,9 +123,7 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                                   ),
                           textAlign: TextAlign.left,
                         ),
-
                         const Gap(30),
-
                         SizedBox(
                           height: 80,
                           child: InternationalPhoneInput(
@@ -148,7 +143,6 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                     ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                   child: CustomLoadingButtom(

@@ -20,8 +20,8 @@ class _DetailEstateMapState extends State<DetailEstateMap> {
   Widget build(BuildContext context) {
     return (widget.bienImmobilier.position != null)
         ? SliverPadding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: appPadding, vertical: 8),
+            padding:
+                const EdgeInsets.symmetric(horizontal: appPadding, vertical: 8),
             sliver: SliverToBoxAdapter(
               child: SizedBox(
                 height: 300,

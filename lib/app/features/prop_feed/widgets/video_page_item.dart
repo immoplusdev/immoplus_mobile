@@ -243,14 +243,12 @@ class _VideoPageItemState extends State<VideoPageItem>
                         width: double.infinity,
                         height: double.infinity,
                         // #7 — Limit memory cache size
-                        memCacheWidth:
-                            (MediaQuery.sizeOf(context).width *
-                                    MediaQuery.devicePixelRatioOf(context))
-                                .toInt(),
+                        memCacheWidth: (MediaQuery.sizeOf(context).width *
+                                MediaQuery.devicePixelRatioOf(context))
+                            .toInt(),
                         fadeInDuration: const Duration(milliseconds: 100),
                         placeholder: (_, __) => const _ImmoLoadingLayer(),
-                        errorWidget: (_, __, ___) =>
-                            const _ImmoLoadingLayer(),
+                        errorWidget: (_, __, ___) => const _ImmoLoadingLayer(),
                       )
                     : const _ImmoLoadingLayer(),
               ),
@@ -372,8 +370,7 @@ class _VideoPageItemState extends State<VideoPageItem>
                     isExpanded: expanded,
                     contentMaxWidth: constraints.maxWidth,
                     contentMaxLines: 2,
-                    onMoreTap: () =>
-                        _isDescriptionExpanded.value = !expanded,
+                    onMoreTap: () => _isDescriptionExpanded.value = !expanded,
                   ),
                 ),
               ),
@@ -556,10 +553,9 @@ class _VideoPageItemState extends State<VideoPageItem>
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        memCacheWidth:
-            (MediaQuery.sizeOf(context).width *
-                    MediaQuery.devicePixelRatioOf(context))
-                .toInt(),
+        memCacheWidth: (MediaQuery.sizeOf(context).width *
+                MediaQuery.devicePixelRatioOf(context))
+            .toInt(),
         fadeInDuration: const Duration(milliseconds: 100),
         placeholder: (_, __) => const _ImmoLoadingLayer(),
         errorWidget: (_, __, ___) => const _ImmoLoadingLayer(),

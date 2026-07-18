@@ -22,7 +22,6 @@ import 'package:immoplus/app/widgets/property_card.dart';
 import 'package:immoplus/app/widgets/property_tab_bar.dart';
 import 'package:lottie/lottie.dart';
 
-
 /// Paramètres pour contrôler la taille du bottom sheet.
 class ReservationSheetSize {
   const ReservationSheetSize({
@@ -196,6 +195,7 @@ class ReservationBottomSheet extends StatelessWidget {
   });
 
   final ReservationSheetData data;
+
   /// Modèle brut pour exécuter les actions (réserver, visiter, contacter).
   final ReservationSheetResult? result;
   final VoidCallback? onReserve;
@@ -235,7 +235,8 @@ class ReservationBottomSheet extends StatelessWidget {
             builder: (context, snapshot) {
               Widget content;
               if (snapshot.connectionState == ConnectionState.waiting) {
-                content =   Center(child: SizedBox(
+                content = Center(
+                    child: SizedBox(
                   width: 150,
                   height: 150,
                   child: Lottie.asset(
@@ -471,7 +472,7 @@ class ReservationBottomSheet extends StatelessWidget {
                           const SizedBox(height: 14),
                           if (data.description != null &&
                               data.description!.isNotEmpty) ...[
-                              const SizedBox(height: 12),
+                            const SizedBox(height: 12),
                             const Text(
                               'Description',
                               style: TextStyle(
@@ -503,7 +504,8 @@ class ReservationBottomSheet extends StatelessWidget {
                       ),
                     ),
                     PropertyTabItem(
-                      label: data.isFurniture ? 'Caractéristiques' : 'Equipements',
+                      label:
+                          data.isFurniture ? 'Caractéristiques' : 'Equipements',
                       child: data.isFurniture
                           ? _FurnitureCaracteristiques(data: data)
                           : Column(
@@ -513,9 +515,13 @@ class ReservationBottomSheet extends StatelessWidget {
                                   commodites: data.commodites.isNotEmpty
                                       ? data.commodites
                                       : [
-                                          const CommoditeData(text: 'WiFi', icon: 'wifi'),
-                                          const CommoditeData(text: 'Climatisation', icon: 'ac'),
-                                          const CommoditeData(text: 'Parking', icon: 'parking'),
+                                          const CommoditeData(
+                                              text: 'WiFi', icon: 'wifi'),
+                                          const CommoditeData(
+                                              text: 'Climatisation',
+                                              icon: 'ac'),
+                                          const CommoditeData(
+                                              text: 'Parking', icon: 'parking'),
                                         ],
                                   iconSize: 14,
                                   fontSize: 12,
@@ -525,9 +531,12 @@ class ReservationBottomSheet extends StatelessWidget {
                                   pieces: data.pieces.isNotEmpty
                                       ? data.pieces
                                       : [
-                                          const PieceData(nom: 'Chambre', nombre: 1),
-                                          const PieceData(nom: 'Salon', nombre: 1),
-                                          const PieceData(nom: 'Cuisine', nombre: 1),
+                                          const PieceData(
+                                              nom: 'Chambre', nombre: 1),
+                                          const PieceData(
+                                              nom: 'Salon', nombre: 1),
+                                          const PieceData(
+                                              nom: 'Cuisine', nombre: 1),
                                         ],
                                   iconSize: 28,
                                   fontSize: 12,
@@ -548,16 +557,18 @@ class ReservationBottomSheet extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
-                  top: BorderSide(color: Colors.black.withValues(alpha: 0.1), width: 0.5),
+                  top: BorderSide(
+                      color: Colors.black.withValues(alpha: 0.1), width: 0.5),
                 ),
               ),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: Row(
                 children: [
-                  if (hasPrice) PropertyPrice(
-                    price: data.price!.trim(),
-                    period: data.pricePeriod,
-                  ),
+                  if (hasPrice)
+                    PropertyPrice(
+                      price: data.price!.trim(),
+                      period: data.pricePeriod,
+                    ),
                   if (hasPrice) const SizedBox(width: 12),
                   Expanded(
                     child: BookNowButton(
@@ -582,7 +593,8 @@ class ReservationBottomSheet extends StatelessWidget {
     required String entityType,
     required String videoId,
   }) async {
-    ImmoLogger.i('[ReservationSheet] fetchEntityData → type=$entityType | id=$entityId | video=$videoId');
+    ImmoLogger.i(
+        '[ReservationSheet] fetchEntityData → type=$entityType | id=$entityId | video=$videoId');
 
     try {
       final getIt = GetIt.instance;
@@ -593,7 +605,8 @@ class ReservationBottomSheet extends StatelessWidget {
           final residenceRepo = getIt<ResidenceRepository>();
           final response = await residenceRepo.getResidence(entityId);
           final residence = response.data;
-          ImmoLogger.i('[ReservationSheet] ✓ residence chargée: ${residence.nom}');
+          ImmoLogger.i(
+              '[ReservationSheet] ✓ residence chargée: ${residence.nom}');
           return ReservationSheetResult(
             data: _mapResidenceToSheetData(residence, videoId),
             rawResidence: residence,
@@ -617,14 +630,16 @@ class ReservationBottomSheet extends StatelessWidget {
           final response = await furnitureRepo.getFurniture(entityId);
           final furniture = response.data;
           if (furniture == null) throw Exception('Meuble non trouvé');
-          ImmoLogger.i('[ReservationSheet] ✓ furniture chargée: ${furniture.titre}');
+          ImmoLogger.i(
+              '[ReservationSheet] ✓ furniture chargée: ${furniture.titre}');
           return ReservationSheetResult(
             data: _mapFurnitureToSheetData(furniture, videoId),
             rawFurniture: furniture,
           );
 
         default:
-          ImmoLogger.w('[ReservationSheet] ⚠ entityType inconnu: "$entityType"');
+          ImmoLogger.w(
+              '[ReservationSheet] ⚠ entityType inconnu: "$entityType"');
           throw Exception('Unknown entity type: $entityType');
       }
     } catch (e, st) {
@@ -766,17 +781,21 @@ class _FurnitureCaracteristiques extends StatelessWidget {
           Row(
             children: [
               if (data.furnitureType != null && data.furnitureType!.isNotEmpty)
-                _CaracChip(label: data.furnitureType!, icon: Icons.category_outlined),
+                _CaracChip(
+                    label: data.furnitureType!, icon: Icons.category_outlined),
               if (data.furnitureType != null && data.furnitureEtat != null)
                 const SizedBox(width: 8),
               if (data.furnitureEtat != null && data.furnitureEtat!.isNotEmpty)
-                _CaracChip(label: data.furnitureEtat!, icon: Icons.info_outline),
+                _CaracChip(
+                    label: data.furnitureEtat!, icon: Icons.info_outline),
             ],
           ),
 
-          if (data.furnitureCategory != null && data.furnitureCategory!.isNotEmpty) ...[
+          if (data.furnitureCategory != null &&
+              data.furnitureCategory!.isNotEmpty) ...[
             const SizedBox(height: 10),
-            _CaracChip(label: data.furnitureCategory!, icon: Icons.label_outline),
+            _CaracChip(
+                label: data.furnitureCategory!, icon: Icons.label_outline),
           ],
 
           // Couleurs

@@ -8,6 +8,14 @@ enum HomeTab {
   final int value;
   const HomeTab(this.value);
 
+  static List<HomeTab> get valuestabs => [
+        HomeTab.residence,
+        HomeTab.hotel,
+        HomeTab.location,
+        // HomeTab.furniture,
+        HomeTab.bien,
+      ];
+
   String? get category => switch (this) {
         HomeTab.residence => 'residence',
         HomeTab.hotel => 'hotel',

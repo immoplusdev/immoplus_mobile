@@ -33,7 +33,8 @@ class SendEmailOrNumberOptPage extends StatefulWidget {
   static String routePath() => '/send-email-or-number-otp';
 
   @override
-  State<SendEmailOrNumberOptPage> createState() => _SendEmailOrNumberOptPageState();
+  State<SendEmailOrNumberOptPage> createState() =>
+      _SendEmailOrNumberOptPageState();
 }
 
 class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
@@ -175,7 +176,9 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                             ),
                             const Gap(14),
                             Text(
-                              isEmail ? "Adresse E-mail" : "Numéro de téléphone",
+                              isEmail
+                                  ? "Adresse E-mail"
+                                  : "Numéro de téléphone",
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
@@ -191,7 +194,8 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                                 validator: (String? value) =>
                                     FormUtils.emailValidator(email: value),
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                  FilteringTextInputFormatter.deny(
+                                      RegExp(r"\s")),
                                   LengthLimitingTextInputFormatter(254),
                                 ],
                                 onFieldSubmitted: (_) =>
@@ -240,7 +244,8 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                               isLoading: isLoading,
                               clickable: isEmail
                                   ? true
-                                  : (isPhoneNumberValid && phoneNumber.isNotEmpty),
+                                  : (isPhoneNumberValid &&
+                                      phoneNumber.isNotEmpty),
                               color: isEmail
                                   ? AppColors.primary
                                   : (isPhoneNumberValid

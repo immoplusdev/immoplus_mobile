@@ -6,6 +6,7 @@ import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/widgets/tickets_cards/estate_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class EstateUserPage extends StatefulWidget {
   final String proprietaireId;
@@ -16,12 +17,21 @@ class EstateUserPage extends StatefulWidget {
   State<EstateUserPage> createState() => _EstateUserPageState();
 }
 
-class _EstateUserPageState extends State<EstateUserPage> {
+class _EstateUserPageState extends State<EstateUserPage>
+    with ConnectivityMixin {
   final BienImmobilierRepository bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
   late PagingController<int, BienImmobilierModel> pagingController;
   final TextEditingController searchController = TextEditingController();
   String searchQuery = '';
+
+  @override
+  void onConnectionRestored() {
+    if (pagingController.itemList == null || pagingController.itemList!.isEmpty) {
+      pagingController.error = 'temporary_error_to_force_refresh';
+      pagingController.refresh();
+    }
+  }
 
   Future<void> loadPage(int page) async {
     bienImmobilierRepository.getBiensImmobiliersProprietaireId(
@@ -40,7 +50,7 @@ class _EstateUserPageState extends State<EstateUserPage> {
         pagingController.appendLastPage(value.data ?? []);
       }
     }).onError((error, stackTrace) {
-      pagingController.error = error.toString();
+      showConnectionErrorDialog();
     });
   }
 
@@ -58,10 +68,12 @@ class _EstateUserPageState extends State<EstateUserPage> {
       loadPage(pageKey);
     });
     super.initState();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     pagingController.dispose();
     searchController.dispose();
     super.dispose();

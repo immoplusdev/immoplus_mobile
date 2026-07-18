@@ -59,8 +59,7 @@ class EntityActionButton extends StatelessWidget {
   final FeedItemRelatedTo? relatedTo;
   final VoidCallback onTap;
 
-  bool get _hasEntity =>
-      relatedTo?.id != null && relatedTo!.id!.isNotEmpty;
+  bool get _hasEntity => relatedTo?.id != null && relatedTo!.id!.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {

@@ -90,7 +90,8 @@ class _StripeCardPageState extends State<StripeCardPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(child: Text('Erreur: Données de paiement manquantes'));
+      return const Center(
+          child: Text('Erreur: Données de paiement manquantes'));
     }
 
     return Container(
@@ -129,7 +130,8 @@ class _StripeCardPageState extends State<StripeCardPage> {
           ),
           ListTile(
             tileColor: Colors.white,
-            leading: const Icon(FontAwesomeIcons.moneyBill, color: Colors.green),
+            leading:
+                const Icon(FontAwesomeIcons.moneyBill, color: Colors.green),
             title: Text(Utils.formatCurrency(paymentData.amount)),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
           ),

@@ -73,8 +73,9 @@ enum BannerAction {
 
 class BannerItem extends StatelessWidget {
   final BannerModel banner;
+  final VoidCallback? onDismiss;
 
-  const BannerItem({super.key, required this.banner});
+  const BannerItem({super.key, required this.banner, this.onDismiss});
 
   void _handleAction(BuildContext context, String? url) {
     if (url == null) return;
@@ -198,9 +199,9 @@ class BannerItem extends StatelessWidget {
           Icon(
             _getIconData(banner.icon!),
             color: Colors.white,
-            size: 24,
+            size: 20,
           ),
-          const Gap(10),
+          const Gap(6),
         ],
         Expanded(
           child: Row(
@@ -210,7 +211,7 @@ class BannerItem extends StatelessWidget {
                 child: Text(
                   banner.subtitle ?? '',
                   style: textStyle,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -237,6 +238,13 @@ class BannerItem extends StatelessWidget {
             ],
           ),
         ),
+        if (onDismiss != null)
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white, size: 16),
+            padding: const EdgeInsets.all(6),
+            constraints: const BoxConstraints(),
+            onPressed: onDismiss,
+          ),
       ],
     );
   }

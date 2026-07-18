@@ -15,6 +15,7 @@ import 'package:immoplus/app/features/notification/pages/notification_detail_pag
 import 'package:immoplus/app/features/notification/pages/notification_tile.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class NotificationsPage extends StatefulWidget {
   static const String name = "NOTIFICATIONS_PAGE";
@@ -24,13 +25,23 @@ class NotificationsPage extends StatefulWidget {
   State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage> {
+class _NotificationsPageState extends State<NotificationsPage>
+    with ConnectivityMixin {
   final PagingController<int, NotificationModel> _pagingController =
       PagingController(firstPageKey: 1);
 
   final NotificationRepository _repository = getIt<NotificationRepository>();
 
   bool _hasUnread = false;
+
+  @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
 
   Future<void> _loadPage(int page) async {
     try {
@@ -51,7 +62,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       }
     } catch (e) {
       log(e.toString(), name: 'NOTIFICATION_PAGING_ERROR');
-      _pagingController.error = e.toString().replaceFirst('Exception: ', '');
+      showConnectionErrorDialog();
     }
   }
 
@@ -59,10 +70,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     _pagingController.addPageRequestListener(_loadPage);
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _pagingController.dispose();
     super.dispose();
   }

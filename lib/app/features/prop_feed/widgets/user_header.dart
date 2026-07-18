@@ -48,9 +48,8 @@ class UserHeader extends StatelessWidget {
 
     if (hashtags.isNotEmpty) {
       if (spans.isNotEmpty) spans.add(const TextSpan(text: ' '));
-      final hashtagText = hashtags
-          .map((h) => h.startsWith('#') ? h : '#$h')
-          .join(' ');
+      final hashtagText =
+          hashtags.map((h) => h.startsWith('#') ? h : '#$h').join(' ');
       spans.add(
         TextSpan(
           text: hashtagText,

@@ -73,7 +73,8 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
                 context: context,
                 sharePositionOrigin: origin,
               );
-              getIt<AnalyticsService>().logResidenceShared(residenceId: widget.logmentModel.id);
+              getIt<AnalyticsService>()
+                  .logResidenceShared(residenceId: widget.logmentModel.id);
             },
           ),
         ),
@@ -114,4 +115,3 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
     );
   }
 }
-

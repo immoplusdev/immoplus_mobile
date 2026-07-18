@@ -36,7 +36,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFFAEB),
                     borderRadius: BorderRadius.circular(8),
@@ -64,7 +65,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
                 const Spacer(),
                 AutoSizeText(
                   maxLines: 1,
-                  Utils.formatCurrency(reservationModel.montantTotalReservation),
+                  Utils.formatCurrency(
+                      reservationModel.montantTotalReservation),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -77,7 +79,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
             // Nombre de jours
             Row(
               children: [
-                Icon(Iconsax.calendar_1, size: 16, color: const Color(0xFF667085)),
+                Icon(Iconsax.calendar_1,
+                    size: 16, color: const Color(0xFF667085)),
                 const Gap(6),
                 Text(
                   "$nbJours jour${nbJours > 1 ? 's' : ''} de réservation",
@@ -101,7 +104,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
                     context,
                     icon: Iconsax.login_1,
                     label: 'Arrivée',
-                    date: formatDate.format(Utils.toDateTime(reservationModel.dateDebut)),
+                    date: formatDate
+                        .format(Utils.toDateTime(reservationModel.dateDebut)),
                     time: reservationModel.residence.heureEntree,
                   ),
                 ),
@@ -115,7 +119,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
                     context,
                     icon: Iconsax.logout_1,
                     label: 'Départ',
-                    date: formatDate.format(Utils.toDateTime(reservationModel.dateFin)),
+                    date: formatDate
+                        .format(Utils.toDateTime(reservationModel.dateFin)),
                     time: "avant ${reservationModel.residence.heureDepart}",
                   ),
                 ),

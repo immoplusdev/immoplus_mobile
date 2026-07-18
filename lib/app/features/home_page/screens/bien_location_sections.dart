@@ -13,13 +13,13 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_bien_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 /// Sections horizontales "par ville" pour les biens immobiliers (utilisé par
 /// les onglets Locations [PropertyType.estate, aLouer:true] et Biens
 /// [PropertyType.land, aLouer:false]).
 class BienLocationSectionsList extends StatefulWidget {
   final PropertyType propertyType;
-
 
   final PagingController<int, BienImmobilierModel> legacyPagingController;
 
@@ -34,7 +34,8 @@ class BienLocationSectionsList extends StatefulWidget {
       _BienLocationSectionsListState();
 }
 
-class _BienLocationSectionsListState extends State<BienLocationSectionsList> {
+class _BienLocationSectionsListState extends State<BienLocationSectionsList>
+    with ConnectivityMixin {
   final BienImmobilierRepository bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
 
@@ -43,6 +44,13 @@ class _BienLocationSectionsListState extends State<BienLocationSectionsList> {
   List<BienLocationSectionData> _displayList = [];
 
   void _onPageRequest(int pageKey) => loadPage(pageKey);
+
+  @override
+  void onConnectionRestored() {
+    if (_activeSections.isEmpty) {
+      _loadAllSections();
+    }
+  }
 
   Future<void> loadPage(int page) async {
     final whereFilters = FilterHandler.getAllFilters(widget.propertyType);
@@ -74,10 +82,12 @@ class _BienLocationSectionsListState extends State<BienLocationSectionsList> {
     widget.legacyPagingController.addPageRequestListener(_onPageRequest);
     widget.legacyPagingController.refresh();
     _loadAllSections();
+    setupConnectivityListener();
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     widget.legacyPagingController.removePageRequestListener(_onPageRequest);
     super.dispose();
   }
@@ -117,8 +127,8 @@ class _BienLocationSectionsListState extends State<BienLocationSectionsList> {
           );
         } catch (e) {
           debugPrint('Error loading section ${item.title}: $e');
+          rethrow;
         }
-        return null;
       }).toList();
 
       final results = await Future.wait(futures);
@@ -139,9 +149,7 @@ class _BienLocationSectionsListState extends State<BienLocationSectionsList> {
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isParentLoading = false;
-        });
+        showConnectionErrorDialog();
       }
     }
   }
@@ -151,15 +159,14 @@ class _BienLocationSectionsListState extends State<BienLocationSectionsList> {
     for (var item in kHomeLocationItems) {
       if (item.isHeader) continue;
 
-      final loaded = _activeSections
-          .cast<BienLocationSectionData?>()
-          .firstWhere(
-            (s) =>
-                s != null &&
-                s.villeId == item.villeId &&
-                s.communeId == item.communeId,
-            orElse: () => null,
-          );
+      final loaded =
+          _activeSections.cast<BienLocationSectionData?>().firstWhere(
+                (s) =>
+                    s != null &&
+                    s.villeId == item.villeId &&
+                    s.communeId == item.communeId,
+                orElse: () => null,
+              );
       final isLoad = loaded != null && loaded.biens.isNotEmpty;
 
       if (isLoad) {
