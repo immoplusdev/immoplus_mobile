@@ -51,6 +51,7 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       reglesSupplementaires: json['reglesSupplementaires'] as String? ?? '',
       score: json['score'] as num?,
       residenceDisponible: json['residenceDisponible'] as bool? ?? true,
+      reduction: json['reduction'] as num? ?? 0,
     );
 
 Map<String, dynamic> _$$ResidenceModelImplToJson(
@@ -83,4 +84,5 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'reglesSupplementaires': instance.reglesSupplementaires,
       'score': instance.score,
       'residenceDisponible': instance.residenceDisponible,
+      'reduction': instance.reduction,
     };
