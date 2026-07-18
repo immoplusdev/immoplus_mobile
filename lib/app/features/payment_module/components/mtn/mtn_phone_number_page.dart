@@ -136,6 +136,7 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
       number: _formController.phoneNumber!.text.replaceAll(' ', ''),
       collection: paymentData.productType,
       itemID: paymentData.orderID,
+      extra: paymentData.extra,
       onSuccess: (paymentIntentData) {
         if (!mounted) return;
 

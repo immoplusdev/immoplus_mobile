@@ -96,6 +96,7 @@ enum ProductType {
   booking,
   demandes_visites,
   reservations,
+  hotel_reservation,
 }
 
 enum ServiceType {

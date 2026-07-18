@@ -36,6 +36,7 @@ import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
     as _i398;
 import 'package:immoplus/app/data/repositories/furniture_repository.dart'
     as _i976;
+import 'package:immoplus/app/data/repositories/hotel_repository.dart' as _i374;
 import 'package:immoplus/app/data/repositories/kyc_repository.dart' as _i184;
 import 'package:immoplus/app/data/repositories/notification_repository.dart'
     as _i371;
@@ -63,6 +64,9 @@ import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dar
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
 import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart'
     as _i529;
+import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart' as _i427;
+import 'package:immoplus/app/features/hotel/cubit/hotel_room_cubit.dart'
+    as _i634;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
 import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart'
@@ -147,6 +151,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i143.ResidenceRepository>(
         () => _i143.ResidenceRepository(gh<_i361.Dio>()));
     gh.factory<_i184.KycRepository>(() => _i184.KycRepository(gh<_i361.Dio>()));
+    gh.factory<_i374.HotelRepository>(
+        () => _i374.HotelRepository(gh<_i361.Dio>()));
     gh.factory<_i745.VisitCubit>(
         () => _i745.VisitCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i488.EstateCubit>(
@@ -175,6 +181,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i184.KycRepository>(),
           gh<_i1058.AnalyticsService>(),
         ));
+    gh.factory<_i427.HotelCubit>(
+        () => _i427.HotelCubit(gh<_i374.HotelRepository>()));
+    gh.factory<_i634.HotelRoomCubit>(
+        () => _i634.HotelRoomCubit(gh<_i374.HotelRepository>()));
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit(
           gh<_i715.UserPreferenceRepository>(),
           gh<_i22.SessionManager>(),

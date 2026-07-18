@@ -7,7 +7,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
-import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
@@ -137,7 +136,7 @@ class _ResidencePageState extends State<ResidencePage> {
 
                 // ── Video ──
                 if (data.video.isNotEmpty) ...[
-                  DetailLogmentVideo(logmentModel: data),
+                  DetailLogmentVideo(videoId: data.video),
                   const _SliverDivider(),
                 ],
 

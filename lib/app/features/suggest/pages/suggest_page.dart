@@ -1,9 +1,7 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/models/remote/suggest/suggestion_model.dart';
@@ -13,7 +11,6 @@ import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/suggest_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggestion_tile.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 

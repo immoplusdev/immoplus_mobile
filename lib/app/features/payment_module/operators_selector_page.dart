@@ -131,11 +131,13 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                         : () {
                             context.read<PaymentCubit>().init();
                             setState(() {
-                              OrderPaymentController.selectedOperator = operator;
+                              OrderPaymentController.selectedOperator =
+                                  operator;
                             });
                             getIt<AnalyticsService>().logAddPaymentInfo(
                               paymentType: operator.value,
-                              value: widget.paymentPageAdapter.amount.toDouble(),
+                              value:
+                                  widget.paymentPageAdapter.amount.toDouble(),
                               itemId: widget.paymentPageAdapter.itemId,
                             );
 

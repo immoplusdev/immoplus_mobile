@@ -12,12 +12,14 @@ class PaymentData extends InheritedWidget {
     required this.amount,
     required this.productType,
     required this.orderID,
+    this.extra,
   }) : super(child: child);
 
   final Widget child;
   final int amount;
   final String productType;
   final String orderID;
+  final Object? extra;
   static PaymentData? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<PaymentData>();
   }
