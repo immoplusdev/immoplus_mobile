@@ -18,9 +18,10 @@ import 'ai_assistant_bottom_sheet.dart';
 
 const Map<int, String> _iaLabels = {
   0: 'Hôte IA', // Résidences
-  1: 'Hôte IA', // Locations
-  2: 'Decor IA', // Meubles
-  3: 'Deal IA', // Achats
+  1: 'Hôte IA', // Hôtel
+  2: 'Hôte IA', // Locations
+  3: 'Decor IA', // Meubles
+  4: 'Deal IA', // Achats
 };
 
 /// Notifier partagé : true quand l'utilisateur scrolle (pilule compactée à droite).

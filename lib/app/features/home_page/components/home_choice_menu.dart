@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -33,17 +34,21 @@ class HomeChoiceMenu extends StatelessWidget {
           ),
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: HomeTab.values.length,
+            itemCount: HomeTab.valuestabs.length,
             separatorBuilder: (context, index) => const SizedBox(
               width: _Constants.itemSpacing,
             ),
             itemBuilder: (context, index) {
-              final tab = HomeTab.values[index];
+              final tab = HomeTab.valuestabs[index];
               bool isSelected = state.indexPage == tab.value;
 
               return GestureDetector(
                 onTap: () {
-                  context.read<HomePageCubit>().changeIndex(tab.value);
+                  if (tab == HomeTab.hotel) {
+                    context.push('/hotels');
+                  } else {
+                    context.read<HomePageCubit>().changeIndex(tab.value);
+                  }
                 },
                 child: UnconstrainedBox(
                   child: Container(

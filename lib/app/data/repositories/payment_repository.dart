@@ -16,6 +16,7 @@ class PaymentRepository {
 
   Future<PaymentItentModel> intent({required PaymentIntentBody body}) async {
     try {
+
       final response = await PaymentProvider(dioClient).intentPayment(body);
       inspect(response);
       return response;

@@ -10,11 +10,13 @@ class OrangePage extends StatefulWidget {
     required this.productType,
     required this.orderID,
     required this.amount,
+    this.extra,
   });
 
   final String productType;
   final String orderID;
   final int amount;
+  final Object? extra;
 
   @override
   State<OrangePage> createState() => _OrangePageState();
@@ -41,6 +43,7 @@ class _OrangePageState extends State<OrangePage> {
       productType: widget.productType,
       orderID: widget.orderID,
       amount: widget.amount,
+      extra: widget.extra,
       child: ListenableBuilder(
         listenable: _controller,
         builder: (context, _) {

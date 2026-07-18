@@ -15,6 +15,7 @@ class LocationBiensPage extends StatefulWidget {
   final String title;
   final String? villeId;
   final String? communeId;
+  final EstateSubCategory? subCategory;
   final PropertyType propertyType;
 
   const LocationBiensPage({
@@ -22,6 +23,7 @@ class LocationBiensPage extends StatefulWidget {
     required this.title,
     this.villeId,
     this.communeId,
+    this.subCategory,
     this.propertyType = PropertyType.land,
   });
 
@@ -64,6 +66,14 @@ class _LocationBiensPageState extends State<LocationBiensPage>
       }
       if (widget.communeId != null) {
         where['_communeId'] = widget.communeId;
+      }
+      if (widget.subCategory != null && widget.subCategory!.value != null) {
+        final whereList =
+            List<String>.from(where['_where'] as List<String>? ?? const []);
+        whereList.add(
+          '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${widget.subCategory!.value}"}',
+        );
+        where['_where'] = whereList;
       }
 
       final result = await _bienImmobilierRepository.getBiensImmobiliers(

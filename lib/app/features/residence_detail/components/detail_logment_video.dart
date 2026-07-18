@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/video_player/video_player_page.dart';
 
 class DetailLogmentVideo extends StatelessWidget {
   const DetailLogmentVideo({
     super.key,
-    required this.logmentModel,
+    required this.videoId,
   });
-  final ResidenceModel logmentModel;
+  final String videoId;
 
   @override
   Widget build(BuildContext context) {
-    if (logmentModel.video.isEmpty) return const SliverToBoxAdapter();
+    if (videoId.isEmpty) return const SliverToBoxAdapter();
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -36,7 +35,7 @@ class DetailLogmentVideo extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: Container(
                   color: Colors.black,
-                  child: VideoPlayerPage(videoID: logmentModel.video),
+                  child: VideoPlayerPage(videoID: videoId),
                 ),
               ),
             ),

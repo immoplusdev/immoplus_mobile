@@ -18,6 +18,7 @@ import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 
 class BestRatedResidencesConstants {
   BestRatedResidencesConstants._();
@@ -143,7 +144,7 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
         ),
         const Gap(12),
         SizedBox(
-          height: 255,
+          height: compactResidenceCardHeight,
           child: _buildContent(),
         ),
         const Gap(15),

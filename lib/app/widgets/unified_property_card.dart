@@ -14,9 +14,12 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
+import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
+import 'package:immoplus/app/widgets/image_collage.dart';
 
 class UnifiedPropertyCard extends StatelessWidget {
-  final dynamic item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
+  final dynamic
+      item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
 
   const UnifiedPropertyCard({super.key, required this.item})
       : assert(item is ResidenceModel ||
@@ -60,20 +63,31 @@ class UnifiedPropertyCard extends StatelessWidget {
   bool get isResidence => item is ResidenceModel;
   bool get isFurniture => item is FurnitureModel;
 
-  String get priceText {
-    if (price >= 1000000000) {
-      final double val = price / 1000000000;
+  bool get hasReduction => isResidence && (item as ResidenceModel).hasReduction;
+
+  /// Prix effectivement affiché en avant (réduit si une réduction existe).
+  int get displayPrice =>
+      hasReduction ? (item as ResidenceModel).prixReduit : price;
+
+  String _formatPrice(int value) {
+    if (value >= 1000000000) {
+      final double val = value / 1000000000;
       final cleanVal =
           val.toStringAsFixed(val.truncateToDouble() == val ? 0 : 1);
       return "$cleanVal Mrd F";
-    } else if (price >= 1000000) {
-      final double val = price / 1000000;
+    } else if (value >= 1000000) {
+      final double val = value / 1000000;
       final cleanVal =
           val.toStringAsFixed(val.truncateToDouble() == val ? 0 : 1);
       return "$cleanVal M F";
     }
-    return Utils.formatCurrency(price);
+    return Utils.formatCurrency(value);
   }
+
+  String get priceText => _formatPrice(displayPrice);
+
+  /// Prix normal (barré), affiché uniquement quand une réduction est active.
+  String get originalPriceText => _formatPrice(price);
 
   String get priceSuffix {
     if (isResidence) return '/nuit';
@@ -150,8 +164,7 @@ class UnifiedPropertyCard extends StatelessWidget {
             context.push(ResidencePage.route((item as ResidenceModel).id),
                 extra: item);
           } else if (isFurniture) {
-            context.push(
-                FurnitureDetailPage.route((item as FurnitureModel).id),
+            context.push(FurnitureDetailPage.route((item as FurnitureModel).id),
                 extra: item);
           } else {
             context.push('/estate_detail/${(item as BienImmobilierModel).id}');
@@ -162,8 +175,13 @@ class UnifiedPropertyCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Left Image Collage (strictly 3 images)
-              _buildImageCollage(images),
+              // Left Image Collage
+              ImageCollage(
+                images: images,
+                width: SuggestCardConstants.imageSize,
+                height: SuggestCardConstants.imageSize,
+                borderRadius: SuggestCardConstants.borderRadius,
+              ),
 
               const Gap(14),
 
@@ -234,31 +252,50 @@ class UnifiedPropertyCard extends StatelessWidget {
                           ),
                           const Gap(8),
                           Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    priceText,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                if (hasReduction)
+                                  Text(
+                                    originalPriceText,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey.shade500,
+                                      decoration: TextDecoration.lineThrough,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                if (priceSuffix.isNotEmpty)
-                                  Text(
-                                    priceSuffix,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        priceText,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: hasReduction
+                                              ? Colors.redAccent
+                                              : Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
+                                    if (priceSuffix.isNotEmpty)
+                                      Text(
+                                        priceSuffix,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -270,111 +307,6 @@ class UnifiedPropertyCard extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImageCollage(List<String> images) {
-    if (images.isEmpty) {
-      return SizedBox(
-        width: SuggestCardConstants.imageSize,
-        height: SuggestCardConstants.imageSize,
-        child: ClipRRect(
-          borderRadius:
-              BorderRadius.circular(SuggestCardConstants.borderRadius),
-          child: _buildImageWidget(''),
-        ),
-      );
-    }
-
-    if (images.length == 1) {
-      return SizedBox(
-        width: SuggestCardConstants.imageSize,
-        height: SuggestCardConstants.imageSize,
-        child: ClipRRect(
-          borderRadius:
-              BorderRadius.circular(SuggestCardConstants.borderRadius),
-          child: _buildImageWidget(images[0]),
-        ),
-      );
-    }
-
-    if (images.length == 2) {
-      return SizedBox(
-        width: SuggestCardConstants.imageSize,
-        height: SuggestCardConstants.imageSize,
-        child: ClipRRect(
-          borderRadius:
-              BorderRadius.circular(SuggestCardConstants.borderRadius),
-          child: Column(
-            children: [
-              Expanded(child: _buildImageWidget(images[0])),
-              const Gap(2),
-              Expanded(child: _buildImageWidget(images[1])),
-            ],
-          ),
-        ),
-      );
-    }
-
-    // 3 or more images
-    final img1 = images[0];
-    final img2 = images[1];
-    final img3 = images[2];
-
-    return Container(
-      width: SuggestCardConstants.imageSize,
-      height: SuggestCardConstants.imageSize,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(SuggestCardConstants.borderRadius),
-        child: Column(
-          children: [
-            // Top large image
-            Expanded(
-              child: _buildImageWidget(img1),
-            ),
-            const Gap(2),
-            // Bottom row (two smaller images)
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(child: _buildImageWidget(img2)),
-                  const Gap(2),
-                  Expanded(child: _buildImageWidget(img3)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImageWidget(String imageId) {
-    if (imageId.isEmpty) {
-      return Container(
-        color: Colors.grey.shade100,
-        child: const Icon(Icons.image_outlined, color: Colors.grey, size: 20),
-      );
-    }
-    return CachedNetworkImage(
-      imageUrl: Utils.getImagePath(id: imageId),
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
-      placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        period: const Duration(milliseconds: 500),
-        child: Container(color: Colors.grey.shade300),
-      ),
-      errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
-        child: const Icon(
-          Icons.broken_image_outlined,
-          color: Colors.grey,
-          size: 16,
         ),
       ),
     );

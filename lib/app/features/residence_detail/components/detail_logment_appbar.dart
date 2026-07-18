@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +9,7 @@ import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
 import 'package:immoplus/app/services/share_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/widgets/circle_button.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 
 class DetailLogmentAppBar extends StatefulWidget {
@@ -48,7 +47,7 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
       elevation: 0,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: _CircleButton(
+        child: CircleButton(
           icon: CupertinoIcons.chevron_back,
           onTap: () {
             if (context.canPop()) {
@@ -63,7 +62,7 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
         // Share button
         Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: _CircleButton(
+          child: CircleButton(
             key: _shareButtonKey,
             icon: Iconsax.send_2,
             onTap: () async {
@@ -84,7 +83,7 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
           padding: const EdgeInsets.only(right: 12),
           child: ValueListenableBuilder(
             valueListenable: _liked,
-            builder: (context, liked, _) => _CircleButton(
+            builder: (context, liked, _) => CircleButton(
               icon: liked ? Iconsax.heart5 : Iconsax.heart,
               iconColor: liked ? Colors.red : null,
               onTap: () {
@@ -111,46 +110,6 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Reusable circle button for AppBar ──────────────────────────────────────
-class _CircleButton extends StatelessWidget {
-  const _CircleButton({
-    super.key,
-    required this.icon,
-    required this.onTap,
-    this.iconColor,
-  });
-  final IconData icon;
-  final VoidCallback onTap;
-  final Color? iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 38,
-        height: 38,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.92),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Icon(
-          icon,
-          size: 20,
-          color: iconColor ?? const Color(0xFF222222),
         ),
       ),
     );

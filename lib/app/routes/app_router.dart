@@ -9,6 +9,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
+import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
@@ -35,6 +36,7 @@ import 'package:immoplus/app/features/home_page/screens/location_furnitures_page
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/reduction_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -57,6 +59,12 @@ import 'package:immoplus/app/features/reset_password/pages/reset_password_page.d
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_booking_selection_page.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_booking_summary_page.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_room_detail_page.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_search_result_page.dart';
 import 'package:immoplus/app/features/vivre/vivre_page.dart';
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
@@ -356,12 +364,15 @@ class AppRouter {
       GoRoute(
         path: SuggestPage.routePath,
         name: SuggestPage.routeName,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
-          return SuggestPage(
-            homeTab: extra['homeTab'] as HomeTab?,
-            lat: extra['lat'] as double?,
-            lng: extra['lng'] as double?,
+          return _slideUpPage(
+            state.pageKey,
+            SuggestPage(
+              homeTab: extra['homeTab'] as HomeTab?,
+              lat: extra['lat'] as double?,
+              lng: extra['lng'] as double?,
+            ),
           );
         },
       ),
@@ -479,6 +490,69 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: HotelSearchPage.routePath,
+        name: HotelSearchPage.name,
+        builder: (context, state) => const HotelSearchPage(),
+      ),
+
+      GoRoute(
+        path: HotelDetailPage.routePath,
+        name: HotelDetailPage.name,
+        builder: (context, state) => HotelDetailPage(
+          hotelId: state.pathParameters['hotelId'] ?? '',
+        ),
+      ),
+
+      GoRoute(
+        path: HotelBookingSelectionPage.routePath,
+        name: HotelBookingSelectionPage.name,
+        builder: (context, state) => HotelBookingSelectionPage(
+          hotelId: state.pathParameters['hotelId'] ?? '',
+          initialRoomId: state.uri.queryParameters['roomId'],
+        ),
+      ),
+
+      GoRoute(
+        path: HotelRoomDetailPage.routePath,
+        name: HotelRoomDetailPage.name,
+        builder: (context, state) => HotelRoomDetailPage(
+          hotelId: state.pathParameters['hotelId'] ?? '',
+          roomTypeId: state.pathParameters['roomTypeId'] ?? '',
+          hotel: state.extra as HotelDetailModel?,
+        ),
+      ),
+
+      GoRoute(
+        path: HotelBookingSummaryPage.routePath,
+        name: HotelBookingSummaryPage.name,
+        builder: (context, state) => HotelBookingSummaryPage(
+          data: state.extra as Map<String, dynamic>,
+        ),
+      ),
+
+      GoRoute(
+        path: HotelSearchResultPage.routePath,
+        name: HotelSearchResultPage.name,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          return _slideUpPage(
+            state.pageKey,
+            HotelSearchResultPage(
+              destination: extra['destination'] as String? ?? '',
+              lat: extra['lat'] as double?,
+              long: extra['long'] as double?,
+              checkInDate: extra['checkInDate'] as DateTime?,
+              checkOutDate: extra['checkOutDate'] as DateTime?,
+              adults: extra['adults'] as int? ?? 2,
+              children: extra['children'] as int? ?? 0,
+              lits: extra['lits'] as int? ?? 1,
+              villeId: extra['villeId'] as String?,
+            ),
+          );
+        },
+      ),
+
+      GoRoute(
         path: NearResidencesPage.routePath,
         name: NearResidencesPage.routeName,
         builder: (context, state) {
@@ -511,6 +585,12 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: ReductionResidencesPage.routePath,
+        name: ReductionResidencesPage.routeName,
+        builder: (context, state) => const ReductionResidencesPage(),
+      ),
+
+      GoRoute(
         path: LocationBiensPage.routePath,
         name: LocationBiensPage.routeName,
         builder: (context, state) {
@@ -519,6 +599,7 @@ class AppRouter {
             title: extra['title'] as String,
             villeId: extra['villeId'] as String?,
             communeId: extra['communeId'] as String?,
+            subCategory: extra['subCategory'] as EstateSubCategory?,
             propertyType:
                 extra['propertyType'] as PropertyType? ?? PropertyType.land,
           );
@@ -730,5 +811,29 @@ class AppRouter {
         ),
       ),
     ],
+  );
+}
+
+/// Slide-up + fade-in page transition — shared between SuggestPage and HotelSearchResultPage.
+CustomTransitionPage<void> _slideUpPage(LocalKey key, Widget child) {
+  return CustomTransitionPage<void>(
+    key: key,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 320),
+    reverseTransitionDuration: const Duration(milliseconds: 260),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      );
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.12),
+          end: Offset.zero,
+        ).animate(curved),
+        child: FadeTransition(opacity: curved, child: child),
+      );
+    },
   );
 }

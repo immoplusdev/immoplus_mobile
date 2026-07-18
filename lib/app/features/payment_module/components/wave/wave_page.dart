@@ -48,11 +48,13 @@ class WavePage extends StatefulWidget {
     required this.productType,
     required this.orderID,
     required this.amount,
+    this.extra,
   });
 
   final String productType;
   final String orderID;
   final int amount;
+  final Object? extra;
 
   @override
   State<WavePage> createState() => _WavePageState();
@@ -79,6 +81,7 @@ class _WavePageState extends State<WavePage> {
       productType: widget.productType,
       orderID: widget.orderID,
       amount: widget.amount,
+      extra: widget.extra,
       child: ListenableBuilder(
         listenable: _controller,
         builder: (context, _) {
