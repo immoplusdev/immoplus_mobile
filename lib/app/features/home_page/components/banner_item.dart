@@ -13,6 +13,7 @@ import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
+import 'package:immoplus/app/features/home_page/screens/reduction_residences_page.dart';
 
 enum BannerAction {
   annulerReservation('/annuler_reservation'),
@@ -20,6 +21,7 @@ enum BannerAction {
   payerExpress('/payer_express'),
   // annulerVisite('/annuler_visite'),
   mesAlertes('/mes_alertes'),
+  reduction('/reduction'),
   unknown('');
 
   final String url;
@@ -131,6 +133,9 @@ class BannerItem extends StatelessWidget {
         } else {
           context.pushNamed(AlertListPage.name);
         }
+        break;
+      case BannerAction.reduction:
+        context.pushNamed(ReductionResidencesPage.routeName);
         break;
       default:
         break;

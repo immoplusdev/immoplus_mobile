@@ -50,6 +50,7 @@ mixin _$ResidenceModel {
   num? get score =>
       throw _privateConstructorUsedError; //ClientModel? proprietaire,
   bool get residenceDisponible => throw _privateConstructorUsedError;
+  num get reduction => throw _privateConstructorUsedError;
 
   /// Serializes this ResidenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -94,7 +95,8 @@ abstract class $ResidenceModelCopyWith<$Res> {
       bool fetesAutorises,
       String reglesSupplementaires,
       num? score,
-      bool residenceDisponible});
+      bool residenceDisponible,
+      num reduction});
 
   $VilleModelCopyWith<$Res>? get villeModel;
   $CommuneModelCopyWith<$Res>? get communeModel;
@@ -143,6 +145,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? reglesSupplementaires = null,
     Object? score = freezed,
     Object? residenceDisponible = null,
+    Object? reduction = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -253,6 +256,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.residenceDisponible
           : residenceDisponible // ignore: cast_nullable_to_non_nullable
               as bool,
+      reduction: null == reduction
+          ? _value.reduction
+          : reduction // ignore: cast_nullable_to_non_nullable
+              as num,
     ) as $Val);
   }
 
@@ -330,7 +337,8 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       bool fetesAutorises,
       String reglesSupplementaires,
       num? score,
-      bool residenceDisponible});
+      bool residenceDisponible,
+      num reduction});
 
   @override
   $VilleModelCopyWith<$Res>? get villeModel;
@@ -380,6 +388,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? reglesSupplementaires = null,
     Object? score = freezed,
     Object? residenceDisponible = null,
+    Object? reduction = null,
   }) {
     return _then(_$ResidenceModelImpl(
       id: null == id
@@ -490,6 +499,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.residenceDisponible
           : residenceDisponible // ignore: cast_nullable_to_non_nullable
               as bool,
+      reduction: null == reduction
+          ? _value.reduction
+          : reduction // ignore: cast_nullable_to_non_nullable
+              as num,
     ));
   }
 }
@@ -524,7 +537,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.fetesAutorises = false,
       this.reglesSupplementaires = '',
       this.score,
-      this.residenceDisponible = true})
+      this.residenceDisponible = true,
+      this.reduction = 0})
       : _images = images,
         _commodites = commodites,
         _pieces = pieces;
@@ -631,10 +645,13 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final bool residenceDisponible;
+  @override
+  @JsonKey()
+  final num reduction;
 
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible, reduction: $reduction)';
   }
 
   @override
@@ -686,7 +703,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
                 other.reglesSupplementaires == reglesSupplementaires) &&
             (identical(other.score, score) || other.score == score) &&
             (identical(other.residenceDisponible, residenceDisponible) ||
-                other.residenceDisponible == residenceDisponible));
+                other.residenceDisponible == residenceDisponible) &&
+            (identical(other.reduction, reduction) ||
+                other.reduction == reduction));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -719,7 +738,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         fetesAutorises,
         reglesSupplementaires,
         score,
-        residenceDisponible
+        residenceDisponible,
+        reduction
       ]);
 
   /// Create a copy of ResidenceModel
@@ -767,7 +787,8 @@ abstract class _ResidenceModel implements ResidenceModel {
       final bool fetesAutorises,
       final String reglesSupplementaires,
       final num? score,
-      final bool residenceDisponible}) = _$ResidenceModelImpl;
+      final bool residenceDisponible,
+      final num reduction}) = _$ResidenceModelImpl;
 
   factory _ResidenceModel.fromJson(Map<String, dynamic> json) =
       _$ResidenceModelImpl.fromJson;
@@ -828,6 +849,8 @@ abstract class _ResidenceModel implements ResidenceModel {
   num? get score; //ClientModel? proprietaire,
   @override
   bool get residenceDisponible;
+  @override
+  num get reduction;
 
   /// Create a copy of ResidenceModel
   /// with the given fields replaced by the non-null parameter values.

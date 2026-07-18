@@ -34,6 +34,7 @@ import 'package:immoplus/app/features/home_page/screens/location_furnitures_page
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
+import 'package:immoplus/app/features/home_page/screens/reduction_residences_page.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -510,6 +511,12 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: ReductionResidencesPage.routePath,
+        name: ReductionResidencesPage.routeName,
+        builder: (context, state) => const ReductionResidencesPage(),
+      ),
+
+      GoRoute(
         path: LocationBiensPage.routePath,
         name: LocationBiensPage.routeName,
         builder: (context, state) {
@@ -518,6 +525,7 @@ class AppRouter {
             title: extra['title'] as String,
             villeId: extra['villeId'] as String?,
             communeId: extra['communeId'] as String?,
+            subCategory: extra['subCategory'] as EstateSubCategory?,
             propertyType:
                 extra['propertyType'] as PropertyType? ?? PropertyType.land,
           );

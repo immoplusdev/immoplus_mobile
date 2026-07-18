@@ -60,20 +60,31 @@ class UnifiedPropertyCard extends StatelessWidget {
   bool get isResidence => item is ResidenceModel;
   bool get isFurniture => item is FurnitureModel;
 
-  String get priceText {
-    if (price >= 1000000000) {
-      final double val = price / 1000000000;
+  bool get hasReduction => isResidence && (item as ResidenceModel).hasReduction;
+
+  /// Prix effectivement affiché en avant (réduit si une réduction existe).
+  int get displayPrice =>
+      hasReduction ? (item as ResidenceModel).prixReduit : price;
+
+  String _formatPrice(int value) {
+    if (value >= 1000000000) {
+      final double val = value / 1000000000;
       final cleanVal =
           val.toStringAsFixed(val.truncateToDouble() == val ? 0 : 1);
       return "$cleanVal Mrd F";
-    } else if (price >= 1000000) {
-      final double val = price / 1000000;
+    } else if (value >= 1000000) {
+      final double val = value / 1000000;
       final cleanVal =
           val.toStringAsFixed(val.truncateToDouble() == val ? 0 : 1);
       return "$cleanVal M F";
     }
-    return Utils.formatCurrency(price);
+    return Utils.formatCurrency(value);
   }
+
+  String get priceText => _formatPrice(displayPrice);
+
+  /// Prix normal (barré), affiché uniquement quand une réduction est active.
+  String get originalPriceText => _formatPrice(price);
 
   String get priceSuffix {
     if (isResidence) return '/nuit';
@@ -234,31 +245,50 @@ class UnifiedPropertyCard extends StatelessWidget {
                           ),
                           const Gap(8),
                           Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    priceText,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                if (hasReduction)
+                                  Text(
+                                    originalPriceText,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey.shade500,
+                                      decoration: TextDecoration.lineThrough,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                if (priceSuffix.isNotEmpty)
-                                  Text(
-                                    priceSuffix,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        priceText,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: hasReduction
+                                              ? Colors.redAccent
+                                              : Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
+                                    if (priceSuffix.isNotEmpty)
+                                      Text(
+                                        priceSuffix,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),

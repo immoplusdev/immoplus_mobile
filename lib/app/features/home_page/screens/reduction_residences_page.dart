@@ -2,42 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
-import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
+import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class LocationBiensPage extends StatefulWidget {
-  final String title;
-  final String? villeId;
-  final String? communeId;
-  final EstateSubCategory? subCategory;
-  final PropertyType propertyType;
+class ReductionResidencesPage extends StatefulWidget {
+  const ReductionResidencesPage({super.key});
 
-  const LocationBiensPage({
-    super.key,
-    required this.title,
-    this.villeId,
-    this.communeId,
-    this.subCategory,
-    this.propertyType = PropertyType.land,
-  });
-
-  static const String routePath = '/location-biens';
-  static const String routeName = 'location-biens';
+  static const String routePath = '/reduction-residences';
+  static const String routeName = 'reduction-residences';
 
   @override
-  State<LocationBiensPage> createState() => _LocationBiensPageState();
+  State<ReductionResidencesPage> createState() =>
+      _ReductionResidencesPageState();
 }
 
-class _LocationBiensPageState extends State<LocationBiensPage> {
-  final PagingController<int, BienImmobilierModel> _pagingController =
+class _ReductionResidencesPageState extends State<ReductionResidencesPage> {
+  final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
-  final BienImmobilierRepository _bienImmobilierRepository =
-      getIt<BienImmobilierRepository>();
+  final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
 
   @override
   void initState() {
@@ -47,36 +33,27 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
 
   Future<void> _loadPage(int pageKey) async {
     try {
-      final Map<String, dynamic> where = {
-        ...FilterHandler.getAllFilters(widget.propertyType),
-      };
-      if (widget.villeId != null) {
-        where['_villeId'] = widget.villeId;
-      }
-      if (widget.communeId != null) {
-        where['_communeId'] = widget.communeId;
-      }
-      if (widget.subCategory != null && widget.subCategory!.value != null) {
-        final whereList =
-            List<String>.from(where['_where'] as List<String>? ?? const []);
-        whereList.add(
-          '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${widget.subCategory!.value}"}',
-        );
-        where['_where'] = whereList;
-      }
-
-      final result = await _bienImmobilierRepository.getBiensImmobiliers(
+      final result = await _residenceRepository.getResidences(
         page: pageKey,
-        where: where,
+        where: {
+          '_where': [
+            '{"_field": "reduction", "_op": "gt", "_val": 0}',
+          ],
+        },
       );
+
+      // Filtre de sécurité côté client : certains environnements API
+      // renvoient encore des résidences sans réduction malgré le `_where`,
+      // donc on ne garde que celles ayant réellement reduction > 0.
+      final reduced = (result.data ?? []).where((r) => r.hasReduction).toList();
 
       if (result.hasNext == true) {
         _pagingController.appendPage(
-          result.data ?? [],
+          reduced,
           (result.currentPage ?? 0) + 1,
         );
       } else {
-        _pagingController.appendLastPage(result.data ?? []);
+        _pagingController.appendLastPage(reduced);
       }
     } catch (error) {
       _pagingController.error = error.toString();
@@ -101,7 +78,7 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          widget.title,
+          'Réductions',
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -120,7 +97,7 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
             const SliverGap(10),
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              sliver: PagedSliverList<int, BienImmobilierModel>(
+              sliver: PagedSliverList<int, ResidenceModel>(
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate(
                   firstPageProgressIndicatorBuilder: (context) => Padding(
@@ -147,13 +124,13 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.location_off_outlined,
+                            Icons.local_offer_outlined,
                             size: 80,
                             color: Colors.grey.shade300,
                           ),
                           const Gap(20),
                           Text(
-                            "Aucun bien trouvé",
+                            "Aucune réduction en cours",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
@@ -169,7 +146,7 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
                     padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Text(
-                        'Vous avez vu tous les biens',
+                        'Vous avez vu toutes les résidences en réduction',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Colors.grey.shade600,
                             ),
