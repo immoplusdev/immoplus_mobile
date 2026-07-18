@@ -95,60 +95,82 @@ class _ResidencesListState extends State<ResidencesList>
     if (!mounted) return;
     setState(() {
       _isParentLoading = true;
+      _activeSections.clear();
+      _displayList.clear();
     });
 
     try {
-      final futures = _homeItems.map((item) async {
-        if (item.isHeader) return null;
+      final itemsToLoad = _homeItems.where((i) => !i.isHeader).toList();
+      const int batchSize = 4;
 
-        final Map<String, dynamic> where = {};
-        if (item.villeId != null) {
-          where['_villeId'] = item.villeId;
+      for (int i = 0; i < itemsToLoad.length; i += batchSize) {
+        if (!mounted) break;
+        final batch = itemsToLoad.sublist(
+            i,
+            i + batchSize > itemsToLoad.length
+                ? itemsToLoad.length
+                : i + batchSize);
+
+        final futures = batch.map((item) async {
+          final Map<String, dynamic> where = {};
+          if (item.villeId != null) {
+            where['_villeId'] = item.villeId;
+          }
+          if (item.communeId != null) {
+            where['_communeId'] = item.communeId;
+          }
+
+          try {
+            final result = await getIt<ResidenceRepository>().getResidences(
+              page: 1,
+              perPage: 10,
+              where: where,
+            );
+            final list = result.data ?? [];
+            return _LocationSectionData(
+              title: item.title,
+              villeId: item.villeId,
+              communeId: item.communeId,
+              residences: list,
+            );
+          } catch (e) {
+            debugPrint('Error loading section ${item.title}: $e');
+            return null; // On retourne null pour ne pas bloquer les autres
+          }
+        }).toList();
+
+        final results = await Future.wait(futures);
+
+        if (!mounted) break;
+
+        bool hasNewData = false;
+        for (var r in results) {
+          if (r != null) {
+            _activeSections.add(r);
+            hasNewData = true;
+          }
         }
-        if (item.communeId != null) {
-          where['_communeId'] = item.communeId;
-        }
 
-        try {
-          final result = await getIt<ResidenceRepository>().getResidences(
-            page: 1,
-            perPage: 10,
-            where: where,
-          );
-          final list = result.data ?? [];
-          // if (list.isNotEmpty) {
-          return _LocationSectionData(
-            title: item.title,
-            villeId: item.villeId,
-            communeId: item.communeId,
-            residences: list,
-          );
-          // }
-        } catch (e) {
-          debugPrint('Error loading section ${item.title}: $e');
-          rethrow;
-        }
-      }).toList();
-
-      final results = await Future.wait(futures);
-
-      final List<_LocationSectionData> active = [];
-      for (var r in results) {
-        if (r != null) {
-          active.add(r);
+        // Met à jour l'interface progressivement pour que l'utilisateur n'attende pas la fin totale
+        if (hasNewData) {
+          setState(() {
+            _displayList = _buildDisplayList();
+            _isParentLoading = false;
+          });
         }
       }
 
-      if (mounted) {
+      if (mounted && _isParentLoading) {
         setState(() {
-          _activeSections = active;
-          _displayList = _buildDisplayList();
           _isParentLoading = false;
         });
       }
     } catch (e) {
       if (mounted) {
         showConnectionErrorDialog();
+        setState(() {
+          _isParentLoading = false;
+        });
       }
     }
   }
