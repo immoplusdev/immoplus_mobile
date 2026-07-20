@@ -27,6 +27,7 @@ import 'package:immoplus/app/features/booking_history/booking_history_page.dart'
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
+import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
@@ -438,6 +439,21 @@ class _AccountPageState extends State<AccountPage> {
             height: 1.25,
           ),
           onTap: () => context.pushNamed(VisitHistoryPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(Icon(FontAwesomeIcons.star,
+              size: 18, color: _kIconColor)),
+          title: 'Historique des notes',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(RatingHistoryPage.name),
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,

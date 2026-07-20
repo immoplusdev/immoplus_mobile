@@ -17,6 +17,7 @@ import 'package:immoplus/app/widgets/custom_empty_state.dart';
 class AlertListPage extends StatefulWidget {
   final bool embedded;
   const AlertListPage({super.key, this.embedded = false});
+  static const String routePath = '/alerts';
   static const String name = 'ALERT_LIST_PAGE';
 
   @override

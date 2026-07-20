@@ -8,6 +8,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_history_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -73,7 +74,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.reservationId != null) {
-        context.push('/reservation/${widget.reservationId}');
+        context.push(BookingDetailPage.route(id: widget.reservationId!));
       }
     });
 
@@ -156,6 +157,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
               ),
               itemBuilder: (context, item, index) => BookingHistoryCard(
                 reservationModel: item,
+                onRefresh: () => _pagingController.refresh(),
               ),
             ),
           ),

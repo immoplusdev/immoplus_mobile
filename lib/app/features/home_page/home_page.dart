@@ -27,6 +27,7 @@ import 'components/home_search_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static const String routePath = '/homePage';
   static String name = "home";
   @override
   State<HomePage> createState() => _HomePageState();

@@ -40,6 +40,7 @@ import 'package:immoplus/app/data/repositories/hotel_repository.dart' as _i374;
 import 'package:immoplus/app/data/repositories/kyc_repository.dart' as _i184;
 import 'package:immoplus/app/data/repositories/notification_repository.dart'
     as _i371;
+import 'package:immoplus/app/data/repositories/rating_repository.dart' as _i568;
 import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
 import 'package:immoplus/app/data/repositories/suggest_repository.dart'
@@ -73,6 +74,7 @@ import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart
     as _i430;
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart'
     as _i872;
+import 'package:immoplus/app/features/rating/logic/rating_cubit.dart' as _i540;
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart'
     as _i85;
 import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart'
@@ -173,6 +175,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i715.UserPreferenceRepository>(
         () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
+    gh.factory<_i568.RatingRepository>(
+        () => _i568.RatingRepository(gh<_i361.Dio>()));
     gh.lazySingleton<_i342.ChatHistoryService>(
         () => _i342.ChatHistoryService(gh<_i361.Dio>()));
     gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(
@@ -185,6 +189,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i427.HotelCubit(gh<_i374.HotelRepository>()));
     gh.factory<_i634.HotelRoomCubit>(
         () => _i634.HotelRoomCubit(gh<_i374.HotelRepository>()));
+    gh.factory<_i540.RatingCubit>(
+        () => _i540.RatingCubit(gh<_i568.RatingRepository>()));
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit(
           gh<_i715.UserPreferenceRepository>(),
           gh<_i22.SessionManager>(),

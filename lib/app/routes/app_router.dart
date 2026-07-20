@@ -25,6 +25,7 @@ import 'package:immoplus/app/features/become_pro/pages/become_pro_intro_page.dar
 import 'package:immoplus/app/features/become_pro/pages/become_pro_form_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
+import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
@@ -420,14 +421,14 @@ class AppRouter {
         },
         routes: [
           GoRoute(
-            path: '/homePage',
+            path: HomePage.routePath,
             name: HomePage.name,
             pageBuilder: (context, state) => NoTransitionPage(
               child: const HomePage(),
             ),
           ),
           GoRoute(
-            path: '/for_me',
+            path: MyChoicePage.routePath,
             name: MyChoicePage.name,
             pageBuilder: (context, state) => const NoTransitionPage(
               child: MyChoicePage(),
@@ -737,7 +738,7 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/user_preference',
+        path: UserPreferencePage.routePath,
         name: UserPreferencePage.name,
         builder: (BuildContext context, GoRouterState state) {
           return const UserPreferencePage();
@@ -758,7 +759,7 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: '/alerts',
+        path: AlertListPage.routePath,
         name: AlertListPage.name,
         builder: (context, state) => const AlertListPage(),
       ),
@@ -804,11 +805,17 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/reservation/:id',
-        name: 'reservation_detail',
+        path: BookingDetailPage.routePath,
+        name: BookingDetailPage.name,
         builder: (context, state) => BookingDetailPage(
           id: state.pathParameters['id']!,
+          autoShowRating: state.uri.queryParameters['action'] == 'rate',
         ),
+      ),
+      GoRoute(
+        path: RatingHistoryPage.routePath(),
+        name: RatingHistoryPage.name,
+        builder: (context, state) => const RatingHistoryPage(),
       ),
     ],
   );

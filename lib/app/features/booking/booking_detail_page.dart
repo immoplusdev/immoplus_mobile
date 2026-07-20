@@ -8,12 +8,14 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/data/enums/rating_status.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/booking/logic/booking_request_state.dart';
 import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
+import 'package:immoplus/app/features/rating/widgets/rating_bottom_sheet.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -24,15 +26,23 @@ import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 class BookingDetailPage extends StatefulWidget {
-  const BookingDetailPage({super.key, required this.id});
+  const BookingDetailPage(
+      {super.key, required this.id, this.autoShowRating = false});
   static String name = 'BOOKING';
+  static String routePath = '/reservation/:id';
+  static String route({required String id, String? action}) {
+    return '/reservation/$id${action != null ? '?action=$action' : ''}';
+  }
+
   final String id;
+  final bool autoShowRating;
 
   @override
   State<BookingDetailPage> createState() => _BookingDetailPageState();
 }
 
 class _BookingDetailPageState extends State<BookingDetailPage> {
+  bool _hasAutoShownRating = false;
   @override
   void initState() {
     super.initState();
@@ -44,7 +54,23 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BookingCubit, BookingRequestState>(
+    return BlocConsumer<BookingCubit, BookingRequestState>(
+      listener: (context, state) {
+        if (state is RECEIVE_BOOKING) {
+          final res = state.reservationResponse.data;
+          if (widget.autoShowRating &&
+              !_hasAutoShownRating &&
+              res.ratingStatus == RatingStatus.pending) {
+            _hasAutoShownRating = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              final result = await RatingBottomSheet.show(context, reservation: res);
+              if (result == true && mounted) {
+                context.read<BookingCubit>().getBooking(id: widget.id);
+              }
+            });
+          }
+        }
+      },
       builder: (context, state) {
         if (state is RECEIVE_BOOKING) {
           final res = state.reservationResponse.data;
@@ -343,26 +369,53 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
             ),
 
             // ── Bottom CTA si non payé ──
-            bottomNavigationBar:
-                res.statusFacture == PaymentStatus.non_paye.name
+            bottomNavigationBar: res.statusFacture ==
+                    PaymentStatus.non_paye.name
+                ? SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                      child: FilledButton.icon(
+                        onPressed: () => context.pushNamed(
+                          OperatorsSelectorPage.name,
+                          extra: PaymentPageAdapter(
+                            itemId: res.id,
+                            collection: ProductType.reservations.name,
+                            amount: res.montantPaye.toInt(),
+                          ),
+                        ),
+                        icon: const Icon(Iconsax.wallet, size: 18),
+                        label: Text(
+                          'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
+                        ),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFF1CA53F),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : res.ratingStatus == RatingStatus.pending
                     ? SafeArea(
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                           child: FilledButton.icon(
-                            onPressed: () => context.pushNamed(
-                              OperatorsSelectorPage.name,
-                              extra: PaymentPageAdapter(
-                                itemId: res.id,
-                                collection: ProductType.reservations.name,
-                                amount: res.montantPaye.toInt(),
-                              ),
-                            ),
-                            icon: const Icon(Iconsax.wallet, size: 18),
-                            label: Text(
-                              'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
-                            ),
+                            onPressed: () async {
+                              final result = await RatingBottomSheet.show(context, reservation: res);
+                              if (result == true && context.mounted) {
+                                context.read<BookingCubit>().getBooking(id: widget.id);
+                              }
+                            },
+                            icon: const Icon(Iconsax.star, size: 18),
+                            label: const Text('Évaluer mon séjour'),
                             style: FilledButton.styleFrom(
-                              backgroundColor: const Color(0xFF1CA53F),
+                              backgroundColor: const Color(0xFF2548E5),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
