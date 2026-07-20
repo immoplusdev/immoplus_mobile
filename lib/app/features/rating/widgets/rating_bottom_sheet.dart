@@ -313,6 +313,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                   );
                 },
               ),
+              Gap(MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
         ),

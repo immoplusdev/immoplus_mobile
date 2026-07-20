@@ -29,6 +29,9 @@ class BookingHistoryCard extends StatelessWidget {
   String _paymentLabel() =>
       Utils.getServiceStatus(reservationModel.statusFacture);
 
+  bool get _isRatingPending =>
+      reservationModel.ratingStatus == RatingStatus.pending;
+
   @override
   Widget build(BuildContext context) {
     final fmt = DateFormat('d MMM yyyy');
@@ -58,7 +61,7 @@ class BookingHistoryCard extends StatelessWidget {
         child: InkWell(
           onTap: clickable
               ? () async {
-                  if (reservationModel.ratingStatus == RatingStatus.pending) {
+                  if (_isRatingPending) {
                     final result = await RatingBottomSheet.show(context,
                         reservation: reservationModel);
                     if (result == true) {
@@ -210,7 +213,7 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if (reservationModel.ratingStatus == RatingStatus.pending)
+              if (_isRatingPending)
                 Positioned(
                   top: 12,
                   right: 12,
