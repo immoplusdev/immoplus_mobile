@@ -52,3 +52,23 @@ xcrun simctl openurl booted "https://app.immoplus.ci/hotels/7e498f07-3b76-445f-9
 
 ```
 *(Remplacez l'URL par le lien exact que vous souhaitez tester).*
+
+### Simuler un clic sur une Notification Push (Simulateur iOS)
+Un dossier `notification_tests` a été créé à la racine du projet contenant plusieurs fichiers `.apns` pour simuler des clics sur des notifications push.
+
+**Comment lancer un test :**
+1. Lancez l'application sur un **Simulateur iOS**.
+2. **Glisser-Déposer :** Prenez l'un des fichiers `.apns` depuis le Finder (par ex: `notification_tests/test_rating.apns`) et glissez-déposez le sur la fenêtre du simulateur.
+3. **Ou via Terminal :** 
+   ```bash
+   xcrun simctl push booted notification_tests/test_rating.apns
+   ```
+4. Cliquez sur la notification qui apparaît pour déclencher la redirection.
+
+**Tests disponibles :**
+- `test_rating.apns` : Ouvre la Bottom Sheet d'évaluation d'un séjour.
+- `test_mktg_preferences.apns` : Redirige vers la sélection des préférences (`cliOnb02`).
+- `test_mktg_imatch.apns` : Redirige vers la vue des matchs (`cliOnb04`).
+- `test_mktg_visit.apns` : Redirige vers l'historique des visites expresses (`cliOnb05`).
+- `test_mktg_residence.apns` : Redirige vers la page de suggestion/résidence (`cliNurt01`).
+- `test_mktg_alert.apns` : Redirige vers la liste des alertes (`cliNurtAl01`).

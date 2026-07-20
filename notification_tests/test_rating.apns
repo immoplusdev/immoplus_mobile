@@ -1,0 +1,19 @@
+{
+  "Simulator Target Bundle": "com.immoplus.ci",
+  "aps": {
+    "alert": {
+      "title": "Évaluez votre séjoure !",
+      "body": "Comment s'est passé votre séjour ? Votre avis est précieux pour nous."
+    },
+    "sound": "default",
+    "badge": 1
+  },
+  "custom": {
+    "i": "d413346e-b3f9-42b7-8ccb-a91cb2edee73",
+    "a": {
+      "type": "rating_request",
+      "reservationId": "d001ed2f-85f4-4447-98e7-3d99181e4e09",
+      "actor": "client"
+    }
+  }
+}
