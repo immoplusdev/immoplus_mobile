@@ -161,6 +161,19 @@ class ResidenceRepository {
     }
   }
 
+  Future<Map<String, dynamic>> generateQrCheckin({required String id}) async {
+    try {
+      final response = await ReservationProvider(dioClient).generateQrCheckin(id);
+      return response.data as Map<String, dynamic>;
+    } on DioException catch (dioError) {
+      log('DioError (generer-qr-checkin): ${dioError.message}');
+      throw Exception('Failed to generate check-in QR: ${dioError.message}');
+    } catch (error) {
+      log('Error (generer-qr-checkin): $error');
+      throw Exception('Failed to generate check-in QR: $error');
+    }
+  }
+
   Future<ReservationResponse> createBooking(
       {required ReservationRequestBody model}) async {
     try {

@@ -49,4 +49,7 @@ abstract class ReservationProvider {
     @Path() String id,
     @Body() Map<String, dynamic> body,
   );
+
+  @POST("/reservations/{id}/action/generer-qr-checkin")
+  Future<HttpResponse> generateQrCheckin(@Path() String id);
 }

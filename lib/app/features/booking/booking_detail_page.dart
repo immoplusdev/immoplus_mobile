@@ -21,9 +21,11 @@ import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart'
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
+import 'dart:async';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class BookingDetailPage extends StatefulWidget {
   const BookingDetailPage(
@@ -43,10 +45,59 @@ class BookingDetailPage extends StatefulWidget {
 
 class _BookingDetailPageState extends State<BookingDetailPage> {
   bool _hasAutoShownRating = false;
+  String? _qrPayload;
+  bool _isLoadingQr = false;
+  String? _qrError;
+  Timer? _qrTimer;
+
   @override
   void initState() {
     super.initState();
     context.read<BookingCubit>().getBooking(id: widget.id);
+  }
+
+  @override
+  void dispose() {
+    _qrTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadQrCheckin() async {
+    if (!mounted) return;
+    _qrTimer?.cancel();
+    setState(() {
+      _isLoadingQr = true;
+      _qrError = null;
+    });
+
+    try {
+      final repository = context.read<BookingCubit>().residenceRepository;
+      final response = await repository.generateQrCheckin(id: widget.id);
+      if (!mounted) return;
+
+      final data = response['data'] as Map<String, dynamic>?;
+      if (data != null && data['qrPayload'] != null) {
+        final payload = data['qrPayload'] as String;
+        final refreshSeconds = data['refreshInSeconds'] as int? ?? 45;
+        setState(() {
+          _qrPayload = payload;
+          _isLoadingQr = false;
+        });
+        _qrTimer = Timer(Duration(seconds: refreshSeconds), _loadQrCheckin);
+      } else {
+        setState(() {
+          _isLoadingQr = false;
+          _qrError = "Impossible de charger le code QR";
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoadingQr = false;
+        _qrError = "Erreur de connexion pour le code QR";
+      });
+      _qrTimer = Timer(const Duration(seconds: 10), _loadQrCheckin);
+    }
   }
 
   bool hasPaid(ReservationResponse r) =>
@@ -58,12 +109,17 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
       listener: (context, state) {
         if (state is RECEIVE_BOOKING) {
           final res = state.reservationResponse.data;
+          final paid = hasPaid(state.reservationResponse);
+          if (paid && _qrPayload == null && !_isLoadingQr && _qrError == null) {
+            _loadQrCheckin();
+          }
           if (widget.autoShowRating &&
               !_hasAutoShownRating &&
               res.ratingStatus == RatingStatus.pending) {
             _hasAutoShownRating = true;
             WidgetsBinding.instance.addPostFrameCallback((_) async {
-              final result = await RatingBottomSheet.show(context, reservation: res);
+              final result =
+                  await RatingBottomSheet.show(context, reservation: res);
               if (result == true && mounted) {
                 context.read<BookingCubit>().getBooking(id: widget.id);
               }
@@ -364,6 +420,10 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ],
                   ),
+                  if (paid) ...[
+                    const Gap(12),
+                    _buildQrCheckinSection(),
+                  ],
                 ],
               ),
             ),
@@ -407,9 +467,13 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                           child: FilledButton.icon(
                             onPressed: () async {
-                              final result = await RatingBottomSheet.show(context, reservation: res);
+                              final result = await RatingBottomSheet.show(
+                                  context,
+                                  reservation: res);
                               if (result == true && context.mounted) {
-                                context.read<BookingCubit>().getBooking(id: widget.id);
+                                context
+                                    .read<BookingCubit>()
+                                    .getBooking(id: widget.id);
                               }
                             },
                             icon: const Icon(Iconsax.star, size: 18),
@@ -478,6 +542,120 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
 
         return const LoadingPage();
       },
+    );
+  }
+
+  Widget _buildQrCheckinSection() {
+    return _SectionCard(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                _IconBox(icon: Iconsax.scan_barcode, color: Colors.blue),
+                const Gap(12),
+                Expanded(
+                  child: Text(
+                    'Présentez ce code QR à l\'arrivée',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: Colors.grey[500]),
+                  ),
+                ),
+              ],
+            ),
+            const Gap(16),
+            if (_isLoadingQr && _qrPayload == null)
+              const SizedBox(
+                height: 200,
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else if (_qrError != null && _qrPayload == null)
+              SizedBox(
+                height: 200,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _qrError!,
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(8),
+                      TextButton.icon(
+                        onPressed: _loadQrCheckin,
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Réessayer'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else if (_qrPayload != null) ...[
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey[200]!),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: QrImageView(
+                      data: _qrPayload!,
+                      version: QrVersions.auto,
+                      size: 180.0,
+                      gapless: false,
+                    ),
+                  ),
+                  if (_isLoadingQr)
+                    Container(
+                      width: 204,
+                      height: 204,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
+              ),
+              const Gap(12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                    height: 10,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const Gap(8),
+                  Text(
+                    'Mise à jour automatique sécurisée...',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: Colors.grey[500]),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ],
     );
   }
 }

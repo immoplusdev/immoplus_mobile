@@ -161,6 +161,7 @@ dependencies:
   flutter_polyline_points: ^3.1.0
   flutter_inappwebview: ^6.1.5
   flutter_stripe: ^11.4.0
+  qr_flutter: ^4.1.0
 
 
 dev_dependencies:
@@ -182,6 +183,10 @@ dev_dependencies:
 flutter_gen:
   output: lib/gen/
   line_length: 80
+  assets:
+    exclude:
+      - .env.dev
+      - .env.prod
 
 flutter_launcher_icons:
   android: "launcher_icon"
