@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,6 +45,8 @@ enum BannerAction {
 //     subtitle: 'Réglez votre visite en un clic',
 //     ctaLabel: 'Payer 5 000 FCFA',
 //     ctaUrl: '/payer_express',
+//     bgColor: '#0066FF',
+//     textColor: '#FFFFFF',
 //     metadata: {
 //       'demande_visite_id': 'VISIT-123',
 //       'montant_total': 5000,
@@ -55,6 +58,8 @@ enum BannerAction {
 //     subtitle: '5 nouvelles offres correspondent à vos critères',
 //     ctaLabel: 'Voir les offres',
 //     ctaUrl: '/mes_alertes',
+//     bgColor: '#8B5CF6',
+//     textColor: '#FFFFFF',
 //     metadata: {
 //       'alert_id': 'ALERT-456',
 //       'nb_propositions': 5,
@@ -66,6 +71,8 @@ enum BannerAction {
 //     subtitle: 'Modifiez vos critères de recherche',
 //     ctaLabel: 'Mes alertes',
 //     ctaUrl: '/mes_alertes',
+//     bgColor: '#34D399',
+//     textColor: '#FFFFFF',
 //     metadata: {
 //       'nb_propositions': 0,
 //     },
@@ -196,60 +203,64 @@ class BannerItem extends StatelessWidget {
       decorationColor: defaultColor,
     );
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        if (banner.icon != null) ...[
-          Icon(
-            _getIconData(banner.icon!),
-            color: defaultColor,
-            size: 20,
+    return FadeIn(
+      key: ValueKey('banner_item_${banner.id}'),
+      duration: const Duration(milliseconds: 600),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (banner.icon != null) ...[
+            Icon(
+              _getIconData(banner.icon!),
+              color: defaultColor,
+              size: 20,
+            ),
+            const Gap(6),
+          ],
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Text(
+                    banner.subtitle ?? '',
+                    style: textStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (banner.ctaLabel != null) ...[
+                  const Gap(8),
+                  GestureDetector(
+                    onTap: () => _handleAction(context, banner.ctaUrl),
+                    child: Text(
+                      banner.ctaLabel!,
+                      style: ctaStyle,
+                    ),
+                  ),
+                ],
+                if (banner.cta2Label != null) ...[
+                  const Gap(8),
+                  GestureDetector(
+                    onTap: () => _handleAction(context, banner.cta2Url),
+                    child: Text(
+                      banner.cta2Label!,
+                      style: ctaStyle,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-          const Gap(6),
+          if (onDismiss != null)
+            IconButton(
+              icon: Icon(Icons.close, color: defaultColor, size: 16),
+              padding: const EdgeInsets.all(6),
+              constraints: const BoxConstraints(),
+              onPressed: onDismiss,
+            ),
         ],
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  banner.subtitle ?? '',
-                  style: textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (banner.ctaLabel != null) ...[
-                const Gap(8),
-                GestureDetector(
-                  onTap: () => _handleAction(context, banner.ctaUrl),
-                  child: Text(
-                    banner.ctaLabel!,
-                    style: ctaStyle,
-                  ),
-                ),
-              ],
-              if (banner.cta2Label != null) ...[
-                const Gap(8),
-                GestureDetector(
-                  onTap: () => _handleAction(context, banner.cta2Url),
-                  child: Text(
-                    banner.cta2Label!,
-                    style: ctaStyle,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        if (onDismiss != null)
-          IconButton(
-            icon: Icon(Icons.close, color: defaultColor, size: 16),
-            padding: const EdgeInsets.all(6),
-            constraints: const BoxConstraints(),
-            onPressed: onDismiss,
-          ),
-      ],
+      ),
     );
   }
 }

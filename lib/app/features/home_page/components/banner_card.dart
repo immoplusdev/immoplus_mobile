@@ -35,24 +35,27 @@ class _BannerCardState extends State<BannerCard> {
           success: (banners) => banners,
           orElse: () => <BannerModel>[],
         );
+        final activeBanners = apiBanners;
+        // Remplacez par testBanners pour tester localement
 
-        // Pas de bannières ou fermée par l'utilisateur : rien à afficher, la
-        // banniere est totalement dissociée de la barre de recherche.
-        if (apiBanners.isEmpty || _isDismissed) {
+        // Pas de bannières ou fermée par l'utilisateur : rien à afficher
+        if (activeBanners.isEmpty || _isDismissed) {
           return const SizedBox.shrink(key: ValueKey('banner_hidden'));
         }
 
         return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 500),
-          switchInCurve: Curves.easeOutQuart,
-          switchOutCurve: Curves.easeInQuart,
-          child: Container(
-            key: const ValueKey('banner_active'),
+          duration: const Duration(milliseconds: 400),
+          switchInCurve: Curves.easeInOut,
+          switchOutCurve: Curves.easeInOut,
+          child: AnimatedContainer(
+            key: const ValueKey('banner_visible'),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
             decoration: BoxDecoration(
-              color: _getBackgroundColor(apiBanners),
+              color: _getBackgroundColor(activeBanners),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
@@ -60,7 +63,7 @@ class _BannerCardState extends State<BannerCard> {
               children: [
                 CarouselSlider.builder(
                   carouselController: _carouselController,
-                  itemCount: apiBanners.length,
+                  itemCount: activeBanners.length,
                   options: CarouselOptions(
                     height: 24,
                     viewportFraction: 1.0,
@@ -73,7 +76,7 @@ class _BannerCardState extends State<BannerCard> {
                   ),
                   itemBuilder: (context, index, realIndex) {
                     return BannerItem(
-                      banner: apiBanners[index],
+                      banner: activeBanners[index],
                       onDismiss: () {
                         setState(() {
                           _isDismissed = true;
@@ -84,7 +87,7 @@ class _BannerCardState extends State<BannerCard> {
                   },
                 ),
                 const Gap(2),
-                _buildDots(apiBanners.length),
+                _buildDots(activeBanners.length),
               ],
             ),
           ),
