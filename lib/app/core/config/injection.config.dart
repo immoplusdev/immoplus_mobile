@@ -173,10 +173,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i143.ResidenceRepository>(),
           gh<_i398.BienImmobilierRepository>(),
         ));
-    gh.factory<_i715.UserPreferenceRepository>(
-        () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
     gh.factory<_i568.RatingRepository>(
         () => _i568.RatingRepository(gh<_i361.Dio>()));
+    gh.factory<_i715.UserPreferenceRepository>(
+        () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
     gh.lazySingleton<_i342.ChatHistoryService>(
         () => _i342.ChatHistoryService(gh<_i361.Dio>()));
     gh.factory<_i237.BookingCubit>(() => _i237.BookingCubit(

@@ -10,6 +10,7 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
@@ -180,16 +181,19 @@ class BannerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultColor = Utils.parseColor(banner.textColor) ?? Colors.white;
+
     final textStyle = GoogleFonts.plusJakartaSans(
-      color: Colors.white,
+      color: defaultColor,
       fontSize: 12,
       fontWeight: FontWeight.w500,
     );
     final ctaStyle = GoogleFonts.plusJakartaSans(
-      color: Colors.white,
+      color: defaultColor,
       fontSize: 12,
       fontWeight: FontWeight.bold,
       decoration: TextDecoration.underline,
+      decorationColor: defaultColor,
     );
 
     return Row(
@@ -198,7 +202,7 @@ class BannerItem extends StatelessWidget {
         if (banner.icon != null) ...[
           Icon(
             _getIconData(banner.icon!),
-            color: Colors.white,
+            color: defaultColor,
             size: 20,
           ),
           const Gap(6),
@@ -240,7 +244,7 @@ class BannerItem extends StatelessWidget {
         ),
         if (onDismiss != null)
           IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 16),
+            icon: Icon(Icons.close, color: defaultColor, size: 16),
             padding: const EdgeInsets.all(6),
             constraints: const BoxConstraints(),
             onPressed: onDismiss,

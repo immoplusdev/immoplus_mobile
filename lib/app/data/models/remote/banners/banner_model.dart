@@ -25,6 +25,7 @@ class BannerModel with _$BannerModel {
     @JsonKey(name: 'cta2_url') String? cta2Url,
     String? icon,
     @JsonKey(name: 'bg_color') String? bgColor,
+    @JsonKey(name: 'text_color') String? textColor,
     String? type,
     String? audience,
     int? order,

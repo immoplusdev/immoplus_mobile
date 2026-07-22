@@ -6,6 +6,7 @@ import 'package:immoplus/app/features/home_page/components/banner_item.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/logic/banners/banners_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:gap/gap.dart';
 
 class BannerCard extends StatefulWidget {
@@ -94,14 +95,8 @@ class _BannerCardState extends State<BannerCard> {
 
   Color _getBackgroundColor(List<BannerModel> apiBanners) {
     if (_currentIndex >= 0 && _currentIndex < apiBanners.length) {
-      final colorStr = apiBanners[_currentIndex].bgColor;
-      if (colorStr != null && colorStr.isNotEmpty) {
-        try {
-          return Color(int.parse(colorStr.replaceAll('#', '0xFF')));
-        } catch (_) {
-          return AppColors.customBlue;
-        }
-      }
+      return Utils.parseColor(apiBanners[_currentIndex].bgColor) ??
+          AppColors.customBlue;
     }
     return AppColors.customBlue;
   }
