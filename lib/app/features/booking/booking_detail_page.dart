@@ -110,7 +110,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         if (state is RECEIVE_BOOKING) {
           final res = state.reservationResponse.data;
           final paid = hasPaid(state.reservationResponse);
-          if (paid && _qrPayload == null && !_isLoadingQr && _qrError == null) {
+          if (res.isCheckinValide) {
+            _qrTimer?.cancel();
+            _qrTimer = null;
+          }
+          if (paid &&
+              res.checkinNotValide &&
+              _qrPayload == null &&
+              !_isLoadingQr &&
+              _qrError == null) {
             _loadQrCheckin();
           }
           if (widget.autoShowRating &&
@@ -420,7 +428,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ],
                   ),
-                  if (paid) ...[
+                  if (paid && res.checkinNotValide) ...[
                     const Gap(12),
                     _buildQrCheckinSection(),
                   ],

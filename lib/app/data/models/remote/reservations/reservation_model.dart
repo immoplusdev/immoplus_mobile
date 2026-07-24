@@ -31,6 +31,8 @@ class ReservationModel with _$ReservationModel {
     @Default(null) String? delaisPaiementClient,
     @Default(null) bool? ratingsNotified,
     @Default(null) RatingStatus? ratingStatus,
+    @Default(null) bool? checkinValide,
+    @Default(null) String? checkinValideAt,
     @Default(ResidenceModel()) ResidenceModel residence,
     @Default(ClientModel()) ClientModel client,
     @Default(ProprietaireModel()) ProprietaireModel proprietaire,
@@ -43,4 +45,7 @@ class ReservationModel with _$ReservationModel {
 extension ReservationModelX on ReservationModel {
   StatusReservation? get statusEnum =>
       StatusReservation.fromString(statusReservation);
+
+  bool get checkinNotValide => checkinValide != true;
+  bool get isCheckinValide => checkinValide == true;
 }

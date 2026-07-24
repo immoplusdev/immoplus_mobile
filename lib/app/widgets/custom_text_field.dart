@@ -31,6 +31,7 @@ class CustomTextField extends StatefulWidget {
     this.contentPadding,
     this.readOnly = false,
     this.bottomPadding,
+    this.isDense = false,
   });
   final String? labelText;
   final Widget? sufixIcon;
@@ -58,6 +59,7 @@ class CustomTextField extends StatefulWidget {
   final EdgeInsets? contentPadding;
   final bool readOnly;
   final double? bottomPadding;
+  final bool isDense;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
@@ -90,6 +92,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: EdgeInsets.only(bottom: widget.bottomPadding ?? 10),
       child: TextFormField(
+        textAlignVertical: TextAlignVertical.center,
         readOnly: widget.readOnly,
         enabled: widget.isEnabled,
         style: (widget.fontSize != null)
@@ -115,6 +118,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         cursorHeight: 16,
         focusNode: _textFieldFocus,
         decoration: InputDecoration(
+          isDense: widget.isDense,
           errorStyle: const TextStyle(color: Colors.redAccent),
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 20),

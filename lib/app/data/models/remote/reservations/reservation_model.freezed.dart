@@ -41,6 +41,8 @@ mixin _$ReservationModel {
   String? get delaisPaiementClient => throw _privateConstructorUsedError;
   bool? get ratingsNotified => throw _privateConstructorUsedError;
   RatingStatus? get ratingStatus => throw _privateConstructorUsedError;
+  bool? get checkinValide => throw _privateConstructorUsedError;
+  String? get checkinValideAt => throw _privateConstructorUsedError;
   ResidenceModel get residence => throw _privateConstructorUsedError;
   ClientModel get client => throw _privateConstructorUsedError;
   ProprietaireModel get proprietaire => throw _privateConstructorUsedError;
@@ -81,6 +83,8 @@ abstract class $ReservationModelCopyWith<$Res> {
       String? delaisPaiementClient,
       bool? ratingsNotified,
       RatingStatus? ratingStatus,
+      bool? checkinValide,
+      String? checkinValideAt,
       ResidenceModel residence,
       ClientModel client,
       ProprietaireModel proprietaire});
@@ -124,6 +128,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     Object? delaisPaiementClient = freezed,
     Object? ratingsNotified = freezed,
     Object? ratingStatus = freezed,
+    Object? checkinValide = freezed,
+    Object? checkinValideAt = freezed,
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
@@ -205,6 +211,14 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
           ? _value.ratingStatus
           : ratingStatus // ignore: cast_nullable_to_non_nullable
               as RatingStatus?,
+      checkinValide: freezed == checkinValide
+          ? _value.checkinValide
+          : checkinValide // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      checkinValideAt: freezed == checkinValideAt
+          ? _value.checkinValideAt
+          : checkinValideAt // ignore: cast_nullable_to_non_nullable
+              as String?,
       residence: null == residence
           ? _value.residence
           : residence // ignore: cast_nullable_to_non_nullable
@@ -279,6 +293,8 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
       String? delaisPaiementClient,
       bool? ratingsNotified,
       RatingStatus? ratingStatus,
+      bool? checkinValide,
+      String? checkinValideAt,
       ResidenceModel residence,
       ClientModel client,
       ProprietaireModel proprietaire});
@@ -323,6 +339,8 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
     Object? delaisPaiementClient = freezed,
     Object? ratingsNotified = freezed,
     Object? ratingStatus = freezed,
+    Object? checkinValide = freezed,
+    Object? checkinValideAt = freezed,
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
@@ -404,6 +422,14 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
           ? _value.ratingStatus
           : ratingStatus // ignore: cast_nullable_to_non_nullable
               as RatingStatus?,
+      checkinValide: freezed == checkinValide
+          ? _value.checkinValide
+          : checkinValide // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      checkinValideAt: freezed == checkinValideAt
+          ? _value.checkinValideAt
+          : checkinValideAt // ignore: cast_nullable_to_non_nullable
+              as String?,
       residence: null == residence
           ? _value.residence
           : residence // ignore: cast_nullable_to_non_nullable
@@ -443,6 +469,8 @@ class _$ReservationModelImpl implements _ReservationModel {
       this.delaisPaiementClient = null,
       this.ratingsNotified = null,
       this.ratingStatus = null,
+      this.checkinValide = null,
+      this.checkinValideAt = null,
       this.residence = const ResidenceModel(),
       this.client = const ClientModel(),
       this.proprietaire = const ProprietaireModel()})
@@ -517,6 +545,12 @@ class _$ReservationModelImpl implements _ReservationModel {
   final RatingStatus? ratingStatus;
   @override
   @JsonKey()
+  final bool? checkinValide;
+  @override
+  @JsonKey()
+  final String? checkinValideAt;
+  @override
+  @JsonKey()
   final ResidenceModel residence;
   @override
   @JsonKey()
@@ -527,7 +561,7 @@ class _$ReservationModelImpl implements _ReservationModel {
 
   @override
   String toString() {
-    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, ratingsNotified: $ratingsNotified, ratingStatus: $ratingStatus, residence: $residence, client: $client, proprietaire: $proprietaire)';
+    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, ratingsNotified: $ratingsNotified, ratingStatus: $ratingStatus, checkinValide: $checkinValide, checkinValideAt: $checkinValideAt, residence: $residence, client: $client, proprietaire: $proprietaire)';
   }
 
   @override
@@ -547,8 +581,7 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.statusFacture == statusFacture) &&
             (identical(other.retraitProEffectue, retraitProEffectue) ||
                 other.retraitProEffectue == retraitProEffectue) &&
-            (identical(
-                    other.montantTotalReservation, montantTotalReservation) ||
+            (identical(other.montantTotalReservation, montantTotalReservation) ||
                 other.montantTotalReservation == montantTotalReservation) &&
             (identical(other.montantReservationSansCommission,
                     montantReservationSansCommission) ||
@@ -574,6 +607,10 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.ratingsNotified == ratingsNotified) &&
             (identical(other.ratingStatus, ratingStatus) ||
                 other.ratingStatus == ratingStatus) &&
+            (identical(other.checkinValide, checkinValide) ||
+                other.checkinValide == checkinValide) &&
+            (identical(other.checkinValideAt, checkinValideAt) ||
+                other.checkinValideAt == checkinValideAt) &&
             (identical(other.residence, residence) ||
                 other.residence == residence) &&
             (identical(other.client, client) || other.client == client) &&
@@ -604,6 +641,8 @@ class _$ReservationModelImpl implements _ReservationModel {
         delaisPaiementClient,
         ratingsNotified,
         ratingStatus,
+        checkinValide,
+        checkinValideAt,
         residence,
         client,
         proprietaire
@@ -647,6 +686,8 @@ abstract class _ReservationModel implements ReservationModel {
       final String? delaisPaiementClient,
       final bool? ratingsNotified,
       final RatingStatus? ratingStatus,
+      final bool? checkinValide,
+      final String? checkinValideAt,
       final ResidenceModel residence,
       final ClientModel client,
       final ProprietaireModel proprietaire}) = _$ReservationModelImpl;
@@ -692,6 +733,10 @@ abstract class _ReservationModel implements ReservationModel {
   bool? get ratingsNotified;
   @override
   RatingStatus? get ratingStatus;
+  @override
+  bool? get checkinValide;
+  @override
+  String? get checkinValideAt;
   @override
   ResidenceModel get residence;
   @override

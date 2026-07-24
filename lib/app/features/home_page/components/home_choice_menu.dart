@@ -11,12 +11,12 @@ class _Constants {
   static const double menuHeight = 50.0;
   static const double horizontalPadding = 8.0;
   static const double itemSpacing = 8.0;
-  static const double itemHorizontalPadding = 6.0;
-  static const double itemVerticalPadding = 5.0;
+  static const double itemHorizontalPadding = 5.0;
+  static const double itemVerticalPadding = 4.0;
   static const double borderRadius = 20.0;
   static const double borderWidth = 1.0;
   static const double borderOpacity = 0.3;
-  static const double imageSize = 32.0;
+  static const double imageSize = 28.0;
   static const double textIconGap = 6.0;
 }
 
@@ -92,6 +92,7 @@ class HomeChoiceMenu extends StatelessWidget {
                           tab.label,
                           style:
                               Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w600,
                                     color: isSelected
                                         ? Colors.white
