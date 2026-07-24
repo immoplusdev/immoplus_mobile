@@ -1,6 +1,7 @@
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/reservation_socket_service.dart';
 import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
@@ -69,6 +70,9 @@ class SessionManager {
       await isarConfig.instance.userModelSchemas.put(user);
     });
     currentUser = user;
+    // Login, inscription ou refresh token : (re)connecte le socket réservations
+    // avec le token à jour (le handshake n'est vérifié qu'à la connexion).
+    ReservationSocketService.connect(user.accessToken);
   }
 
   /// logout user clear session and navigate to login page
@@ -93,6 +97,9 @@ class SessionManager {
           await isarConfig.instance.userModelSchemas.where().findFirst();
       if (user != null) {
         currentUser = user;
+        // Session déjà ouverte au démarrage de l'app (cold start) : connecte
+        // le socket réservations sans attendre une action de login explicite.
+        ReservationSocketService.connect(user.accessToken);
       }
     }
 
@@ -113,6 +120,7 @@ class SessionManager {
       await isarConfig.instance.userModelSchemas.clear();
     });
     currentUser = null;
+    ReservationSocketService.disconnect();
   }
 
   Future<UserModelSchema?> getUserInIsolate() async {
