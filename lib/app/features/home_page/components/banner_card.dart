@@ -67,7 +67,11 @@ class _BannerCardState extends State<BannerCard> {
                   options: CarouselOptions(
                     height: 24,
                     viewportFraction: 1.0,
-                    enableInfiniteScroll: false,
+                    enableInfiniteScroll: activeBanners.length > 1,
+                    autoPlay: activeBanners.length > 1,
+                    autoPlayInterval: const Duration(seconds: 4),
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
                     onPageChanged: (index, reason) {
                       setState(() {
                         _currentIndex = index;

@@ -72,3 +72,11 @@ Un dossier `notification_tests` a été créé à la racine du projet contenant 
 - `test_mktg_visit.apns` : Redirige vers l'historique des visites expresses (`cliOnb05`).
 - `test_mktg_residence.apns` : Redirige vers la page de suggestion/résidence (`cliNurt01`).
 - `test_mktg_alert.apns` : Redirige vers la liste des alertes (`cliNurtAl01`).
+
+## Gestion des Timeouts et des Re-tentatives (Retries)
+
+Pour éviter les erreurs de type `DioError: The request connection took longer than 0:00:10.000000 and it was aborted` (très courantes lors du chargement simultané de multiples sections réseau sur des connexions mobiles instables) :
+
+1. **Timeouts Globaux Augmentés** : Dans [dio_config.dart](file:///Users/kitoko/Documents/applications/immoplus/lib/app/core/network/dio_config.dart), la configuration des paramètres `connectTimeout` et `receiveTimeout` a été élevée de 10 à **30 secondes** pour laisser aux requêtes lentes le temps de s'établir.
+2. **RetryInterceptor (Re-tentatives Automatiques)** : Un interceptor personnalisé [RetryInterceptor](file:///Users/kitoko/Documents/applications/immoplus/lib/app/core/network/interceptors/retry_interceptor.dart) a été ajouté au client global Dio. Il intercepte automatiquement les exceptions réseau de type timeout ou erreur de connexion et relance la requête jusqu'à **3 fois** avec un délai de reprise exponentiel (`2s`, `4s`, `6s`).
+   - **Sécurité des requêtes non-idempotentes** : L'intercepteur ne réessaie les requêtes `POST`/`PUT`/`DELETE` que si l'erreur survient lors de l'établissement initial de la connexion (avant envoi de la charge utile). Les requêtes de type `GET` sont toujours réessayées en cas de timeout de réception.
