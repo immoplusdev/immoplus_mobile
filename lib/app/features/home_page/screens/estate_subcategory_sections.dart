@@ -9,6 +9,8 @@ import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/features/home_page/screens/location_biens_page.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_bien_card.dart';
+import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
+import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
@@ -128,7 +130,8 @@ class _EstateSubCategorySectionsListState
                 : i + batchSize);
 
         final futures = batch.map((section) async {
-          final where = _buildWhereForCategory(defaultFilters, section.category);
+          final where =
+              _buildWhereForCategory(defaultFilters, section.category);
 
           try {
             final result = await bienImmobilierRepository.getBiensImmobiliers(
@@ -179,20 +182,61 @@ class _EstateSubCategorySectionsListState
   Widget build(BuildContext context) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final item = _displayList[index];
-            return BiensHorizontalListBySubCategory(
-              key: ValueKey('estate_subcategory_${item.category.name}'),
-              title: item.title,
-              category: item.category,
-              biens: item.biens,
-            );
-          },
-          childCount: _displayList.length,
-        ),
-      ),
+      sliver: _isBackgroundLoading && _displayList.isEmpty
+          ? SliverToBoxAdapter(
+              child: Column(
+                children: List.generate(
+                  3,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(15),
+                        const SizedBox(
+                          width: 150,
+                          height: 20,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
+                            ),
+                          ),
+                        ),
+                        const Gap(10),
+                        SizedBox(
+                          height: 255,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            separatorBuilder: (context, index) => const Gap(12),
+                            itemBuilder: (context, index) => SizedBox(
+                              width: neirResidenceCardWidth,
+                              child: LoadProductCard(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final item = _displayList[index];
+                  return BiensHorizontalListBySubCategory(
+                    key: ValueKey('estate_subcategory_${item.category.name}'),
+                    title: item.title,
+                    category: item.category,
+                    biens: item.biens,
+                  );
+                },
+                childCount: _displayList.length,
+              ),
+            ),
     );
   }
 }
