@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/data/constants/home_location_items.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
@@ -14,11 +13,9 @@ import 'package:immoplus/app/features/home_page/screens/residences_near_list.dar
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
-import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
-import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
@@ -31,16 +28,15 @@ class ResidencesList extends StatefulWidget {
 
 class _ResidencesListState extends State<ResidencesList>
     with ConnectivityMixin {
-  bool _isParentLoading = true;
-  List<_LocationSectionData> _activeSections = [];
-  List<dynamic> _displayList = [];
+  final List<_LocationSectionData> _displayList = [];
+  bool _isBackgroundLoading = false;
 
   void _onPageRequest(int pageKey) => loadPage(pageKey);
 
   @override
   void onConnectionRestored() {
-    if (_activeSections.isEmpty) {
-      _loadAllSections();
+    if (_displayList.isEmpty && !_isBackgroundLoading) {
+      _loadAllSectionsInBackground();
     }
   }
 
@@ -79,7 +75,7 @@ class _ResidencesListState extends State<ResidencesList>
     HomePageState.pagingControllerResidence
         .addPageRequestListener(_onPageRequest);
     HomePageState.refreshResidences();
-    _loadAllSections();
+    _loadAllSectionsInBackground();
     setupConnectivityListener();
   }
 
@@ -91,17 +87,16 @@ class _ResidencesListState extends State<ResidencesList>
     super.dispose();
   }
 
-  Future<void> _loadAllSections() async {
+  Future<void> _loadAllSectionsInBackground() async {
     if (!mounted) return;
     setState(() {
-      _isParentLoading = true;
-      _activeSections.clear();
+      _isBackgroundLoading = true;
       _displayList.clear();
     });
 
     try {
       final itemsToLoad = _homeItems.where((i) => !i.isHeader).toList();
-      const int batchSize = 4;
+      const int batchSize = 2; // Fetch in light batches of 2 in background
 
       for (int i = 0; i < itemsToLoad.length; i += batchSize) {
         if (!mounted) break;
@@ -127,74 +122,43 @@ class _ResidencesListState extends State<ResidencesList>
               where: where,
             );
             final list = result.data ?? [];
-            return _LocationSectionData(
-              title: item.title,
-              villeId: item.villeId,
-              communeId: item.communeId,
-              residences: list,
-            );
+            if (list.isNotEmpty) {
+              return _LocationSectionData(
+                title: item.title,
+                villeId: item.villeId,
+                communeId: item.communeId,
+                residences: list,
+              );
+            }
           } catch (e) {
             debugPrint('Error loading section ${item.title}: $e');
-            return null; // On retourne null pour ne pas bloquer les autres
           }
+          return null;
         }).toList();
 
         final results = await Future.wait(futures);
-
         if (!mounted) break;
 
-        bool hasNewData = false;
+        final List<_LocationSectionData> loadedSections = [];
         for (var r in results) {
           if (r != null) {
-            _activeSections.add(r);
-            hasNewData = true;
+            loadedSections.add(r);
           }
         }
 
-        // Met à jour l'interface progressivement pour que l'utilisateur n'attende pas la fin totale
-        if (hasNewData) {
+        if (loadedSections.isNotEmpty) {
           setState(() {
-            _displayList = _buildDisplayList();
-            _isParentLoading = false;
+            _displayList.addAll(loadedSections);
           });
         }
       }
-
-      if (mounted && _isParentLoading) {
-        setState(() {
-          _isParentLoading = false;
-        });
-      }
-    } catch (e) {
+    } finally {
       if (mounted) {
-        showConnectionErrorDialog();
         setState(() {
-          _isParentLoading = false;
+          _isBackgroundLoading = false;
         });
       }
     }
-  }
-
-  List<dynamic> _buildDisplayList() {
-    final List<dynamic> list = [];
-    for (var item in _homeItems) {
-      if (item.isHeader) continue;
-
-      final loaded = _activeSections.cast<_LocationSectionData?>().firstWhere(
-            (s) =>
-                s != null &&
-                s.villeId == item.villeId &&
-                s.communeId == item.communeId,
-            orElse: () => null,
-          );
-      bool isLoad = loaded != null && loaded.residences.isNotEmpty;
-      // bool isLoad = loaded != null; pour afficher les empty state
-
-      if (isLoad) {
-        list.add(loaded);
-      }
-    }
-    return list;
   }
 
   @override
@@ -226,78 +190,31 @@ class _ResidencesListState extends State<ResidencesList>
                         );
                       },
                     ),
-                    // const HomeSectionTitle(title: "Ce qu'il vous faut"),
-                    // const Gap(13),
                   ],
                 ),
               ),
             );
           },
         ),
-        if (_isParentLoading)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                children: List.generate(
-                  3,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Gap(15),
-                        const SizedBox(
-                          width: 150,
-                          height: 20,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4)),
-                            ),
-                          ),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                          height: compactResidenceCardHeight,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            separatorBuilder: (context, index) => const Gap(12),
-                            itemBuilder: (context, index) => SizedBox(
-                              width: neirResidenceCardWidth,
-                              child: LoadProductCard(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = _displayList[index];
+                return ResidencesHorizontalListByLocation(
+                  key: ValueKey(
+                      'location_residences_${item.villeId ?? item.communeId}'),
+                  title: item.title,
+                  villeId: item.villeId,
+                  communeId: item.communeId,
+                  residences: item.residences,
+                );
+              },
+              childCount: _displayList.length,
             ),
           ),
-        if (!_isParentLoading)
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final item = _displayList[index] as _LocationSectionData;
-                  return ResidencesHorizontalListByLocation(
-                    key: ValueKey(
-                        'location_residences_${item.villeId ?? item.communeId}'),
-                    title: item.title,
-                    villeId: item.villeId,
-                    communeId: item.communeId,
-                    residences: item.residences,
-                  );
-                },
-                childCount: _displayList.length,
-              ),
-            ),
-          ),
+        ),
       ],
     );
   }
@@ -334,7 +251,6 @@ final List<HomeListItem> _homeItems = [
       title: "San-Pédro", villeId: "8b97ea35-a507-11ef-8b44-0e595bc2ce41"),
 
   // --- Section 2 : Communes d'Abidjan ---
-  // const HomeListItem(title: "COMMUNES D'ABIDJAN", isHeader: true),
   const HomeListItem(
       title: "Abobo", communeId: "8bb4b211-a507-11ef-8b44-0e595bc2ce41"),
   const HomeListItem(
@@ -365,7 +281,6 @@ final List<HomeListItem> _homeItems = [
       title: "Bonoua", communeId: "8bb80dca-a507-11ef-8b44-0e595bc2ce41"),
 
   // --- Section 3 : Villes extérieures ---
-  // const HomeListItem(title: "VILLES EXTÉRIEURES", isHeader: true),
   const HomeListItem(
       title: "Abengourou", villeId: "8b980686-a507-11ef-8b44-0e595bc2ce41"),
   const HomeListItem(
@@ -441,8 +356,7 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color:
-                    residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
+                color: residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -451,51 +365,20 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
           ],
         ),
         const Gap(12),
-        if (residences.isEmpty)
-          Container(
-            height: 100,
-            width: double.infinity,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.location_off_outlined,
-                  color: Colors.grey.shade400,
-                  size: 28,
-                ),
-                const Gap(6),
-                Text(
-                  "Aucune résidence disponible dans cette localité",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ],
-            ),
-          )
-        else
-          SizedBox(
-            height: compactResidenceCardHeight,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: residences.length,
-              separatorBuilder: (context, index) => const Gap(12),
-              itemBuilder: (context, index) {
-                return CompactResidenceCard(
-                  residence: residences[index],
-                  showRating: false,
-                );
-              },
-            ),
+        SizedBox(
+          height: compactResidenceCardHeight,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: residences.length,
+            separatorBuilder: (context, index) => const Gap(12),
+            itemBuilder: (context, index) {
+              return CompactResidenceCard(
+                residence: residences[index],
+                showRating: false,
+              );
+            },
           ),
+        ),
       ],
     );
   }
@@ -516,38 +399,14 @@ class _LocationSectionData {
 }
 
 class AppPrimaryColors {
-  // Couleur principale
   static const Color primary = kPrimaryColor;
-
-  // Variantes plus claires
-  static const Color primary50 = Color(0xffEEF1FC); // Très clair (backgrounds)
-  static const Color primary100 = Color(0xffC5CFF5); // Clair
-  static const Color primary200 = Color(0xff9BADEF); //
-  static const Color primary300 = Color(0xff6B85E6); //
-  static const Color primary400 = Color(0xff4A64E2); // Légèrement plus clair
-
-  // Variantes plus foncées
-  static const Color primary600 = Color(0xff1E35B8); // Plus foncé
-  static const Color primary700 = Color(0xff182A92); // Foncé
-  static const Color primary800 = Color(0xff121F6C); // Très foncé
-  static const Color primary900 = Color(0xff0C1446); // Extra foncé
+  static const Color primary50 = Color(0xffEEF1FC);
+  static const Color primary100 = Color(0xffC5CFF5);
+  static const Color primary200 = Color(0xff9BADEF);
+  static const Color primary300 = Color(0xff6B85E6);
+  static const Color primary400 = Color(0xff4A64E2);
+  static const Color primary600 = Color(0xff1E35B8);
+  static const Color primary700 = Color(0xff182A92);
+  static const Color primary800 = Color(0xff121F6C);
+  static const Color primary900 = Color(0xff0C1446);
 }
-// class _PromoSection extends StatelessWidget {
-//   const _PromoSection();
-
-//   static const List<PromoCardData> _promoItems = [
-//     PromoCardData(backgroundImage: 'assets/promo/promo_1.JPG'),
-//     PromoCardData(backgroundImage: 'assets/promo/promo_2.JPG'),
-//     PromoCardData(backgroundImage: 'assets/promo/promo_3.JPG'),
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return PromoCarousel(
-//       items: _promoItems,
-//       cardWidth: 300,
-//       cardHeight: 325,
-//       spacing: 12,
-//     );
-//   }
-// }
