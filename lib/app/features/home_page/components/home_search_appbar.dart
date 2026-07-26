@@ -564,7 +564,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(50),
+                  preferredSize: const Size.fromHeight(58),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -586,6 +586,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
 }
 
 class _Constants {
-  static const double toolbarHeightWithBanner = 210;
-  static const double toolbarHeightWithoutBanner = 138;
+  static const double toolbarHeightWithBanner = 190;
+  static const double toolbarHeightWithoutBanner = 118;
 }

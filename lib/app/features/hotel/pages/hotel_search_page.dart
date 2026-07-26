@@ -450,10 +450,10 @@ class _HotelSearchPageState extends State<HotelSearchPage>
               ),
               title: Text(
                 "Hôtel",
-                style: GoogleFonts.calSans(
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 22),
+                // style: GoogleFonts.plus(
+                //     color: Colors.white,
+                //     // fontWeight: FontWeight.bold,
+                //     fontSize: 22),
               ),
               centerTitle: true,
               actions: const [
