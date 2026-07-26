@@ -17,6 +17,36 @@ import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/features/home_page/screens/reduction_residences_page.dart';
 
+/// Icônes disponibles pour les bannières, définies côté dashboard
+enum BannerIconType {
+  plusCircle('plus-circle', Iconsax.add_circle5),
+  calendarCheck('calendar-check', Iconsax.calendar_tick5),
+  bell('bell', Iconsax.notification5),
+  home('home', Iconsax.home5),
+  star('star', Iconsax.star5),
+  megaphone('megaphone', Iconsax.speaker5),
+  creditCard('credit-card', Iconsax.card5),
+  checkCircle('check-circle', Iconsax.tick_circle5);
+
+  final String value;
+  final IconData icon;
+  const BannerIconType(this.value, this.icon);
+
+  static IconData iconFor(String? value) {
+    if (value == 'notification') {
+      // Ancien nom historique, conservé pour compatibilité avec des
+      // bannières déjà enregistrées côté dashboard.
+      return BannerIconType.bell.icon;
+    }
+    return BannerIconType.values
+        .firstWhere(
+          (e) => e.value == value,
+          orElse: () => BannerIconType.bell,
+        )
+        .icon;
+  }
+}
+
 enum BannerAction {
   annulerReservation('/annuler_reservation'),
   payerReservation('/payer_reservation'),
@@ -175,20 +205,10 @@ class BannerItem extends StatelessWidget {
     );
   }
 
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'calendar-check':
-        return Iconsax.calendar_tick5;
-      case 'notification':
-        return Iconsax.notification5;
-      default:
-        return Iconsax.notification5;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final defaultColor = Utils.parseColor(banner.textColor) ?? Colors.white;
+    final iconColor = Utils.parseColor(banner.iconColor) ?? defaultColor;
 
     final textStyle = GoogleFonts.plusJakartaSans(
       color: defaultColor,
@@ -211,8 +231,8 @@ class BannerItem extends StatelessWidget {
         children: [
           if (banner.icon != null) ...[
             Icon(
-              _getIconData(banner.icon!),
-              color: defaultColor,
+              BannerIconType.iconFor(banner.icon),
+              color: iconColor,
               size: 20,
             ),
             const Gap(6),
