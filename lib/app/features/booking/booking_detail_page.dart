@@ -500,7 +500,44 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           ),
                         ),
                       )
-                    : null,
+                    : (res.ratingStatus == RatingStatus.rated ||
+                            res.ratingStatus == RatingStatus.expired)
+                        ? SafeArea(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                              child: FilledButton.icon(
+                                onPressed: null,
+                                icon: Icon(
+                                  res.ratingStatus == RatingStatus.rated
+                                      ? Iconsax.star1
+                                      : Iconsax.clock,
+                                  size: 18,
+                                ),
+                                label: Text(
+                                  res.ratingStatus == RatingStatus.rated
+                                      ? 'Déjà noté'
+                                      : 'Notation expirée',
+                                ),
+                                style: FilledButton.styleFrom(
+                                  disabledBackgroundColor:
+                                      Colors.grey.shade300,
+                                  disabledForegroundColor:
+                                      Colors.grey.shade600,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : null,
           );
         }
 

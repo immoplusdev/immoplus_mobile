@@ -32,6 +32,11 @@ class BookingHistoryCard extends StatelessWidget {
   bool get _isRatingPending =>
       reservationModel.ratingStatus == RatingStatus.pending;
 
+  bool get _isRated => reservationModel.ratingStatus == RatingStatus.rated;
+
+  bool get _isRatingExpired =>
+      reservationModel.ratingStatus == RatingStatus.expired;
+
   @override
   Widget build(BuildContext context) {
     final fmt = DateFormat('d MMM yyyy');
@@ -240,6 +245,38 @@ class BookingHistoryCard extends StatelessWidget {
                           'À évaluer',
                           style: TextStyle(
                             color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else if (_isRated || _isRatingExpired)
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _isRated ? Iconsax.star1 : Iconsax.clock,
+                          size: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                        const Gap(4),
+                        Text(
+                          _isRated ? 'Déjà noté' : 'Notation expirée',
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),

@@ -100,7 +100,6 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
             ToastUtils.showSuccess(title: 'Merci pour votre avis !');
             Navigator.pop(context, true);
           },
-          error: (msg) => ToastUtils.showError(title: msg),
           orElse: () {},
         );
       },
