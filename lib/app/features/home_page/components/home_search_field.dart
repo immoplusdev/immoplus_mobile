@@ -35,7 +35,13 @@ class HomeSearchField extends StatefulWidget {
 }
 
 class _HomeSearchFieldState extends State<HomeSearchField> {
-  static const List<String> _cities = ["Abidjan", "Bouaké", "Yamoussoukro"];
+  static const List<String> _cities = [
+    "Un logement",
+    "une résidence",
+    "un appartement",
+    "une villa",
+    "un hôtel"
+  ];
   static const String _placeholder = 'Que cherchez-vous ?';
 
   int _currentCityIndex = 0;
