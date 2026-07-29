@@ -1,0 +1,18 @@
+{
+  "Simulator Target Bundle": "com.immoplus.ci",
+  "aps": {
+    "alert": {
+      "title": "Complétez votre profil",
+      "body": "Définissez vos préférences pour recevoir des recommandations sur mesure."
+    },
+    "sound": "default",
+    "badge": 1
+  },
+  "custom": {
+    "i": "d413346e-b3f9-42b7-8ccb-a91cb2edee70",
+    "a": {
+      "type": "marketing",
+      "code": "CLI-ONB-02"
+    }
+  }
+}

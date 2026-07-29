@@ -9,6 +9,7 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class LocationFurnituresPage extends StatefulWidget {
   final String title;
@@ -26,19 +27,29 @@ class LocationFurnituresPage extends StatefulWidget {
   static const String routeName = 'location-furnitures';
 
   @override
-  State<LocationFurnituresPage> createState() =>
-      _LocationFurnituresPageState();
+  State<LocationFurnituresPage> createState() => _LocationFurnituresPageState();
 }
 
-class _LocationFurnituresPageState extends State<LocationFurnituresPage> {
+class _LocationFurnituresPageState extends State<LocationFurnituresPage>
+    with ConnectivityMixin {
   final PagingController<int, FurnitureModel> _pagingController =
       PagingController(firstPageKey: 1);
   final FurnitureRepository _furnitureRepository = getIt<FurnitureRepository>();
 
   @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     _pagingController.addPageRequestListener(_loadPage);
+    setupConnectivityListener();
   }
 
   Future<void> _loadPage(int pageKey) async {
@@ -67,12 +78,13 @@ class _LocationFurnituresPageState extends State<LocationFurnituresPage> {
         _pagingController.appendLastPage(result.data ?? []);
       }
     } catch (error) {
-      _pagingController.error = error.toString();
+      showConnectionErrorDialog();
     }
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _pagingController.dispose();
     super.dispose();
   }

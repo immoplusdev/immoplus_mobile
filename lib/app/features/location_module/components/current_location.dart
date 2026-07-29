@@ -64,8 +64,7 @@ class _LocationTile extends StatelessWidget {
                   : Icon(
                       Iconsax.gps,
                       size: 22,
-                      color:
-                          hasError ? Colors.red.shade400 : AppColors.primary,
+                      color: hasError ? Colors.red.shade400 : AppColors.primary,
                     ),
             ),
             const SizedBox(width: 14),

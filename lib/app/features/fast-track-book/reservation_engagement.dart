@@ -154,8 +154,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
       if (!mounted) return;
 
       final reservation = response.data;
-      final status = StatusReservation.fromString(
-          reservation.statusReservation);
+      final status =
+          StatusReservation.fromString(reservation.statusReservation);
 
       // Détermine le nouvel état
       ReservationBannerState newState;
@@ -289,7 +289,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
     ReservationPendingBanner.bannerStateNotifier
         .removeListener(_onStateChanged);
     ReservationPendingBanner.pushNotifier.removeListener(_onPushReceived);
-    ReservationEngagementFrame.paymentDoneNotifier.removeListener(_onPaymentDone);
+    ReservationEngagementFrame.paymentDoneNotifier
+        .removeListener(_onPaymentDone);
     _messageController.dispose();
     super.dispose();
   }
@@ -336,7 +337,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                   ? 'assets/lotties/success.json'
                   : 'assets/lotties/agenda.json',
               fit: BoxFit.contain,
-              repeat: _currentState != ReservationBannerState.waitingPayment && !_isTerminal,
+              repeat: _currentState != ReservationBannerState.waitingPayment &&
+                  !_isTerminal,
               animate: true,
             ),
           ),

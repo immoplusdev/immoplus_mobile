@@ -127,10 +127,9 @@ class VisitListTileAction extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-                
               ),
             ),
-                    const SizedBox(width: 8),
+            const SizedBox(width: 8),
 
             // Trailing
             trailing ??
@@ -140,7 +139,6 @@ class VisitListTileAction extends StatelessWidget {
                   color: Colors.grey.shade400,
                 ),
           ],
-          
         ),
       ),
     );

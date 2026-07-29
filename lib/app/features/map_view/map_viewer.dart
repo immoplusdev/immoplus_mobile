@@ -262,8 +262,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
     final topPadding = MediaQuery.of(context).viewPadding.top;
     final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
-    final isDark =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     final mapStyle = isDark ? MapConstantes.darlStyle : _modernMapStyle;
 
     const estimationCardHeight = 72.0;
@@ -425,12 +424,14 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                 children: [
                   _buildMapButton(
                     icon: Icons.add_rounded,
-                    onTap: () => mapController?.animateCamera(CameraUpdate.zoomIn()),
+                    onTap: () =>
+                        mapController?.animateCamera(CameraUpdate.zoomIn()),
                   ),
                   const SizedBox(height: 10),
                   _buildMapButton(
                     icon: Icons.remove_rounded,
-                    onTap: () => mapController?.animateCamera(CameraUpdate.zoomOut()),
+                    onTap: () =>
+                        mapController?.animateCamera(CameraUpdate.zoomOut()),
                   ),
                   const SizedBox(height: 10),
                   _buildMapButton(
@@ -469,7 +470,8 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildMapButton({required IconData icon, required VoidCallback onTap}) {
+  Widget _buildMapButton(
+      {required IconData icon, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -589,7 +591,8 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                     animProgress: _countUpAnimation.value,
                   ),
                   const Spacer(),
-                  Container(width: 1, height: 36, color: const Color(0xFFF0F0F0)),
+                  Container(
+                      width: 1, height: 36, color: const Color(0xFFF0F0F0)),
                   const Spacer(),
                   _buildEstimationBlock(
                     icon: Icons.access_time_rounded,
@@ -733,4 +736,3 @@ class _SheetData {
   @override
   int get hashCode => Object.hash(showRoute, routeDistance, routeDuration);
 }
-

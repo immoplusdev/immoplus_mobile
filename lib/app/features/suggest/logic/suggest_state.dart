@@ -7,6 +7,7 @@ part 'suggest_state.freezed.dart';
 class SuggestState with _$SuggestState {
   const factory SuggestState.initial() = _Initial;
   const factory SuggestState.loading() = _Loading;
-  const factory SuggestState.success(List<SuggestionModel> suggestions) = _Success;
+  const factory SuggestState.success(List<SuggestionModel> suggestions) =
+      _Success;
   const factory SuggestState.error(String message) = _Error;
 }

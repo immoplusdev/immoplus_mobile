@@ -46,6 +46,7 @@ class HomePageState {
     );
     return switch (tab) {
       HomeTab.residence => const ResidencesList(),
+      HomeTab.hotel => const SizedBox.shrink(),
       HomeTab.location => const EstatesList(),
       HomeTab.furniture => const FurnituresList(),
       HomeTab.bien => const LandsList(),
@@ -59,6 +60,7 @@ class HomePageState {
     );
     return switch (tab) {
       HomeTab.residence => pagingControllerResidence,
+      HomeTab.hotel => pagingControllerResidence,
       HomeTab.location => pagingControllerEstate,
       HomeTab.furniture => pagingControllerFurniture,
       HomeTab.bien => pagingControllerLand,

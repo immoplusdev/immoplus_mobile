@@ -1,19 +1,17 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
-import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
-import 'package:immoplus/app/features/authentification/authentification_page.dart';
+
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
@@ -25,17 +23,16 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/features/filter/filter_page.dart';
-import 'package:immoplus/app/features/notification/pages/notification_page.dart';
+import 'package:immoplus/app/widgets/notification_bell.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
-import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/logic/banners/banners_state.dart';
 import 'package:immoplus/app/features/home_page/components/banner_card.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+
 import 'package:immoplus/gen/assets.gen.dart';
+import 'package:immoplus/app/features/home_page/components/home_search_field.dart';
 
 class HomeSearchAppbar extends StatefulWidget {
   const HomeSearchAppbar({
@@ -162,6 +159,18 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       // Fetch banners
       context.read<BannersCubit>().fetchBanners();
     });
+  }
+
+  @override
+  void didUpdateWidget(HomeSearchAppbar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      _searchController.clear();
+      EasyDebounce.cancel(_searchDebounceKey);
+      FilterHandler.search = null;
+      FilterHandler.notifyChange();
+      FocusScope.of(context).unfocus();
+    }
   }
 
   // Réagir aux changements externes de FilterHandler (ex: suppression du chip)
@@ -423,98 +432,53 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
         builder: (context, filterState) {
           final isFurnitureTab = widget.currentIndex == HomeTab.furniture.value;
 
-          final searchField = SizedBox(
-            height: 57.5,
-            child: CustomTextField(
-              readOnly: !isFurnitureTab,
-              onTap: isFurnitureTab
-                  ? null
-                  : () {
-                      final category =
-                          HomeTab.values[widget.currentIndex].category;
-                      context.pushNamed(
-                        SuggestPage.routeName,
-                        extra: {
-                          'category': category,
-                          'lat': FilterHandler.lat,
-                          'lng': FilterHandler.long,
-                        },
-                      );
+          final searchField = HomeSearchField(
+            isFurnitureTab: isFurnitureTab,
+            currentIndex: widget.currentIndex,
+            searchController: _searchController,
+            showClearButton: _showClearButton,
+            onClear: () {
+              _searchController.clear();
+              EasyDebounce.cancel(_searchDebounceKey);
+              FilterHandler.search = null;
+              FilterHandler.notifyChange();
+              HomePageState.refreshPage(widget.currentIndex);
+            },
+            onFilterPressed: _showFilterDialog,
+            onFieldSubmitted: (keyword) {
+              if (FilterHandler.search != null) {
+                if (FilterHandler.search!.isNotEmpty) {
+                  log(keyword);
+                  getIt<AnalyticsService>().logSearch(
+                    searchTerm: keyword,
+                    searchLocation: FilterHandler.locationName,
+                    searchType: switch (widget.currentIndex) {
+                      1 => 'estate',
+                      2 => 'furniture',
+                      _ => 'residence',
                     },
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              labelText: 'Que cherchez-vous ?',
-              prefixIcon: Icon(
-                  color: AppColors.primary, size: 20, Iconsax.search_normal_1),
-              controller: _searchController,
-              sufixIcon: _showClearButton
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.cancel,
-                        color: Colors.grey.shade600,
-                        size: 18,
-                      ),
-                      onPressed: () {
-                        _searchController.clear();
-                        EasyDebounce.cancel(_searchDebounceKey);
-                        FilterHandler.search = null;
-                        FilterHandler.notifyChange();
-                        HomePageState.refreshPage(widget.currentIndex);
-                      },
-                    )
-                  : IconButton(
-                      icon: Icon(
-                        Iconsax.setting_4,
-                        color: AppColors.primary,
-                        size: 18,
-                      ),
-                      onPressed: _showFilterDialog,
-                    ),
-              onFieldSubmitted: (keyword) {
-                if (FilterHandler.search != null) {
-                  if (FilterHandler.search!.isNotEmpty) {
-                    log(keyword);
-                    getIt<AnalyticsService>().logSearch(
-                      searchTerm: keyword,
-                      searchLocation: FilterHandler.locationName,
-                      searchType: switch (widget.currentIndex) {
-                        1 => 'estate',
-                        2 => 'furniture',
-                        _ => 'residence',
-                      },
-                    );
-                    HomePageState.refreshPage(widget.currentIndex);
-                  } else {
-                    FilterHandler.search = null;
-                    FilterHandler.notifyChange();
-                    HomePageState.refreshPage(widget.currentIndex);
-                  }
+                  );
+                  HomePageState.refreshPage(widget.currentIndex);
+                } else {
+                  FilterHandler.search = null;
+                  FilterHandler.notifyChange();
+                  HomePageState.refreshPage(widget.currentIndex);
                 }
-              },
-              onChanged: (text) {
-                EasyDebounce.debounce(
-                  _searchDebounceKey,
-                  const Duration(milliseconds: _searchDeboucemillisecond),
-                  () {
-                    final search = text.isNotEmpty ? text : null;
-                    FilterHandler.search = search;
-                    FilterHandler.notifyChange();
-                    if (search != null) log(text);
-                    HomePageState.refreshPage(widget.currentIndex);
-                  },
-                );
-              },
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(radiusButton),
-                borderSide:
-                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(radiusButton),
-                borderSide:
-                    BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
-              ),
-            ),
+              }
+            },
+            onChanged: (text) {
+              EasyDebounce.debounce(
+                _searchDebounceKey,
+                const Duration(milliseconds: _searchDeboucemillisecond),
+                () {
+                  final search = text.isNotEmpty ? text : null;
+                  FilterHandler.search = search;
+                  FilterHandler.notifyChange();
+                  if (search != null) log(text);
+                  HomePageState.refreshPage(widget.currentIndex);
+                },
+              );
+            },
           );
 
           return BlocBuilder<BannersCubit, BannersState>(
@@ -578,24 +542,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                               },
                             ),
                             const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                if (sessionManager.currentUser != null) {
-                                  context.pushNamed(NotificationsPage.name);
-                                } else {
-                                  context.pushNamed(AuthenticationPage.name);
-                                }
-                              },
-                              child: Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.F2F2F2,
-                                ),
-                                child: const Icon(FontAwesomeIcons.bell),
-                              ),
-                            ),
+                            const NotificationBell(),
                           ],
                         ),
                       ),
@@ -617,7 +564,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(50),
+                  preferredSize: const Size.fromHeight(58),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -639,6 +586,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
 }
 
 class _Constants {
-  static const double toolbarHeightWithBanner = 217;
-  static const double toolbarHeightWithoutBanner = 145;
+  static const double toolbarHeightWithBanner = 190;
+  static const double toolbarHeightWithoutBanner = 118;
 }

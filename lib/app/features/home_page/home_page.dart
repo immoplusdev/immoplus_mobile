@@ -27,6 +27,7 @@ import 'components/home_search_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static const String routePath = '/homePage';
   static String name = "home";
   @override
   State<HomePage> createState() => _HomePageState();
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage>
     () {
       HistoryPageState.refrechAll();
     }();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _scrollController = ScrollController()..addListener(_handleScrollChanged);
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage>
             child: Scaffold(
               backgroundColor: AppColors.white,
               body: DefaultTabController(
-                length: 4,
+                length: 5,
                 child: Stack(
                   children: [
                     RefreshIndicator(

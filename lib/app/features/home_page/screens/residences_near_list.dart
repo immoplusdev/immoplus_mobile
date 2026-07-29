@@ -17,6 +17,7 @@ import 'package:immoplus/app/widgets/empty_state_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
 import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 
 class NearResidencesConstants {
   NearResidencesConstants._();
@@ -219,7 +220,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         ),
         const Gap(12),
         SizedBox(
-          height: _locationError ? null : 255,
+          height: _locationError ? null : compactResidenceCardHeight,
           child: _buildContent(),
         ),
         const Gap(15),

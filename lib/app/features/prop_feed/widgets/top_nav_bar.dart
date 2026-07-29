@@ -16,7 +16,7 @@ class TopNavBar extends StatefulWidget {
   final VoidCallback? onSearchTap;
   final ValueChanged<PropertyType>? onPropertyTypeSelected;
 
-  static const List<String> _tabs = [ 'Pour Toi'];
+  static const List<String> _tabs = ['Pour Toi'];
 
   /// Espacement horizontal entre les onglets.
   static const double tabSpacing = 12;
@@ -109,15 +109,15 @@ class _TopNavBarState extends State<TopNavBar> {
                                   child: PropertyTypeDropdown(
                                     selectedType: _selectedPropertyType,
                                     onSelected: (type) {
-                                      setState(() => _selectedPropertyType = type);
+                                      setState(
+                                          () => _selectedPropertyType = type);
                                       widget.onPropertyTypeSelected?.call(type);
                                       Future.delayed(
                                         const Duration(milliseconds: 150),
                                         () {
                                           if (mounted) {
-                                            setState(
-                                                () => _showPropertyDropdown =
-                                                    false);
+                                            setState(() =>
+                                                _showPropertyDropdown = false);
                                           }
                                         },
                                       );
@@ -207,4 +207,3 @@ class _TabItem extends StatelessWidget {
     );
   }
 }
-

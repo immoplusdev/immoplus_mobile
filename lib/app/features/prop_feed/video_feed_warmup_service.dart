@@ -115,7 +115,8 @@ class VideoFeedWarmupService extends GetxService {
         _prefetchThumbs(page.items, prefetchThumbnails),
       ];
       if (cacheFirstVideoOnWifi) {
-        futures.add(_repository.cacheInBackgroundWifiOnly(page.items.first.url));
+        futures
+            .add(_repository.cacheInBackgroundWifiOnly(page.items.first.url));
       }
       await Future.wait(futures);
 
@@ -163,7 +164,8 @@ class VideoFeedWarmupService extends GetxService {
       if (_playerTaken) {
         // Le FeedController a déjà créé son propre player → dispose le nôtre
         controller.dispose();
-        talker.debug('[VideoFeed:Warmup] Player 0 disposed (controller already took over)');
+        talker.debug(
+            '[VideoFeed:Warmup] Player 0 disposed (controller already took over)');
         return;
       }
 
@@ -220,4 +222,3 @@ class VideoFeedWarmupService extends GetxService {
     return null;
   }
 }
-

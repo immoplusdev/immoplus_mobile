@@ -42,8 +42,7 @@ class FeedCommodite {
   const FeedCommodite({required this.text, required this.icon});
   final String text;
   final String icon;
-  factory FeedCommodite.fromJson(Map<String, dynamic> json) =>
-      FeedCommodite(
+  factory FeedCommodite.fromJson(Map<String, dynamic> json) => FeedCommodite(
         text: json['text'] as String? ?? '',
         icon: json['icon'] as String? ?? '',
       );
@@ -58,8 +57,7 @@ class FeedPiece {
   final String nom;
   final int nombre;
   final String? value;
-  factory FeedPiece.fromJson(Map<String, dynamic> json) =>
-      FeedPiece(
+  factory FeedPiece.fromJson(Map<String, dynamic> json) => FeedPiece(
         nom: json['nom'] as String? ?? '',
         nombre: json['nombre'] as int? ?? 0,
         value: json['value'] as String?,
@@ -114,6 +112,7 @@ class VideoModel {
     required this.id,
     required this.url,
     this.thumbnailUrl,
+
     /// UUID du fichier miniature (table files). URL: {baseUrl}/files/raw/public/{miniature}
     this.miniature,
     this.source,
@@ -152,8 +151,7 @@ class VideoModel {
         source: json['source'] as String?,
         status: json['status'] as String? ?? 'ready',
         content: json['content'] != null
-            ? FeedItemContent.fromJson(
-                json['content'] as Map<String, dynamic>)
+            ? FeedItemContent.fromJson(json['content'] as Map<String, dynamic>)
             : null,
         stats: json['stats'] != null
             ? FeedItemStats.fromJson(json['stats'] as Map<String, dynamic>)

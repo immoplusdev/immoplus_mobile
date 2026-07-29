@@ -360,7 +360,8 @@ class VideoRepository {
     );
     if (!hasConnection) {
       if (kDebugMode) {
-        talker.debug('[VideoRepository:Cache] Skip (offline) → ${key.split('/').last}');
+        talker.debug(
+            '[VideoRepository:Cache] Skip (offline) → ${key.split('/').last}');
       }
       return;
     }
@@ -376,8 +377,7 @@ class VideoRepository {
   Future<void> cacheInBackgroundWifiOnly(String url) async {
     if (isStreamManifest(url)) return;
     final results = await Connectivity().checkConnectivity();
-    final hasWifi =
-        results.any((r) => r == ConnectivityResult.wifi);
+    final hasWifi = results.any((r) => r == ConnectivityResult.wifi);
     if (!hasWifi) {
       if (kDebugMode) {
         final key = _cacheKeyForUrl(url);
@@ -412,24 +412,21 @@ class VideoRepository {
       );
     }
 
-    _activeDownload = _downloadAndRegister(url, key)
-        .then((_) {
-          _cachedCacheKeys.add(key);
-          if (kDebugMode) {
-            talker.info(
-              '[VideoRepository:Cache] ✓ Cached → ${key.split('/').last}',
-            );
-          }
-        })
-        .catchError((Object e) {
-          if (kDebugMode) {
-            talker.warning('[VideoRepository:Cache] ⚠ Failed → $e');
-          }
-        })
-        .whenComplete(() {
-          _activeDownload = null;
-          _processDownloadQueue(); // Traiter la vidéo suivante en queue
-        });
+    _activeDownload = _downloadAndRegister(url, key).then((_) {
+      _cachedCacheKeys.add(key);
+      if (kDebugMode) {
+        talker.info(
+          '[VideoRepository:Cache] ✓ Cached → ${key.split('/').last}',
+        );
+      }
+    }).catchError((Object e) {
+      if (kDebugMode) {
+        talker.warning('[VideoRepository:Cache] ⚠ Failed → $e');
+      }
+    }).whenComplete(() {
+      _activeDownload = null;
+      _processDownloadQueue(); // Traiter la vidéo suivante en queue
+    });
   }
 
   /// Télécharge [url] dans un Isolate séparé (n'impacte pas l'UI thread)
@@ -538,7 +535,8 @@ class VideoRepository {
       );
       if (path == null) return null;
 
-      final createdPath = path.startsWith('/') ? path : '${thumbDir.path}/$path';
+      final createdPath =
+          path.startsWith('/') ? path : '${thumbDir.path}/$path';
       final created = File(createdPath);
       if (await created.exists() && createdPath != ourPath) {
         await created.copy(ourPath);

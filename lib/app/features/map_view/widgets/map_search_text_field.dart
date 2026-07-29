@@ -143,7 +143,8 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
             prefix: Padding(
               padding: const EdgeInsets.only(left: 14.0),
-              child: Icon(CupertinoIcons.search, size: 20, color: Colors.grey.shade500),
+              child: Icon(CupertinoIcons.search,
+                  size: 20, color: Colors.grey.shade500),
             ),
             onChanged: _onSearchChanged,
             clearButtonMode: OverlayVisibilityMode.editing,
@@ -193,8 +194,8 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
                       color: Colors.grey.shade600,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   onTap: () => _onPredictionTap(prediction),
                   title: Text(
                     prediction['description'] ?? "",

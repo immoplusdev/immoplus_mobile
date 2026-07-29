@@ -17,6 +17,7 @@ import 'package:immoplus/app/widgets/custom_loading_button.dart';
 class UserPreferencePage extends StatelessWidget {
   const UserPreferencePage({super.key});
 
+  static const String routePath = '/user_preference';
   static const String name = 'USER_PREFERENCE_PAGE';
 
   @override

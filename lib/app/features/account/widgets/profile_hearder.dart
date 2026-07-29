@@ -37,7 +37,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   _HeaderDelegate({this.currentUser, this.onServiceClientPressed});
 
   /// Deux cas : avec photo → image (monogramme en placeholder pour éviter le fond bleu). Sans photo → monogramme.
-  Widget _buildAvatar({required String? imageUrl, required String monogramName}) {
+  Widget _buildAvatar(
+      {required String? imageUrl, required String monogramName}) {
     final monogram = EzCircleAvatar(
       name: monogramName,
       radius: 26,
@@ -71,15 +72,16 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     final fullName =
-        '${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}'
-            .trim();
+        '${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}'.trim();
     final imageUrl = currentUser?.avatar != null
         ? Utils.getImagePath(id: currentUser!.avatar!)
         : null;
     final email = currentUser?.email?.trim() ?? '';
     // Utilisateur inscrit uniquement : nom ou email pour l’affichage et le monogramme (si pas de photo).
-    final displayLabel = fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Invité');
-    final monogramName = fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Invité');
+    final displayLabel =
+        fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Invité');
+    final monogramName =
+        fullName.isNotEmpty ? fullName : (email.isNotEmpty ? email : 'Invité');
 
     return Container(
       alignment: Alignment.center,

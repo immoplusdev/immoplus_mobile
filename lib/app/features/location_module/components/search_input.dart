@@ -41,13 +41,10 @@ class SearchInput extends GetView<LocationController> {
             ),
             prefixIconConstraints:
                 const BoxConstraints(minWidth: 0, minHeight: 0),
-
-            
             border: InputBorder.none,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 14,

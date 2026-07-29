@@ -33,6 +33,12 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
       delaisProprietaireReponse:
           json['delaisProprietaireReponse'] as String? ?? null,
       delaisPaiementClient: json['delaisPaiementClient'] as String? ?? null,
+      ratingsNotified: json['ratingsNotified'] as bool? ?? null,
+      ratingStatus:
+          $enumDecodeNullable(_$RatingStatusEnumMap, json['ratingStatus']) ??
+              null,
+      checkinValide: json['checkinValide'] as bool? ?? null,
+      checkinValideAt: json['checkinValideAt'] as String? ?? null,
       residence: json['residence'] == null
           ? const ResidenceModel()
           : ResidenceModel.fromJson(json['residence'] as Map<String, dynamic>),
@@ -66,7 +72,18 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
       'updatedAt': instance.updatedAt,
       'delaisProprietaireReponse': instance.delaisProprietaireReponse,
       'delaisPaiementClient': instance.delaisPaiementClient,
+      'ratingsNotified': instance.ratingsNotified,
+      'ratingStatus': _$RatingStatusEnumMap[instance.ratingStatus],
+      'checkinValide': instance.checkinValide,
+      'checkinValideAt': instance.checkinValideAt,
       'residence': instance.residence,
       'client': instance.client,
       'proprietaire': instance.proprietaire,
     };
+
+const _$RatingStatusEnumMap = {
+  RatingStatus.not_applicable: 'not_applicable',
+  RatingStatus.pending: 'pending',
+  RatingStatus.rated: 'rated',
+  RatingStatus.expired: 'expired',
+};

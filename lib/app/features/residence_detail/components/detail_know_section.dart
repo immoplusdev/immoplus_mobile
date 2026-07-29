@@ -51,14 +51,14 @@ class DetailKnowSection extends StatelessWidget {
 
           // ── Conditions d'annulation ──
           _KnowCard(
-  icon: Iconsax.security,
-  title: "Consignes de salubrité",
-  items: const [
-    'Maintenir les lieux propres',
-    'Respecter les équipements et le mobilier',
-    'Laisser la résidence dans un état acceptable à votre départ',
-  ],
-),
+            icon: Iconsax.security,
+            title: "Consignes de salubrité",
+            items: const [
+              'Maintenir les lieux propres',
+              'Respecter les équipements et le mobilier',
+              'Laisser la résidence dans un état acceptable à votre départ',
+            ],
+          ),
         ]),
       ),
     );
@@ -91,13 +91,11 @@ class DetailKnowSection extends StatelessWidget {
               const SizedBox(height: 24),
               _RuleRow(
                 icon: Iconsax.clock,
-                text:
-                    "Arrivée à partir de ${residenceModel.heureEntree}",
+                text: "Arrivée à partir de ${residenceModel.heureEntree}",
               ),
               _RuleRow(
                 icon: Iconsax.clock,
-                text:
-                    'Départ avant ${residenceModel.heureDepart}',
+                text: 'Départ avant ${residenceModel.heureDepart}',
               ),
               if (residenceModel.nombreMaxOccupants > 0)
                 _RuleRow(
@@ -121,9 +119,7 @@ class DetailKnowSection extends StatelessWidget {
               ),
               if (residenceModel.reglesSupplementaires.isNotEmpty) ...[
                 Divider(
-                    height: 32,
-                    thickness: 0.5,
-                    color: Colors.grey.shade200),
+                    height: 32, thickness: 0.5, color: Colors.grey.shade200),
                 const Text(
                   'Règles supplémentaires',
                   style: TextStyle(

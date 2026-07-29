@@ -31,21 +31,28 @@ class SocialPostHeader extends StatelessWidget {
   final List<String> hashtags;
   final String? avatarUrl;
   final String? avatarPath;
+
   /// Date affichée à côté du username (ex: "2024-04-01").
   final String? date;
+
   /// Localisation du bien (ex: "Cocody, Abidjan"). Null → ligne masquée.
   final String? location;
   final bool verify;
   final VoidCallback? onFollowTap;
   final VoidCallback? onMoreTap;
+
   /// Si true, la description est entièrement affichée (après tap sur "Plus").
   final bool isExpanded;
+
   /// Facteur de largeur max pour la description (0.0 à 1.0). Ex: 0.65 = 65% du parent.
   final double descriptionMaxWidthFactor;
+
   /// Largeur max du contenu. Si dépassée, la description est tronquée à [contentMaxLines].
   final double? contentMaxWidth;
+
   /// Nombre max de lignes pour la description quand le contenu dépasse [contentMaxWidth].
   final int contentMaxLines;
+
   /// Quand on appuie sur Plus et que la description dépasse ce nombre de caractères, elle devient scrollable.
   final int scrollThreshold;
 
@@ -116,7 +123,8 @@ class SocialPostHeader extends StatelessWidget {
             onTap: onFollowTap,
             child: ProfileAvatar(
               username: username,
-              avatarUrl: "https://image2url.com/r2/default/images/1774772507455-c74e5e54-899a-4b4f-b36d-18b292a0784d.jpg",
+              avatarUrl:
+                  "https://image2url.com/r2/default/images/1774772507455-c74e5e54-899a-4b4f-b36d-18b292a0784d.jpg",
               avatarPath: avatarPath,
               verify: verify,
             ),
@@ -145,12 +153,10 @@ class SocialPostHeader extends StatelessWidget {
     );
   }
 
-
   Widget _buildDescriptionRow(BuildContext context) {
     final fullText = _buildCaptionText();
     final isLong = fullText.length > _longDescriptionThreshold;
-    final shouldScroll =
-        isExpanded && fullText.length > scrollThreshold;
+    final shouldScroll = isExpanded && fullText.length > scrollThreshold;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -199,7 +205,8 @@ class SocialPostHeader extends StatelessWidget {
                   GestureDetector(
                     onTap: onMoreTap,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
@@ -258,9 +265,8 @@ class SocialPostHeader extends StatelessWidget {
 
     if (hashtags.isNotEmpty) {
       if (spans.isNotEmpty) spans.add(const TextSpan(text: ' '));
-      final hashtagText = hashtags
-          .map((h) => h.startsWith('#') ? h : '#$h')
-          .join(' ');
+      final hashtagText =
+          hashtags.map((h) => h.startsWith('#') ? h : '#$h').join(' ');
       spans.add(
         TextSpan(
           text: hashtagText,

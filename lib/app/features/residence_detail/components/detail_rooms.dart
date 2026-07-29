@@ -9,10 +9,10 @@ class DetailLogmentRooms extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final validPieces =
-        logmentModel.pieces.where((p) => p.nombre > 0).toList();
+    final validPieces = logmentModel.pieces.where((p) => p.nombre > 0).toList();
 
-    if (validPieces.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+    if (validPieces.isEmpty)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -40,11 +40,16 @@ class _RoomItem extends StatelessWidget {
     if (lower.contains('chambre') || lower.contains('bedroom')) {
       return Iconsax.house;
     }
-    if (lower.contains('salle') || lower.contains('bain') || lower.contains('douche') || lower.contains('bathroom')) {
+    if (lower.contains('salle') ||
+        lower.contains('bain') ||
+        lower.contains('douche') ||
+        lower.contains('bathroom')) {
       return Iconsax.receipt_1;
     }
-    
-    if (lower.contains('salon') || lower.contains('living') || lower.contains('séjour')) {
+
+    if (lower.contains('salon') ||
+        lower.contains('living') ||
+        lower.contains('séjour')) {
       return Iconsax.lamp_charge;
     }
     if (lower.contains('cuisine') || lower.contains('kitchen')) {
@@ -71,7 +76,7 @@ class _RoomItem extends StatelessWidget {
         Icon(
           _icon,
           size: 20,
-          color:  Color(0xff2744de),
+          color: Color(0xff2744de),
         ),
         const SizedBox(width: 6),
         Text(

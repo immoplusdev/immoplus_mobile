@@ -70,8 +70,10 @@ class Constantes {
   };
   //static ConfigModel? configApp;
   static ValueNotifier<bool> buildNotifier = ValueNotifier<bool>(true);
+
   /// Masquer la bottom navigation bar (ex: quand le sheet Réserver est ouvert).
   static ValueNotifier<bool> hideBottomNavNotifier = ValueNotifier<bool>(false);
+
   /// Nombre de propositions non vues pour le badge Imatch.
   static ValueNotifier<int> imatchBadgeCount = ValueNotifier<int>(0);
   static ValueNotifier<VilleModel> villeUser =
@@ -96,6 +98,7 @@ enum ProductType {
   booking,
   demandes_visites,
   reservations,
+  hotel_reservation,
 }
 
 enum ServiceType {
@@ -168,6 +171,7 @@ List<double> listToDouble(dynamic value) {
   return [];
 }
 
+const double compactResidenceCardHeight = 265.0;
 const maxPriceLimit = 3000000;
 const minPriceLimit = 100;
 

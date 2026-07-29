@@ -293,8 +293,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         const Gap(20),
         Center(
           child: TextButton(
-            onPressed:
-                (_isSendingChannel || _isSubmittingOtp) ? null : _resend,
+            onPressed: (_isSendingChannel || _isSubmittingOtp) ? null : _resend,
             child: const Text('Renvoyer le code'),
           ),
         ),

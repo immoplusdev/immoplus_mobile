@@ -10,12 +10,15 @@ class LocationPermissionState with _$LocationPermissionState {
   const factory LocationPermissionState.checking() = _Checking;
   const factory LocationPermissionState.granted() = _Granted;
   const factory LocationPermissionState.denied() = _Denied;
-  const factory LocationPermissionState.permanentlyDenied() = _PermanentlyDenied;
+  const factory LocationPermissionState.permanentlyDenied() =
+      _PermanentlyDenied;
   const factory LocationPermissionState.notDetermined() = _NotDetermined;
 
   // Getters publics pour vérifier l'état
   bool get isGranted => maybeWhen(granted: () => true, orElse: () => false);
   bool get isDenied => maybeWhen(denied: () => true, orElse: () => false);
-  bool get isPermanentlyDenied => maybeWhen(permanentlyDenied: () => true, orElse: () => false);
-  bool get isNotDetermined => maybeWhen(notDetermined: () => true, orElse: () => false);
+  bool get isPermanentlyDenied =>
+      maybeWhen(permanentlyDenied: () => true, orElse: () => false);
+  bool get isNotDetermined =>
+      maybeWhen(notDetermined: () => true, orElse: () => false);
 }

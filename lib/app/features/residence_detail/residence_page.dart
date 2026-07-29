@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +10,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
-import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
@@ -18,6 +20,7 @@ import 'package:immoplus/app/features/residence_detail/components/inititial_deta
 import 'package:immoplus/app/features/residence_detail/components/logment_bottom_bar.dart';
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart';
 import 'package:immoplus/app/logic/request_state.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/svgs_icons.dart';
 import 'components/detail_logment_amentities.dart';
 import 'components/detail_logment_appbar.dart';
@@ -39,20 +42,40 @@ class ResidencePage extends StatefulWidget {
   State<ResidencePage> createState() => _ResidencePageState();
 }
 
-class _ResidencePageState extends State<ResidencePage> {
+class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
   bool _hasLoggedViewItem = false;
+
+  @override
+  void onConnectionRestored() {
+    final state = context.read<ResidenceCubit>().state;
+    if (state is REQUEST_ERROR || state is REQUEST_LOADING) {
+      context.read<ResidenceCubit>().getResidence(id: widget.idProduct);
+    }
+  }
 
   @override
   void initState() {
     context.read<ResidenceCubit>().getResidence(id: widget.idProduct);
     super.initState();
+    setupConnectivityListener();
+  }
+
+  @override
+  void dispose() {
+    disposeConnectivityListener();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ResidenceCubit, RequestState>(
+    return BlocConsumer<ResidenceCubit, RequestState>(
+      listener: (context, state) {
+        if (state is REQUEST_ERROR) {
+          showConnectionErrorDialog();
+        }
+      },
       builder: (context, state) {
-        if (state is REQUEST_LOADING) {
+        if (state is REQUEST_LOADING || state is REQUEST_ERROR) {
           return const LoadingPage();
         }
 
@@ -137,7 +160,7 @@ class _ResidencePageState extends State<ResidencePage> {
 
                 // ── Video ──
                 if (data.video.isNotEmpty) ...[
-                  DetailLogmentVideo(logmentModel: data),
+                  DetailLogmentVideo(videoId: data.video),
                   const _SliverDivider(),
                 ],
 

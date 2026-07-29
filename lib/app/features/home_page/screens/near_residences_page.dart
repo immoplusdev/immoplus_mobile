@@ -10,6 +10,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class NearResidencesPage extends StatefulWidget {
   const NearResidencesPage({
@@ -31,16 +32,26 @@ class NearResidencesPage extends StatefulWidget {
   State<NearResidencesPage> createState() => _NearResidencesPageState();
 }
 
-class _NearResidencesPageState extends State<NearResidencesPage> {
+class _NearResidencesPageState extends State<NearResidencesPage>
+    with ConnectivityMixin {
   final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
   final ResidenceRepository _residenceRepository = getIt<ResidenceRepository>();
+
+  @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     getIt<AnalyticsService>().logNearResidencesViewed();
     _pagingController.addPageRequestListener(_loadPage);
+    setupConnectivityListener();
   }
 
   Future<void> _loadPage(int pageKey) async {
@@ -61,12 +72,14 @@ class _NearResidencesPageState extends State<NearResidencesPage> {
         _pagingController.appendLastPage(result.data ?? []);
       }
     } catch (error) {
-      _pagingController.error = error.toString();
+      // Don't set _pagingController.error to keep the shimmer loading
+      showConnectionErrorDialog();
     }
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _pagingController.dispose();
     super.dispose();
   }

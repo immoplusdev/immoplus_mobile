@@ -81,7 +81,8 @@ class _ClarificationBlockState extends State<ClarificationBlock>
                   child: Container(
                     decoration: BoxDecoration(
                       color: ChatTokens.neutral0,
-                      borderRadius: BorderRadius.circular(ChatTokens.cardRadius),
+                      borderRadius:
+                          BorderRadius.circular(ChatTokens.cardRadius),
                       border: Border.all(
                         color: ChatTokens.borderStandard,
                         width: 0.5,
@@ -93,7 +94,8 @@ class _ClarificationBlockState extends State<ClarificationBlock>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (totalSteps > 1) ...[
-                          _ProgressIndicator(done: doneSteps, total: totalSteps),
+                          _ProgressIndicator(
+                              done: doneSteps, total: totalSteps),
                           const SizedBox(height: 12),
                         ],
                         if (understood.isNotEmpty) ...[

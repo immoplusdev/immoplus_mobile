@@ -794,7 +794,8 @@ class VideoFeedController extends GetxController {
     // Reset pagination et re-fetch
     _cursor = null;
     _hasMore = true;
-    _isVisible = true; // Réactivé avant _fetchFeed pour que la 1ère vidéo puisse jouer
+    _isVisible =
+        true; // Réactivé avant _fetchFeed pour que la 1ère vidéo puisse jouer
     _fetchFeed();
     update();
   }

@@ -9,11 +9,13 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class LocationBiensPage extends StatefulWidget {
   final String title;
   final String? villeId;
   final String? communeId;
+  final EstateSubCategory? subCategory;
   final PropertyType propertyType;
 
   const LocationBiensPage({
@@ -21,6 +23,7 @@ class LocationBiensPage extends StatefulWidget {
     required this.title,
     this.villeId,
     this.communeId,
+    this.subCategory,
     this.propertyType = PropertyType.land,
   });
 
@@ -31,16 +34,26 @@ class LocationBiensPage extends StatefulWidget {
   State<LocationBiensPage> createState() => _LocationBiensPageState();
 }
 
-class _LocationBiensPageState extends State<LocationBiensPage> {
+class _LocationBiensPageState extends State<LocationBiensPage>
+    with ConnectivityMixin {
   final PagingController<int, BienImmobilierModel> _pagingController =
       PagingController(firstPageKey: 1);
   final BienImmobilierRepository _bienImmobilierRepository =
       getIt<BienImmobilierRepository>();
+  @override
+  void onConnectionRestored() {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
+      _pagingController.error = 'temporary_error_to_force_refresh';
+      _pagingController.refresh();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _pagingController.addPageRequestListener(_loadPage);
+    setupConnectivityListener();
   }
 
   Future<void> _loadPage(int pageKey) async {
@@ -53,6 +66,14 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
       }
       if (widget.communeId != null) {
         where['_communeId'] = widget.communeId;
+      }
+      if (widget.subCategory != null && widget.subCategory!.value != null) {
+        final whereList =
+            List<String>.from(where['_where'] as List<String>? ?? const []);
+        whereList.add(
+          '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${widget.subCategory!.value}"}',
+        );
+        where['_where'] = whereList;
       }
 
       final result = await _bienImmobilierRepository.getBiensImmobiliers(
@@ -69,12 +90,13 @@ class _LocationBiensPageState extends State<LocationBiensPage> {
         _pagingController.appendLastPage(result.data ?? []);
       }
     } catch (error) {
-      _pagingController.error = error.toString();
+      showConnectionErrorDialog();
     }
   }
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _pagingController.dispose();
     super.dispose();
   }

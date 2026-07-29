@@ -554,6 +554,15 @@ class Utils {
   return text;
 }
 
+  static Color? parseColor(String? colorStr) {
+    if (colorStr == null || colorStr.isEmpty) return null;
+    try {
+      return Color(int.parse(colorStr.replaceAll('#', '0xFF')));
+    } catch (_) {
+      return null;
+    }
+  }
+
   static copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
   }

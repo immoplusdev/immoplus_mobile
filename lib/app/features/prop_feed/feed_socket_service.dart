@@ -45,11 +45,10 @@ class FeedSocketService {
       }
     });
 
-    _socket!.onConnectError((e) =>
-        debugPrint('[FeedSocket] erreur de connexion → $e'));
+    _socket!.onConnectError(
+        (e) => debugPrint('[FeedSocket] erreur de connexion → $e'));
 
-    _socket!.onDisconnect((_) =>
-        debugPrint('[FeedSocket] déconnecté'));
+    _socket!.onDisconnect((_) => debugPrint('[FeedSocket] déconnecté'));
 
     _socket!.on('video:likes_updated', (data) {
       if (data is! Map) return;

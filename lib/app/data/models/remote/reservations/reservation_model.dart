@@ -4,6 +4,7 @@ import 'client_model.dart';
 import 'proprietaire_model.dart';
 import 'dates_reservation_model.dart';
 import 'status_reservation.dart';
+import '../../../enums/rating_status.dart';
 
 part 'reservation_model.freezed.dart';
 part 'reservation_model.g.dart';
@@ -28,6 +29,10 @@ class ReservationModel with _$ReservationModel {
     @Default('') String updatedAt,
     @Default(null) String? delaisProprietaireReponse,
     @Default(null) String? delaisPaiementClient,
+    @Default(null) bool? ratingsNotified,
+    @Default(null) RatingStatus? ratingStatus,
+    @Default(null) bool? checkinValide,
+    @Default(null) String? checkinValideAt,
     @Default(ResidenceModel()) ResidenceModel residence,
     @Default(ClientModel()) ClientModel client,
     @Default(ProprietaireModel()) ProprietaireModel proprietaire,
@@ -40,4 +45,7 @@ class ReservationModel with _$ReservationModel {
 extension ReservationModelX on ReservationModel {
   StatusReservation? get statusEnum =>
       StatusReservation.fromString(statusReservation);
+
+  bool get checkinNotValide => checkinValide != true;
+  bool get isCheckinValide => checkinValide == true;
 }

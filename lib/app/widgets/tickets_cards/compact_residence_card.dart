@@ -191,21 +191,32 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         const Gap(12),
 
         // Prix
+        if (widget.residence.hasReduction)
+          Text(
+            '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
+            style: GoogleFonts.plusJakartaSans(
+              color: Colors.grey.shade500,
+              fontSize: 12,
+              decoration: TextDecoration.lineThrough,
+            ),
+          ),
         RichText(
           text: TextSpan(
             children: [
               TextSpan(
                 text:
-                    '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
+                    '${CurrencyFormatter().format((widget.residence.hasReduction ? widget.residence.prixReduit : widget.residence.prixReservation).toString())} Fcfa',
                 style: GoogleFonts.plusJakartaSans(
                   fontWeight: FontWeight.w900,
                   fontSize: 15,
-                  color: Colors.black,
+                  color: widget.residence.hasReduction
+                      ? Colors.redAccent
+                      : Colors.black,
                 ),
               ),
               TextSpan(
                 text: '/nuit',
-                style: GoogleFonts.calSans(
+                style: GoogleFonts.plusJakartaSans(
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w200,
                   fontSize: 12,

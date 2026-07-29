@@ -41,7 +41,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Gap(24),
-
                 Text(
                   "Indiquez votre numéro",
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
@@ -51,9 +50,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                       ),
                   textAlign: TextAlign.left,
                 ),
-
                 const Gap(16),
-
                 Text(
                   "Nous vous enverrons un code pour vérifier votre téléphone",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -63,9 +60,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                       ),
                   textAlign: TextAlign.left,
                 ),
-
                 const Gap(30),
-
                 SizedBox(
                   height: 80,
                   child: InternationalPhoneInput(

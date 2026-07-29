@@ -85,7 +85,9 @@ class NotificationService {
       );
       if (data != null) {
         final typeString = data['type'] as String?;
-        final id = data['id']?.toString() ?? data['alertId']?.toString();
+        final id = data['id']?.toString() ??
+            data['alertId']?.toString() ??
+            data['reservationId']?.toString();
 
         final type = PushNotificationType.fromString(typeString);
 
@@ -96,7 +98,9 @@ class NotificationService {
         }
 
         if (type != null) {
-          final route = type.getRoute(id);
+          final code = data['code']?.toString();
+          final referenceId = data['referenceId']?.toString();
+          final route = type.getRoute(id, code: code, referenceId: referenceId);
 
           if (route != null) {
             log('🔔 Navigation: ${AppRouter.router.currentLocation} → $route',

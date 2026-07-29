@@ -10,6 +10,7 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
+import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class SearchResultPage extends StatefulWidget {
   final String category;
@@ -34,7 +35,8 @@ class SearchResultPage extends StatefulWidget {
   State<SearchResultPage> createState() => _SearchResultPageState();
 }
 
-class _SearchResultPageState extends State<SearchResultPage> {
+class _SearchResultPageState extends State<SearchResultPage>
+    with ConnectivityMixin {
   // Paging controllers for different models
   final PagingController<int, ResidenceModel> _residencePagingController =
       PagingController(firstPageKey: 1);
@@ -48,8 +50,24 @@ class _SearchResultPageState extends State<SearchResultPage> {
   late final TextEditingController _searchController;
 
   @override
+  void onConnectionRestored() {
+    if (widget.category == 'residence') {
+      if (_residencePagingController.itemList == null || _residencePagingController.itemList!.isEmpty) {
+        _residencePagingController.error = 'temporary_error_to_force_refresh';
+        _residencePagingController.refresh();
+      }
+    } else {
+      if (_estatePagingController.itemList == null || _estatePagingController.itemList!.isEmpty) {
+        _estatePagingController.error = 'temporary_error_to_force_refresh';
+        _estatePagingController.refresh();
+      }
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+    setupConnectivityListener();
     _searchController = TextEditingController(text: widget.displayText);
     if (widget.category == 'residence') {
       _residencePagingController.addPageRequestListener(_fetchResidences);
@@ -60,6 +78,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
   @override
   void dispose() {
+    disposeConnectivityListener();
     _searchController.dispose();
     _residencePagingController.dispose();
     _estatePagingController.dispose();
@@ -91,7 +110,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
         _residencePagingController.appendPage(response.data ?? [], nextPageKey);
       }
     } catch (error) {
-      _residencePagingController.error = error;
+      showConnectionErrorDialog();
     }
   }
 
@@ -134,7 +153,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
         _estatePagingController.appendPage(response.data ?? [], nextPageKey);
       }
     } catch (error) {
-      _estatePagingController.error = error;
+      showConnectionErrorDialog();
     }
   }
 

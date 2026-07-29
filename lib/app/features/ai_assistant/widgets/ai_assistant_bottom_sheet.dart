@@ -120,17 +120,20 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                     _buildSuggestionCard(
                       icon: Icons.person_search,
                       text: "Trouver un locataire",
-                      onTap: () => _handleCardTap("Je cherche un locataire pour..."),
+                      onTap: () =>
+                          _handleCardTap("Je cherche un locataire pour..."),
                     ),
                     _buildSuggestionCard(
                       icon: Icons.vibration,
                       text: "Estimer un bien",
-                      onTap: () => _handleCardTap("J'aimerais faire l'estimation de..."),
+                      onTap: () =>
+                          _handleCardTap("J'aimerais faire l'estimation de..."),
                     ),
                     _buildSuggestionCard(
                       icon: Icons.assignment_turned_in,
                       text: "Vérifier un dossier de bail",
-                      onTap: () => _handleCardTap("Je souhaite vérifier les documents d'un bail..."),
+                      onTap: () => _handleCardTap(
+                          "Je souhaite vérifier les documents d'un bail..."),
                     ),
                   ],
                 ),
@@ -168,9 +171,11 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                             maxLines: 4,
                             minLines: 1,
                             textInputAction: TextInputAction.send,
-                            style: const TextStyle(fontSize: 16, color: Colors.black87),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black87),
                             decoration: InputDecoration(
-                              hintText: "Décrivez le bien ou posez une question...",
+                              hintText:
+                                  "Décrivez le bien ou posez une question...",
                               hintStyle: TextStyle(
                                 color: Colors.grey[500],
                                 fontSize: 14,
@@ -186,7 +191,8 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                             right: 8,
                             bottom: 8,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
                                   colors: [Colors.indigo, Colors.pinkAccent],

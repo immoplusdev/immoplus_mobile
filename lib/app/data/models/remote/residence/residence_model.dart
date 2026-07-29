@@ -41,6 +41,7 @@ class ResidenceModel with _$ResidenceModel {
     num? score,
     //ClientModel? proprietaire,
     @Default(true) bool residenceDisponible,
+    @Default(0) num reduction,
   }) = _ResidenceModel;
 
   factory ResidenceModel.fromJson(Map<String, dynamic> json) =>
@@ -50,4 +51,10 @@ class ResidenceModel with _$ResidenceModel {
 extension ResidenceModelX on ResidenceModel {
   ValidationStatus get validationStatus =>
       ValidationStatus.fromString(statusValidation);
+
+  bool get hasReduction => reduction > 0;
+
+  /// Prix réduit calculé côté front : prixReservation * (1 - reduction/100).
+  int get prixReduit =>
+      hasReduction ? (prixReservation * (1 - reduction / 100)).round() : prixReservation;
 }

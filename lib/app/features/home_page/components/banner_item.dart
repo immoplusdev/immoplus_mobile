@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,9 +11,41 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
+import 'package:immoplus/app/features/home_page/screens/reduction_residences_page.dart';
+
+/// Icônes disponibles pour les bannières, définies côté dashboard
+enum BannerIconType {
+  plusCircle('plus-circle', Iconsax.add_circle5),
+  calendarCheck('calendar-check', Iconsax.calendar_tick5),
+  bell('bell', Iconsax.notification5),
+  home('home', Iconsax.home5),
+  star('star', Iconsax.star5),
+  megaphone('megaphone', Iconsax.speaker5),
+  creditCard('credit-card', Iconsax.card5),
+  checkCircle('check-circle', Iconsax.tick_circle5);
+
+  final String value;
+  final IconData icon;
+  const BannerIconType(this.value, this.icon);
+
+  static IconData iconFor(String? value) {
+    if (value == 'notification') {
+      // Ancien nom historique, conservé pour compatibilité avec des
+      // bannières déjà enregistrées côté dashboard.
+      return BannerIconType.bell.icon;
+    }
+    return BannerIconType.values
+        .firstWhere(
+          (e) => e.value == value,
+          orElse: () => BannerIconType.bell,
+        )
+        .icon;
+  }
+}
 
 enum BannerAction {
   annulerReservation('/annuler_reservation'),
@@ -20,6 +53,7 @@ enum BannerAction {
   payerExpress('/payer_express'),
   // annulerVisite('/annuler_visite'),
   mesAlertes('/mes_alertes'),
+  reduction('/reduction'),
   unknown('');
 
   final String url;
@@ -41,6 +75,8 @@ enum BannerAction {
 //     subtitle: 'Réglez votre visite en un clic',
 //     ctaLabel: 'Payer 5 000 FCFA',
 //     ctaUrl: '/payer_express',
+//     bgColor: '#0066FF',
+//     textColor: '#FFFFFF',
 //     metadata: {
 //       'demande_visite_id': 'VISIT-123',
 //       'montant_total': 5000,
@@ -52,6 +88,8 @@ enum BannerAction {
 //     subtitle: '5 nouvelles offres correspondent à vos critères',
 //     ctaLabel: 'Voir les offres',
 //     ctaUrl: '/mes_alertes',
+//     bgColor: '#8B5CF6',
+//     textColor: '#FFFFFF',
 //     metadata: {
 //       'alert_id': 'ALERT-456',
 //       'nb_propositions': 5,
@@ -63,6 +101,8 @@ enum BannerAction {
 //     subtitle: 'Modifiez vos critères de recherche',
 //     ctaLabel: 'Mes alertes',
 //     ctaUrl: '/mes_alertes',
+//     bgColor: '#34D399',
+//     textColor: '#FFFFFF',
 //     metadata: {
 //       'nb_propositions': 0,
 //     },
@@ -71,8 +111,9 @@ enum BannerAction {
 
 class BannerItem extends StatelessWidget {
   final BannerModel banner;
+  final VoidCallback? onDismiss;
 
-  const BannerItem({super.key, required this.banner});
+  const BannerItem({super.key, required this.banner, this.onDismiss});
 
   void _handleAction(BuildContext context, String? url) {
     if (url == null) return;
@@ -132,6 +173,9 @@ class BannerItem extends StatelessWidget {
           context.pushNamed(AlertListPage.name);
         }
         break;
+      case BannerAction.reduction:
+        context.pushNamed(ReductionResidencesPage.routeName);
+        break;
       default:
         break;
     }
@@ -161,78 +205,82 @@ class BannerItem extends StatelessWidget {
     );
   }
 
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'calendar-check':
-        return Iconsax.calendar_tick5;
-      case 'notification':
-        return Iconsax.notification5;
-      default:
-        return Iconsax.notification5;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final defaultColor = Utils.parseColor(banner.textColor) ?? Colors.white;
+    final iconColor = Utils.parseColor(banner.iconColor) ?? defaultColor;
+
     final textStyle = GoogleFonts.plusJakartaSans(
-      color: Colors.white,
+      color: defaultColor,
       fontSize: 12,
       fontWeight: FontWeight.w500,
     );
     final ctaStyle = GoogleFonts.plusJakartaSans(
-      color: Colors.white,
+      color: defaultColor,
       fontSize: 12,
       fontWeight: FontWeight.bold,
       decoration: TextDecoration.underline,
+      decorationColor: defaultColor,
     );
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        if (banner.icon != null) ...[
-          Icon(
-            _getIconData(banner.icon!),
-            color: Colors.white,
-            size: 24,
+    return FadeIn(
+      key: ValueKey('banner_item_${banner.id}'),
+      duration: const Duration(milliseconds: 600),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (banner.icon != null) ...[
+            Icon(
+              BannerIconType.iconFor(banner.icon),
+              color: iconColor,
+              size: 20,
+            ),
+            const Gap(6),
+          ],
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Text(
+                    banner.subtitle ?? '',
+                    style: textStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (banner.ctaLabel != null) ...[
+                  const Gap(8),
+                  GestureDetector(
+                    onTap: () => _handleAction(context, banner.ctaUrl),
+                    child: Text(
+                      banner.ctaLabel!,
+                      style: ctaStyle,
+                    ),
+                  ),
+                ],
+                if (banner.cta2Label != null) ...[
+                  const Gap(8),
+                  GestureDetector(
+                    onTap: () => _handleAction(context, banner.cta2Url),
+                    child: Text(
+                      banner.cta2Label!,
+                      style: ctaStyle,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-          const Gap(10),
+          if (onDismiss != null)
+            IconButton(
+              icon: Icon(Icons.close, color: defaultColor, size: 16),
+              padding: const EdgeInsets.all(6),
+              constraints: const BoxConstraints(),
+              onPressed: onDismiss,
+            ),
         ],
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  banner.subtitle ?? '',
-                  style: textStyle,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (banner.ctaLabel != null) ...[
-                const Gap(8),
-                GestureDetector(
-                  onTap: () => _handleAction(context, banner.ctaUrl),
-                  child: Text(
-                    banner.ctaLabel!,
-                    style: ctaStyle,
-                  ),
-                ),
-              ],
-              if (banner.cta2Label != null) ...[
-                const Gap(8),
-                GestureDetector(
-                  onTap: () => _handleAction(context, banner.cta2Url),
-                  child: Text(
-                    banner.cta2Label!,
-                    style: ctaStyle,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

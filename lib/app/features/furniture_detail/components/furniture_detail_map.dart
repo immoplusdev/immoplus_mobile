@@ -16,8 +16,7 @@ class _FurnitureDetailMapState extends State<FurnitureDetailMap> {
   @override
   Widget build(BuildContext context) {
     final coordinates = widget.furniture.position.coordinates;
-    final hasValidCoordinates =
-        coordinates != null && coordinates.length >= 2;
+    final hasValidCoordinates = coordinates != null && coordinates.length >= 2;
 
     if (!hasValidCoordinates) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());

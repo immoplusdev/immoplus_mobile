@@ -50,8 +50,8 @@ class LogmentBottomBar extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: CurrencyFormatter().format(
-                            residenceModel.prixReservation.toString()),
+                        text: CurrencyFormatter()
+                            .format(residenceModel.prixReservation.toString()),
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -92,8 +92,7 @@ class LogmentBottomBar extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(60),
                 ),

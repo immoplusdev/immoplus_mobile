@@ -5,6 +5,7 @@ import 'package:immoplus/app/features/for_me/favorite_page.dart';
 
 class MyChoicePage extends StatefulWidget {
   const MyChoicePage({super.key});
+  static const String routePath = '/for_me';
   static const String name = 'MyChoicePage';
 
   @override

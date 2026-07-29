@@ -45,6 +45,45 @@ class ShareService {
     );
   }
 
+  /// Partage une URL de hotel
+  static Future<ShareResult> shareHotel({
+    required String hotelId,
+    String? hotelName,
+    BuildContext? context,
+    Rect? sharePositionOrigin,
+  }) async {
+    final url = "https://app.immoplus.ci/hotels/$hotelId";
+    final text = "Découvrez cet hotel: ${hotelName ?? ""}";
+
+    return await shareText(
+      text: text,
+      uri: url,
+      subject: 'Partager cet hotel',
+      context: context,
+      sharePositionOrigin: sharePositionOrigin,
+    );
+  }
+
+  /// Partage une URL de chambre d'hotel
+  static Future<ShareResult> shareRoomHotel({
+    required String hotelId,
+    required String hotelRoomId,
+    String? hotelRoomName,
+    BuildContext? context,
+    Rect? sharePositionOrigin,
+  }) async {
+    final url = "https://app.immoplus.ci/hotels/$hotelId/chambres/$hotelRoomId";
+    final text = "Découvrez cette chambre: ${hotelRoomName ?? ""}";
+
+    return await shareText(
+      text: text,
+      uri: url,
+      subject: 'Partager cette chambre d\'hotel',
+      context: context,
+      sharePositionOrigin: sharePositionOrigin,
+    );
+  }
+
   static Future<ShareResult> shareBien({
     required String bienId,
     String? bienName,
