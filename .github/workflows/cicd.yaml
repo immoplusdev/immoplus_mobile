@@ -102,7 +102,7 @@ jobs:
         run: |
           flutter build ipa --release --flavor ${{ env.FLAVOR }} --build-number ${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist -- \
             CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution"
+            CODE_SIGN_IDENTITY="Apple Distribution" 
 
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v3
