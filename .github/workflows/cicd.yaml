@@ -34,27 +34,23 @@ jobs:
           echo "FLAVOR=$FLAVOR" >> $GITHUB_ENV
           echo "➡️ Flavor utilisé : $FLAVOR"
 
-      - name: 🔐 Install Apple Certificates and Provisioning Profiles
+      - name: 🔐 Install Apple Certificate and Provisioning Profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
-          EXTENSION_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_EXTENSION_PROVISIONING_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
         run: |
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          EXT_PP_PATH=$RUNNER_TEMP/build_ext_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
-          echo -n "$BUILD_CERTIFICATE_BASE64" \vert{} base64 --decode -o $CERTIFICATE_PATH
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" \vert{} base64 --decode -o $PP_PATH
-          echo -n "$EXTENSION_PROVISION_PROFILE_BASE64" \vert{} base64 --decode -o $EXT_PP_PATH
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
           echo "🔍 Vérification de la taille des fichiers générés :"
           ls -lh $CERTIFICATE_PATH
           ls -lh $PP_PATH
-          ls -lh $EXT_PP_PATH
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
@@ -64,16 +60,10 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          # Installation du profil principal
-          UUID=$(grep UUID -A1 -a$PP_PATH | grep -io "[-A-F0-9]\{36\}")
+          UUID=$(grep UUID -A1 -a $PP_PATH | grep -io "[-A-F0-9]\{36\}")
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
           echo "PROFILE_UUID=$UUID" >> $GITHUB_ENV
-
-          # Installation du profil de l'extension OneSignal
-          EXT_UUID=$(grep UUID -A1 -a$EXT_PP_PATH | grep -io "[-A-F0-9]\{36\}")
-          cp $EXT_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$EXT_UUID.mobileprovision
-          echo "EXT_PROFILE_UUID=$EXT_UUID" >> $GITHUB_ENV
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
@@ -86,12 +76,23 @@ jobs:
       - name: 🔢 Compute build number (base + run number)
         run: |
           BASE=${{ vars.IOS_BASE_BUILD_NUMBER }}
-          NEW_BUILD=$((BASE +${{ github.run_number }}))
+          NEW_BUILD=$((BASE + ${{ github.run_number }}))
           echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
           echo "➡️ Build number utilisé : $NEW_BUILD"
 
       - name: 🔨 Build IPA
-        run: flutter build ipa --release --flavor ${{ env.FLAVOR }} --build-number${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist -- CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution"
+        env:
+          PROFILE_UUID: ${{ env.PROFILE_UUID }}
+        run: |
+          flutter build ipa --release \
+            --export-options-plist=ios/ExportOptions.plist \
+            --build-number=${{ env.BUILD_NUMBER }} \
+            --dart-define=FLAVOR=${{ env.FLAVOR }} \
+            -- \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
+            PROVISIONING_PROFILE_SPECIFIER=$PROFILE_UUID \
+            CODE_SIGN_IDENTITY="Apple Distribution"
 
       - name: 🚀 Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
@@ -101,8 +102,7 @@ jobs:
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
-      - name: 🧹 Clean up keychain and profiles
+      - name: 🧹 Clean up keychain
         if: always()
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
-          rm -f ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision
