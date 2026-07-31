@@ -51,6 +51,11 @@ jobs:
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
           echo -n "$EXTENSION_PROVISION_PROFILE_BASE64" | base64 --decode -o $EXT_PP_PATH
 
+          echo "🔍 Vérification de la taille des fichiers générés :"
+          ls -lh $CERTIFICATE_PATH
+          ls -lh $PP_PATH
+          ls -lh $EXT_PP_PATH
+
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -61,49 +66,51 @@ jobs:
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
-          # Extraction UUID ET Nom du profil principal
-          UUID=$(security cms -D -i $PP_PATH | grep -A1 "<key>UUID</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
-          MAIN_NAME=$(security cms -D -i $PP_PATH | grep -A1 "<key>Name</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
+          # Installation du profil principal
+          UUID=$(grep UUID -A1 -a $PP_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
           echo "PROFILE_UUID=$UUID" >> $GITHUB_ENV
-          echo "MAIN_PROFILE_NAME=$MAIN_NAME" >> $GITHUB_ENV
 
-          # Extraction UUID ET Nom du profil de l'extension
-          EXT_UUID=$(security cms -D -i $EXT_PP_PATH | grep -A1 "<key>UUID</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
-          EXT_NAME=$(security cms -D -i $EXT_PP_PATH | grep -A1 "<key>Name</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
+          # Installation du profil de l'extension OneSignal
+          EXT_UUID=$(grep UUID -A1 -a $EXT_PP_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $EXT_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$EXT_UUID.mobileprovision
           echo "EXT_PROFILE_UUID=$EXT_UUID" >> $GITHUB_ENV
-          echo "EXT_PROFILE_NAME=$EXT_NAME" >> $GITHUB_ENV
 
-      - name: 🔧 Patch project.pbxproj with Dynamic Profile Names
+      - name: 🔧 Patch project.pbxproj (build settings réels, via xcodeproj)
         env:
-          MAIN_NAME: ${{ env.MAIN_PROFILE_NAME }}
-          EXT_NAME: ${{ env.EXT_PROFILE_NAME }}
+          MAIN_UUID: ${{ env.PROFILE_UUID }}
+          EXT_UUID: ${{ env.EXT_PROFILE_UUID }}
+          TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          echo "Injection du profil principal : $MAIN_NAME"
-          echo "Injection du profil d'extension : $EXT_NAME"
-          
-          python3 -c "
-          import re, os
-          pbxproj_path = 'ios/Runner.xcodeproj/project.pbxproj'
-          with open(pbxproj_path, 'r') as f: content = f.read()
-          
-          # 1. Forcer le style de signature en Manual
-          content = content.replace('CODE_SIGN_STYLE = Automatic', 'CODE_SIGN_STYLE = Manual')
-          
-          # 2. Injecter le vrai nom du profil pour Runner
-          main_name = os.environ['MAIN_NAME']
-          runner_pattern = r'(/\*\s*Runner\s*\*/\s*=\s*\{[^}]*isa\s*=\s*PBXNativeTarget;[^}]*)'
-          content = re.sub(runner_pattern, lambda m: m.group(1).rstrip() + f'\n\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"{main_name}\";\n\t\t' if 'PROVISIONING_PROFILE_SPECIFIER' not in m.group(1) else m.group(1), content, flags=re.DOTALL)
-          
-          # 3. Injecter le vrai nom du profil pour OneSignal
-          ext_name = os.environ['EXT_NAME']
-          onesignal_pattern = r'(/\*\s*OneSignalNotificationServiceExtension\s*\*/\s*=\s*\{[^}]*isa\s*=\s*PBXNativeTarget;[^}]*)'
-          content = re.sub(onesignal_pattern, lambda m: m.group(1).rstrip() + f'\n\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"{ext_name}\";\n\t\t' if 'PROVISIONING_PROFILE_SPECIFIER' not in m.group(1) else m.group(1), content, flags=re.DOTALL)
-          
-          with open(pbxproj_path, 'w') as f: f.write(content)
-          print('✅ Fichier project.pbxproj patché avec succès !')
-          "
+          gem install xcodeproj --no-document
+
+          ruby -e '
+            require "xcodeproj"
+
+            project = Xcodeproj::Project.open("ios/Runner.xcodeproj")
+
+            targets_map = {
+              "Runner" => ENV["MAIN_UUID"],
+              "OneSignalNotificationServiceExtension" => ENV["EXT_UUID"]
+            }
+
+            project.targets.each do |target|
+              next unless targets_map.key?(target.name)
+              uuid = targets_map[target.name]
+
+              target.build_configurations.each do |config|
+                next unless config.name == "Release"
+                config.build_settings["CODE_SIGN_STYLE"] = "Manual"
+                config.build_settings["CODE_SIGN_IDENTITY"] = "Apple Distribution"
+                config.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = uuid
+                config.build_settings["DEVELOPMENT_TEAM"] = ENV["TEAM_ID"]
+                puts "✅ #{target.name} (Release) -> profil #{uuid}"
+              end
+            end
+
+            project.save
+            puts "✅ project.pbxproj sauvegardé"
+          '
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
