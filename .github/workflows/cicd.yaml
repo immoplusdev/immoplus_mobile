@@ -34,23 +34,22 @@ jobs:
           echo "FLAVOR=$FLAVOR" >> $GITHUB_ENV
           echo "➡️ Flavor utilisé : $FLAVOR"
 
-      - name: 🔐 Install Apple Certificate and Provisioning Profile
+      - name: 🔐 Install Apple Certificates and Provisioning Profiles
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          EXTENSION_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_EXTENSION_PROVISIONING_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
         run: |
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          EXT_PP_PATH=$RUNNER_TEMP/build_ext_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-
-          echo "🔍 Vérification de la taille des fichiers générés :"
-          ls -lh $CERTIFICATE_PATH
-          ls -lh $PP_PATH
+          echo -n "$EXTENSION_PROVISION_PROFILE_BASE64" | base64 --decode -o $EXT_PP_PATH
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
@@ -60,10 +59,51 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          UUID=$(grep UUID -A1 -a $PP_PATH | grep -io "[-A-F0-9]\{36\}")
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+
+          # Extraction UUID ET Nom du profil principal
+          UUID=$(security cms -D -i $PP_PATH | grep -A1 "<key>UUID</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
+          MAIN_NAME=$(security cms -D -i $PP_PATH | grep -A1 "<key>Name</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
           echo "PROFILE_UUID=$UUID" >> $GITHUB_ENV
+          echo "MAIN_PROFILE_NAME=$MAIN_NAME" >> $GITHUB_ENV
+
+          # Extraction UUID ET Nom du profil de l'extension
+          EXT_UUID=$(security cms -D -i $EXT_PP_PATH | grep -A1 "<key>UUID</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
+          EXT_NAME=$(security cms -D -i $EXT_PP_PATH | grep -A1 "<key>Name</key>" | grep "<string>" | sed -e 's/<[^>]*>//g' | xargs)
+          cp $EXT_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$EXT_UUID.mobileprovision
+          echo "EXT_PROFILE_UUID=$EXT_UUID" >> $GITHUB_ENV
+          echo "EXT_PROFILE_NAME=$EXT_NAME" >> $GITHUB_ENV
+
+      - name: 🔧 Patch project.pbxproj with Dynamic Profile Names
+        env:
+          MAIN_NAME: ${{ env.MAIN_PROFILE_NAME }}
+          EXT_NAME: ${{ env.EXT_PROFILE_NAME }}
+        run: |
+          echo "Injection du profil principal : $MAIN_NAME"
+          echo "Injection du profil d'extension : $EXT_NAME"
+          
+          python3 -c "
+          import re, os
+          pbxproj_path = 'ios/Runner.xcodeproj/project.pbxproj'
+          with open(pbxproj_path, 'r') as f: content = f.read()
+          
+          # 1. Forcer le style de signature en Manual
+          content = content.replace('CODE_SIGN_STYLE = Automatic', 'CODE_SIGN_STYLE = Manual')
+          
+          # 2. Injecter le vrai nom du profil pour Runner
+          main_name = os.environ['MAIN_NAME']
+          runner_pattern = r'(/\*\s*Runner\s*\*/\s*=\s*\{[^}]*isa\s*=\s*PBXNativeTarget;[^}]*)'
+          content = re.sub(runner_pattern, lambda m: m.group(1).rstrip() + f'\n\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"{main_name}\";\n\t\t' if 'PROVISIONING_PROFILE_SPECIFIER' not in m.group(1) else m.group(1), content, flags=re.DOTALL)
+          
+          # 3. Injecter le vrai nom du profil pour OneSignal
+          ext_name = os.environ['EXT_NAME']
+          onesignal_pattern = r'(/\*\s*OneSignalNotificationServiceExtension\s*\*/\s*=\s*\{[^}]*isa\s*=\s*PBXNativeTarget;[^}]*)'
+          content = re.sub(onesignal_pattern, lambda m: m.group(1).rstrip() + f'\n\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"{ext_name}\";\n\t\t' if 'PROVISIONING_PROFILE_SPECIFIER' not in m.group(1) else m.group(1), content, flags=re.DOTALL)
+          
+          with open(pbxproj_path, 'w') as f: f.write(content)
+          print('✅ Fichier project.pbxproj patché avec succès !')
+          "
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
@@ -80,12 +120,39 @@ jobs:
           echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
           echo "➡️ Build number utilisé : $NEW_BUILD"
 
+      - name: 📄 Create ExportOptions.plist
+        run: |
+          cat <<EOF > ios/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>com.immoplus.ci</key>
+              <string>${{ env.PROFILE_UUID }}</string>
+              <key>com.immoplus.ci.OneSignalNotificationServiceExtension</key>
+              <string>${{ env.EXT_PROFILE_UUID }}</string>
+            </dict>
+            <key>signingCertificate</key>
+            <string>Apple Distribution</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <true/>
+          </dict>
+          </plist>
+          EOF
+
       - name: 🔨 Build IPA
         run: |
-          flutter build ipa --release \
-            --export-options-plist=ios/ExportOptions.plist \
-            --build-number=${{ env.BUILD_NUMBER }} \
-            --dart-define=FLAVOR=${{ env.FLAVOR }}
+          flutter build ipa --release --flavor ${{ env.FLAVOR }} --build-number ${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist -- CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution"
 
       - name: 🚀 Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
@@ -95,7 +162,8 @@ jobs:
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
-      - name: 🧹 Clean up keychain
+      - name: 🧹 Clean up keychain and profiles
         if: always()
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
+          rm -f ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision
