@@ -286,6 +286,7 @@
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+			PROVISIONING_PROFILE_SPECIFIER = "ImmoPlus AppStore Profile";
 		};
 		FC9048052EC7C25700575CDC /* OneSignalNotificationServiceExtension */ = {
 			isa = PBXNativeTarget;
@@ -307,6 +308,7 @@
 			productName = OneSignalNotificationServiceExtension;
 			productReference = FC9048062EC7C25700575CDC /* OneSignalNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+			PROVISIONING_PROFILE_SPECIFIER = "ImmoPlus AppStore Profile One Signal";
 		};
 /* End PBXNativeTarget section */
 
