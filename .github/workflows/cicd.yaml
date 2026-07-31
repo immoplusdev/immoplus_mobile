@@ -1,103 +1,119 @@
-name: Deploy iOS to TestFlight
+name: build-and-deploy-ios
 
 on:
   push:
-    branches:
-      - develop
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environnement à déployer'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - prod
+    branches: [ main ]
 
 jobs:
   build-and-deploy-ios:
     runs-on: macos-latest
-
     steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: 🌍 Determine environment (flavor)
+      - name: Determine environment (flavor)
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            FLAVOR="${{ github.event.inputs.environment }}"
-          else
-            FLAVOR="dev"
-          fi
+          echo "FLAVOR=dev" >> $GITHUB_ENV
 
-          echo "FLAVOR=$FLAVOR" >> $GITHUB_ENV
-          echo "➡️ Flavor utilisé : $FLAVOR"
-
-      - name: 🔐 Install Apple Certificate and Provisioning Profile
+      - name: Install Apple Certificates and Provisioning Profiles
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          EXTENSION_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_EXTENSION_PROVISIONING_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
         run: |
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          EXT_PP_PATH=$RUNNER_TEMP/build_ext_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
+          
+          # Décoder les certificats et profils
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
-
-          echo "🔍 Vérification de la taille des fichiers générés :"
-          ls -lh $CERTIFICATE_PATH
-          ls -lh $PP_PATH
-
+          echo -n "$EXTENSION_PROVISION_PROFILE_BASE64" | base64 --decode -o $EXT_PP_PATH
+          
+          # Configurer le trousseau
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
+          
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
-
+          
+          # Installer le profil principal
           UUID=$(grep UUID -A1 -a $PP_PATH | grep -io "[-A-F0-9]\{36\}")
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
           echo "PROFILE_UUID=$UUID" >> $GITHUB_ENV
+          
+          # Installer le profil de l'extension OneSignal
+          EXT_UUID=$(grep UUID -A1 -a $EXT_PP_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $EXT_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$EXT_UUID.mobileprovision
+          echo "EXT_PROFILE_UUID=$EXT_UUID" >> $GITHUB_ENV
 
-      - name: 🐦 Setup Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.x'
           channel: 'stable'
+          cache: true
 
-      - name: 📦 Install Dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: 🔢 Compute build number (base + run number)
+      - name: Compute build number (base 37 + run number)
         run: |
-          BASE=${{ vars.IOS_BASE_BUILD_NUMBER }}
-          NEW_BUILD=$((BASE + ${{ github.run_number }}))
-          echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
-          echo "➡️ Build number utilisé : $NEW_BUILD"
+          BUILD_NUMBER=$(( ${{ secrets.IOS_BASE_BUILD_NUMBER }} + ${{ github.run_number }} ))
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
 
-      - name: 🔨 Build IPA
-        env:
-          PROFILE_UUID: ${{ env.PROFILE_UUID }}
+      - name: Create ExportOptions.plist
         run: |
-          flutter build ipa --release \
-            --export-options-plist=ios/ExportOptions.plist \
-            --build-number=${{ env.BUILD_NUMBER }} \
-            --dart-define=FLAVOR=${{ env.FLAVOR }}
+          cat <<EOF > ios/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>com.immoplus.ci</key>
+              <string>${{ env.PROFILE_UUID }}</string>
+              <key>com.immoplus.ci.OneSignalNotificationServiceExtension</key>
+              <string>${{ env.EXT_PROFILE_UUID }}</string>
+            </dict>
+            <key>signingCertificate</key>
+            <string>Apple Distribution</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <true/>
+          </dict>
+          </plist>
+          EOF
 
-      - name: 🚀 Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
+      - name: Build IPA
+        run: |
+          flutter build ipa --release --flavor ${{ env.FLAVOR }} --build-number ${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist -- \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution"
+
+      - name: Upload to TestFlight
+        uses: apple-actions/upload-testflight-build@v3
         with:
           app-path: 'build/ios/ipa/*.ipa'
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
-      - name: 🧹 Clean up keychain
+      - name: Clean up keychain
         if: always()
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
+          rm -f ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision
