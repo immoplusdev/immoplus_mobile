@@ -48,11 +48,9 @@ jobs:
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
-          # --- AJOUT POUR LE DÉBOGAGE ---
           echo "🔍 Vérification de la taille des fichiers générés :"
           ls -lh $CERTIFICATE_PATH
           ls -lh $PP_PATH
-          # ------------------------------
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
@@ -75,7 +73,7 @@ jobs:
       - name: 📦 Install Dependencies
         run: flutter pub get
 
-      - name: 🔢 Compute build number (base 37 + run number)
+      - name: 🔢 Compute build number (base + run number)
         run: |
           BASE=${{ vars.IOS_BASE_BUILD_NUMBER }}
           NEW_BUILD=$((BASE + ${{ github.run_number }}))
@@ -83,6 +81,8 @@ jobs:
           echo "➡️ Build number utilisé : $NEW_BUILD"
 
       - name: 🔨 Build IPA
+        env:
+          PROFILE_UUID: ${{ env.PROFILE_UUID }}
         run: |
           flutter build ipa --release \
             --export-options-plist=ios/ExportOptions.plist \
