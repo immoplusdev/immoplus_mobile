@@ -159,7 +159,7 @@ jobs:
 
       - name: 🔨 Build IPA
         run: |
-          flutter build ipa --release --flavor ${{ env.FLAVOR }} --build-number ${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist
+          flutter build ipa --release --build-number ${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist
 
       - name: 🚀 Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
