@@ -157,7 +157,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                             ),
                             child: Icon(
                               liked
-                                  ? FontAwesomeIcons.solidHeart
+                                  ? FontAwesomeIcons.solidHeart.data
                                   : FontAwesomeIcons.heart,
                               size: 12,
                               color:

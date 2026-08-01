@@ -81,7 +81,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                 leading: const CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(
-                    FontAwesomeIcons.whatsapp,
+                    FontAwesomeIcons.whatsapp.data,
                     color: Colors.green,
                   ),
                 ),
@@ -111,7 +111,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 leading: const Icon(
-                  FontAwesomeIcons.headset,
+                  FontAwesomeIcons.headset.data,
                   color: Colors.black,
                 ),
                 title: const Text('Contacter par appel'),

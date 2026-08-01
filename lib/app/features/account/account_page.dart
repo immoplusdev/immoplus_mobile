@@ -264,16 +264,16 @@ class _AccountPageState extends State<AccountPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _socialFaIcon(FontAwesomeIcons.instagram,
+          _socialIcon(FontAwesomeIcons.instagram,
               () => _openUrl('https://www.instagram.com/immoplus_lapp')),
           const SizedBox(width: 28),
-          _socialFaIcon(FontAwesomeIcons.tiktok,
+          _socialIcon(FontAwesomeIcons.tiktok,
               () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
           // const SizedBox(width: 28),
-          // _socialFaIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
+          // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
           const SizedBox(width: 28),
           _socialIcon(
-              FontAwesomeIcons.facebook,
+              FontAwesomeIcons.facebook.data,
               () => _openUrl(
                   'https://www.facebook.com/profile.php?id=61584464421569')),
         ],
@@ -600,7 +600,7 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 const SizedBox(width: 8),
                 const Icon(
-                  FontAwesomeIcons.chevronRight,
+                  FontAwesomeIcons.chevronRight.data,
                   size: 14,
                   color: _kTrailingColor,
                 ),

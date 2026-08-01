@@ -109,7 +109,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                 ),
                 subtitle: const Text('Montant à payer'),
                 trailing: const Icon(
-                  FontAwesomeIcons.moneyBill,
+                  FontAwesomeIcons.moneyBill.data,
                   color: Colors.green,
                 ),
               ),

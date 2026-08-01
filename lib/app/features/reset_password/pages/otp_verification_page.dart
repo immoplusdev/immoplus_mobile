@@ -81,7 +81,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               final email =
                   context.read<ResetPasswordCubit>().currentEmail ?? "";
               return HeaderContainer(
-                iconData: FontAwesomeIcons.shieldHalved,
+                iconData: FontAwesomeIcons.shieldHalved.data,
                 title: "Entrez le code de vérification reçu",
                 subtitle: "Code envoyé à $email",
               );

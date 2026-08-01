@@ -53,7 +53,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
         child: Column(
           children: [
             HeaderContainer(
-              iconData: FontAwesomeIcons.envelope,
+              iconData: FontAwesomeIcons.envelope.data,
               title: "Entrez votre email",
               subtitle:
                   "Nous vous enverrons un code de vérification par email pour réinitialiser votre mot de passe.",

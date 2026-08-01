@@ -15,7 +15,7 @@ class ClientServiceChip extends StatelessWidget {
       },
       backgroundColor: Colors.white,
       avatar: Icon(
-        FontAwesomeIcons.headset,
+        FontAwesomeIcons.headset.data,
         color: Colors.black,
         size: 15,
       ),

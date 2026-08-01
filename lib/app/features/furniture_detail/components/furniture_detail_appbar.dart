@@ -87,7 +87,7 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
                 radius: 15,
                 backgroundColor: value ? Colors.red : Colors.grey.shade300,
                 child: const Icon(
-                  FontAwesomeIcons.solidHeart,
+                  FontAwesomeIcons.solidHeart.data,
                   size: 16,
                   color: Colors.white,
                 ),

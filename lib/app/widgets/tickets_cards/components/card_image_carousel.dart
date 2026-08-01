@@ -225,7 +225,7 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              FontAwesomeIcons.circleExclamation,
+              FontAwesomeIcons.circleExclamation.data,
               size: 40,
               color: Colors.grey.shade400,
             ),

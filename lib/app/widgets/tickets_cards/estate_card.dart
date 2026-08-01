@@ -151,7 +151,7 @@ class _EstateCardState extends State<EstateCard> {
                   radius: 14,
                   backgroundColor: value ? Colors.red : Colors.grey.shade300,
                   child: const Icon(
-                    FontAwesomeIcons.solidHeart,
+                    FontAwesomeIcons.solidHeart.data,
                     size: 16,
                     color: Colors.white,
                   ),

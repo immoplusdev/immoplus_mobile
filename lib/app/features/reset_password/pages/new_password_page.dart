@@ -64,7 +64,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         child: Column(
           children: [
             HeaderContainer(
-              iconData: FontAwesomeIcons.lock,
+              iconData: FontAwesomeIcons.lock.data,
               title: "Créez un nouveau mot de passe",
               subtitle:
                   "Votre nouveau mot de passe doit être différent des précédents.",
@@ -87,7 +87,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           },
                           icon: Icon(
                             value
-                                ? FontAwesomeIcons.eyeSlash
+                                ? FontAwesomeIcons.eyeSlash.data
                                 : FontAwesomeIcons.eye,
                             size: 20,
                           ),
@@ -111,7 +111,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           },
                           icon: Icon(
                             value
-                                ? FontAwesomeIcons.eyeSlash
+                                ? FontAwesomeIcons.eyeSlash.data
                                 : FontAwesomeIcons.eye,
                             size: 20,
                           ),

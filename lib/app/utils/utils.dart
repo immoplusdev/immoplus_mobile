@@ -418,9 +418,9 @@ class Utils {
 
   static IconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {
-      return FontAwesomeIcons.coins;
+      return FontAwesomeIcons.coins.data;
     }
-    return FontAwesomeIcons.ring;
+    return FontAwesomeIcons.ring.data;
   }
 
   static String formatCurrency(dynamic amount) {

@@ -171,7 +171,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                             ),
                             child: Icon(
                               liked
-                                  ? FontAwesomeIcons.solidHeart
+                                  ? FontAwesomeIcons.solidHeart.data
                                   : FontAwesomeIcons.heart,
                               size: 12,
                               color:

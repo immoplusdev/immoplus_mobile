@@ -72,7 +72,7 @@ class _MtnValidatorPageState extends State<MtnValidatorPage> {
         TextButton.icon(
           iconAlignment: IconAlignment.end,
           icon: Icon(
-            FontAwesomeIcons.circleArrowRight,
+            FontAwesomeIcons.circleArrowRight.data,
             color: AppColors.primary,
             size: 20,
           ),

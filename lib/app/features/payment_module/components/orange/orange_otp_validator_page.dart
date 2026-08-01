@@ -77,7 +77,7 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
         TextButton.icon(
           iconAlignment: IconAlignment.end,
           icon: Icon(
-            FontAwesomeIcons.circleArrowRight,
+            FontAwesomeIcons.circleArrowRight.data,
             color: AppColors.primary,
             size: 20,
           ),

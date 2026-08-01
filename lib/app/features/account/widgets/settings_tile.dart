@@ -80,7 +80,7 @@ class SettingsTile extends StatelessWidget {
       ),
       trailing: trailing ??
           Icon(
-            FontAwesomeIcons.chevronRight,
+            FontAwesomeIcons.chevronRight.data,
             size: 14,
             color: trailingColor ?? const Color(0xFF374151),
           ),

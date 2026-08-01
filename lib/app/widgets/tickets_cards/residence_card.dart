@@ -183,7 +183,7 @@ class ResidenceFavoriteButton extends StatelessWidget {
         radius: 14,
         backgroundColor: isFavorite ? Colors.red : Colors.grey.shade300,
         child: const Icon(
-          FontAwesomeIcons.solidHeart,
+          FontAwesomeIcons.solidHeart.data,
           size: 16,
           color: Colors.white,
         ),

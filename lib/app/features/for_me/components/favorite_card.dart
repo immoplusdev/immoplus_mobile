@@ -141,7 +141,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
                 errorWidget: (context, url, error) => Container(
                   color: _kSeparator,
                   child: Icon(
-                    FontAwesomeIcons.images,
+                    FontAwesomeIcons.images.data,
                     size: 36,
                     color: _kTextSecondary,
                   ),
@@ -152,7 +152,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
               Container(
                 color: _kSeparator,
                 child: Icon(
-                  FontAwesomeIcons.images,
+                  FontAwesomeIcons.images.data,
                   size: 36,
                   color: _kTextSecondary,
                 ),
@@ -216,7 +216,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Icon(
-          FontAwesomeIcons.solidStar,
+          FontAwesomeIcons.solidStar.data,
           color: Colors.orange,
           size: 14,
         ),
