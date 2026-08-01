@@ -78,7 +78,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                leading: const CircleAvatar(
+                leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(
                     FontAwesomeIcons.whatsapp.data,
