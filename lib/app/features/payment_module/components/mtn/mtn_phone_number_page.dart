@@ -88,7 +88,7 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
+              leading: Icon(
                 FontAwesomeIcons.moneyBill.data,
                 color: Colors.green,
               ),

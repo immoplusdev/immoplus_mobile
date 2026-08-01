@@ -110,7 +110,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                leading: const Icon(
+                leading: Icon(
                   FontAwesomeIcons.headset.data,
                   color: Colors.black,
                 ),

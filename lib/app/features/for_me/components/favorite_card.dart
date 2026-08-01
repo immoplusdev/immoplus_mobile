@@ -215,7 +215,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(
+        Icon(
           FontAwesomeIcons.solidStar.data,
           color: Colors.orange,
           size: 14,

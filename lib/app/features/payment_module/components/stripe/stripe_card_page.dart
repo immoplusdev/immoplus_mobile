@@ -140,7 +140,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 FontAwesomeIcons.creditCard.data,
                 size: 13,
                 color: Color(0xFF635BFF),

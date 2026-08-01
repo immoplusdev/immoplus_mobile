@@ -599,7 +599,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Icon(
+                Icon(
                   FontAwesomeIcons.chevronRight.data,
                   size: 14,
                   color: _kTrailingColor,

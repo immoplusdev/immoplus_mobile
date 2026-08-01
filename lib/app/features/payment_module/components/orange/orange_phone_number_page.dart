@@ -89,7 +89,7 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
+              leading: Icon(
                 FontAwesomeIcons.moneyBill.data,
                 color: Colors.green,
               ),

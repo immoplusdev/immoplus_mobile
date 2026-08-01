@@ -88,7 +88,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
+              leading: Icon(
                 FontAwesomeIcons.moneyBill.data,
                 color: Colors.green,
               ),

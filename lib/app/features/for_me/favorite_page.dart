@@ -161,7 +161,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           ),
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
-                          child: const Icon(
+                          child: Icon(
                             FontAwesomeIcons.trashCan.data,
                             color: Colors.white,
                             size: 22,

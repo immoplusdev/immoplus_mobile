@@ -86,7 +86,7 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
               child: CircleAvatar(
                 radius: 15,
                 backgroundColor: value ? Colors.red : Colors.grey.shade300,
-                child: const Icon(
+                child: Icon(
                   FontAwesomeIcons.solidHeart.data,
                   size: 16,
                   color: Colors.white,

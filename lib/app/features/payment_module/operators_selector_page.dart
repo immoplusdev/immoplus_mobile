@@ -108,7 +108,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 subtitle: const Text('Montant à payer'),
-                trailing: const Icon(
+                trailing: Icon(
                   FontAwesomeIcons.moneyBill.data,
                   color: Colors.green,
                 ),
