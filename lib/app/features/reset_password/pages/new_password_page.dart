@@ -88,7 +88,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           icon: Icon(
                             value
                                 ? FontAwesomeIcons.eyeSlash.data
-                                : FontAwesomeIcons.eye,
+                                : FontAwesomeIcons.eye.data,
                             size: 20,
                           ),
                         ),
@@ -112,7 +112,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           icon: Icon(
                             value
                                 ? FontAwesomeIcons.eyeSlash.data
-                                : FontAwesomeIcons.eye,
+                                : FontAwesomeIcons.eye.data,
                             size: 20,
                           ),
                         ),
