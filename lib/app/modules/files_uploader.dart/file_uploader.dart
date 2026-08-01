@@ -173,7 +173,7 @@ class _FileUploaderState extends State<FileUploader> {
                               ? Center(
                                   child: Icon(
                                     widget.iconPlaceholder ??
-                                        FontAwesomeIcons.camera,
+                                        FontAwesomeIcons.camera.data,
                                     size: 50,
                                     color: Colors.grey.shade500,
                                   ),

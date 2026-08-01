@@ -49,7 +49,7 @@ class PriceSetterButton extends StatelessWidget {
                         right: BorderSide(),
                       ),
                     ),
-                    child: const Icon(
+                    child: const FaIcon(
                       FontAwesomeIcons.minus,
                       size: 20,
                       color: Colors.white,
@@ -84,7 +84,7 @@ class PriceSetterButton extends StatelessWidget {
                       ),
                     ),
                     child: const Center(
-                      child: Icon(
+                      child: FaFaIcon(
                         FontAwesomeIcons.plus,
                         size: 20,
                         color: Colors.white,

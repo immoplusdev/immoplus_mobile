@@ -264,10 +264,10 @@ class _AccountPageState extends State<AccountPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _socialIcon(FontAwesomeIcons.instagram,
+          _socialIcon(FontAwesomeIcons.instagram.data,
               () => _openUrl('https://www.instagram.com/immoplus_lapp')),
           const SizedBox(width: 28),
-          _socialIcon(FontAwesomeIcons.tiktok,
+          _socialIcon(FontAwesomeIcons.tiktok.data,
               () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
           // const SizedBox(width: 28),
           // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),

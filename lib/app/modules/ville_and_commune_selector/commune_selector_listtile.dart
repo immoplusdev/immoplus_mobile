@@ -23,7 +23,7 @@ class _CommuneSelectorListtileState extends State<CommuneSelectorListtile> {
       tileColor: (communeModel != null)
           ? AppColors.primaryLite
           : CupertinoColors.tertiarySystemFill,
-      leading: Icon(
+      leading: FaFaIcon(
         FontAwesomeIcons.treeCity,
         color:
             (communeModel != null) ? AppColors.primary : Colors.grey.shade400,
