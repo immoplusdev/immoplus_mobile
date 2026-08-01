@@ -80,7 +80,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       return CustomTextField(
                         controller: _passwordController,
                         obscureText: !value,
-                        prefixIcon: const Icon(FontAwesomeIcons.lock),
+                        prefixIcon: const FaIcon(FontAwesomeIcons.lock),
                         sufixIcon: IconButton(
                           onPressed: () {
                             _passwordNotifier.value = !value;
@@ -104,7 +104,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       return CustomTextField(
                         controller: _confirmPasswordController,
                         obscureText: !value,
-                        prefixIcon: const Icon(FontAwesomeIcons.lock),
+                        prefixIcon: const FaIcon(FontAwesomeIcons.lock),
                         sufixIcon: IconButton(
                           onPressed: () {
                             _confirmPasswordNotifier.value = !value;

@@ -264,13 +264,13 @@ class _AccountPageState extends State<AccountPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _socialIcon(FontAwesomeIcons.instagram,
+          _socialFaIcon(FontAwesomeIcons.instagram,
               () => _openUrl('https://www.instagram.com/immoplus_lapp')),
           const SizedBox(width: 28),
-          _socialIcon(FontAwesomeIcons.tiktok,
+          _socialFaIcon(FontAwesomeIcons.tiktok,
               () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
           // const SizedBox(width: 28),
-          // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
+          // _socialFaIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
           const SizedBox(width: 28),
           _socialIcon(
               FontAwesomeIcons.facebook,
@@ -345,7 +345,7 @@ class _AccountPageState extends State<AccountPage> {
         SettingsTile(
           shape: SettingsTile.shapeLast,
           leading: _iconLeading(
-              Icon(FontAwesomeIcons.gears, size: 18, color: _kIconColor)),
+              FaIcon(FontAwesomeIcons.gears, size: 18, color: _kIconColor)),
           title: 'Permissions',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
@@ -368,7 +368,7 @@ class _AccountPageState extends State<AccountPage> {
         SettingsTile(
           shape: SettingsTile.shapeFirst,
           leading: _iconLeading(
-              Icon(FontAwesomeIcons.bell, size: 18, color: _kIconColor)),
+              FaIcon(FontAwesomeIcons.bell, size: 18, color: _kIconColor)),
           title: 'Notification',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
@@ -383,7 +383,7 @@ class _AccountPageState extends State<AccountPage> {
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(
-              Icon(FontAwesomeIcons.doorOpen, size: 18, color: _kIconColor)),
+              FaIcon(FontAwesomeIcons.doorOpen, size: 18, color: _kIconColor)),
           title: 'Historiques des réservations',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
@@ -413,7 +413,7 @@ class _AccountPageState extends State<AccountPage> {
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(
-              Icon(FontAwesomeIcons.creditCard, size: 18, color: _kIconColor)),
+              FaIcon(FontAwesomeIcons.creditCard, size: 18, color: _kIconColor)),
           title: 'Réservations à payer',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
@@ -427,7 +427,7 @@ class _AccountPageState extends State<AccountPage> {
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(Icon(FontAwesomeIcons.personWalkingLuggage,
+          leading: _iconLeading(FaIcon(FontAwesomeIcons.personWalkingLuggage,
               size: 18, color: _kIconColor)),
           title: 'Historiques des visites',
           titleColor: _kLabelColor,
@@ -442,7 +442,7 @@ class _AccountPageState extends State<AccountPage> {
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(Icon(FontAwesomeIcons.star,
+          leading: _iconLeading(FaIcon(FontAwesomeIcons.star,
               size: 18, color: _kIconColor)),
           title: 'Historique des notes',
           titleColor: _kLabelColor,
@@ -458,7 +458,7 @@ class _AccountPageState extends State<AccountPage> {
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(
-              Icon(FontAwesomeIcons.moneyBills, size: 18, color: _kIconColor)),
+              FaIcon(FontAwesomeIcons.moneyBills, size: 18, color: _kIconColor)),
           title: 'Paiements',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
@@ -480,7 +480,7 @@ class _AccountPageState extends State<AccountPage> {
       delegate: SliverChildListDelegate([
         SettingsTile(
           shape: SettingsTile.shapeSingle,
-          leading: _iconLeading(Icon(FontAwesomeIcons.arrowRightFromBracket,
+          leading: _iconLeading(FaIcon(FontAwesomeIcons.arrowRightFromBracket,
               size: 18, color: _kIconColor)),
           title: 'Déconnexion',
           titleColor: _kLabelColor,
@@ -527,7 +527,7 @@ class _AccountPageState extends State<AccountPage> {
     return SettingsTile(
       shape: SettingsTile.shapeMiddle,
       leading: _iconLeading(
-          Icon(FontAwesomeIcons.lock, size: 18, color: _kIconColor)),
+          FaIcon(FontAwesomeIcons.lock, size: 18, color: _kIconColor)),
       title: 'Modifier mes identifiants de connexion',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,

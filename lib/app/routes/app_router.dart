@@ -673,7 +673,7 @@ class AppRouter {
                 onPressed: () {
                   context.goNamed(SplashScreen.name);
                 },
-                icon: const Icon(FontAwesomeIcons.circleArrowLeft),
+                icon: const FaIcon(FontAwesomeIcons.circleArrowLeft),
               ),
             ),
             body: BookingDetailPage(
@@ -692,7 +692,7 @@ class AppRouter {
               onPressed: () {
                 context.goNamed(SplashScreen.name);
               },
-              icon: const Icon(FontAwesomeIcons.circleArrowLeft),
+              icon: const FaIcon(FontAwesomeIcons.circleArrowLeft),
             ),
           ),
           body: VisitDetailPage(

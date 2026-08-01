@@ -105,7 +105,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
                           color: Colors.grey.shade100,
-                          child: Icon(FontAwesomeIcons.images,
+                          child: FaIcon(FontAwesomeIcons.images,
                               size: 32, color: Colors.grey.shade300),
                         ),
                       ),

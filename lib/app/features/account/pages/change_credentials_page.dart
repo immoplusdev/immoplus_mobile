@@ -61,7 +61,7 @@ class ChangeCredentialsPage extends StatelessWidget {
             SettingsTile(
               shape: SettingsTile.shapeFirst,
               leading: _iconLeading(
-                  Icon(FontAwesomeIcons.key, size: 16, color: _kIconColor)),
+                  FaIcon(FontAwesomeIcons.key, size: 16, color: _kIconColor)),
               title: 'Changer mon mot de passe',
               titleColor: _kLabelColor,
               trailingColor: _kTrailingColor,
@@ -75,7 +75,7 @@ class ChangeCredentialsPage extends StatelessWidget {
             ),
             SettingsTile(
               shape: SettingsTile.shapeMiddle,
-              leading: _iconLeading(Icon(FontAwesomeIcons.envelope,
+              leading: _iconLeading(FaIcon(FontAwesomeIcons.envelope,
                   size: 16, color: _kIconColor)),
               title: 'Changer mon email',
               titleColor: _kLabelColor,
@@ -93,7 +93,7 @@ class ChangeCredentialsPage extends StatelessWidget {
             ),
             SettingsTile(
               shape: SettingsTile.shapeLast,
-              leading: _iconLeading(Icon(FontAwesomeIcons.mobileScreen,
+              leading: _iconLeading(FaIcon(FontAwesomeIcons.mobileScreen,
                   size: 16, color: _kIconColor)),
               title: 'Changer mon numéro de téléphone',
               titleColor: _kLabelColor,

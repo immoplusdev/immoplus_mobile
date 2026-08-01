@@ -66,7 +66,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
                   const Gap(30),
                   CustomTextField(
                     controller: _emailController,
-                    prefixIcon: const Icon(FontAwesomeIcons.envelope),
+                    prefixIcon: const FaIcon(FontAwesomeIcons.envelope),
                     labelText: 'Adresse email',
                     textInputType: TextInputType.emailAddress,
                     validator: (value) =>

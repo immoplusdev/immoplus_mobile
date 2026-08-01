@@ -18,7 +18,7 @@ class _CountryPhoneNumberInputState extends State<CountryPhoneNumberInput> {
       textInputAction: TextInputAction.done,
       labelText: 'Numéro de téléphone',
       controller: widget.controller,
-      sufixIcon: Icon(FontAwesomeIcons.whatsapp),
+      sufixIcon: FaIcon(FontAwesomeIcons.whatsapp),
       prefixIcon: CountryCodePicker(
         onChanged: print,
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')

@@ -178,25 +178,25 @@ class Utils {
   static Widget getServiceStatusIcon(String status) {
     switch (status) {
       case 'en_cours_validation_user':
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
       case 'en_cours_validation_admin':
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
       case 'successful':
-        return const Icon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
       case 'valide':
-        return const Icon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
       case 'failed':
-        return const Icon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       case 'rejete':
-        return const Icon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       case 'paye':
-        return const Icon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
       case 'en_attente_validation':
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
       case 'non_paye':
-        return const Icon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       default:
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.grey);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.grey);
     }
   }
 
