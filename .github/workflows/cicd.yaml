@@ -120,6 +120,9 @@ jobs:
       - name: 📦 Install Dependencies
         run: flutter pub get
 
+      - name: ⚙️ Generate code (freezed / json_serializable)
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: 🔢 Compute build number (base + run number)
         run: |
           BASE=${{ vars.IOS_BASE_BUILD_NUMBER }}
