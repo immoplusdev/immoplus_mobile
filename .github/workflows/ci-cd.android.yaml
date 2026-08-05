@@ -25,6 +25,21 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
+      - name: 🧹 Free disk space
+        run: |
+          echo "Espace disque avant nettoyage :"
+          df -h /
+
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/.ghcup
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf /usr/local/lib/android/sdk/ndk
+          sudo docker image prune --all --force || true
+
+          echo "Espace disque après nettoyage :"
+          df -h /
+
       - name: 🌍 Determine target track
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -98,7 +113,7 @@ jobs:
         uses: LuisDuarte1/google-play-latest-version-code@5c48a3d926268d66b919cd815c85ae2f476fc07a # v0.2.1
         with:
           google_service_account_json: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          package_name: com.immoplus_pro.ci
+          package_name: com.immoplus.ci
 
       - name: 🔢 Compute build number
         env:
@@ -138,7 +153,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.immoplus_pro.ci
+          packageName: com.immoplus.ci
           releaseFiles: ${{ steps.aab.outputs.path }}
           track: ${{ env.TRACK }}
           status: completed
