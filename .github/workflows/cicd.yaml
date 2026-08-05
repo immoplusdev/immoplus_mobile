@@ -116,19 +116,107 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
+
+      - name: 🗄️ Cache Pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: 🗄️ Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: pods-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            pods-${{ runner.os }}-
 
       - name: 📦 Install Dependencies
         run: flutter pub get
 
+      - name: 🗄️ Cache build_runner output
+        uses: actions/cache@v4
+        with:
+          path: .dart_tool/build
+          key: build-runner-${{ runner.os }}-${{ hashFiles('pubspec.lock', 'lib/**/*.dart') }}
+          restore-keys: |
+            build-runner-${{ runner.os }}-
+
       - name: ⚙️ Generate code (freezed / json_serializable)
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: 🔢 Compute build number (base + run number)
+      - name: 🔢 Compute build number (via App Store Connect API)
+        env:
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_PRIVATE_KEY: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+          IOS_BASE_BUILD_NUMBER: ${{ secrets.IOS_BASE_BUILD_NUMBER }}
         run: |
-          BASE=${{ vars.IOS_BASE_BUILD_NUMBER }}
-          NEW_BUILD=$((BASE + ${{ github.run_number }}))
+          gem install jwt --no-document
+
+          MARKETING_VERSION=$(grep '^version:' pubspec.yaml | sed -E 's/^version:\s*([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)/\1/')
+          FALLBACK_BUILD="$IOS_BASE_BUILD_NUMBER"
+
+          if [ -z "$MARKETING_VERSION" ]; then
+            echo "❌ Impossible d'extraire la version depuis pubspec.yaml (format attendu: X.Y.Z+N)"
+            exit 1
+          fi
+
+          if [ -z "$FALLBACK_BUILD" ]; then
+            echo "❌ Secret IOS_BASE_BUILD_NUMBER manquant ou vide"
+            exit 1
+          fi
+
+          NEW_BUILD=$(BUNDLE_ID="com.immoplus.ci" MARKETING_VERSION="$MARKETING_VERSION" FALLBACK_BASE="$FALLBACK_BUILD" ruby -e '
+            require "jwt"
+            require "openssl"
+            require "net/http"
+            require "json"
+            require "time"
+
+            private_key = OpenSSL::PKey.read(ENV.fetch("APPSTORE_PRIVATE_KEY"))
+
+            token = JWT.encode(
+              { iss: ENV.fetch("APPSTORE_ISSUER_ID"), exp: Time.now.to_i + 600, aud: "appstoreconnect-v1" },
+              private_key,
+              "ES256",
+              { kid: ENV.fetch("APPSTORE_KEY_ID"), typ: "JWT" }
+            )
+
+            def api_get(path, token)
+              uri = URI("https://api.appstoreconnect.apple.com#{path}")
+              req = Net::HTTP::Get.new(uri)
+              req["Authorization"] = "Bearer #{token}"
+              res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+              JSON.parse(res.body)
+            end
+
+            bundle_id = ENV.fetch("BUNDLE_ID")
+            version = ENV.fetch("MARKETING_VERSION")
+
+            apps = api_get("/v1/apps?filter[bundleId]=#{bundle_id}", token)
+            app_id = apps.dig("data", 0, "id")
+            raise "App introuvable pour bundleId=#{bundle_id}: #{apps}" unless app_id
+
+            builds = api_get("/v1/builds?filter[app]=#{app_id}&filter[preReleaseVersion.version]=#{version}&sort=-version&limit=1", token)
+            latest = builds.dig("data", 0, "attributes", "version")
+
+            new_build = latest ? latest.to_i + 1 : ENV.fetch("FALLBACK_BASE").to_i
+            puts new_build
+          ')
+
+          if [ -z "$NEW_BUILD" ]; then
+            echo "❌ Échec du calcul du build number via App Store Connect API"
+            exit 1
+          fi
+
           echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
-          echo "➡️ Build number utilisé : $NEW_BUILD"
+          echo "➡️ Build number utilisé : $NEW_BUILD (version=$MARKETING_VERSION, source=App Store Connect API, fallback pubspec=$FALLBACK_BUILD)"
 
       - name: 📄 Create ExportOptions.plist
         run: |

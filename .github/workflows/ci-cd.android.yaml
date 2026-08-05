@@ -1,0 +1,150 @@
+name: Deploy Android to Play Store
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Piste Play Store cible'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+
+jobs:
+  build-and-deploy-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🌍 Determine target track
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TRACK="${{ github.event.inputs.track }}"
+          else
+            TRACK="internal"
+          fi
+
+          echo "TRACK=$TRACK" >> $GITHUB_ENV
+          echo "➡️ Piste utilisée : $TRACK"
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 🔐 Decode keystore and write key.properties
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          KEYSTORE_PATH=$RUNNER_TEMP/release-keystore.jks
+          echo -n "$ANDROID_KEYSTORE_BASE64" | base64 -d > $KEYSTORE_PATH
+
+          echo "🔍 Vérification de la taille du fichier généré :"
+          ls -lh $KEYSTORE_PATH
+
+          cat <<EOF > android/key.properties
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=$KEYSTORE_PATH
+          EOF
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 🗄️ Cache Pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: 🗄️ Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: 📦 Install Dependencies
+        run: flutter pub get
+
+      - name: ⚙️ Generate code (freezed / json_serializable)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: 🔢 Get latest Play Store version code
+        id: latest_version
+        continue-on-error: true
+        uses: LuisDuarte1/google-play-latest-version-code@5c48a3d926268d66b919cd815c85ae2f476fc07a # v0.2.1
+        with:
+          google_service_account_json: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          package_name: com.immoplus_pro.ci
+
+      - name: 🔢 Compute build number
+        env:
+          ANDROID_BASE_BUILD_NUMBER: ${{ vars.ANDROID_BASE_BUILD_NUMBER }}
+          LATEST_VERSION_CODE: ${{ steps.latest_version.outputs.latest_version_code }}
+        run: |
+          if [ -n "$LATEST_VERSION_CODE" ]; then
+            NEW_BUILD=$((LATEST_VERSION_CODE + 1))
+            echo "➡️ Build number basé sur le dernier bundle Play Store : $NEW_BUILD (latest=$LATEST_VERSION_CODE)"
+          else
+            if [ -z "$ANDROID_BASE_BUILD_NUMBER" ]; then
+              echo "❌ Aucun bundle existant sur Play Store et ANDROID_BASE_BUILD_NUMBER manquant"
+              exit 1
+            fi
+            NEW_BUILD="$ANDROID_BASE_BUILD_NUMBER"
+            echo "➡️ Aucun bundle existant sur Play Store, fallback utilisé : $NEW_BUILD"
+          fi
+
+          echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
+
+      - name: 🔨 Build App Bundle
+        run: |
+          flutter build appbundle --release --build-number=${{ env.BUILD_NUMBER }}
+
+      - name: 🔍 Resolve AAB path
+        id: aab
+        run: |
+          AAB_PATH=$(find build/app/outputs/bundle -name "*.aab" | head -n 1)
+          if [ -z "$AAB_PATH" ]; then
+            echo "❌ Aucun fichier .aab trouvé dans build/app/outputs/bundle"
+            exit 1
+          fi
+          echo "Fichier trouvé : $AAB_PATH"
+          echo "path=$AAB_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: 🚀 Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.immoplus_pro.ci
+          releaseFiles: ${{ steps.aab.outputs.path }}
+          track: ${{ env.TRACK }}
+          status: completed
+
+      - name: 🧹 Clean up keystore and key.properties
+        if: always()
+        run: |
+          rm -f $RUNNER_TEMP/release-keystore.jks
+          rm -f android/key.properties
