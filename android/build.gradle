@@ -8,27 +8,24 @@ allprojects {
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
-}
 
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty("android")) {
-            project.android {
+    afterEvaluate { proj ->
+        if (proj.hasProperty("android")) {
+            proj.android {
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_11
                     targetCompatibility JavaVersion.VERSION_11
                 }
             }
         }
-        project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
             kotlinOptions {
                 jvmTarget = "11"
             }
         }
     }
+
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
