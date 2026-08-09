@@ -68,11 +68,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   void initState() {
     super.initState();
     // Utilisateur non connecté : pas de réservations à charger, le bouton
-    // ne s'affiche même pas (voir build()).
     if (!_isLoggedIn) return;
     // Chargement initial (alimente le badge même menu fermé) + rafraîchi à
-    // chaque événement temps réel du websocket /reservations (indépendant de
-    // ReservationPendingBanner, qui n'est monté nulle part dans l'arbre).
     unawaited(
         _refreshPendingReservations().then((_) => _maybeAutoOpenEmptyHint()));
     ReservationPendingBanner.pushNotifier.addListener(_onNewOperation);
@@ -86,8 +83,6 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   /// Ouvre le menu automatiquement à l'ouverture de l'app si l'utilisateur
-  /// n'a aucune transaction en cours — une seule fois, jamais rejoué ensuite
-  /// (flag persisté en local).
   Future<void> _maybeAutoOpenEmptyHint() async {
     if (!mounted || _isOpen || _pendingCount > 0) return;
 
