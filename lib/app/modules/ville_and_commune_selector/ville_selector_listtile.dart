@@ -22,7 +22,7 @@ class _VilleSelectorListtileState extends State<VilleSelectorListtile> {
       tileColor: (villeModel != null)
           ? AppColors.primaryLite
           : CupertinoColors.tertiarySystemFill,
-      leading: FaFaIcon(
+      leading: FaIcon(
         FontAwesomeIcons.treeCity,
         color: (villeModel != null) ? AppColors.primary : Colors.grey.shade400,
       ),
