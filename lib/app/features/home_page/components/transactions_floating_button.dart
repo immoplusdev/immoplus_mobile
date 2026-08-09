@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
@@ -57,12 +58,18 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   List<ReservationModel> _pendingOwnerReservations = [];
   List<ReservationModel> _pendingPaymentReservations = [];
 
+  final _sessionManager = getIt<SessionManager>();
+  bool get _isLoggedIn => _sessionManager.currentUser != null;
+
   int get _pendingCount =>
       _pendingOwnerReservations.length + _pendingPaymentReservations.length;
 
   @override
   void initState() {
     super.initState();
+    // Utilisateur non connecté : pas de réservations à charger, le bouton
+    // ne s'affiche même pas (voir build()).
+    if (!_isLoggedIn) return;
     // Chargement initial (alimente le badge même menu fermé) + rafraîchi à
     // chaque événement temps réel du websocket /reservations (indépendant de
     // ReservationPendingBanner, qui n'est monté nulle part dans l'arbre).
@@ -251,6 +258,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
 
   @override
   Widget build(BuildContext context) {
+    if (!_isLoggedIn) return const SizedBox.shrink();
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -339,7 +348,7 @@ class _TransactionsStackIconState extends State<_TransactionsStackIcon> {
   static const List<String> _images = [
     'assets/img/residence.png',
     'assets/img/terrain.png',
-    'assets/meuble.png',
+    'assets/img/meuble.png',
   ];
 
   static const List<_StackSlot> _slots = [
