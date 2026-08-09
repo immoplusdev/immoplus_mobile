@@ -50,22 +50,31 @@ class ResidenceRepository {
   /// Récupère la dernière réservation en attente de réponse du propriétaire
   Future<ReservationModel?> getLatestPendingProprietaireReponse() async {
     try {
-      final where = [
-        '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttenteReponseProprietaire.backendValue}"}',
-        '{ "_field": "statusFacture", "_op": "eq", "_val": "non_paye"}'
-      ];
-      final result = await getReservations(
-        page: 1,
-        perPage: 1,
-        where: where,
-        orderBy: OrderByField.createdAt.value,
-        orderDir: OrderDir.desc.value,
-      );
+      final result =
+          await getReservationsEnAttenteProprietaire(page: 1, perPage: 1);
       if (result.data.isNotEmpty) return result.data.first;
       return null;
     } catch (_) {
       return null;
     }
+  }
+
+  /// Récupère les réservations en attente de réponse du propriétaire
+  Future<ReservationsCollection> getReservationsEnAttenteProprietaire({
+    int page = 1,
+    int perPage = 10,
+  }) {
+    final where = [
+      '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttenteReponseProprietaire.backendValue}"}',
+      '{ "_field": "statusFacture", "_op": "eq", "_val": "non_paye"}'
+    ];
+    return getReservations(
+      page: page,
+      perPage: perPage,
+      where: where,
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
+    );
   }
 
   Future<ReservationModel> annulerReservationClient({

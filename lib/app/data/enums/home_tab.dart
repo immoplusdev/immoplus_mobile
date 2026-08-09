@@ -10,10 +10,10 @@ enum HomeTab {
 
   static List<HomeTab> get valuestabs => [
         HomeTab.residence,
-        HomeTab.hotel,
         HomeTab.location,
         // HomeTab.furniture,
         HomeTab.bien,
+        HomeTab.hotel,
       ];
 
   String? get category => switch (this) {

@@ -9,12 +9,15 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
+import 'package:immoplus/app/data/models/remote/hotel/hotel_module_status_response.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotels_collection.dart';
 import 'package:immoplus/app/data/repositories/hotel_repository.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_result_page.dart';
 import 'package:immoplus/app/features/hotel/widgets/adds_tag.dart';
 import 'package:immoplus/app/features/hotel/widgets/discover_card.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card.dart';
+import 'package:immoplus/app/features/hotel/widgets/hotel_coming_soon_view.dart';
+import 'package:immoplus/app/features/hotel/widgets/hotel_search_skeleton_view.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_shimmer_card.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card_sponsorise.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
@@ -79,6 +82,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
   late Future<HotelsCollection> _closestHotelsFuture;
   late Future<HotelsCollection> _sponsoredHotelsFuture;
   final Map<String, Future<HotelsCollection>> _cityHotelsFutures = {};
+  late Future<HotelModuleStatusResponse> _moduleStatusFuture;
   List<Map<String, dynamic>> _recentSearches = [];
   bool _recentSearchesVisible = true;
 
@@ -103,6 +107,13 @@ class _HotelSearchPageState extends State<HotelSearchPage>
     _loadRecentSearches();
     _initFutures();
     _fetchUserLocationAndRefresh();
+    _moduleStatusFuture = getIt<HotelRepository>().getModuleStatus().catchError(
+      (e) {
+        debugPrint('Hotel module status check failed: $e');
+        // En cas d'échec du check, on n'empêche pas l'accès au module.
+        return const HotelModuleStatusResponse(active: true);
+      },
+    );
   }
 
   void _initFutures() {
@@ -404,6 +415,21 @@ class _HotelSearchPageState extends State<HotelSearchPage>
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<HotelModuleStatusResponse>(
+      future: _moduleStatusFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const HotelSearchSkeletonView();
+        }
+        if (snapshot.data?.active == false) {
+          return const HotelComingSoonView();
+        }
+        return _buildHotelContent(context);
+      },
+    );
+  }
+
+  Widget _buildHotelContent(BuildContext context) {
     final dateFormat = DateFormat('dd MMM', 'fr_FR');
     final String datesText = _selectedDateRange == null
         ? "Selectionner les dates"

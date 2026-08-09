@@ -14,6 +14,7 @@ import '../models/remote/hotel/hotel_reservation_response.dart';
 import '../models/remote/hotel/hotel_payment_request.dart';
 import '../models/remote/hotel/hotel_payment_response.dart';
 import '../models/remote/hotel/hotel_payment_methods_response.dart';
+import '../models/remote/hotel/hotel_module_status_response.dart';
 import '../providers/hotel_provider.dart';
 
 @injectable
@@ -33,6 +34,22 @@ class HotelRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to load room detail: $error');
+    }
+  }
+
+  /// Statut d'activation globale du module Hôtel (flag plateforme).
+  Future<HotelModuleStatusResponse> getModuleStatus() async {
+    try {
+      final response = await dioClient.get('/pms/hotels/module-status');
+      return HotelModuleStatusResponse.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load hotel module status: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to load hotel module status: $error');
     }
   }
 
