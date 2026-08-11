@@ -98,20 +98,20 @@ class AdActionHandler {
         break;
 
       case AdAction.openEvent:
-        _runWithAuthGuard(context, () {
+        _runWithAuthGuardAndPass(() {
           AppRouter.router.pushIfDifferent('/${NotificationsPage.name}');
         });
         break;
 
       case AdAction.openExternal:
-        final appUrl = scope?.filters?['app_url']?.toString();
+        final appUrl = scope?.filters['app_url']?.toString() ?? campaign.url;
         if (appUrl != null && appUrl.isNotEmpty) {
           launchUrl(Uri.parse(appUrl), mode: LaunchMode.externalApplication);
         }
         break;
 
       case AdAction.openInternalPage:
-        final pageSlug = scope?.filters?['page_slug']?.toString();
+        final pageSlug = scope?.filters['page_slug']?.toString();
         if (pageSlug != null && pageSlug.isNotEmpty) {
           final target = pageSlug.startsWith('/') ? pageSlug : '/$pageSlug';
           AppRouter.router.pushIfDifferent(target);
@@ -119,7 +119,7 @@ class AdActionHandler {
         break;
 
       case AdAction.openPayment:
-        final bookingId = scope?.filters?['booking_id']?.toString();
+        final bookingId = scope?.filters['booking_id']?.toString();
         if (bookingId != null && bookingId.isNotEmpty) {
           AppRouter.router
               .pushIfDifferent(BookingDetailPage.paymentRoute(bookingId));
@@ -142,6 +142,13 @@ class AdActionHandler {
       ));
       context.pushNamed(AuthenticationPage.name);
     } else {
+      action();
+    }
+  }
+
+  static void _runWithAuthGuardAndPass(VoidCallback action) {
+    final sessionManager = getIt<SessionManager>();
+    if (sessionManager.currentUser != null) {
       action();
     }
   }
