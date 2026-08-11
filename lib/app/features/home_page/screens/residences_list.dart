@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
@@ -165,6 +169,28 @@ class _ResidencesListState extends State<ResidencesList>
 
   @override
   Widget build(BuildContext context) {
+    final adsState = context.watch<AdsCubit>().state;
+    final ads = adsState.maybeWhen(
+      success: (list) => list
+          .where((c) => c.placement == AdPlacement.residenceList.value)
+          .toList(),
+      orElse: () => <AdCampaignModel>[],
+    );
+
+    // Merge ads into the section list based on positionIndex
+    final List<dynamic> listItems = [..._displayList];
+    final indexedAds = ads.where((ad) => ad.positionIndex != null).toList()
+      ..sort((a, b) => a.positionIndex!.compareTo(b.positionIndex!));
+
+    int insertedCount = 0;
+    for (final ad in indexedAds) {
+      final target = ad.positionIndex! + 1 + insertedCount; // "after the N-th element" (0-based)
+      if (target >= 0 && target <= listItems.length) {
+        listItems.insert(target, ad);
+        insertedCount++;
+      }
+    }
+
     return SliverMainAxisGroup(
       slivers: [
         BlocBuilder<LocationPermissionCubit, LocationPermissionState>(
@@ -244,17 +270,24 @@ class _ResidencesListState extends State<ResidencesList>
               : SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final item = _displayList[index];
+                      final item = listItems[index];
+                      if (item is AdCampaignModel) {
+                        return AdWidget(
+                          placement: AdPlacement.residenceList,
+                          index: item.positionIndex,
+                        );
+                      }
+                      final section = item as _LocationSectionData;
                       return ResidencesHorizontalListByLocation(
                         key: ValueKey(
-                            'location_residences_${item.villeId ?? item.communeId}'),
-                        title: item.title,
-                        villeId: item.villeId,
-                        communeId: item.communeId,
-                        residences: item.residences,
+                            'location_residences_${section.villeId ?? section.communeId}'),
+                        title: section.title,
+                        villeId: section.villeId,
+                        communeId: section.communeId,
+                        residences: section.residences,
                       );
                     },
-                    childCount: _displayList.length,
+                    childCount: listItems.length,
                   ),
                 ),
         ),

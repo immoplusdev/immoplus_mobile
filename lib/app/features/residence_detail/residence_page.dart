@@ -28,6 +28,9 @@ import 'components/detail_logment_map.dart';
 import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
 
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
+
 class ResidencePage extends StatefulWidget {
   const ResidencePage({super.key, required this.idProduct});
 
@@ -129,6 +132,10 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                 const DetailLogmentTitle2(title: 'Description'),
                 const SliverGap(4),
                 _ExpandableDescription(description: data.description),
+
+                const SliverToBoxAdapter(
+                  child: AdWidget(placement: AdPlacement.residenceDetails),
+                ),
 
                 const _SliverDivider(),
 

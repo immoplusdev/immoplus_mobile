@@ -4,12 +4,14 @@ import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
 
 class KycWebViewPage extends StatefulWidget {
   final String url;
+  final String? title;
 
   static final String routeName = "kyc_webview";
 
   const KycWebViewPage({
     super.key,
     required this.url,
+    this.title,
   });
 
   @override
@@ -52,7 +54,7 @@ class _KycWebViewPageState extends State<KycWebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Vérification d'identité"),
+        title: Text(widget.title ?? "Vérification d'identité"),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),

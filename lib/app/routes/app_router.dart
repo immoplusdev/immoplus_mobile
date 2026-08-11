@@ -800,9 +800,18 @@ class AppRouter {
       GoRoute(
         path: '/kyc-webview',
         name: KycWebViewPage.routeName,
-        builder: (context, state) => KycWebViewPage(
-          url: state.extra as String? ?? '',
-        ),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is Map<String, String>) {
+            return KycWebViewPage(
+              url: extra['url'] ?? '',
+              title: extra['title'],
+            );
+          }
+          return KycWebViewPage(
+            url: extra as String? ?? '',
+          );
+        },
       ),
       GoRoute(
         path: BookingDetailPage.routePath,
