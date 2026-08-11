@@ -19,6 +19,10 @@ import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/auth_redirect_service.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
 
 class AdActionHandler {
   static void handleAdAction(BuildContext context, AdCampaignModel campaign) {
@@ -83,8 +87,9 @@ class AdActionHandler {
         break;
 
       case AdAction.openProfile:
-        // Navigates directly to user's edit account page
-        context.pushNamed(EditAccountPage.name);
+        _runWithAuthGuard(context, () {
+          context.pushNamed(EditAccountPage.name);
+        });
         break;
 
       case AdAction.openImatch:
@@ -93,7 +98,9 @@ class AdActionHandler {
         break;
 
       case AdAction.openEvent:
-        AppRouter.router.pushIfDifferent('/${NotificationsPage.name}');
+        _runWithAuthGuard(context, () {
+          AppRouter.router.pushIfDifferent('/${NotificationsPage.name}');
+        });
         break;
 
       case AdAction.openExternal:
@@ -122,6 +129,20 @@ class AdActionHandler {
       case AdAction.none:
       default:
         break;
+    }
+  }
+
+  static void _runWithAuthGuard(BuildContext context, VoidCallback action) {
+    final sessionManager = getIt<SessionManager>();
+    if (sessionManager.currentUser == null) {
+      final currentRouteName = ModalRoute.of(context)?.settings.name;
+      getIt<AuthRedirectService>().set((
+        popUntilRouteName: currentRouteName,
+        callback: action,
+      ));
+      context.pushNamed(AuthenticationPage.name);
+    } else {
+      action();
     }
   }
 }
