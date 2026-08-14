@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:immoplus/app/data/enums/ad_action.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
@@ -25,8 +27,14 @@ import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 
 class AdActionHandler {
-  static void handleAdAction(BuildContext context, AdCampaignModel campaign) {
-    log("campaign======> ${campaign.toJson().toString()}");
+  static void handleAdAction(BuildContext context, AdCampaignModel campaign,
+      {bool isLongPress = false}) {
+    final debugLog = "campaign======> ${campaign.toJson().toString()}";
+    log(debugLog);
+    if (isLongPress) {
+      Utils.copyToClipboard(debugLog);
+      return;
+    }
     final action = AdAction.fromString(campaign.action);
     final scope = campaign.scope;
     final url = campaign.url;
@@ -66,6 +74,8 @@ class AdActionHandler {
         if (scope?.entityId != null) {
           AppRouter.router
               .pushIfDifferent(HotelDetailPage.route(scope!.entityId!));
+        } else {
+          AppRouter.router.pushIfDifferent(HotelSearchPage.routePath);
         }
         break;
 

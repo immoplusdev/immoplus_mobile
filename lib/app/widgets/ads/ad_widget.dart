@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/data/enums/ad_type.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 import 'package:immoplus/app/logic/ads/ads_state.dart';
+import 'components/ad_carousel_video_widget.dart';
+import 'components/ad_carousel_widget.dart';
 import 'components/ad_image_widget.dart';
 import 'components/ad_video_widget.dart';
-import 'components/ad_carousel_widget.dart';
 
 class AdWidget extends StatelessWidget {
   final AdPlacement placement;
@@ -27,9 +29,8 @@ class AdWidget extends StatelessWidget {
         return state.maybeWhen(
           success: (campaigns) {
             // Filter campaigns matching this placement
-            final placementCampaigns = campaigns
-                .where((c) => c.placement == placement.value)
-                .toList();
+            final placementCampaigns =
+                campaigns.where((c) => c.placement == placement.value).toList();
 
             if (placementCampaigns.isEmpty) {
               return const SizedBox.shrink();
@@ -54,7 +55,8 @@ class AdWidget extends StatelessWidget {
             }
 
             return VisibilityDetector(
-              key: ValueKey('ad_detector_${selectedCampaign.id}_${placement.value}'),
+              key: ValueKey(
+                  'ad_detector_${selectedCampaign.id}_${placement.value}'),
               onVisibilityChanged: (info) {
                 if (info.visibleFraction > 0.5) {
                   context.read<AdsCubit>().trackImpression(
@@ -73,15 +75,15 @@ class AdWidget extends StatelessWidget {
   }
 
   Widget _buildAdLayout(AdCampaignModel campaign) {
-    final type = campaign.type;
-
-    if (type == 'CAROUSEL') {
-      return AdCarouselWidget(campaign: campaign);
-    } else if (type == 'VIDEO') {
-      return AdVideoWidget(campaign: campaign);
-    } else {
-      // Default / IMAGE
-      return AdImageWidget(campaign: campaign);
+    switch (AdType.fromString(campaign.type)) {
+      case AdType.carousel:
+        return AdCarouselWidget(campaign: campaign);
+      case AdType.video:
+        return AdVideoWidget(campaign: campaign);
+      case AdType.videoCarousel:
+        return AdCarouselVideoWidget(campaign: campaign);
+      case AdType.image:
+        return AdImageWidget(campaign: campaign);
     }
   }
 }

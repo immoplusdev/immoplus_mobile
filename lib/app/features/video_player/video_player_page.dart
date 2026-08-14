@@ -8,7 +8,16 @@ import 'package:chewie/chewie.dart';
 class VideoPlayerPage extends StatefulWidget {
   final String videoID;
 
-  const VideoPlayerPage({super.key, required this.videoID});
+  /// Optional builder for a custom error widget.
+  /// Receives [retry] — a callback that re-triggers video initialisation.
+  /// When null the default error UI is shown.
+  final Widget Function(VoidCallback retry)? buildErrorWidget;
+
+  const VideoPlayerPage({
+    super.key,
+    required this.videoID,
+    this.buildErrorWidget,
+  });
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
@@ -178,13 +187,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     return _buildErrorWidget();
   }
 
-  // Widget d'erreur amélioré
+  // Widget d'erreur — utilise le builder custom si fourni, sinon le UI par défaut.
   Widget _buildErrorWidget() {
+    if (widget.buildErrorWidget != null) {
+      return widget.buildErrorWidget!(_initializeAndPlayVideo);
+    }
+
     return Container(
       width: double.infinity,
       height: 250.0,
       decoration: BoxDecoration(
-        // color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
