@@ -14,6 +14,7 @@ class SuggestSearchBar extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final VoidCallback? onClear;
   final bool showClearButton;
+  final bool showBackButton;
   final bool showSearchButton;
   final VoidCallback? onSearchPressed;
   final VoidCallback? onBackPressed;
@@ -32,6 +33,7 @@ class SuggestSearchBar extends StatelessWidget {
     this.showSearchButton = false,
     this.onSearchPressed,
     this.onBackPressed,
+    this.showBackButton = true,
   });
 
   @override
@@ -42,18 +44,19 @@ class SuggestSearchBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Back Button
-          IconButton(
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.primary,
-              size: 22,
+          if (showBackButton) ...[
+            IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.primary,
+                size: 22,
+              ),
+              onPressed: onBackPressed ?? () => Navigator.pop(context),
             ),
-            onPressed: onBackPressed ?? () => Navigator.pop(context),
-          ),
-
-          const Gap(8),
+            const Gap(8),
+          ],
 
           // Text Field
           Expanded(

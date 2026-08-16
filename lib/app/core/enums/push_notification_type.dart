@@ -6,6 +6,7 @@ import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
@@ -92,7 +93,7 @@ enum PushNotificationType {
           MarketingNotificationCode.cliSeason04,
           MarketingNotificationCode.cliSocial04,
         ].contains(mCode)) {
-          return SuggestPage.routePath;
+          return SearchContainerPage.routePath;
         }
 
         // Profil / Préférences
@@ -122,7 +123,7 @@ enum PushNotificationType {
         ].contains(mCode)) {
           return referenceId != null
               ? ResidencePage.route(referenceId)
-              : SuggestPage.routePath;
+              : SearchContainerPage.routePath;
         }
 
         // Alertes (deep link)

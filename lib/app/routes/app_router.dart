@@ -85,6 +85,7 @@ import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
@@ -363,13 +364,13 @@ class AppRouter {
         builder: (context, state) => const VisitHistoryPage(),
       ),
       GoRoute(
-        path: SuggestPage.routePath,
-        name: SuggestPage.routeName,
+        path: SearchContainerPage.routePath,
+        name: SearchContainerPage.routeName,
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
           return _slideUpPage(
             state.pageKey,
-            SuggestPage(
+            SearchContainerPage(
               homeTab: extra['homeTab'] as HomeTab?,
               lat: extra['lat'] as double?,
               lng: extra['lng'] as double?,

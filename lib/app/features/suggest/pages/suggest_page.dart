@@ -293,6 +293,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
               focusNode: _focusNode,
               showClearButton: _showClearButton,
               showSearchButton: true,
+              showBackButton: false,
               onClear: () {
                 _searchController.clear();
               },
