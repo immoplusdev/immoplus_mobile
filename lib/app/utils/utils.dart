@@ -71,13 +71,19 @@ class Utils {
   static String getImagePath({required String id}) =>
       "${RequestPath.baseUrl}/files/raw/public/$id";
 
-  /// URL vidéo à partir de l'ID. En dev (FLAVOR=dev) utilise l'URL dev [RequestPath.baseUrl].
-  /// En prod utilise l'URL prod. Retourne null si baseUrl ou id vide → "Impossible de lire la vidéo".
   static String? getVideoPath({required String id}) {
     final baseUrl = RequestPath.baseUrl.trim();
     final videoId = id.trim();
     if (baseUrl.isEmpty || videoId.isEmpty) return null;
     return "$baseUrl/files/videos/raw/public/$videoId";
+  }
+
+  /// URL du master playlist HLS d'une vidéo du feed, à partir de son ID.
+  static String? getFeedVideoHlsPath({required String id}) {
+    final baseUrl = RequestPath.baseUrl.trim();
+    final videoId = id.trim();
+    if (baseUrl.isEmpty || videoId.isEmpty) return null;
+    return "$baseUrl/files/hls/public/$videoId/master.m3u8";
   }
 
   static Widget getImageWidget({required String id}) => CachedNetworkImage(
@@ -418,9 +424,9 @@ class Utils {
 
   static IconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {
-      return FontAwesomeIcons.coins.data;
+      return FontAwesomeIcons.coins;
     }
-    return FontAwesomeIcons.ring.data;
+    return FontAwesomeIcons.ring;
   }
 
   static String formatCurrency(dynamic amount) {

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -7,6 +8,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
@@ -19,6 +21,10 @@ class SearchResultPage extends StatefulWidget {
   final String? communeId;
   final String displayText;
 
+  /// Si fourni, remplace la barre de recherche par une bannière image en
+  /// haut de page (ex: clic sur une pub) — aucun champ de recherche affiché.
+  final String? bannerImageId;
+
   const SearchResultPage({
     super.key,
     required this.category,
@@ -26,6 +32,7 @@ class SearchResultPage extends StatefulWidget {
     this.villeId,
     this.communeId,
     required this.displayText,
+    this.bannerImageId,
   });
 
   static const String routeName = "search_results";
@@ -160,63 +167,93 @@ class _SearchResultPageState extends State<SearchResultPage>
   @override
   Widget build(BuildContext context) {
     final isResidence = widget.category == 'residence';
+    final showBanner = widget.bannerImageId?.isNotEmpty == true;
+
+    final resultsList = isResidence
+        ? PagedListView<int, ResidenceModel>(
+            pagingController: _residencePagingController,
+            builderDelegate: PagedChildBuilderDelegate<ResidenceModel>(
+              firstPageProgressIndicatorBuilder: (context) => Column(
+                children: List.generate(5, (index) => LoadProductCard()),
+              ),
+              noItemsFoundIndicatorBuilder: (context) => const Center(
+                child: Text(
+                  'Aucun résultat trouvé pour votre recherche.',
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+              ),
+              itemBuilder: (context, item, index) => Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: UnifiedPropertyCard(item: item),
+              ),
+            ),
+          )
+        : PagedListView<int, BienImmobilierModel>(
+            pagingController: _estatePagingController,
+            builderDelegate: PagedChildBuilderDelegate<BienImmobilierModel>(
+              firstPageProgressIndicatorBuilder: (context) => Column(
+                children: List.generate(5, (index) => LoadProductCard()),
+              ),
+              noItemsFoundIndicatorBuilder: (context) => const Center(
+                child: Text(
+                  'Aucun résultat trouvé pour votre recherche.',
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+              ),
+              itemBuilder: (context, item, index) => Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: UnifiedPropertyCard(item: item),
+              ),
+            ),
+          );
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: SafeArea(
-          child: SuggestSearchBar(
-            controller: _searchController,
-            readOnly: true,
-            onTap: () => context.pop(), // Go back to search suggestions page
-            showClearButton: true,
-            onClear: () => context.pop(),
-            onBackPressed: () => context.pop(),
-          ),
-        ),
-      ),
+      appBar: showBanner
+          ? AppBar(
+              backgroundColor: AppColors.white,
+              elevation: 0,
+              leading: BackButton(onPressed: () => context.pop()),
+            )
+          : PreferredSize(
+              preferredSize: const Size.fromHeight(60.0),
+              child: SafeArea(
+                child: SuggestSearchBar(
+                  controller: _searchController,
+                  readOnly: true,
+                  onTap: () =>
+                      context.pop(), // Go back to search suggestions page
+                  showClearButton: true,
+                  onClear: () => context.pop(),
+                  onBackPressed: () => context.pop(),
+                ),
+              ),
+            ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: isResidence
-              ? PagedListView<int, ResidenceModel>(
-                  pagingController: _residencePagingController,
-                  builderDelegate: PagedChildBuilderDelegate<ResidenceModel>(
-                    firstPageProgressIndicatorBuilder: (context) => Column(
-                      children: List.generate(5, (index) => LoadProductCard()),
-                    ),
-                    noItemsFoundIndicatorBuilder: (context) => const Center(
-                      child: Text(
-                        'Aucun résultat trouvé pour votre recherche.',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      ),
-                    ),
-                    itemBuilder: (context, item, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: UnifiedPropertyCard(item: item),
-                    ),
-                  ),
-                )
-              : PagedListView<int, BienImmobilierModel>(
-                  pagingController: _estatePagingController,
-                  builderDelegate:
-                      PagedChildBuilderDelegate<BienImmobilierModel>(
-                    firstPageProgressIndicatorBuilder: (context) => Column(
-                      children: List.generate(5, (index) => LoadProductCard()),
-                    ),
-                    noItemsFoundIndicatorBuilder: (context) => const Center(
-                      child: Text(
-                        'Aucun résultat trouvé pour votre recherche.',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      ),
-                    ),
-                    itemBuilder: (context, item, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: UnifiedPropertyCard(item: item),
-                    ),
+        top: !showBanner,
+        child: Column(
+          children: [
+            if (showBanner)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: CachedNetworkImage(
+                    imageUrl: Utils.getImagePath(id: widget.bannerImageId!),
+                    width: double.infinity,
+                    height: 180,
+                    fit: BoxFit.cover,
                   ),
                 ),
+              ),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                child: resultsList,
+              ),
+            ),
+          ],
         ),
       ),
     );

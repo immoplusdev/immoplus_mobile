@@ -23,14 +23,15 @@ class AdImageWidget extends StatelessWidget {
     return AdTap(
       campaign: campaign,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.grey[100]!,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
         ),
+        clipBehavior: Clip.antiAlias,
         child: CachedNetworkImage(
           imageUrl: imageUrl,
-          height: 440,
+          height: 380,
           width: double.infinity,
           fit: BoxFit.cover,
           placeholder: (context, url) => Shimmer.fromColors(
@@ -38,7 +39,7 @@ class AdImageWidget extends StatelessWidget {
             highlightColor: Colors.grey[100]!,
             child: Container(
               width: double.infinity,
-              height: 440,
+              height: 380,
               color: Colors.white,
             ),
           ),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_video_cover_widget.dart';
 
-class AdCarouselVideoWidget extends StatefulWidget {
+class AdCarouselVideoWidget extends StatelessWidget {
   final AdCampaignModel campaign;
 
   const AdCarouselVideoWidget({
@@ -13,27 +16,33 @@ class AdCarouselVideoWidget extends StatefulWidget {
     required this.campaign,
   });
 
-  @override
-  State<AdCarouselVideoWidget> createState() => _AdCarouselVideoWidgetState();
-}
+  void _openInFeed(BuildContext context, int index) {
+    final entityIds = campaign.scope?.entityIds ?? const [];
+    final baseUrl = campaign.url;
+    if (baseUrl == null || baseUrl.isEmpty || index >= entityIds.length) {
+      return;
+    }
+    context.read<AdsCubit>().trackClick(campaign.id, campaign.placement);
+    context.push('$baseUrl/${entityIds[index]}');
+  }
 
-class _AdCarouselVideoWidgetState extends State<AdCarouselVideoWidget> {
   @override
   Widget build(BuildContext context) {
-    final videos = widget.campaign.media.videos;
-    if (videos.isEmpty) return const SizedBox.shrink();
+    final videoIds = campaign.scope?.entityIds ?? const [];
+    if (videoIds.isEmpty) return const SizedBox.shrink();
 
-    return AdTap(
-      campaign: widget.campaign,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Title
-          if (widget.campaign.content.title?.isNotEmpty == true)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title
+        if (campaign.content.title?.isNotEmpty == true)
+          AdTap(
+            campaign: campaign,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Text(
-                widget.campaign.content.title!,
+                campaign.content.title!,
                 style: GoogleFonts.dmSans(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
@@ -42,89 +51,41 @@ class _AdCarouselVideoWidgetState extends State<AdCarouselVideoWidget> {
                 ),
               ),
             ),
-
-          // Horizontal ListView for videos (matching UI: portrait aspect ratio, overlaid text)
-          SizedBox(
-            height: 163,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              scrollDirection: Axis.horizontal,
-              itemCount: videos.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 122,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.10),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      AdVideoCoverWidget(
-                        videoID: videos[index],
-                        buildErrorWidget: (retry) => _ErrorCard(onRetry: retry),
-                      ),
-
-                      // Gradient and Text Overlay
-                      // Positioned(
-                      //   bottom: 0,
-                      //   left: 0,
-                      //   right: 0,
-                      //   child: Container(
-                      //     padding: const EdgeInsets.all(16),
-                      //     decoration: BoxDecoration(
-                      //       gradient: LinearGradient(
-                      //         begin: Alignment.bottomCenter,
-                      //         end: Alignment.topCenter,
-                      //         colors: [
-                      //           Colors.black.withValues(alpha: 0.8),
-                      //           Colors.transparent,
-                      //         ],
-                      //       ),
-                      //     ),
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text(
-                      //           widget.campaign.content.title ?? '',
-                      //           style: GoogleFonts.dmSans(
-                      //             color: Colors.white,
-                      //             fontSize: 18,
-                      //             fontWeight: FontWeight.bold,
-                      //           ),
-                      //         ),
-                      //         const SizedBox(height: 4),
-                      //         if (widget
-                      //                 .campaign.content.subtitle?.isNotEmpty ==
-                      //             true)
-                      //           Text(
-                      //             widget.campaign.content.subtitle!,
-                      //             style: GoogleFonts.dmSans(
-                      //               color: Colors.white.withValues(alpha: 0.8),
-                      //               fontSize: 15,
-                      //             ),
-                      //           ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                );
-              },
-            ),
           ),
-          const SizedBox(height: 16),
-        ],
-      ),
+
+        // Horizontal ListView for videos (matching UI: portrait aspect ratio, overlaid text)
+        SizedBox(
+          height: 163,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            scrollDirection: Axis.horizontal,
+            itemCount: videoIds.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              return Container(
+                width: 122,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.10),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: AdVideoCoverWidget(
+                  videoId: videoIds[index],
+                  onTap: () => _openInFeed(context, index),
+                  buildErrorWidget: (retry) => _ErrorCard(onRetry: retry),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

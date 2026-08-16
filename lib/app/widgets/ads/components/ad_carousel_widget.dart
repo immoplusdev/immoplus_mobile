@@ -2,12 +2,26 @@ import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/data/enums/ad_action.dart';
+import 'package:immoplus/app/extensions/go_router_extensions.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/utils/utils.dart';
+
+/// Angles de rotation fixes par carte, pour l'effet "photos éparpillées"
+const List<double> _kScatterAngles = [3.7, -2.82, 5.6];
+
+/// Ratio hauteur/largeur des cartes du design Figma (192.19 / 168.53).
+const double _kCardAspectRatio = 200.18636202070945 / 168.53266132511646;
+
+const double _kCardViewportFraction = 0.42;
 
 class AdCarouselWidget extends StatefulWidget {
   final AdCampaignModel campaign;
@@ -22,40 +36,66 @@ class AdCarouselWidget extends StatefulWidget {
 }
 
 class _AdCarouselWidgetState extends State<AdCarouselWidget> {
-  late final PageController _pageController;
-  int _currentPage = 0;
+  final ScrollController _scrollController = ScrollController();
+  bool _hasCentered = false;
+  double _step = 0;
+  int _currentIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    // viewportFraction < 1 → neighboring cards are partially visible.
-    _pageController = PageController(viewportFraction: 0.72);
-    _pageController.addListener(() {
-      final page = _pageController.page?.round() ?? 0;
-      if (page != _currentPage) setState(() => _currentPage = page);
-    });
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_step <= 0) return;
+    final index = (_scrollController.offset / _step).round().clamp(0, 2);
+    if (index != _currentIndex) {
+      setState(() => _currentIndex = index);
+    }
+  }
+
+  /// Pour une pub OPEN_RESIDENCE avec une résidence par carte
+  /// (`scope.entity_ids[i]`, même ordre que `media.images`) : chaque carte
+  /// doit ouvrir sa propre résidence, pas toujours la même via `AdTap`.
+  bool get _hasPerCardResidence {
+    final campaign = widget.campaign;
+    return AdAction.fromString(campaign.action) == AdAction.openResidence &&
+        (campaign.scope?.entityIds.isNotEmpty ?? false);
+  }
+
+  void _openResidenceCard(BuildContext context, int index) {
+    final campaign = widget.campaign;
+    final entityIds = campaign.scope?.entityIds ?? const [];
+    if (index >= entityIds.length) return;
+    context.read<AdsCubit>().trackClick(campaign.id, campaign.placement);
+    AppRouter.router.pushIfDifferent(ResidencePage.route(entityIds[index]));
+  }
+
+  /// Centre la carte du milieu (index 1) au premier affichage, pour que les
+  /// cartes 1 et 3 débordent visiblement des bords de l'écran.
+  void _centerMiddleCardOnce(double cardWidth, double gap) {
+    if (_hasCentered) return;
+    _hasCentered = true;
+    final targetOffset = cardWidth + gap;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+      final maxOffset = _scrollController.position.maxScrollExtent;
+      _scrollController.jumpTo(targetOffset.clamp(0, maxOffset));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final images = widget.campaign.media.images;
+    final images = widget.campaign.media.images.take(3).toList();
     if (images.isEmpty) return const SizedBox.shrink();
-
-    // TODO: revert to real images once testing is done.
-    final displayImages = images;
-    // final displayImages = [
-    //   "f15367ed-ae6d-487b-8452-c2ad0fc75926",
-    //   "f15367ed-ae6d-487b-8452-c2ad0fc75926",
-    //   "f15367ed-ae6d-487b-8452-c2ad0fc75926",
-    //   "f15367ed-ae6d-487b-8452-c2ad0fc75926",
-    //   "f15367ed-ae6d-487b-8452-c2ad0fc75926",
-    // ];
 
     return Column(
       children: [
@@ -67,7 +107,7 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
               widget.campaign.content.title!,
               textAlign: TextAlign.center,
               style: GoogleFonts.dmSans(
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.w800,
                 color: const Color(0xFF1A1A2E),
                 letterSpacing: -0.3,
@@ -75,87 +115,106 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
             ),
           ),
 
-        // Swipeable fan carousel
-        SizedBox(
-          height: 225,
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: displayImages.length,
-            itemBuilder: (context, index) {
-              return AnimatedBuilder(
-                animation: _pageController,
-                builder: (context, child) {
-                  double pageOffset = 0;
-                  if (_pageController.hasClients &&
-                      _pageController.page != null) {
-                    pageOffset =
-                        (_pageController.page! - index).clamp(-1.0, 1.0);
-                  }
+        // Photos éparpillées : cartes agrandies, scrollables horizontalement,
+        // la 1ère et la dernière débordent des bords, celle du milieu est
+        // centrée et entièrement visible par défaut.
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const gap = 16.0;
+            final viewportWidth = constraints.maxWidth;
+            final cardWidth = viewportWidth * _kCardViewportFraction;
+            final cardHeight = cardWidth * _kCardAspectRatio;
+            final sidePadding = (viewportWidth - cardWidth) / 2;
 
-                  // Left cards tilt left (−2.82°), right cards tilt right (+5.6°).
-                  final rotationDeg = pageOffset > 0
-                      ? -pageOffset * 2.82 // card is to the left of center
-                      : -pageOffset * 5.6; // card is to the right of center
+            _step = cardWidth + gap;
+            _centerMiddleCardOnce(cardWidth, gap);
 
-                  // Slight scale-down for non-center cards.
-                  final scale = 1.0 - pageOffset.abs() * 0.06;
+            return SizedBox(
+              // Marge verticale supplémentaire pour laisser respirer les
+              // coins des cartes tournées (Transform.rotate ne change pas
+              // la taille de layout, seulement le rendu).
+              height: cardHeight + 24,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(width: sidePadding),
+                    for (var i = 0; i < images.length; i++) ...[
+                      if (i > 0) SizedBox(width: gap),
+                      Transform.rotate(
+                        angle: _kScatterAngles[i % _kScatterAngles.length] *
+                            math.pi /
+                            180,
+                        child: Builder(builder: (cardContext) {
+                          final card = Container(
+                            width: cardWidth,
+                            height: cardHeight,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              // border: Border.all(
+                              //   color: Colors.black.withValues(alpha: 0.06),
+                              //   width: 0.5,
+                              // ),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: CachedNetworkImage(
+                              imageUrl: Utils.getImagePath(id: images[i]),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              placeholder: (_, __) => Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(color: Colors.white),
+                              ),
+                              errorWidget: (_, __, ___) => Container(
+                                color: Colors.grey[200],
+                                child: const Icon(Icons.broken_image,
+                                    color: Colors.grey),
+                              ),
+                            ),
+                          );
 
-                  return Transform.scale(
-                    scale: scale,
-                    child: Transform.rotate(
-                      angle: rotationDeg * math.pi / 180,
-                      child: child,
-                    ),
-                  );
-                },
-                // child is rebuilt only when the image changes, not on every
-                // scroll frame — keeps performance smooth.
-                child: AdTap(
-                  campaign: widget.campaign,
-                  child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    clipBehavior: Clip.hardEdge,
-                    child: CachedNetworkImage(
-                      imageUrl: Utils.getImagePath(id: displayImages[index]),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                      placeholder: (_, __) => Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Container(color: Colors.white),
+                          return _hasPerCardResidence
+                              ? GestureDetector(
+                                  onTap: () =>
+                                      _openResidenceCard(cardContext, i),
+                                  child: card,
+                                )
+                              : AdTap(
+                                  campaign: widget.campaign,
+                                  child: card,
+                                );
+                        }),
                       ),
-                      errorWidget: (_, __, ___) => Container(
-                        color: Colors.grey[200],
-                        child:
-                            const Icon(Icons.broken_image, color: Colors.grey),
-                      ),
-                    ),
-                  ),
+                    ],
+                    SizedBox(width: sidePadding),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
 
-        // Animated dots indicator
-        if (displayImages.length > 1) ...[
+        // Dots indicator
+        if (images.length > 1) ...[
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(displayImages.length, (i) {
-              final isActive = i == _currentPage;
+            children: List.generate(images.length, (i) {
+              final isActive = i == _currentIndex;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: isActive ? const Color(0xFF898989) : Color(0xffD9D9D9),
+                  color: isActive
+                      ? const Color(0xFF898989)
+                      : const Color(0xffD9D9D9),
                   borderRadius: BorderRadius.circular(4),
                 ),
               );

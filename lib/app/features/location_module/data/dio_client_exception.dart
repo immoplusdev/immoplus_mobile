@@ -59,8 +59,6 @@ class DioClientException implements Exception {
         return DioClientException.connectionError;
       case DioExceptionType.unknown:
         return DioClientException.unknown;
-      case DioExceptionType.transformTimeout:
-        return DioClientException.unknown;
     }
   }
 }

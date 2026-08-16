@@ -1,15 +1,22 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'package:immoplus/app/features/prop_feed/video_repository.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
+/// Affiche la miniature d'une vidéo du feed dans une carte de carrousel.
 class AdVideoCoverWidget extends StatefulWidget {
-  final String videoID;
+  final String videoId;
   final Widget Function(VoidCallback retry)? buildErrorWidget;
+  final VoidCallback? onTap;
 
   const AdVideoCoverWidget({
     super.key,
-    required this.videoID,
+    required this.videoId,
     this.buildErrorWidget,
+    this.onTap,
   });
 
   @override
@@ -17,64 +24,37 @@ class AdVideoCoverWidget extends StatefulWidget {
 }
 
 class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
-  VideoPlayerController? _controller;
+  final VideoRepository _repository = VideoRepository();
+  String? _thumbnailUrl;
   bool _isLoading = true;
-  String? _errorMessage;
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeVideo();
+    _loadThumbnail();
   }
 
-  Future<void> _initializeVideo() async {
-    final videoUrl = Utils.getVideoPath(id: widget.videoID);
-    if (videoUrl == null || videoUrl.isEmpty) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'URL invalide';
-        });
-      }
-      return;
-    }
+  Future<void> _loadThumbnail() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
 
-    try {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
+    final video = await _repository.fetchVideoDetail(widget.videoId);
+    if (!mounted) return;
 
-      _controller = VideoPlayerController.networkUrl(
-        Uri.parse(videoUrl),
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-      );
+    final url = video?.thumbnailUrl?.isNotEmpty == true
+        ? video!.thumbnailUrl
+        : (video?.miniature?.isNotEmpty == true
+            ? Utils.getImagePath(id: video!.miniature!)
+            : null);
 
-      await _controller!.initialize().timeout(const Duration(seconds: 15));
-      
-      if (!mounted) return;
-
-      _controller!.setVolume(0); // Muted for autoplay carousel
-      _controller!.setLooping(true);
-      _controller!.play();
-
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = e.toString();
-        });
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
+    setState(() {
+      _thumbnailUrl = url;
+      _isLoading = false;
+      _hasError = url == null;
+    });
   }
 
   @override
@@ -89,21 +69,53 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
       );
     }
 
-    if (_errorMessage != null || _controller == null) {
+    if (_hasError || _thumbnailUrl == null) {
       if (widget.buildErrorWidget != null) {
-        return widget.buildErrorWidget!(_initializeVideo);
+        return widget.buildErrorWidget!(_loadThumbnail);
       }
       return const Center(child: Icon(Icons.error));
     }
 
-    return SizedBox.expand(
-      child: FittedBox(
-        fit: BoxFit.cover,
-        child: SizedBox(
-          width: _controller!.value.size.width,
-          height: _controller!.value.size.height,
-          child: VideoPlayer(_controller!),
-        ),
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          CachedNetworkImage(
+            imageUrl: _thumbnailUrl!,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(color: Colors.white),
+            ),
+            errorWidget: (context, url, error) {
+              if (widget.buildErrorWidget != null) {
+                return widget.buildErrorWidget!(_loadThumbnail);
+              }
+              return const Center(child: Icon(Icons.error));
+            },
+          ),
+          // Signale que la carte est cliquable pour lancer la vidéo dans
+          // le feed — pas de pause, rien ne joue ici (simple miniature).
+          Center(
+            child: IgnorePointer(
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.35),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Iconsax.play,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

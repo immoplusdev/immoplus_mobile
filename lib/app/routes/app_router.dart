@@ -388,6 +388,7 @@ class AppRouter {
             villeId: extra['villeId'] as String?,
             communeId: extra['communeId'] as String?,
             displayText: extra['displayText'] as String,
+            bannerImageId: extra['bannerImageId'] as String?,
           );
         },
       ),

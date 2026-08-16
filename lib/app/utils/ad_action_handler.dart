@@ -16,7 +16,6 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
-import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
@@ -108,9 +107,18 @@ class AdActionHandler {
         break;
 
       case AdAction.openEvent:
-        _runWithAuthGuardAndPass(() {
-          AppRouter.router.pushIfDifferent('/${NotificationsPage.name}');
-        });
+        final searchTerm = scope?.entityId;
+        if (searchTerm != null && searchTerm.isNotEmpty) {
+          final bannerImageId = campaign.media.images.isNotEmpty
+              ? campaign.media.images.first
+              : null;
+          context.push(SearchResultPage.routePath, extra: {
+            'category': 'residence',
+            'search': searchTerm,
+            'displayText': campaign.content.title ?? 'Résultats',
+            'bannerImageId': bannerImageId,
+          });
+        }
         break;
 
       case AdAction.openExternal:
@@ -125,6 +133,17 @@ class AdActionHandler {
         if (pageSlug != null && pageSlug.isNotEmpty) {
           final target = pageSlug.startsWith('/') ? pageSlug : '/$pageSlug';
           AppRouter.router.pushIfDifferent(target);
+          break;
+        }
+        // Fallback : `url` de base de la campagne + entité liée —
+        // scope.entity_id pour une seule vidéo (pub vidéo unique),
+        // sinon scope.entity_ids[0] pour plusieurs (pub carrousel vidéo),
+        // via /vivre.
+        final entityIds = scope?.entityIds ?? const [];
+        final targetEntityId = scope?.entityId ??
+            (entityIds.isNotEmpty ? entityIds.first : null);
+        if (url != null && url.isNotEmpty && targetEntityId != null) {
+          AppRouter.router.pushIfDifferent('$url/$targetEntityId');
         }
         break;
 
@@ -152,13 +171,6 @@ class AdActionHandler {
       ));
       context.pushNamed(AuthenticationPage.name);
     } else {
-      action();
-    }
-  }
-
-  static void _runWithAuthGuardAndPass(VoidCallback action) {
-    final sessionManager = getIt<SessionManager>();
-    if (sessionManager.currentUser != null) {
       action();
     }
   }
