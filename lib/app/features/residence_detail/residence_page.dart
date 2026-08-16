@@ -29,9 +29,18 @@ import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
 
 class ResidencePage extends StatefulWidget {
-  const ResidencePage({super.key, required this.idProduct});
+  const ResidencePage({
+    super.key,
+    required this.idProduct,
+    this.isInverseSearch = false,
+    this.reverseSearchId,
+    this.reverseSearchPrice,
+  });
 
   final String idProduct;
+  final bool isInverseSearch;
+  final String? reverseSearchId;
+  final double? reverseSearchPrice;
   static String name = 'logment_page';
 
   static String routePath() => '/residence_detail/:idProduct';

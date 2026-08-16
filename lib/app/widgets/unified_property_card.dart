@@ -18,10 +18,18 @@ import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
 class UnifiedPropertyCard extends StatelessWidget {
-  final dynamic
-      item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
+  final dynamic item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
+  final bool isInverseSearch;
+  final String? reverseSearchId;
+  final double? reverseSearchPrice;
 
-  const UnifiedPropertyCard({super.key, required this.item})
+  const UnifiedPropertyCard({
+    super.key,
+    required this.item,
+    this.isInverseSearch = false,
+    this.reverseSearchId,
+    this.reverseSearchPrice,
+  })
       : assert(item is ResidenceModel ||
             item is BienImmobilierModel ||
             item is FurnitureModel);
@@ -161,8 +169,17 @@ class UnifiedPropertyCard extends StatelessWidget {
         onTap: () {
           Constantes.tempPage = Utils.getCurrentLocation();
           if (isResidence) {
-            context.push(ResidencePage.route((item as ResidenceModel).id),
-                extra: item);
+            if (isInverseSearch) {
+              context.push(ResidencePage.route((item as ResidenceModel).id),
+                  extra: {
+                    'isInverseSearch': true,
+                    'reverseSearchId': reverseSearchId,
+                    'reverseSearchPrice': reverseSearchPrice,
+                  });
+            } else {
+              context.push(ResidencePage.route((item as ResidenceModel).id),
+                  extra: item);
+            }
           } else if (isFurniture) {
             context.push(FurnitureDetailPage.route((item as FurnitureModel).id),
                 extra: item);

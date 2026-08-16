@@ -16,8 +16,17 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
 class LogmentBottomBar extends StatelessWidget {
-  LogmentBottomBar({super.key, required this.residenceModel});
+  LogmentBottomBar({
+    super.key,
+    required this.residenceModel,
+    this.isInverseSearch = false,
+    this.reverseSearchId,
+    this.reverseSearchPrice,
+  });
   final ResidenceModel residenceModel;
+  final bool isInverseSearch;
+  final String? reverseSearchId;
+  final double? reverseSearchPrice;
   final sessionManager = getIt<SessionManager>();
 
   @override
@@ -102,7 +111,7 @@ class LogmentBottomBar extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
-              child: const Text('Réserver'),
+              child: Text(isInverseSearch ? 'Payer' : 'Réserver'),
             ),
           ),
         ],
@@ -119,15 +128,23 @@ class LogmentBottomBar extends StatelessWidget {
     if (sessionManager.currentUser == null) {
       getIt<AuthRedirectService>().set((
         popUntilRouteName: ResidencePage.name,
-        callback: () => Navigator.push(
+        callback: () {
+          if (isInverseSearch) {
+            _payedTapped(context);
+          } else {
+            Navigator.push(
               context,
               CupertinoPageRoute(
                 builder: (_) =>
                     BookingFormularAction(residenceModel: residenceModel),
               ),
-            ),
+            );
+          }
+        },
       ));
       context.pushNamed(AuthenticationPage.name);
+    } else if (isInverseSearch) {
+      _payedTapped(context);
     } else {
       Navigator.push(
         context,
@@ -137,5 +154,14 @@ class LogmentBottomBar extends StatelessWidget {
         ),
       );
     }
+  }
+
+  _payedTapped(BuildContext context) {
+    // TODO: Implement lock and payment flow for reverse search
+    // example: context.read<ReverseSearchCubit>().lockResidence(reverseSearchId!, ...)
+    // then context.pushNamed(PaymentScreen...)
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Redirection vers le paiement...')),
+    );
   }
 }
