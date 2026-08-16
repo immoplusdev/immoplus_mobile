@@ -29,6 +29,8 @@ import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart'
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -160,6 +162,9 @@ class _AccountPageState extends State<AccountPage> {
                 currentUser: null,
                 onServiceClientPressed: _openServiceClient,
               ),
+              const SliverToBoxAdapter(
+                child: AdWidget(placement: AdPlacement.accountTop),
+              ),
               const SliverGap(32),
               _sectionTitle('COMPTE'),
               SliverList(
@@ -190,6 +195,10 @@ class _AccountPageState extends State<AccountPage> {
               _buildBrandSignature(),
               const SliverGap(20),
               _buildSocialRow(),
+              const SliverGap(20),
+              const SliverToBoxAdapter(
+                child: AdWidget(placement: AdPlacement.accountBottom),
+              ),
               const SliverGap(32),
             ],
           ),
@@ -219,6 +228,9 @@ class _AccountPageState extends State<AccountPage> {
               currentUser: currentUser,
               onServiceClientPressed: _openServiceClient,
             ),
+            const SliverToBoxAdapter(
+              child: AdWidget(placement: AdPlacement.accountTop),
+            ),
             const SliverGap(32),
             _sectionTitle('COMPTE'),
             _buildFirstGroup(context),
@@ -234,6 +246,10 @@ class _AccountPageState extends State<AccountPage> {
             _buildBrandSignature(),
             const SliverGap(20),
             _buildSocialRow(),
+            const SliverGap(20),
+            const SliverToBoxAdapter(
+              child: AdWidget(placement: AdPlacement.accountBottom),
+            ),
             const SliverGap(32),
           ],
         ),

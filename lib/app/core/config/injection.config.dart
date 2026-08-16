@@ -30,6 +30,7 @@ import 'package:immoplus/app/core/services/client_reservation_overlay_service.da
     as _i99;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
+import 'package:immoplus/app/data/repositories/ad_repository.dart' as _i206;
 import 'package:immoplus/app/data/repositories/alert_repository.dart' as _i443;
 import 'package:immoplus/app/data/repositories/banner_repository.dart' as _i39;
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
@@ -82,6 +83,7 @@ import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart'
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit.dart'
     as _i57;
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart' as _i745;
+import 'package:immoplus/app/logic/ads/ads_cubit.dart' as _i448;
 import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart'
     as _i636;
 import 'package:immoplus/app/logic/authentification/login_cubit.dart' as _i888;
@@ -121,6 +123,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i944.AuthRedirectService>(
         () => _i944.AuthRedirectService());
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
+    gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
+    gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
     gh.factory<_i974.BannersCubit>(

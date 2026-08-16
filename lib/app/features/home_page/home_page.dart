@@ -18,6 +18,9 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'components/home_search_appbar.dart';
 import 'components/transactions_floating_button.dart';
 
@@ -122,7 +125,10 @@ class _HomePageState extends State<HomePage>
                   children: [
                     RefreshIndicator(
                       onRefresh: () async {
-                        await context.read<BannersCubit>().fetchBanners();
+                        final bannersCubit = context.read<BannersCubit>();
+                        final adsCubit = context.read<AdsCubit>();
+                        await bannersCubit.fetchBanners();
+                        await adsCubit.fetchActiveCampaigns();
                         if (state.indexPage == HomeTab.residence.value) {
                           HomePageState.refreshResidences();
                         } else {
@@ -141,6 +147,9 @@ class _HomePageState extends State<HomePage>
                           HomeSearchAppbar(
                             currentIndex: state.indexPage,
                             controller: _tabController,
+                          ),
+                          const SliverToBoxAdapter(
+                            child: AdWidget(placement: AdPlacement.homeTop),
                           ),
                           ValueListenableBuilder<int>(
                             valueListenable: FilterHandler.notifier,
@@ -172,6 +181,10 @@ class _HomePageState extends State<HomePage>
                           ),
                           const SliverGap(10),
                           HomePageState.getPageListFromIndex(state.indexPage),
+                          const SliverGap(15),
+                          const SliverToBoxAdapter(
+                            child: AdWidget(placement: AdPlacement.homeBottom),
+                          ),
                         ],
                       ),
                     ),
