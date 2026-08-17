@@ -127,9 +127,9 @@ class Utils {
   }
 
   static String getServiceName(String type) {
-    if (type == ServicesCollection.reservations.name) {
+    if (type == ProductType.reservations.name) {
       return 'Réservation';
-    } else if (type == ServicesCollection.demandes_visites.name) {
+    } else if (type == ProductType.demandes_visites.name) {
       return 'Demande de visite';
     }
     return 'Réservation';

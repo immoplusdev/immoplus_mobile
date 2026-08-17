@@ -149,6 +149,30 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservations/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservation/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
       GoRoute(
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
@@ -707,7 +731,7 @@ class AppRouter {
           path: '/order/:idProduct/:collection',
           builder: (BuildContext context, GoRouterState state) {
             String? type = state.pathParameters['type'];
-            if (type == ServicesCollection.demandes_visites.name) {
+            if (type == ProductType.demandes_visites.name) {
               return VisitDetailPage(id: state.pathParameters['idProduct']!);
             } else if (type == ProductType.booking.name) {
               return BookingDetailPage(id: state.pathParameters['idProduct']!);

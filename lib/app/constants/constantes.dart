@@ -29,11 +29,6 @@ enum TypeDemandeVisite {
   normal,
 }
 
-enum ServicesCollection {
-  demandes_visites,
-  reservations,
-}
-
 class Constantes {
   static String tempPage = '/home';
   static var globalkey = GlobalKey<NavigatorState>();
