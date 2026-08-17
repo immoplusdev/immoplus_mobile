@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,13 +29,13 @@ class ResidencePage extends StatefulWidget {
   const ResidencePage({
     super.key,
     required this.idProduct,
-    this.isInverseSearch = false,
+    this.isImmediateBooking = false,
     this.reverseSearchId,
     this.reverseSearchPrice,
   });
 
   final String idProduct;
-  final bool isInverseSearch;
+  final bool isImmediateBooking;
   final String? reverseSearchId;
   final double? reverseSearchPrice;
   static String name = 'logment_page';
@@ -191,6 +188,9 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
             ),
             bottomNavigationBar: LogmentBottomBar(
               residenceModel: data,
+              isImmediateBooking: widget.isImmediateBooking,
+              reverseSearchId: widget.reverseSearchId,
+              reverseSearchPrice: widget.reverseSearchPrice,
             ),
           );
         }

@@ -84,6 +84,44 @@ class Constantes {
       offset: Offset(0.0, 0.0),
       blurRadius: 10.0,
       color: Color.fromRGBO(0, 0, 0, 1));
+
+  /// Style Google Maps immobilier premium
+  static const modernMapStyle = '''
+[
+  {"elementType":"geometry","stylers":[{"color":"#f5f3ef"}]},
+  {"elementType":"labels.icon","stylers":[{"visibility":"off"}]},
+  {"elementType":"labels.text.fill","stylers":[{"color":"#8a8580"}]},
+  {"elementType":"labels.text.stroke","stylers":[{"color":"#f5f3ef"},{"weight":4}]},
+
+  {"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#e0dbd5"},{"weight":1}]},
+  {"featureType":"administrative.neighborhood","elementType":"labels.text.fill","stylers":[{"color":"#a09890"},{"weight":0.5}]},
+  {"featureType":"administrative.land_parcel","stylers":[{"visibility":"off"}]},
+
+  {"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ede9e3"}]},
+  {"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"color":"#e0dbd5"},{"weight":0.5}]},
+  {"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"color":"#e8e4dc"}]},
+  {"featureType":"landscape.natural.terrain","elementType":"geometry.fill","stylers":[{"color":"#dfd9d0"}]},
+
+  {"featureType":"poi","stylers":[{"visibility":"off"}]},
+  {"featureType":"poi.park","stylers":[{"visibility":"simplified"}]},
+  {"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#d4ddc9"}]},
+  {"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"off"}]},
+
+  {"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},
+  {"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},
+  {"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#b0a8a0"}]},
+  {"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#f0ece6"}]},
+  {"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#e0dbd5"},{"weight":0.8}]},
+  {"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#faf8f5"}]},
+  {"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"}]},
+  {"featureType":"road.local","elementType":"labels","stylers":[{"visibility":"off"}]},
+
+  {"featureType":"transit","stylers":[{"visibility":"off"}]},
+
+  {"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#c4dae5"}]},
+  {"featureType":"water","elementType":"labels","stylers":[{"visibility":"off"}]}
+]
+''';
 }
 
 enum ProductType {

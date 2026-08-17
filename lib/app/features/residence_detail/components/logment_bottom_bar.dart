@@ -19,12 +19,12 @@ class LogmentBottomBar extends StatelessWidget {
   LogmentBottomBar({
     super.key,
     required this.residenceModel,
-    this.isInverseSearch = false,
+    this.isImmediateBooking = false,
     this.reverseSearchId,
     this.reverseSearchPrice,
   });
   final ResidenceModel residenceModel;
-  final bool isInverseSearch;
+  final bool isImmediateBooking;
   final String? reverseSearchId;
   final double? reverseSearchPrice;
   final sessionManager = getIt<SessionManager>();
@@ -111,7 +111,7 @@ class LogmentBottomBar extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
-              child: Text(isInverseSearch ? 'Payer' : 'Réserver'),
+              child: Text(isImmediateBooking ? 'Payer' : 'Réserver'),
             ),
           ),
         ],
@@ -129,7 +129,7 @@ class LogmentBottomBar extends StatelessWidget {
       getIt<AuthRedirectService>().set((
         popUntilRouteName: ResidencePage.name,
         callback: () {
-          if (isInverseSearch) {
+          if (isImmediateBooking) {
             _payedTapped(context);
           } else {
             Navigator.push(
@@ -143,7 +143,7 @@ class LogmentBottomBar extends StatelessWidget {
         },
       ));
       context.pushNamed(AuthenticationPage.name);
-    } else if (isInverseSearch) {
+    } else if (isImmediateBooking) {
       _payedTapped(context);
     } else {
       Navigator.push(

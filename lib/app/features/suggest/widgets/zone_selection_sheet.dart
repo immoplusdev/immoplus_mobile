@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class SelectedZone {
+  final String id;
   final String nom;
   final double lat;
   final double lng;
 
   const SelectedZone({
+    required this.id,
     required this.nom,
     required this.lat,
     required this.lng,
@@ -42,13 +44,13 @@ class ZoneSelectionSheet extends StatefulWidget {
 
 class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
   final List<SelectedZone> availableZones = const [
-    SelectedZone(nom: 'Cocody Angre', lat: 5.359951, lng: -4.008256),
-    SelectedZone(nom: 'Rivera Palmeraie', lat: 5.361520, lng: -3.966750),
-    SelectedZone(nom: 'Macory Zone 4', lat: 5.297420, lng: -3.992640),
-    SelectedZone(nom: 'Plateau', lat: 5.328320, lng: -4.019550),
-    SelectedZone(nom: 'Yopougon', lat: 5.334000, lng: -4.072000),
-    SelectedZone(nom: 'Bassam', lat: 5.204500, lng: -3.737100),
-    SelectedZone(nom: 'Assinie', lat: 5.127400, lng: -3.275000),
+    SelectedZone(id: '1', nom: 'Cocody Angre', lat: 5.359951, lng: -4.008256),
+    SelectedZone(id: '2', nom: 'Rivera Palmeraie', lat: 5.361520, lng: -3.966750),
+    SelectedZone(id: '3', nom: 'Macory Zone 4', lat: 5.297420, lng: -3.992640),
+    SelectedZone(id: '4', nom: 'Plateau', lat: 5.328320, lng: -4.019550),
+    SelectedZone(id: '5', nom: 'Yopougon', lat: 5.334000, lng: -4.072000),
+    SelectedZone(id: '6', nom: 'Bassam', lat: 5.204500, lng: -3.737100),
+    SelectedZone(id: '7', nom: 'Assinie', lat: 5.127400, lng: -3.275000),
   ];
   
   late List<SelectedZone> _tempSelected;

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
+import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 
 part 'reverse_search_state.freezed.dart';
 
@@ -10,6 +11,7 @@ class ReverseSearchState with _$ReverseSearchState {
   const factory ReverseSearchState.searching({
     required String searchId,
     @Default([]) List<ReverseSearchProposition> propositions,
+    @Default([]) List<ResidenceModel> classicResidences,
   }) = _Searching;
   const factory ReverseSearchState.locked({
     required String searchId,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/reverse_search_socket_service.dart';
@@ -15,53 +16,89 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
   StreamSubscription? _propositionSub;
   StreamSubscription? _statusSub;
 
-  ReverseSearchCubit(this._repository, this._socketService, this._sessionManager)
+  ReverseSearchCubit(
+      this._repository, this._socketService, this._sessionManager)
       : super(const ReverseSearchState.initial());
 
   Future<void> initiateSearch(ReverseSearchRequest request) async {
     emit(const ReverseSearchState.loading());
     try {
-      final token = _sessionManager.currentUser?.accessToken;
-      if (!_socketService.isConnected) {
-        _socketService.connect(token);
-      }
-
       final searchId = await _repository.createSearch(request);
 
-      _propositionSub?.cancel();
-      _propositionSub = _socketService.onProposition.listen((proposition) {
+      // Emit early to trigger navigation to the Map Page immediately
+      emit(ReverseSearchState.searching(
+        searchId: searchId,
+        propositions: [],
+        classicResidences: [],
+      ));
+    } catch (e) {
+      String msg = e.toString().replaceAll('Exception: ', '');
+      // TODO : TO DEBUG
+      // emit(ReverseSearchState.searching(
+      //   searchId: "searchId",
+      //   propositions: [],
+      //   classicResidences: [],
+      // ));
+      emit(ReverseSearchState.error(msg));
+    }
+  }
+
+  Future<void> startListening(
+      String searchId, ReverseSearchRequest request) async {
+    // Connect the socket
+    final token = _sessionManager.currentUser?.accessToken;
+    if (!_socketService.isConnected) {
+      _socketService.connect(token);
+    }
+
+    _propositionSub?.cancel();
+    _propositionSub = _socketService.onProposition.listen((proposition) {
+      state.maybeWhen(
+        searching: (id, props, classicProps) {
+          if (proposition.reverseSearchId == searchId) {
+            final newProps = List<ReverseSearchProposition>.from(props)
+              ..add(proposition);
+            emit(ReverseSearchState.searching(
+                searchId: searchId,
+                propositions: newProps,
+                classicResidences: classicProps));
+          }
+        },
+        orElse: () {},
+      );
+    });
+
+    _statusSub?.cancel();
+    _statusSub = _socketService.onStatus.listen((status) {
+      if (status == 'selection_expiree') {
+        // Revenir à l'état de recherche si la sélection expire
         state.maybeWhen(
-          searching: (id, props) {
-            if (proposition.reverseSearchId == searchId) {
-              final newProps = List<ReverseSearchProposition>.from(props)
-                ..add(proposition);
-              emit(ReverseSearchState.searching(
-                  searchId: searchId, propositions: newProps));
-            }
+          locked: (id, prop) {
+            emit(ReverseSearchState.searching(
+                searchId: id, propositions: [prop], classicResidences: []));
           },
           orElse: () {},
         );
-      });
+      } else if (status == 'annulee') {
+        emit(const ReverseSearchState.initial());
+      }
+    });
 
-      _statusSub?.cancel();
-      _statusSub = _socketService.onStatus.listen((status) {
-        if (status == 'selection_expiree') {
-          // Revenir à l'état de recherche si la sélection expire
-          state.maybeWhen(
-            locked: (id, prop) {
-              emit(ReverseSearchState.searching(
-                  searchId: id, propositions: [prop])); // Ou rafraîchir
-            },
-            orElse: () {},
-          );
-        } else if (status == 'annulee') {
-          emit(const ReverseSearchState.initial());
-        }
-      });
-
-      emit(ReverseSearchState.searching(searchId: searchId, propositions: []));
+    // Fetch classic residences in the background
+    try {
+      final classicRes = await _repository.getClassicResidences(request);
+      state.maybeWhen(
+        searching: (id, props, _) {
+          emit(ReverseSearchState.searching(
+            searchId: searchId,
+            propositions: props,
+            classicResidences: classicRes.data ?? [],
+          ));
+        },
+        orElse: () {},
+      );
     } catch (e) {
-      emit(ReverseSearchState.error(e.toString()));
+      debugPrint('Error fetching classic residences: $e');
     }
   }
 
@@ -74,7 +111,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
       emit(ReverseSearchState.locked(
           searchId: searchId, proposition: proposition));
     } catch (e) {
-      emit(ReverseSearchState.error(e.toString()));
+      String msg = e.toString().replaceAll('Exception: ', '');
+      emit(ReverseSearchState.error(msg));
       emit(prevState); // Revenir à l'état précédent (searching)
     }
   }
@@ -85,7 +123,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
       emit(const ReverseSearchState.initial());
       _socketService.disconnect();
     } catch (e) {
-      emit(ReverseSearchState.error(e.toString()));
+      String msg = e.toString().replaceAll('Exception: ', '');
+      emit(ReverseSearchState.error(msg));
     }
   }
 

@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/svgs_icons.dart';
 import 'package:go_router/go_router.dart';
@@ -14,23 +12,18 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
 class UnifiedPropertyCard extends StatelessWidget {
-  final dynamic item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
-  final bool isInverseSearch;
-  final String? reverseSearchId;
-  final double? reverseSearchPrice;
+  final dynamic
+      item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
+  final VoidCallback? onTap;
 
   const UnifiedPropertyCard({
     super.key,
     required this.item,
-    this.isInverseSearch = false,
-    this.reverseSearchId,
-    this.reverseSearchPrice,
-  })
-      : assert(item is ResidenceModel ||
+    this.onTap,
+  }) : assert(item is ResidenceModel ||
             item is BienImmobilierModel ||
             item is FurnitureModel);
 
@@ -166,20 +159,11 @@ class UnifiedPropertyCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () {
+        onTap: onTap ?? () {
           Constantes.tempPage = Utils.getCurrentLocation();
           if (isResidence) {
-            if (isInverseSearch) {
-              context.push(ResidencePage.route((item as ResidenceModel).id),
-                  extra: {
-                    'isInverseSearch': true,
-                    'reverseSearchId': reverseSearchId,
-                    'reverseSearchPrice': reverseSearchPrice,
-                  });
-            } else {
-              context.push(ResidencePage.route((item as ResidenceModel).id),
-                  extra: item);
-            }
+            context.push(ResidencePage.route((item as ResidenceModel).id),
+                extra: item);
           } else if (isFurniture) {
             context.push(FurnitureDetailPage.route((item as FurnitureModel).id),
                 extra: item);

@@ -7,6 +7,7 @@ part 'reverse_search_model.g.dart';
 @freezed
 class ReverseSearchZone with _$ReverseSearchZone {
   const factory ReverseSearchZone({
+    required String id,
     required String adresse,
     required double lat,
     required double lng,

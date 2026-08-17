@@ -90,6 +90,9 @@ import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
+import 'package:immoplus/app/features/suggest/pages/reverse_search_map_page.dart';
+import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
+import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -486,9 +489,25 @@ class AppRouter {
       GoRoute(
         path: ResidencePage.routePath(),
         name: ResidencePage.name,
-        builder: (context, state) => ResidencePage(
-          idProduct: state.pathParameters['idProduct'] ?? '',
-        ),
+        builder: (context, state) {
+          final extra = state.extra;
+          bool isImmediateBooking = false;
+          String? reverseSearchId;
+          double? reverseSearchPrice;
+
+          if (extra is Map<String, dynamic>) {
+            isImmediateBooking = extra['isImmediateBooking'] as bool? ?? false;
+            reverseSearchId = extra['reverseSearchId'] as String?;
+            reverseSearchPrice = extra['reverseSearchPrice'] as double?;
+          }
+
+          return ResidencePage(
+            idProduct: state.pathParameters['idProduct'] ?? '',
+            isImmediateBooking: isImmediateBooking,
+            reverseSearchId: reverseSearchId,
+            reverseSearchPrice: reverseSearchPrice,
+          );
+        },
       ),
 
       GoRoute(
@@ -797,6 +816,19 @@ class AppRouter {
         builder: (context, state) => NotificationDetailPage(
           notification: state.extra as NotificationModel,
         ),
+      ),
+      GoRoute(
+        path: ReverseSearchMapPage.routePath,
+        name: ReverseSearchMapPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return BlocProvider.value(
+            value: extra['cubit'] as ReverseSearchCubit,
+            child: ReverseSearchMapPage(
+              request: extra['request'] as ReverseSearchRequest,
+            ),
+          );
+        },
       ),
       GoRoute(
         path: '/kyc-webview',
