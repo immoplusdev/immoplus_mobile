@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -59,8 +57,9 @@ class LogmentBottomBar extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: CurrencyFormatter()
-                            .format(residenceModel.prixReservation.toString()),
+                        text: CurrencyFormatter().format(isImmediateBooking
+                            ? reverseSearchPrice.toString()
+                            : residenceModel.prixReservation.toString()),
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -120,39 +119,38 @@ class LogmentBottomBar extends StatelessWidget {
   }
 
   void _handleReservation(BuildContext context) {
+    final finalPrice = isImmediateBooking
+        ? (reverseSearchPrice ?? residenceModel.prixReservation).toDouble()
+        : residenceModel.prixReservation.toDouble();
+
     getIt<AnalyticsService>().logResidenceBookingCtaTapped(
       residenceId: residenceModel.id,
       residenceName: residenceModel.nom,
-      price: residenceModel.prixReservation.toDouble(),
+      price: finalPrice,
     );
+
+    void executeAction() {
+      if (isImmediateBooking) {
+        _payedTapped(context);
+      } else {
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (_) =>
+                BookingFormularAction(residenceModel: residenceModel),
+          ),
+        );
+      }
+    }
+
     if (sessionManager.currentUser == null) {
       getIt<AuthRedirectService>().set((
         popUntilRouteName: ResidencePage.name,
-        callback: () {
-          if (isImmediateBooking) {
-            _payedTapped(context);
-          } else {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (_) =>
-                    BookingFormularAction(residenceModel: residenceModel),
-              ),
-            );
-          }
-        },
+        callback: executeAction,
       ));
       context.pushNamed(AuthenticationPage.name);
-    } else if (isImmediateBooking) {
-      _payedTapped(context);
     } else {
-      Navigator.push(
-        context,
-        CupertinoPageRoute(
-          builder: (context) =>
-              BookingFormularAction(residenceModel: residenceModel),
-        ),
-      );
+      executeAction();
     }
   }
 
