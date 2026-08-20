@@ -4,11 +4,44 @@ import 'package:flutter/services.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final String videoID;
 
-  const VideoPlayerPage({super.key, required this.videoID});
+  /// URL directe (ex: HLS `.m3u8` du feed) — si fournie, remplace la
+  /// construction d'URL habituelle via `Utils.getVideoPath(id: videoID)`.
+  final String? videoUrl;
+
+  /// Optional builder for a custom error widget.
+  /// Receives [retry] — a callback that re-triggers video initialisation.
+  /// When null the default error UI is shown.
+  final Widget Function(VoidCallback retry)? buildErrorWidget;
+
+  /// Lecture automatique dès le chargement (défaut: false).
+  final bool autoPlay;
+
+  /// Lecture en boucle (défaut: false).
+  final bool looping;
+
+  /// Affiche les contrôles Chewie (play/pause, scrubber, plein écran) et
+  /// l'icône "play" avant chargement. À false pour une lecture silencieuse
+  /// sans aucune indication (ex: teaser pub). Défaut: true.
+  final bool showControls;
+
+  /// Coupe le son au démarrage (défaut: false).
+  final bool muted;
+
+  const VideoPlayerPage({
+    super.key,
+    required this.videoID,
+    this.videoUrl,
+    this.buildErrorWidget,
+    this.autoPlay = false,
+    this.looping = false,
+    this.showControls = true,
+    this.muted = false,
+  });
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
@@ -19,6 +52,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   ChewieController? _chewieController;
   bool _isLoading = true;
   String? _errorMessage;
+  bool _isMuted = false;
+
+  void _toggleMute() {
+    final controller = _videoPlayerController;
+    if (controller == null) return;
+    setState(() {
+      _isMuted = !_isMuted;
+      controller.setVolume(_isMuted ? 0 : 1);
+    });
+  }
 
   @override
   void initState() {
@@ -27,8 +70,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   Future<void> _initializeAndPlayVideo() async {
-    // En dev (FLAVOR=dev) : URL dev. En prod : URL prod. Plus d'URL prod en dur.
-    final String? videoUrl = Utils.getVideoPath(id: widget.videoID);
+    // URL directe (ex: HLS du feed) si fournie, sinon construction habituelle
+    // via l'ID (en dev (FLAVOR=dev) : URL dev. En prod : URL prod).
+    final String? videoUrl = widget.videoUrl?.isNotEmpty == true
+        ? widget.videoUrl
+        : Utils.getVideoPath(id: widget.videoID);
     if (videoUrl == null || videoUrl.isEmpty) {
       log('Vidéo: baseUrl ou videoID manquant → impossible de lire la vidéo');
       if (mounted) {
@@ -72,60 +118,74 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         throw Exception('Vidéo invalide ou corrompue');
       }
 
-      // Initialiser ChewieController seulement après succès
-      _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController!,
-        autoPlay: false,
-        looping: false,
-        allowFullScreen: true,
-        allowMuting: true,
-        showControls: true,
-        materialProgressColors: ChewieProgressColors(
-          playedColor: Theme.of(context).primaryColor,
-          handleColor: Theme.of(context).primaryColor,
-          // backgroundColor: Colors.red,
-          bufferedColor: Colors.lightGreen,
-        ),
-        placeholder: Container(
-          // color: Colors.grey.shade200,
-          child: const Center(
+      _isMuted = widget.muted;
+      if (widget.muted) {
+        await _videoPlayerController!.setVolume(0);
+      }
+
+      if (widget.showControls) {
+        // Chewie ne sert qu'à afficher les contrôles (play/pause, scrubber,
+        // plein écran) : il force son propre AspectRatio en interne, ce qui
+        // laisse des bandes vides si la vidéo source n'a pas exactement le
+        // ratio demandé. Inutile ici quand aucun contrôle n'est affiché.
+        _chewieController = ChewieController(
+          videoPlayerController: _videoPlayerController!,
+          autoPlay: widget.autoPlay,
+          looping: widget.looping,
+          allowFullScreen: true,
+          allowMuting: true,
+          showControls: true,
+          materialProgressColors: ChewieProgressColors(
+            playedColor: Theme.of(context).primaryColor,
+            handleColor: Theme.of(context).primaryColor,
+            // backgroundColor: Colors.red,
+            bufferedColor: Colors.lightGreen,
+          ),
+          placeholder: const Center(
             child: Icon(
               Icons.play_circle_outline,
               size: 80,
-              // color: Colors.grey,
             ),
           ),
-        ),
-        errorBuilder: (context, errorMessage) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error,
-                  color: Colors.red,
-                  size: 60,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Erreur de lecture vidéo',
-                  style: TextStyle(
+          errorBuilder: (context, errorMessage) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error,
                     color: Colors.red,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    size: 60,
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  errorMessage,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ],
-            ),
-          );
-        },
-      );
+                  const SizedBox(height: 16),
+                  Text(
+                    'Erreur de lecture vidéo',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    errorMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      } else {
+        // Pas de Chewie : on pilote directement le VideoPlayerController et
+        // on remplit tout le cadre en "cover" (voir _buildCoverVideo), sans
+        // aucune bande vide liée au ratio natif de la vidéo.
+        await _videoPlayerController!.setLooping(widget.looping);
+        if (widget.autoPlay) {
+          await _videoPlayerController!.play();
+        }
+      }
 
       setState(() {
         _isLoading = false;
@@ -167,24 +227,89 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       return _buildErrorWidget();
     }
 
-    if (_chewieController != null &&
-        _videoPlayerController!.value.isInitialized) {
-      return SizedBox(
-        height: 300,
-        child: Chewie(controller: _chewieController!),
-      );
+    final controller = _videoPlayerController;
+    if (controller != null && controller.value.isInitialized) {
+      if (!widget.showControls) {
+        return _buildCoverVideo(controller);
+      }
+      if (_chewieController != null) {
+        return SizedBox(
+          height: 300,
+          child: Chewie(controller: _chewieController!),
+        );
+      }
     }
 
     return _buildErrorWidget();
   }
 
-  // Widget d'erreur amélioré
+  /// Remplit tout le cadre disponible sans bande vide, en rognant l'excédent
+  /// si le ratio natif de la vidéo diffère du cadre (BoxFit.cover), au lieu
+  Widget _buildCoverVideo(VideoPlayerController controller) {
+    final video = SizedBox(
+      height: 300,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          FittedBox(
+            fit: BoxFit.cover,
+            clipBehavior: Clip.hardEdge,
+            child: SizedBox(
+              width: controller.value.size.width,
+              height: controller.value.size.height,
+              child: VideoPlayer(controller),
+            ),
+          ),
+          Positioned(
+            left: 12,
+            bottom: 12,
+            child: GestureDetector(
+              onTap: _toggleMute,
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.4),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  _isMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (!widget.autoPlay) return video;
+
+    return VisibilityDetector(
+      key: ValueKey('video_player_visibility_${widget.videoID}'),
+      onVisibilityChanged: (info) {
+        if (!mounted) return;
+        if (info.visibleFraction > 0.5) {
+          if (!controller.value.isPlaying) controller.play();
+        } else if (info.visibleFraction < 0.1) {
+          if (controller.value.isPlaying) controller.pause();
+        }
+      },
+      child: video,
+    );
+  }
+
+  // Widget d'erreur — utilise le builder custom si fourni, sinon le UI par défaut.
   Widget _buildErrorWidget() {
+    if (widget.buildErrorWidget != null) {
+      return widget.buildErrorWidget!(_initializeAndPlayVideo);
+    }
+
     return Container(
       width: double.infinity,
       height: 250.0,
       decoration: BoxDecoration(
-        // color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(

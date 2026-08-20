@@ -21,6 +21,9 @@ import 'package:immoplus/app/logic/request_state.dart';
 import 'package:immoplus/svgs_icons.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
+
 import 'components/detail_estate_amentities.dart';
 import 'components/detail_logment_appbar.dart';
 import 'components/detail_logment_map.dart';
@@ -109,6 +112,10 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                 // ── Image Carousel AppBar ──
                 DetailEstateAppBar(bienImmobilier: data),
 
+                const SliverToBoxAdapter(
+                  child: AdWidget(placement: AdPlacement.propertyDetailsHeader),
+                ),
+
                 // ── Pull to refresh ──
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
@@ -130,6 +137,10 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                 const DetailLogmentTitle2(title: 'À propos de ce bien'),
                 const SliverGap(4),
                 _ExpandableDescription(description: data.description),
+
+                const SliverToBoxAdapter(
+                  child: AdWidget(placement: AdPlacement.propertyDetailsDescription),
+                ),
 
                 const _SliverDivider(),
 
@@ -179,6 +190,10 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                 const DetailLogmentTitle2(title: 'À savoir'),
                 const SliverGap(12),
                 DetailEstateKnowSection(bienImmobilier: data),
+
+                const SliverToBoxAdapter(
+                  child: AdWidget(placement: AdPlacement.propertyDetailsBottom),
+                ),
 
                 // ── Bottom spacing for bottom bar ──
                 const SliverGap(120),

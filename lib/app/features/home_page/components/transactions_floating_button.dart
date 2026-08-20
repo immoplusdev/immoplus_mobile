@@ -64,6 +64,11 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   int get _pendingCount =>
       _pendingOwnerReservations.length + _pendingPaymentReservations.length;
 
+  /// Une réservation attend un règlement : le badge annonce l'action à mener
+  /// plutôt qu'un simple décompte, qui n'indiquait pas ce qui était attendu de
+  /// l'utilisateur.
+  bool get _hasPendingPayment => _pendingPaymentReservations.isNotEmpty;
+
   @override
   void initState() {
     super.initState();
@@ -158,6 +163,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
         ownerName: reservation.residence.nom,
         reservationId: reservation.id,
         montantTotal: reservation.montantTotalReservation,
+        initialState: ReservationBannerState.waitingOwner,
       ),
     );
   }
@@ -284,7 +290,17 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                         color: AppColors.primary, size: 24)
                     : const _TransactionsStackIcon(),
               ),
-              if (!_isOpen && _pendingCount > 0)
+              // Un paiement en attente prime sur le décompte : c'est la seule
+              // situation où l'utilisateur a quelque chose à faire.
+              if (!_isOpen && _hasPendingPayment)
+                Positioned(
+                  top: -6,
+                  right: -6,
+                  child: _PendingPaymentBadge(
+                    count: _pendingPaymentReservations.length,
+                  ),
+                )
+              else if (!_isOpen && _pendingCount > 0)
                 Positioned(
                   top: -4,
                   right: -4,
@@ -309,6 +325,152 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                   ),
                 ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Pastille « À payer » du bouton flottant.
+///
+/// Reprend l'orange déjà associé au paiement dans le menu (icône portefeuille
+/// `#B54708` sur `#FFFAEB`) pour que les deux se lisent comme une même chose.
+/// Purement informative : c'est le bouton qui reste la cible tactile.
+///
+/// Positionnée avec `right` seul, elle s'étend vers la gauche et ne déborde
+/// donc jamais de l'écran, quelle que soit la longueur du libellé.
+///
+/// Elle surgit à l'apparition puis rebondit brièvement toutes les quelques
+/// secondes. Un rappel espacé plutôt qu'une pulsation continue : le bouton
+/// reste affiché en permanence sur l'accueil, et une animation qui ne s'arrête
+/// jamais y deviendrait vite un bruit de fond — coûteux et vite ignoré.
+class _PendingPaymentBadge extends StatefulWidget {
+  const _PendingPaymentBadge({required this.count});
+
+  final int count;
+
+  static const Color _amber = Color(0xFFF79009);
+
+  @override
+  State<_PendingPaymentBadge> createState() => _PendingPaymentBadgeState();
+}
+
+class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
+    with SingleTickerProviderStateMixin {
+  static const Duration _pulseInterval = Duration(seconds: 4);
+
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 620),
+  );
+
+  /// Apparition : la pastille jaillit depuis un point.
+  late final Animation<double> _entrance = Tween<double>(
+    begin: 0.4,
+    end: 1.0,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
+
+  /// Rappel : détente puis léger contrecoup, sans repartir de zéro.
+  late final Animation<double> _pulse = TweenSequence<double>(<
+      TweenSequenceItem<double>>[
+    TweenSequenceItem(
+      tween: Tween(begin: 1.0, end: 1.18)
+          .chain(CurveTween(curve: Curves.easeOutCubic)),
+      weight: 35,
+    ),
+    TweenSequenceItem(
+      tween: Tween(begin: 1.18, end: 0.94)
+          .chain(CurveTween(curve: Curves.easeInOutCubic)),
+      weight: 35,
+    ),
+    TweenSequenceItem(
+      tween: Tween(begin: 0.94, end: 1.0)
+          .chain(CurveTween(curve: Curves.easeOutBack)),
+      weight: 30,
+    ),
+  ]).animate(_controller);
+
+  Timer? _pulseTimer;
+  bool _hasEntered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.forward().whenComplete(() {
+      if (mounted) _hasEntered = true;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Respecte « Réduire les animations » du système : le badge reste alors
+    // affiché, simplement immobile.
+    _pulseTimer?.cancel();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _controller.value = 1.0;
+      _hasEntered = true;
+      return;
+    }
+    _pulseTimer = Timer.periodic(_pulseInterval, (_) {
+      if (mounted && _hasEntered) _controller.forward(from: 0);
+    });
+  }
+
+  @override
+  void didUpdateWidget(_PendingPaymentBadge oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Une réservation à payer de plus : on le signale tout de suite plutôt que
+    // d'attendre le prochain rappel.
+    if (oldWidget.count != widget.count && _hasEntered) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulseTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final label = widget.count > 1 ? '${widget.count} à payer' : 'À payer';
+
+    return Semantics(
+      label: widget.count > 1
+          ? '${widget.count} réservations à payer'
+          : 'Une réservation à payer',
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) => Transform.scale(
+          scale: _hasEntered ? _pulse.value : _entrance.value,
+          child: child,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          decoration: BoxDecoration(
+            color: _PendingPaymentBadge._amber,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: _PendingPaymentBadge._amber.withValues(alpha: 0.35),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 9,
+              height: 1.1,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),

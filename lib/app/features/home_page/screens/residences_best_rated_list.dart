@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -6,7 +7,12 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/data/enums/ad_type.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
+import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
@@ -108,6 +114,23 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
 
   @override
   Widget build(BuildContext context) {
+    final adsState = context.watch<AdsCubit>().state;
+    final bestRatedAdMatches = adsState.maybeWhen(
+      success: (list) => list
+          .where((c) => c.placement == AdPlacement.residenceListBestRated.value)
+          .toList(),
+      orElse: () => <AdCampaignModel>[],
+    );
+    final hasBestRatedAd = bestRatedAdMatches.isNotEmpty;
+    final bestRatedAdType = bestRatedAdMatches.isNotEmpty
+        ? AdType.fromString(bestRatedAdMatches.first.type)
+        : null;
+    final bestRatedAdGap = switch (bestRatedAdType) {
+      AdType.carousel => kHomeSectionPubCarrousel,
+      AdType.videoCarousel => kHomeSectionPubCarrouselVideo,
+      _ => kHomeSectionSpacingPub,
+    };
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -147,7 +170,15 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
           height: compactResidenceCardHeight,
           child: _buildContent(),
         ),
-        const Gap(15),
+        if (!_isLoading &&
+            !_hasError &&
+            _bestRatedResidences.isNotEmpty &&
+            hasBestRatedAd) ...[
+          Gap(bestRatedAdGap),
+          const AdWidget(placement: AdPlacement.residenceListBestRated),
+          Gap(bestRatedAdGap),
+        ] else
+          const Gap(kHomeSectionSpacing),
       ],
     );
   }

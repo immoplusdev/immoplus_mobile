@@ -29,11 +29,6 @@ enum TypeDemandeVisite {
   normal,
 }
 
-enum ServicesCollection {
-  demandes_visites,
-  reservations,
-}
-
 class Constantes {
   static String tempPage = '/home';
   static var globalkey = GlobalKey<NavigatorState>();
@@ -210,6 +205,23 @@ List<double> listToDouble(dynamic value) {
 }
 
 const double compactResidenceCardHeight = 265.0;
+
+/// Espace vertical entre deux sections normales de la page d'accueil
+/// (sans pub entre elles).
+const double kHomeSectionSpacing = 28.0;
+
+/// Espace vertical (au-dessus ET en dessous) autour d'une pub sur la
+/// page d'accueil.
+const double kHomeSectionSpacingPub = 48.0;
+
+/// Espace vertical (au-dessus ET en dessous) autour d'une pub de type
+/// carrousel (photos éparpillées) — plus compact que les autres pubs car
+/// le carrousel a déjà son propre padding visuel intégré.
+const double kHomeSectionPubCarrousel = 24.0;
+
+/// Espace vertical (au-dessus ET en dessous) autour d'une pub de type
+/// carrousel vidéo — même logique que kHomeSectionPubCarrousel.
+const double kHomeSectionPubCarrouselVideo = 24.0;
 const maxPriceLimit = 3000000;
 const minPriceLimit = 100;
 

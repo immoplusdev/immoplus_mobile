@@ -65,9 +65,6 @@ class _OrangePageState extends State<OrangePage> {
             },
             child: SizedBox(
               key: ValueKey(_controller.currentStep),
-              height: _controller.currentStep == OrangePaymentStep.phoneNumber
-                  ? 300 + MediaQuery.of(context).viewInsets.bottom
-                  : 600 + MediaQuery.of(context).viewInsets.bottom,
               child: _controller.currentStep == OrangePaymentStep.phoneNumber
                   ? OrangePhoneNumberPage(controller: _controller)
                   : OrangeOptValidatorPage(

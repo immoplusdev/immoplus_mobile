@@ -27,6 +27,8 @@ import 'package:immoplus/app/features/residence_detail/components/detail_logment
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_video.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
 class HotelDetailPage extends StatefulWidget {
   final String hotelId;
@@ -252,6 +254,10 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
               commentCount: 12,
               description: hotel.descriptionLongue,
             ),
+          ),
+
+          const SliverToBoxAdapter(
+            child: AdWidget(placement: AdPlacement.hotelDetailsHeader),
           ),
 
           const _SliverDivider(),

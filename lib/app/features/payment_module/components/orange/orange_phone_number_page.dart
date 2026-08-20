@@ -132,9 +132,10 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
 
     setState(() => _loadingButton = true);
 
+    final number = _formController.phoneNumber!.text.replaceAll(' ', '');
     PaymentServices.initPayment(
       context: context,
-      number: _formController.phoneNumber!.text.replaceAll(' ', ''),
+      number: number,
       collection: paymentData.productType,
       itemID: paymentData.orderID,
       extra: paymentData.extra,
@@ -143,8 +144,8 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
 
         setState(() => _loadingButton = false);
 
-        // ✅ Naviguer vers l'étape OTP via le controller
-        widget.controller.goToOtpValidator(paymentIntentData);
+        // ✅ Naviguer vers l'étape suivante via le controller
+        widget.controller.goToOtpValidator(paymentIntentData, number);
       },
       onFailed: () {
         if (!mounted) return;

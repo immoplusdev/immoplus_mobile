@@ -153,6 +153,30 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservations/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservation/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
       GoRoute(
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
@@ -392,6 +416,7 @@ class AppRouter {
             villeId: extra['villeId'] as String?,
             communeId: extra['communeId'] as String?,
             displayText: extra['displayText'] as String,
+            bannerImageId: extra['bannerImageId'] as String?,
           );
         },
       ),
@@ -406,16 +431,35 @@ class AppRouter {
         path: '/visit-pending',
         name: VisitPendingPage.name,
         builder: (context, state) {
-          final page = state.extra as VisitPendingPage;
-          return page;
+          if (state.extra is VisitPendingPage) {
+            final page = state.extra as VisitPendingPage;
+            return VisitPendingPage(
+              key: state.pageKey,
+              bienImmo: page.bienImmo,
+              visitType: page.visitType,
+              visitId: page.visitId,
+              fromHistory: page.fromHistory,
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
       GoRoute(
         path: '/reservation-engagement',
         name: ReservationEngagementFrame.name,
         builder: (context, state) {
-          final reservation = state.extra as ReservationEngagementFrame;
-          return reservation;
+          if (state.extra is ReservationEngagementFrame) {
+            final reservation = state.extra as ReservationEngagementFrame;
+            return ReservationEngagementFrame(
+              key: state.pageKey,
+              ownerName: reservation.ownerName,
+              reservationId: reservation.reservationId,
+              montantTotal: reservation.montantTotal,
+              initialState: reservation.initialState,
+              onBackHome: reservation.onBackHome,
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
       ShellRoute(
@@ -726,7 +770,7 @@ class AppRouter {
           path: '/order/:idProduct/:collection',
           builder: (BuildContext context, GoRouterState state) {
             String? type = state.pathParameters['type'];
-            if (type == ServicesCollection.demandes_visites.name) {
+            if (type == ProductType.demandes_visites.name) {
               return VisitDetailPage(id: state.pathParameters['idProduct']!);
             } else if (type == ProductType.booking.name) {
               return BookingDetailPage(id: state.pathParameters['idProduct']!);
@@ -833,9 +877,18 @@ class AppRouter {
       GoRoute(
         path: '/kyc-webview',
         name: KycWebViewPage.routeName,
-        builder: (context, state) => KycWebViewPage(
-          url: state.extra as String? ?? '',
-        ),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is Map<String, String>) {
+            return KycWebViewPage(
+              url: extra['url'] ?? '',
+              title: extra['title'],
+            );
+          }
+          return KycWebViewPage(
+            url: extra as String? ?? '',
+          );
+        },
       ),
       GoRoute(
         path: BookingDetailPage.routePath,

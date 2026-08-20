@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
@@ -24,6 +24,10 @@ import 'components/detail_logment_appbar.dart';
 import 'components/detail_logment_map.dart';
 import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
+import 'components/rating_logment_section.dart';
+
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
 class ResidencePage extends StatefulWidget {
   const ResidencePage({
@@ -95,15 +99,18 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                 itemName: data.nom,
                 itemCategory: data.typeResidence,
                 itemLocation: data.adresse,
+                // itemLocation: '${data.ville} ${data.commune}'.trim(),
                 price: data.prixReservation.toDouble(),
               );
             });
           }
+
           final hasPieces =
               data.pieces.isNotEmpty && data.pieces.any((p) => p.nombre > 0);
+          // final hasPieces = data.pieces.isNotEmpty &&
+          //     data.pieces.any((p) => p.nombre > 0);
 
           return Scaffold(
-            backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
             body: CustomScrollView(
               physics: const BouncingScrollPhysics(
@@ -136,6 +143,10 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                 const SliverGap(4),
                 _ExpandableDescription(description: data.description),
 
+                const SliverToBoxAdapter(
+                  child: AdWidget(placement: AdPlacement.residenceDetails),
+                ),
+
                 const _SliverDivider(),
 
                 // ── Amenities ──
@@ -162,6 +173,10 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                 // ── Highlights (Arrivée autonome, etc.) ──
                 DetailHighlights(residenceModel: data),
 
+                const _SliverDivider(),
+
+                // ── Avis ──
+                RatingLogmentSection(residenceId: data.id),
                 const _SliverDivider(),
 
                 // ── Video ──

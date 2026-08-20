@@ -69,4 +69,7 @@ post_install do |installer|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = didit_sdk_ios_deployment_target
     end
   end
+
+  # Fix for Stripe Catalyst warning in Swift 6 / Xcode 16
+  system("find Pods -type f -name '*.swift' -exec sed -i '' -e 's/TARGET_OS_MACCATALYST/targetEnvironment(macCatalyst)/g' {} +")
 end

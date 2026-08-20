@@ -10,6 +10,7 @@ import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
+import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/visits/visit_detail_page.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -176,7 +177,13 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
             elevation: 0,
             leading: IconButton(
               icon: const Icon(Iconsax.arrow_left, size: 24),
-              onPressed: () => context.pop(),
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.goNamed(HomePage.name);
+                }
+              },
             ),
             centerTitle: true,
             backgroundColor: AppColors.whiteBackground,
@@ -310,6 +317,9 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: () {
+          if (item.collection == ProductType.hotel_reservation.name) {
+            return;
+          }
           showModalBottomSheet(
             backgroundColor: AppColors.whiteBackground,
             showDragHandle: true,
@@ -322,7 +332,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
             context: context,
             builder: (context) => SizedBox(
               height: MediaQuery.of(context).size.height * 0.85,
-              child: (item.collection == ServicesCollection.reservations.name)
+              child: (item.collection == ProductType.reservations.name)
                   ? BookingDetailPage(id: item.itemId)
                   : VisitDetailPage(id: item.itemId),
             ),

@@ -133,9 +133,10 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
 
     setState(() => _loadingButton = true);
 
+    final number = _formController.phoneNumber!.text.replaceAll(' ', '');
     PaymentServices.initPayment(
       context: context,
-      number: _formController.phoneNumber!.text.replaceAll(' ', ''),
+      number: number,
       collection: paymentData.productType,
       itemID: paymentData.orderID,
       extra: paymentData.extra,
@@ -145,7 +146,7 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
         setState(() => _loadingButton = false);
 
         // ✅ Naviguer vers l'étape suivante via le controller
-        widget.controller.goToValidator(paymentIntentData);
+        widget.controller.goToValidator(paymentIntentData, number);
       },
       onFailed: () {
         if (!mounted) return;

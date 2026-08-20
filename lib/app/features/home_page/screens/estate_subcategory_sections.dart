@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:sliver_tools/sliver_tools.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
@@ -180,9 +186,41 @@ class _EstateSubCategorySectionsListState
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      sliver: _isBackgroundLoading && _displayList.isEmpty
+    final adsState = context.watch<AdsCubit>().state;
+    final ads = adsState.maybeWhen(
+      success: (list) => list
+          .where((c) => c.placement == AdPlacement.locationList.value)
+          .toList(),
+      orElse: () => <AdCampaignModel>[],
+    );
+
+    // Merge ads into the section list based on positionIndex
+    final List<dynamic> listItems = [..._displayList];
+    final indexedAds = ads.where((ad) => ad.positionIndex != null).toList()
+      ..sort((a, b) => a.positionIndex!.compareTo(b.positionIndex!));
+
+    int insertedCount = 0;
+    for (final ad in indexedAds) {
+      final target = ad.positionIndex! +
+          1 +
+          insertedCount; // "after the N-th element" (0-based)
+      if (target >= 0 && target <= listItems.length) {
+        listItems.insert(target, ad);
+        insertedCount++;
+      }
+    }
+
+    return MultiSliver(
+      children: [
+        const SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: AdWidget(placement: AdPlacement.propertyListTop),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: _isBackgroundLoading && _displayList.isEmpty
           ? SliverToBoxAdapter(
               child: Column(
                 children: List.generate(
@@ -226,17 +264,27 @@ class _EstateSubCategorySectionsListState
           : SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final item = _displayList[index];
+                  final item = listItems[index];
+                  if (item is AdCampaignModel) {
+                    return AdWidget(
+                      placement: AdPlacement.locationList,
+                      index: item.positionIndex,
+                    );
+                  }
+                  final section = item as _EstateSubCategorySectionData;
                   return BiensHorizontalListBySubCategory(
-                    key: ValueKey('estate_subcategory_${item.category.name}'),
-                    title: item.title,
-                    category: item.category,
-                    biens: item.biens,
+                    key:
+                        ValueKey('estate_subcategory_${section.category.name}'),
+                    title: section.title,
+                    category: section.category,
+                    biens: section.biens,
                   );
                 },
-                childCount: _displayList.length,
+                childCount: listItems.length,
               ),
             ),
+        ),
+      ],
     );
   }
 }

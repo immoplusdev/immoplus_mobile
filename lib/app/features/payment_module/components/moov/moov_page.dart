@@ -65,9 +65,6 @@ class _MoovPageState extends State<MoovPage> {
             },
             child: SizedBox(
               key: ValueKey(_controller.currentStep),
-              height: _controller.currentStep == MoovPaymentStep.phoneNumber
-                  ? 300 + MediaQuery.of(context).viewInsets.bottom
-                  : 500 + MediaQuery.of(context).viewInsets.bottom,
               child: _controller.currentStep == MoovPaymentStep.phoneNumber
                   ? MoovNumberPage(controller: _controller)
                   : MoovOptValidatorPage(

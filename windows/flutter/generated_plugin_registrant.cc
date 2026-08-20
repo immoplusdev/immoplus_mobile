@@ -12,6 +12,7 @@
 #include <firebase_remote_config/firebase_remote_config_plugin_c_api.h>
 #include <flutter_inappwebview_windows/flutter_inappwebview_windows_plugin_c_api.h>
 #include <flutter_secure_storage_windows/flutter_secure_storage_windows_plugin.h>
+#include <gal/gal_plugin_c_api.h>
 #include <geolocator_windows/geolocator_windows.h>
 #include <isar_community_flutter_libs/isar_flutter_libs_plugin.h>
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
@@ -31,6 +32,8 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("FlutterInappwebviewWindowsPluginCApi"));
   FlutterSecureStorageWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FlutterSecureStorageWindowsPlugin"));
+  GalPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("GalPluginCApi"));
   GeolocatorWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("GeolocatorWindows"));
   IsarFlutterLibsPluginRegisterWithRegistrar(
