@@ -13,12 +13,15 @@ enum WavePaymentStep {
 class WavePaymentController extends ChangeNotifier {
   WavePaymentStep _currentStep = WavePaymentStep.phoneNumber;
   PaymentItentData? _paymentIntentData;
+  String? _phoneNumber;
 
   WavePaymentStep get currentStep => _currentStep;
   PaymentItentData? get paymentIntentData => _paymentIntentData;
+  String? get phoneNumber => _phoneNumber;
 
-  void goToValidator(PaymentItentData data) {
+  void goToValidator(PaymentItentData data, [String? number]) {
     _paymentIntentData = data;
+    _phoneNumber = number;
     _currentStep = WavePaymentStep.validator;
     notifyListeners();
   }
@@ -32,6 +35,7 @@ class WavePaymentController extends ChangeNotifier {
   void reset() {
     _currentStep = WavePaymentStep.phoneNumber;
     _paymentIntentData = null;
+    _phoneNumber = null;
     notifyListeners();
   }
 
@@ -103,9 +107,6 @@ class _WavePageState extends State<WavePage> {
             },
             child: SizedBox(
               key: ValueKey(_controller.currentStep),
-              height: _controller.currentStep == WavePaymentStep.phoneNumber
-                  ? 300 + MediaQuery.of(context).viewInsets.bottom
-                  : 500 + MediaQuery.of(context).viewInsets.bottom,
               child: _controller.currentStep == WavePaymentStep.phoneNumber
                   ? WaveNumberPage(controller: _controller)
                   : WaveValidatorPage(

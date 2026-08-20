@@ -162,6 +162,7 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   flutter_stripe: ^11.4.0
   qr_flutter: ^4.1.0
+  share_files_and_screenshot_widgets_plus: ^1.0.5
 
 
 dev_dependencies:

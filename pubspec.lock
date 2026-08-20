@@ -2575,6 +2575,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  share_files_and_screenshot_widgets_plus:
+    dependency: "direct main"
+    description:
+      name: share_files_and_screenshot_widgets_plus
+      sha256: c342f966b895b173d934c70d506e4d7b70b757bc332253e5bfe285d64ffed5c4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   share_plus:
     dependency: "direct main"
     description:

@@ -9,12 +9,15 @@ enum MoovPaymentStep {
 class MoovPaymentController extends ChangeNotifier {
   MoovPaymentStep _currentStep = MoovPaymentStep.phoneNumber;
   PaymentItentData? _paymentIntentData;
+  String? _phoneNumber;
 
   MoovPaymentStep get currentStep => _currentStep;
   PaymentItentData? get paymentIntentData => _paymentIntentData;
+  String? get phoneNumber => _phoneNumber;
 
-  void goToValidator(PaymentItentData data) {
+  void goToValidator(PaymentItentData data, [String? number]) {
     _paymentIntentData = data;
+    _phoneNumber = number;
     _currentStep = MoovPaymentStep.validator;
     notifyListeners();
   }
@@ -28,6 +31,7 @@ class MoovPaymentController extends ChangeNotifier {
   void reset() {
     _currentStep = MoovPaymentStep.phoneNumber;
     _paymentIntentData = null;
+    _phoneNumber = null;
     notifyListeners();
   }
 

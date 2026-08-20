@@ -65,9 +65,6 @@ class _MtnPageState extends State<MtnPage> {
             },
             child: SizedBox(
               key: ValueKey(_controller.currentStep),
-              height: _controller.currentStep == MtnPaymentStep.phoneNumber
-                  ? 300 + MediaQuery.of(context).viewInsets.bottom
-                  : 500 + MediaQuery.of(context).viewInsets.bottom,
               child: _controller.currentStep == MtnPaymentStep.phoneNumber
                   ? MtnNumberPage(controller: _controller)
                   : MtnValidatorPage(
