@@ -132,6 +132,7 @@ enum ProductType {
   demandes_visites,
   reservations,
   hotel_reservation,
+  reverse_searches,
 }
 
 enum ServiceType {

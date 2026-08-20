@@ -440,7 +440,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                   Expanded(
                                     flex: 1,
                                     child: GestureDetector(
-                                      onTap: () => _cancelSearch(currentSearchId),
+                                      onTap: () =>
+                                          _cancelSearch(currentSearchId),
                                       child: Container(
                                         height: 44,
                                         decoration: BoxDecoration(

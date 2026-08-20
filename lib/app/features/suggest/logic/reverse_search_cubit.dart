@@ -53,7 +53,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
 
     _propositionSub?.cancel();
     _propositionSub = _socketService.onProposition.listen((propositions) {
-      if (propositions.isEmpty || propositions.first.reverseSearchId != searchId) {
+      if (propositions.isEmpty ||
+          propositions.first.reverseSearchId != searchId) {
         return;
       }
       state.maybeWhen(
