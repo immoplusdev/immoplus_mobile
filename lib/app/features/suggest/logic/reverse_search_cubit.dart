@@ -52,17 +52,18 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     }
 
     _propositionSub?.cancel();
-    _propositionSub = _socketService.onProposition.listen((proposition) {
+    _propositionSub = _socketService.onProposition.listen((propositions) {
+      if (propositions.isEmpty || propositions.first.reverseSearchId != searchId) {
+        return;
+      }
       state.maybeWhen(
         searching: (id, props, classicProps) {
-          if (proposition.reverseSearchId == searchId) {
-            final newProps = List<ReverseSearchProposition>.from(props)
-              ..add(proposition);
-            emit(ReverseSearchState.searching(
-                searchId: searchId,
-                propositions: newProps,
-                classicResidences: classicProps));
-          }
+          // Le backend renvoie la liste complète des résidences disponibles :
+          // on remplace, on n'ajoute pas.
+          emit(ReverseSearchState.searching(
+              searchId: searchId,
+              propositions: propositions,
+              classicResidences: classicProps));
         },
         orElse: () {},
       );
@@ -125,6 +126,20 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     } catch (e) {
       String msg = e.toString().replaceAll('Exception: ', '');
       emit(ReverseSearchState.error(msg));
+    }
+  }
+
+  Future<bool> cancelActiveSearch() async {
+    emit(const ReverseSearchState.loading());
+    try {
+      final bool cancelled = await _repository.cancelActiveSearch();
+      emit(const ReverseSearchState.initial());
+      _socketService.disconnect();
+      return cancelled;
+    } catch (e) {
+      String msg = e.toString().replaceAll('Exception: ', '');
+      emit(ReverseSearchState.error(msg));
+      return false;
     }
   }
 

@@ -12,6 +12,12 @@ abstract class ReverseSearchProvider {
   @POST('/reverse-searches')
   Future<HttpResponse<dynamic>> createSearch(@Body() ReverseSearchRequest body);
 
+  @GET('/reverse-searches')
+  Future<HttpResponse<dynamic>> getReverseSearches({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  });
+
   @POST('/reverse-searches/action/cancel/{id}')
   Future<void> cancelSearch(@Path('id') String id);
 

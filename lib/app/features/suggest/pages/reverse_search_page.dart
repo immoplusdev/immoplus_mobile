@@ -17,7 +17,9 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class ReverseSearchPage extends StatefulWidget {
-  const ReverseSearchPage({super.key});
+  final Widget? tabBar;
+
+  const ReverseSearchPage({super.key, this.tabBar});
 
   @override
   State<ReverseSearchPage> createState() => _ReverseSearchPageState();
@@ -27,7 +29,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
   final _cubit = getIt<ReverseSearchCubit>();
 
   List<SelectedZone> _selectedZones = [
-    SelectedZone(id: '1', nom: 'Cocody Angre', lat: 5.359951, lng: -4.008256),
+    const SelectedZone(id: '1', nom: 'Cocody, Abidjan', lat: 5.359951, lng: -4.008256),
   ];
   DateTime? _dateDebut = DateTime.now();
   DateTime? _dateFin = DateTime.now().add(const Duration(days: 4));
@@ -62,7 +64,6 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
     final request = ReverseSearchRequest(
       zones: _selectedZones
           .map((z) => ReverseSearchZone(
-                id: z.id,
                 adresse: z.nom,
                 lat: z.lat,
                 lng: z.lng,
@@ -73,7 +74,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
       nombrePersonnes: _nombrePersonnes,
       budgetMin: _budgetMin,
       budgetMax: _budgetMax,
-      notes: "Test",
+      notes: "Pas de préférence",
     );
 
     _lastRequest = request;
@@ -91,15 +92,48 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
   }
 
   String get _budgetText {
-    final kMin = (_budgetMin / 1000).toInt();
-    final kMax = (_budgetMax / 1000).toInt();
-    if (_budgetMax >= 150000) return "${kMin} 000 F +";
-    return "$kMin et $kMax 000 F";
+    final formatter = NumberFormat('#,###', 'fr_FR');
+
+    if (_budgetMin == 0 && _budgetMax == 0) return "Budget ?";
+
+    final isMinK = _budgetMin >= 1000 && (_budgetMin % 1000 == 0);
+    final isMaxK = _budgetMax >= 1000 && (_budgetMax % 1000 == 0);
+
+    if (_budgetMin == 0) {
+      final maxStr = isMaxK
+          ? '${(_budgetMax / 1000).toInt()} 000'
+          : formatter.format(_budgetMax.toInt());
+      return "-$maxStr F";
+    }
+
+    if (_budgetMax >= 200000) {
+      final minStr = isMinK
+          ? '${(_budgetMin / 1000).toInt()} 000'
+          : formatter.format(_budgetMin.toInt());
+      return "$minStr F +";
+    }
+
+    if (isMinK && isMaxK) {
+      final kMin = (_budgetMin / 1000).toInt();
+      final kMax = (_budgetMax / 1000).toInt();
+      return "$kMin et $kMax 000 F";
+    }
+
+    final minStr = formatter.format(_budgetMin.toInt());
+    final maxStr = formatter.format(_budgetMax.toInt());
+    return "$minStr et $maxStr F";
   }
 
   String get _zonesText {
-    if (_selectedZones.isEmpty) return "Ou ?";
-    return _selectedZones.map((z) => z.nom).join(', ');
+    if (_selectedZones.isEmpty) return "Où ?";
+    return _selectedZones.first.nom;
+  }
+
+  String? get _zoneBadgeText {
+    if (_selectedZones.length > 1) {
+      return "+${_selectedZones.length - 1}";
+    }
+    return null;
   }
 
   @override
@@ -108,97 +142,181 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
       value: _cubit,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: BlocConsumer<ReverseSearchCubit, ReverseSearchState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              error: (msg) {
-                _isMapPushed = false;
-                // ToastUtils.showError(description: msg);
-              },
-              searching: (searchId, props, classic) {
-                if (!_isMapPushed && _lastRequest != null) {
-                  _isMapPushed = true;
-                  context.pushNamed(
-                    ReverseSearchMapPage.routeName,
-                    extra: {
-                      'cubit': _cubit,
-                      'request': _lastRequest!,
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
+              child: Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.arrow_back_ios,
+                        color: Colors.black, size: 22),
+                    onPressed: () => context.pop(),
+                  ),
+                ],
+              ),
+            ),
+            if (widget.tabBar != null) widget.tabBar!,
+
+            // Rule 4: No hard divider — consistent 8px-based rhythm
+
+            Expanded(
+              child:
+                  BlocConsumer<ReverseSearchCubit, ReverseSearchState>(
+                listener: (context, state) {
+                  state.maybeWhen(
+                    error: (msg) {
+                      _isMapPushed = false;
+                      ToastUtils.showError(description: msg);
                     },
-                  ).then((_) {
-                    _isMapPushed = false;
-                    _cubit.cancelSearch(searchId); // Clean up if user goes back
-                  });
-                }
-              },
-              orElse: () {},
-            );
-          },
-          builder: (context, state) {
-            return state.maybeWhen(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              orElse: () => _buildForm(),
-            );
-          },
+                    searching: (searchId, props, classic) {
+                      if (!_isMapPushed && _lastRequest != null) {
+                        _isMapPushed = true;
+                        context.pushNamed(
+                          ReverseSearchMapPage.routeName,
+                          extra: {
+                            'cubit': _cubit,
+                            'request': _lastRequest!,
+                          },
+                        ).then((_) {
+                          _isMapPushed = false;
+                          _cubit
+                              .cancelSearch(searchId); // Clean up if user goes back
+                        });
+                      }
+                    },
+                    orElse: () {},
+                  );
+                },
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    orElse: () => _buildForm(),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildForm() {
+    const textStyle = TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.w400,
+      color: Color(0xFF4A4A4A),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 60),
-                  Text(
-                    'Que cherchez- vous ?',
-                    style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
-                  ),
-                  const SizedBox(height: 16),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 8,
-                    runSpacing: 12,
-                    children: [
-                      const Text('Je cherche a',
-                          style:
-                              TextStyle(fontSize: 28, color: Colors.black87)),
-                      ReverseSearchChip(
-                          text: _zonesText, onTap: _showZoneSheet),
-                      const Text('du',
-                          style:
-                              TextStyle(fontSize: 28, color: Colors.black87)),
-                      ReverseSearchChip(text: _dateText, onTap: _showDateSheet),
-                      const Text('pour',
-                          style:
-                              TextStyle(fontSize: 28, color: Colors.black87)),
-                      ReverseSearchChip(
-                          text: '$_nombrePersonnes personnes',
-                          onTap: _showPersonnesSheet),
-                      const Text(', entre',
-                          style:
-                              TextStyle(fontSize: 28, color: Colors.black87)),
-                      ReverseSearchChip(
-                          text: _budgetText, onTap: _showBudgetSheet),
-                    ],
-                  ),
-                ],
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Que cherchez- vous ?',
+                      style: TextStyle(color: Colors.grey.shade400, fontSize: 15),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // ── Ligne 1: Je cherche a [Ville] ──
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Je cherche a ', style: textStyle),
+                          ReverseSearchChip(
+                            text: _zonesText,
+                            badge: _zoneBadgeText,
+                            onTap: _showZoneSheet,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // ── Ligne 2: du [Dates] pour ──
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('du ', style: textStyle),
+                          ReverseSearchChip(
+                            text: _dateText,
+                            onTap: _showDateSheet,
+                          ),
+                          const Text(' pour', style: textStyle),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // ── Ligne 3: [Personnes] , entre ──
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ReverseSearchChip(
+                            text: _nombrePersonnes >= 8
+                                ? '8 personnes'
+                                : '$_nombrePersonnes personnes',
+                            badge: _nombrePersonnes >= 8 ? '+' : null,
+                            onTap: _showPersonnesSheet,
+                          ),
+                          const Text(', entre', style: textStyle),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // ── Ligne 4: [Budget] ──
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ReverseSearchChip(
+                            text: _budgetText,
+                            onTap: _showBudgetSheet,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ), // Add top padding since AppBar is removed
-        Divider(),
+        ),
+        const Divider(height: 1),
         Padding(
-          padding: const EdgeInsets.only(bottom: 24.0, left: 24, right: 24),
-          child: CustomButtom(
-            text: 'Lancer la recherche',
-            onClick: _submit,
+          padding: const EdgeInsets.only(bottom: 16.0, top: 12.0, left: 20, right: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomButtom(
+                text: 'Lancer la recherche',
+                onClick: _submit,
+              ),
+            ],
           ),
         ),
       ],

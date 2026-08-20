@@ -10,8 +10,8 @@ class ReverseSearchSocketService {
   io.Socket? _socket;
 
   final _propositionController =
-      StreamController<ReverseSearchProposition>.broadcast();
-  Stream<ReverseSearchProposition> get onProposition =>
+      StreamController<List<ReverseSearchProposition>>.broadcast();
+  Stream<List<ReverseSearchProposition>> get onProposition =>
       _propositionController.stream;
 
   final _statusController = StreamController<String>.broadcast();
@@ -38,26 +38,45 @@ class ReverseSearchSocketService {
           .build(),
     );
 
-    _socket!.onConnect((_) => dev.log('connecté', name: 'ReverseSearchSocket'));
-    _socket!.onDisconnect((reason) =>
-        dev.log('déconnecté: $reason', name: 'ReverseSearchSocket'));
-    _socket!.onConnectError((err) =>
-        dev.log('erreur connexion: $err', name: 'ReverseSearchSocket'));
+    _socket!.onConnect((_) {
+      dev.log('connecté', name: 'ReverseSearchSocket');
+    });
+    _socket!.onDisconnect((reason) {
+      dev.log('déconnecté: $reason', name: 'ReverseSearchSocket');
+    });
+    _socket!.onConnectError((err) {
+      dev.log('erreur connexion: $err', name: 'ReverseSearchSocket');
+    });
 
     _socket!.on('reverse_search:proposition_disponible', (data) {
       if (data is Map<String, dynamic>) {
         try {
-          final proposition = ReverseSearchProposition.fromJson(data);
-          _propositionController.add(proposition);
+          final event = ReverseSearchPropositionEvent.fromJson(data);
+          final propositions = event.data
+              .map((residence) => ReverseSearchProposition(
+                    reverseSearchId: event.reverseSearchId,
+                    montant: event.montant,
+                    data: residence,
+                  ))
+              .toList();
+          _propositionController.add(propositions);
         } catch (e) {
           dev.log('Erreur parsing proposition: $e', name: 'ReverseSearchSocket');
         }
       }
     });
 
-    _socket!.on('reverse_search:annulee', (_) => _statusController.add('annulee'));
-    _socket!.on('reverse_search:selection_expiree', (_) => _statusController.add('selection_expiree'));
-    _socket!.on('reverse_search:paiement_echec', (_) => _statusController.add('paiement_echec'));
+    _socket!.on('reverse_search:annulee', (data) {
+      _statusController.add('annulee');
+    });
+
+    _socket!.on('reverse_search:selection_expiree', (data) {
+      _statusController.add('selection_expiree');
+    });
+
+    _socket!.on('reverse_search:paiement_echec', (data) {
+      _statusController.add('paiement_echec');
+    });
 
     _socket!.connect();
   }

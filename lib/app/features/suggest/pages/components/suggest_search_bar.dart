@@ -15,6 +15,8 @@ class SuggestSearchBar extends StatelessWidget {
   final VoidCallback? onClear;
   final bool showClearButton;
   final bool showBackButton;
+  // Rule 1: showSearchButton & onSearchPressed kept for backward compat but
+  // the redundant "Recherche" text link is no longer rendered.
   final bool showSearchButton;
   final VoidCallback? onSearchPressed;
   final VoidCallback? onBackPressed;
@@ -58,7 +60,7 @@ class SuggestSearchBar extends StatelessWidget {
             const Gap(8),
           ],
 
-          // Text Field
+          // Text Field — Rule 1: single search trigger (prefix icon + keyboard action)
           Expanded(
             child: GestureDetector(
               onTap: onTap,
@@ -74,10 +76,18 @@ class SuggestSearchBar extends StatelessWidget {
                     labelText: hintText,
                     onChanged: onChanged,
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                    prefixIcon: const Icon(
-                      Iconsax.search_normal_1,
-                      color: Colors.black,
-                      size: 18,
+                    prefixIcon: GestureDetector(
+                      onTap: () {
+                        // Allow prefix icon tap to submit search when text is present
+                        if (controller.text.trim().isNotEmpty) {
+                          onFieldSubmitted?.call(controller.text);
+                        }
+                      },
+                      child: const Icon(
+                        Iconsax.search_normal_1,
+                        color: Colors.black,
+                        size: 18,
+                      ),
                     ),
                     sufixIcon: showClearButton
                         ? UnconstrainedBox(
@@ -121,23 +131,8 @@ class SuggestSearchBar extends StatelessWidget {
             ),
           ),
 
-          if (showSearchButton) ...[
-            const Gap(12),
-            GestureDetector(
-              onTap: onSearchPressed,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  'Recherche',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          // Rule 1: "Recherche" text link removed — the prefix loupe icon
+          // and the keyboard's search action are the single search trigger.
         ],
       ),
     );

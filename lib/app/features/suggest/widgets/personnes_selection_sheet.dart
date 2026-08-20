@@ -44,7 +44,7 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('$_tempPers',
+              Text(_tempPers >= 8 ? '8+' : '$_tempPers',
                   style: const TextStyle(
                       fontSize: 50, fontWeight: FontWeight.bold)),
               Row(
@@ -58,7 +58,7 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
                   _CustomIcButton(
                       icon: Icons.add,
                       onTap: () {
-                        setState(() => _tempPers++);
+                        if (_tempPers < 8) setState(() => _tempPers++);
                       }),
                 ],
               )

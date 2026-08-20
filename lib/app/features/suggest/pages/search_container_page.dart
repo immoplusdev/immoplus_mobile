@@ -43,74 +43,69 @@ class _SearchContainerPageState extends State<SearchContainerPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Recherche'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-        titleTextStyle: const TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
       body: SafeArea(
-        child: Column(
+        child: TabBarView(
+          controller: _tabController,
+          physics:
+              const NeverScrollableScrollPhysics(), // Evite les conflits de swipe avec les listes
           children: [
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                    color: const Color(0xFF2548E5),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey[500],
-                  labelStyle: GoogleFonts.dmSans(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  unselectedLabelStyle: GoogleFonts.dmSans(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  dividerColor: Colors.transparent,
-                  tabs: const [
-                    Tab(text: 'Normale'),
-                    Tab(text: 'Inversée'),
-                  ],
-                ),
-              ),
+            ReverseSearchPage(
+              tabBar: _buildTabBar(),
             ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                physics:
-                    const NeverScrollableScrollPhysics(), // Evite les conflits de swipe avec les listes
-                children: [
-                  SuggestPage(
-                    homeTab: widget.homeTab,
-                    lat: widget.lat,
-                    lng: widget.lng,
-                  ),
-                  const ReverseSearchPage(),
-                ],
-              ),
+            SuggestPage(
+              homeTab: widget.homeTab,
+              lat: widget.lat,
+              lng: widget.lng,
+              tabBar: _buildTabBar(),
             ),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildTabBar() {
+    // Rule 4: 8px-based vertical rhythm (16px top = 2×8, 16px bottom = 2×8)
+    // Rule 2: 16px top creates clear visual separation from the search bar above
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+      child: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: TabBar(
+          controller: _tabController,
+          // Rule 3: isScrollable false ensures equal-width tabs (flex: 1 equivalent)
+          isScrollable: false,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicator: BoxDecoration(
+            color: const Color(0xFF2548E5),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.grey[500],
+          // Rule 5: identical fontWeight in both states prevents micro-shift
+          // on toggle — the active state is distinguished solely by the
+          // indicator pill background, not by text width changes.
+          labelStyle: GoogleFonts.dmSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          unselectedLabelStyle: GoogleFonts.dmSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          dividerColor: Colors.transparent,
+          labelPadding: EdgeInsets.zero, // Rule 3: no extra padding asymmetry
+          tabs: const [
+            Tab(text: 'On cherche pour toi'),
+            Tab(text: 'Tu cherches'),
+          ],
+        ),
+      ),
+    );
+  }
+
 }

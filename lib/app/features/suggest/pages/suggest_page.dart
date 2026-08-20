@@ -31,12 +31,14 @@ class SuggestPage extends StatefulWidget {
   final HomeTab? homeTab;
   final double? lat;
   final double? lng;
+  final Widget? tabBar;
 
   const SuggestPage({
     super.key,
     this.homeTab,
     this.lat,
     this.lng,
+    this.tabBar,
   });
 
   static const String routeName = "suggest";
@@ -293,7 +295,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
               focusNode: _focusNode,
               showClearButton: _showClearButton,
               showSearchButton: true,
-              showBackButton: false,
+              showBackButton: true,
               onClear: () {
                 _searchController.clear();
               },
@@ -303,7 +305,10 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
               onBackPressed: () => context.pop(),
             ),
 
-            const Divider(height: 1),
+            if (widget.tabBar != null) widget.tabBar!,
+
+            // Rule 4: No hard divider — the tab bar's own 16px bottom padding
+            // provides consistent 8px-based vertical rhythm.
 
             // Suggestion list
             Expanded(
@@ -379,9 +384,27 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
         _showAllHistory ? _searchHistory : _searchHistory.take(3).toList();
 
     return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 16), // Rule 4: 16px = 2×8
       children: [
         if (_searchHistory.isNotEmpty) ...[
+          // Rule 6: mode-aware section header for search history
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            child: Row(
+              children: [
+                Icon(Icons.history, color: Colors.grey.shade500, size: 18),
+                const SizedBox(width: 8), // Rule 4: 8px base unit
+                Text(
+                  'Recherches récentes',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
           ...historyToShow.map((item) {
             final query = item.query;
             return SearchHistoryTile(
@@ -420,14 +443,18 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                 ),
               ),
             ),
-          const Gap(12),
+          const SizedBox(height: 16), // Rule 4: 16px = 2×8
           const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          const Gap(16),
+          const SizedBox(height: 16), // Rule 4: 16px = 2×8
         ],
+        // Rule 6: mode-aware section header for recommendations
+        // The label and icon change to reflect the active "Tu cherches" mode
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
+              Icon(Icons.search, color: AppColors.primary, size: 20),
+              const SizedBox(width: 8), // Rule 4: 8px base unit
               const Expanded(
                 child: Text(
                   'Tu pourrais aimer',
@@ -458,7 +485,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 16), // Rule 4: 16px = 2×8
         if (_isLoadingRecommendations)
           const Center(
             child: Padding(

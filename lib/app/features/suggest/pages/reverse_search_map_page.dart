@@ -170,7 +170,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   Set<Circle> _buildCircles() {
     return widget.request.zones.map((zone) {
       return Circle(
-        circleId: CircleId(zone.id),
+        circleId: CircleId(zone.adresse),
         center: LatLng(zone.lat, zone.lng),
         radius: 2500, // 2.5km
         fillColor: AppColors.primary.withValues(alpha: 0.15),
@@ -180,9 +180,13 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
     }).toSet();
   }
 
-  void _cancelSearch() {
-    // Optionally call cubit to cancel
-    Navigator.of(context).pop();
+  void _cancelSearch(String searchId) {
+    if (searchId.isNotEmpty) {
+      context.read<ReverseSearchCubit>().cancelSearch(searchId);
+    }
+    if (mounted && Navigator.canPop(context)) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -436,7 +440,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                   Expanded(
                                     flex: 1,
                                     child: GestureDetector(
-                                      onTap: _cancelSearch,
+                                      onTap: () => _cancelSearch(currentSearchId),
                                       child: Container(
                                         height: 44,
                                         decoration: BoxDecoration(

@@ -7,7 +7,6 @@ part 'reverse_search_model.g.dart';
 @freezed
 class ReverseSearchZone with _$ReverseSearchZone {
   const factory ReverseSearchZone({
-    required String id,
     required String adresse,
     required double lat,
     required double lng,
@@ -43,4 +42,19 @@ class ReverseSearchProposition with _$ReverseSearchProposition {
 
   factory ReverseSearchProposition.fromJson(Map<String, dynamic> json) =>
       _$ReverseSearchPropositionFromJson(json);
+}
+
+/// Payload brut de l'event socket `reverse_search:proposition_disponible`.
+/// Le backend envoie la liste complète des résidences actuellement
+/// disponibles pour la recherche (remplacement, pas ajout incrémental).
+@freezed
+class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
+  const factory ReverseSearchPropositionEvent({
+    required String reverseSearchId,
+    @JsonKey(name: 'reverse_search_montant') required double montant,
+    required List<ResidenceModel> data,
+  }) = _ReverseSearchPropositionEvent;
+
+  factory ReverseSearchPropositionEvent.fromJson(Map<String, dynamic> json) =>
+      _$ReverseSearchPropositionEventFromJson(json);
 }

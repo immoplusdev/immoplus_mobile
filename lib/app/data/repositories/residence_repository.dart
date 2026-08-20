@@ -252,6 +252,40 @@ class ResidenceRepository {
     }
   }
 
+  Future<ResidencesCollection> searchResidencesPublic({
+    String? zones,
+    int? priceMin,
+    int? priceMax,
+    int? occupantsMin,
+    String? startDate,
+    String? endDate,
+    int page = 1,
+    int perPage = 50,
+  }) async {
+    try {
+      final response =
+          await ResidenceProvider(dioClient).searchResidencesPublic(
+        zones: zones,
+        priceMin: priceMin,
+        priceMax: priceMax,
+        occupantsMin: occupantsMin,
+        startDate: startDate,
+        endDate: endDate,
+        page: page,
+        perPage: perPage,
+      );
+
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to search residences: ${dioError.message}');
+    } catch (error) {
+      inspect(error);
+      log('Error: $error');
+      throw Exception('Failed to search residences: $error');
+    }
+  }
+
   Future<ResidencesCollection> getResidencesProprietaire({
     required String proprietaireId,
     required int page,
