@@ -142,15 +142,15 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleButton(
-                    icon: CupertinoIcons.arrow_down_to_line,
-                    iconColor: AppColors.primary,
-                    backgroundColor: const Color(0xFFF1F5FD),
-                    onTap: _isExporting
-                        ? () {}
-                        : () => _downloadScreenshot(displayPaymentId),
-                  ),
-                  const Gap(20),
+                  // CircleButton(
+                  //   icon: CupertinoIcons.arrow_down_to_line,
+                  //   iconColor: AppColors.primary,
+                  //   backgroundColor: const Color(0xFFF1F5FD),
+                  //   onTap: _isExporting
+                  //       ? () {}
+                  //       : () => _downloadScreenshot(displayPaymentId),
+                  // ),
+                  // const Gap(20),
                   CircleButton(
                     icon: CupertinoIcons.share,
                     iconColor: AppColors.primary,

@@ -427,16 +427,35 @@ class AppRouter {
         path: '/visit-pending',
         name: VisitPendingPage.name,
         builder: (context, state) {
-          final page = state.extra as VisitPendingPage;
-          return page;
+          if (state.extra is VisitPendingPage) {
+            final page = state.extra as VisitPendingPage;
+            return VisitPendingPage(
+              key: state.pageKey,
+              bienImmo: page.bienImmo,
+              visitType: page.visitType,
+              visitId: page.visitId,
+              fromHistory: page.fromHistory,
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
       GoRoute(
         path: '/reservation-engagement',
         name: ReservationEngagementFrame.name,
         builder: (context, state) {
-          final reservation = state.extra as ReservationEngagementFrame;
-          return reservation;
+          if (state.extra is ReservationEngagementFrame) {
+            final reservation = state.extra as ReservationEngagementFrame;
+            return ReservationEngagementFrame(
+              key: state.pageKey,
+              ownerName: reservation.ownerName,
+              reservationId: reservation.reservationId,
+              montantTotal: reservation.montantTotal,
+              initialState: reservation.initialState,
+              onBackHome: reservation.onBackHome,
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
       ShellRoute(

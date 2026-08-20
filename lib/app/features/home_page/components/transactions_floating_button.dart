@@ -163,6 +163,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
         ownerName: reservation.residence.nom,
         reservationId: reservation.id,
         montantTotal: reservation.montantTotalReservation,
+        initialState: ReservationBannerState.waitingOwner,
       ),
     );
   }

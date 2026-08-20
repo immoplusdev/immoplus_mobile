@@ -117,12 +117,13 @@ class BookingCubit extends Cubit<BookingRequestState> {
       final context = NavigationService.navigatorKey.currentContext;
       if (context != null) {
         final ownerName = reservationResponse.data.residence.nom;
-        context.goNamed(
+        context.pushNamed(
           ReservationEngagementFrame.name,
           extra: ReservationEngagementFrame(
             ownerName: ownerName,
             reservationId: reservationResponse.data.id,
             montantTotal: reservationResponse.data.montantTotalReservation,
+            initialState: ReservationBannerState.waitingOwner,
           ),
         );
       }
@@ -145,12 +146,13 @@ class BookingCubit extends Cubit<BookingRequestState> {
         message: e.message,
         onViewReservation: () {
           if (existing != null) {
-            context.goNamed(
+            context.pushNamed(
               ReservationEngagementFrame.name,
               extra: ReservationEngagementFrame(
                 ownerName: existing.data.residence.nom,
                 reservationId: existing.data.id,
                 montantTotal: existing.data.montantTotalReservation,
+                initialState: ReservationBannerState.waitingOwner,
               ),
             );
           }

@@ -433,6 +433,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
           ownerName: _reservation!.residence.nom,
           reservationId: _reservation!.id,
           montantTotal: _reservation!.montantTotalReservation,
+          initialState: ReservationBannerState.waitingOwner,
         ),
       );
     }
