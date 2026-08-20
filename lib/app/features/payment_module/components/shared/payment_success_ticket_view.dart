@@ -1,7 +1,11 @@
+import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gal/gal.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -105,7 +109,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                 ),
               ),
 
-              const Gap(24),
+              const Gap(100),
 
               // ── BOUTON DS : ALLER A L'ACCUEIL (SECONDAIRE AVEC BORDURES) ──
               CustomButtonSecondary(
@@ -142,19 +146,23 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // CircleButton(
-                  //   icon: CupertinoIcons.arrow_down_to_line,
-                  //   iconColor: AppColors.primary,
-                  //   backgroundColor: const Color(0xFFF1F5FD),
-                  //   onTap: _isExporting
-                  //       ? () {}
-                  //       : () => _downloadScreenshot(displayPaymentId),
-                  // ),
-                  // const Gap(20),
                   CircleButton(
-                    icon: CupertinoIcons.share,
-                    iconColor: AppColors.primary,
-                    backgroundColor: const Color(0xFFF1F5FD),
+                    iconWidget: Center(
+                      child: SvgPicture.asset(
+                          "assets/svgs/icons/save_payment.svg"),
+                    ),
+                    backgroundColor: const Color(0xFFEFF4FF),
+                    onTap: _isExporting
+                        ? () {}
+                        : () => _downloadScreenshot(displayPaymentId),
+                  ),
+                  const Gap(20),
+                  CircleButton(
+                    iconWidget: Center(
+                      child: SvgPicture.asset(
+                          "assets/svgs/icons/share_payment.svg"),
+                    ),
+                    backgroundColor: const Color(0xFFEFF4FF),
                     onTap: _isExporting
                         ? () {}
                         : () => _shareScreenshot(
@@ -224,14 +232,39 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
     }
   }
 
+  Future<Uint8List?> _capturePng() async {
+    try {
+      final boundary = _previewContainer.currentContext?.findRenderObject()
+          as RenderRepaintBoundary?;
+      if (boundary == null) return null;
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      return byteData?.buffer.asUint8List();
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _downloadScreenshot(String paymentId) async {
     try {
       setState(() => _isExporting = true);
-      await ShareFilesAndScreenshotWidgets().takeScreenshot(
-        _previewContainer,
-        800,
-      );
-      EasyLoading.showSuccess("Reçu téléchargé avec succès");
+      EasyLoading.show(status: 'Enregistrement...');
+
+      final bytes = await _capturePng();
+      if (bytes == null) {
+        EasyLoading.showError("Impossible de capturer le reçu");
+        return;
+      }
+
+      final fileName = "recu_paiement_$paymentId";
+      await Gal.putImageBytes(bytes, name: fileName);
+      EasyLoading.showSuccess("Reçu enregistré dans la galerie !");
+    } on GalException catch (e) {
+      if (e.type == GalExceptionType.accessDenied) {
+        EasyLoading.showError("Accès à la galerie refusé");
+      } else {
+        EasyLoading.showError("Erreur lors de l'enregistrement");
+      }
     } catch (e) {
       EasyLoading.showError("Erreur lors du téléchargement");
     } finally {
@@ -303,10 +336,10 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: _buildDottedLine(
-              color: const Color(0xFFCBD5E1),
-              dashWidth: 6,
-              dashSpace: 5,
-            ),
+                color: const Color(0xFFCBD5E1),
+                dashWidth: 6,
+                dashSpace: 5,
+                horizontalPadding: 35),
           ),
 
           // ── DÉTAILS DE LA TRANSACTION ──
@@ -481,13 +514,10 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
           ),
 
           // ── POINTILLÉS INFÉRIEURS ──
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: _buildDottedLine(
-              color: const Color(0xFFE2E8F0),
-              dashWidth: 6,
-              dashSpace: 5,
-            ),
+          _buildDottedLine(
+            color: const Color(0xFFE2E8F0),
+            dashWidth: 20,
+            dashSpace: 5,
           ),
 
           // ── SIGNATURE / WATERMARK ──
@@ -507,27 +537,30 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
     );
   }
 
-  Widget _buildDottedLine({
-    required Color color,
-    double dashWidth = 5.0,
-    double dashSpace = 4.0,
-  }) {
+  Widget _buildDottedLine(
+      {required Color color,
+      double dashWidth = 5.0,
+      double dashSpace = 4.0,
+      double horizontalPadding = 0}) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final boxWidth = constraints.maxWidth;
         final dashCount = (boxWidth / (dashWidth + dashSpace)).floor();
-        return Flex(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          direction: Axis.horizontal,
-          children: List.generate(dashCount, (_) {
-            return SizedBox(
-              width: dashWidth,
-              height: 1.2,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: color),
-              ),
-            );
-          }),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Flex(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            direction: Axis.horizontal,
+            children: List.generate(dashCount, (_) {
+              return SizedBox(
+                width: dashWidth,
+                height: 1.2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: color),
+                ),
+              );
+            }),
+          ),
         );
       },
     );
