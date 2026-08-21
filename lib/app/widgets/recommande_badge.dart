@@ -30,3 +30,26 @@ class RecommandeBadge extends StatelessWidget {
     );
   }
 }
+
+class FreeReverseBadge extends StatelessWidget {
+  const FreeReverseBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF06F26),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        'Libre',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}

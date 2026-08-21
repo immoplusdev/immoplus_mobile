@@ -18,11 +18,12 @@ class UnifiedPropertyCard extends StatelessWidget {
   final dynamic
       item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
   final VoidCallback? onTap;
-
+  final Widget? badge;
   const UnifiedPropertyCard({
     super.key,
     required this.item,
     this.onTap,
+    this.badge,
   }) : assert(item is ResidenceModel ||
             item is BienImmobilierModel ||
             item is FurnitureModel);
@@ -159,18 +160,21 @@ class UnifiedPropertyCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: onTap ?? () {
-          Constantes.tempPage = Utils.getCurrentLocation();
-          if (isResidence) {
-            context.push(ResidencePage.route((item as ResidenceModel).id),
-                extra: item);
-          } else if (isFurniture) {
-            context.push(FurnitureDetailPage.route((item as FurnitureModel).id),
-                extra: item);
-          } else {
-            context.push('/estate_detail/${(item as BienImmobilierModel).id}');
-          }
-        },
+        onTap: onTap ??
+            () {
+              Constantes.tempPage = Utils.getCurrentLocation();
+              if (isResidence) {
+                context.push(ResidencePage.route((item as ResidenceModel).id),
+                    extra: item);
+              } else if (isFurniture) {
+                context.push(
+                    FurnitureDetailPage.route((item as FurnitureModel).id),
+                    extra: item);
+              } else {
+                context
+                    .push('/estate_detail/${(item as BienImmobilierModel).id}');
+              }
+            },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
@@ -233,7 +237,7 @@ class UnifiedPropertyCard extends StatelessWidget {
 
                       const Spacer(),
 
-                      const RecommandeBadge(),
+                      badge ?? const RecommandeBadge(),
 
                       // Divider
                       const Gap(8),

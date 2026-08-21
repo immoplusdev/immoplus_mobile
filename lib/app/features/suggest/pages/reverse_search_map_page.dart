@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +15,7 @@ import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
+import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 
 class ReverseSearchMapPage extends StatefulWidget {
@@ -476,18 +478,27 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                           'Le propriétaire à confirmer vous payer c\'est reserve',
                                     ),
                                     const SizedBox(height: 16),
-                                    ...socketProps.map((prop) => Padding(
+                                    ...socketProps.map(
+                                      (prop) {
+                                        final isImmediateBooking = true;
+                                        return Padding(
                                           padding: const EdgeInsets.only(
                                               bottom: 16.0),
                                           child: UnifiedPropertyCard(
                                             item: prop.data,
-                                            onTap: () => _handleResidenceTap(
-                                                currentSearchId,
-                                                prop.data,
-                                                prop.montant.toDouble(),
-                                                true),
+                                            badge: FreeReverseBadge(),
+                                            onTap: () {
+                                              inspect(prop);
+                                              _handleResidenceTap(
+                                                  currentSearchId,
+                                                  prop.data,
+                                                  prop.montant.toDouble(),
+                                                  isImmediateBooking);
+                                            },
                                           ),
-                                        )),
+                                        );
+                                      },
+                                    ),
                                     const SizedBox(height: 24),
                                   ],
 

@@ -29,7 +29,8 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
   final _cubit = getIt<ReverseSearchCubit>();
 
   List<SelectedZone> _selectedZones = [
-    const SelectedZone(id: '1', nom: 'Cocody, Abidjan', lat: 5.359951, lng: -4.008256),
+    const SelectedZone(
+        id: '1', nom: 'Cocody, Abidjan', lat: 5.359951, lng: -4.008256),
   ];
   DateTime? _dateDebut = DateTime.now();
   DateTime? _dateFin = DateTime.now().add(const Duration(days: 4));
@@ -163,8 +164,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
             // Rule 4: No hard divider — consistent 8px-based rhythm
 
             Expanded(
-              child:
-                  BlocConsumer<ReverseSearchCubit, ReverseSearchState>(
+              child: BlocConsumer<ReverseSearchCubit, ReverseSearchState>(
                 listener: (context, state) {
                   state.maybeWhen(
                     error: (msg) {
@@ -182,8 +182,6 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                           },
                         ).then((_) {
                           _isMapPushed = false;
-                          _cubit
-                              .cancelSearch(searchId); // Clean up if user goes back
                         });
                       }
                     },
@@ -219,14 +217,16 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
           child: Center(
             child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Que cherchez- vous ?',
-                      style: TextStyle(color: Colors.grey.shade400, fontSize: 15),
+                      style:
+                          TextStyle(color: Colors.grey.shade400, fontSize: 15),
                     ),
                     const SizedBox(height: 16),
 
@@ -308,7 +308,8 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
         ),
         const Divider(height: 1),
         Padding(
-          padding: const EdgeInsets.only(bottom: 16.0, top: 12.0, left: 20, right: 20),
+          padding: const EdgeInsets.only(
+              bottom: 16.0, top: 12.0, left: 20, right: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

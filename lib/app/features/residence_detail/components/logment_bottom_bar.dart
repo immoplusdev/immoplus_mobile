@@ -238,7 +238,6 @@ class _ImmediatePaymentBottomBarState extends State<ImmediatePaymentBottomBar> {
   @override
   void initState() {
     super.initState();
-    _startCountdown();
     _initSocketListener();
   }
 
@@ -388,7 +387,9 @@ class _ImmediatePaymentBottomBarState extends State<ImmediatePaymentBottomBar> {
                       ),
                     )
                   : Text(
-                      'Payer (${_formatRemainingTime(_remainingSeconds)})',
+                      _countdownTimer != null
+                          ? 'Payer (${_formatRemainingTime(_remainingSeconds)})'
+                          : 'Payer',
                     ),
             ),
           ),
@@ -435,6 +436,7 @@ class _ImmediatePaymentBottomBarState extends State<ImmediatePaymentBottomBar> {
         widget.residenceModel.id,
       );
 
+      _startCountdown();
       EasyLoading.dismiss();
 
       if (!context.mounted) return;
