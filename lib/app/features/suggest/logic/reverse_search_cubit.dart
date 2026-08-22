@@ -43,12 +43,54 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     }
   }
 
+  void resumeSearch(String searchId, ReverseSearchRequest request,
+      {List<ReverseSearchProposition>? propositions}) {
+    final initialProps = (propositions != null && propositions.isNotEmpty)
+        ? propositions
+        : _socketService.getPropositions(searchId);
+    emit(ReverseSearchState.searching(
+      searchId: searchId,
+      propositions: initialProps,
+      classicResidences: [],
+    ));
+  }
+
   Future<void> startListening(
       String searchId, ReverseSearchRequest request) async {
     // Connect the socket
     final token = _sessionManager.currentUser?.accessToken;
     if (!_socketService.isConnected) {
       _socketService.connect(token);
+    }
+
+    // Récupérer les propositions de l'API GET /reverse-searches/:id si elles ne sont pas déjà chargées
+    final bool hasPropsAlready = state.maybeWhen(
+      searching: (id, currentProps, _) => currentProps.isNotEmpty,
+      orElse: () => false,
+    );
+
+    if (!hasPropsAlready) {
+      try {
+        final detailedSearch = await _repository.getReverseSearchById(searchId);
+        if (detailedSearch != null &&
+            detailedSearch.propositionsList.isNotEmpty) {
+          final apiProps = detailedSearch.propositionsList;
+          state.maybeWhen(
+            searching: (id, currentProps, classicProps) {
+              if (currentProps.isEmpty) {
+                emit(ReverseSearchState.searching(
+                  searchId: searchId,
+                  propositions: apiProps,
+                  classicResidences: classicProps,
+                ));
+              }
+            },
+            orElse: () {},
+          );
+        }
+      } catch (e) {
+        debugPrint('Error fetching reverse search by id: $e');
+      }
     }
 
     _propositionSub?.cancel();
@@ -93,7 +135,9 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
         searching: (id, props, _) {
           emit(ReverseSearchState.searching(
             searchId: searchId,
-            propositions: props,
+            propositions: props.isNotEmpty
+                ? props
+                : _socketService.getPropositions(searchId),
             classicResidences: classicRes.data ?? [],
           ));
         },
@@ -123,7 +167,7 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     try {
       await _repository.cancelSearch(searchId);
       emit(const ReverseSearchState.initial());
-      _socketService.disconnect();
+      _socketService.disconnect(searchId: searchId);
     } catch (e) {
       String msg = e.toString().replaceAll('Exception: ', '');
       emit(ReverseSearchState.error(msg));
@@ -148,7 +192,6 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
   Future<void> close() {
     _propositionSub?.cancel();
     _statusSub?.cancel();
-    _socketService.disconnect();
     return super.close();
   }
 }

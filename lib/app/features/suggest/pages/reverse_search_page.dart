@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
@@ -45,6 +46,25 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
   void initState() {
     super.initState();
     initializeDateFormatting('fr_FR', null);
+    _checkActiveSearch();
+  }
+
+  Future<void> _checkActiveSearch() async {
+    try {
+      final repository = getIt<ReverseSearchRepository>();
+      final activeSearch = await repository.getActiveSearch();
+      if (activeSearch != null && mounted) {
+        final request = activeSearch.toRequest();
+        _lastRequest = request;
+        _cubit.resumeSearch(
+          activeSearch.id,
+          request,
+          propositions: activeSearch.propositionsList,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error checking active reverse search: $e');
+    }
   }
 
   @override
@@ -100,29 +120,22 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
     final isMinK = _budgetMin >= 1000 && (_budgetMin % 1000 == 0);
     final isMaxK = _budgetMax >= 1000 && (_budgetMax % 1000 == 0);
 
+    String formatSingle(double val, bool isK) {
+      if (isK) {
+        return '${(val / 1000).toInt()}k';
+      }
+      return '${formatter.format(val.toInt())} F';
+    }
+
     if (_budgetMin == 0) {
-      final maxStr = isMaxK
-          ? '${(_budgetMax / 1000).toInt()} 000'
-          : formatter.format(_budgetMax.toInt());
-      return "-$maxStr F";
+      return "< ${formatSingle(_budgetMax, isMaxK)}";
     }
 
     if (_budgetMax >= 200000) {
-      final minStr = isMinK
-          ? '${(_budgetMin / 1000).toInt()} 000'
-          : formatter.format(_budgetMin.toInt());
-      return "$minStr F +";
+      return "${formatSingle(_budgetMin, isMinK)} +";
     }
 
-    if (isMinK && isMaxK) {
-      final kMin = (_budgetMin / 1000).toInt();
-      final kMax = (_budgetMax / 1000).toInt();
-      return "$kMin et $kMax 000 F";
-    }
-
-    final minStr = formatter.format(_budgetMin.toInt());
-    final maxStr = formatter.format(_budgetMax.toInt());
-    return "$minStr et $maxStr F";
+    return "${formatSingle(_budgetMin, isMinK)} et ${formatSingle(_budgetMax, isMaxK)}";
   }
 
   String get _zonesText {

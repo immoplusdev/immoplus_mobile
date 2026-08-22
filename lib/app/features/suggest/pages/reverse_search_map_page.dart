@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/suggest/widgets/reverse_search_list_header.dart';
 import 'package:immoplus/app/features/map_view/logics/map_marker_widget.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
@@ -15,6 +16,7 @@ import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
+import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 
@@ -182,82 +184,129 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
     }).toSet();
   }
 
-  void _cancelSearch(String searchId) {
-    if (searchId.isNotEmpty) {
-      context.read<ReverseSearchCubit>().cancelSearch(searchId);
-    }
-    if (mounted && Navigator.canPop(context)) {
-      Navigator.of(context).pop();
-    }
+  void _showExitDialog(String searchId) {
+    AppDialog.show(
+      title: 'Recherche en cours',
+      description:
+          'Souhaitez-vous annuler la recherche lancée ou la conserver en arrière-plan ?',
+      primaryButtonText: 'Conserver',
+      secondButtonText: 'Annuler la recherche',
+      onPrimary: () {
+        context.goNamed(HomePage.name);
+      },
+      onSecond: () {
+        if (searchId.isNotEmpty) {
+          context.read<ReverseSearchCubit>().cancelSearch(searchId);
+        }
+        if (mounted && Navigator.canPop(context)) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: BlocListener<ReverseSearchCubit, ReverseSearchState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            searching: (searchId, socketProps, classicProps) {
-              _updateMarkers(searchId, socketProps, classicProps);
-            },
-            orElse: () {},
-          );
-        },
-        child: Stack(
-          children: [
-            // MAP
-            Positioned.fill(
-              child: ValueListenableBuilder<Set<Marker>>(
-                valueListenable: _mapMarkersNotifier,
-                builder: (context, markers, child) {
-                  return GoogleMap(
-                    key: const ValueKey('reverse_search_map'),
-                    style: Constantes.modernMapStyle,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(widget.request.zones.first.lat,
-                          widget.request.zones.first.lng),
-                      zoom: 12,
-                    ),
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: false,
-                    zoomControlsEnabled: false,
-                    mapToolbarEnabled: false,
-                    circles: _buildCircles(),
-                    markers: markers,
-                    onMapCreated: (controller) {
-                      mapController = controller;
-                    },
-                  );
-                },
-              ),
-            ),
+    return BlocBuilder<ReverseSearchCubit, ReverseSearchState>(
+      builder: (context, state) {
+        int libres = 0;
+        int confirmer = 0;
+        List<ReverseSearchProposition> socketProps = [];
+        List<ResidenceModel> classicProps = [];
+        String currentSearchId = "";
 
-            // BOTTOM SHEET
-            BlocBuilder<ReverseSearchCubit, ReverseSearchState>(
-              builder: (context, state) {
-                int libres = 0;
-                int confirmer = 0;
-                List<ReverseSearchProposition> socketProps = [];
-                List<ResidenceModel> classicProps = [];
-                String currentSearchId = "";
+        state.maybeWhen(
+          searching: (id, props, classic) {
+            currentSearchId = id;
+            libres = props.length;
+            confirmer = classic.length;
+            socketProps = props;
+            classicProps = classic;
+          },
+          orElse: () {},
+        );
 
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            _showExitDialog(currentSearchId);
+          },
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: BlocListener<ReverseSearchCubit, ReverseSearchState>(
+              listener: (context, state) {
                 state.maybeWhen(
-                  searching: (id, props, classic) {
-                    currentSearchId = id;
-                    libres = props.length;
-                    confirmer = classic.length;
-                    socketProps = props;
-                    classicProps = classic;
+                  searching: (searchId, socketProps, classicProps) {
+                    _updateMarkers(searchId, socketProps, classicProps);
                   },
                   orElse: () {},
                 );
+              },
+              child: Stack(
+                children: [
+                  // MAP
+                  Positioned.fill(
+                    child: ValueListenableBuilder<Set<Marker>>(
+                      valueListenable: _mapMarkersNotifier,
+                      builder: (context, markers, child) {
+                        return GoogleMap(
+                          key: const ValueKey('reverse_search_map'),
+                          style: Constantes.modernMapStyle,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(widget.request.zones.first.lat,
+                                widget.request.zones.first.lng),
+                            zoom: 12,
+                          ),
+                          myLocationEnabled: true,
+                          myLocationButtonEnabled: false,
+                          zoomControlsEnabled: false,
+                          mapToolbarEnabled: false,
+                          circles: _buildCircles(),
+                          markers: markers,
+                          onMapCreated: (controller) {
+                            mapController = controller;
+                          },
+                        );
+                      },
+                    ),
+                  ),
 
-                return DraggableScrollableSheet(
-                  controller: _sheetController,
-                  initialChildSize: 0.35,
-                  minChildSize: 0.35,
-                  maxChildSize: 0.9,
+                  // BOUTON RETOUR FLOTTANT
+                  Positioned(
+                    top: MediaQuery.of(context).padding.top + 8,
+                    left: 16,
+                    child: GestureDetector(
+                      onTap: () => _showExitDialog(currentSearchId),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.black87,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // BOTTOM SHEET
+                  DraggableScrollableSheet(
+                    controller: _sheetController,
+                    initialChildSize: 0.35,
+                    minChildSize: 0.35,
+                    maxChildSize: 0.9,
                   snap: true,
                   builder: (context, scrollController) {
                     return Container(
@@ -443,7 +492,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                     flex: 1,
                                     child: GestureDetector(
                                       onTap: () =>
-                                          _cancelSearch(currentSearchId),
+                                          _showExitDialog(currentSearchId),
                                       child: Container(
                                         height: 44,
                                         decoration: BoxDecoration(
@@ -528,14 +577,15 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                           ],
                         ),
                       ),
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

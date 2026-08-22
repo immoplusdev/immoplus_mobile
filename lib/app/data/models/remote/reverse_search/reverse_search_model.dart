@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus/app/data/enums/reverse_search_status.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 
 part 'reverse_search_model.freezed.dart';
@@ -44,9 +45,7 @@ class ReverseSearchProposition with _$ReverseSearchProposition {
       _$ReverseSearchPropositionFromJson(json);
 }
 
-/// Payload brut de l'event socket `reverse_search:proposition_disponible`.
-/// Le backend envoie la liste complète des résidences actuellement
-/// disponibles pour la recherche (remplacement, pas ajout incrémental).
+/// Payload brut des propositions (renvoyé par l'événement socket et par GET /reverse-searches/:id dans "proposals")
 @freezed
 class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
   const factory ReverseSearchPropositionEvent({
@@ -57,4 +56,96 @@ class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
 
   factory ReverseSearchPropositionEvent.fromJson(Map<String, dynamic> json) =>
       _$ReverseSearchPropositionEventFromJson(json);
+}
+
+extension ReverseSearchPropositionEventX on ReverseSearchPropositionEvent {
+  List<ReverseSearchProposition> toPropositions() {
+    return data
+        .map((residence) => ReverseSearchProposition(
+              reverseSearchId: reverseSearchId,
+              montant: montant,
+              data: residence.copyWith(
+                prixReservation: montant > 0
+                    ? montant.toInt()
+                    : (residence.prixReservation > 0
+                        ? residence.prixReservation
+                        : montant.toInt()),
+              ),
+            ))
+        .toList();
+  }
+}
+
+@freezed
+class ReverseSearchItem with _$ReverseSearchItem {
+  const factory ReverseSearchItem({
+    required String id,
+    required String status,
+    String? clientId,
+    @Default([]) List<ReverseSearchZone> zones,
+    DateTime? dateDebut,
+    DateTime? dateFin,
+    @Default(1) int nombrePersonnes,
+    @Default(0) double budgetMin,
+    @Default(0) double budgetMax,
+    String? notes,
+    @Default([]) List<String> eligibleResidenceIds,
+    @Default([]) List<dynamic> proprietairesNotifies,
+    String? residenceSelectionnee,
+    double? montantSelectionne,
+    DateTime? selectionExpireAt,
+    @Default(0) int currentWave,
+    DateTime? expiresAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    ReverseSearchPropositionEvent? proposals,
+  }) = _ReverseSearchItem;
+
+  factory ReverseSearchItem.fromJson(Map<String, dynamic> json) =>
+      _$ReverseSearchItemFromJson(json);
+}
+
+@freezed
+class ReverseSearchResponse with _$ReverseSearchResponse {
+  const factory ReverseSearchResponse({
+    required ReverseSearchItem data,
+  }) = _ReverseSearchResponse;
+
+  factory ReverseSearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$ReverseSearchResponseFromJson(json);
+}
+
+@freezed
+class ReverseSearchesResponse with _$ReverseSearchesResponse {
+  const factory ReverseSearchesResponse({
+    @Default([]) List<ReverseSearchItem> data,
+    int? currentPage,
+    int? totalPages,
+    int? pageSize,
+    int? totalCount,
+    bool? hasPrevious,
+    bool? hasNext,
+  }) = _ReverseSearchesResponse;
+
+  factory ReverseSearchesResponse.fromJson(Map<String, dynamic> json) =>
+      _$ReverseSearchesResponseFromJson(json);
+}
+
+extension ReverseSearchItemX on ReverseSearchItem {
+  ReverseSearchStatus get statusEnum => ReverseSearchStatus.fromString(status);
+
+  List<ReverseSearchProposition> get propositionsList =>
+      proposals?.toPropositions() ?? [];
+
+  ReverseSearchRequest toRequest() {
+    return ReverseSearchRequest(
+      zones: zones,
+      dateDebut: dateDebut ?? DateTime.now(),
+      dateFin: dateFin ?? DateTime.now().add(const Duration(days: 4)),
+      nombrePersonnes: nombrePersonnes,
+      budgetMin: budgetMin,
+      budgetMax: budgetMax,
+      notes: notes,
+    );
+  }
 }

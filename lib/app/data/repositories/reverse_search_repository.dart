@@ -23,21 +23,7 @@ class ReverseSearchRepository {
   Future<String> createSearch(ReverseSearchRequest request) async {
     try {
       final response = await _provider.createSearch(request);
-      final dynamic rawData = response.data;
-      String? id;
-      if (rawData is Map<String, dynamic>) {
-        if (rawData['id'] != null) {
-          id = rawData['id'].toString();
-        } else if (rawData['data'] != null) {
-          if (rawData['data'] is Map && rawData['data']['id'] != null) {
-            id = rawData['data']['id'].toString();
-          } else if (rawData['data'] is String) {
-            id = rawData['data'].toString();
-          }
-        }
-      }
-      id ??= rawData.toString();
-
+      final id = response.data.id;
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('active_reverse_search_id', id);
       return id;
@@ -69,41 +55,48 @@ class ReverseSearchRepository {
     }
   }
 
-  Future<String?> fetchActiveSearchId() async {
+  Future<List<ReverseSearchItem>> getReverseSearchesList({
+    int page = 1,
+    int limit = 20,
+  }) async {
     try {
-      final response = await _provider.getReverseSearches(page: 1, limit: 20);
-      final rawData = response.data;
-      List<dynamic>? list;
+      final response =
+          await _provider.getReverseSearches(page: page, limit: limit);
+      return response.data;
+    } catch (_) {
+      return [];
+    }
+  }
 
-      if (rawData is Map<String, dynamic>) {
-        if (rawData['data'] is List) {
-          list = rawData['data'] as List;
-        } else if (rawData['items'] is List) {
-          list = rawData['items'] as List;
-        }
-      } else if (rawData is List) {
-        list = rawData;
-      }
+  Future<ReverseSearchItem?> getReverseSearchById(String id) async {
+    try {
+      final response = await _provider.getReverseSearchById(id);
+      return response.data;
+    } catch (_) {
+      return null;
+    }
+  }
 
-      if (list != null && list.isNotEmpty) {
-        for (var item in list) {
-          if (item is Map<String, dynamic>) {
-            final status = item['status']?.toString().toLowerCase();
-            if (status == 'en_attente' ||
-                status == 'active' ||
-                status == 'pending' ||
-                status == 'searching' ||
-                status == 'created') {
-              return item['id']?.toString();
-            }
-          }
-        }
-        final firstItem = list.first;
-        if (firstItem is Map<String, dynamic> && firstItem['id'] != null) {
-          return firstItem['id'].toString();
+  Future<ReverseSearchItem?> getActiveSearch() async {
+    try {
+      final list = await getReverseSearchesList(page: 1, limit: 10);
+      if (list.isNotEmpty) {
+        final first = list.first;
+        if (first.statusEnum.isEnRecherche) {
+          final detailed = await getReverseSearchById(first.id);
+          return detailed ?? first;
         }
       }
       return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<String?> fetchActiveSearchId() async {
+    try {
+      final active = await getActiveSearch();
+      return active?.id;
     } catch (_) {
       return null;
     }
@@ -162,4 +155,3 @@ class ReverseSearchRepository {
     }
   }
 }
-

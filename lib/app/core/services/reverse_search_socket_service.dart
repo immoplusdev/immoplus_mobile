@@ -17,10 +17,22 @@ class ReverseSearchSocketService {
   final _statusController = StreamController<String>.broadcast();
   Stream<String> get onStatus => _statusController.stream;
 
+  final Map<String, List<ReverseSearchProposition>>
+      _lastPropositionsBySearchId = {};
+
+  List<ReverseSearchProposition> getPropositions(String searchId) {
+    return _lastPropositionsBySearchId[searchId] ?? [];
+  }
+
+  void clearPropositions(String searchId) {
+    _lastPropositionsBySearchId.remove(searchId);
+  }
+
   bool get isConnected => _socket?.connected ?? false;
 
   void connect(String? accessToken) {
     if (accessToken == null || accessToken.isEmpty) return;
+    if (_socket != null && _socket!.connected) return;
 
     final baseUrl = (dotenv.env['API_BASE_URL'] ?? '').trim();
     if (baseUrl.isEmpty) return;
@@ -59,9 +71,11 @@ class ReverseSearchSocketService {
                     data: residence,
                   ))
               .toList();
+          _lastPropositionsBySearchId[event.reverseSearchId] = propositions;
           _propositionController.add(propositions);
         } catch (e) {
-          dev.log('Erreur parsing proposition: $e', name: 'ReverseSearchSocket');
+          dev.log('Erreur parsing proposition: $e',
+              name: 'ReverseSearchSocket');
         }
       }
     });
@@ -81,7 +95,12 @@ class ReverseSearchSocketService {
     _socket!.connect();
   }
 
-  void disconnect() {
+  void disconnect({String? searchId}) {
+    if (searchId != null) {
+      _lastPropositionsBySearchId.remove(searchId);
+    } else {
+      _lastPropositionsBySearchId.clear();
+    }
     _socket?.disconnect();
     _socket?.dispose();
     _socket = null;
