@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';

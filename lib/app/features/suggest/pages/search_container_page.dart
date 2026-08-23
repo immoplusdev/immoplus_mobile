@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_page.dart';
@@ -25,22 +27,35 @@ class SearchContainerPage extends StatefulWidget {
 
 class _SearchContainerPageState extends State<SearchContainerPage>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  TabController? _tabController;
+  late final bool _isLoggedIn;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    final sessionManager = getIt<SessionManager>();
+    _isLoggedIn = sessionManager.currentUser != null;
+    if (_isLoggedIn) {
+      _tabController = TabController(length: 2, vsync: this);
+    }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_isLoggedIn) {
+      return SuggestPage(
+        homeTab: widget.homeTab,
+        lat: widget.lat,
+        lng: widget.lng,
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -107,5 +122,4 @@ class _SearchContainerPageState extends State<SearchContainerPage>
       ),
     );
   }
-
 }

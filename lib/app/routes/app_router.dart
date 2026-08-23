@@ -86,13 +86,14 @@ import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_map_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
+import 'package:immoplus/app/widgets/ads/components/mosaic_items_gallery_page.dart';
+import 'package:immoplus/app/widgets/image_collage.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -667,6 +668,11 @@ class AppRouter {
             subCategory: extra['subCategory'] as EstateSubCategory?,
             propertyType:
                 extra['propertyType'] as PropertyType? ?? PropertyType.land,
+            lat: extra['lat'] as double?,
+            long: extra['long'] as double?,
+            radius: extra['radius'] as double?,
+            minPrice: extra['minPrice'] as int?,
+            maxPrice: extra['maxPrice'] as int?,
           );
         },
       ),
@@ -902,6 +908,30 @@ class AppRouter {
         path: RatingHistoryPage.routePath(),
         name: RatingHistoryPage.name,
         builder: (context, state) => const RatingHistoryPage(),
+      ),
+      GoRoute(
+        path: MosaicItemsGalleryPage.routePath,
+        name: MosaicItemsGalleryPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is MosaicGalleryExtra) {
+            return MosaicItemsGalleryPage(
+              items: extra.items,
+              title: extra.title,
+              tag: extra.tag,
+            );
+          } else if (extra is List<CollageItem>) {
+            return MosaicItemsGalleryPage(items: extra);
+          } else if (extra is Map<String, dynamic>) {
+            return MosaicItemsGalleryPage(
+              items: (extra['items'] as List<dynamic>?)?.cast<CollageItem>() ??
+                  const [],
+              title: extra['title'] as String?,
+              tag: extra['tag'] as String?,
+            );
+          }
+          return const MosaicItemsGalleryPage(items: []);
+        },
       ),
     ],
   );

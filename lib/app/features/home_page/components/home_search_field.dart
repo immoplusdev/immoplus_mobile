@@ -7,7 +7,6 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 
 class HomeSearchField extends StatefulWidget {
   const HomeSearchField({

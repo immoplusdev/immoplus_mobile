@@ -128,10 +128,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i57.RemoteConfigService());
     gh.lazySingleton<_i944.AuthRedirectService>(
         () => _i944.AuthRedirectService());
-    gh.lazySingleton<_i997.ReverseSearchSocketService>(
-        () => _i997.ReverseSearchSocketService());
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
+    gh.lazySingleton<_i997.ReverseSearchSocketService>(
+        () => _i997.ReverseSearchSocketService());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
