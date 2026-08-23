@@ -647,6 +647,11 @@ class AppRouter {
             subCategory: extra['subCategory'] as EstateSubCategory?,
             propertyType:
                 extra['propertyType'] as PropertyType? ?? PropertyType.land,
+            lat: extra['lat'] as double?,
+            long: extra['long'] as double?,
+            radius: extra['radius'] as double?,
+            minPrice: extra['minPrice'] as int?,
+            maxPrice: extra['maxPrice'] as int?,
           );
         },
       ),

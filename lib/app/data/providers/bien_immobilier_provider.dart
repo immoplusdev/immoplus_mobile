@@ -58,16 +58,17 @@ abstract class BienImmobilierProvider {
   });
   //* end point de la map
   @GET("/biens-immobiliers/data/public/geolocalized")
-  Future<BienImmobilierCollection> getBienImmobilierGeolocalized(
-      {@Query("_lat") double? lat,
-      @Query("_long") double? long,
-      @Query("_radius") double? radius,
-      @Query("_per_page") int? perPage,
-      @Query("_page") int? page,
-      @Query("_search") String? search,
-      @Query('_where') List<Map<String, dynamic>>? where,
-      @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir});
+  Future<BienImmobilierCollection> getBienImmobilierGeolocalized({
+    @Query("_lat") double? lat,
+    @Query("_long") double? long,
+    @Query("_radius") double? radius,
+    @Query("_per_page") int? perPage,
+    @Query("_page") int? page,
+    @Query("_search") String? search,
+    @Queries() Map<String, dynamic>? where,
+    @Query("_order_by") String? orderBy,
+    @Query("_order_dir") String? orderDir,
+  });
 
   @POST("/biens-immobiliers")
   Future<BienImmobilierSingle> createBienImmobilier(

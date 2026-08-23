@@ -349,73 +349,61 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   // Biens et Meubles utilisent désormais la disposition par ville (comme
   // Résidences).
   //
-  // Ancienne pastille de filtre par sous-catégorie (Tous, Appartement, ...),
-  // conservée pour référence / réactivation éventuelle.
-  // Widget _buildSubCategoryTabsOld() {
-  //   final isFurniture = widget.currentIndex == 2;
-  //   final items =
-  //       isFurniture ? FurnitureSubCategory.values : EstateSubCategory.values;
-  //
-  //   final selectedValue = isFurniture
-  //       ? FilterHandler.furnitureSubCategory
-  //       : FilterHandler.estateSubCategory;
-  //
-  //   return Container(
-  //     height: 30,
-  //     width: double.infinity,
-  //     child: ListView.separated(
-  //       scrollDirection: Axis.horizontal,
-  //       padding: const EdgeInsets.symmetric(horizontal: 16),
-  //       itemCount: items.length,
-  //       separatorBuilder: (context, index) => const SizedBox(width: 20),
-  //       itemBuilder: (context, index) {
-  //         final item = items[index];
-  //         final isSelected = selectedValue == item;
-  //         final label = isFurniture
-  //             ? (item as FurnitureSubCategory).label
-  //             : (item as EstateSubCategory).label;
-  //
-  //         return GestureDetector(
-  //           onTap: () {
-  //             setState(() {
-  //               if (isFurniture) {
-  //                 FilterHandler.furnitureSubCategory =
-  //                     item as FurnitureSubCategory;
-  //               } else {
-  //                 FilterHandler.estateSubCategory = item as EstateSubCategory;
-  //               }
-  //             });
-  //             FilterHandler.notifyChange();
-  //             HomePageState.refreshPage(widget.currentIndex);
-  //           },
-  //           child: Container(
-  //             alignment: Alignment.center,
-  //             padding: const EdgeInsets.only(bottom: 8),
-  //             decoration: BoxDecoration(
-  //               border: isSelected
-  //                   ? Border(
-  //                       bottom: BorderSide(
-  //                         color: AppColors.primary,
-  //                         width: 2,
-  //                       ),
-  //                     )
-  //                   : null,
-  //             ),
-  //             child: Text(
-  //               label,
-  //               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-  //                     color:
-  //                         isSelected ? AppColors.primary : Colors.grey.shade600,
-  //                     fontWeight:
-  //                         isSelected ? FontWeight.w600 : FontWeight.w500,
-  //                   ),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+  Widget _buildEstateSubCategoryTabs() {
+    const items = [
+      EstateSubCategory.all,
+      EstateSubCategory.villa,
+      EstateSubCategory.duplex,
+      EstateSubCategory.studio,
+      EstateSubCategory.appartement,
+      EstateSubCategory.bureau,
+      EstateSubCategory.terrain,
+    ];
+    final selectedValue = FilterHandler.estateSubCategory;
+
+    return SizedBox(
+      height: 25,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        itemCount: items.length,
+        separatorBuilder: (context, index) => const Gap(10),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          final isSelected = selectedValue == item;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                FilterHandler.estateSubCategory = item;
+              });
+              FilterHandler.notifyChange();
+              HomePageState.refreshPage(widget.currentIndex);
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primary : const Color(0xffEDF1F7),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                item.label,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color:
+                          isSelected ? Colors.white : const Color(0xff333333),
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontSize: 12,
+                    ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -431,6 +419,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       child: BlocBuilder<FilterCubit, FilterHandler>(
         builder: (context, filterState) {
           final isFurnitureTab = widget.currentIndex == HomeTab.furniture.value;
+          final isLocationTab = widget.currentIndex == HomeTab.location.value;
 
           final searchField = HomeSearchField(
             isFurnitureTab: isFurnitureTab,
@@ -564,15 +553,18 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(58),
+                  preferredSize: Size.fromHeight(
+                    isLocationTab ? 58 + 48.0 : 58.0,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      HomeChoiceMenu(),
-                      // Pastille de filtre par sous-catégorie désactivée pour
-                      // tous les onglets (disposition par ville partout).
-                      // const Gap(15),
-                      // _buildSubCategoryTabs(),
+                      const HomeChoiceMenu(),
+                      if (isLocationTab) ...[
+                        const Gap(10),
+                        _buildEstateSubCategoryTabs(),
+                        const Gap(6),
+                      ],
                     ],
                   ),
                 ),

@@ -157,7 +157,7 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
     int? perPage,
     int? page,
     String? search,
-    List<Map<String, dynamic>>? where,
+    Map<String, dynamic>? where,
     String? orderBy,
     String? orderDir,
   }) async {
@@ -169,10 +169,10 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
       r'_per_page': perPage,
       r'_page': page,
       r'_search': search,
-      r'_where': where,
       r'_order_by': orderBy,
       r'_order_dir': orderDir,
     };
+    queryParameters.addAll(where ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
