@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
-import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
