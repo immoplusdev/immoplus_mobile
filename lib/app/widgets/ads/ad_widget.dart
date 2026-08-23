@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'package:immoplus/app/data/enums/ad_campaign_category.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/data/enums/ad_type.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 import 'package:immoplus/app/logic/ads/ads_state.dart';
+import 'components/ad_carousel_offre_special_campaign_category.dart';
 import 'components/ad_carousel_video_widget.dart';
+import 'components/ad_carousel_ville_ads_campaign_category.dart';
 import 'components/ad_carousel_widget.dart';
 import 'components/ad_image_widget.dart';
 import 'components/ad_video_widget.dart';
@@ -77,7 +80,16 @@ class AdWidget extends StatelessWidget {
   Widget _buildAdLayout(AdCampaignModel campaign) {
     switch (AdType.fromString(campaign.type)) {
       case AdType.carousel:
-        return AdCarouselWidget(campaign: campaign);
+        final category =
+            AdCampaignCategory.fromString(campaign.campaignCategory);
+        switch (category) {
+          case AdCampaignCategory.villeAds:
+            return AdCarouselVilleAdsCampaignCategory(campaign: campaign);
+          case AdCampaignCategory.offreSpecial:
+            return AdCarouselOffreSpecialCampaignCategory(campaign: campaign);
+          default:
+            return AdCarouselWidget(campaign: campaign);
+        }
       case AdType.video:
         return AdVideoWidget(campaign: campaign);
       case AdType.videoCarousel:

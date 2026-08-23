@@ -2,18 +2,11 @@ import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/data/enums/ad_action.dart';
-import 'package:immoplus/app/extensions/go_router_extensions.dart';
-import 'package:immoplus/app/features/residence_detail/residence_page.dart';
-import 'package:immoplus/app/logic/ads/ads_cubit.dart';
-import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
-import 'package:shimmer/shimmer.dart';
-
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
+import 'package:immoplus/app/utils/ad_action_handler.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// Angles de rotation fixes par carte, pour l'effet "photos éparpillées"
 const List<double> _kScatterAngles = [3.7, -2.82, 5.6];
@@ -60,23 +53,6 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
     if (index != _currentIndex) {
       setState(() => _currentIndex = index);
     }
-  }
-
-  /// Pour une pub OPEN_RESIDENCE avec une résidence par carte
-  /// (`scope.entity_ids[i]`, même ordre que `media.images`) : chaque carte
-  /// doit ouvrir sa propre résidence, pas toujours la même via `AdTap`.
-  bool get _hasPerCardResidence {
-    final campaign = widget.campaign;
-    return AdAction.fromString(campaign.action) == AdAction.openResidence &&
-        (campaign.scope?.entityIds.isNotEmpty ?? false);
-  }
-
-  void _openResidenceCard(BuildContext context, int index) {
-    final campaign = widget.campaign;
-    final entityIds = campaign.scope?.entityIds ?? const [];
-    if (index >= entityIds.length) return;
-    context.read<AdsCubit>().trackClick(campaign.id, campaign.placement);
-    AppRouter.router.pushIfDifferent(ResidencePage.route(entityIds[index]));
   }
 
   /// Centre la carte du milieu (index 1) au premier affichage, pour que les
@@ -178,16 +154,14 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
                             ),
                           );
 
-                          return _hasPerCardResidence
-                              ? GestureDetector(
-                                  onTap: () =>
-                                      _openResidenceCard(cardContext, i),
-                                  child: card,
-                                )
-                              : AdTap(
-                                  campaign: widget.campaign,
-                                  child: card,
-                                );
+                          return GestureDetector(
+                            onTap: () => AdActionHandler.handleCardAction(
+                              cardContext,
+                              widget.campaign,
+                              cardIndex: i,
+                            ),
+                            child: card,
+                          );
                         }),
                       ),
                     ],
