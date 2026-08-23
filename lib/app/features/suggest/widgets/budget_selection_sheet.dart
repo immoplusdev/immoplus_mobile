@@ -254,7 +254,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
-                  showValueIndicator: ShowValueIndicator.onDrag,
+                  showValueIndicator: ShowValueIndicator.always,
                 ),
                 child: RangeSlider(
                   values: RangeValues(validMin, validMax),

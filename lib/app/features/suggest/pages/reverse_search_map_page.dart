@@ -8,11 +8,16 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/suggest/widgets/reverse_search_list_header.dart';
 import 'package:immoplus/app/features/map_view/logics/map_marker_widget.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
+import 'package:immoplus/app/features/suggest/widgets/pending_selection_card.dart';
+import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
+import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
@@ -121,7 +126,27 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
       'isImmediateBooking': isImmediateBooking,
       'reverseSearchId': searchId,
       'reverseSearchPrice': reverseSearchPrice,
-    });
+    }).then((_) => _refreshLockStateFromServer(searchId));
+  }
+
+  /// Une sélection (verrou 10 min) peut être posée depuis la page résidence
+  /// ou levée depuis la page paiement, sans jamais passer par ce cubit — on
+  /// revérifie donc l'état réel au retour, plutôt que de se fier à l'état
+  /// local qui n'aurait pas bougé depuis le dernier push.
+  Future<void> _refreshLockStateFromServer(String searchId) async {
+    if (!mounted) return;
+    try {
+      final detailed =
+          await getIt<ReverseSearchRepository>().getReverseSearchById(searchId);
+      if (!mounted || detailed == null) return;
+      context.read<ReverseSearchCubit>().resumeSearch(
+            detailed.id,
+            widget.request,
+            propositions: detailed.propositionsList,
+            pendingSelection: detailed.pendingSelectionProposition,
+            selectionExpireAt: detailed.selectionExpireAt,
+          );
+    } catch (_) {}
   }
 
   @override
@@ -139,7 +164,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
 
     final cubit = context.read<ReverseSearchCubit>();
     cubit.state.maybeWhen(
-      searching: (searchId, socketProps, classicProps) {
+      searching: (searchId, socketProps, classicProps, _, __) {
         cubit.startListening(searchId, widget.request);
         _updateMarkers(searchId, socketProps, classicProps);
       },
@@ -184,6 +209,21 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
     }).toSet();
   }
 
+  void _continueToPayment(
+    BuildContext context,
+    String searchId,
+    ReverseSearchProposition proposition,
+  ) {
+    context.pushNamed(
+      OperatorsSelectorPage.name,
+      extra: PaymentPageAdapter(
+        itemId: searchId,
+        collection: ProductType.reverse_searches.name,
+        amount: proposition.montant.toInt(),
+      ),
+    ).then((_) => _refreshLockStateFromServer(searchId));
+  }
+
   void _showExitDialog(String searchId) {
     AppDialog.show(
       title: 'Recherche en cours',
@@ -209,22 +249,29 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReverseSearchCubit, ReverseSearchState>(
       builder: (context, state) {
-        int libres = 0;
-        int confirmer = 0;
         List<ReverseSearchProposition> socketProps = [];
         List<ResidenceModel> classicProps = [];
         String currentSearchId = "";
+        ReverseSearchProposition? pendingSelection;
+        DateTime? selectionExpireAt;
 
         state.maybeWhen(
-          searching: (id, props, classic) {
+          searching: (id, props, classic, pending, expireAt) {
             currentSearchId = id;
-            libres = props.length;
-            confirmer = classic.length;
-            socketProps = props;
+            pendingSelection = pending;
+            selectionExpireAt = expireAt;
+            // La résidence épinglée (en attente de paiement) est retirée de
+            // la liste normale pour ne pas apparaître deux fois.
+            socketProps = pending == null
+                ? props
+                : props.where((p) => p.data.id != pending.data.id).toList();
             classicProps = classic;
           },
           orElse: () {},
         );
+
+        final libres = socketProps.length + (pendingSelection != null ? 1 : 0);
+        final confirmer = classicProps.length;
 
         return PopScope(
           canPop: false,
@@ -237,7 +284,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
             body: BlocListener<ReverseSearchCubit, ReverseSearchState>(
               listener: (context, state) {
                 state.maybeWhen(
-                  searching: (searchId, socketProps, classicProps) {
+                  searching: (searchId, socketProps, classicProps, _, __) {
                     _updateMarkers(searchId, socketProps, classicProps);
                   },
                   orElse: () {},
@@ -520,13 +567,28 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                               child: Column(
                                 children: [
                                   // LIBRE TOUT DE SUITE
-                                  if (socketProps.isNotEmpty) ...[
+                                  if (pendingSelection != null ||
+                                      socketProps.isNotEmpty) ...[
                                     const ReverseSearchListHeader(
                                       title: 'Libre tout de suite',
                                       description:
                                           'Le propriétaire à confirmer vous payer c\'est reserve',
                                     ),
                                     const SizedBox(height: 16),
+                                    if (pendingSelection != null)
+                                      PendingSelectionCard(
+                                        proposition: pendingSelection!,
+                                        selectionExpireAt: selectionExpireAt,
+                                        onContinuePayment: () =>
+                                            _continueToPayment(
+                                          context,
+                                          currentSearchId,
+                                          pendingSelection!,
+                                        ),
+                                        onExpired: () => context
+                                            .read<ReverseSearchCubit>()
+                                            .clearPendingSelection(),
+                                      ),
                                     ...socketProps.map(
                                       (prop) {
                                         final isImmediateBooking = true;

@@ -52,6 +52,14 @@ mixin _$ResidenceModel {
   bool get residenceDisponible => throw _privateConstructorUsedError;
   num get reduction => throw _privateConstructorUsedError;
 
+  /// Montant propre à cette résidence dans le cadre d'une recherche
+  /// inversée (prix × nombre de nuits recherchées). Présent uniquement
+  /// dans les payloads de propositions reverse-search (socket
+  /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
+  /// absent des autres endpoints résidence.
+  @JsonKey(name: 'reverse_search_montant')
+  double? get reverseSearchMontant => throw _privateConstructorUsedError;
+
   /// Serializes this ResidenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -96,7 +104,8 @@ abstract class $ResidenceModelCopyWith<$Res> {
       String reglesSupplementaires,
       num? score,
       bool residenceDisponible,
-      num reduction});
+      num reduction,
+      @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant});
 
   $VilleModelCopyWith<$Res>? get villeModel;
   $CommuneModelCopyWith<$Res>? get communeModel;
@@ -146,6 +155,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? score = freezed,
     Object? residenceDisponible = null,
     Object? reduction = null,
+    Object? reverseSearchMontant = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -260,6 +270,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.reduction
           : reduction // ignore: cast_nullable_to_non_nullable
               as num,
+      reverseSearchMontant: freezed == reverseSearchMontant
+          ? _value.reverseSearchMontant
+          : reverseSearchMontant // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 
@@ -338,7 +352,8 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       String reglesSupplementaires,
       num? score,
       bool residenceDisponible,
-      num reduction});
+      num reduction,
+      @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant});
 
   @override
   $VilleModelCopyWith<$Res>? get villeModel;
@@ -389,6 +404,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? score = freezed,
     Object? residenceDisponible = null,
     Object? reduction = null,
+    Object? reverseSearchMontant = freezed,
   }) {
     return _then(_$ResidenceModelImpl(
       id: null == id
@@ -503,6 +519,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.reduction
           : reduction // ignore: cast_nullable_to_non_nullable
               as num,
+      reverseSearchMontant: freezed == reverseSearchMontant
+          ? _value.reverseSearchMontant
+          : reverseSearchMontant // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -538,7 +558,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.reglesSupplementaires = '',
       this.score,
       this.residenceDisponible = true,
-      this.reduction = 0})
+      this.reduction = 0,
+      @JsonKey(name: 'reverse_search_montant') this.reverseSearchMontant})
       : _images = images,
         _commodites = commodites,
         _pieces = pieces;
@@ -649,9 +670,18 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @JsonKey()
   final num reduction;
 
+  /// Montant propre à cette résidence dans le cadre d'une recherche
+  /// inversée (prix × nombre de nuits recherchées). Présent uniquement
+  /// dans les payloads de propositions reverse-search (socket
+  /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
+  /// absent des autres endpoints résidence.
+  @override
+  @JsonKey(name: 'reverse_search_montant')
+  final double? reverseSearchMontant;
+
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible, reduction: $reduction)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible, reduction: $reduction, reverseSearchMontant: $reverseSearchMontant)';
   }
 
   @override
@@ -705,7 +735,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.residenceDisponible, residenceDisponible) ||
                 other.residenceDisponible == residenceDisponible) &&
             (identical(other.reduction, reduction) ||
-                other.reduction == reduction));
+                other.reduction == reduction) &&
+            (identical(other.reverseSearchMontant, reverseSearchMontant) ||
+                other.reverseSearchMontant == reverseSearchMontant));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -739,7 +771,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         reglesSupplementaires,
         score,
         residenceDisponible,
-        reduction
+        reduction,
+        reverseSearchMontant
       ]);
 
   /// Create a copy of ResidenceModel
@@ -788,7 +821,9 @@ abstract class _ResidenceModel implements ResidenceModel {
       final String reglesSupplementaires,
       final num? score,
       final bool residenceDisponible,
-      final num reduction}) = _$ResidenceModelImpl;
+      final num reduction,
+      @JsonKey(name: 'reverse_search_montant')
+      final double? reverseSearchMontant}) = _$ResidenceModelImpl;
 
   factory _ResidenceModel.fromJson(Map<String, dynamic> json) =
       _$ResidenceModelImpl.fromJson;
@@ -851,6 +886,15 @@ abstract class _ResidenceModel implements ResidenceModel {
   bool get residenceDisponible;
   @override
   num get reduction;
+
+  /// Montant propre à cette résidence dans le cadre d'une recherche
+  /// inversée (prix × nombre de nuits recherchées). Présent uniquement
+  /// dans les payloads de propositions reverse-search (socket
+  /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
+  /// absent des autres endpoints résidence.
+  @override
+  @JsonKey(name: 'reverse_search_montant')
+  double? get reverseSearchMontant;
 
   /// Create a copy of ResidenceModel
   /// with the given fields replaced by the non-null parameter values.

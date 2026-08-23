@@ -64,13 +64,7 @@ class ReverseSearchSocketService {
       if (data is Map<String, dynamic>) {
         try {
           final event = ReverseSearchPropositionEvent.fromJson(data);
-          final propositions = event.data
-              .map((residence) => ReverseSearchProposition(
-                    reverseSearchId: event.reverseSearchId,
-                    montant: event.montant,
-                    data: residence,
-                  ))
-              .toList();
+          final propositions = event.toPropositions();
           _lastPropositionsBySearchId[event.reverseSearchId] = propositions;
           _propositionController.add(propositions);
         } catch (e) {

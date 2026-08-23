@@ -42,6 +42,12 @@ class ResidenceModel with _$ResidenceModel {
     //ClientModel? proprietaire,
     @Default(true) bool residenceDisponible,
     @Default(0) num reduction,
+    /// Montant propre à cette résidence dans le cadre d'une recherche
+    /// inversée (prix × nombre de nuits recherchées). Présent uniquement
+    /// dans les payloads de propositions reverse-search (socket
+    /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
+    /// absent des autres endpoints résidence.
+    @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
   }) = _ResidenceModel;
 
   factory ResidenceModel.fromJson(Map<String, dynamic> json) =>

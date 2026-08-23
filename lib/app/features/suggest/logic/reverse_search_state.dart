@@ -12,10 +12,10 @@ class ReverseSearchState with _$ReverseSearchState {
     required String searchId,
     @Default([]) List<ReverseSearchProposition> propositions,
     @Default([]) List<ResidenceModel> classicResidences,
+    // Résidence sélectionnée en attente de paiement (verrouillée le temps du
+    // paiement). Épinglée dans la liste "Libre tout de suite" côté UI.
+    ReverseSearchProposition? pendingSelection,
+    DateTime? selectionExpireAt,
   }) = _Searching;
-  const factory ReverseSearchState.locked({
-    required String searchId,
-    required ReverseSearchProposition proposition,
-  }) = _Locked;
   const factory ReverseSearchState.error(String message) = _Error;
 }

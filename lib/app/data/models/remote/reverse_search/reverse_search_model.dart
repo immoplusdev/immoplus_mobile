@@ -45,12 +45,14 @@ class ReverseSearchProposition with _$ReverseSearchProposition {
       _$ReverseSearchPropositionFromJson(json);
 }
 
-/// Payload brut des propositions (renvoyé par l'événement socket et par GET /reverse-searches/:id dans "proposals")
+/// Payload brut des propositions (renvoyé par l'événement socket et par GET /reverse-searches/:id dans "proposals").
+/// Chaque résidence de [data] porte son propre `reverse_search_montant`
+/// (voir [ResidenceModel.reverseSearchMontant]) — il n'y a plus de montant
+/// unique à ce niveau, puisque chaque résidence a son propre prix.
 @freezed
 class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
   const factory ReverseSearchPropositionEvent({
     required String reverseSearchId,
-    @JsonKey(name: 'reverse_search_montant') required double montant,
     required List<ResidenceModel> data,
   }) = _ReverseSearchPropositionEvent;
 
@@ -61,17 +63,21 @@ class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
 extension ReverseSearchPropositionEventX on ReverseSearchPropositionEvent {
   List<ReverseSearchProposition> toPropositions() {
     return data
-        .map((residence) => ReverseSearchProposition(
-              reverseSearchId: reverseSearchId,
-              montant: montant,
-              data: residence.copyWith(
-                prixReservation: montant > 0
-                    ? montant.toInt()
-                    : (residence.prixReservation > 0
-                        ? residence.prixReservation
-                        : montant.toInt()),
-              ),
-            ))
+        .map((residence) {
+          final montant = residence.reverseSearchMontant ??
+              residence.prixReservation.toDouble();
+          return ReverseSearchProposition(
+            reverseSearchId: reverseSearchId,
+            montant: montant,
+            data: residence.copyWith(
+              prixReservation: montant > 0
+                  ? montant.toInt()
+                  : (residence.prixReservation > 0
+                      ? residence.prixReservation
+                      : montant.toInt()),
+            ),
+          );
+        })
         .toList();
   }
 }
@@ -136,6 +142,19 @@ extension ReverseSearchItemX on ReverseSearchItem {
 
   List<ReverseSearchProposition> get propositionsList =>
       proposals?.toPropositions() ?? [];
+
+  /// Proposition correspondant à [residenceSelectionnee], si elle est encore
+  /// présente dans les propositions chargées. Utile pour épingler la
+  /// résidence verrouillée en attente de paiement (statut
+  /// `selection_en_attente_paiement`).
+  ReverseSearchProposition? get pendingSelectionProposition {
+    final selectedId = residenceSelectionnee;
+    if (selectedId == null) return null;
+    for (final p in propositionsList) {
+      if (p.data.id == selectedId) return p;
+    }
+    return null;
+  }
 
   ReverseSearchRequest toRequest() {
     return ReverseSearchRequest(

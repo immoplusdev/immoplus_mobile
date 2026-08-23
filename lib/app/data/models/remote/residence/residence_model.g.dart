@@ -52,6 +52,8 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       score: json['score'] as num?,
       residenceDisponible: json['residenceDisponible'] as bool? ?? true,
       reduction: json['reduction'] as num? ?? 0,
+      reverseSearchMontant:
+          (json['reverse_search_montant'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$ResidenceModelImplToJson(
@@ -85,4 +87,5 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'score': instance.score,
       'residenceDisponible': instance.residenceDisponible,
       'reduction': instance.reduction,
+      'reverse_search_montant': instance.reverseSearchMontant,
     };

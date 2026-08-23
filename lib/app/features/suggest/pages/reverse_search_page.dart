@@ -7,6 +7,7 @@ import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/features/suggest/widgets/reverse_search_chip.dart';
+import 'package:immoplus/app/features/suggest/widgets/reverse_search_form_skeleton.dart';
 import 'package:immoplus/app/features/suggest/widgets/zone_selection_sheet.dart';
 import 'package:immoplus/app/features/suggest/widgets/personnes_selection_sheet.dart';
 import 'package:immoplus/app/features/suggest/widgets/budget_selection_sheet.dart';
@@ -41,6 +42,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
 
   ReverseSearchRequest? _lastRequest;
   bool _isMapPushed = false;
+  bool _isCheckingActiveSearch = true;
 
   @override
   void initState() {
@@ -50,20 +52,35 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
   }
 
   Future<void> _checkActiveSearch() async {
+    debugPrint('[ReverseSearch] _checkActiveSearch: start');
     try {
       final repository = getIt<ReverseSearchRepository>();
       final activeSearch = await repository.getActiveSearch();
-      if (activeSearch != null && mounted) {
-        final request = activeSearch.toRequest();
-        _lastRequest = request;
-        _cubit.resumeSearch(
-          activeSearch.id,
-          request,
-          propositions: activeSearch.propositionsList,
-        );
+      debugPrint(
+          '[ReverseSearch] _checkActiveSearch: activeSearch=${activeSearch?.id} status=${activeSearch?.status} mounted=$mounted');
+      if (!mounted) return;
+
+      if (activeSearch == null) {
+        setState(() => _isCheckingActiveSearch = false);
+        return;
       }
+
+      final pendingSelection = activeSearch.pendingSelectionProposition;
+      final request = activeSearch.toRequest();
+      _lastRequest = request;
+      debugPrint('[ReverseSearch] _checkActiveSearch: calling resumeSearch '
+          '(pendingSelection=${pendingSelection?.data.id})');
+      _cubit.resumeSearch(
+        activeSearch.id,
+        request,
+        propositions: activeSearch.propositionsList,
+        pendingSelection: pendingSelection,
+        selectionExpireAt: activeSearch.selectionExpireAt,
+      );
+      setState(() => _isCheckingActiveSearch = false);
     } catch (e) {
-      debugPrint('Error checking active reverse search: $e');
+      debugPrint('[ReverseSearch] Error checking active reverse search: $e');
+      if (mounted) setState(() => _isCheckingActiveSearch = false);
     }
   }
 
@@ -172,21 +189,23 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                 ],
               ),
             ),
-            if (widget.tabBar != null) widget.tabBar!,
-
             // Rule 4: No hard divider — consistent 8px-based rhythm
 
             Expanded(
               child: BlocConsumer<ReverseSearchCubit, ReverseSearchState>(
                 listener: (context, state) {
+                  debugPrint('[ReverseSearch] listener state=$state');
                   state.maybeWhen(
                     error: (msg) {
                       _isMapPushed = false;
                       ToastUtils.showError(description: msg);
                     },
-                    searching: (searchId, props, classic) {
+                    searching: (searchId, props, classic, _, __) {
+                      debugPrint(
+                          '[ReverseSearch] listener searching: isMapPushed=$_isMapPushed lastRequest=${_lastRequest != null}');
                       if (!_isMapPushed && _lastRequest != null) {
                         _isMapPushed = true;
+                        debugPrint('[ReverseSearch] pushing ReverseSearchMapPage');
                         context.pushNamed(
                           ReverseSearchMapPage.routeName,
                           extra: {
@@ -202,10 +221,33 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                   );
                 },
                 builder: (context, state) {
-                  return state.maybeWhen(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    orElse: () => _buildForm(),
+                  // Tant qu'on vérifie une recherche active (ou qu'elle vient
+                  // d'être trouvée et s'apprête à pousser vers la carte), on
+                  // affiche le squelette (tab bar comprise) plutôt que le
+                  // formulaire vide — évite le flash "formulaire → carte" au
+                  // clic sur l'onglet.
+                  final showSkeleton = _isCheckingActiveSearch ||
+                      state.maybeWhen(
+                        searching: (_, __, ___, ____, _____) => true,
+                        orElse: () => false,
+                      );
+
+                  return Column(
+                    children: [
+                      if (widget.tabBar != null)
+                        showSkeleton
+                            ? const ReverseSearchTabBarSkeleton()
+                            : widget.tabBar!,
+                      Expanded(
+                        child: showSkeleton
+                            ? const ReverseSearchFormSkeleton()
+                            : state.maybeWhen(
+                                loading: () => const Center(
+                                    child: CircularProgressIndicator()),
+                                orElse: () => _buildForm(),
+                              ),
+                      ),
+                    ],
                   );
                 },
               ),
@@ -310,6 +352,8 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                             text: _budgetText,
                             onTap: _showBudgetSheet,
                           ),
+                          if (_budgetMin != 0 || _budgetMax != 0)
+                            const Text(' par nuitée', style: textStyle),
                         ],
                       ),
                     ),

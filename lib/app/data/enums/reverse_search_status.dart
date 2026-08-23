@@ -1,11 +1,11 @@
+/// Miroir de `ReverseSearchStatus` côté backend
+/// (api-immoplus-v2/src/core/domain/reverse-searches/reverse-search-status.enum.ts).
 enum ReverseSearchStatus {
   enRecherche("en_recherche"),
-  annuleeParClient("annulee_par_client"),
-  annulee("annulee"),
+  selectionEnAttentePaiement("selection_en_attente_paiement"),
+  confirmee("confirmee"),
   expiree("expiree"),
-  selectionExpiree("selection_expiree"),
-  selectionnee("selectionnee"),
-  terminee("terminee"),
+  annuleeParClient("annulee_par_client"),
   unknown("unknown");
 
   final String value;
@@ -16,32 +16,27 @@ enum ReverseSearchStatus {
     if (status == null) return ReverseSearchStatus.unknown;
     switch (status.toLowerCase().trim()) {
       case 'en_recherche':
-      case 'en_attente':
-      case 'active':
-      case 'pending':
-      case 'searching':
-      case 'created':
         return ReverseSearchStatus.enRecherche;
-      case 'annulee_par_client':
-        return ReverseSearchStatus.annuleeParClient;
-      case 'annulee':
-        return ReverseSearchStatus.annulee;
+      case 'selection_en_attente_paiement':
+        return ReverseSearchStatus.selectionEnAttentePaiement;
+      case 'confirmee':
+        return ReverseSearchStatus.confirmee;
       case 'expiree':
         return ReverseSearchStatus.expiree;
-      case 'selection_expiree':
-        return ReverseSearchStatus.selectionExpiree;
-      case 'selectionnee':
-        return ReverseSearchStatus.selectionnee;
-      case 'terminee':
-      case 'payee':
-        return ReverseSearchStatus.terminee;
+      case 'annulee_par_client':
+        return ReverseSearchStatus.annuleeParClient;
       default:
         return ReverseSearchStatus.unknown;
     }
   }
 
   bool get isEnRecherche => this == ReverseSearchStatus.enRecherche;
-  bool get isAnnulee =>
-      this == ReverseSearchStatus.annuleeParClient ||
-      this == ReverseSearchStatus.annulee;
+  bool get isSelectionEnAttentePaiement =>
+      this == ReverseSearchStatus.selectionEnAttentePaiement;
+
+  /// Recherche encore "vivante" côté client : soit en cours de recherche,
+  /// soit en attente de paiement suite à une sélection.
+  bool get isActive => isEnRecherche || isSelectionEnAttentePaiement;
+
+  bool get isAnnulee => this == ReverseSearchStatus.annuleeParClient;
 }

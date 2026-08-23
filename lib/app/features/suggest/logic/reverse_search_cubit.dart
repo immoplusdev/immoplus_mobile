@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/reverse_search_socket_service.dart';
+import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
@@ -43,16 +44,33 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     }
   }
 
-  void resumeSearch(String searchId, ReverseSearchRequest request,
-      {List<ReverseSearchProposition>? propositions}) {
+  void resumeSearch(
+    String searchId,
+    ReverseSearchRequest request, {
+    List<ReverseSearchProposition>? propositions,
+    ReverseSearchProposition? pendingSelection,
+    DateTime? selectionExpireAt,
+  }) {
+    debugPrint(
+        '[ReverseSearch] cubit.resumeSearch: searchId=$searchId isClosed=$isClosed currentState=$state');
     final initialProps = (propositions != null && propositions.isNotEmpty)
         ? propositions
         : _socketService.getPropositions(searchId);
+    // Ne jamais écraser "Sur demande" avec []: on préserve ce qui est déjà
+    // chargé (via startListening) plutôt que de le vider à chaque resume —
+    // sinon la section disparaît à chaque retour (paiement, résidence...).
+    final currentClassicResidences = state.maybeWhen(
+      searching: (_, __, classicResidences, ___, ____) => classicResidences,
+      orElse: () => const <ResidenceModel>[],
+    );
     emit(ReverseSearchState.searching(
       searchId: searchId,
       propositions: initialProps,
-      classicResidences: [],
+      classicResidences: currentClassicResidences,
+      pendingSelection: pendingSelection,
+      selectionExpireAt: selectionExpireAt,
     ));
+    debugPrint('[ReverseSearch] cubit.resumeSearch: emitted, newState=$state');
   }
 
   Future<void> startListening(
@@ -65,7 +83,7 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
 
     // Récupérer les propositions de l'API GET /reverse-searches/:id si elles ne sont pas déjà chargées
     final bool hasPropsAlready = state.maybeWhen(
-      searching: (id, currentProps, _) => currentProps.isNotEmpty,
+      searching: (id, currentProps, _, __, ___) => currentProps.isNotEmpty,
       orElse: () => false,
     );
 
@@ -76,12 +94,14 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
             detailedSearch.propositionsList.isNotEmpty) {
           final apiProps = detailedSearch.propositionsList;
           state.maybeWhen(
-            searching: (id, currentProps, classicProps) {
+            searching: (id, currentProps, classicProps, pending, expireAt) {
               if (currentProps.isEmpty) {
                 emit(ReverseSearchState.searching(
                   searchId: searchId,
                   propositions: apiProps,
                   classicResidences: classicProps,
+                  pendingSelection: pending,
+                  selectionExpireAt: expireAt,
                 ));
               }
             },
@@ -100,13 +120,15 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
         return;
       }
       state.maybeWhen(
-        searching: (id, props, classicProps) {
+        searching: (id, props, classicProps, pending, expireAt) {
           // Le backend renvoie la liste complète des résidences disponibles :
           // on remplace, on n'ajoute pas.
           emit(ReverseSearchState.searching(
               searchId: searchId,
               propositions: propositions,
-              classicResidences: classicProps));
+              classicResidences: classicProps,
+              pendingSelection: pending,
+              selectionExpireAt: expireAt));
         },
         orElse: () {},
       );
@@ -115,14 +137,7 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     _statusSub?.cancel();
     _statusSub = _socketService.onStatus.listen((status) {
       if (status == 'selection_expiree') {
-        // Revenir à l'état de recherche si la sélection expire
-        state.maybeWhen(
-          locked: (id, prop) {
-            emit(ReverseSearchState.searching(
-                searchId: id, propositions: [prop], classicResidences: []));
-          },
-          orElse: () {},
-        );
+        clearPendingSelection();
       } else if (status == 'annulee') {
         emit(const ReverseSearchState.initial());
       }
@@ -132,13 +147,15 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     try {
       final classicRes = await _repository.getClassicResidences(request);
       state.maybeWhen(
-        searching: (id, props, _) {
+        searching: (id, props, _, pending, expireAt) {
           emit(ReverseSearchState.searching(
             searchId: searchId,
             propositions: props.isNotEmpty
                 ? props
                 : _socketService.getPropositions(searchId),
             classicResidences: classicRes.data ?? [],
+            pendingSelection: pending,
+            selectionExpireAt: expireAt,
           ));
         },
         orElse: () {},
@@ -148,14 +165,45 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     }
   }
 
+  /// Retire l'épinglage "en attente de paiement" de l'état courant, sans
+  /// perdre les propositions déjà chargées. Appelé quand la sélection expire
+  /// — via l'event socket serveur `selection_expiree`, ou directement côté
+  /// client dès que le compte à rebours atteint zéro (pas besoin d'attendre
+  /// le serveur : passé les 10 minutes, la sélection est de toute façon
+  /// caduque).
+  void clearPendingSelection() {
+    state.maybeWhen(
+      searching: (id, props, classicProps, pending, _) {
+        if (pending != null) {
+          emit(ReverseSearchState.searching(
+            searchId: id,
+            propositions: props,
+            classicResidences: classicProps,
+          ));
+        }
+      },
+      orElse: () {},
+    );
+  }
+
+  /// Sélectionne une résidence et l'épingle dans la liste en attente de
+  /// paiement (état [ReverseSearchState.searching] avec [pendingSelection]).
   Future<void> lockResidence(
       String searchId, ReverseSearchProposition proposition) async {
     final prevState = state;
-    emit(const ReverseSearchState.loading());
     try {
       await _repository.selectResidence(searchId, proposition.data.id);
-      emit(ReverseSearchState.locked(
-          searchId: searchId, proposition: proposition));
+      prevState.maybeWhen(
+        searching: (id, props, classicProps, _, __) {
+          emit(ReverseSearchState.searching(
+            searchId: id,
+            propositions: props,
+            classicResidences: classicProps,
+            pendingSelection: proposition,
+          ));
+        },
+        orElse: () {},
+      );
     } catch (e) {
       String msg = e.toString().replaceAll('Exception: ', '');
       emit(ReverseSearchState.error(msg));

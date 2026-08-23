@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residences_collection.dart';
 import 'package:immoplus/app/data/providers/reverse_search_provider.dart';
@@ -63,7 +64,8 @@ class ReverseSearchRepository {
       final response =
           await _provider.getReverseSearches(page: page, limit: limit);
       return response.data;
-    } catch (_) {
+    } catch (e, st) {
+      debugPrint('getReverseSearchesList failed: $e\n$st');
       return [];
     }
   }
@@ -72,7 +74,8 @@ class ReverseSearchRepository {
     try {
       final response = await _provider.getReverseSearchById(id);
       return response.data;
-    } catch (_) {
+    } catch (e, st) {
+      debugPrint('getReverseSearchById($id) failed: $e\n$st');
       return null;
     }
   }
@@ -82,13 +85,14 @@ class ReverseSearchRepository {
       final list = await getReverseSearchesList(page: 1, limit: 10);
       if (list.isNotEmpty) {
         final first = list.first;
-        if (first.statusEnum.isEnRecherche) {
+        if (first.statusEnum.isActive) {
           final detailed = await getReverseSearchById(first.id);
           return detailed ?? first;
         }
       }
       return null;
-    } catch (_) {
+    } catch (e, st) {
+      debugPrint('getActiveSearch failed: $e\n$st');
       return null;
     }
   }
