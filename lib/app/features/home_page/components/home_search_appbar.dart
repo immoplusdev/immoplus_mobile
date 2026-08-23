@@ -356,8 +356,8 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       EstateSubCategory.duplex,
       EstateSubCategory.studio,
       EstateSubCategory.appartement,
-      EstateSubCategory.bureau,
-      EstateSubCategory.terrain,
+      // EstateSubCategory.bureau,
+      // EstateSubCategory.terrain,
     ];
     final selectedValue = FilterHandler.estateSubCategory;
 
