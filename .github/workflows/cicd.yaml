@@ -274,6 +274,9 @@ jobs:
           </plist>
           EOF
 
+      - name: 🔁 Mettre à jour les specs CocoaPods (évite le cache CDN périmé)
+        run: pod repo update
+
       - name: 🔨 Build IPA
         run: |
           flutter build ipa --release --build-number ${{ env.BUILD_NUMBER }} --export-options-plist=ios/ExportOptions.plist
