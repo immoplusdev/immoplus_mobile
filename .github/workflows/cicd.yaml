@@ -147,9 +147,6 @@ jobs:
       - name: 📦 Install Dependencies
         run: flutter pub get
 
-      - name: ⬆️ Upgrade dev dependencies (analyzer/build_runner) to match SDK
-        run: flutter pub upgrade
-
       - name: 🔍 Versions résolues des packages de génération
         run: |
           grep -A3 -E "^  (analyzer|build_runner|freezed|json_serializable|retrofit_generator|source_gen):" pubspec.lock
