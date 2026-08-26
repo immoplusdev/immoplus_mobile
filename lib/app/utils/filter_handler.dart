@@ -20,9 +20,7 @@ enum EstateSubCategory {
   // maison('Maison', 'maison'),
   villa('Villa', 'villa'),
   studio('Studio', 'studio'),
-  duplex('Duplex', 'duplex'),
-  bureau('Bureau', 'bureau'),
-  terrain('Terrain', 'terrain');
+  duplex('Duplex', 'duplex');
 
   final String label;
   final String? value;

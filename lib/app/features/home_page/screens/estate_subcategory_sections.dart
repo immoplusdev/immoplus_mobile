@@ -28,6 +28,7 @@ class _SubCategorySection {
 
 const List<_SubCategorySection> _kEstateSubCategorySections = [
   _SubCategorySection('Appartements', EstateSubCategory.appartement),
+  _SubCategorySection('Autres', EstateSubCategory.maison),
   _SubCategorySection('Villas', EstateSubCategory.villa),
   _SubCategorySection('Studios', EstateSubCategory.studio),
   _SubCategorySection('Duplex', EstateSubCategory.duplex),
