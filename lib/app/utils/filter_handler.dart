@@ -17,7 +17,7 @@ enum FilterField {
 enum EstateSubCategory {
   all('Tout', null),
   appartement('Appartement', 'appartement'),
-  // maison('Maison', 'maison'),
+  maison('Autres', 'maison'),
   villa('Villa', 'villa'),
   studio('Studio', 'studio'),
   duplex('Duplex', 'duplex');
