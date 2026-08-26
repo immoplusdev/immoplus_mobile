@@ -11,6 +11,7 @@ import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/extensions/go_router_extensions.dart';
 
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
+import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/firebase_options.dart';
 import 'package:injectable/injectable.dart';
@@ -98,6 +99,16 @@ class NotificationService {
         }
 
         if (type != null) {
+          // Écran de paiement encore actif (ex: retour de Wave) : son polling
+          // gère déjà le succès, ne pas le court-circuiter vers l'historique.
+          if (type == PushNotificationType.payment &&
+              AppRouter.router.currentLocation
+                  .contains(PaiementStatusPage.name)) {
+            log('🔔 Notification payment ignorée : flow de paiement déjà actif',
+                name: 'NOTIFICATION');
+            return;
+          }
+
           final code = data['code']?.toString();
           final referenceId = data['referenceId']?.toString();
           final route = type.getRoute(id, code: code, referenceId: referenceId);

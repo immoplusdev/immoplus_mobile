@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
+import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_page.dart';
 
@@ -25,22 +28,50 @@ class SearchContainerPage extends StatefulWidget {
 
 class _SearchContainerPageState extends State<SearchContainerPage>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  TabController? _tabController;
+  late final bool _isLoggedIn;
+  // Optimiste par défaut (comportement actuel inchangé) : si l'appel au
+  // statut du module échoue ou n'est pas encore revenu, on ne prive pas
+  // l'utilisateur de la recherche inversée pour un problème réseau.
+  bool _isReverseSearchModuleActive = true;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    final sessionManager = getIt<SessionManager>();
+    _isLoggedIn = sessionManager.currentUser != null;
+    if (_isLoggedIn) {
+      _tabController = TabController(length: 2, vsync: this);
+      _checkReverseSearchModule();
+    }
+  }
+
+  Future<void> _checkReverseSearchModule() async {
+    final active = await getIt<ReverseSearchRepository>().isModuleActive();
+    if (!mounted || active) return;
+    setState(() {
+      _isReverseSearchModuleActive = false;
+      _tabController?.dispose();
+      _tabController = null;
+    });
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_isLoggedIn || !_isReverseSearchModuleActive) {
+      return SuggestPage(
+        homeTab: widget.homeTab,
+        lat: widget.lat,
+        lng: widget.lng,
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -107,5 +138,4 @@ class _SearchContainerPageState extends State<SearchContainerPage>
       ),
     );
   }
-
 }

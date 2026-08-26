@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -30,6 +28,24 @@ class SelectedZone {
   @override
   int get hashCode => nom.hashCode;
 }
+
+/// Zones "populaires" proposées par défaut dans le sélecteur de lieu.
+/// Source unique de vérité : ne pas dupliquer ces coordonnées ailleurs.
+const List<SelectedZone> kPopularZones = [
+  SelectedZone(
+      id: '1', nom: 'Cocody, Abidjan', lat: 5.3602164, lng: -3.967474371),
+  SelectedZone(
+      id: '2', nom: 'Palmeraie, Abidjan', lat: 5.3702344, lng: -3.9551871),
+  SelectedZone(
+      id: '5',
+      nom: 'Yopougon, Abidjan',
+      lat: 5.317660999999,
+      lng: -4.0899911),
+  SelectedZone(
+      id: '6', nom: 'Grand-Bassam, Abidjan', lat: 5.2103072, lng: -3.7549648),
+  SelectedZone(
+      id: '7', nom: 'Assinie, Comoé', lat: 5.1398055, lng: -3.3237824),
+];
 
 class ZoneSelectionSheet extends StatefulWidget {
   final List<SelectedZone> initialSelectedZones;
@@ -66,14 +82,7 @@ class ZoneSelectionSheet extends StatefulWidget {
 }
 
 class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
-  final List<SelectedZone> availableZones = const [
-    SelectedZone(id: '1', nom: 'Cocody, Abidjan', lat: 5.359951, lng: -4.008256),
-    SelectedZone(
-        id: '2', nom: 'Palmeraie, Abidjan', lat: 5.361520, lng: -3.966750),
-    SelectedZone(id: '5', nom: 'Yopougon, Abidjan', lat: 5.334000, lng: -4.072000),
-    SelectedZone(id: '6', nom: 'Grand-Bassam, Abidjan', lat: 5.204500, lng: -3.737100),
-    SelectedZone(id: '7', nom: 'Assinie, Comoé', lat: 5.127400, lng: -3.275000),
-  ];
+  final List<SelectedZone> availableZones = kPopularZones;
 
   late List<SelectedZone> _tempSelected;
 

@@ -7,6 +7,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/reverse_search_socket_service.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -62,6 +63,12 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   List<ReservationModel> _pendingOwnerReservations = [];
   List<ReservationModel> _pendingPaymentReservations = [];
   ReverseSearchItem? _activeReverseSearch;
+
+  /// Écoute les changements de statut de la recherche inversée active
+  /// (`reverse_search:annulee`, `selection_expiree`, `paiement_echec`,
+  /// `expiree`) pour rafraîchir le bouton flottant en temps réel, sans
+  /// attendre une réouverture du menu ou une notification push classique.
+  StreamSubscription? _reverseSearchStatusSub;
 
   final _sessionManager = getIt<SessionManager>();
   bool get _isLoggedIn => _sessionManager.currentUser != null;
@@ -129,6 +136,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   void dispose() {
     ReservationPendingBanner.pushNotifier.removeListener(_onNewOperation);
     widget.scrollController?.removeListener(_onScroll);
+    _reverseSearchStatusSub?.cancel();
     _overlayEntry?.remove();
     _overlayEntry = null;
     _animController.dispose();
@@ -160,6 +168,26 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
       _isLoading = false;
     });
     _overlayEntry?.markNeedsBuild();
+
+    if (reverseSearch != null) {
+      _ensureReverseSearchRealtime();
+    }
+  }
+
+  /// Ouvre (si besoin) le socket de recherche inversée et s'abonne une seule
+  /// fois à ses changements de statut, pour que "Recherche en cours" /
+  /// "Sélection en attente de paiement" se mettent à jour dès que le serveur
+  /// pousse l'event — sans attendre que l'utilisateur rouvre le menu ou que
+  /// la page carte soit visitée dans la session.
+  void _ensureReverseSearchRealtime() {
+    final socketService = getIt<ReverseSearchSocketService>();
+    if (!socketService.isConnected) {
+      socketService.connect(_sessionManager.currentUser?.accessToken);
+    }
+    _reverseSearchStatusSub ??= socketService.onStatus.listen((status) {
+      if (!mounted) return;
+      unawaited(_refreshPendingReservations());
+    });
   }
 
   Future<void> _closeMenu() async {

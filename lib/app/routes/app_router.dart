@@ -86,7 +86,6 @@ import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';

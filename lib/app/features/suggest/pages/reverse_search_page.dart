@@ -30,10 +30,7 @@ class ReverseSearchPage extends StatefulWidget {
 class _ReverseSearchPageState extends State<ReverseSearchPage> {
   final _cubit = getIt<ReverseSearchCubit>();
 
-  List<SelectedZone> _selectedZones = [
-    const SelectedZone(
-        id: '1', nom: 'Cocody, Abidjan', lat: 5.359951, lng: -4.008256),
-  ];
+  List<SelectedZone> _selectedZones = [kPopularZones.first];
   DateTime? _dateDebut = DateTime.now();
   DateTime? _dateFin = DateTime.now().add(const Duration(days: 4));
   int _nombrePersonnes = 3;

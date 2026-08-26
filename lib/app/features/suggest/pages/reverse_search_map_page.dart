@@ -7,8 +7,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/suggest/widgets/reverse_search_list_header.dart';
+import 'package:immoplus/app/features/suggest/widgets/reverse_search_waiting_banner.dart';
 import 'package:immoplus/app/features/map_view/logics/map_marker_widget.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/reverse_search_socket_service.dart';
+import 'package:immoplus/app/data/enums/reverse_search_status.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
@@ -16,6 +19,7 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_state.dart';
 import 'package:immoplus/app/features/suggest/widgets/pending_selection_card.dart';
+import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -41,10 +45,23 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   final ValueNotifier<Set<Marker>> _mapMarkersNotifier = ValueNotifier({});
   GoogleMapController? mapController;
   final ValueNotifier<bool> _showListNotifier = ValueNotifier(false);
-  Timer? _timer;
-  final ValueNotifier<int> _secondsNotifier = ValueNotifier<int>(0);
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
+
+  // Compte à rebours de la recherche elle-même (`expiresAt`, distinct du
+  // `selectionExpireAt` de la carte "en attente de paiement"). Chargé via
+  // GET /reverse-searches/:id, et confirmé en temps réel par l'event socket
+  // `reverse_search:expiree` (le timer local reste un filet de sécurité si
+  // l'event n'arrive jamais).
+  DateTime? _expiresAt;
+  bool _isExpired = false;
+
+  // Nombre de vagues de notifications déjà envoyées aux propriétaires
+  // (`currentWave`, mis à jour en temps réel par `reverse_search:wave_updated`).
+  // "Sur demande" reste grisé tant qu'aucune vague n'est encore partie.
+  int _currentWave = 0;
+  StreamSubscription? _waveSub;
+  StreamSubscription? _expiredSub;
 
   int _lastSocketPropsCount = -1;
   int _lastClassicPropsCount = -1;
@@ -146,13 +163,51 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
             pendingSelection: detailed.pendingSelectionProposition,
             selectionExpireAt: detailed.selectionExpireAt,
           );
+      _applyExpiry(detailed);
     } catch (_) {}
+  }
+
+  Future<void> _loadExpiry(String searchId) async {
+    try {
+      final detailed =
+          await getIt<ReverseSearchRepository>().getReverseSearchById(searchId);
+      if (!mounted || detailed == null) return;
+      _applyExpiry(detailed);
+    } catch (_) {}
+  }
+
+  void _applyExpiry(ReverseSearchItem detailed) {
+    if (!mounted) return;
+    setState(() {
+      _expiresAt = detailed.expiresAt;
+      _isExpired = detailed.statusEnum == ReverseSearchStatus.expiree ||
+          (detailed.expiresAt?.isBefore(DateTime.now()) ?? false);
+      _currentWave = detailed.currentWave;
+    });
+  }
+
+  /// Écoute les events temps réel `reverse_search:wave_updated` et
+  /// `reverse_search:expiree` pour mettre à jour l'UI sans attendre un
+  /// rafraîchissement manuel (retour de page, filet de sécurité local...).
+  void _listenToSocketUpdates(String searchId) {
+    final socketService = getIt<ReverseSearchSocketService>();
+
+    _waveSub?.cancel();
+    _waveSub = socketService.onWaveUpdate.listen((update) {
+      if (!mounted || update.reverseSearchId != searchId) return;
+      setState(() => _currentWave = update.currentWave);
+    });
+
+    _expiredSub?.cancel();
+    _expiredSub = socketService.onStatus.listen((status) {
+      if (!mounted || status != 'expiree') return;
+      setState(() => _isExpired = true);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
 
     _sheetController.addListener(() {
       if (_sheetController.size > 0.5 && !_showListNotifier.value) {
@@ -167,33 +222,21 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
       searching: (searchId, socketProps, classicProps, _, __) {
         cubit.startListening(searchId, widget.request);
         _updateMarkers(searchId, socketProps, classicProps);
+        _loadExpiry(searchId);
+        _listenToSocketUpdates(searchId);
       },
       orElse: () {},
     );
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        _secondsNotifier.value++;
-      }
-    });
-  }
-
   @override
   void dispose() {
-    _timer?.cancel();
-    _secondsNotifier.dispose();
+    _waveSub?.cancel();
+    _expiredSub?.cancel();
     _mapMarkersNotifier.dispose();
     _showListNotifier.dispose();
     _sheetController.dispose();
     super.dispose();
-  }
-
-  String _formatTime(int totalSeconds) {
-    int minutes = totalSeconds ~/ 60;
-    int seconds = totalSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')} : ${seconds.toString().padLeft(2, '0')}';
   }
 
   Set<Circle> _buildCircles() {
@@ -393,9 +436,14 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Recherche en cours',
+                                  Text(
+                                      _isExpired
+                                          ? 'Recherche expirée'
+                                          : 'Recherche en cours',
                                       style: TextStyle(
-                                          color: Colors.grey.shade500,
+                                          color: _isExpired
+                                              ? Colors.red.shade400
+                                              : Colors.grey.shade500,
                                           fontSize: 13)),
                                   const SizedBox(height: 8),
                                   Row(
@@ -403,18 +451,43 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                         MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      ValueListenableBuilder<int>(
-                                        valueListenable: _secondsNotifier,
-                                        builder: (context, seconds, child) {
-                                          return Text(
-                                            _formatTime(seconds),
-                                            style: TextStyle(
-                                                color: Colors.orange.shade800,
-                                                fontSize: 36,
-                                                fontWeight: FontWeight.bold),
-                                          );
-                                        },
-                                      ),
+                                      _expiresAt == null
+                                          ? Text(
+                                              '--:--',
+                                              style: TextStyle(
+                                                  color:
+                                                      Colors.orange.shade800,
+                                                  fontSize: 36,
+                                                  fontWeight:
+                                                      FontWeight.bold),
+                                            )
+                                          : SelectionCountdown(
+                                              expireAt: _expiresAt!,
+                                              onExpired: () {
+                                                if (mounted) {
+                                                  setState(
+                                                      () => _isExpired = true);
+                                                }
+                                              },
+                                              builder:
+                                                  (context, remaining, expired) {
+                                                return Text(
+                                                  expired
+                                                      ? 'Expiré'
+                                                      : formatCountdown(
+                                                          remaining),
+                                                  style: TextStyle(
+                                                      color: expired
+                                                          ? Colors.red.shade600
+                                                          : Colors
+                                                              .orange.shade800,
+                                                      fontSize:
+                                                          expired ? 24 : 36,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                );
+                                              },
+                                            ),
                                       Row(
                                         children: [
                                           Text('$libres Libres',
@@ -564,17 +637,21 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 16),
-                              child: Column(
+                              child: Opacity(
+                                opacity: _isExpired ? 0.5 : 1,
+                                child: IgnorePointer(
+                                  ignoring: _isExpired,
+                                  child: Column(
                                 children: [
                                   // LIBRE TOUT DE SUITE
+                                  const ReverseSearchListHeader(
+                                    title: 'Libre tout de suite',
+                                    description:
+                                        'Le propriétaire à confirmer vous payer c\'est reserve',
+                                  ),
+                                  const SizedBox(height: 16),
                                   if (pendingSelection != null ||
                                       socketProps.isNotEmpty) ...[
-                                    const ReverseSearchListHeader(
-                                      title: 'Libre tout de suite',
-                                      description:
-                                          'Le propriétaire à confirmer vous payer c\'est reserve',
-                                    ),
-                                    const SizedBox(height: 16),
                                     if (pendingSelection != null)
                                       PendingSelectionCard(
                                         proposition: pendingSelection!,
@@ -611,29 +688,54 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                       },
                                     ),
                                     const SizedBox(height: 24),
-                                  ],
+                                  ] else
+                                    const ReverseSearchWaitingBanner(),
 
                                   if (classicProps.isNotEmpty) ...[
-                                    ReverseSearchListHeader(
-                                      title: 'Sur demande',
-                                      description:
-                                          'Les ${classicProps.length} autres qui correspondent à votre besoin. Reponse du proprietaire sous 24h.',
+                                    Opacity(
+                                      // Grisé tant qu'aucune vague de
+                                      // notifications n'a encore été envoyée
+                                      // aux propriétaires (`currentWave`,
+                                      // mis à jour via
+                                      // `reverse_search:wave_updated`) : les
+                                      // propriétés "sur demande" (24h de
+                                      // délai de réponse) ne sont pas la
+                                      // priorité tant que la 1ère vague de
+                                      // matchs immédiats n'est pas partie.
+                                      opacity: _currentWave >= 1 ? 1 : 0.45,
+                                      child: IgnorePointer(
+                                        ignoring: _currentWave < 1,
+                                        child: Column(
+                                          children: [
+                                            ReverseSearchListHeader(
+                                              title: 'Sur demande',
+                                              description:
+                                                  'Les ${classicProps.length} autres qui correspondent à votre besoin. Reponse du proprietaire sous 24h.',
+                                            ),
+                                            const SizedBox(height: 16),
+                                            ...classicProps.map((prop) =>
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 16.0),
+                                                  child: UnifiedPropertyCard(
+                                                    item: prop,
+                                                    onTap: () =>
+                                                        _handleResidenceTap(
+                                                            currentSearchId,
+                                                            prop,
+                                                            null,
+                                                            false),
+                                                  ),
+                                                )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(height: 16),
-                                    ...classicProps.map((prop) => Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 16.0),
-                                          child: UnifiedPropertyCard(
-                                            item: prop,
-                                            onTap: () => _handleResidenceTap(
-                                                currentSearchId,
-                                                prop,
-                                                null,
-                                                false),
-                                          ),
-                                        )),
                                   ],
                                 ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],

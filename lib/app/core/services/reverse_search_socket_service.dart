@@ -5,6 +5,18 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:injectable/injectable.dart';
 
+/// Payload de l'event socket `reverse_search:wave_updated`, émis à chaque
+/// nouvelle vague de notifications envoyée aux propriétaires.
+class ReverseSearchWaveUpdate {
+  final String reverseSearchId;
+  final int currentWave;
+
+  const ReverseSearchWaveUpdate({
+    required this.reverseSearchId,
+    required this.currentWave,
+  });
+}
+
 @lazySingleton
 class ReverseSearchSocketService {
   io.Socket? _socket;
@@ -16,6 +28,10 @@ class ReverseSearchSocketService {
 
   final _statusController = StreamController<String>.broadcast();
   Stream<String> get onStatus => _statusController.stream;
+
+  final _waveController =
+      StreamController<ReverseSearchWaveUpdate>.broadcast();
+  Stream<ReverseSearchWaveUpdate> get onWaveUpdate => _waveController.stream;
 
   final Map<String, List<ReverseSearchProposition>>
       _lastPropositionsBySearchId = {};
@@ -84,6 +100,23 @@ class ReverseSearchSocketService {
 
     _socket!.on('reverse_search:paiement_echec', (data) {
       _statusController.add('paiement_echec');
+    });
+
+    _socket!.on('reverse_search:expiree', (data) {
+      _statusController.add('expiree');
+    });
+
+    _socket!.on('reverse_search:wave_updated', (data) {
+      if (data is Map<String, dynamic>) {
+        final id = data['reverseSearchId']?.toString();
+        final wave = data['currentWave'] is int
+            ? data['currentWave'] as int
+            : int.tryParse(data['currentWave']?.toString() ?? '');
+        if (id != null && wave != null) {
+          _waveController.add(
+              ReverseSearchWaveUpdate(reverseSearchId: id, currentWave: wave));
+        }
+      }
     });
 
     _socket!.connect();
