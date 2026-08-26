@@ -139,6 +139,9 @@ jobs:
       - name: 📦 Install Dependencies
         run: flutter pub get
 
+      - name: ⬆️ Upgrade dev dependencies (analyzer/build_runner) to match SDK
+        run: flutter pub upgrade
+
       - name: 🗄️ Cache build_runner output
         uses: actions/cache@v4
         with:
