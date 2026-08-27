@@ -64,7 +64,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         child: Column(
           children: [
             HeaderContainer(
-              iconData: FontAwesomeIcons.lock,
+              iconData: FontAwesomeIcons.lock.data,
               title: "Créez un nouveau mot de passe",
               subtitle:
                   "Votre nouveau mot de passe doit être différent des précédents.",
@@ -80,15 +80,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       return CustomTextField(
                         controller: _passwordController,
                         obscureText: !value,
-                        prefixIcon: const Icon(FontAwesomeIcons.lock),
+                        prefixIcon: const FaIcon(FontAwesomeIcons.lock),
                         sufixIcon: IconButton(
                           onPressed: () {
                             _passwordNotifier.value = !value;
                           },
                           icon: Icon(
                             value
-                                ? FontAwesomeIcons.eyeSlash
-                                : FontAwesomeIcons.eye,
+                                ? FontAwesomeIcons.eyeSlash.data
+                                : FontAwesomeIcons.eye.data,
                             size: 20,
                           ),
                         ),
@@ -104,15 +104,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       return CustomTextField(
                         controller: _confirmPasswordController,
                         obscureText: !value,
-                        prefixIcon: const Icon(FontAwesomeIcons.lock),
+                        prefixIcon: const FaIcon(FontAwesomeIcons.lock),
                         sufixIcon: IconButton(
                           onPressed: () {
                             _confirmPasswordNotifier.value = !value;
                           },
                           icon: Icon(
                             value
-                                ? FontAwesomeIcons.eyeSlash
-                                : FontAwesomeIcons.eye,
+                                ? FontAwesomeIcons.eyeSlash.data
+                                : FontAwesomeIcons.eye.data,
                             size: 20,
                           ),
                         ),

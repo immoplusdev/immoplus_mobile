@@ -105,7 +105,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
                           color: Colors.grey.shade100,
-                          child: Icon(FontAwesomeIcons.images,
+                          child: FaIcon(FontAwesomeIcons.images,
                               size: 32, color: Colors.grey.shade300),
                         ),
                       ),
@@ -157,8 +157,8 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                             ),
                             child: Icon(
                               liked
-                                  ? FontAwesomeIcons.solidHeart
-                                  : FontAwesomeIcons.heart,
+                                  ? FontAwesomeIcons.solidHeart.data
+                                  : FontAwesomeIcons.heart.data,
                               size: 12,
                               color:
                                   liked ? Colors.redAccent : AppColors.primary,

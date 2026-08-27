@@ -52,8 +52,6 @@ class Utils {
     }
   }
 
-
-
   static String getCurrentLocation() =>
       AppRouter.router.routerDelegate.currentConfiguration.uri.toString();
 
@@ -71,13 +69,19 @@ class Utils {
   static String getImagePath({required String id}) =>
       "${RequestPath.baseUrl}/files/raw/public/$id";
 
-  /// URL vidéo à partir de l'ID. En dev (FLAVOR=dev) utilise l'URL dev [RequestPath.baseUrl].
-  /// En prod utilise l'URL prod. Retourne null si baseUrl ou id vide → "Impossible de lire la vidéo".
   static String? getVideoPath({required String id}) {
     final baseUrl = RequestPath.baseUrl.trim();
     final videoId = id.trim();
     if (baseUrl.isEmpty || videoId.isEmpty) return null;
     return "$baseUrl/files/videos/raw/public/$videoId";
+  }
+
+  /// URL du master playlist HLS d'une vidéo du feed, à partir de son ID.
+  static String? getFeedVideoHlsPath({required String id}) {
+    final baseUrl = RequestPath.baseUrl.trim();
+    final videoId = id.trim();
+    if (baseUrl.isEmpty || videoId.isEmpty) return null;
+    return "$baseUrl/files/hls/public/$videoId/master.m3u8";
   }
 
   static Widget getImageWidget({required String id}) => CachedNetworkImage(
@@ -123,9 +127,9 @@ class Utils {
   }
 
   static String getServiceName(String type) {
-    if (type == ServicesCollection.reservations.name) {
+    if (type == ProductType.reservations.name) {
       return 'Réservation';
-    } else if (type == ServicesCollection.demandes_visites.name) {
+    } else if (type == ProductType.demandes_visites.name) {
       return 'Demande de visite';
     }
     return 'Réservation';
@@ -178,25 +182,25 @@ class Utils {
   static Widget getServiceStatusIcon(String status) {
     switch (status) {
       case 'en_cours_validation_user':
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
       case 'en_cours_validation_admin':
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
       case 'successful':
-        return const Icon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
       case 'valide':
-        return const Icon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
       case 'failed':
-        return const Icon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       case 'rejete':
-        return const Icon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       case 'paye':
-        return const Icon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
       case 'en_attente_validation':
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
       case 'non_paye':
-        return const Icon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       default:
-        return const Icon(FontAwesomeIcons.hourglass, color: Colors.grey);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.grey);
     }
   }
 
@@ -416,7 +420,7 @@ class Utils {
   //   );
   // }
 
-  static IconData getNotificationIcon(String collection) {
+  static FaIconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {
       return FontAwesomeIcons.coins;
     }
@@ -528,31 +532,32 @@ class Utils {
       return const TimeOfDay(hour: 12, minute: 0);
     }
   }
-    static String cleanMarkdown(String markdownText) {
-  String text = markdownText;
 
-  text = text.replaceAll(RegExp(r'#{1,6}\s*'), '');
-  text = text.replaceAll(RegExp(r'\*\*(.*?)\*\*'), r'$1');
-  text = text.replaceAll(RegExp(r'__(.*?)__'), r'$1');
-  text = text.replaceAll(RegExp(r'\*(.*?)\*'), r'$1');
-  text = text.replaceAll(RegExp(r'_(.*?)_'), r'$1');
-  text = text.replaceAll(RegExp(r'^\s*[-*]\s+', multiLine: true), '');
-  text = text.replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '');
-  text = text.replaceAll(RegExp(r'\[([^\]]+)\]\([^\)]+\)'), r'$1');
-  text = text.replaceAll(RegExp(r'\n{2,}'), ' ');
-  text = text.replaceAll('\n', ' ');
-  text = text.replaceAll(RegExp(r' {2,}'), ' ').trim();
+  static String cleanMarkdown(String markdownText) {
+    String text = markdownText;
 
-  if (text.isNotEmpty) {
-    text = text[0].toUpperCase() + text.substring(1);
+    text = text.replaceAll(RegExp(r'#{1,6}\s*'), '');
+    text = text.replaceAll(RegExp(r'\*\*(.*?)\*\*'), r'$1');
+    text = text.replaceAll(RegExp(r'__(.*?)__'), r'$1');
+    text = text.replaceAll(RegExp(r'\*(.*?)\*'), r'$1');
+    text = text.replaceAll(RegExp(r'_(.*?)_'), r'$1');
+    text = text.replaceAll(RegExp(r'^\s*[-*]\s+', multiLine: true), '');
+    text = text.replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '');
+    text = text.replaceAll(RegExp(r'\[([^\]]+)\]\([^\)]+\)'), r'$1');
+    text = text.replaceAll(RegExp(r'\n{2,}'), ' ');
+    text = text.replaceAll('\n', ' ');
+    text = text.replaceAll(RegExp(r' {2,}'), ' ').trim();
+
+    if (text.isNotEmpty) {
+      text = text[0].toUpperCase() + text.substring(1);
+    }
+
+    if (text.isNotEmpty && !'.!?'.contains(text[text.length - 1])) {
+      text = '$text.';
+    }
+
+    return text;
   }
-
-  if (text.isNotEmpty && !'.!?'.contains(text[text.length - 1])) {
-    text = '$text.';
-  }
-
-  return text;
-}
 
   static Color? parseColor(String? colorStr) {
     if (colorStr == null || colorStr.isEmpty) return null;

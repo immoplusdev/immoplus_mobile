@@ -141,7 +141,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          FontAwesomeIcons.headset,
+                          FontAwesomeIcons.headset.data,
                           size: 18,
                           color: AppColors.primary,
                         ),

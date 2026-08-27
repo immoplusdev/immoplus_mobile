@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/svgs_icons.dart';
 import 'package:go_router/go_router.dart';
@@ -14,15 +12,40 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
 class UnifiedPropertyCard extends StatelessWidget {
   final dynamic
       item; // Can be ResidenceModel, BienImmobilierModel or FurnitureModel
+  final VoidCallback? onTap;
+  final Widget? badge;
 
-  const UnifiedPropertyCard({super.key, required this.item})
-      : assert(item is ResidenceModel ||
+  /// Dates réelles du séjour recherché, remplacent le calcul par défaut.
+  final DateTime? checkIn;
+  final DateTime? checkOut;
+
+  /// Le prix principal est un TOTAL séjour (pas un tarif/nuit) : affiche "(total)" + le prix/nuit en indice.
+  final bool showTotalLabel;
+  final int? nights;
+
+  /// Prix par nuit explicite (figé côté backend), prioritaire sur le calcul.
+  final int? perNightPrice;
+
+  /// Frais de paiement inclus dans le prix total, affichés en détail sous le prix.
+  final int? fraisAmount;
+
+  const UnifiedPropertyCard({
+    super.key,
+    required this.item,
+    this.onTap,
+    this.badge,
+    this.checkIn,
+    this.checkOut,
+    this.showTotalLabel = false,
+    this.nights,
+    this.perNightPrice,
+    this.fraisAmount,
+  }) : assert(item is ResidenceModel ||
             item is BienImmobilierModel ||
             item is FurnitureModel);
 
@@ -90,6 +113,7 @@ class UnifiedPropertyCard extends StatelessWidget {
   String get originalPriceText => _formatPrice(price);
 
   String get priceSuffix {
+    if (showTotalLabel) return ' (total)';
     if (isResidence) return '/nuit';
     if (item is BienImmobilierModel) {
       final b = item as BienImmobilierModel;
@@ -98,33 +122,57 @@ class UnifiedPropertyCard extends StatelessWidget {
     return '';
   }
 
+  /// Texte "(soit X/nuit)" affiché en orange au-dessus du badge quand [showTotalLabel] est vrai.
+  String? get perNightIndiceText {
+    if (!showTotalLabel) return null;
+    if (perNightPrice != null) {
+      return '(soit ${_formatPrice(perNightPrice!)}/nuit)';
+    }
+    if (nights == null || nights! <= 0) return null;
+    return '(soit ${_formatPrice((displayPrice / nights!).round())}/nuit)';
+  }
+
+  /// Texte "(dont X de frais)" affiché sous le prix quand [showTotalLabel] est vrai.
+  String? get fraisIndiceText {
+    if (!showTotalLabel || fraisAmount == null || fraisAmount! <= 0) {
+      return null;
+    }
+    return '(dont ${_formatPrice(fraisAmount!)} de frais)';
+  }
+
+  static const _frenchMonths = [
+    'janv.',
+    'févr.',
+    'mars',
+    'avr.',
+    'mai',
+    'juin',
+    'juil.',
+    'août',
+    'sept.',
+    'oct.',
+    'nov.',
+    'déc.'
+  ];
+
+  String _formatDateRange(DateTime start, DateTime end) {
+    if (start.month == end.month) {
+      return "${start.day}-${end.day} ${_frenchMonths[start.month - 1]}";
+    }
+    return "${start.day} ${_frenchMonths[start.month - 1]} - "
+        "${end.day} ${_frenchMonths[end.month - 1]}";
+  }
+
   String get formattedDuration {
+    if (checkIn != null && checkOut != null) {
+      return _formatDateRange(checkIn!, checkOut!);
+    }
     if (isResidence) {
       final now = DateTime.now();
       final min = (item as ResidenceModel).dureeMinSejour;
       final duration = min > 0 ? min : 1;
       final end = now.add(Duration(days: duration));
-
-      const frenchMonths = [
-        'janv.',
-        'févr.',
-        'mars',
-        'avr.',
-        'mai',
-        'juin',
-        'juil.',
-        'août',
-        'sept.',
-        'oct.',
-        'nov.',
-        'déc.'
-      ];
-
-      if (now.month == end.month) {
-        return "${now.day}-${end.day} ${frenchMonths[now.month - 1]}";
-      } else {
-        return "${now.day} ${frenchMonths[now.month - 1]} - ${end.day} ${frenchMonths[end.month - 1]}";
-      }
+      return _formatDateRange(now, end);
     }
     if (item is BienImmobilierModel) {
       final b = item as BienImmobilierModel;
@@ -158,18 +206,21 @@ class UnifiedPropertyCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          Constantes.tempPage = Utils.getCurrentLocation();
-          if (isResidence) {
-            context.push(ResidencePage.route((item as ResidenceModel).id),
-                extra: item);
-          } else if (isFurniture) {
-            context.push(FurnitureDetailPage.route((item as FurnitureModel).id),
-                extra: item);
-          } else {
-            context.push('/estate_detail/${(item as BienImmobilierModel).id}');
-          }
-        },
+        onTap: onTap ??
+            () {
+              Constantes.tempPage = Utils.getCurrentLocation();
+              if (isResidence) {
+                context.push(ResidencePage.route((item as ResidenceModel).id),
+                    extra: item);
+              } else if (isFurniture) {
+                context.push(
+                    FurnitureDetailPage.route((item as FurnitureModel).id),
+                    extra: item);
+              } else {
+                context
+                    .push('/estate_detail/${(item as BienImmobilierModel).id}');
+              }
+            },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
@@ -232,7 +283,20 @@ class UnifiedPropertyCard extends StatelessWidget {
 
                       const Spacer(),
 
-                      const RecommandeBadge(),
+                      if (perNightIndiceText != null) ...[
+                        Text(
+                          perNightIndiceText!,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orange.shade800,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Gap(4),
+                      ],
+
+                      badge ?? const RecommandeBadge(),
 
                       // Divider
                       const Gap(8),
@@ -266,15 +330,16 @@ class UnifiedPropertyCard extends StatelessWidget {
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
                                         priceText,
                                         style: TextStyle(
                                           fontSize: 14,
@@ -283,19 +348,27 @@ class UnifiedPropertyCard extends StatelessWidget {
                                               ? Colors.redAccent
                                               : Colors.black,
                                         ),
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                    if (priceSuffix.isNotEmpty)
-                                      Text(
-                                        priceSuffix,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade600,
+                                      if (priceSuffix.isNotEmpty)
+                                        Text(
+                                          priceSuffix,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade600,
+                                          ),
                                         ),
-                                      ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
+                                if (fraisIndiceText != null)
+                                  Text(
+                                    fraisIndiceText!,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.grey.shade500,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                               ],
                             ),
                           ),

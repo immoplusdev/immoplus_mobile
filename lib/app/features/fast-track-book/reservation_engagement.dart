@@ -31,6 +31,7 @@ class ReservationEngagementFrame extends StatefulWidget {
   final String ownerName;
   final String reservationId;
   final double montantTotal;
+  final ReservationBannerState? initialState;
   final VoidCallback? onBackHome;
 
   const ReservationEngagementFrame({
@@ -38,6 +39,7 @@ class ReservationEngagementFrame extends StatefulWidget {
     required this.ownerName,
     required this.reservationId,
     required this.montantTotal,
+    this.initialState,
     this.onBackHome,
   });
 
@@ -74,7 +76,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   ];
 
   // ── État local ──────────────────────────────────────────────────────────────
-  ReservationBannerState _currentState = ReservationBannerState.idle;
+  ReservationBannerState _currentState = ReservationBannerState.waitingOwner;
   late double _montantTotal;
   bool _isFetchingReservation = false;
   bool _hasPurchaseLogged = false;
@@ -92,7 +94,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   void initState() {
     super.initState();
 
-    _currentState = ReservationPendingBanner.bannerStateNotifier.value;
+    _currentState = widget.initialState ?? ReservationBannerState.waitingOwner;
+    ReservationPendingBanner.bannerStateNotifier.value = _currentState;
     _montantTotal = widget.montantTotal;
 
     _messageController = AnimationController(
@@ -146,7 +149,9 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
 
   /// Fetch direct de la réservation depuis l'API et mise à jour du state.
   Future<void> _pollReservation() async {
-    if (_isFetchingReservation) return;
+    if (_isFetchingReservation || !mounted) return;
+    // Éviter le polling si la page n'est pas la page active au premier plan
+    if (ModalRoute.of(context)?.isCurrent != true) return;
     _isFetchingReservation = true;
     try {
       final repo = getIt<ResidenceRepository>();
@@ -251,9 +256,23 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         _messageRotationTimer?.cancel();
         _aggressiveRefreshTimer?.cancel();
         Future.delayed(const Duration(milliseconds: 600), () {
-          if (mounted) context.goNamed(HomePage.name);
+          if (mounted && ModalRoute.of(context)?.isCurrent == true) {
+            _navigateBackToHome();
+          }
         });
         break;
+    }
+  }
+
+  void _navigateBackToHome() {
+    if (widget.onBackHome != null) {
+      widget.onBackHome!();
+      return;
+    }
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    } else {
+      context.goNamed(HomePage.name);
     }
   }
 
@@ -319,7 +338,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: _textPrimary),
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: _navigateBackToHome,
         ),
       ),
       body: Stack(
@@ -643,7 +662,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           key: const ValueKey('btn_waiting_owner'),
           icon: Iconsax.save_2,
           label: 'Sauvegarder et Quitter',
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: _navigateBackToHome,
         );
 
       case ReservationBannerState.waitingPayment:
@@ -654,19 +673,24 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
               icon: Iconsax.wallet_2,
               label: 'Effectuer le paiement',
               color: _successGreen,
-              onPressed: () => context.pushNamed(
-                OperatorsSelectorPage.name,
-                extra: PaymentPageAdapter(
-                  itemId: widget.reservationId,
-                  collection: ProductType.reservations.name,
-                  amount: _montantTotal.toInt(),
-                ),
-              ),
+              onPressed: () async {
+                await context.pushNamed(
+                  OperatorsSelectorPage.name,
+                  extra: PaymentPageAdapter(
+                    itemId: widget.reservationId,
+                    collection: ProductType.reservations.name,
+                    amount: _montantTotal.toInt(),
+                  ),
+                );
+                if (mounted) {
+                  _pollReservation();
+                }
+              },
             ),
             const SizedBox(height: 12),
             _textBtn(
               label: 'Sauvegarder et Quitter',
-              onPressed: () => context.goNamed(HomePage.name),
+              onPressed: _navigateBackToHome,
             ),
           ],
         );
@@ -679,7 +703,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           icon: Iconsax.search_normal_1,
           label: 'Découvrir d\'autres biens',
           color: _primaryBlue,
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: _navigateBackToHome,
         );
 
       case ReservationBannerState.idle:

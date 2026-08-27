@@ -55,7 +55,7 @@ class _FileUploaderState extends State<FileUploader> {
                   },
                 );
               },
-              leading: const Icon(FontAwesomeIcons.camera),
+              leading: const FaIcon(FontAwesomeIcons.camera),
               title: const Text("À partir de la caméra"),
             ),
             const Divider(),
@@ -70,7 +70,7 @@ class _FileUploaderState extends State<FileUploader> {
                   },
                 );
               },
-              leading: const Icon(FontAwesomeIcons.folder),
+              leading: const FaIcon(FontAwesomeIcons.folder),
               title: const Text("À partir de la gallérie"),
             ),
             const Gap(30),
@@ -173,7 +173,7 @@ class _FileUploaderState extends State<FileUploader> {
                               ? Center(
                                   child: Icon(
                                     widget.iconPlaceholder ??
-                                        FontAwesomeIcons.camera,
+                                        FontAwesomeIcons.camera.data,
                                     size: 50,
                                     color: Colors.grey.shade500,
                                   ),

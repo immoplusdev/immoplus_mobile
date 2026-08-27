@@ -85,10 +85,15 @@ import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
+import 'package:immoplus/app/features/suggest/pages/reverse_search_map_page.dart';
+import 'package:immoplus/app/features/suggest/logic/reverse_search_cubit.dart';
+import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
+import 'package:immoplus/app/widgets/ads/components/mosaic_items_gallery_page.dart';
+import 'package:immoplus/app/widgets/image_collage.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -363,13 +368,13 @@ class AppRouter {
         builder: (context, state) => const VisitHistoryPage(),
       ),
       GoRoute(
-        path: SuggestPage.routePath,
-        name: SuggestPage.routeName,
+        path: SearchContainerPage.routePath,
+        name: SearchContainerPage.routeName,
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>? ?? {};
           return _slideUpPage(
             state.pageKey,
-            SuggestPage(
+            SearchContainerPage(
               homeTab: extra['homeTab'] as HomeTab?,
               lat: extra['lat'] as double?,
               lng: extra['lng'] as double?,
@@ -388,6 +393,7 @@ class AppRouter {
             villeId: extra['villeId'] as String?,
             communeId: extra['communeId'] as String?,
             displayText: extra['displayText'] as String,
+            bannerImageId: extra['bannerImageId'] as String?,
           );
         },
       ),
@@ -402,16 +408,35 @@ class AppRouter {
         path: '/visit-pending',
         name: VisitPendingPage.name,
         builder: (context, state) {
-          final page = state.extra as VisitPendingPage;
-          return page;
+          if (state.extra is VisitPendingPage) {
+            final page = state.extra as VisitPendingPage;
+            return VisitPendingPage(
+              key: state.pageKey,
+              bienImmo: page.bienImmo,
+              visitType: page.visitType,
+              visitId: page.visitId,
+              fromHistory: page.fromHistory,
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
       GoRoute(
         path: '/reservation-engagement',
         name: ReservationEngagementFrame.name,
         builder: (context, state) {
-          final reservation = state.extra as ReservationEngagementFrame;
-          return reservation;
+          if (state.extra is ReservationEngagementFrame) {
+            final reservation = state.extra as ReservationEngagementFrame;
+            return ReservationEngagementFrame(
+              key: state.pageKey,
+              ownerName: reservation.ownerName,
+              reservationId: reservation.reservationId,
+              montantTotal: reservation.montantTotal,
+              initialState: reservation.initialState,
+              onBackHome: reservation.onBackHome,
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
       ShellRoute(
@@ -485,9 +510,32 @@ class AppRouter {
       GoRoute(
         path: ResidencePage.routePath(),
         name: ResidencePage.name,
-        builder: (context, state) => ResidencePage(
-          idProduct: state.pathParameters['idProduct'] ?? '',
-        ),
+        builder: (context, state) {
+          final extra = state.extra;
+          bool isImmediateBooking = false;
+          String? reverseSearchId;
+          double? reverseSearchPrice;
+          int? reverseSearchNights;
+          int? reverseSearchPrixParNuit;
+
+          if (extra is Map<String, dynamic>) {
+            isImmediateBooking = extra['isImmediateBooking'] as bool? ?? false;
+            reverseSearchId = extra['reverseSearchId'] as String?;
+            reverseSearchPrice = extra['reverseSearchPrice'] as double?;
+            reverseSearchNights = extra['reverseSearchNights'] as int?;
+            reverseSearchPrixParNuit =
+                extra['reverseSearchPrixParNuit'] as int?;
+          }
+
+          return ResidencePage(
+            idProduct: state.pathParameters['idProduct'] ?? '',
+            isImmediateBooking: isImmediateBooking,
+            reverseSearchId: reverseSearchId,
+            reverseSearchPrice: reverseSearchPrice,
+            reverseSearchNights: reverseSearchNights,
+            reverseSearchPrixParNuit: reverseSearchPrixParNuit,
+          );
+        },
       ),
 
       GoRoute(
@@ -603,6 +651,11 @@ class AppRouter {
             subCategory: extra['subCategory'] as EstateSubCategory?,
             propertyType:
                 extra['propertyType'] as PropertyType? ?? PropertyType.land,
+            lat: extra['lat'] as double?,
+            long: extra['long'] as double?,
+            radius: extra['radius'] as double?,
+            minPrice: extra['minPrice'] as int?,
+            maxPrice: extra['maxPrice'] as int?,
           );
         },
       ),
@@ -673,12 +726,11 @@ class AppRouter {
                 onPressed: () {
                   context.goNamed(SplashScreen.name);
                 },
-                icon: const Icon(FontAwesomeIcons.circleArrowLeft),
+                icon: const FaIcon(FontAwesomeIcons.circleArrowLeft),
               ),
             ),
             body: BookingDetailPage(
               id: state.pathParameters['idProduct'] ?? '',
-              // bienImmobilierModel: state.extra as BienImmobilierModel,
             ),
           ),
         ),
@@ -692,7 +744,7 @@ class AppRouter {
               onPressed: () {
                 context.goNamed(SplashScreen.name);
               },
-              icon: const Icon(FontAwesomeIcons.circleArrowLeft),
+              icon: const FaIcon(FontAwesomeIcons.circleArrowLeft),
             ),
           ),
           body: VisitDetailPage(
@@ -701,12 +753,50 @@ class AppRouter {
           ),
         ),
       ),
+      // Non utilisée par "Voir reservation" (qui résout le reservationId
+      // avant de naviguer, voir PaymentSuccessTicketView._onViewReservation) ;
+      // gardée en filet de sécurité pour un lien externe éventuel.
+      GoRoute(
+        path: '/payment/reverse_searches/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservations/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservation/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
 
       GoRoute(
           path: '/order/:idProduct/:collection',
           builder: (BuildContext context, GoRouterState state) {
             String? type = state.pathParameters['type'];
-            if (type == ServicesCollection.demandes_visites.name) {
+            if (type == ProductType.demandes_visites.name) {
               return VisitDetailPage(id: state.pathParameters['idProduct']!);
             } else if (type == ProductType.booking.name) {
               return BookingDetailPage(id: state.pathParameters['idProduct']!);
@@ -798,11 +888,33 @@ class AppRouter {
         ),
       ),
       GoRoute(
+        path: ReverseSearchMapPage.routePath,
+        name: ReverseSearchMapPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return BlocProvider.value(
+            value: extra['cubit'] as ReverseSearchCubit,
+            child: ReverseSearchMapPage(
+              request: extra['request'] as ReverseSearchRequest,
+            ),
+          );
+        },
+      ),
+      GoRoute(
         path: '/kyc-webview',
         name: KycWebViewPage.routeName,
-        builder: (context, state) => KycWebViewPage(
-          url: state.extra as String? ?? '',
-        ),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is Map<String, String>) {
+            return KycWebViewPage(
+              url: extra['url'] ?? '',
+              title: extra['title'],
+            );
+          }
+          return KycWebViewPage(
+            url: extra as String? ?? '',
+          );
+        },
       ),
       GoRoute(
         path: BookingDetailPage.routePath,
@@ -816,6 +928,30 @@ class AppRouter {
         path: RatingHistoryPage.routePath(),
         name: RatingHistoryPage.name,
         builder: (context, state) => const RatingHistoryPage(),
+      ),
+      GoRoute(
+        path: MosaicItemsGalleryPage.routePath,
+        name: MosaicItemsGalleryPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is MosaicGalleryExtra) {
+            return MosaicItemsGalleryPage(
+              items: extra.items,
+              title: extra.title,
+              tag: extra.tag,
+            );
+          } else if (extra is List<CollageItem>) {
+            return MosaicItemsGalleryPage(items: extra);
+          } else if (extra is Map<String, dynamic>) {
+            return MosaicItemsGalleryPage(
+              items: (extra['items'] as List<dynamic>?)?.cast<CollageItem>() ??
+                  const [],
+              title: extra['title'] as String?,
+              tag: extra['tag'] as String?,
+            );
+          }
+          return const MosaicItemsGalleryPage(items: []);
+        },
       ),
     ],
   );

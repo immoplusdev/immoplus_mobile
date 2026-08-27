@@ -39,14 +39,14 @@ class NamePasswordRegistration extends StatelessWidget {
               Gap(30),
               CustomTextField(
                 controller: formController.firstName,
-                prefixIcon: const Icon(FontAwesomeIcons.user),
+                prefixIcon: const FaIcon(FontAwesomeIcons.user),
                 labelText: "Nom",
                 validator: (String? value) =>
                     FormUtils.fieldValidator(value: value),
               ),
               CustomTextField(
                 controller: formController.lastName,
-                prefixIcon: const Icon(FontAwesomeIcons.user),
+                prefixIcon: const FaIcon(FontAwesomeIcons.user),
                 labelText: "Prénom",
                 validator: (String? value) =>
                     FormUtils.fieldValidator(value: value),

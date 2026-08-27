@@ -99,7 +99,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                         memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
                           color: Colors.grey.shade100,
-                          child: Icon(FontAwesomeIcons.images,
+                          child: FaIcon(FontAwesomeIcons.images,
                               size: 32, color: Colors.grey.shade300),
                         ),
                       ),
@@ -171,8 +171,8 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                             ),
                             child: Icon(
                               liked
-                                  ? FontAwesomeIcons.solidHeart
-                                  : FontAwesomeIcons.heart,
+                                  ? FontAwesomeIcons.solidHeart.data
+                                  : FontAwesomeIcons.heart.data,
                               size: 12,
                               color:
                                   liked ? Colors.redAccent : AppColors.primary,

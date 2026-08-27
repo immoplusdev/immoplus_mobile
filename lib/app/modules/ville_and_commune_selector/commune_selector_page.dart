@@ -99,7 +99,7 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
                   onTap: () {
                     context.pop<CommuneModel>(item);
                   },
-                  trailing: Icon(FontAwesomeIcons.circleArrowRight),
+                  trailing: FaIcon(FontAwesomeIcons.circleArrowRight),
                 ),
               ),
             ),

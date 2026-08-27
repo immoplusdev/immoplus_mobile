@@ -33,7 +33,7 @@ class SocialNetworkButton extends StatelessWidget {
             .textTheme
             .bodyLarge!
             .copyWith(fontWeight: FontWeight.bold),
-        trailing: const Icon(
+        trailing: const FaIcon(
           FontAwesomeIcons.circleArrowRight,
           size: 20,
         ),

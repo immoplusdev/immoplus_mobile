@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import '../models/remote/rating/rating_request.dart';
 import '../models/remote/rating/rating_history_response.dart';
+import '../models/remote/rating/residence_reviews_response.dart';
 import '../providers/rating_provider.dart';
 import 'package:injectable/injectable.dart';
 
@@ -26,6 +27,20 @@ class RatingRepository {
     } on DioException catch (e) {
       log('DioError (getRatingHistory): ${e.message}');
       throw Exception('Failed to get rating history: ${e.message}');
+    }
+  }
+
+  Future<ResidenceReviewsResponse> getResidenceReviews(
+    String residenceId, {
+    int? page,
+    int? perPage,
+  }) async {
+    try {
+      return await RatingProvider(_dio)
+          .getResidenceReviews(residenceId, page: page, perPage: perPage);
+    } on DioException catch (e) {
+      log('DioError (getResidenceReviews): ${e.message}');
+      throw Exception('Failed to get residence reviews: ${e.message}');
     }
   }
 }

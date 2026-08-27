@@ -131,7 +131,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
           ListTile(
             tileColor: Colors.white,
             leading:
-                const Icon(FontAwesomeIcons.moneyBill, color: Colors.green),
+                const FaIcon(FontAwesomeIcons.moneyBill, color: Colors.green),
             title: Text(Utils.formatCurrency(paymentData.amount)),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
           ),
@@ -140,8 +140,8 @@ class _StripeCardPageState extends State<StripeCardPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                FontAwesomeIcons.creditCard,
+              Icon(
+                FontAwesomeIcons.creditCard.data,
                 size: 13,
                 color: Color(0xFF635BFF),
               ),
@@ -163,7 +163,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(FontAwesomeIcons.lock, size: 13, color: Colors.white),
+                FaIcon(FontAwesomeIcons.lock, size: 13, color: Colors.white),
                 Gap(8),
                 Text(
                   "Payer par carte",

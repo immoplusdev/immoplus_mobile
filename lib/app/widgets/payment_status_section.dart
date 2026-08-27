@@ -22,7 +22,7 @@ class _PaymentStatusSectionState extends State<PaymentStatusSection> {
           backgroundColor: Colors.transparent,
           radius: 15,
           child: Icon(
-            FontAwesomeIcons.moneyBillWave,
+            FontAwesomeIcons.moneyBillWave.data,
             color: Utils.getServiceStatusColor(
                 widget.demandeVisitModel.statusFacture.toString()),
           ),

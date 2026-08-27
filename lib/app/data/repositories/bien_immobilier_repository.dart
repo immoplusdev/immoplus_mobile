@@ -253,7 +253,7 @@ class BienImmobilierRepository {
     int? perPage,
     String? orderBy,
     String? orderDir,
-    List<Map<String, dynamic>>? where,
+    Map<String, dynamic>? where,
     String? search,
   }) async {
     //dioClient.options.queryParameters['meta'] = '*';

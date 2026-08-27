@@ -189,7 +189,7 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
-                      FontAwesomeIcons.locationDot,
+                      FontAwesomeIcons.locationDot.data,
                       size: 14,
                       color: Colors.grey.shade600,
                     ),

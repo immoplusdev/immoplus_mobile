@@ -8,6 +8,9 @@ import 'package:immoplus/app/data/repositories/hotel_repository.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
+import 'package:sliver_tools/sliver_tools.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
 class HotelSearchResultPage extends StatefulWidget {
   final String destination;
@@ -194,20 +197,30 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                   ),
                 );
               }
-              return SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final hotel = hotels[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: HotelCard(hotel: hotel),
-                      );
-                    },
-                    childCount: hotels.length,
+              return MultiSliver(
+                children: [
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: AdWidget(placement: AdPlacement.hotelListTop),
+                    ),
                   ),
-                ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final hotel = hotels[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: HotelCard(hotel: hotel),
+                          );
+                        },
+                        childCount: hotels.length,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

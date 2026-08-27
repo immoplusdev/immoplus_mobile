@@ -88,8 +88,8 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
-                FontAwesomeIcons.moneyBill,
+              leading: Icon(
+                FontAwesomeIcons.moneyBill.data,
                 color: Colors.green,
               ),
               title: Text(Utils.formatCurrency(paymentData.amount)),
@@ -131,9 +131,10 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
 
     setState(() => _loadingButton = true);
 
+    final number = _formController.phoneNumber!.text.replaceAll(' ', '');
     PaymentServices.initPayment(
       context: context,
-      number: _formController.phoneNumber!.text.replaceAll(' ', ''),
+      number: number,
       collection: paymentData.productType,
       itemID: paymentData.orderID,
       extra: paymentData.extra,
@@ -143,7 +144,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
         setState(() => _loadingButton = false);
 
         // ✅ Naviguer vers l'étape suivante via le controller
-        widget.controller.goToValidator(paymentIntentData);
+        widget.controller.goToValidator(paymentIntentData, number);
       },
       onFailed: () {
         if (!mounted) return;

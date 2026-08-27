@@ -7,6 +7,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/location_exceptions.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/data/enums/ad_type.dart';
+import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
@@ -182,6 +187,23 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
       return const SizedBox.shrink();
     }
 
+    final adsState = context.watch<AdsCubit>().state;
+    final nearAdMatches = adsState.maybeWhen(
+      success: (list) => list
+          .where((c) => c.placement == AdPlacement.residenceListNear.value)
+          .toList(),
+      orElse: () => <AdCampaignModel>[],
+    );
+    final hasNearAd = nearAdMatches.isNotEmpty;
+    final nearAdType = nearAdMatches.isNotEmpty
+        ? AdType.fromString(nearAdMatches.first.type)
+        : null;
+    final nearAdGap = switch (nearAdType) {
+      AdType.carousel => kHomeSectionPubCarrousel,
+      AdType.videoCarousel => kHomeSectionPubCarrouselVideo,
+      _ => kHomeSectionSpacingPub,
+    };
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -223,7 +245,16 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           height: _locationError ? null : compactResidenceCardHeight,
           child: _buildContent(),
         ),
-        const Gap(15),
+        if (!_isLoading &&
+            !_hasError &&
+            !_locationError &&
+            _nearResidences.isNotEmpty &&
+            hasNearAd) ...[
+          Gap(nearAdGap),
+          const AdWidget(placement: AdPlacement.residenceListNear),
+          Gap(nearAdGap),
+        ] else
+          const Gap(kHomeSectionSpacing),
       ],
     );
   }

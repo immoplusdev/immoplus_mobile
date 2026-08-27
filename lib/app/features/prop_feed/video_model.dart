@@ -123,11 +123,15 @@ class VideoModel {
     this.author,
     this.createdAt,
     this.shortCode,
+    this.videoType,
+    this.availableBitrates = const <int>[],
+    this.bitrateUrls = const <int, String>{},
   });
 
   final String id;
 
   /// URL de la vidéo (champ videoUrl dans l'API).
+  /// Pour une vidéo HLS, c'est le master playlist (`master.m3u8`).
   final String url;
 
   final String? thumbnailUrl;
@@ -142,6 +146,49 @@ class VideoModel {
 
   /// Code court pour le partage (ex: "Xk9mP2"). Fourni par GET /feed.
   final String? shortCode;
+
+  /// `hls` quand le backend a produit un ladder adaptatif, `mp4` sinon (legacy).
+  final String? videoType;
+
+  /// Paliers de qualité disponibles, croissants (ex: `[360, 720]`).
+  final List<int> availableBitrates;
+
+  /// Playlist de chaque palier : `{360: 'https://…/360p/playlist.m3u8'}`.
+  final Map<int, String> bitrateUrls;
+
+  bool get isHls => videoType == 'hls' || url.contains('.m3u8');
+
+  String get playbackUrl {
+    if (availableBitrates.length == 1) {
+      final direct = bitrateUrls[availableBitrates.first];
+      if (direct != null && direct.isNotEmpty) return direct;
+    }
+    return url;
+  }
+
+  static List<int> _parseBitrates(dynamic raw) {
+    if (raw is! List) return const <int>[];
+    final parsed = raw
+        .map((e) => e is int ? e : int.tryParse('$e'))
+        .whereType<int>()
+        .toList()
+      ..sort();
+    return parsed;
+  }
+
+  /// Les clés JSON sont des chaînes (`{"360": "..."}`) — TypeScript sérialise
+  /// `Record<number, string>` ainsi.
+  static Map<int, String> _parseBitrateUrls(dynamic raw) {
+    if (raw is! Map) return const <int, String>{};
+    final parsed = <int, String>{};
+    raw.forEach((key, value) {
+      final bitrate = key is int ? key : int.tryParse('$key');
+      if (bitrate != null && value is String && value.isNotEmpty) {
+        parsed[bitrate] = value;
+      }
+    });
+    return parsed;
+  }
 
   factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json['id'] as String? ?? '',
@@ -165,5 +212,8 @@ class VideoModel {
             : null,
         createdAt: json['createdAt'] as String?,
         shortCode: json['shortCode'] as String?,
+        videoType: json['videoType'] as String?,
+        availableBitrates: _parseBitrates(json['availableBitrates']),
+        bitrateUrls: _parseBitrateUrls(json['bitrateUrls']),
       );
 }

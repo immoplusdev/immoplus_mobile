@@ -16,6 +16,7 @@ import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
+import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 
 class AppBlocs {
   static List<BlocProvider> listBlocProviders = [
@@ -73,6 +74,9 @@ class AppBlocs {
     // ),
     BlocProvider<NotificationCubit>(
       create: (context) => getIt<NotificationCubit>(),
+    ),
+    BlocProvider<AdsCubit>(
+      create: (context) => getIt<AdsCubit>()..fetchActiveCampaigns(),
     ),
   ];
 }

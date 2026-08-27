@@ -78,10 +78,10 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                leading: const CircleAvatar(
+                leading: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(
-                    FontAwesomeIcons.whatsapp,
+                    FontAwesomeIcons.whatsapp.data,
                     color: Colors.green,
                   ),
                 ),
@@ -110,8 +110,8 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                leading: const Icon(
-                  FontAwesomeIcons.headset,
+                leading: Icon(
+                  FontAwesomeIcons.headset.data,
                   color: Colors.black,
                 ),
                 title: const Text('Contacter par appel'),

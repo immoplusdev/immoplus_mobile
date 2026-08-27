@@ -127,7 +127,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         color: Colors.grey.shade200,
         child: Center(
           child: Icon(
-            FontAwesomeIcons.images,
+            FontAwesomeIcons.images.data,
             size: 60,
             color: Colors.grey.shade400,
           ),

@@ -99,7 +99,7 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
                   onTap: () {
                     context.pop<VilleModel>(item);
                   },
-                  trailing: Icon(FontAwesomeIcons.circleArrowRight),
+                  trailing: FaIcon(FontAwesomeIcons.circleArrowRight),
                 ),
               ),
             ),

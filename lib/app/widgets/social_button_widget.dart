@@ -58,7 +58,7 @@ class SocialLoginButtons extends StatelessWidget {
               backgroundColor: Colors.black,
               onPressed: () => context.read<LoginCubit>().signInWithApple(),
               child: Center(
-                child: const Icon(
+                child: const FaIcon(
                   FontAwesomeIcons.apple,
                   color: Colors.white,
                   size: 30,
@@ -78,7 +78,7 @@ class SocialLoginButtons extends StatelessWidget {
         return _SocialButton(
           backgroundColor: Colors.blue,
           onPressed: onSwitchMode,
-          child: const Icon(
+          child: const FaIcon(
             FontAwesomeIcons.at,
             color: CupertinoColors.white,
             size: 40,

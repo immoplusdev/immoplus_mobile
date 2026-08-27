@@ -50,22 +50,31 @@ class ResidenceRepository {
   /// Récupère la dernière réservation en attente de réponse du propriétaire
   Future<ReservationModel?> getLatestPendingProprietaireReponse() async {
     try {
-      final where = [
-        '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttenteReponseProprietaire.backendValue}"}',
-        '{ "_field": "statusFacture", "_op": "eq", "_val": "non_paye"}'
-      ];
-      final result = await getReservations(
-        page: 1,
-        perPage: 1,
-        where: where,
-        orderBy: OrderByField.createdAt.value,
-        orderDir: OrderDir.desc.value,
-      );
+      final result =
+          await getReservationsEnAttenteProprietaire(page: 1, perPage: 1);
       if (result.data.isNotEmpty) return result.data.first;
       return null;
     } catch (_) {
       return null;
     }
+  }
+
+  /// Récupère les réservations en attente de réponse du propriétaire
+  Future<ReservationsCollection> getReservationsEnAttenteProprietaire({
+    int page = 1,
+    int perPage = 10,
+  }) {
+    final where = [
+      '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttenteReponseProprietaire.backendValue}"}',
+      '{ "_field": "statusFacture", "_op": "eq", "_val": "non_paye"}'
+    ];
+    return getReservations(
+      page: page,
+      perPage: perPage,
+      where: where,
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
+    );
   }
 
   Future<ReservationModel> annulerReservationClient({
@@ -240,6 +249,40 @@ class ResidenceRepository {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
       throw Exception('Failed to load users: $error');
+    }
+  }
+
+  Future<ResidencesCollection> searchResidencesPublic({
+    String? zones,
+    int? priceMin,
+    int? priceMax,
+    int? occupantsMin,
+    String? startDate,
+    String? endDate,
+    int page = 1,
+    int perPage = 50,
+  }) async {
+    try {
+      final response =
+          await ResidenceProvider(dioClient).searchResidencesPublic(
+        zones: zones,
+        priceMin: priceMin,
+        priceMax: priceMax,
+        occupantsMin: occupantsMin,
+        startDate: startDate,
+        endDate: endDate,
+        page: page,
+        perPage: perPage,
+      );
+
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to search residences: ${dioError.message}');
+    } catch (error) {
+      inspect(error);
+      log('Error: $error');
+      throw Exception('Failed to search residences: $error');
     }
   }
 

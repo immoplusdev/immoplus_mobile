@@ -26,6 +26,8 @@ import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
 class BookingDetailPage extends StatefulWidget {
   const BookingDetailPage(
@@ -35,6 +37,7 @@ class BookingDetailPage extends StatefulWidget {
   static String route({required String id, String? action}) {
     return '/reservation/$id${action != null ? '?action=$action' : ''}';
   }
+  static String paymentRoute(String idProduct) => '/payment/reservations/$idProduct';
 
   final String id;
   final bool autoShowRating;
@@ -162,6 +165,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
                 children: [
+                  const AdWidget(placement: AdPlacement.paymentTop),
+                  const Gap(12),
+
                   // ── Logement ──
                   LogmentInfo(logmentModel: res.residence),
                   const Gap(12),
@@ -432,6 +438,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     const Gap(12),
                     _buildQrCheckinSection(),
                   ],
+                  const Gap(12),
+                  const AdWidget(placement: AdPlacement.paymentBottom),
                 ],
               ),
             ),

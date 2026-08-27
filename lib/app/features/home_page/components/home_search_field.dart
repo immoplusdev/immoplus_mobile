@@ -6,7 +6,7 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 
 class HomeSearchField extends StatefulWidget {
   const HomeSearchField({
@@ -251,7 +251,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
           } else {
             final homeTab = HomeTab.values[widget.currentIndex];
             context.pushNamed(
-              SuggestPage.routeName,
+              SearchContainerPage.routeName,
               extra: {
                 'homeTab': homeTab,
                 'lat': FilterHandler.lat,

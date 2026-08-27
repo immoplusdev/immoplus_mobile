@@ -9,7 +9,9 @@ import 'package:immoplus/app/utils/app_colors.dart';
 
 class _Constants {
   static const double menuHeight = 58.0;
-  static const double horizontalPadding = 8.0;
+  // Aligné sur le padding horizontal de la barre de recherche
+  // (home_search_appbar.dart) pour que les deux commencent à la même ligne.
+  static const double horizontalPadding = 15.0;
   static const double itemSpacing = 8.0;
   static const double itemHorizontalPadding = 6.0;
   static const double itemVerticalPadding = 8.0;
@@ -25,8 +27,10 @@ class _Constants {
   static const double minImageSize = 16.0;
   static const double maxImageSize = 22.0;
 
-  // Largeur plancher par onglet : en dessous, la ligne devient scrollable
-  // (filet de sécurité sur les très petits écrans).
+  // Largeur de référence utilisée pour l'interpolation de la taille d'icône
+  // (voir _computeItemMetrics). Ne sert plus de plancher de largeur : les 4
+  // onglets doivent toujours tenir sur une seule ligne, quelle que soit la
+  // largeur d'écran.
   static const double minItemWidth = 82.0;
 }
 
@@ -79,10 +83,10 @@ _ItemMetrics _computeItemMetrics(
       (_Constants.maxImageSize - _Constants.minImageSize) * t;
 
   final naturalItemWidth = maxTextWidth + _chrome(iconSize);
-  final width = availableWidthPerItem.clamp(
-    _Constants.minItemWidth,
-    naturalItemWidth,
-  );
+  // Plafonné à la largeur naturelle (pour ne pas s'étirer inutilement quand
+  // il y a de la place), jamais en dessous de l'espace réellement
+  // disponible : les 4 onglets doivent toujours tenir sans scroll.
+  final width = availableWidthPerItem.clamp(0.0, naturalItemWidth);
 
   return _ItemMetrics(width: width, iconSize: iconSize);
 }

@@ -6,7 +6,7 @@ import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
-import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
@@ -27,7 +27,11 @@ enum PushNotificationType {
   newProposal, // Admin a ajouté une proposition → badge Imatch
   alert, // Alerte reçue (match)
   marketing, // Marketing
-  ratingRequest; // Demande d'évaluation
+  ratingRequest, // Demande d'évaluation
+  reverseSearchPropositionDisponible, // Propriétaire a confirmé sa dispo → recherche en cours
+  reverseSearchExpiree, // Recherche expirée
+  reverseSearchSelectionExpiree, // Verrou de sélection expiré
+  reverseSearchExpirationImminente; // Alerte 5 min / 1 min avant expiration
 
   /// 🎯 Retourne la route correspondante
   String? getRoute(String? id, {String? code, String? referenceId}) {
@@ -57,7 +61,18 @@ enum PushNotificationType {
         return id != null ? AlertPropositionsPage.route(id) : null;
 
       case PushNotificationType.ratingRequest:
-        return id != null ? BookingDetailPage.route(id: id, action: 'rate') : null;
+        return id != null
+            ? BookingDetailPage.route(id: id, action: 'rate')
+            : null;
+
+      // Nécessite de recharger la recherche complète (zones, propositions...)
+      // avant de naviguer : géré à part par NotificationService, pas par un
+      // simple path ici.
+      case PushNotificationType.reverseSearchPropositionDisponible:
+      case PushNotificationType.reverseSearchExpiree:
+      case PushNotificationType.reverseSearchSelectionExpiree:
+      case PushNotificationType.reverseSearchExpirationImminente:
+        return null;
 
       case PushNotificationType.wallet:
       case PushNotificationType.auth:
@@ -92,7 +107,7 @@ enum PushNotificationType {
           MarketingNotificationCode.cliSeason04,
           MarketingNotificationCode.cliSocial04,
         ].contains(mCode)) {
-          return SuggestPage.routePath;
+          return SearchContainerPage.routePath;
         }
 
         // Profil / Préférences
@@ -122,7 +137,7 @@ enum PushNotificationType {
         ].contains(mCode)) {
           return referenceId != null
               ? ResidencePage.route(referenceId)
-              : SuggestPage.routePath;
+              : SearchContainerPage.routePath;
         }
 
         // Alertes (deep link)
@@ -200,6 +215,18 @@ enum PushNotificationType {
 
       case 'rating_request':
         return PushNotificationType.ratingRequest;
+
+      case 'reverse_search_proposition_disponible':
+        return PushNotificationType.reverseSearchPropositionDisponible;
+
+      case 'reverse_search_expiree':
+        return PushNotificationType.reverseSearchExpiree;
+
+      case 'reverse_search_selection_expiree':
+        return PushNotificationType.reverseSearchSelectionExpiree;
+
+      case 'reverse_search_expiration_imminente':
+        return PushNotificationType.reverseSearchExpirationImminente;
 
       default:
         return null;

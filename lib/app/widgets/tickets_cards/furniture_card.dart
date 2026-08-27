@@ -173,8 +173,8 @@ class _FurnitureCardState extends State<FurnitureCard> {
               child: CircleAvatar(
                 radius: 14,
                 backgroundColor: value ? Colors.red : Colors.grey.shade300,
-                child: const Icon(
-                  FontAwesomeIcons.solidHeart,
+                child: Icon(
+                  FontAwesomeIcons.solidHeart.data,
                   size: 16,
                   color: Colors.white,
                 ),

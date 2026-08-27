@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 enum PropertyType {
   residence,
@@ -16,14 +15,12 @@ enum FilterField {
 }
 
 enum EstateSubCategory {
-  all('Tous', null),
+  all('Tout', null),
   appartement('Appartement', 'appartement'),
-  // maison('Maison', 'maison'),
+  maison('Autres', 'maison'),
   villa('Villa', 'villa'),
   studio('Studio', 'studio'),
-  duplex('Duplex', 'duplex'),
-  bureau('Bureau', 'bureau'),
-  terrain('Terrain', 'terrain');
+  duplex('Duplex', 'duplex');
 
   final String label;
   final String? value;

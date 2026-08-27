@@ -17,6 +17,11 @@ class LocationBiensPage extends StatefulWidget {
   final String? communeId;
   final EstateSubCategory? subCategory;
   final PropertyType propertyType;
+  final double? lat;
+  final double? long;
+  final double? radius;
+  final int? minPrice;
+  final int? maxPrice;
 
   const LocationBiensPage({
     super.key,
@@ -25,6 +30,11 @@ class LocationBiensPage extends StatefulWidget {
     this.communeId,
     this.subCategory,
     this.propertyType = PropertyType.land,
+    this.lat,
+    this.long,
+    this.radius,
+    this.minPrice,
+    this.maxPrice,
   });
 
   static const String routePath = '/location-biens';
@@ -56,41 +66,96 @@ class _LocationBiensPageState extends State<LocationBiensPage>
     setupConnectivityListener();
   }
 
+  bool get _isGeolocalized =>
+      widget.lat != null && widget.long != null && widget.radius != null;
+
   Future<void> _loadPage(int pageKey) async {
     try {
-      final Map<String, dynamic> where = {
-        ...FilterHandler.getAllFilters(widget.propertyType),
-      };
-      if (widget.villeId != null) {
-        where['_villeId'] = widget.villeId;
-      }
-      if (widget.communeId != null) {
-        where['_communeId'] = widget.communeId;
-      }
-      if (widget.subCategory != null && widget.subCategory!.value != null) {
-        final whereList =
-            List<String>.from(where['_where'] as List<String>? ?? const []);
-        whereList.add(
-          '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${widget.subCategory!.value}"}',
-        );
-        where['_where'] = whereList;
-      }
-
-      final result = await _bienImmobilierRepository.getBiensImmobiliers(
-        page: pageKey,
-        where: where,
-      );
-
-      if (result.hasNext == true) {
-        _pagingController.appendPage(
-          result.data ?? [],
-          (result.currentPage ?? 0) + 1,
-        );
+      if (_isGeolocalized) {
+        await _loadGeolocalizedBiens(pageKey);
       } else {
-        _pagingController.appendLastPage(result.data ?? []);
+        await _loadFilteredBiens(pageKey);
       }
     } catch (error) {
       showConnectionErrorDialog();
+    }
+  }
+
+  Future<void> _loadGeolocalizedBiens(int pageKey) async {
+    final where = _buildWhereFilters();
+    final result = await _bienImmobilierRepository.getBiensLocalized(
+      page: pageKey,
+      lat: widget.lat!,
+      long: widget.long!,
+      radius: widget.radius,
+      perPage: 10,
+      where: where,
+    );
+    _appendResultToPaging(result);
+  }
+
+  Future<void> _loadFilteredBiens(int pageKey) async {
+    final where = _buildWhereFilters(
+      villeId: widget.villeId,
+      communeId: widget.communeId,
+      minPrice: widget.minPrice,
+      maxPrice: widget.maxPrice,
+    );
+    final result = await _bienImmobilierRepository.getBiensImmobiliers(
+      page: pageKey,
+      where: where,
+    );
+    _appendResultToPaging(result);
+  }
+
+  Map<String, dynamic> _buildWhereFilters({
+    String? villeId,
+    String? communeId,
+    int? minPrice,
+    int? maxPrice,
+  }) {
+    final where = <String, dynamic>{
+      ...FilterHandler.getAllFilters(widget.propertyType),
+    };
+    if (villeId != null) {
+      where['_villeId'] = villeId;
+    }
+    if (communeId != null) {
+      where['_communeId'] = communeId;
+    }
+
+    final whereList =
+        List<String>.from(where['_where'] as List<String>? ?? const []);
+
+    if (widget.subCategory != null &&
+        widget.subCategory != EstateSubCategory.all &&
+        widget.subCategory!.value != null) {
+      final typeFilter =
+          '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${widget.subCategory!.value}"}';
+      if (!whereList.contains(typeFilter)) {
+        whereList.add(typeFilter);
+      }
+    }
+
+    if (minPrice != null) {
+      whereList.add('{"_field": "prix", "_op": "gte", "_val": "$minPrice"}');
+    }
+    if (maxPrice != null) {
+      whereList.add('{"_field": "prix", "_op": "lte", "_val": "$maxPrice"}');
+    }
+
+    where['_where'] = whereList;
+    return where;
+  }
+
+  void _appendResultToPaging(dynamic result) {
+    if (result.hasNext == true) {
+      _pagingController.appendPage(
+        result.data ?? [],
+        (result.currentPage ?? 0) + 1,
+      );
+    } else {
+      _pagingController.appendLastPage(result.data ?? []);
     }
   }
 

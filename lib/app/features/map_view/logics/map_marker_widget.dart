@@ -36,16 +36,16 @@ class MapMarkerWidget {
     required Color bgColor,
     Color? textColor,
   }) async {
-    // final cacheKey = '$imageUrl-$price';
-    // if (_cache.containsKey(cacheKey)) return _cache[cacheKey]!;
+    final cacheKey = '$imageUrl-$price';
+    if (_cache.containsKey(cacheKey)) return _cache[cacheKey]!;
 
-    // Uint8List? imageBytes;
-    // try {
-    //   final file = await DefaultCacheManager()
-    //       .getSingleFile(imageUrl)
-    //       .timeout(_Constants.requestTimeout);
-    //   imageBytes = await file.readAsBytes();
-    // } catch (_) {}
+    Uint8List? imageBytes;
+    try {
+      final file = await DefaultCacheManager()
+          .getSingleFile(imageUrl)
+          .timeout(_Constants.requestTimeout);
+      imageBytes = await file.readAsBytes();
+    } catch (_) {}
 
     final descriptor = await _MarkerWidget(
       imageBytes: null,
@@ -57,7 +57,7 @@ class MapMarkerWidget {
       imageSize: _Constants.imageSize,
     );
 
-    // _cache[cacheKey] = descriptor;
+    _cache[cacheKey] = descriptor;
     return descriptor;
   }
 
