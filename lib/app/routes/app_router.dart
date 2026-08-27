@@ -154,30 +154,6 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
-      // TODO CLEAN
-      GoRoute(
-        path: '/payment/hotel_reservations/:idProduct',
-        redirect: (context, state) {
-          final sessionManager = getIt<SessionManager>();
-          if (sessionManager.currentUser == null) {
-            return state.namedLocation(HomePage.name);
-          }
-          return null;
-        },
-        builder: (context, state) => const PaymentHistoryPage(),
-      ),
-      // TODO CLEAN
-      GoRoute(
-        path: '/payment/hotel_reservation/:idProduct',
-        redirect: (context, state) {
-          final sessionManager = getIt<SessionManager>();
-          if (sessionManager.currentUser == null) {
-            return state.namedLocation(HomePage.name);
-          }
-          return null;
-        },
-        builder: (context, state) => const PaymentHistoryPage(),
-      ),
       GoRoute(
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
@@ -748,7 +724,6 @@ class AppRouter {
             ),
             body: BookingDetailPage(
               id: state.pathParameters['idProduct'] ?? '',
-              // bienImmobilierModel: state.extra as BienImmobilierModel,
             ),
           ),
         ),
@@ -770,6 +745,53 @@ class AppRouter {
             // bienImmobilierModel: state.extra as BienImmobilierModel,
           ),
         ),
+      ),
+      GoRoute(
+        path: '/payment/reverse_searches/:idProduct',
+        builder: (context, state) => WillPopScope(
+          onWillPop: () async {
+            context.goNamed(SplashScreen.name);
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Réservation'),
+              leading: IconButton(
+                onPressed: () {
+                  context.goNamed(SplashScreen.name);
+                },
+                icon: const FaIcon(FontAwesomeIcons.circleArrowLeft),
+              ),
+            ),
+            body: BookingDetailPage(
+              id: state.pathParameters['idProduct'] ?? '',
+            ),
+          ),
+        ),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservations/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservation/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
       ),
 
       GoRoute(

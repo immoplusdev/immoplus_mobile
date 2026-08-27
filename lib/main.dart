@@ -14,8 +14,8 @@ class _DeepLinkEater extends WidgetsBindingObserver {
   @override
   Future<bool> didPushRouteInformation(
       RouteInformation routeInformation) async {
-    final uri = routeInformation.uri;
-    if (uri.toString().contains('/payment/hotel_reservations/')) {
+    final uri = routeInformation.uri.toString();
+    if (uri.contains('/payment/')) {
       return true; // Empêche GoRouter de traiter cette route
     }
     return false;
@@ -23,7 +23,7 @@ class _DeepLinkEater extends WidgetsBindingObserver {
 
   @override
   Future<bool> didPushRoute(String route) async {
-    if (route.contains('/payment/hotel_reservations/')) {
+    if (route.contains('/payment/')) {
       return true;
     }
     return false;
