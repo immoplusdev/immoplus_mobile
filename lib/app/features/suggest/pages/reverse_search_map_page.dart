@@ -25,6 +25,7 @@ import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart'
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
@@ -48,15 +49,13 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
 
-  // Compte à rebours de la recherche elle-même (`expiresAt`, distinct du
-  // `selectionExpireAt` de la carte "en attente de paiement"). Chargé via
-  // GET /reverse-searches/:id, et confirmé en temps réel par l'event socket
-  // `reverse_search:expiree` (le timer local reste un filet de sécurité si
-  // l'event n'arrive jamais).
+  // Expiration de la recherche elle-même (distincte de `selectionExpireAt`).
   DateTime? _expiresAt;
+  DateTime? _createdAt;
   bool _isExpired = false;
 
   StreamSubscription? _expiredSub;
+  StreamSubscription? _expirationImminenteSub;
 
   int _lastSocketPropsCount = -1;
   int _lastClassicPropsCount = -1;
@@ -80,7 +79,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
         .map((prop) async {
       final icon = await MapMarkerWidget.build(
         imageUrl: Utils.getImagePath(id: prop.data.miniature),
-        price: "${CurrencyFormatter().format(prop.montant.toString())} F",
+        price:
+            "${CurrencyFormatter().format(prop.montantTotal.round().toString())} F",
         bgColor: Colors.white,
         textColor: Colors.black,
       );
@@ -93,9 +93,9 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
             title: prop.data.nom.isNotEmpty
                 ? prop.data.nom
                 : 'Libre tout de suite',
-            snippet: '${prop.montant} FCFA'),
-        onTap: () => _handleResidenceTap(
-            searchId, prop.data, prop.montant.toDouble(), true),
+            snippet: '${prop.montantTotal.round()} FCFA'),
+        onTap: () =>
+            _handleResidenceTap(searchId, prop.data, prop.montantTotal, true),
       );
     });
 
@@ -138,13 +138,13 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
       'isImmediateBooking': isImmediateBooking,
       'reverseSearchId': searchId,
       'reverseSearchPrice': reverseSearchPrice,
+      'reverseSearchNights':
+          residence.reverseSearchNombreNuits ?? widget.request.nights,
+      'reverseSearchPrixParNuit': residence.reverseSearchPrixParNuit,
     }).then((_) => _refreshLockStateFromServer(searchId));
   }
 
-  /// Une sélection (verrou 10 min) peut être posée depuis la page résidence
-  /// ou levée depuis la page paiement, sans jamais passer par ce cubit — on
-  /// revérifie donc l'état réel au retour, plutôt que de se fier à l'état
-  /// local qui n'aurait pas bougé depuis le dernier push.
+  /// Revérifie l'état réel de la sélection au retour (verrou pas géré par ce cubit).
   Future<void> _refreshLockStateFromServer(String searchId) async {
     if (!mounted) return;
     try {
@@ -173,24 +173,71 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
 
   void _applyExpiry(ReverseSearchItem detailed) {
     if (!mounted) return;
+    final wasExpired = _isExpired;
     setState(() {
       _expiresAt = detailed.expiresAt;
+      _createdAt = detailed.createdAt;
       _isExpired = detailed.statusEnum == ReverseSearchStatus.expiree ||
           (detailed.expiresAt?.isBefore(DateTime.now()) ?? false);
     });
+    if (_isExpired && !wasExpired) _showExpiredDialog(detailed.id);
   }
 
-  /// Écoute l'event temps réel `reverse_search:expiree` pour mettre à jour
-  /// l'UI sans attendre un rafraîchissement manuel (retour de page, filet de
-  /// sécurité local...).
+  /// Écoute les events temps réel d'expiration de la recherche.
   void _listenToSocketUpdates(String searchId) {
     final socketService = getIt<ReverseSearchSocketService>();
 
     _expiredSub?.cancel();
     _expiredSub = socketService.onStatus.listen((status) {
-      if (!mounted || status != 'expiree') return;
+      if (!mounted || status != 'expiree' || _isExpired) return;
       setState(() => _isExpired = true);
+      _showExpiredDialog(searchId);
     });
+
+    _expirationImminenteSub?.cancel();
+    _expirationImminenteSub =
+        socketService.onExpirationImminente.listen((event) {
+      if (!mounted || event.reverseSearchId != searchId) return;
+      final minutes = event.minutesRestantes;
+      ToastUtils.showWarning(
+        title: 'Recherche bientôt expirée',
+        description: minutes > 1
+            ? 'Plus que $minutes minutes avant l\'expiration de votre recherche.'
+            : 'Plus qu\'une minute avant l\'expiration de votre recherche.',
+      );
+    });
+  }
+
+  Widget _buildLibresEnAttenteRow(int libres, int enAttente) {
+    return Row(
+      children: [
+        Text('$libres Libres',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+        const SizedBox(width: 8),
+        Text('$enAttente En attente',
+            style: TextStyle(color: Colors.grey.shade500, fontSize: 13)),
+      ],
+    );
+  }
+
+  /// Prévient l'utilisateur de l'expiration puis le ramène au formulaire.
+  void _showExpiredDialog(String searchId) {
+    AppDialog.show(
+      title: 'Recherche expirée',
+      description:
+          'Le délai de votre recherche est écoulé. Vous pouvez lancer une nouvelle recherche.',
+      primaryButtonText: 'Nouvelle recherche',
+      barrierDismissible: false,
+      onPrimary: () async {
+        // Annule explicitement côté serveur pour éviter que la page précédente ne reprenne cette recherche comme "active".
+        if (searchId.isNotEmpty) {
+          await context.read<ReverseSearchCubit>().cancelSearch(searchId);
+        }
+        if (mounted && Navigator.canPop(context)) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
   }
 
   @override
@@ -220,6 +267,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   @override
   void dispose() {
     _expiredSub?.cancel();
+    _expirationImminenteSub?.cancel();
     _mapMarkersNotifier.dispose();
     _showListNotifier.dispose();
     _sheetController.dispose();
@@ -244,14 +292,16 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
     String searchId,
     ReverseSearchProposition proposition,
   ) {
-    context.pushNamed(
-      OperatorsSelectorPage.name,
-      extra: PaymentPageAdapter(
-        itemId: searchId,
-        collection: ProductType.reverse_searches.name,
-        amount: proposition.montant.toInt(),
-      ),
-    ).then((_) => _refreshLockStateFromServer(searchId));
+    context
+        .pushNamed(
+          OperatorsSelectorPage.name,
+          extra: PaymentPageAdapter(
+            itemId: searchId,
+            collection: ProductType.reverse_searches.name,
+            amount: proposition.montantTotal.toInt(),
+          ),
+        )
+        .then((_) => _refreshLockStateFromServer(searchId));
   }
 
   void _showOnDemandInfoDialog() {
@@ -393,338 +443,403 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                     initialChildSize: 0.35,
                     minChildSize: 0.35,
                     maxChildSize: 0.9,
-                  snap: true,
-                  builder: (context, scrollController) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(24)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, -4)),
-                        ],
-                      ),
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        child: Column(
-                          children: [
-                            // Handle
-                            Center(
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.only(top: 12, bottom: 8),
-                                width: 40,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
-                                  borderRadius: BorderRadius.circular(4),
+                    snap: true,
+                    builder: (context, scrollController) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(24)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, -4)),
+                          ],
+                        ),
+                        child: SingleChildScrollView(
+                          controller: scrollController,
+                          child: Column(
+                            children: [
+                              // Handle
+                              Center(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.only(top: 12, bottom: 8),
+                                  width: 40,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            // Header Info
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24.0, vertical: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      _isExpired
-                                          ? 'Recherche expirée'
-                                          : 'Recherche en cours',
-                                      style: TextStyle(
-                                          color: _isExpired
-                                              ? Colors.red.shade400
-                                              : Colors.grey.shade500,
-                                          fontSize: 13)),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      _expiresAt == null
-                                          ? Text(
-                                              '--:--',
-                                              style: TextStyle(
-                                                  color:
-                                                      Colors.orange.shade800,
-                                                  fontSize: 36,
-                                                  fontWeight:
-                                                      FontWeight.bold),
-                                            )
-                                          : SelectionCountdown(
-                                              expireAt: _expiresAt!,
-                                              onExpired: () {
-                                                if (mounted) {
-                                                  setState(
-                                                      () => _isExpired = true);
-                                                }
-                                              },
-                                              builder:
-                                                  (context, remaining, expired) {
-                                                return Text(
-                                                  expired
-                                                      ? 'Expiré'
-                                                      : formatCountdown(
-                                                          remaining),
-                                                  style: TextStyle(
-                                                      color: expired
-                                                          ? Colors.red.shade600
-                                                          : Colors
-                                                              .orange.shade800,
-                                                      fontSize:
-                                                          expired ? 24 : 36,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                );
-                                              },
-                                            ),
-                                      Row(
-                                        children: [
-                                          Text('$libres Libres',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13)),
-                                          const SizedBox(width: 8),
-                                          Text('$confirmer Confirmer',
-                                              style: TextStyle(
-                                                  color: Colors.grey.shade500,
-                                                  fontSize: 13)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              // Header Info
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0, vertical: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        _isExpired
+                                            ? 'Recherche expirée'
+                                            : 'Recherche en cours',
+                                        style: TextStyle(
+                                            color: _isExpired
+                                                ? Colors.red.shade400
+                                                : Colors.grey.shade500,
+                                            fontSize: 13)),
+                                    const SizedBox(height: 8),
+                                    _expiresAt == null
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                '--:--',
+                                                style: TextStyle(
+                                                    color:
+                                                        Colors.orange.shade800,
+                                                    fontSize: 36,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              _buildLibresEnAttenteRow(
+                                                  libres, confirmer),
+                                            ],
+                                          )
+                                        : SelectionCountdown(
+                                            expireAt: _expiresAt!,
+                                            onExpired: () {
+                                              if (mounted && !_isExpired) {
+                                                setState(
+                                                    () => _isExpired = true);
+                                                _showExpiredDialog(
+                                                    currentSearchId);
+                                              }
+                                            },
+                                            builder:
+                                                (context, remaining, expired) {
+                                              final totalSeconds = _createdAt
+                                                  ?.difference(_expiresAt!)
+                                                  .inSeconds
+                                                  .abs();
+                                              final progress =
+                                                  (totalSeconds != null &&
+                                                          totalSeconds > 0)
+                                                      ? (remaining.inSeconds /
+                                                              totalSeconds)
+                                                          .clamp(0.0, 1.0)
+                                                      : null;
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        expired
+                                                            ? 'Expiré'
+                                                            : formatCountdown(
+                                                                remaining),
+                                                        style: TextStyle(
+                                                            color: expired
+                                                                ? Colors.red
+                                                                    .shade600
+                                                                : Colors.orange
+                                                                    .shade800,
+                                                            fontSize: expired
+                                                                ? 24
+                                                                : 36,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      _buildLibresEnAttenteRow(
+                                                          libres, confirmer),
+                                                    ],
+                                                  ),
+                                                  if (progress != null &&
+                                                      !expired) ...[
+                                                    const SizedBox(height: 10),
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                      child:
+                                                          LinearProgressIndicator(
+                                                        value: progress,
+                                                        minHeight: 6,
+                                                        backgroundColor: Colors
+                                                            .grey.shade200,
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                                Colors.orange
+                                                                    .shade800),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                  ],
+                                ),
                               ),
-                            ),
 
-                            // Segmented Control & Cancel Button
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24.0, vertical: 12.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(22),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                _showListNotifier.value = false;
-                                                _sheetController.animateTo(0.35,
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.easeInOut);
-                                              },
-                                              child:
-                                                  ValueListenableBuilder<bool>(
-                                                valueListenable:
-                                                    _showListNotifier,
-                                                builder: (context, show, _) {
-                                                  return Container(
-                                                    decoration: BoxDecoration(
-                                                      color: !show
-                                                          ? AppColors.primary
-                                                          : Colors.transparent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              22),
-                                                    ),
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      'Carte',
-                                                      style: TextStyle(
-                                                        color: !show
-                                                            ? Colors.white
-                                                            : Colors.black87,
-                                                        fontWeight: !show
-                                                            ? FontWeight.bold
-                                                            : FontWeight.normal,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                _showListNotifier.value = true;
-                                                _sheetController.animateTo(0.9,
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.easeInOut);
-                                              },
-                                              child:
-                                                  ValueListenableBuilder<bool>(
-                                                valueListenable:
-                                                    _showListNotifier,
-                                                builder: (context, show, _) {
-                                                  return Container(
-                                                    decoration: BoxDecoration(
-                                                      color: show
-                                                          ? AppColors.primary
-                                                          : Colors.transparent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              22),
-                                                    ),
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      'Liste',
-                                                      style: TextStyle(
-                                                        color: show
-                                                            ? Colors.white
-                                                            : Colors.black87,
-                                                        fontWeight: show
-                                                            ? FontWeight.bold
-                                                            : FontWeight.normal,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    flex: 1,
-                                    child: GestureDetector(
-                                      onTap: () =>
-                                          _showExitDialog(currentSearchId),
+                              // Segmented Control & Cancel Button
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0, vertical: 12.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
                                       child: Container(
                                         height: 44,
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: Colors.grey.shade300),
+                                          color: Colors.grey.shade100,
                                           borderRadius:
                                               BorderRadius.circular(22),
                                         ),
-                                        alignment: Alignment.center,
-                                        child: const Text('Annuler',
-                                            style: TextStyle(
-                                                color: Colors.black87)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            // List View
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 16),
-                              child: Opacity(
-                                opacity: _isExpired ? 0.5 : 1,
-                                child: IgnorePointer(
-                                  ignoring: _isExpired,
-                                  child: Column(
-                                children: [
-                                  // LIBRE TOUT DE SUITE
-                                  const ReverseSearchListHeader(
-                                    title: 'Libre tout de suite',
-                                    description:
-                                        'Le propriétaire à confirmer vous payer c\'est reserve',
-                                  ),
-                                  const SizedBox(height: 16),
-                                  if (pendingSelection != null ||
-                                      socketProps.isNotEmpty) ...[
-                                    if (pendingSelection != null)
-                                      PendingSelectionCard(
-                                        proposition: pendingSelection!,
-                                        selectionExpireAt: selectionExpireAt,
-                                        onContinuePayment: () =>
-                                            _continueToPayment(
-                                          context,
-                                          currentSearchId,
-                                          pendingSelection!,
-                                        ),
-                                        onExpired: () => context
-                                            .read<ReverseSearchCubit>()
-                                            .clearPendingSelection(),
-                                      ),
-                                    ...socketProps.map(
-                                      (prop) {
-                                        final isImmediateBooking = true;
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 16.0),
-                                          child: UnifiedPropertyCard(
-                                            item: prop.data,
-                                            badge: FreeReverseBadge(),
-                                            onTap: () {
-                                              inspect(prop);
-                                              _handleResidenceTap(
-                                                  currentSearchId,
-                                                  prop.data,
-                                                  prop.montant.toDouble(),
-                                                  isImmediateBooking);
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(height: 24),
-                                  ] else
-                                    const ReverseSearchWaitingBanner(),
-
-                                  if (classicProps.isNotEmpty) ...[
-                                    Opacity(
-                                      // "Sur demande" : réponse du
-                                      // propriétaire requise sous 24h, donc
-                                      // pas de réservation directe possible.
-                                      // Toujours grisé et non-navigable ; un
-                                      // tap explique juste le délai.
-                                      opacity: 0.55,
-                                      child: Column(
-                                        children: [
-                                          ReverseSearchListHeader(
-                                            title: 'Sur demande',
-                                            description:
-                                                'Les ${classicProps.length} autres qui correspondent à votre besoin. Reponse du proprietaire sous 24h.',
-                                          ),
-                                          const SizedBox(height: 16),
-                                          ...classicProps.map((prop) =>
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 16.0),
-                                                child: UnifiedPropertyCard(
-                                                  item: prop,
-                                                  onTap:
-                                                      _showOnDemandInfoDialog,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  _showListNotifier.value =
+                                                      false;
+                                                  _sheetController.animateTo(
+                                                      0.35,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                },
+                                                child: ValueListenableBuilder<
+                                                    bool>(
+                                                  valueListenable:
+                                                      _showListNotifier,
+                                                  builder: (context, show, _) {
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: !show
+                                                            ? AppColors.primary
+                                                            : Colors
+                                                                .transparent,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(22),
+                                                      ),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        'Carte',
+                                                        style: TextStyle(
+                                                          color: !show
+                                                              ? Colors.white
+                                                              : Colors.black87,
+                                                          fontWeight: !show
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                              )),
-                                        ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  _showListNotifier.value =
+                                                      true;
+                                                  _sheetController.animateTo(
+                                                      0.9,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                },
+                                                child: ValueListenableBuilder<
+                                                    bool>(
+                                                  valueListenable:
+                                                      _showListNotifier,
+                                                  builder: (context, show, _) {
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: show
+                                                            ? AppColors.primary
+                                                            : Colors
+                                                                .transparent,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(22),
+                                                      ),
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        'Liste',
+                                                        style: TextStyle(
+                                                          color: show
+                                                              ? Colors.white
+                                                              : Colors.black87,
+                                                          fontWeight: show
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      flex: 1,
+                                      child: GestureDetector(
+                                        onTap: () =>
+                                            _showExitDialog(currentSearchId),
+                                        child: Container(
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: Colors.grey.shade300),
+                                            borderRadius:
+                                                BorderRadius.circular(22),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: const Text('Annuler',
+                                              style: TextStyle(
+                                                  color: Colors.black87)),
+                                        ),
                                       ),
                                     ),
                                   ],
-                                ],
+                                ),
+                              ),
+
+                              // List View
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 16),
+                                child: Opacity(
+                                  opacity: _isExpired ? 0.5 : 1,
+                                  child: IgnorePointer(
+                                    ignoring: _isExpired,
+                                    child: Column(
+                                      children: [
+                                        // LIBRE TOUT DE SUITE
+                                        const ReverseSearchListHeader(
+                                          title: 'Libre tout de suite',
+                                          description:
+                                              'Le propriétaire à confirmer vous payer c\'est reserve',
+                                        ),
+                                        const SizedBox(height: 16),
+                                        if (pendingSelection != null ||
+                                            socketProps.isNotEmpty) ...[
+                                          if (pendingSelection != null)
+                                            PendingSelectionCard(
+                                              proposition: pendingSelection!,
+                                              selectionExpireAt:
+                                                  selectionExpireAt,
+                                              onContinuePayment: () =>
+                                                  _continueToPayment(
+                                                context,
+                                                currentSearchId,
+                                                pendingSelection!,
+                                              ),
+                                              onExpired: () => context
+                                                  .read<ReverseSearchCubit>()
+                                                  .clearPendingSelection(),
+                                            ),
+                                          ...socketProps.map(
+                                            (prop) {
+                                              final isImmediateBooking = true;
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 16.0),
+                                                child: UnifiedPropertyCard(
+                                                  item: prop.data,
+                                                  badge: FreeReverseBadge(),
+                                                  checkIn:
+                                                      widget.request.dateDebut,
+                                                  checkOut:
+                                                      widget.request.dateFin,
+                                                  showTotalLabel: true,
+                                                  nights: prop.nombreNuits ??
+                                                      widget.request.nights,
+                                                  perNightPrice:
+                                                      prop.prixParNuit,
+                                                  fraisAmount:
+                                                      prop.frais?.round(),
+                                                  onTap: () {
+                                                    inspect(prop);
+                                                    _handleResidenceTap(
+                                                        currentSearchId,
+                                                        prop.data,
+                                                        prop.montantTotal,
+                                                        isImmediateBooking);
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(height: 24),
+                                        ] else
+                                          const ReverseSearchWaitingBanner(),
+
+                                        if (classicProps.isNotEmpty) ...[
+                                          Opacity(
+                                            // Toujours grisé et non-navigable : réservation directe impossible tant que le propriétaire n'a pas répondu.
+                                            opacity: 0.55,
+                                            child: Column(
+                                              children: [
+                                                ReverseSearchListHeader(
+                                                  title: 'Sur demande',
+                                                  description:
+                                                      'Les ${classicProps.length} autres qui correspondent à votre besoin. En attente de réponse du propriétaire.',
+                                                ),
+                                                const SizedBox(height: 16),
+                                                ...classicProps.map((prop) =>
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 16.0),
+                                                      child:
+                                                          UnifiedPropertyCard(
+                                                        item: prop,
+                                                        onTap:
+                                                            _showOnDemandInfoDialog,
+                                                      ),
+                                                    )),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                       );
                     },
                   ),

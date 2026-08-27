@@ -128,11 +128,7 @@ class ReverseSearchRepository {
     }
   }
 
-  /// GET /reverse-searches/module-status — endpoint public (aucun token
-  /// requis) indiquant si le module recherche inversée est activé côté
-  /// plateforme (variable d'env `REVERSE_SEARCH_MODULE_ENABLED`). En échec
-  /// réseau, on part du principe que le module est actif (fail-open) plutôt
-  /// que de masquer la fonctionnalité pour un problème transitoire.
+
   Future<bool> isModuleActive() async {
     try {
       final response = await _dioClient.get('/reverse-searches/module-status');

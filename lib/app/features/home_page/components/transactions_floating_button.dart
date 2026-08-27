@@ -47,15 +47,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
     with SingleTickerProviderStateMixin {
   static const String _emptyHintShownKey = 'transactions_empty_hint_shown';
 
-  late final AnimationController _animController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-  );
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _animController,
-    curve: Curves.easeOutCubic,
-    reverseCurve: Curves.easeInCubic,
-  );
+  late final AnimationController _animController;
+  late final Animation<double> _animation;
 
   OverlayEntry? _overlayEntry;
   bool _isOpen = false;
@@ -87,7 +80,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   /// Nombre total d'éléments "à payer" (réservations classiques + recherche
   /// inversée verrouillée).
   int get _totalPendingPaymentCount =>
-      _pendingPaymentReservations.length + (_reverseSearchPendingPayment ? 1 : 0);
+      _pendingPaymentReservations.length +
+      (_reverseSearchPendingPayment ? 1 : 0);
 
   /// Une réservation attend un règlement : le badge annonce l'action à mener
   /// plutôt qu'un simple décompte, qui n'indiquait pas ce qui était attendu de
@@ -105,6 +99,18 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   @override
   void initState() {
     super.initState();
+    // Créé ici (pas via `late final = AnimationController(vsync: this)`) :
+    // sinon un premier accès dans dispose() déclencherait sa création alors
+    // que le widget est déjà démonté, ce qui fait planter le lookup vsync.
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _animation = CurvedAnimation(
+      parent: _animController,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
     // Utilisateur non connecté : pas de réservations à charger, le bouton
     if (!_isLoggedIn) return;
     // Chargement initial (alimente le badge même menu fermé) + rafraîchi à
@@ -464,8 +470,8 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
 
   /// Rappel : détente puis léger contrecoup, sans repartir de zéro.
-  late final Animation<double> _pulse = TweenSequence<double>(<
-      TweenSequenceItem<double>>[
+  late final Animation<double> _pulse =
+      TweenSequence<double>(<TweenSequenceItem<double>>[
     TweenSequenceItem(
       tween: Tween(begin: 1.0, end: 1.18)
           .chain(CurveTween(curve: Curves.easeOutCubic)),
@@ -801,7 +807,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
                       ),
                     if (activeReverseSearch != null)
                       _TransactionCard(
-                        key: ValueKey('reverse_search_${activeReverseSearch!.id}'),
+                        key: ValueKey(
+                            'reverse_search_${activeReverseSearch!.id}'),
                         icon: activeReverseSearch!
                                 .statusEnum.isSelectionEnAttentePaiement
                             ? Iconsax.wallet_2

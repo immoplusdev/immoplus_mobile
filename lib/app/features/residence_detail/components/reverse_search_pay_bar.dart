@@ -4,25 +4,32 @@ import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
 /// Barre "prix + Payer" pour une résidence issue d'une recherche inversée —
-/// que la résidence soit déjà verrouillée (tap → paiement direct) ou pas
-/// encore (tap → sélectionne puis enchaîne vers le paiement). Le compte à
-/// rebours n'est plus porté par ce bouton : il vit dans
-/// [PendingReverseSearchBanner], affiché juste au-dessus, pour un traitement
-/// visuel identique partout dans l'app.
 class ReverseSearchPayBar extends StatelessWidget {
+  /// Prix total à payer pour tout le séjour.
   final double price;
+
+  /// Nombre de nuits, toujours >= 1 — filet de secours si [perNightPrice] n'est pas fourni.
+  final int nights;
+
+  /// Prix par nuit explicite (figé côté backend), prioritaire sur le calcul.
+  final int? perNightPrice;
   final bool isLoading;
   final VoidCallback onTap;
 
   const ReverseSearchPayBar({
     super.key,
     required this.price,
+    required this.nights,
+    this.perNightPrice,
     required this.isLoading,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final totalRounded = price.round();
+    final perNight = perNightPrice ?? (totalRounded / nights).round();
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -47,7 +54,7 @@ class ReverseSearchPayBar extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: CurrencyFormatter().format(price.toString()),
+                        text: CurrencyFormatter().format(perNight.toString()),
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -56,7 +63,7 @@ class ReverseSearchPayBar extends StatelessWidget {
                         ),
                       ),
                       const TextSpan(
-                        text: ' F',
+                        text: ' F / nuit',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -68,7 +75,8 @@ class ReverseSearchPayBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'par nuitée (offre spéciale)',
+                  'Total séjour ($nights nuit${nights > 1 ? 's' : ''}) : '
+                  '${CurrencyFormatter().format(totalRounded.toString())} F',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,

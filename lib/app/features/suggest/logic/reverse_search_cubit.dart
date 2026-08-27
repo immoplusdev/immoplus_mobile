@@ -21,6 +21,20 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
       this._repository, this._socketService, this._sessionManager)
       : super(const ReverseSearchState.initial());
 
+  /// Retire de [classicResidences] toute résidence déjà confirmée dans [propositions] (évite le doublon grisé).
+  List<ResidenceModel> _excludeConfirmed(
+    List<ResidenceModel> classicResidences,
+    List<ReverseSearchProposition> propositions,
+  ) {
+    if (classicResidences.isEmpty || propositions.isEmpty) {
+      return classicResidences;
+    }
+    final confirmedIds = propositions.map((p) => p.data.id).toSet();
+    return classicResidences
+        .where((r) => !confirmedIds.contains(r.id))
+        .toList();
+  }
+
   Future<void> initiateSearch(ReverseSearchRequest request) async {
     emit(const ReverseSearchState.loading());
     try {
@@ -66,7 +80,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
     emit(ReverseSearchState.searching(
       searchId: searchId,
       propositions: initialProps,
-      classicResidences: currentClassicResidences,
+      classicResidences:
+          _excludeConfirmed(currentClassicResidences, initialProps),
       pendingSelection: pendingSelection,
       selectionExpireAt: selectionExpireAt,
     ));
@@ -99,7 +114,7 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
                 emit(ReverseSearchState.searching(
                   searchId: searchId,
                   propositions: apiProps,
-                  classicResidences: classicProps,
+                  classicResidences: _excludeConfirmed(classicProps, apiProps),
                   pendingSelection: pending,
                   selectionExpireAt: expireAt,
                 ));
@@ -126,7 +141,7 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
           emit(ReverseSearchState.searching(
               searchId: searchId,
               propositions: propositions,
-              classicResidences: classicProps,
+              classicResidences: _excludeConfirmed(classicProps, propositions),
               pendingSelection: pending,
               selectionExpireAt: expireAt));
         },
@@ -148,12 +163,14 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
       final classicRes = await _repository.getClassicResidences(request);
       state.maybeWhen(
         searching: (id, props, _, pending, expireAt) {
+          final effectiveProps = props.isNotEmpty
+              ? props
+              : _socketService.getPropositions(searchId);
           emit(ReverseSearchState.searching(
             searchId: searchId,
-            propositions: props.isNotEmpty
-                ? props
-                : _socketService.getPropositions(searchId),
-            classicResidences: classicRes.data ?? [],
+            propositions: effectiveProps,
+            classicResidences:
+                _excludeConfirmed(classicRes.data ?? [], effectiveProps),
             pendingSelection: pending,
             selectionExpireAt: expireAt,
           ));

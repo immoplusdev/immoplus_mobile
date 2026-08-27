@@ -52,13 +52,25 @@ mixin _$ResidenceModel {
   bool get residenceDisponible => throw _privateConstructorUsedError;
   num get reduction => throw _privateConstructorUsedError;
 
-  /// Montant propre à cette résidence dans le cadre d'une recherche
-  /// inversée (prix × nombre de nuits recherchées). Présent uniquement
-  /// dans les payloads de propositions reverse-search (socket
-  /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
-  /// absent des autres endpoints résidence.
+  /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
   @JsonKey(name: 'reverse_search_montant')
   double? get reverseSearchMontant => throw _privateConstructorUsedError;
+
+  /// Prix par nuit, figé au moment de l'envoi de la vague au propriétaire.
+  @JsonKey(name: 'reverse_search_prix_par_nuit')
+  int? get reverseSearchPrixParNuit => throw _privateConstructorUsedError;
+
+  /// Nombre de nuits du séjour recherché.
+  @JsonKey(name: 'reverse_search_nombre_nuits')
+  int? get reverseSearchNombreNuits => throw _privateConstructorUsedError;
+
+  /// Frais de paiement (2%) appliqués à reverseSearchMontant.
+  @JsonKey(name: 'reverse_search_frais')
+  double? get reverseSearchFrais => throw _privateConstructorUsedError;
+
+  /// Montant réellement facturé au paiement (reverseSearchMontant + frais).
+  @JsonKey(name: 'reverse_search_montant_total')
+  double? get reverseSearchMontantTotal => throw _privateConstructorUsedError;
 
   /// Serializes this ResidenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -105,7 +117,14 @@ abstract class $ResidenceModelCopyWith<$Res> {
       num? score,
       bool residenceDisponible,
       num reduction,
-      @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant});
+      @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
+      @JsonKey(name: 'reverse_search_prix_par_nuit')
+      int? reverseSearchPrixParNuit,
+      @JsonKey(name: 'reverse_search_nombre_nuits')
+      int? reverseSearchNombreNuits,
+      @JsonKey(name: 'reverse_search_frais') double? reverseSearchFrais,
+      @JsonKey(name: 'reverse_search_montant_total')
+      double? reverseSearchMontantTotal});
 
   $VilleModelCopyWith<$Res>? get villeModel;
   $CommuneModelCopyWith<$Res>? get communeModel;
@@ -156,6 +175,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? residenceDisponible = null,
     Object? reduction = null,
     Object? reverseSearchMontant = freezed,
+    Object? reverseSearchPrixParNuit = freezed,
+    Object? reverseSearchNombreNuits = freezed,
+    Object? reverseSearchFrais = freezed,
+    Object? reverseSearchMontantTotal = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -274,6 +297,22 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.reverseSearchMontant
           : reverseSearchMontant // ignore: cast_nullable_to_non_nullable
               as double?,
+      reverseSearchPrixParNuit: freezed == reverseSearchPrixParNuit
+          ? _value.reverseSearchPrixParNuit
+          : reverseSearchPrixParNuit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reverseSearchNombreNuits: freezed == reverseSearchNombreNuits
+          ? _value.reverseSearchNombreNuits
+          : reverseSearchNombreNuits // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reverseSearchFrais: freezed == reverseSearchFrais
+          ? _value.reverseSearchFrais
+          : reverseSearchFrais // ignore: cast_nullable_to_non_nullable
+              as double?,
+      reverseSearchMontantTotal: freezed == reverseSearchMontantTotal
+          ? _value.reverseSearchMontantTotal
+          : reverseSearchMontantTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 
@@ -353,7 +392,14 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       num? score,
       bool residenceDisponible,
       num reduction,
-      @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant});
+      @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
+      @JsonKey(name: 'reverse_search_prix_par_nuit')
+      int? reverseSearchPrixParNuit,
+      @JsonKey(name: 'reverse_search_nombre_nuits')
+      int? reverseSearchNombreNuits,
+      @JsonKey(name: 'reverse_search_frais') double? reverseSearchFrais,
+      @JsonKey(name: 'reverse_search_montant_total')
+      double? reverseSearchMontantTotal});
 
   @override
   $VilleModelCopyWith<$Res>? get villeModel;
@@ -405,6 +451,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? residenceDisponible = null,
     Object? reduction = null,
     Object? reverseSearchMontant = freezed,
+    Object? reverseSearchPrixParNuit = freezed,
+    Object? reverseSearchNombreNuits = freezed,
+    Object? reverseSearchFrais = freezed,
+    Object? reverseSearchMontantTotal = freezed,
   }) {
     return _then(_$ResidenceModelImpl(
       id: null == id
@@ -523,6 +573,22 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.reverseSearchMontant
           : reverseSearchMontant // ignore: cast_nullable_to_non_nullable
               as double?,
+      reverseSearchPrixParNuit: freezed == reverseSearchPrixParNuit
+          ? _value.reverseSearchPrixParNuit
+          : reverseSearchPrixParNuit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reverseSearchNombreNuits: freezed == reverseSearchNombreNuits
+          ? _value.reverseSearchNombreNuits
+          : reverseSearchNombreNuits // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reverseSearchFrais: freezed == reverseSearchFrais
+          ? _value.reverseSearchFrais
+          : reverseSearchFrais // ignore: cast_nullable_to_non_nullable
+              as double?,
+      reverseSearchMontantTotal: freezed == reverseSearchMontantTotal
+          ? _value.reverseSearchMontantTotal
+          : reverseSearchMontantTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -559,7 +625,14 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.score,
       this.residenceDisponible = true,
       this.reduction = 0,
-      @JsonKey(name: 'reverse_search_montant') this.reverseSearchMontant})
+      @JsonKey(name: 'reverse_search_montant') this.reverseSearchMontant,
+      @JsonKey(name: 'reverse_search_prix_par_nuit')
+      this.reverseSearchPrixParNuit,
+      @JsonKey(name: 'reverse_search_nombre_nuits')
+      this.reverseSearchNombreNuits,
+      @JsonKey(name: 'reverse_search_frais') this.reverseSearchFrais,
+      @JsonKey(name: 'reverse_search_montant_total')
+      this.reverseSearchMontantTotal})
       : _images = images,
         _commodites = commodites,
         _pieces = pieces;
@@ -670,18 +743,34 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @JsonKey()
   final num reduction;
 
-  /// Montant propre à cette résidence dans le cadre d'une recherche
-  /// inversée (prix × nombre de nuits recherchées). Présent uniquement
-  /// dans les payloads de propositions reverse-search (socket
-  /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
-  /// absent des autres endpoints résidence.
+  /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
   @override
   @JsonKey(name: 'reverse_search_montant')
   final double? reverseSearchMontant;
 
+  /// Prix par nuit, figé au moment de l'envoi de la vague au propriétaire.
+  @override
+  @JsonKey(name: 'reverse_search_prix_par_nuit')
+  final int? reverseSearchPrixParNuit;
+
+  /// Nombre de nuits du séjour recherché.
+  @override
+  @JsonKey(name: 'reverse_search_nombre_nuits')
+  final int? reverseSearchNombreNuits;
+
+  /// Frais de paiement (2%) appliqués à reverseSearchMontant.
+  @override
+  @JsonKey(name: 'reverse_search_frais')
+  final double? reverseSearchFrais;
+
+  /// Montant réellement facturé au paiement (reverseSearchMontant + frais).
+  @override
+  @JsonKey(name: 'reverse_search_montant_total')
+  final double? reverseSearchMontantTotal;
+
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible, reduction: $reduction, reverseSearchMontant: $reverseSearchMontant)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, statusValidation: $statusValidation, villeModel: $villeModel, communeModel: $communeModel, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, score: $score, residenceDisponible: $residenceDisponible, reduction: $reduction, reverseSearchMontant: $reverseSearchMontant, reverseSearchPrixParNuit: $reverseSearchPrixParNuit, reverseSearchNombreNuits: $reverseSearchNombreNuits, reverseSearchFrais: $reverseSearchFrais, reverseSearchMontantTotal: $reverseSearchMontantTotal)';
   }
 
   @override
@@ -737,7 +826,18 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.reduction, reduction) ||
                 other.reduction == reduction) &&
             (identical(other.reverseSearchMontant, reverseSearchMontant) ||
-                other.reverseSearchMontant == reverseSearchMontant));
+                other.reverseSearchMontant == reverseSearchMontant) &&
+            (identical(
+                    other.reverseSearchPrixParNuit, reverseSearchPrixParNuit) ||
+                other.reverseSearchPrixParNuit == reverseSearchPrixParNuit) &&
+            (identical(
+                    other.reverseSearchNombreNuits, reverseSearchNombreNuits) ||
+                other.reverseSearchNombreNuits == reverseSearchNombreNuits) &&
+            (identical(other.reverseSearchFrais, reverseSearchFrais) ||
+                other.reverseSearchFrais == reverseSearchFrais) &&
+            (identical(other.reverseSearchMontantTotal,
+                    reverseSearchMontantTotal) ||
+                other.reverseSearchMontantTotal == reverseSearchMontantTotal));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -772,7 +872,11 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         score,
         residenceDisponible,
         reduction,
-        reverseSearchMontant
+        reverseSearchMontant,
+        reverseSearchPrixParNuit,
+        reverseSearchNombreNuits,
+        reverseSearchFrais,
+        reverseSearchMontantTotal
       ]);
 
   /// Create a copy of ResidenceModel
@@ -823,7 +927,14 @@ abstract class _ResidenceModel implements ResidenceModel {
       final bool residenceDisponible,
       final num reduction,
       @JsonKey(name: 'reverse_search_montant')
-      final double? reverseSearchMontant}) = _$ResidenceModelImpl;
+      final double? reverseSearchMontant,
+      @JsonKey(name: 'reverse_search_prix_par_nuit')
+      final int? reverseSearchPrixParNuit,
+      @JsonKey(name: 'reverse_search_nombre_nuits')
+      final int? reverseSearchNombreNuits,
+      @JsonKey(name: 'reverse_search_frais') final double? reverseSearchFrais,
+      @JsonKey(name: 'reverse_search_montant_total')
+      final double? reverseSearchMontantTotal}) = _$ResidenceModelImpl;
 
   factory _ResidenceModel.fromJson(Map<String, dynamic> json) =
       _$ResidenceModelImpl.fromJson;
@@ -887,14 +998,30 @@ abstract class _ResidenceModel implements ResidenceModel {
   @override
   num get reduction;
 
-  /// Montant propre à cette résidence dans le cadre d'une recherche
-  /// inversée (prix × nombre de nuits recherchées). Présent uniquement
-  /// dans les payloads de propositions reverse-search (socket
-  /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
-  /// absent des autres endpoints résidence.
+  /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
   @override
   @JsonKey(name: 'reverse_search_montant')
   double? get reverseSearchMontant;
+
+  /// Prix par nuit, figé au moment de l'envoi de la vague au propriétaire.
+  @override
+  @JsonKey(name: 'reverse_search_prix_par_nuit')
+  int? get reverseSearchPrixParNuit;
+
+  /// Nombre de nuits du séjour recherché.
+  @override
+  @JsonKey(name: 'reverse_search_nombre_nuits')
+  int? get reverseSearchNombreNuits;
+
+  /// Frais de paiement (2%) appliqués à reverseSearchMontant.
+  @override
+  @JsonKey(name: 'reverse_search_frais')
+  double? get reverseSearchFrais;
+
+  /// Montant réellement facturé au paiement (reverseSearchMontant + frais).
+  @override
+  @JsonKey(name: 'reverse_search_montant_total')
+  double? get reverseSearchMontantTotal;
 
   /// Create a copy of ResidenceModel
   /// with the given fields replaced by the non-null parameter values.

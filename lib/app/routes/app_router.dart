@@ -515,11 +515,16 @@ class AppRouter {
           bool isImmediateBooking = false;
           String? reverseSearchId;
           double? reverseSearchPrice;
+          int? reverseSearchNights;
+          int? reverseSearchPrixParNuit;
 
           if (extra is Map<String, dynamic>) {
             isImmediateBooking = extra['isImmediateBooking'] as bool? ?? false;
             reverseSearchId = extra['reverseSearchId'] as String?;
             reverseSearchPrice = extra['reverseSearchPrice'] as double?;
+            reverseSearchNights = extra['reverseSearchNights'] as int?;
+            reverseSearchPrixParNuit =
+                extra['reverseSearchPrixParNuit'] as int?;
           }
 
           return ResidencePage(
@@ -527,6 +532,8 @@ class AppRouter {
             isImmediateBooking: isImmediateBooking,
             reverseSearchId: reverseSearchId,
             reverseSearchPrice: reverseSearchPrice,
+            reverseSearchNights: reverseSearchNights,
+            reverseSearchPrixParNuit: reverseSearchPrixParNuit,
           );
         },
       ),
@@ -746,28 +753,19 @@ class AppRouter {
           ),
         ),
       ),
+      // Non utilisée par "Voir reservation" (qui résout le reservationId
+      // avant de naviguer, voir PaymentSuccessTicketView._onViewReservation) ;
+      // gardée en filet de sécurité pour un lien externe éventuel.
       GoRoute(
         path: '/payment/reverse_searches/:idProduct',
-        builder: (context, state) => WillPopScope(
-          onWillPop: () async {
-            context.goNamed(SplashScreen.name);
-            return false;
-          },
-          child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Réservation'),
-              leading: IconButton(
-                onPressed: () {
-                  context.goNamed(SplashScreen.name);
-                },
-                icon: const FaIcon(FontAwesomeIcons.circleArrowLeft),
-              ),
-            ),
-            body: BookingDetailPage(
-              id: state.pathParameters['idProduct'] ?? '',
-            ),
-          ),
-        ),
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
       ),
       // TODO CLEAN
       GoRoute(
