@@ -7,14 +7,19 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gal/gal.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
+import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
+import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/payment_module/components/shared/ticket_clipper.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
+import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/circle_button.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -45,6 +50,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
     with SingleTickerProviderStateMixin {
   final GlobalKey _previewContainer = GlobalKey();
   bool _isExporting = false;
+  bool _isResolvingReservation = false;
   bool _showConfetti = true;
   late final AnimationController _confettiController;
 
@@ -129,11 +135,10 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
               // ── BOUTON DS : VOIR RESERVATION (PRIMAIRE PLEIN) ──
               CustomButtom(
                 text: "Voir reservation",
-                onClick: () {
-                  AppRouter.router.go(
-                    "/payment/${widget.paymentData.productType}/${widget.paymentData.orderID}",
-                  );
-                },
+                isLoading: _isResolvingReservation,
+                onClick: _isResolvingReservation
+                    ? () {}
+                    : () => _onViewReservation(),
                 color: AppColors.primary,
                 textColor: Colors.white,
                 buttonHeight: 52,
@@ -200,6 +205,41 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
           ),
       ],
     );
+  }
+
+  /// "Voir reservation" — pour une recherche inversée, `orderID` est un
+  /// reverseSearchId, pas un reservationId : il faut d'abord le traduire via
+  /// GET /reverse-searches/:id (champ `reservationId`, présent une fois
+  /// confirmée) avant de savoir où naviguer.
+  Future<void> _onViewReservation() async {
+    final productType = widget.paymentData.productType;
+    final orderID = widget.paymentData.orderID;
+
+    if (productType != ProductType.reverse_searches.name) {
+      AppRouter.router.go("/payment/$productType/$orderID");
+      return;
+    }
+
+    setState(() => _isResolvingReservation = true);
+    try {
+      final item =
+          await getIt<ReverseSearchRepository>().getReverseSearchById(orderID);
+      if (!mounted) return;
+
+      final reservationId = item?.reservationId;
+      if (reservationId != null) {
+        AppRouter.router.go(BookingDetailPage.route(id: reservationId));
+      } else if (item != null) {
+        // Pas encore confirmée côté backend : on ramène sur la recherche
+        // plutôt que sur une réservation qui n'existe pas encore.
+        ReverseSearchNavigation.resume(context, item);
+      } else {
+        ToastUtils.showError(description: 'Recherche introuvable');
+        AppRouter.router.goNamed(HomePage.name);
+      }
+    } finally {
+      if (mounted) setState(() => _isResolvingReservation = false);
+    }
   }
 
   Future<void> _shareScreenshot(

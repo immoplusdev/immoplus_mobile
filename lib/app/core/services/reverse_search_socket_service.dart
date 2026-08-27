@@ -17,6 +17,19 @@ class ReverseSearchWaveUpdate {
   });
 }
 
+/// Payload de l'event socket `reverse_search:expiration_imminente`, émis 5
+/// puis 1 minute avant l'expiration de la recherche (équivalent temps réel de
+/// la notification push `reverse_search_expiration_imminente`).
+class ReverseSearchExpirationImminente {
+  final String reverseSearchId;
+  final int minutesRestantes;
+
+  const ReverseSearchExpirationImminente({
+    required this.reverseSearchId,
+    required this.minutesRestantes,
+  });
+}
+
 @lazySingleton
 class ReverseSearchSocketService {
   io.Socket? _socket;
@@ -29,9 +42,13 @@ class ReverseSearchSocketService {
   final _statusController = StreamController<String>.broadcast();
   Stream<String> get onStatus => _statusController.stream;
 
-  final _waveController =
-      StreamController<ReverseSearchWaveUpdate>.broadcast();
+  final _waveController = StreamController<ReverseSearchWaveUpdate>.broadcast();
   Stream<ReverseSearchWaveUpdate> get onWaveUpdate => _waveController.stream;
+
+  final _expirationImminenteController =
+      StreamController<ReverseSearchExpirationImminente>.broadcast();
+  Stream<ReverseSearchExpirationImminente> get onExpirationImminente =>
+      _expirationImminenteController.stream;
 
   final Map<String, List<ReverseSearchProposition>>
       _lastPropositionsBySearchId = {};
@@ -115,6 +132,19 @@ class ReverseSearchSocketService {
         if (id != null && wave != null) {
           _waveController.add(
               ReverseSearchWaveUpdate(reverseSearchId: id, currentWave: wave));
+        }
+      }
+    });
+
+    _socket!.on('reverse_search:expiration_imminente', (data) {
+      if (data is Map<String, dynamic>) {
+        final id = data['reverseSearchId']?.toString();
+        final minutes = data['minutesRestantes'] is int
+            ? data['minutesRestantes'] as int
+            : int.tryParse(data['minutesRestantes']?.toString() ?? '');
+        if (id != null && minutes != null) {
+          _expirationImminenteController.add(ReverseSearchExpirationImminente(
+              reverseSearchId: id, minutesRestantes: minutes));
         }
       }
     });

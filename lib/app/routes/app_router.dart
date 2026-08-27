@@ -154,30 +154,6 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
-      // TODO CLEAN
-      GoRoute(
-        path: '/payment/hotel_reservations/:idProduct',
-        redirect: (context, state) {
-          final sessionManager = getIt<SessionManager>();
-          if (sessionManager.currentUser == null) {
-            return state.namedLocation(HomePage.name);
-          }
-          return null;
-        },
-        builder: (context, state) => const PaymentHistoryPage(),
-      ),
-      // TODO CLEAN
-      GoRoute(
-        path: '/payment/hotel_reservation/:idProduct',
-        redirect: (context, state) {
-          final sessionManager = getIt<SessionManager>();
-          if (sessionManager.currentUser == null) {
-            return state.namedLocation(HomePage.name);
-          }
-          return null;
-        },
-        builder: (context, state) => const PaymentHistoryPage(),
-      ),
       GoRoute(
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
@@ -539,11 +515,16 @@ class AppRouter {
           bool isImmediateBooking = false;
           String? reverseSearchId;
           double? reverseSearchPrice;
+          int? reverseSearchNights;
+          int? reverseSearchPrixParNuit;
 
           if (extra is Map<String, dynamic>) {
             isImmediateBooking = extra['isImmediateBooking'] as bool? ?? false;
             reverseSearchId = extra['reverseSearchId'] as String?;
             reverseSearchPrice = extra['reverseSearchPrice'] as double?;
+            reverseSearchNights = extra['reverseSearchNights'] as int?;
+            reverseSearchPrixParNuit =
+                extra['reverseSearchPrixParNuit'] as int?;
           }
 
           return ResidencePage(
@@ -551,6 +532,8 @@ class AppRouter {
             isImmediateBooking: isImmediateBooking,
             reverseSearchId: reverseSearchId,
             reverseSearchPrice: reverseSearchPrice,
+            reverseSearchNights: reverseSearchNights,
+            reverseSearchPrixParNuit: reverseSearchPrixParNuit,
           );
         },
       ),
@@ -748,7 +731,6 @@ class AppRouter {
             ),
             body: BookingDetailPage(
               id: state.pathParameters['idProduct'] ?? '',
-              // bienImmobilierModel: state.extra as BienImmobilierModel,
             ),
           ),
         ),
@@ -770,6 +752,44 @@ class AppRouter {
             // bienImmobilierModel: state.extra as BienImmobilierModel,
           ),
         ),
+      ),
+      // Non utilisée par "Voir reservation" (qui résout le reservationId
+      // avant de naviguer, voir PaymentSuccessTicketView._onViewReservation) ;
+      // gardée en filet de sécurité pour un lien externe éventuel.
+      GoRoute(
+        path: '/payment/reverse_searches/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservations/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      // TODO CLEAN
+      GoRoute(
+        path: '/payment/hotel_reservation/:idProduct',
+        redirect: (context, state) {
+          final sessionManager = getIt<SessionManager>();
+          if (sessionManager.currentUser == null) {
+            return state.namedLocation(HomePage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => const PaymentHistoryPage(),
       ),
 
       GoRoute(

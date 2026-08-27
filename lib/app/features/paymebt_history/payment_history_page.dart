@@ -317,7 +317,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: () {
-          if (item.collection == ProductType.hotel_reservation.name) {
+          if (item.collection == ProductType.hotel_reservation.name ||
+              item.collection == ProductType.reverse_searches.name) {
             return;
           }
           showModalBottomSheet(

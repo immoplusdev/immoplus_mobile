@@ -54,6 +54,13 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       reduction: json['reduction'] as num? ?? 0,
       reverseSearchMontant:
           (json['reverse_search_montant'] as num?)?.toDouble(),
+      reverseSearchPrixParNuit:
+          (json['reverse_search_prix_par_nuit'] as num?)?.toInt(),
+      reverseSearchNombreNuits:
+          (json['reverse_search_nombre_nuits'] as num?)?.toInt(),
+      reverseSearchFrais: (json['reverse_search_frais'] as num?)?.toDouble(),
+      reverseSearchMontantTotal:
+          (json['reverse_search_montant_total'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$ResidenceModelImplToJson(
@@ -88,4 +95,8 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'residenceDisponible': instance.residenceDisponible,
       'reduction': instance.reduction,
       'reverse_search_montant': instance.reverseSearchMontant,
+      'reverse_search_prix_par_nuit': instance.reverseSearchPrixParNuit,
+      'reverse_search_nombre_nuits': instance.reverseSearchNombreNuits,
+      'reverse_search_frais': instance.reverseSearchFrais,
+      'reverse_search_montant_total': instance.reverseSearchMontantTotal,
     };

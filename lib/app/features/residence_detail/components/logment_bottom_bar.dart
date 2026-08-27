@@ -35,12 +35,20 @@ class LogmentBottomBar extends StatefulWidget {
     this.isImmediateBooking = false,
     this.reverseSearchId,
     this.reverseSearchPrice,
+    this.reverseSearchNights,
+    this.reverseSearchPrixParNuit,
   });
 
   final ResidenceModel residenceModel;
   final bool isImmediateBooking;
   final String? reverseSearchId;
   final double? reverseSearchPrice;
+
+  /// Filet de secours pour dériver le prix/nuit si [reverseSearchPrixParNuit] n'est pas fourni.
+  final int? reverseSearchNights;
+
+  /// Prix par nuit explicite (figé côté backend), prioritaire sur le calcul.
+  final int? reverseSearchPrixParNuit;
 
   @override
   State<LogmentBottomBar> createState() => _LogmentBottomBarState();
@@ -201,6 +209,8 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
             price: (widget.reverseSearchPrice ??
                     widget.residenceModel.prixReservation)
                 .toDouble(),
+            nights: widget.reverseSearchNights ?? 1,
+            perNightPrice: widget.reverseSearchPrixParNuit,
             isLoading: _isLocking,
             onTap: () {
               if (_isThisResidenceLocked) {
@@ -215,8 +225,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
           StandardBookingBottomBar(
             residenceModel: widget.residenceModel,
             lockedElsewhere: _isLockedElsewhere ? _activeReverseSearch : null,
-            onLockCancelled: () =>
-                setState(() => _activeReverseSearch = null),
+            onLockCancelled: () => setState(() => _activeReverseSearch = null),
           ),
       ],
     );

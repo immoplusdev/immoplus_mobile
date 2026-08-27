@@ -41,6 +41,10 @@ class PendingSelectionCard extends StatelessWidget {
           UnifiedPropertyCard(
             item: proposition.data,
             badge: const _ConfirmAPayerBadge(),
+            showTotalLabel: true,
+            nights: proposition.nombreNuits,
+            perNightPrice: proposition.prixParNuit,
+            fraisAmount: proposition.frais?.round(),
           ),
 
           // Compte à rebours, cropé dans le coin haut-gauche de la carte.
@@ -91,7 +95,8 @@ class PendingSelectionCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.green1CA53F,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 shape: const StadiumBorder(),
                 elevation: 0,
                 shadowColor: Colors.transparent,

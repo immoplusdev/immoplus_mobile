@@ -36,12 +36,16 @@ class ResidencePage extends StatefulWidget {
     this.isImmediateBooking = false,
     this.reverseSearchId,
     this.reverseSearchPrice,
+    this.reverseSearchNights,
+    this.reverseSearchPrixParNuit,
   });
 
   final String idProduct;
   final bool isImmediateBooking;
   final String? reverseSearchId;
   final double? reverseSearchPrice;
+  final int? reverseSearchNights;
+  final int? reverseSearchPrixParNuit;
   static String name = 'logment_page';
 
   static String routePath() => '/residence_detail/:idProduct';
@@ -206,6 +210,8 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
               isImmediateBooking: widget.isImmediateBooking,
               reverseSearchId: widget.reverseSearchId,
               reverseSearchPrice: widget.reverseSearchPrice,
+              reverseSearchNights: widget.reverseSearchNights,
+              reverseSearchPrixParNuit: widget.reverseSearchPrixParNuit,
             ),
           );
         }

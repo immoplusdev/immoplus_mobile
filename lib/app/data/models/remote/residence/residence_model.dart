@@ -42,12 +42,23 @@ class ResidenceModel with _$ResidenceModel {
     //ClientModel? proprietaire,
     @Default(true) bool residenceDisponible,
     @Default(0) num reduction,
-    /// Montant propre à cette résidence dans le cadre d'une recherche
-    /// inversée (prix × nombre de nuits recherchées). Présent uniquement
-    /// dans les payloads de propositions reverse-search (socket
-    /// `reverse_search:proposition_disponible` et REST `proposals.data[]`),
-    /// absent des autres endpoints résidence.
+
+    /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
     @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
+
+    /// Prix par nuit, figé au moment de l'envoi de la vague au propriétaire.
+    @JsonKey(name: 'reverse_search_prix_par_nuit')
+    int? reverseSearchPrixParNuit,
+
+    /// Nombre de nuits du séjour recherché.
+    @JsonKey(name: 'reverse_search_nombre_nuits') int? reverseSearchNombreNuits,
+
+    /// Frais de paiement (2%) appliqués à reverseSearchMontant.
+    @JsonKey(name: 'reverse_search_frais') double? reverseSearchFrais,
+
+    /// Montant réellement facturé au paiement (reverseSearchMontant + frais).
+    @JsonKey(name: 'reverse_search_montant_total')
+    double? reverseSearchMontantTotal,
   }) = _ResidenceModel;
 
   factory ResidenceModel.fromJson(Map<String, dynamic> json) =>
@@ -61,6 +72,7 @@ extension ResidenceModelX on ResidenceModel {
   bool get hasReduction => reduction > 0;
 
   /// Prix réduit calculé côté front : prixReservation * (1 - reduction/100).
-  int get prixReduit =>
-      hasReduction ? (prixReservation * (1 - reduction / 100)).round() : prixReservation;
+  int get prixReduit => hasReduction
+      ? (prixReservation * (1 - reduction / 100)).round()
+      : prixReservation;
 }

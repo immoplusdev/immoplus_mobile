@@ -33,12 +33,32 @@ class ReverseSearchRequest with _$ReverseSearchRequest {
       _$ReverseSearchRequestFromJson(json);
 }
 
+extension ReverseSearchRequestX on ReverseSearchRequest {
+  /// Nombre de nuits recherchées, toujours au moins 1.
+  int get nights {
+    final diff = dateFin.difference(dateDebut).inDays;
+    return diff > 0 ? diff : 1;
+  }
+}
+
 @freezed
 class ReverseSearchProposition with _$ReverseSearchProposition {
   const factory ReverseSearchProposition({
     required String reverseSearchId,
+
+    /// Montant du séjour SANS les frais de paiement.
     required double montant,
     required ResidenceModel data,
+
+    /// Prix par nuit, figé au moment de l'envoi de la vague.
+    int? prixParNuit,
+    int? nombreNuits,
+
+    /// Frais de paiement (2%) appliqués à [montant].
+    double? frais,
+
+    /// Montant réellement facturé au paiement (montant + frais).
+    required double montantTotal,
   }) = _ReverseSearchProposition;
 
   factory ReverseSearchProposition.fromJson(Map<String, dynamic> json) =>
@@ -46,9 +66,6 @@ class ReverseSearchProposition with _$ReverseSearchProposition {
 }
 
 /// Payload brut des propositions (renvoyé par l'événement socket et par GET /reverse-searches/:id dans "proposals").
-/// Chaque résidence de [data] porte son propre `reverse_search_montant`
-/// (voir [ResidenceModel.reverseSearchMontant]) — il n'y a plus de montant
-/// unique à ce niveau, puisque chaque résidence a son propre prix.
 @freezed
 class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
   const factory ReverseSearchPropositionEvent({
@@ -62,23 +79,27 @@ class ReverseSearchPropositionEvent with _$ReverseSearchPropositionEvent {
 
 extension ReverseSearchPropositionEventX on ReverseSearchPropositionEvent {
   List<ReverseSearchProposition> toPropositions() {
-    return data
-        .map((residence) {
-          final montant = residence.reverseSearchMontant ??
-              residence.prixReservation.toDouble();
-          return ReverseSearchProposition(
-            reverseSearchId: reverseSearchId,
-            montant: montant,
-            data: residence.copyWith(
-              prixReservation: montant > 0
-                  ? montant.toInt()
-                  : (residence.prixReservation > 0
-                      ? residence.prixReservation
-                      : montant.toInt()),
-            ),
-          );
-        })
-        .toList();
+    return data.map((residence) {
+      final montant = residence.reverseSearchMontant ??
+          residence.prixReservation.toDouble();
+      // Montant réellement facturé au paiement (frais compris).
+      final montantTotal = residence.reverseSearchMontantTotal ?? montant;
+      return ReverseSearchProposition(
+        reverseSearchId: reverseSearchId,
+        montant: montant,
+        montantTotal: montantTotal,
+        frais: residence.reverseSearchFrais,
+        prixParNuit: residence.reverseSearchPrixParNuit,
+        nombreNuits: residence.reverseSearchNombreNuits,
+        data: residence.copyWith(
+          prixReservation: montantTotal > 0
+              ? montantTotal.toInt()
+              : (residence.prixReservation > 0
+                  ? residence.prixReservation
+                  : montantTotal.toInt()),
+        ),
+      );
+    }).toList();
   }
 }
 
@@ -105,6 +126,9 @@ class ReverseSearchItem with _$ReverseSearchItem {
     DateTime? createdAt,
     DateTime? updatedAt,
     ReverseSearchPropositionEvent? proposals,
+
+    /// Id de la réservation créée une fois la recherche confirmée (statut `confirmee`).
+    String? reservationId,
   }) = _ReverseSearchItem;
 
   factory ReverseSearchItem.fromJson(Map<String, dynamic> json) =>
