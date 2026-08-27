@@ -56,11 +56,6 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   DateTime? _expiresAt;
   bool _isExpired = false;
 
-  // Nombre de vagues de notifications déjà envoyées aux propriétaires
-  // (`currentWave`, mis à jour en temps réel par `reverse_search:wave_updated`).
-  // "Sur demande" reste grisé tant qu'aucune vague n'est encore partie.
-  int _currentWave = 0;
-  StreamSubscription? _waveSub;
   StreamSubscription? _expiredSub;
 
   int _lastSocketPropsCount = -1;
@@ -182,21 +177,14 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
       _expiresAt = detailed.expiresAt;
       _isExpired = detailed.statusEnum == ReverseSearchStatus.expiree ||
           (detailed.expiresAt?.isBefore(DateTime.now()) ?? false);
-      _currentWave = detailed.currentWave;
     });
   }
 
-  /// Écoute les events temps réel `reverse_search:wave_updated` et
-  /// `reverse_search:expiree` pour mettre à jour l'UI sans attendre un
-  /// rafraîchissement manuel (retour de page, filet de sécurité local...).
+  /// Écoute l'event temps réel `reverse_search:expiree` pour mettre à jour
+  /// l'UI sans attendre un rafraîchissement manuel (retour de page, filet de
+  /// sécurité local...).
   void _listenToSocketUpdates(String searchId) {
     final socketService = getIt<ReverseSearchSocketService>();
-
-    _waveSub?.cancel();
-    _waveSub = socketService.onWaveUpdate.listen((update) {
-      if (!mounted || update.reverseSearchId != searchId) return;
-      setState(() => _currentWave = update.currentWave);
-    });
 
     _expiredSub?.cancel();
     _expiredSub = socketService.onStatus.listen((status) {
@@ -231,7 +219,6 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
 
   @override
   void dispose() {
-    _waveSub?.cancel();
     _expiredSub?.cancel();
     _mapMarkersNotifier.dispose();
     _showListNotifier.dispose();
@@ -265,6 +252,15 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
         amount: proposition.montant.toInt(),
       ),
     ).then((_) => _refreshLockStateFromServer(searchId));
+  }
+
+  void _showOnDemandInfoDialog() {
+    AppDialog.show(
+      title: 'Demande envoyée',
+      description:
+          'Votre demande a été transmise au propriétaire. Dès qu\'il répond sur la disponibilité, vous pourrez réserver.',
+      primaryButtonText: 'Compris',
+    );
   }
 
   void _showExitDialog(String searchId) {
@@ -693,43 +689,31 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
 
                                   if (classicProps.isNotEmpty) ...[
                                     Opacity(
-                                      // Grisé tant qu'aucune vague de
-                                      // notifications n'a encore été envoyée
-                                      // aux propriétaires (`currentWave`,
-                                      // mis à jour via
-                                      // `reverse_search:wave_updated`) : les
-                                      // propriétés "sur demande" (24h de
-                                      // délai de réponse) ne sont pas la
-                                      // priorité tant que la 1ère vague de
-                                      // matchs immédiats n'est pas partie.
-                                      opacity: _currentWave >= 1 ? 1 : 0.45,
-                                      child: IgnorePointer(
-                                        ignoring: _currentWave < 1,
-                                        child: Column(
-                                          children: [
-                                            ReverseSearchListHeader(
-                                              title: 'Sur demande',
-                                              description:
-                                                  'Les ${classicProps.length} autres qui correspondent à votre besoin. Reponse du proprietaire sous 24h.',
-                                            ),
-                                            const SizedBox(height: 16),
-                                            ...classicProps.map((prop) =>
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 16.0),
-                                                  child: UnifiedPropertyCard(
-                                                    item: prop,
-                                                    onTap: () =>
-                                                        _handleResidenceTap(
-                                                            currentSearchId,
-                                                            prop,
-                                                            null,
-                                                            false),
-                                                  ),
-                                                )),
-                                          ],
-                                        ),
+                                      // "Sur demande" : réponse du
+                                      // propriétaire requise sous 24h, donc
+                                      // pas de réservation directe possible.
+                                      // Toujours grisé et non-navigable ; un
+                                      // tap explique juste le délai.
+                                      opacity: 0.55,
+                                      child: Column(
+                                        children: [
+                                          ReverseSearchListHeader(
+                                            title: 'Sur demande',
+                                            description:
+                                                'Les ${classicProps.length} autres qui correspondent à votre besoin. Reponse du proprietaire sous 24h.',
+                                          ),
+                                          const SizedBox(height: 16),
+                                          ...classicProps.map((prop) =>
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 16.0),
+                                                child: UnifiedPropertyCard(
+                                                  item: prop,
+                                                  onTap:
+                                                      _showOnDemandInfoDialog,
+                                                ),
+                                              )),
+                                        ],
                                       ),
                                     ),
                                   ],

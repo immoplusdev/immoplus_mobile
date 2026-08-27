@@ -10,6 +10,7 @@ import 'package:immoplus/app/widgets/operator_payment.dart';
 
 class PaiementStatusPage extends StatefulWidget {
   static String name = 'paiement_status_page';
+  static bool isActive = false;
   final PaymentPageAdapter paymentPageAdapter;
   const PaiementStatusPage({super.key, required this.paymentPageAdapter});
 
@@ -18,6 +19,18 @@ class PaiementStatusPage extends StatefulWidget {
 }
 
 class _PaiementStatusPageState extends State<PaiementStatusPage> {
+  @override
+  void initState() {
+    super.initState();
+    PaiementStatusPage.isActive = true;
+  }
+
+  @override
+  void dispose() {
+    PaiementStatusPage.isActive = false;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Pas d'AppBar pour Stripe : StripeCardPage a son propre bouton ✕

@@ -99,12 +99,10 @@ class NotificationService {
         }
 
         if (type != null) {
-          // Écran de paiement encore actif (ex: retour de Wave) : son polling
-          // gère déjà le succès, ne pas le court-circuiter vers l'historique.
-          if (type == PushNotificationType.payment &&
+          if (PaiementStatusPage.isActive ||
               AppRouter.router.currentLocation
                   .contains(PaiementStatusPage.name)) {
-            log('🔔 Notification payment ignorée : flow de paiement déjà actif',
+            log('🔔 Notification $type ignorée : flow de paiement déjà actif',
                 name: 'NOTIFICATION');
             return;
           }

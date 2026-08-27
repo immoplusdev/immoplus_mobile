@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/lottie_assets.dart';
 
 /// Affiché à la place de "Libre tout de suite" tant qu'aucun match temps réel
 /// n'est encore arrivé — fait défiler 3 courtes phrases une seule fois (pas
@@ -49,12 +48,6 @@ class _ReverseSearchWaitingBannerState
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          SizedBox(
-            width: 64,
-            height: 64,
-            child: LottieAssets().orderChecking,
-          ),
-          const SizedBox(height: 8),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 400),
             transitionBuilder: (child, animation) => FadeTransition(
