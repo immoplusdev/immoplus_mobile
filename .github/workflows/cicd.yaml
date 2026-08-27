@@ -226,7 +226,7 @@ jobs:
             app_id = apps.dig("data", 0, "id")
             raise "App introuvable pour bundleId=#{bundle_id}: #{apps}" unless app_id
 
-            builds = api_get("/v1/builds?filter[app]=#{app_id}&filter[preReleaseVersion.version]=#{version}&sort=-version&limit=1", token)
+            builds = api_get("/v1/builds?filter[app]=#{app_id}&sort=-version&limit=1", token)
             latest = builds.dig("data", 0, "attributes", "version")
 
             new_build = latest ? latest.to_i + 1 : ENV.fetch("FALLBACK_BASE").to_i
