@@ -3,8 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 
+class CollageItem {
+  final String image;
+  final VoidCallback? onTap;
+
+  const CollageItem({
+    required this.image,
+    this.onTap,
+  });
+
+  bool get isUrl => image.startsWith('http');
+
+  String get imageUrl =>
+      image.isEmpty ? '' : (isUrl ? image : Utils.getImagePath(id: image));
+}
+
 class ImageCollage extends StatelessWidget {
-  final List<String> images;
+  final List<String>? images;
+  final List<CollageItem>? items;
   final double width;
   final double height;
   final double borderRadius;
@@ -13,63 +29,108 @@ class ImageCollage extends StatelessWidget {
 
   const ImageCollage({
     super.key,
-    required this.images,
+    this.images,
+    this.items,
     this.width = double.infinity,
     this.height = 300,
     this.borderRadius = 16,
     this.spacing = 2,
     this.onTap,
-  });
+  }) : assert(
+          (images != null && items == null) || (items != null && images == null),
+          'Provide either images or items, but not both.',
+        );
+
+  List<CollageItem> get _effectiveItems {
+    if (items != null) return items!;
+    if (images != null) {
+      return images!.map((img) => CollageItem(image: img)).toList();
+    }
+    return const [];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final effectiveItems = _effectiveItems;
     Widget content;
 
-    if (images.isEmpty) {
+    if (effectiveItems.isEmpty) {
       content = ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
-        child: _buildImageWidget(''),
+        child: _buildItemWidget(const CollageItem(image: '')),
       );
-    } else if (images.length == 1) {
+    } else if (effectiveItems.length == 1) {
       content = ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
-        child: _buildImageWidget(images[0]),
+        child: _buildItemWidget(effectiveItems[0]),
       );
-    } else if (images.length == 2) {
+    } else if (effectiveItems.length == 2) {
       content = ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: Column(
           children: [
-            Expanded(child: _buildImageWidget(images[0])),
+            Expanded(child: _buildItemWidget(effectiveItems[0])),
             Gap(spacing),
-            Expanded(child: _buildImageWidget(images[1])),
+            Expanded(child: _buildItemWidget(effectiveItems[1])),
           ],
         ),
       );
-    } else {
-      // 3 or more images
+    } else if (effectiveItems.length == 3) {
       content = ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: Column(
           children: [
-            Expanded(child: _buildImageWidget(images[0])),
+            Expanded(child: _buildItemWidget(effectiveItems[0])),
             Gap(spacing),
             Expanded(
               child: Row(
                 children: [
-                  Expanded(child: _buildImageWidget(images[1])),
+                  Expanded(child: _buildItemWidget(effectiveItems[1])),
+                  Gap(spacing),
+                  Expanded(child: _buildItemWidget(effectiveItems[2])),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // 4 or more images: 2x2 asymmetric grid
+      content = ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Column(
+          children: [
+            // Row 1 (60% / 40%)
+            Expanded(
+              flex: 10,
+              child: Row(
+                children: [
+                  Expanded(flex: 6, child: _buildItemWidget(effectiveItems[0])),
+                  Gap(spacing),
+                  Expanded(flex: 4, child: _buildItemWidget(effectiveItems[1])),
+                ],
+              ),
+            ),
+            Gap(spacing),
+            // Row 2 (35% / 65%)
+            Expanded(
+              flex: 11,
+              child: Row(
+                children: [
+                  Expanded(flex: 35, child: _buildItemWidget(effectiveItems[2])),
                   Gap(spacing),
                   Expanded(
+                    flex: 65,
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        _buildImageWidget(images[2]),
-                        if (images.length > 3)
+                        _buildItemWidget(effectiveItems[3]),
+                        if (effectiveItems.length > 4)
                           Container(
-                            color: Colors.black.withOpacity(0.4),
+                            color: Colors.black.withValues(alpha: 0.4),
                             child: Center(
                               child: Text(
-                                '+${images.length - 3}',
+                                '+${effectiveItems.length - 4}',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,
@@ -99,15 +160,28 @@ class ImageCollage extends StatelessWidget {
     );
   }
 
-  Widget _buildImageWidget(String imageId) {
-    if (imageId.isEmpty) {
+  Widget _buildItemWidget(CollageItem item) {
+    final imageWidget = _buildImageWidget(item);
+    if (item.onTap != null) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: item.onTap,
+        child: imageWidget,
+      );
+    }
+    return imageWidget;
+  }
+
+  Widget _buildImageWidget(CollageItem item) {
+    if (item.image.isEmpty) {
       return Container(
         color: Colors.grey.shade100,
         child: const Icon(Icons.image_outlined, color: Colors.grey, size: 20),
       );
     }
+
     return CachedNetworkImage(
-      imageUrl: Utils.getImagePath(id: imageId),
+      imageUrl: item.imageUrl,
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,

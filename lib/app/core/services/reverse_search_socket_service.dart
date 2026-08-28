@@ -1,0 +1,165 @@
+import 'dart:async';
+import 'dart:developer' as dev;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
+import 'package:injectable/injectable.dart';
+
+/// Payload de l'event socket `reverse_search:wave_updated`, émis à chaque
+/// nouvelle vague de notifications envoyée aux propriétaires.
+class ReverseSearchWaveUpdate {
+  final String reverseSearchId;
+  final int currentWave;
+
+  const ReverseSearchWaveUpdate({
+    required this.reverseSearchId,
+    required this.currentWave,
+  });
+}
+
+/// Payload de l'event socket `reverse_search:expiration_imminente`, émis 5
+/// puis 1 minute avant l'expiration de la recherche (équivalent temps réel de
+/// la notification push `reverse_search_expiration_imminente`).
+class ReverseSearchExpirationImminente {
+  final String reverseSearchId;
+  final int minutesRestantes;
+
+  const ReverseSearchExpirationImminente({
+    required this.reverseSearchId,
+    required this.minutesRestantes,
+  });
+}
+
+@lazySingleton
+class ReverseSearchSocketService {
+  io.Socket? _socket;
+
+  final _propositionController =
+      StreamController<List<ReverseSearchProposition>>.broadcast();
+  Stream<List<ReverseSearchProposition>> get onProposition =>
+      _propositionController.stream;
+
+  final _statusController = StreamController<String>.broadcast();
+  Stream<String> get onStatus => _statusController.stream;
+
+  final _waveController = StreamController<ReverseSearchWaveUpdate>.broadcast();
+  Stream<ReverseSearchWaveUpdate> get onWaveUpdate => _waveController.stream;
+
+  final _expirationImminenteController =
+      StreamController<ReverseSearchExpirationImminente>.broadcast();
+  Stream<ReverseSearchExpirationImminente> get onExpirationImminente =>
+      _expirationImminenteController.stream;
+
+  final Map<String, List<ReverseSearchProposition>>
+      _lastPropositionsBySearchId = {};
+
+  List<ReverseSearchProposition> getPropositions(String searchId) {
+    return _lastPropositionsBySearchId[searchId] ?? [];
+  }
+
+  void clearPropositions(String searchId) {
+    _lastPropositionsBySearchId.remove(searchId);
+  }
+
+  bool get isConnected => _socket?.connected ?? false;
+
+  void connect(String? accessToken) {
+    if (accessToken == null || accessToken.isEmpty) return;
+    if (_socket != null && _socket!.connected) return;
+
+    final baseUrl = (dotenv.env['API_BASE_URL'] ?? '').trim();
+    if (baseUrl.isEmpty) return;
+
+    _socket?.dispose();
+    _socket = io.io(
+      '$baseUrl/reverse-searches',
+      io.OptionBuilder()
+          .setTransports(['websocket'])
+          .setAuth({'token': accessToken})
+          .disableAutoConnect()
+          .setReconnectionAttempts(8)
+          .setReconnectionDelay(1000)
+          .setReconnectionDelayMax(8000)
+          .build(),
+    );
+
+    _socket!.onConnect((_) {
+      dev.log('connecté', name: 'ReverseSearchSocket');
+    });
+    _socket!.onDisconnect((reason) {
+      dev.log('déconnecté: $reason', name: 'ReverseSearchSocket');
+    });
+    _socket!.onConnectError((err) {
+      dev.log('erreur connexion: $err', name: 'ReverseSearchSocket');
+    });
+
+    _socket!.on('reverse_search:proposition_disponible', (data) {
+      if (data is Map<String, dynamic>) {
+        try {
+          final event = ReverseSearchPropositionEvent.fromJson(data);
+          final propositions = event.toPropositions();
+          _lastPropositionsBySearchId[event.reverseSearchId] = propositions;
+          _propositionController.add(propositions);
+        } catch (e) {
+          dev.log('Erreur parsing proposition: $e',
+              name: 'ReverseSearchSocket');
+        }
+      }
+    });
+
+    _socket!.on('reverse_search:annulee', (data) {
+      _statusController.add('annulee');
+    });
+
+    _socket!.on('reverse_search:selection_expiree', (data) {
+      _statusController.add('selection_expiree');
+    });
+
+    _socket!.on('reverse_search:paiement_echec', (data) {
+      _statusController.add('paiement_echec');
+    });
+
+    _socket!.on('reverse_search:expiree', (data) {
+      _statusController.add('expiree');
+    });
+
+    _socket!.on('reverse_search:wave_updated', (data) {
+      if (data is Map<String, dynamic>) {
+        final id = data['reverseSearchId']?.toString();
+        final wave = data['currentWave'] is int
+            ? data['currentWave'] as int
+            : int.tryParse(data['currentWave']?.toString() ?? '');
+        if (id != null && wave != null) {
+          _waveController.add(
+              ReverseSearchWaveUpdate(reverseSearchId: id, currentWave: wave));
+        }
+      }
+    });
+
+    _socket!.on('reverse_search:expiration_imminente', (data) {
+      if (data is Map<String, dynamic>) {
+        final id = data['reverseSearchId']?.toString();
+        final minutes = data['minutesRestantes'] is int
+            ? data['minutesRestantes'] as int
+            : int.tryParse(data['minutesRestantes']?.toString() ?? '');
+        if (id != null && minutes != null) {
+          _expirationImminenteController.add(ReverseSearchExpirationImminente(
+              reverseSearchId: id, minutesRestantes: minutes));
+        }
+      }
+    });
+
+    _socket!.connect();
+  }
+
+  void disconnect({String? searchId}) {
+    if (searchId != null) {
+      _lastPropositionsBySearchId.remove(searchId);
+    } else {
+      _lastPropositionsBySearchId.clear();
+    }
+    _socket?.disconnect();
+    _socket?.dispose();
+    _socket = null;
+  }
+}

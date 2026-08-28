@@ -10,8 +10,29 @@ import 'package:talker/talker.dart';
 
 final talker = Talker();
 
+class _DeepLinkEater extends WidgetsBindingObserver {
+  @override
+  Future<bool> didPushRouteInformation(
+      RouteInformation routeInformation) async {
+    final uri = routeInformation.uri.toString();
+    if (uri.contains('/payment/')) {
+      return true; // Empêche GoRouter de traiter cette route
+    }
+    return false;
+  }
+
+  @override
+  Future<bool> didPushRoute(String route) async {
+    if (route.contains('/payment/')) {
+      return true;
+    }
+    return false;
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding.instance.addObserver(_DeepLinkEater());
   // dotenv est chargé dans configureDependencies() → Stripe s'init après
   await configureDependencies();
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';

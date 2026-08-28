@@ -7,12 +7,17 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/reverse_search_socket_service.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
+import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
+import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
+import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -42,36 +47,70 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
     with SingleTickerProviderStateMixin {
   static const String _emptyHintShownKey = 'transactions_empty_hint_shown';
 
-  late final AnimationController _animController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-  );
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _animController,
-    curve: Curves.easeOutCubic,
-    reverseCurve: Curves.easeInCubic,
-  );
+  late final AnimationController _animController;
+  late final Animation<double> _animation;
 
   OverlayEntry? _overlayEntry;
   bool _isOpen = false;
   bool _isLoading = true;
   List<ReservationModel> _pendingOwnerReservations = [];
   List<ReservationModel> _pendingPaymentReservations = [];
+  ReverseSearchItem? _activeReverseSearch;
+
+  /// Écoute les changements de statut de la recherche inversée active
+  /// (`reverse_search:annulee`, `selection_expiree`, `paiement_echec`,
+  /// `expiree`) pour rafraîchir le bouton flottant en temps réel, sans
+  /// attendre une réouverture du menu ou une notification push classique.
+  StreamSubscription? _reverseSearchStatusSub;
 
   final _sessionManager = getIt<SessionManager>();
   bool get _isLoggedIn => _sessionManager.currentUser != null;
 
+  bool get _reverseSearchPendingPayment =>
+      _activeReverseSearch?.statusEnum.isSelectionEnAttentePaiement ?? false;
+  bool get _reverseSearchSearching =>
+      _activeReverseSearch != null && !_reverseSearchPendingPayment;
+
   int get _pendingCount =>
-      _pendingOwnerReservations.length + _pendingPaymentReservations.length;
+      _pendingOwnerReservations.length +
+      _pendingPaymentReservations.length +
+      (_reverseSearchSearching ? 1 : 0) +
+      (_reverseSearchPendingPayment ? 1 : 0);
+
+  /// Nombre total d'éléments "à payer" (réservations classiques + recherche
+  /// inversée verrouillée).
+  int get _totalPendingPaymentCount =>
+      _pendingPaymentReservations.length +
+      (_reverseSearchPendingPayment ? 1 : 0);
 
   /// Une réservation attend un règlement : le badge annonce l'action à mener
   /// plutôt qu'un simple décompte, qui n'indiquait pas ce qui était attendu de
   /// l'utilisateur.
-  bool get _hasPendingPayment => _pendingPaymentReservations.isNotEmpty;
+  bool get _hasPendingPayment => _totalPendingPaymentCount > 0;
+
+  /// Le compte à rebours n'a de sens que si la recherche inversée est le seul
+  /// élément "à payer" — avec plusieurs éléments, on affiche un décompte
+  /// cumulé simple plutôt que de mélanger chrono et nombre.
+  DateTime? get _soloReverseSearchExpireAt =>
+      (_totalPendingPaymentCount == 1 && _reverseSearchPendingPayment)
+          ? _activeReverseSearch?.selectionExpireAt
+          : null;
 
   @override
   void initState() {
     super.initState();
+    // Créé ici (pas via `late final = AnimationController(vsync: this)`) :
+    // sinon un premier accès dans dispose() déclencherait sa création alors
+    // que le widget est déjà démonté, ce qui fait planter le lookup vsync.
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _animation = CurvedAnimation(
+      parent: _animController,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
     // Utilisateur non connecté : pas de réservations à charger, le bouton
     if (!_isLoggedIn) return;
     // Chargement initial (alimente le badge même menu fermé) + rafraîchi à
@@ -103,6 +142,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   void dispose() {
     ReservationPendingBanner.pushNotifier.removeListener(_onNewOperation);
     widget.scrollController?.removeListener(_onScroll);
+    _reverseSearchStatusSub?.cancel();
     _overlayEntry?.remove();
     _overlayEntry = null;
     _animController.dispose();
@@ -119,17 +159,41 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
         repo.getReservationsEnAttenteProprietaire(page: 1, perPage: 20);
     final paymentFuture =
         repo.getReservationsEnAttentePaiement(page: 1, perPage: 20);
+    final reverseSearchFuture =
+        getIt<ReverseSearchRepository>().getActiveSearch();
 
     final owner = await ownerFuture;
     final payment = await paymentFuture;
+    final reverseSearch = await reverseSearchFuture;
     if (!mounted) return;
 
     setState(() {
       _pendingOwnerReservations = owner.data;
       _pendingPaymentReservations = payment.data;
+      _activeReverseSearch = reverseSearch;
       _isLoading = false;
     });
     _overlayEntry?.markNeedsBuild();
+
+    if (reverseSearch != null) {
+      _ensureReverseSearchRealtime();
+    }
+  }
+
+  /// Ouvre (si besoin) le socket de recherche inversée et s'abonne une seule
+  /// fois à ses changements de statut, pour que "Recherche en cours" /
+  /// "Sélection en attente de paiement" se mettent à jour dès que le serveur
+  /// pousse l'event — sans attendre que l'utilisateur rouvre le menu ou que
+  /// la page carte soit visitée dans la session.
+  void _ensureReverseSearchRealtime() {
+    final socketService = getIt<ReverseSearchSocketService>();
+    if (!socketService.isConnected) {
+      socketService.connect(_sessionManager.currentUser?.accessToken);
+    }
+    _reverseSearchStatusSub ??= socketService.onStatus.listen((status) {
+      if (!mounted) return;
+      unawaited(_refreshPendingReservations());
+    });
   }
 
   Future<void> _closeMenu() async {
@@ -163,6 +227,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
         ownerName: reservation.residence.nom,
         reservationId: reservation.id,
         montantTotal: reservation.montantTotalReservation,
+        initialState: ReservationBannerState.waitingOwner,
       ),
     );
   }
@@ -176,6 +241,32 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
         collection: ProductType.reservations.name,
         amount: reservation.montantTotalReservation.toInt(),
       ),
+    );
+  }
+
+  void _openReverseSearch(ReverseSearchItem item) {
+    unawaited(_closeMenu());
+    ReverseSearchNavigation.resume(context, item);
+  }
+
+  void _cancelReverseSearch(ReverseSearchItem item) {
+    AppDialog.show(
+      title: 'Annuler la recherche',
+      description: 'Voulez-vous vraiment annuler cette recherche ?',
+      primaryButtonText: 'Oui, annuler',
+      secondButtonText: 'Non',
+      onPrimary: () async {
+        try {
+          await getIt<ReverseSearchRepository>().cancelSearch(item.id);
+          ToastUtils.showSuccess(description: 'Recherche annulée');
+          if (mounted) {
+            setState(() => _activeReverseSearch = null);
+            _overlayEntry?.markNeedsBuild();
+          }
+        } catch (e) {
+          ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+        }
+      },
     );
   }
 
@@ -241,9 +332,12 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                         isLoading: _isLoading,
                         pendingOwnerReservations: _pendingOwnerReservations,
                         pendingPaymentReservations: _pendingPaymentReservations,
+                        activeReverseSearch: _activeReverseSearch,
                         onTapOwnerReservation: _openOwnerReservation,
                         onTapPayment: _openPayment,
                         onCancel: _cancelReservation,
+                        onTapReverseSearch: _openReverseSearch,
+                        onCancelReverseSearch: _cancelReverseSearch,
                       ),
                     ),
                   ),
@@ -296,7 +390,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                   top: -6,
                   right: -6,
                   child: _PendingPaymentBadge(
-                    count: _pendingPaymentReservations.length,
+                    count: _totalPendingPaymentCount,
+                    reverseSearchExpireAt: _soloReverseSearchExpireAt,
                   ),
                 )
               else if (!_isOpen && _pendingCount > 0)
@@ -345,9 +440,13 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
 /// reste affiché en permanence sur l'accueil, et une animation qui ne s'arrête
 /// jamais y deviendrait vite un bruit de fond — coûteux et vite ignoré.
 class _PendingPaymentBadge extends StatefulWidget {
-  const _PendingPaymentBadge({required this.count});
+  const _PendingPaymentBadge({required this.count, this.reverseSearchExpireAt});
 
   final int count;
+
+  /// Non-nul uniquement quand l'unique élément "à payer" est une recherche
+  /// inversée verrouillée : le badge affiche alors son compte à rebours.
+  final DateTime? reverseSearchExpireAt;
 
   static const Color _amber = Color(0xFFF79009);
 
@@ -371,8 +470,8 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
 
   /// Rappel : détente puis léger contrecoup, sans repartir de zéro.
-  late final Animation<double> _pulse = TweenSequence<double>(<
-      TweenSequenceItem<double>>[
+  late final Animation<double> _pulse =
+      TweenSequence<double>(<TweenSequenceItem<double>>[
     TweenSequenceItem(
       tween: Tween(begin: 1.0, end: 1.18)
           .chain(CurveTween(curve: Curves.easeOutCubic)),
@@ -434,10 +533,32 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
     super.dispose();
   }
 
+  static const TextStyle _labelStyle = TextStyle(
+    color: Colors.white,
+    fontSize: 9,
+    height: 1.1,
+    fontWeight: FontWeight.w700,
+  );
+
+  /// Compte à rebours quand l'unique élément "à payer" est une recherche
+  /// inversée verrouillée, sinon le décompte habituel.
+  Widget _buildLabel() {
+    final expireAt = widget.reverseSearchExpireAt;
+    if (expireAt != null) {
+      return SelectionCountdown(
+        expireAt: expireAt,
+        builder: (context, remaining, expired) => Text(
+          expired ? 'À payer' : 'À payer (${formatCountdown(remaining)})',
+          style: _labelStyle,
+        ),
+      );
+    }
+    final label = widget.count > 1 ? '${widget.count} à payer' : 'À payer';
+    return Text(label, style: _labelStyle);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final label = widget.count > 1 ? '${widget.count} à payer' : 'À payer';
-
     return Semantics(
       label: widget.count > 1
           ? '${widget.count} réservations à payer'
@@ -462,15 +583,7 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
               ),
             ],
           ),
-          child: Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 9,
-              height: 1.1,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          child: _buildLabel(),
         ),
       ),
     );
@@ -598,20 +711,28 @@ class _TransactionsMenuPanel extends StatelessWidget {
     required this.isLoading,
     required this.pendingOwnerReservations,
     required this.pendingPaymentReservations,
+    required this.activeReverseSearch,
     required this.onTapOwnerReservation,
     required this.onTapPayment,
     required this.onCancel,
+    required this.onTapReverseSearch,
+    required this.onCancelReverseSearch,
   });
 
   final bool isLoading;
   final List<ReservationModel> pendingOwnerReservations;
   final List<ReservationModel> pendingPaymentReservations;
+  final ReverseSearchItem? activeReverseSearch;
   final void Function(ReservationModel) onTapOwnerReservation;
   final void Function(ReservationModel) onTapPayment;
   final void Function(ReservationModel) onCancel;
+  final void Function(ReverseSearchItem) onTapReverseSearch;
+  final void Function(ReverseSearchItem) onCancelReverseSearch;
 
   bool get _hasNothing =>
-      pendingOwnerReservations.isEmpty && pendingPaymentReservations.isEmpty;
+      pendingOwnerReservations.isEmpty &&
+      pendingPaymentReservations.isEmpty &&
+      activeReverseSearch == null;
 
   @override
   Widget build(BuildContext context) {
@@ -683,6 +804,38 @@ class _TransactionsMenuPanel extends StatelessWidget {
                             reservation.montantTotalReservation),
                         onTap: () => onTapPayment(reservation),
                         onCancel: () => onCancel(reservation),
+                      ),
+                    if (activeReverseSearch != null)
+                      _TransactionCard(
+                        key: ValueKey(
+                            'reverse_search_${activeReverseSearch!.id}'),
+                        icon: activeReverseSearch!
+                                .statusEnum.isSelectionEnAttentePaiement
+                            ? Iconsax.wallet_2
+                            : Iconsax.search_normal_1,
+                        iconColor: activeReverseSearch!
+                                .statusEnum.isSelectionEnAttentePaiement
+                            ? const Color(0xFFB54708)
+                            : const Color(0xFF2744DE),
+                        iconBg: activeReverseSearch!
+                                .statusEnum.isSelectionEnAttentePaiement
+                            ? const Color(0xFFFFFAEB)
+                            : const Color(0xFFF8F6FF),
+                        title: activeReverseSearch!
+                                .statusEnum.isSelectionEnAttentePaiement
+                            ? 'Sélection en attente de paiement'
+                            : 'Recherche en cours',
+                        subtitle: activeReverseSearch!
+                                .statusEnum.isSelectionEnAttentePaiement
+                            ? Utils.formatCurrency(
+                                (activeReverseSearch!.montantSelectionne ?? 0)
+                                    .toInt())
+                            : (activeReverseSearch!.zones.isNotEmpty
+                                ? activeReverseSearch!.zones.first.adresse
+                                : 'Recherche de résidence en cours'),
+                        onTap: () => onTapReverseSearch(activeReverseSearch!),
+                        onCancel: () =>
+                            onCancelReverseSearch(activeReverseSearch!),
                       ),
                   ],
                 ),

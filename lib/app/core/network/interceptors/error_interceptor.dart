@@ -69,8 +69,8 @@ class ErrorInterceptor extends Interceptor {
       if (response?.data != null && response!.data is Map<String, dynamic>) {
         return ApiErrorResponse.fromJson(response.data);
       }
-    } catch (e) {
-      log('Erreur lors du parsing de la réponse d\'erreur: $e',
+    } catch (e, s) {
+      log('Erreur lors du parsing de la réponse d\'erreur: $e $s',
           name: 'ERROR_INTERCEPTOR');
     }
     return null;

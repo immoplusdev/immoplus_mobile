@@ -5,7 +5,7 @@ part 'api_error_response.g.dart';
 
 @JsonSerializable()
 class ApiErrorResponse {
-  final int statusCode;
+  final int? statusCode;
   final String? message;
   final String? error;
   final String? code;
@@ -13,12 +13,12 @@ class ApiErrorResponse {
   final String? path;
 
   const ApiErrorResponse({
-    required this.statusCode,
-    required this.message,
-    required this.error,
-    required this.code,
-    required this.timestamp,
-    required this.path,
+    this.statusCode,
+    this.message,
+    this.error,
+    this.code,
+    this.timestamp,
+    this.path,
   });
 
   factory ApiErrorResponse.fromJson(Map<String, dynamic> json) =>

@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +6,7 @@ import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
@@ -35,9 +30,22 @@ import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
 class ResidencePage extends StatefulWidget {
-  const ResidencePage({super.key, required this.idProduct});
+  const ResidencePage({
+    super.key,
+    required this.idProduct,
+    this.isImmediateBooking = false,
+    this.reverseSearchId,
+    this.reverseSearchPrice,
+    this.reverseSearchNights,
+    this.reverseSearchPrixParNuit,
+  });
 
   final String idProduct;
+  final bool isImmediateBooking;
+  final String? reverseSearchId;
+  final double? reverseSearchPrice;
+  final int? reverseSearchNights;
+  final int? reverseSearchPrixParNuit;
   static String name = 'logment_page';
 
   static String routePath() => '/residence_detail/:idProduct';
@@ -199,6 +207,11 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
             ),
             bottomNavigationBar: LogmentBottomBar(
               residenceModel: data,
+              isImmediateBooking: widget.isImmediateBooking,
+              reverseSearchId: widget.reverseSearchId,
+              reverseSearchPrice: widget.reverseSearchPrice,
+              reverseSearchNights: widget.reverseSearchNights,
+              reverseSearchPrixParNuit: widget.reverseSearchPrixParNuit,
             ),
           );
         }

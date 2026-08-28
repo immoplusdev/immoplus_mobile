@@ -32,6 +32,18 @@ abstract class ResidenceProvider {
     @Query("_order_dir") String? orderDir,
   });
 
+  @GET("/residences/data/search/public")
+  Future<ResidencesCollection> searchResidencesPublic({
+    @Query("zones") String? zones,
+    @Query("priceMin") int? priceMin,
+    @Query("priceMax") int? priceMax,
+    @Query("occupantsMin") int? occupantsMin,
+    @Query("startDate") String? startDate,
+    @Query("endDate") String? endDate,
+    @Query("page") int? page,
+    @Query("perPage") int? perPage,
+  });
+
   @GET("/residences/data/public/proprietaire/{proprietaireId}")
   Future<ResidencesCollection> getResidencesProprietaire({
     @Path() required String proprietaireId,

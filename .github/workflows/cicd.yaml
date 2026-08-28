@@ -3,7 +3,7 @@ name: Deploy iOS to TestFlight
 on:
   push:
     branches:
-      - develop
+      - test/develop
   workflow_dispatch:
     inputs:
       environment:
@@ -115,9 +115,17 @@ jobs:
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.41.4'
           channel: 'stable'
           flutter-version: '3.41.4'
           cache: true
+
+      - name: 🔍 Afficher versions Flutter/Dart
+        run: |
+          flutter --version
+          dart --version
+          echo "--- .fvmrc ---"
+          cat .fvmrc || echo "(pas de .fvmrc)"
 
       - name: 🗄️ Cache Pub packages
         uses: actions/cache@v4
@@ -140,6 +148,12 @@ jobs:
       - name: 📦 Install Dependencies
         run: flutter pub get
 
+      - name: 🔍 Versions résolues des packages de génération
+        run: |
+          grep -A3 -E "^  (analyzer|build_runner|freezed|json_serializable|retrofit_generator|source_gen):" pubspec.lock
+          echo "--- sdks requis (pubspec.lock) ---"
+          grep -A2 "^sdks:" pubspec.lock
+
       - name: 🗄️ Cache build_runner output
         uses: actions/cache@v4
         with:
@@ -149,7 +163,16 @@ jobs:
             build-runner-${{ runner.os }}-
 
       - name: ⚙️ Generate code (freezed / json_serializable)
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: |
+          set -o pipefail
+          dart run build_runner build --delete-conflicting-outputs 2>&1 | tee build_runner.log
+
+      - name: 📤 Uploader le log build_runner (si échec)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-runner-log-ios
+          path: build_runner.log
 
       - name: 🔢 Compute build number (via App Store Connect API)
         env:
@@ -204,7 +227,7 @@ jobs:
             app_id = apps.dig("data", 0, "id")
             raise "App introuvable pour bundleId=#{bundle_id}: #{apps}" unless app_id
 
-            builds = api_get("/v1/builds?filter[app]=#{app_id}&filter[preReleaseVersion.version]=#{version}&sort=-version&limit=1", token)
+            builds = api_get("/v1/builds?filter[app]=#{app_id}&sort=-version&limit=1", token)
             latest = builds.dig("data", 0, "attributes", "version")
 
             new_build = latest ? latest.to_i + 1 : ENV.fetch("FALLBACK_BASE").to_i
@@ -248,6 +271,9 @@ jobs:
           </dict>
           </plist>
           EOF
+
+      - name: 🔁 Mettre à jour les specs CocoaPods (évite le cache CDN périmé)
+        run: pod repo update
 
       - name: 🔨 Build IPA
         run: |

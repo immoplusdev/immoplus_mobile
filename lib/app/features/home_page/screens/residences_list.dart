@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/data/constants/home_location_items.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/data/enums/ad_type.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
@@ -102,7 +103,7 @@ class _ResidencesListState extends State<ResidencesList>
     });
 
     try {
-      final itemsToLoad = _homeItems.where((i) => !i.isHeader).toList();
+      final itemsToLoad = kHomeLocationItems.where((i) => !i.isHeader).toList();
       const int batchSize = 2; // Fetch in light batches of 2 in background
 
       for (int i = 0; i < itemsToLoad.length; i += batchSize) {
@@ -186,7 +187,9 @@ class _ResidencesListState extends State<ResidencesList>
 
     int insertedCount = 0;
     for (final ad in indexedAds) {
-      final target = ad.positionIndex! + 1 + insertedCount; // "after the N-th element" (0-based)
+      final target = ad.positionIndex! +
+          1 +
+          insertedCount; // "after the N-th element" (0-based)
       if (target >= 0 && target <= listItems.length) {
         listItems.insert(target, ad);
         insertedCount++;
@@ -280,7 +283,8 @@ class _ResidencesListState extends State<ResidencesList>
                               child: ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: 3,
-                                separatorBuilder: (context, index) => const Gap(12),
+                                separatorBuilder: (context, index) =>
+                                    const Gap(12),
                                 itemBuilder: (context, index) => SizedBox(
                                   width: neirResidenceCardWidth,
                                   child: LoadProductCard(),
@@ -358,87 +362,6 @@ class HomeListItem {
     this.isHeader = false,
   });
 }
-
-final List<HomeListItem> _homeItems = [
-  // --- Section 1 : Villes populaires ---
-  const HomeListItem(title: "VILLES POPULAIRES", isHeader: true),
-  const HomeListItem(
-      title: "Abidjan", villeId: "8b97b9ce-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Aboisso", villeId: "8b981afc-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Anyama", villeId: "8b9806f9-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Grand-Bassam", villeId: "8b981ba8-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Yamoussoukro", villeId: "8b97d0b3-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "San-Pédro", villeId: "8b97ea35-a507-11ef-8b44-0e595bc2ce41"),
-
-  // --- Section 2 : Communes d'Abidjan ---
-  const HomeListItem(
-      title: "Abobo", communeId: "8bb4b211-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Adjamé", communeId: "55a42f68-2867-11f1-a056-661ac3bf2f34"),
-  const HomeListItem(
-      title: "Attécoubé", communeId: "8bb4d4d0-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Cocody", communeId: "8bb446ea-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Koumassi", communeId: "8bb4b588-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Marcory", communeId: "8bb498f3-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Plateau (Le Plateau)",
-      communeId: "8bb48973-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Port-Bouët", communeId: "8bb4c15a-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Treichville", communeId: "8bb4a496-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Yopougon", communeId: "8bb47716-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Anyama (Commune)",
-      communeId: "567aa860-2867-11f1-a056-661ac3bf2f34"),
-  const HomeListItem(
-      title: "Bingerville", communeId: "8bb68343-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Bonoua", communeId: "8bb80dca-a507-11ef-8b44-0e595bc2ce41"),
-
-  // --- Section 3 : Villes extérieures ---
-  const HomeListItem(
-      title: "Abengourou", villeId: "8b980686-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Adzopé", villeId: "8b981bef-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Agboville", villeId: "8b981b46-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Bondoukou", villeId: "8b980e6a-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Bouaké", villeId: "8b97dccc-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Daloa", villeId: "8b97e49c-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Divo", villeId: "8b97f856-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Ferkessédougou", villeId: "8b980eb7-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Gagnoa", villeId: "8b97f23e-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Issia", villeId: "8b981c4e-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Korhogo", villeId: "8b97ea95-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Man", villeId: "8b97f0aa-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Odienné", villeId: "8b9814b6-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Séguéla", villeId: "8b981507-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Soubré", villeId: "8b980dd8-a507-11ef-8b44-0e595bc2ce41"),
-  const HomeListItem(
-      title: "Toumodi", villeId: "8b981aa6-a507-11ef-8b44-0e595bc2ce41"),
-];
 
 /// Placements dédiés (ex: RESIDENCE_LIST_YOPOUGON) pour les villes/communes
 /// les plus populaires. Les autres localisations retombent sur le tag
@@ -527,7 +450,8 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color: residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
+                color:
+                    residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

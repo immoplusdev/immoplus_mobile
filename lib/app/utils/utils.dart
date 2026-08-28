@@ -52,8 +52,6 @@ class Utils {
     }
   }
 
-
-
   static String getCurrentLocation() =>
       AppRouter.router.routerDelegate.currentConfiguration.uri.toString();
 
@@ -129,9 +127,9 @@ class Utils {
   }
 
   static String getServiceName(String type) {
-    if (type == ServicesCollection.reservations.name) {
+    if (type == ProductType.reservations.name) {
       return 'Réservation';
-    } else if (type == ServicesCollection.demandes_visites.name) {
+    } else if (type == ProductType.demandes_visites.name) {
       return 'Demande de visite';
     }
     return 'Réservation';
@@ -422,7 +420,7 @@ class Utils {
   //   );
   // }
 
-  static IconData getNotificationIcon(String collection) {
+  static FaIconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {
       return FontAwesomeIcons.coins;
     }
@@ -534,31 +532,32 @@ class Utils {
       return const TimeOfDay(hour: 12, minute: 0);
     }
   }
-    static String cleanMarkdown(String markdownText) {
-  String text = markdownText;
 
-  text = text.replaceAll(RegExp(r'#{1,6}\s*'), '');
-  text = text.replaceAll(RegExp(r'\*\*(.*?)\*\*'), r'$1');
-  text = text.replaceAll(RegExp(r'__(.*?)__'), r'$1');
-  text = text.replaceAll(RegExp(r'\*(.*?)\*'), r'$1');
-  text = text.replaceAll(RegExp(r'_(.*?)_'), r'$1');
-  text = text.replaceAll(RegExp(r'^\s*[-*]\s+', multiLine: true), '');
-  text = text.replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '');
-  text = text.replaceAll(RegExp(r'\[([^\]]+)\]\([^\)]+\)'), r'$1');
-  text = text.replaceAll(RegExp(r'\n{2,}'), ' ');
-  text = text.replaceAll('\n', ' ');
-  text = text.replaceAll(RegExp(r' {2,}'), ' ').trim();
+  static String cleanMarkdown(String markdownText) {
+    String text = markdownText;
 
-  if (text.isNotEmpty) {
-    text = text[0].toUpperCase() + text.substring(1);
+    text = text.replaceAll(RegExp(r'#{1,6}\s*'), '');
+    text = text.replaceAll(RegExp(r'\*\*(.*?)\*\*'), r'$1');
+    text = text.replaceAll(RegExp(r'__(.*?)__'), r'$1');
+    text = text.replaceAll(RegExp(r'\*(.*?)\*'), r'$1');
+    text = text.replaceAll(RegExp(r'_(.*?)_'), r'$1');
+    text = text.replaceAll(RegExp(r'^\s*[-*]\s+', multiLine: true), '');
+    text = text.replaceAll(RegExp(r'^\s*\d+\.\s+', multiLine: true), '');
+    text = text.replaceAll(RegExp(r'\[([^\]]+)\]\([^\)]+\)'), r'$1');
+    text = text.replaceAll(RegExp(r'\n{2,}'), ' ');
+    text = text.replaceAll('\n', ' ');
+    text = text.replaceAll(RegExp(r' {2,}'), ' ').trim();
+
+    if (text.isNotEmpty) {
+      text = text[0].toUpperCase() + text.substring(1);
+    }
+
+    if (text.isNotEmpty && !'.!?'.contains(text[text.length - 1])) {
+      text = '$text.';
+    }
+
+    return text;
   }
-
-  if (text.isNotEmpty && !'.!?'.contains(text[text.length - 1])) {
-    text = '$text.';
-  }
-
-  return text;
-}
 
   static Color? parseColor(String? colorStr) {
     if (colorStr == null || colorStr.isEmpty) return null;

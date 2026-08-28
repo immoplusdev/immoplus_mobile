@@ -26,9 +26,63 @@ import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 
 class AdActionHandler {
+  /// Vérifie si la campagne définit des entités par carte (`scope.entityIds`).
+  static bool hasPerCardEntity(AdCampaignModel campaign) {
+    final action = AdAction.fromString(campaign.action);
+    return (action == AdAction.openResidence ||
+            action == AdAction.openProperty ||
+            action == AdAction.openHotel ||
+            action == AdAction.openLocation) &&
+        (campaign.scope?.entityIds.isNotEmpty ?? false);
+  }
+
+  /// Gère l'action pour une carte individuelle (ex: index dans scope.entityIds).
+  /// Si la carte n'a pas d'entité spécifique, retombe sur `handleAdAction`.
+  static void handleCardAction(
+    BuildContext context,
+    AdCampaignModel campaign, {
+    required int cardIndex,
+    bool isLongPress = false,
+  }) {
+    final debugLog =
+        "handleCardAction campaign======> ${campaign.toJson().toString()}";
+    log(debugLog);
+    if (isLongPress) {
+      Utils.copyToClipboard(debugLog);
+      return;
+    }
+
+    if (hasPerCardEntity(campaign)) {
+      final entityIds = campaign.scope?.entityIds ?? const [];
+      if (cardIndex < entityIds.length) {
+        final entityId = entityIds[cardIndex];
+        final action = AdAction.fromString(campaign.action);
+        context.read<AdsCubit>().trackClick(campaign.id, campaign.placement);
+
+        switch (action) {
+          case AdAction.openProperty:
+          case AdAction.openLocation:
+            AppRouter.router.pushIfDifferent(EstatePage.route(entityId));
+            return;
+          case AdAction.openResidence:
+            AppRouter.router.pushIfDifferent(ResidencePage.route(entityId));
+            return;
+          case AdAction.openHotel:
+            AppRouter.router.pushIfDifferent(HotelDetailPage.route(entityId));
+            return;
+          default:
+            break;
+        }
+      }
+    }
+
+    handleAdAction(context, campaign);
+  }
+
   static void handleAdAction(BuildContext context, AdCampaignModel campaign,
       {bool isLongPress = false}) {
-    final debugLog = "campaign======> ${campaign.toJson().toString()}";
+    final debugLog =
+        "handleAdAction campaign======> ${campaign.toJson().toString()}";
     log(debugLog);
     if (isLongPress) {
       Utils.copyToClipboard(debugLog);
@@ -120,14 +174,15 @@ class AdActionHandler {
           });
         }
         break;
-
       case AdAction.openExternal:
         final appUrl = scope?.filters['app_url']?.toString() ?? campaign.url;
         if (appUrl != null && appUrl.isNotEmpty) {
-          launchUrl(Uri.parse(appUrl), mode: LaunchMode.externalApplication);
+          final uri = Uri.tryParse(appUrl);
+          if (uri != null) {
+            launchUrl(uri, mode: LaunchMode.externalApplication);
+          }
         }
         break;
-
       case AdAction.openInternalPage:
         final pageSlug = scope?.filters['page_slug']?.toString();
         if (pageSlug != null && pageSlug.isNotEmpty) {
@@ -140,8 +195,8 @@ class AdActionHandler {
         // sinon scope.entity_ids[0] pour plusieurs (pub carrousel vidéo),
         // via /vivre.
         final entityIds = scope?.entityIds ?? const [];
-        final targetEntityId = scope?.entityId ??
-            (entityIds.isNotEmpty ? entityIds.first : null);
+        final targetEntityId =
+            scope?.entityId ?? (entityIds.isNotEmpty ? entityIds.first : null);
         if (url != null && url.isNotEmpty && targetEntityId != null) {
           AppRouter.router.pushIfDifferent('$url/$targetEntityId');
         }

@@ -9,12 +9,15 @@ enum MtnPaymentStep {
 class MtnPaymentController extends ChangeNotifier {
   MtnPaymentStep _currentStep = MtnPaymentStep.phoneNumber;
   PaymentItentData? _paymentIntentData;
+  String? _phoneNumber;
 
   MtnPaymentStep get currentStep => _currentStep;
   PaymentItentData? get paymentIntentData => _paymentIntentData;
+  String? get phoneNumber => _phoneNumber;
 
-  void goToValidator(PaymentItentData data) {
+  void goToValidator(PaymentItentData data, [String? number]) {
     _paymentIntentData = data;
+    _phoneNumber = number;
     _currentStep = MtnPaymentStep.validator;
     notifyListeners();
   }
@@ -28,6 +31,7 @@ class MtnPaymentController extends ChangeNotifier {
   void reset() {
     _currentStep = MtnPaymentStep.phoneNumber;
     _paymentIntentData = null;
+    _phoneNumber = null;
     notifyListeners();
   }
 

@@ -9,12 +9,15 @@ enum OrangePaymentStep {
 class OrangePaymentController extends ChangeNotifier {
   OrangePaymentStep _currentStep = OrangePaymentStep.phoneNumber;
   PaymentItentData? _paymentIntentData;
+  String? _phoneNumber;
 
   OrangePaymentStep get currentStep => _currentStep;
   PaymentItentData? get paymentIntentData => _paymentIntentData;
+  String? get phoneNumber => _phoneNumber;
 
-  void goToOtpValidator(PaymentItentData data) {
+  void goToOtpValidator(PaymentItentData data, [String? number]) {
     _paymentIntentData = data;
+    _phoneNumber = number;
     _currentStep = OrangePaymentStep.otpValidator;
     notifyListeners();
   }
@@ -28,6 +31,7 @@ class OrangePaymentController extends ChangeNotifier {
   void reset() {
     _currentStep = OrangePaymentStep.phoneNumber;
     _paymentIntentData = null;
+    _phoneNumber = null;
     notifyListeners();
   }
 

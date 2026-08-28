@@ -79,9 +79,17 @@ jobs:
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.41.4'
           channel: 'stable'
           flutter-version: '3.41.4'
           cache: true
+
+      - name: 🔍 Afficher versions Flutter/Dart
+        run: |
+          flutter --version
+          dart --version
+          echo "--- .fvmrc ---"
+          cat .fvmrc || echo "(pas de .fvmrc)"
 
       - name: 🗄️ Cache Pub packages
         uses: actions/cache@v4
@@ -104,8 +112,23 @@ jobs:
       - name: 📦 Install Dependencies
         run: flutter pub get
 
+      - name: 🔍 Versions résolues des packages de génération
+        run: |
+          grep -A3 -E "^  (analyzer|build_runner|freezed|json_serializable|retrofit_generator|source_gen):" pubspec.lock
+          echo "--- sdks requis (pubspec.lock) ---"
+          grep -A2 "^sdks:" pubspec.lock
+
       - name: ⚙️ Generate code (freezed / json_serializable)
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: |
+          set -o pipefail
+          dart run build_runner build --delete-conflicting-outputs 2>&1 | tee build_runner.log
+
+      - name: 📤 Uploader le log build_runner (si échec)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-runner-log-android
+          path: build_runner.log
 
       - name: 🔢 Get latest Play Store version code
         id: latest_version

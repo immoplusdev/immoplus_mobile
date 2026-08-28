@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -8,10 +9,14 @@ import 'package:immoplus/app/core/enums/push_notification_type.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
+import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/extensions/go_router_extensions.dart';
 
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
+import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
+import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/firebase_options.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -98,6 +103,30 @@ class NotificationService {
         }
 
         if (type != null) {
+          if (PaiementStatusPage.isActive ||
+              AppRouter.router.currentLocation
+                  .contains(PaiementStatusPage.name)) {
+            log('🔔 Notification $type ignorée : flow de paiement déjà actif',
+                name: 'NOTIFICATION');
+            return;
+          }
+
+          // Nécessite de recharger la recherche complète (zones,
+          // propositions...) avant de naviguer : pas un simple path GoRouter
+          // comme les autres types.
+          const reverseSearchTypes = {
+            PushNotificationType.reverseSearchPropositionDisponible,
+            PushNotificationType.reverseSearchExpiree,
+            PushNotificationType.reverseSearchSelectionExpiree,
+            PushNotificationType.reverseSearchExpirationImminente,
+          };
+          if (reverseSearchTypes.contains(type)) {
+            if (id != null && id.isNotEmpty) {
+              unawaited(_openReverseSearchFromNotification(id));
+            }
+            return;
+          }
+
           final code = data['code']?.toString();
           final referenceId = data['referenceId']?.toString();
           final route = type.getRoute(id, code: code, referenceId: referenceId);
@@ -112,6 +141,28 @@ class NotificationService {
         }
       }
     });
+  }
+
+  /// Ouvre la recherche inversée sur sa carte de résultats depuis une
+  /// notification qui la concerne (proposition disponible, expiration,
+  /// expiration imminente, sélection expirée...) — recharge l'item complet
+  /// (zones, propositions...) car `ReverseSearchNavigation.resume` ne peut
+  /// pas se contenter du seul id.
+  Future<void> _openReverseSearchFromNotification(String searchId) async {
+    try {
+      final item =
+          await getIt<ReverseSearchRepository>().getReverseSearchById(searchId);
+      final context = NavigationService.navigatorKey.currentContext;
+      if (item == null || context == null || !context.mounted) {
+        log('⚠️ Recherche $searchId introuvable ou contexte indisponible',
+            name: 'NOTIFICATION');
+        return;
+      }
+      ReverseSearchNavigation.resume(context, item);
+    } catch (e) {
+      log('⚠️ Erreur ouverture recherche inversée depuis notification: $e',
+          name: 'NOTIFICATION');
+    }
   }
 
   suscribeCurrentUser() async {
