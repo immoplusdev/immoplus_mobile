@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_video_cover_widget.dart';
 
@@ -39,14 +39,12 @@ class AdCarouselVideoWidget extends StatelessWidget {
           AdTap(
             campaign: campaign,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Text(
                 campaign.content.title!,
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.titleSmall.copyWith(
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1A1A2E),
+                  color: AppColors.textCharcoal,
                   letterSpacing: -0.2,
                 ),
               ),
@@ -68,7 +66,7 @@ class AdCarouselVideoWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.10),
+                      color: AppColors.black.withValues(alpha: 0.10),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -99,28 +97,27 @@ class _ErrorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey.shade100,
-      padding: EdgeInsets.all(2),
+      color: AppColors.grey100,
+      padding: const EdgeInsets.all(2),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.videocam_off, size: 36, color: Colors.grey[400]),
+            Icon(Icons.videocam_off, size: 36, color: AppColors.grey400),
             const SizedBox(height: 8),
             Text(
               'Impossible de lire la vidéo',
               textAlign: TextAlign.center,
-              style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey[600]),
+              style: AppTypography.bodySmall.copyWith(color: AppColors.grey600),
             ),
             const SizedBox(height: 6),
             TextButton(
               onPressed: onRetry,
               child: Text(
                 'Réessayer',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
+                style: AppTypography.labelMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF2548E5),
+                  color: AppColors.primary,
                 ),
               ),
             ),

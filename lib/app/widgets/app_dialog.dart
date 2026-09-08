@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -22,9 +22,8 @@ class AppDialog {
           title: icon,
           content: Text(
             content,
-            style: GoogleFonts.inter(
-              //fontWeight: FontWeight.w700,
-              fontSize: 18,
+            style: AppTypography.h4.copyWith(
+              color: AppColors.black,
             ),
           ),
           actions: [
@@ -52,25 +51,28 @@ class AppDialog {
         barrierDismissible: barrierDismissible,
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: Icon(
+          title: const Icon(
             CupertinoIcons.exclamationmark_triangle,
-            color: Colors.red,
+            color: AppColors.red,
           ),
-          content: Text(content),
+          content: Text(
+            content,
+            style: AppTypography.bodyMedium,
+          ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text('Retour'),
+              child: const Text('Retour'),
               onPressed: () {
                 context.pop();
               },
             ),
             CupertinoDialogAction(
-              child: Text('Confirmer'),
               isDestructiveAction: isDestructiveAction,
               onPressed: rollback ??
                   () {
                     context.pop();
                   },
+              child: const Text('Confirmer'),
             ),
           ],
         ),
@@ -92,10 +94,10 @@ class AppDialog {
     return showDialog<void>(
       context: NavigationService.navigatorKey.currentContext!,
       barrierDismissible: barrierDismissible,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
+      barrierColor: AppColors.black.withValues(alpha: 0.5),
       builder: (BuildContext ctx) {
         return Dialog(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -108,26 +110,21 @@ class AppDialog {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 18,
+                  style: AppTypography.h4.copyWith(
                     fontWeight: FontWeight.w700,
                     color: AppColors.primary,
-                    height: 1.3,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   description,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF64748B),
-                    height: 1.5,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 24),
-                     CustomButtom(
+                CustomButtom(
                   text: primaryButtonText,
                   borderRadius: BorderRadius.circular(28),
                   onClick: () {
@@ -135,7 +132,7 @@ class AppDialog {
                     onPrimary?.call();
                   },
                 ),
-                 const SizedBox(height: 10),
+                const SizedBox(height: 10),
                 if (secondButtonText != null) ...[
                   SizedBox(
                     height: 50,
@@ -152,17 +149,13 @@ class AppDialog {
                       ),
                       child: Text(
                         secondButtonText,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.button.copyWith(
                           color: AppColors.primary,
                         ),
                       ),
                     ),
                   ),
-                 
                 ],
-           
               ],
             ),
           ),

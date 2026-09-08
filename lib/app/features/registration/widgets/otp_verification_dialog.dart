@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
@@ -172,22 +172,17 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
         Text(
           'Envoyer le code par',
           textAlign: TextAlign.center,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 18,
+          style: AppTypography.h4.copyWith(
             fontWeight: FontWeight.w700,
             color: AppColors.primary,
-            height: 1.3,
           ),
         ),
         const Gap(12),
         Text(
           'Choisissez comment vous souhaitez recevoir votre code de vérification.',
           textAlign: TextAlign.center,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
+          style: AppTypography.bodyMedium.copyWith(
             color: const Color(0xFF64748B),
-            height: 1.5,
           ),
         ),
         const Gap(24),
@@ -210,9 +205,7 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
             ),
             child: Text(
               'SMS',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+              style: AppTypography.button.copyWith(
                 color: AppColors.primary,
               ),
             ),

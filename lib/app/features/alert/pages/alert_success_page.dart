@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 class AlertSuccessPage extends StatelessWidget {
@@ -24,21 +24,16 @@ class AlertSuccessPage extends StatelessWidget {
               Text(
                 'Votre demande a été envoyée avec succès',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.h2.copyWith(
                   color: Colors.black,
-                  height: 1.2,
                 ),
               ),
               const Gap(16),
               Text(
                 'Nous vous proposerons des biens correspondant à vos critères dans les plus brefs délais.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
-                  fontSize: 14,
+                style: AppTypography.bodyMedium.copyWith(
                   color: Colors.grey.shade500,
-                  height: 1.5,
                 ),
               ),
               const Spacer(),

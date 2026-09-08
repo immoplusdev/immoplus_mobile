@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class SocialNetworkButton extends StatelessWidget {
   const SocialNetworkButton({
@@ -22,9 +23,9 @@ class SocialNetworkButton extends StatelessWidget {
         //tileColor: Colors.red,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: Colors.grey)),
+            side: const BorderSide(color: AppColors.grey)),
         leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           child: icon,
         ),
         title: Text(title),

@@ -72,10 +72,10 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
         Container(
           width: 300,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: const Color(0xFFE8E6F8),
+              color: AppColors.borderSoftBlue,
               width: 0.5,
             ),
           ),
@@ -101,12 +101,12 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         fadeOutDuration: Duration.zero,
                         fit: BoxFit.cover,
                         placeholder: (_, __) =>
-                            Container(color: Colors.grey.shade100),
+                            Container(color: AppColors.grey100),
                         memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
-                          color: Colors.grey.shade100,
+                          color: AppColors.grey100,
                           child: FaIcon(FontAwesomeIcons.images,
-                              size: 32, color: Colors.grey.shade300),
+                              size: 32, color: AppColors.grey300),
                         ),
                       ),
                     ),
@@ -119,13 +119,13 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.45),
+                            color: AppColors.black.withValues(alpha: 0.45),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             '${residence.images.length} photos',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontSize: 9,
                               fontWeight: FontWeight.w500,
                             ),
@@ -152,7 +152,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                             width: 28,
                             height: 28,
                             decoration: const BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.white,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -161,7 +161,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                                   : FontAwesomeIcons.heart.data,
                               size: 12,
                               color:
-                                  liked ? Colors.redAccent : AppColors.primary,
+                                  liked ? AppColors.redAccent : AppColors.primary,
                             ),
                           ),
                         ),
@@ -192,7 +192,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF1A1A1A),
+                                  color: AppColors.textPrimaryDark,
                                 ),
                               ),
                               const SizedBox(height: 3),
@@ -210,7 +210,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontSize: 11,
-                                        color: Color(0xFF888888),
+                                        color: AppColors.textSecondary,
                                       ),
                                     ),
                                   ),
@@ -236,7 +236,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                               '/ nuit',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Color(0xFF888888),
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -249,7 +249,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                       child: Divider(
                           height: 0.5,
                           thickness: 0.5,
-                          color: Color(0xFFF0EFF8)),
+                          color: AppColors.borderLightGray),
                     ),
 
                     // BLOCK C — Commodités
@@ -264,7 +264,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         Container(
                             width: 0.5,
                             height: 22,
-                            color: const Color(0xFFE8E6F8)),
+                            color: AppColors.borderSoftBlue),
                         _AmenityItem(
                           icon: Icons.bathtub_outlined,
                           count: sdb > 0 ? sdb : 1,
@@ -273,7 +273,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                         Container(
                             width: 0.5,
                             height: 22,
-                            color: const Color(0xFFE8E6F8)),
+                            color: AppColors.borderSoftBlue),
                         _AmenityItem(
                           icon: Icons.soup_kitchen_outlined,
                           count: cuisines > 0 ? cuisines : 1,
@@ -287,7 +287,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                       child: Divider(
                           height: 0.5,
                           thickness: 0.5,
-                          color: Color(0xFFF0EFF8)),
+                          color: AppColors.borderLightGray),
                     ),
 
                     // BLOCK D — Boutons CTA
@@ -307,7 +307,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                               child: const Text(
                                 'Voir détails',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -369,7 +369,7 @@ class _AmenityItem extends StatelessWidget {
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF1A1A1A),
+            color: AppColors.textPrimaryDark,
           ),
         ),
         const SizedBox(width: 3),
@@ -377,7 +377,7 @@ class _AmenityItem extends StatelessWidget {
           label,
           style: const TextStyle(
             fontSize: 10,
-            color: Color(0xFF444444),
+            color: AppColors.textDarkGray,
           ),
         ),
       ],
@@ -399,10 +399,10 @@ class _ActionIconButton extends StatelessWidget {
         width: 42,
         height: 42,
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F6FF),
+          color: AppColors.softBlueBg,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: const Color(0xFFE8E6F8),
+            color: AppColors.borderSoftBlue,
             width: 1,
           ),
         ),
@@ -415,9 +415,9 @@ class _ActionIconButton extends StatelessWidget {
 class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.white;
+    final paint = Paint()..color = AppColors.white;
     final borderPaint = Paint()
-      ..color = const Color(0xFFE8E6F8)
+      ..color = AppColors.borderSoftBlue
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 typedef OnToggle = void Function(int index);
 
@@ -15,13 +16,13 @@ class CustomChipList extends StatefulWidget {
     Key? key,
     required this.listOfChipNames,
     required this.listOfChipIndicesCurrentlySeclected,
-    this.activeTextColorList = const [Colors.white],
-    this.inactiveTextColorList = const [Colors.blue],
-    this.activeBgColorList = const [Colors.blue],
-    this.inactiveBgColorList = const [Colors.white],
+    this.activeTextColorList = const [AppColors.white],
+    this.inactiveTextColorList = const [AppColors.blue],
+    this.activeBgColorList = const [AppColors.blue],
+    this.inactiveBgColorList = const [AppColors.white],
     this.style,
-    this.inactiveBorderColorList = const [Colors.white],
-    this.activeBorderColorList = const [Colors.white],
+    this.inactiveBorderColorList = const [AppColors.white],
+    this.activeBorderColorList = const [AppColors.white],
     this.borderRadiiList = const [15],
     this.supportsMultiSelect = false,
     this.extraOnToggle,

@@ -160,7 +160,7 @@ class BookingHistoryCard extends StatelessWidget {
                             label: 'ARRIVÉE',
                             date: fmt.format(checkin),
                             icon: Iconsax.login,
-                            color: const Color(0xFF1CA53F),
+                            color: AppColors.green1CA53F,
                           ),
                         ),
                         Container(
@@ -226,11 +226,11 @@ class BookingHistoryCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFF9800), // Orange/Gold for rating
+                      color: AppColors.orangeRating, // Orange/Gold for rating
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFF9800).withValues(alpha: 0.3),
+                          color: AppColors.orangeRating.withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),

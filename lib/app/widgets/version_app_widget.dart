@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/services/app_version_service.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/bottom_immoplus.dart';
 
 class VersionAppWidget extends StatelessWidget {
@@ -19,7 +20,7 @@ class VersionAppWidget extends StatelessWidget {
                   '${snapshot.data}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: AppColors.grey,
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

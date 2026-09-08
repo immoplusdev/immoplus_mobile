@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
@@ -65,8 +65,7 @@ class NotificationTile extends StatelessWidget {
                         Expanded(
                           child: Text(
                             notification.subject ?? "Notification",
-                            style: GoogleFonts.dmSans(
-                              fontSize: 15,
+                            style: AppTypography.button.copyWith(
                               fontWeight:
                                   isRead ? FontWeight.w500 : FontWeight.bold,
                               color: isRead
@@ -80,9 +79,7 @@ class NotificationTile extends StatelessWidget {
                         const Gap(8),
                         Text(
                           _formatDate(notification.createdAt ?? DateTime.now()),
-                          style: GoogleFonts.dmSans(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
+                          style: AppTypography.captionMedium.copyWith(
                             color: Colors.grey.shade500,
                           ),
                         ),
@@ -91,10 +88,8 @@ class NotificationTile extends StatelessWidget {
                     const Gap(6),
                     Text(
                       notification.message ?? "",
-                      style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                      style: AppTypography.bodyMedium.copyWith(
                         color: const Color(0xFF6B7280),
-                        height: 1.5,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

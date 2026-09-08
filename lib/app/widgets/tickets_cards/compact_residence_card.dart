@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -11,6 +11,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/rating_component.dart';
@@ -116,20 +117,20 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.grey300,
+        highlightColor: AppColors.grey100,
         period: const Duration(milliseconds: 500),
         child: Container(
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
       errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
+        color: AppColors.grey200,
         child: Center(
           child: Icon(
             FontAwesomeIcons.images.data,
             size: 60,
-            color: Colors.grey.shade400,
+            color: AppColors.grey400,
           ),
         ),
       ),
@@ -144,9 +145,9 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.transparent,
-            Colors.black.withOpacity(0.3),
-            Colors.black.withOpacity(0.7),
+            AppColors.transparent,
+            AppColors.black.withOpacity(0.3),
+            AppColors.black.withOpacity(0.7),
           ],
           stops: const [0.3, 0.6, 1.0],
         ),
@@ -165,10 +166,9 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         if (widget.showName)
           Text(
             widget.residence.nom.capitalizeFirst(),
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.button.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: Colors.black87,
+              color: AppColors.black87,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -179,9 +179,8 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           const Gap(3),
           Text(
             "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
-            style: GoogleFonts.plusJakartaSans(
-              color: Colors.grey.shade600,
-              fontSize: 13,
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.grey600,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -194,9 +193,8 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         if (widget.residence.hasReduction)
           Text(
             '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
-            style: GoogleFonts.plusJakartaSans(
-              color: Colors.grey.shade500,
-              fontSize: 12,
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.grey500,
               decoration: TextDecoration.lineThrough,
             ),
           ),
@@ -206,20 +204,17 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
               TextSpan(
                 text:
                     '${CurrencyFormatter().format((widget.residence.hasReduction ? widget.residence.prixReduit : widget.residence.prixReservation).toString())} Fcfa',
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.button.copyWith(
                   fontWeight: FontWeight.w900,
-                  fontSize: 15,
                   color: widget.residence.hasReduction
-                      ? Colors.redAccent
-                      : Colors.black,
+                      ? AppColors.redAccent
+                      : AppColors.black,
                 ),
               ),
               TextSpan(
                 text: '/nuit',
-                style: GoogleFonts.plusJakartaSans(
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w200,
-                  fontSize: 12,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.grey600,
                 ),
               ),
             ],

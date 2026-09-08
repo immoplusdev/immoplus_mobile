@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/repositories/notification_repository.dart';
@@ -143,9 +143,8 @@ class _NotificationsPageState extends State<NotificationsPage>
                     },
                     child: Text(
                       'Tout lire',
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.button.copyWith(
                         color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -208,8 +207,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                             const Gap(24),
                             Text(
                               'Aucune notification',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 18,
+                              style: AppTypography.h4.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF4B5563),
                               ),
@@ -218,8 +216,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Text(
                               'Vous n\'avez pas encore reçu de notifications.',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
+                              style: AppTypography.bodyMedium.copyWith(
                                 color: Colors.grey.shade500,
                               ),
                             ),
@@ -238,8 +235,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                             const Gap(16),
                             Text(
                               'Oups! Une erreur est survenue',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 16,
+                              style: AppTypography.titleSmall.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -247,7 +243,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Text(
                               _pagingController.error?.toString() ?? '',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.dmSans(color: Colors.grey),
+                              style: AppTypography.bodyMedium.copyWith(color: Colors.grey),
                             ),
                             const Gap(24),
                             ElevatedButton(
@@ -261,8 +257,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                               ),
                               child: Text(
                                 'Réessayer',
-                                style: GoogleFonts.dmSans(
-                                    fontWeight: FontWeight.w600),
+                                style: AppTypography.button,
                               ),
                             ),
                           ],

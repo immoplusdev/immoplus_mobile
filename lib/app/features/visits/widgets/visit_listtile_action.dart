@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 
 class VisitListTileAction extends StatelessWidget {
   const VisitListTileAction({
@@ -79,9 +79,8 @@ class VisitListTileAction extends StatelessWidget {
                       Flexible(
                         child: Text(
                           title,
-                          style: GoogleFonts.inter(
+                          style: AppTypography.titleSmall.copyWith(
                             fontWeight: FontWeight.w700,
-                            fontSize: 16,
                             color: primaryColor,
                           ),
                           maxLines: 1,
@@ -101,9 +100,8 @@ class VisitListTileAction extends StatelessWidget {
                           ),
                           child: Text(
                             '$price Fcfa',
-                            style: GoogleFonts.inter(
+                            style: AppTypography.labelMedium.copyWith(
                               fontWeight: FontWeight.w600,
-                              fontSize: 12,
                               color: primaryColor,
                             ),
                           ),
@@ -117,11 +115,8 @@ class VisitListTileAction extends StatelessWidget {
                   // Subtitle
                   Text(
                     subtitle,
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
+                    style: AppTypography.bodySmall.copyWith(
                       color: Colors.grey.shade600,
-                      height: 1.4,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,

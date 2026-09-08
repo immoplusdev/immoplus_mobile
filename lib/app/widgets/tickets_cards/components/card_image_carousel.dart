@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/image_counter_badge.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -122,7 +123,7 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
                 return Container(
                   key: ValueKey('${url}_$retryCount'),
                   width: double.infinity,
-                  color: Colors.grey.shade100,
+                  color: AppColors.grey100,
                   child: CachedNetworkImage(
                     imageUrl: url,
                     memCacheWidth: _targetWidth,
@@ -173,9 +174,9 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
 
   Widget _buildPlaceholder() {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Container(color: Colors.white),
+      baseColor: AppColors.grey300,
+      highlightColor: AppColors.grey100,
+      child: Container(color: AppColors.white),
     );
   }
 
@@ -184,33 +185,6 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
       alignment: Alignment.center,
       children: [
         _buildPlaceholder(),
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     SizedBox(
-        //       width: 30,
-        //       height: 30,
-        //       child: CircularProgressIndicator(
-        //         value: progress,
-        //         strokeWidth: 2,
-        //         valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade300),
-        //       ),
-        //     ),
-        //     const SizedBox(height: 10),
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 20),
-        //       child: SelectableText(
-        //         url,
-        //         textAlign: TextAlign.center,
-        //         style: const TextStyle(
-        //           fontSize: 8,
-        //           color: Colors.black54,
-        //           backgroundColor: Colors.white70,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }
@@ -220,21 +194,21 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
       onTap: () => _onRetry(index),
       behavior: HitTestBehavior.opaque,
       child: Container(
-        color: Colors.grey.shade200,
+        color: AppColors.grey200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               FontAwesomeIcons.circleExclamation.data,
               size: 40,
-              color: Colors.grey.shade400,
+              color: AppColors.grey400,
             ),
             const SizedBox(height: 10),
             Text(
               "Erreur de chargement\nAppuyez pour réessayer",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey.shade600,
+                color: AppColors.grey600,
                 fontSize: 12,
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/features/become_pro/pages/become_pro_form_page.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -79,11 +79,8 @@ class BecomeProIntroPage extends StatelessWidget {
                     child: Text(
                       "Passez en compte\nprofessionnel",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.h1.copyWith(
                         color: Colors.white,
-                        height: 1.2,
                       ),
                     ),
                   ),
@@ -94,11 +91,8 @@ class BecomeProIntroPage extends StatelessWidget {
                     child: Text(
                       "Publiez vos biens, gérez vos annonces et atteignez\nplus de clients avec Immo Plus.",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                      style: AppTypography.bodyMedium.copyWith(
                         color: Colors.white.withOpacity(0.9),
-                        height: 1.4,
                       ),
                     ),
                   ),
@@ -144,9 +138,7 @@ class BecomeProIntroPage extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: GoogleFonts.plusJakartaSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+        style: AppTypography.labelMedium.copyWith(
           color: Colors.white,
         ),
       ),

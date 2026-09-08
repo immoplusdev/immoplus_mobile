@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
@@ -123,7 +123,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             children: [
               Text(
                 alert.title ?? 'Demande sans titre',
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF1F2937),
                 ),
@@ -131,8 +131,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               if (alert.createdAt != null)
                 Text(
                   'Envoyée le ${DateFormat('d MMM yyyy', 'fr_FR').format(alert.createdAt!)}',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 14,
+                  style: AppTypography.bodyMedium.copyWith(
                     color: Colors.grey.shade500,
                   ),
                 ),
@@ -153,8 +152,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       ),
       child: Text(
         status.label,
-        style: GoogleFonts.dmSans(
-          fontSize: 12,
+        style: AppTypography.captionSemiBold.copyWith(
           fontWeight: FontWeight.bold,
           color: status.textColor,
         ),
@@ -200,16 +198,14 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         children: [
           Text(
             label,
-            style: GoogleFonts.dmSans(
-              fontSize: 12,
+            style: AppTypography.caption.copyWith(
               color: Colors.grey.shade400,
             ),
           ),
           const Gap(4),
           Text(
             value,
-            style: GoogleFonts.dmSans(
-              fontSize: 14,
+            style: AppTypography.bodyMediumSemiBold.copyWith(
               fontWeight: FontWeight.bold,
               color: const Color(0xFF374151),
             ),
@@ -226,8 +222,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Votre budget :',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
             color: Colors.grey.shade600,
           ),
@@ -263,22 +258,20 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           Text(
             label,
             style:
-                GoogleFonts.dmSans(fontSize: 10, color: Colors.grey.shade500),
+                AppTypography.micro.copyWith(fontSize: 10, color: Colors.grey.shade500),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 amount != null ? formatter.format(amount) : '0',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLargeSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 'fcfa',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
+                style: AppTypography.caption.copyWith(
                   color: Colors.grey.shade500,
                 ),
               ),
@@ -295,8 +288,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Localisation:',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
             color: Colors.grey.shade600,
           ),
@@ -315,8 +307,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               Expanded(
                 child: Text(
                   alert.criteria.location ?? 'N/A',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 16,
+                  style: AppTypography.bodyLargeSemiBold.copyWith(
                     color: const Color(0xFF1F2937),
                     fontWeight: FontWeight.w500,
                   ),
@@ -335,8 +326,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Précisions supplémentaires :',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
             color: Colors.grey.shade600,
           ),
@@ -351,8 +341,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           ),
           child: Text(
             alert.descriptionClient ?? 'Aucune précision supplémentaire.',
-            style: GoogleFonts.dmSans(
-              fontSize: 14,
+            style: AppTypography.bodyMedium.copyWith(
               color: const Color(0xFF4B5563),
             ),
           ),
@@ -367,8 +356,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Suivi de la demande :',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
             color: Colors.grey.shade600,
           ),
@@ -463,7 +451,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             children: [
               Text(
                 title,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color:
@@ -472,7 +460,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               ),
               Text(
                 subtitle,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodySmall.copyWith(
                   fontSize: 13,
                   color: isHighlighted
                       ? const Color(0xFFD97706)
@@ -509,8 +497,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             ),
             child: Text(
               'Modifier',
-              style: GoogleFonts.dmSans(
-                fontSize: 16,
+              style: AppTypography.button.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -530,8 +517,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             ),
             child: Text(
               'Annuler',
-              style: GoogleFonts.dmSans(
-                fontSize: 16,
+              style: AppTypography.button.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),

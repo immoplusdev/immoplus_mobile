@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:pinput/pinput.dart';
 
 class CustomPinput extends StatelessWidget {
@@ -46,15 +47,15 @@ class CustomPinput extends StatelessWidget {
       height: height,
       textStyle: TextStyle(
         fontSize: fontSize,
-        color: Colors.black,
+        color: AppColors.black,
         fontWeight: FontWeight.w600,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
+        color: backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: hasError
-              ? (errorBorderColor ?? Colors.red)
+              ? (errorBorderColor ?? AppColors.red)
               : (borderColor ?? theme.colorScheme.primary.withOpacity(.5)),
         ),
       ),
@@ -64,7 +65,7 @@ class CustomPinput extends StatelessWidget {
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(
           color: hasError
-              ? (errorBorderColor ?? Colors.red)
+              ? (errorBorderColor ?? AppColors.red)
               : (focusedBorderColor ?? theme.colorScheme.primary),
           width: 1,
         ),
@@ -74,7 +75,7 @@ class CustomPinput extends StatelessWidget {
     final errorPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(
-          color: errorBorderColor ?? Colors.red,
+          color: errorBorderColor ?? AppColors.red,
           width: 1,
         ),
       ),
@@ -121,7 +122,7 @@ class CustomPinput extends StatelessWidget {
             child: Text(
               errorText!,
               style: TextStyle(
-                color: errorBorderColor ?? Colors.red,
+                color: errorBorderColor ?? AppColors.red,
                 fontSize: 12,
               ),
             ),

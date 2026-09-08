@@ -93,7 +93,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
-                                      .copyWith(color: Colors.grey.shade600),
+                                      .copyWith(color: AppColors.grey600),
                                 ),
                               ),
                             ],
@@ -118,7 +118,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                                   .textTheme
                                   .bodySmall!
                                   .copyWith(
-                                    color: Colors.grey.shade800,
+                                    color: AppColors.grey800,
                                     fontWeight: FontWeight.bold,
                                   ),
                             )
@@ -181,11 +181,11 @@ class ResidenceFavoriteButton extends StatelessWidget {
       onTap: onTap,
       child: CircleAvatar(
         radius: 14,
-        backgroundColor: isFavorite ? Colors.red : Colors.grey.shade300,
+        backgroundColor: isFavorite ? AppColors.red : AppColors.grey300,
         child: Icon(
           FontAwesomeIcons.solidHeart.data,
           size: 16,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

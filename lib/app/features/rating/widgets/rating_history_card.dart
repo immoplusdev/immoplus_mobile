@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/rating/rating_model.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RatingHistoryCard extends StatelessWidget {
   final RatingModel rating;
@@ -25,11 +25,11 @@ class RatingHistoryCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 12),
       child: Material(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         elevation: 0,
-        shadowColor: Colors.black.withValues(alpha: 0.06),
+        shadowColor: AppColors.black.withValues(alpha: 0.06),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -40,17 +40,15 @@ class RatingHistoryCard extends StatelessWidget {
                 children: [
                   Text(
                     'Réservation: ${rating.reservationId.substring(0, 8)}...',
-                    style: GoogleFonts.dmSans(
-                      fontSize: 14,
+                    style: AppTypography.bodyMediumSemiBold.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   if (dateStr.isNotEmpty)
                     Text(
                       dateStr,
-                      style: GoogleFonts.dmSans(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.grey500,
                       ),
                     ),
                 ],
@@ -63,10 +61,9 @@ class RatingHistoryCard extends StatelessWidget {
                 const Gap(12),
                 Text(
                   '"${rating.propertyFeedback}"',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 14,
+                  style: AppTypography.bodyMedium.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: Colors.grey.shade700,
+                    color: AppColors.grey700,
                   ),
                 ),
               ],
@@ -79,15 +76,13 @@ class RatingHistoryCard extends StatelessWidget {
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2548E5).withValues(alpha: 0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         t,
-                        style: GoogleFonts.dmSans(
-                          fontSize: 12,
-                          color: const Color(0xFF2548E5),
-                          fontWeight: FontWeight.w500,
+                        style: AppTypography.labelMedium.copyWith(
+                          color: AppColors.primary,
                         ),
                       ),
                     );
@@ -108,10 +103,8 @@ class RatingHistoryCard extends StatelessWidget {
           width: 80,
           child: Text(
             label,
-            style: GoogleFonts.dmSans(
-              fontSize: 14,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
+            style: AppTypography.bodyMediumMedium.copyWith(
+              color: AppColors.grey600,
             ),
           ),
         ),
@@ -119,7 +112,7 @@ class RatingHistoryCard extends StatelessWidget {
           rating: ratingValue.toDouble(),
           itemBuilder: (context, index) => const Icon(
             Icons.star_rounded,
-            color: Colors.amber,
+            color: AppColors.amber,
           ),
           itemCount: 5,
           itemSize: 16.0,

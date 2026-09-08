@@ -38,11 +38,7 @@ void main() async {
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
   await Stripe.instance.applySettings();
   await GoogleFonts.pendingFonts([
-    GoogleFonts.sen(),
-    GoogleFonts.inter(),
     GoogleFonts.plusJakartaSans(),
-    GoogleFonts.inder(),
-    GoogleFonts.dmSans(),
   ]);
   GoRouter.optionURLReflectsImperativeAPIs = true;
   OneSignal.initialize("3dcf3bc5-e4c7-4328-9d30-0f33cdedb1f0");

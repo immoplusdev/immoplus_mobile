@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class CustomDropDownField extends StatelessWidget {
   CustomDropDownField({
@@ -38,33 +39,12 @@ class CustomDropDownField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: labelText ?? 'label',
         filled: true,
-        //fillColor: Colors.white10,
-        //labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         focusColor: Theme.of(context).colorScheme.onSurface,
         suffixIcon: sufixIcon,
-        // border: new OutlineInputBorder(
-        //   borderRadius: new BorderRadius.circular(4.0),
-        //   borderSide: new BorderSide(
-        //     color: Theme.of(context).colorScheme.onSurface,
-        //   ),
-        // ),
-        // focusedBorder: new OutlineInputBorder(
-        //   borderRadius: new BorderRadius.circular(4.0),
-        //   borderSide: new BorderSide(
-        //     color: Theme.of(context).colorScheme.primary,
-        //   ),
-        // ),
-        errorStyle: const TextStyle(color: Colors.redAccent),
+        errorStyle: const TextStyle(color: AppColors.redAccent),
         contentPadding: const EdgeInsets.all(0).copyWith(left: 10),
-        // prefixIconColor: _iconColor,
-        // suffixIconColor: _iconColor,
-
-        //labelText: labelText!,
-
-        //iconColor: Colors.black,
         hintStyle: const TextStyle(
-          color: Colors.grey,
-          //fontWeight: FontWeight.bold,
+          color: AppColors.grey,
           fontSize: 15,
         ),
         //fillColor: _color,

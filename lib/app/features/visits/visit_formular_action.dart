@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -129,9 +129,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
           centerTitle: true,
           title: Text(
             'Demande de visite',
-            style: GoogleFonts.inter(
+            style: AppTypography.h4.copyWith(
               fontWeight: FontWeight.w700,
-              fontSize: 18,
               color: Colors.black,
             ),
           ),
@@ -200,10 +199,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                               Expanded(
                                 child: Text(
                                   "Numéro sur lequel vous préférez être contacté, de préférence un numéro WhatsApp actif.",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12,
+                                  style: AppTypography.bodySmall.copyWith(
                                     color: primaryColor,
-                                    height: 1.45,
                                   ),
                                 ),
                               ),
@@ -291,9 +288,7 @@ class _SectionLabel extends StatelessWidget {
         // const Gap(6),
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
+          style: AppTypography.button.copyWith(
             color: Colors.black87,
           ),
         ),

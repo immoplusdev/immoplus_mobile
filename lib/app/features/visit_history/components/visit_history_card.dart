@@ -40,7 +40,7 @@ class VisitHistoryCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
-            border: Border.all(color: const Color(0xFFF2F4F7)),
+            border: Border.all(color: AppColors.borderF2F4F7),
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -55,8 +55,8 @@ class VisitHistoryCard extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: isExpress
-                          ? const Color(0xFFFEF3F2)
-                          : const Color(0xFFF4F3FF),
+                          ? AppColors.bgFEF3F2
+                          : AppColors.bgF4F3FF,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -66,8 +66,8 @@ class VisitHistoryCard extends StatelessWidget {
                           isExpress ? Iconsax.flash_1 : Iconsax.calendar_1,
                           size: 14,
                           color: isExpress
-                              ? const Color(0xFFF04438)
-                              : const Color(0xFF7A5AF8),
+                              ? AppColors.errorF04438
+                              : AppColors.purple7A5AF8,
                         ),
                         const Gap(4),
                         Text(
@@ -78,8 +78,8 @@ class VisitHistoryCard extends StatelessWidget {
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: isExpress
-                                ? const Color(0xFFF04438)
-                                : const Color(0xFF7A5AF8),
+                                ? AppColors.errorF04438
+                                : AppColors.purple7A5AF8,
                           ),
                         ),
                       ],
@@ -114,7 +114,7 @@ class VisitHistoryCard extends StatelessWidget {
                     Icon(
                       Iconsax.location,
                       size: 14,
-                      color: const Color(0xFF667085),
+                      color: AppColors.textSecondaryMedium,
                     ),
                     const Gap(4),
                     Expanded(
@@ -123,7 +123,7 @@ class VisitHistoryCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: AppColors.textSecondaryMedium,
                             ),
                       ),
                     ),
@@ -141,7 +141,7 @@ class VisitHistoryCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFFAEB),
+                    color: AppColors.bgFFFAEB,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -149,7 +149,7 @@ class VisitHistoryCard extends StatelessWidget {
                       const Icon(
                         Iconsax.calendar_remove,
                         size: 16,
-                        color: Color(0xFFF79009),
+                        color: AppColors.amberF79009,
                       ),
                       const Gap(8),
                       Expanded(
@@ -157,7 +157,7 @@ class VisitHistoryCard extends StatelessWidget {
                           "Aucune date de visite planifiée",
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFFB54708),
+                                    color: AppColors.amberB54708,
                                     fontWeight: FontWeight.w500,
                                   ),
                         ),

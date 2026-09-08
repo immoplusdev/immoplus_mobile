@@ -33,12 +33,12 @@ class CustomLoadingButtom extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             elevation: 0,
-            disabledBackgroundColor: Colors.blue.shade100,
+            disabledBackgroundColor: AppColors.softBlueBg,
             backgroundColor: (clickable)
                 ? (color == null)
                     ? AppColors.primary
                     : color
-                : Colors.grey[400],
+                : AppColors.grey400,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radiusButton)),
           ),
@@ -50,7 +50,7 @@ class CustomLoadingButtom extends StatelessWidget {
               : Text(
                   text,
                   style: context.textTheme.titleLarge!.copyWith(
-                      color: textColor ?? Colors.white,
+                      color: textColor ?? AppColors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 16),
                 ),

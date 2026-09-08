@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_page_header.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -63,9 +63,7 @@ class HotelComingSoonView extends StatelessWidget {
                           Text(
                             "Bientôt disponible",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.dmSans(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                            style: AppTypography.h3.copyWith(
                               color: Colors.black,
                             ),
                           ),
@@ -74,8 +72,7 @@ class HotelComingSoonView extends StatelessWidget {
                             "Hôtel arrive très prochainement. "
                             "Revenez bientôt pour réserver votre chambre !",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.dmSans(
-                              fontSize: 14,
+                            style: AppTypography.bodyMedium.copyWith(
                               color: Colors.grey.shade600,
                               height: 1.5,
                             ),

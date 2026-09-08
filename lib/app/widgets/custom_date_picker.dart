@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 
 import 'custom_text_field.dart';
@@ -65,8 +66,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               data: theme.copyWith(
                 colorScheme: theme.colorScheme.copyWith(
                   // Change the primary color
-                  onPrimary: Colors.black, // Change the text color on primary
-                  onSurface: Colors.black, // Change the text color on surface
+                  onPrimary:
+                      AppColors.black, // Change the text color on primary
+                  onSurface:
+                      AppColors.black, // Change the text color on surface
                 ),
               ),
               child: child!,

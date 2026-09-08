@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class CustomChip extends StatelessWidget {
   final Color backgroundColor;
@@ -17,8 +18,8 @@ class CustomChip extends StatelessWidget {
 
   const CustomChip({
     super.key,
-    this.backgroundColor = Colors.grey,
-    this.iconColor = Colors.black,
+    this.backgroundColor = AppColors.grey,
+    this.iconColor = AppColors.black,
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
     this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
     this.icon,

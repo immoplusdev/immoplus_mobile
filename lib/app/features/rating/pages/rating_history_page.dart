@@ -73,7 +73,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
         automaticallyImplyLeading: false,
         title: const Text('Historique des notes'),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),

@@ -99,7 +99,7 @@ class _FilterPageState extends State<FilterPage> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: const Color(0xFFF2F4F7)),
+                      border: Border.all(color: AppColors.borderF2F4F7),
                     ),
                     child: Row(
                       children: [
@@ -128,14 +128,14 @@ class _FilterPageState extends State<FilterPage> {
                                           ? FontWeight.w400
                                           : FontWeight.w600,
                                       color: currentAddress == null
-                                          ? const Color(0xFF98A2B3)
-                                          : const Color(0xFF344054),
+                                          ? AppColors.text98A2B3
+                                          : AppColors.text344054,
                                     ),
                           ),
                         ),
                         Icon(
                           Iconsax.arrow_down_1,
-                          color: const Color(0xFF98A2B3),
+                          color: AppColors.text98A2B3,
                           size: 20,
                         ),
                       ],
@@ -162,7 +162,7 @@ class _FilterPageState extends State<FilterPage> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFF2F4F7)),
+                    border: Border.all(color: AppColors.borderF2F4F7),
                   ),
                   child: CalendarDatePicker2(
                     config: CalendarDatePicker2Config(
@@ -215,7 +215,7 @@ class _FilterPageState extends State<FilterPage> {
           decoration: BoxDecoration(
             color: AppColors.whiteBackground,
             border: const Border(
-              top: BorderSide(color: Color(0xFFF2F4F7)),
+              top: BorderSide(color: AppColors.borderF2F4F7),
             ),
           ),
           child: SafeArea(
@@ -279,7 +279,7 @@ class _FilterPageState extends State<FilterPage> {
                       context.pop();
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFFF04438),
+                      foregroundColor: AppColors.errorF04438,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       textStyle: const TextStyle(
                         fontSize: 14,
@@ -302,7 +302,7 @@ class _FilterPageState extends State<FilterPage> {
       text,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF344054),
+            color: AppColors.text344054,
           ),
     );
   }

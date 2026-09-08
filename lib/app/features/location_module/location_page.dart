@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 import 'components/button_map.dart';
 import 'components/current_location.dart';
@@ -69,7 +70,7 @@ class _LocationPageState extends State<LocationPage> {
                         child: const Icon(
                           Iconsax.arrow_left,
                           size: 18,
-                          color: Color(0xFF222222),
+                          color: AppColors.textDark,
                         ),
                       ),
                     ),
@@ -79,7 +80,7 @@ class _LocationPageState extends State<LocationPage> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF222222),
+                        color: AppColors.textDark,
                         letterSpacing: -0.3,
                       ),
                     ),

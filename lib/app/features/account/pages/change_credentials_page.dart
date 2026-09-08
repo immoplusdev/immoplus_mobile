@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
-const Color _kIconBg = Color(0xFFF2F2F2);
-const Color _kIconColor = Color(0xFF374151);
-const Color _kLabelColor = Color(0xFF0D0D0D);
-const Color _kTrailingColor = Color(0xFF374151);
+const Color _kIconBg = AppColors.iconBgLight;
+const Color _kIconColor = AppColors.textDarkGray;
+const Color _kLabelColor = AppColors.text0D0D0D;
+const Color _kTrailingColor = AppColors.textDarkGray;
 
 class ChangeCredentialsPage extends StatelessWidget {
   const ChangeCredentialsPage({super.key});
@@ -45,7 +46,7 @@ class ChangeCredentialsPage extends StatelessWidget {
         ),
         title: Text(
           'Identifiants de connexion',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.h4.copyWith(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: _kLabelColor,
@@ -65,7 +66,7 @@ class ChangeCredentialsPage extends StatelessWidget {
               title: 'Changer mon mot de passe',
               titleColor: _kLabelColor,
               trailingColor: _kTrailingColor,
-              titleStyle: GoogleFonts.dmSans(
+              titleStyle: AppTypography.bodyMediumSemiBold.copyWith(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: _kLabelColor,
@@ -80,7 +81,7 @@ class ChangeCredentialsPage extends StatelessWidget {
               title: 'Changer mon email',
               titleColor: _kLabelColor,
               trailingColor: _kTrailingColor,
-              titleStyle: GoogleFonts.dmSans(
+              titleStyle: AppTypography.bodyMediumSemiBold.copyWith(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: _kLabelColor,
@@ -98,7 +99,7 @@ class ChangeCredentialsPage extends StatelessWidget {
               title: 'Changer mon numéro de téléphone',
               titleColor: _kLabelColor,
               trailingColor: _kTrailingColor,
-              titleStyle: GoogleFonts.dmSans(
+              titleStyle: AppTypography.bodyMediumSemiBold.copyWith(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: _kLabelColor,

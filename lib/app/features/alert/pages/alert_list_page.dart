@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
@@ -91,9 +91,7 @@ class _AlertListPageState extends State<AlertListPage>
                 children: [
                   Text(
                     'Mes demandes',
-                    style: GoogleFonts.dmSans(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                    style: AppTypography.h1.copyWith(
                       color: Colors.black,
                     ),
                   ),
@@ -109,15 +107,12 @@ class _AlertListPageState extends State<AlertListPage>
             isScrollable: true,
             indicatorColor: Colors.transparent,
             dividerColor: Colors.transparent,
-            labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
             tabAlignment: TabAlignment.start,
-            tabs: AlertStatusTab.values.map((tab) {
-              return Tab(
-                height: 44,
-                child: _buildTabItem(tab.label, tab.index),
-              );
-            }).toList(),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+            tabs: AlertStatusTab.values
+                .map((tab) => _buildTabItem(tab.label, tab.index))
+                .toList(),
           ),
           const Gap(16),
           Expanded(
@@ -127,7 +122,7 @@ class _AlertListPageState extends State<AlertListPage>
                   .map((tab) => _AlertListContent(
                         status: tab.value,
                         refreshNotifier: _refreshNotifier,
-                        onAlertsLoaded: tab.value == null
+                        onAlertsLoaded: tab == AlertStatusTab.all
                             ? (alerts) => setState(() => _allAlerts = alerts)
                             : null,
                       ))
@@ -136,16 +131,15 @@ class _AlertListPageState extends State<AlertListPage>
           ),
         ],
       ),
-      floatingActionButton: _allAlerts.isEmpty
+      floatingActionButton: widget.embedded
           ? null
           : FloatingActionButton(
               onPressed: () async {
                 final result =
                     await context.pushNamed(AlertCreateEditPage.name);
-                if (result == true && context.mounted) {
-                  await context.pushNamed(AlertSuccessPage.name);
+                if (result == true) {
+                  _refresh();
                 }
-                _refresh();
               },
               backgroundColor: AppColors.primary,
               shape: const CircleBorder(),
@@ -165,8 +159,8 @@ class _AlertListPageState extends State<AlertListPage>
         : 'nouvelles propositions';
     return Text(
       '$total $demandesLabel · $withPropositions $propositionsLabel',
-      style: GoogleFonts.dmSans(
-        fontSize: 15,
+      style: AppTypography.button.copyWith(
+        fontWeight: FontWeight.normal,
         color: Colors.grey.shade500,
       ),
     );
@@ -186,9 +180,7 @@ class _AlertListPageState extends State<AlertListPage>
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+        style: AppTypography.bodyMediumMedium.copyWith(
           color: isSelected ? Colors.white : AppColors.primary,
         ),
       ),

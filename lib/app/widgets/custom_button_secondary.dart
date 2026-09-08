@@ -51,9 +51,9 @@ class CustomButtonSecondary extends StatelessWidget {
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             elevation: elevation ?? 0,
-            backgroundColor: backgroundColor ?? Colors.white,
+            backgroundColor: backgroundColor ?? AppColors.white,
             side: BorderSide(
-              color: clickable ? borderColor : Colors.grey[400]!,
+              color: clickable ? borderColor : AppColors.grey400,
               width: borderWidth ?? 1.5,
             ),
             shape: RoundedRectangleBorder(

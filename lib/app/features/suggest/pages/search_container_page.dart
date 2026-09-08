@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class SearchContainerPage extends StatefulWidget {
   final HomeTab? homeTab;
@@ -112,7 +113,7 @@ class _SearchContainerPageState extends State<SearchContainerPage>
           isScrollable: false,
           indicatorSize: TabBarIndicatorSize.tab,
           indicator: BoxDecoration(
-            color: const Color(0xFF2548E5),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(25),
           ),
           labelColor: Colors.white,
@@ -120,14 +121,8 @@ class _SearchContainerPageState extends State<SearchContainerPage>
           // Rule 5: identical fontWeight in both states prevents micro-shift
           // on toggle — the active state is distinguished solely by the
           // indicator pill background, not by text width changes.
-          labelStyle: GoogleFonts.dmSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          unselectedLabelStyle: GoogleFonts.dmSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          labelStyle: AppTypography.bodyMediumMedium,
+          unselectedLabelStyle: AppTypography.bodyMediumMedium,
           dividerColor: Colors.transparent,
           labelPadding: EdgeInsets.zero, // Rule 3: no extra padding asymmetry
           tabs: const [

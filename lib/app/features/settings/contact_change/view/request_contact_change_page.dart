@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
@@ -68,7 +68,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
           ),
           title: Text(
             _title,
-            style: GoogleFonts.dmSans(
+            style: AppTypography.h4.copyWith(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF0D0D0D),
@@ -89,8 +89,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                   widget.type == ContactChangeType.phone
                       ? 'Entrez votre nouveau numéro de téléphone. Un code de vérification vous sera envoyé.'
                       : 'Entrez votre nouvelle adresse email. Un code de vérification vous sera envoyé.',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 14,
+                  style: AppTypography.bodyMedium.copyWith(
                     color: const Color(0xFF64748B),
                     height: 1.5,
                   ),

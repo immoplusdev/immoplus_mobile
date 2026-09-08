@@ -19,14 +19,14 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE9E9E9),
+      backgroundColor: AppColors.E9E9E9,
       body: Column(
         children: [
           Gap(100),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(50),
                 ),

@@ -236,7 +236,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF1CA53F),
+                                  color: AppColors.green1CA53F,
                                 ),
                           ),
                         ],
@@ -464,7 +464,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
                         ),
                         style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF1CA53F),
+                          backgroundColor: AppColors.green1CA53F,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -495,7 +495,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             icon: const Icon(Iconsax.star, size: 18),
                             label: const Text('Évaluer mon séjour'),
                             style: FilledButton.styleFrom(
-                              backgroundColor: const Color(0xFF2548E5),
+                              backgroundColor: AppColors.primary,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
@@ -726,7 +726,7 @@ class _SectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEEEEE)),
+        border: Border.all(color: AppColors.borderLight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -780,7 +780,7 @@ class _StatusRow extends StatelessWidget {
     if (status == PaymentStatus.paye.name ||
         status == 'accepte' ||
         status == 'confirme') {
-      return const Color(0xFF1CA53F);
+      return AppColors.green1CA53F;
     }
     if (status == 'refuse' || status == 'annule') {
       return Colors.red;
@@ -883,14 +883,14 @@ class _DatesCard extends StatelessWidget {
       endDate: reservationModel.datesReservation.last.date!,
     );
     final statusColor = bookingStatus == BookingStatus.ongoing
-        ? const Color(0xFF1CA53F)
+        ? AppColors.green1CA53F
         : AppColors.primary;
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEEEEE)),
+        border: Border.all(color: AppColors.borderLight),
       ),
       child: Column(
         children: [
@@ -936,7 +936,7 @@ class _DatesCard extends StatelessWidget {
                     date: fmt.format(checkin),
                     hour: reservationModel.residence.heureEntree,
                     icon: Iconsax.login,
-                    color: const Color(0xFF1CA53F),
+                    color: AppColors.green1CA53F,
                   ),
                 ),
                 Container(

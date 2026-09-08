@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -22,14 +22,12 @@ class ProductInfo extends StatelessWidget {
       ),
       leading: CircleAvatar(
         radius: 22,
-        backgroundColor: primaryColor.withOpacity(0.08),
+        backgroundColor: primaryColor.withValues(alpha: 0.08),
         backgroundImage: Utils.getImage(id: bienImmobilierModel.images.first),
       ),
       title: Text(
         bienImmobilierModel.nom,
-        style: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
+        style: AppTypography.labelLarge.copyWith(
           color: Colors.black87,
         ),
         maxLines: 1,
@@ -40,8 +38,7 @@ class ProductInfo extends StatelessWidget {
           children: [
             TextSpan(
               text: '${bienImmobilierModel.prix} F',
-              style: GoogleFonts.inter(
-                fontSize: 13,
+              style: AppTypography.bodySmallSemiBold.copyWith(
                 fontWeight: FontWeight.w700,
                 color: primaryColor,
               ),
@@ -49,8 +46,7 @@ class ProductInfo extends StatelessWidget {
             if (period != null && period.isNotEmpty)
               TextSpan(
                 text: period,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
+                style: AppTypography.bodySmall.copyWith(
                   color: Colors.grey.shade500,
                 ),
               ),

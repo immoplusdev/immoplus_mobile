@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/utils/ad_action_handler.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/ads/components/mosaic_items_gallery_page.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
@@ -60,10 +61,8 @@ class AdCarouselVilleAdsCampaignCategory extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title!,
-                      style: GoogleFonts.dmSans(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w800,
-                        color: const Color(0xFF0F1E36),
+                      style: AppTypography.h2.copyWith(
+                        color: AppColors.textNavyDeep,
                         letterSpacing: -0.5,
                       ),
                       maxLines: 1,
@@ -76,10 +75,9 @@ class AdCarouselVilleAdsCampaignCategory extends StatelessWidget {
                   onTap: () => _openMosaicGallery(context, items),
                   child: Text(
                     ctaLabel,
-                    style: GoogleFonts.dmSans(
-                      fontSize: 15,
+                    style: AppTypography.button.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF8E8E93),
+                      color: AppColors.textLightGray,
                     ),
                   ),
                 ),
@@ -111,12 +109,12 @@ class AdCarouselVilleAdsCampaignCategory extends StatelessWidget {
                         width: 36,
                         height: 36,
                         decoration: const BoxDecoration(
-                          color: Colors.black,
+                          color: AppColors.black,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.arrow_forward,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: 18,
                         ),
                       ),

@@ -4,7 +4,7 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/utils/request_path.dart';
 
 class FormUtils {
@@ -180,7 +180,7 @@ class FormUtils {
                                 : Colors.transparent,
                             child: Text(
                               date.day.toString(),
-                              style: GoogleFonts.inder(
+                              style: AppTypography.bodyMedium.copyWith(
                                 color: (isSelected || isDisabled!)
                                     ? CupertinoColors.systemGrey
                                     : Colors.black,

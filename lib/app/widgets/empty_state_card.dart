@@ -127,11 +127,11 @@ class _EmptyStateCardModalState extends State<_EmptyStateCardModal> {
             onTap: () => Navigator.pop(context),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.35),
+                color: AppColors.black.withValues(alpha: 0.35),
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(6),
-              child: const Icon(Icons.close, color: Colors.white, size: 18),
+              child: const Icon(Icons.close, color: AppColors.white, size: 18),
             ),
           ),
         ),
@@ -160,7 +160,7 @@ class _EmptyStateCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: const BoxDecoration(color: AppColors.white),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -193,7 +193,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: AppColors.grey700,
                     height: 1.4,
                   ),
                 ),
@@ -205,7 +205,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                       onPressed: onButtonPressed,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.customBlue,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
                           vertical: 16,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -74,9 +74,7 @@ class UserPreferenceView extends StatelessWidget {
                           const Gap(40),
                           Text(
                             'Choisis ce qui te plaît',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
+                            style: AppTypography.h1.copyWith(
                               color: Colors.black,
                             ),
                           ),
@@ -176,8 +174,7 @@ class UserPreferenceView extends StatelessWidget {
                       Text(
                         message,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.dmSans(
-                          fontSize: 16,
+                        style: AppTypography.bodyMedium.copyWith(
                           color: Colors.grey.shade600,
                         ),
                       ),
@@ -205,8 +202,7 @@ class UserPreferenceView extends StatelessWidget {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: GoogleFonts.dmSans(
-        fontSize: 16,
+      style: AppTypography.bodyLargeSemiBold.copyWith(
         color: Colors.black87,
         fontWeight: FontWeight.w500,
       ),
@@ -244,8 +240,7 @@ class _PreferenceChip extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.dmSans(
-                fontSize: 14,
+              style: AppTypography.bodyMedium.copyWith(
                 color: isSelected ? Colors.white : Colors.grey.shade600,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),

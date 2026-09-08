@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/for_me/favorite_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class MyChoicePage extends StatefulWidget {
   const MyChoicePage({super.key});
@@ -54,17 +55,15 @@ class _MyChoicePageState extends State<MyChoicePage>
                   controller: _tabController,
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
-                    color: const Color(0xFF2548E5), // Blue from screenshots
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.grey[500],
-                  labelStyle: GoogleFonts.dmSans(
-                    fontSize: 16,
+                  labelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
-                  unselectedLabelStyle: GoogleFonts.dmSans(
-                    fontSize: 16,
+                  unselectedLabelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                   dividerColor: Colors.transparent,

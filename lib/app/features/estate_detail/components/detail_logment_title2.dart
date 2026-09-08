@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 
 class DetailEstateTitle2 extends StatelessWidget {
   const DetailEstateTitle2({super.key, required this.title});
@@ -11,8 +11,7 @@ class DetailEstateTitle2 extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 5),
         child: Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 16,
+          style: AppTypography.titleSmall.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),

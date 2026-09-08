@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/features/become_pro/logic/become_pro_cubit.dart';
@@ -86,11 +86,8 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     Text(
                       "Créer votre compte\nprofessionnel",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.h2.copyWith(
                         color: AppColors.textPrimaryDark,
-                        height: 1.2,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -100,11 +97,8 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     Text(
                       "Veuillez renseigner vos informations afin de vérifier\nvotre identité.",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                      style: AppTypography.bodyMedium.copyWith(
                         color: AppColors.textSecondaryMedium,
-                        height: 1.4,
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -118,9 +112,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Document d'identité",
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.titleSmall.copyWith(
                           color: AppColors.textPrimaryDark,
                         ),
                       ),
@@ -181,9 +173,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Secteur d'activité :",
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                        style: AppTypography.bodySmallMedium.copyWith(
                           color: AppColors.textSecondaryMedium,
                         ),
                       ),
@@ -211,10 +201,8 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                           value: _selectedSecteur,
                           icon: const Icon(Icons.keyboard_arrow_down,
                               color: AppColors.textSecondaryMedium),
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                          style: AppTypography.bodyMediumMedium.copyWith(
                             color: AppColors.textPrimaryDark,
-                            fontWeight: FontWeight.w500,
                           ),
                           items: _secteurs.map((String value) {
                             return DropdownMenuItem<String>(
@@ -253,10 +241,8 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       ),
                       child: Text(
                         "Tous vos documents sont sécurisés et utilisés uniquement pour la validation de votre compte.",
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 12,
+                        style: AppTypography.bodySmall.copyWith(
                           color: const Color(0xFF475467),
-                          height: 1.4,
                         ),
                       ),
                     ),
@@ -336,9 +322,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
       children: [
         Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+          style: AppTypography.bodySmallMedium.copyWith(
             color: AppColors.textSecondaryMedium,
           ),
         ),
@@ -355,13 +339,9 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
               border: Border.all(
                 color: AppColors.borderMediumGray,
                 width: 1,
-                style: BorderStyle
-                    .none, // We use a CustomPaint for dotted border if preferred, but for simplicity a standard border with some opacity is fine
+                style: BorderStyle.none,
               ),
             ),
-            // Re-implementing a simple dotted-like dash or using an explicit border
-            // For a perfectly dotted border in standard flutter we'd use a package like 'dotted_border'
-            // Since we can't be sure if 'dotted_border' is exactly configured, we'll use a neat solid/border combo
             child: Stack(
               children: [
                 if (file != null)
@@ -381,7 +361,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                           color: AppColors.borderSoftBlue,
-                          width: 2), // mimicking dotted bounding area loosely
+                          width: 2),
                     ),
                   ),
                   Center(
@@ -400,8 +380,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         Text(
                           actionText,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 10,
+                          style: AppTypography.micro.copyWith(
                             color: AppColors.infoBorderBlue,
                             fontWeight: FontWeight.w500,
                           ),

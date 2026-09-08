@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class RatingComponent extends StatelessWidget {
   final double rating;
@@ -20,7 +21,7 @@ class RatingComponent extends StatelessWidget {
         children: [
           const Icon(
             Iconsax.verify, // Icône étoile
-            color: Colors.white, // Couleur de l'étoile
+            color: AppColors.white, // Couleur de l'étoile
             size: 16, // Taille de l'icône
           ),
           // const SizedBox(width: 5), // Espace entre l'étoile et la note

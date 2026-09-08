@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
@@ -109,15 +110,13 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 5),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           'Ads',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF222222),
+                          style: AppTypography.captionSemiBold.copyWith(
+                            color: AppColors.textDark,
                           ),
                         ),
                       ),
@@ -129,7 +128,7 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                  color: kPrimaryColor.withValues(alpha: 0.08),
+                  color: AppColors.primary.withValues(alpha: 0.08),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -144,16 +143,14 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF2548E5)
+                                  color: AppColors.primary
                                       .withValues(alpha: 0.10),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
                                   campaign.content.badge!,
-                                  style: GoogleFonts.dmSans(
-                                    color: const Color(0xFF2548E5),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                                  style: AppTypography.microBold.copyWith(
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ),
@@ -161,10 +158,9 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                             ],
                             Text(
                               campaign.content.title ?? '',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
+                              style: AppTypography.bodyMediumSemiBold.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF222222),
+                                color: AppColors.textDark,
                               ),
                             ),
                             if (campaign.content.subtitle?.isNotEmpty ==
@@ -172,9 +168,8 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                               const Gap(2),
                               Text(
                                 campaign.content.subtitle!,
-                                style: GoogleFonts.dmSans(
-                                  fontSize: 12,
-                                  color: Colors.grey[600],
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: AppColors.grey600,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -191,7 +186,7 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                           onPressed: () => AdActionHandler.handleAdAction(
                               context, campaign),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF2548E5),
+                            backgroundColor: AppColors.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -201,9 +196,8 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                           ),
                           child: Text(
                             campaign.content.ctaLabel!,
-                            style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontSize: 12,
+                            style: AppTypography.labelMedium.copyWith(
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

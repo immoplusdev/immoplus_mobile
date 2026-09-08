@@ -32,7 +32,7 @@ class ContactUtils {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF0D0D0D),
+                      color: AppColors.text0D0D0D,
                     ),
                   ),
                 ),
@@ -42,14 +42,14 @@ class ContactUtils {
                     width: 38,
                     height: 38,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF25D366).withValues(alpha: 0.1),
+                      color: AppColors.whatsAppGreen.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Iconsax.message, size: 18, color: Color(0xFF25D366)),
+                    child: const Icon(Iconsax.message, size: 18, color: AppColors.whatsAppGreen),
                   ),
                   title: "WhatsApp",
                   subtitle: "Écrivez-nous sur WhatsApp",
-                  accentColor: const Color(0xFF25D366),
+                  accentColor: AppColors.whatsAppGreen,
                   onTap: () => Utils.whatsapp(phoneNumber: phone),
                 ),
                 const Gap(10),
@@ -76,7 +76,7 @@ class ContactUtils {
                     width: 38,
                     height: 38,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEA4335).withValues(alpha: 0.1),
+                      color: AppColors.gmailRed.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
@@ -86,7 +86,7 @@ class ContactUtils {
                   ),
                   title: "Email",
                   subtitle: "Envoyez-nous un e-mail",
-                  accentColor: const Color(0xFFEA4335),
+                  accentColor: AppColors.gmailRed,
                   onTap: () async {
                     final uri = Uri(scheme: 'mailto', path: email);
                     await launchUrl(uri);
@@ -107,7 +107,7 @@ class ContactUtils {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: const Color(0xFFF9FAFB),
+      color: AppColors.surfaceLight,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -127,7 +127,7 @@ class ContactUtils {
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF1E1E1E),
+                        color: AppColors.text1E1E1E,
                       ),
                     ),
                     const Gap(2),
@@ -135,13 +135,13 @@ class ContactUtils {
                       subtitle,
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF9CA3AF),
+                        color: AppColors.textBrandMuted,
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: const Color(0xFFD1D5DB), size: 20),
+              Icon(Icons.chevron_right_rounded, color: AppColors.borderD1D5DB, size: 20),
             ],
           ),
         ),

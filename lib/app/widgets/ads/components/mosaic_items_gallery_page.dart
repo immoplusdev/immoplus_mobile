@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -46,19 +47,19 @@ class _MosaicItemsGalleryPageState extends State<MosaicItemsGalleryPage> {
   @override
   Widget build(BuildContext context) {
     final body = Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const CircleAvatar(
-            backgroundColor: Color(0xFFF2F2F7),
+          icon: CircleAvatar(
+            backgroundColor: AppColors.borderLight,
             radius: 18,
-            child: Icon(
+            child: const Icon(
               CupertinoIcons.chevron_back,
-              color: Colors.black,
+              color: AppColors.black,
               size: 20,
             ),
           ),
@@ -67,10 +68,9 @@ class _MosaicItemsGalleryPageState extends State<MosaicItemsGalleryPage> {
         title: widget.title?.isNotEmpty == true
             ? Text(
                 widget.title!,
-                style: GoogleFonts.dmSans(
-                  fontSize: 18,
+                style: AppTypography.h4.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF0F1E36),
+                  color: AppColors.textNavyDeep,
                 ),
               )
             : null,
@@ -109,17 +109,17 @@ class _MosaicItemsGalleryPageState extends State<MosaicItemsGalleryPage> {
                           imageUrl: item.imageUrl,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey.shade200,
-                            highlightColor: Colors.grey.shade100,
+                            baseColor: AppColors.grey200,
+                            highlightColor: AppColors.grey100,
                             child: Container(
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                           errorWidget: (context, url, error) => Container(
-                            color: Colors.grey.shade200,
+                            color: AppColors.grey200,
                             child: const Icon(
                               Icons.broken_image,
-                              color: Colors.grey,
+                              color: AppColors.grey,
                             ),
                           ),
                         ),

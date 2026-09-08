@@ -109,7 +109,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E1E1E),
+                        color: AppColors.text1E1E1E,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -119,7 +119,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                         email,
                         style: TextStyle(
                           fontSize: 12,
-                          color: const Color(0xFF1E1E1E).withValues(alpha: 0.5),
+                          color: AppColors.text1E1E1E.withValues(alpha: 0.5),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

@@ -78,7 +78,7 @@ class _LocationTile extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF222222),
+                      color: AppColors.textDark,
                       height: 1.2,
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class CustomRoundedTextField extends StatelessWidget {
   final String? labelText;
@@ -70,7 +71,7 @@ class CustomRoundedTextField extends StatelessWidget {
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
-                  color: Color.fromARGB(255, 166, 173, 185),
+                  color: AppColors.shadowA6ADB9,
                   blurRadius: 8,
                   offset: Offset(0, 0),
                 ),
@@ -84,8 +85,6 @@ class CustomRoundedTextField extends StatelessWidget {
             // Add height of error message if it is displayed
             height: validator != null ? height + heightErrorMessage : height,
             margin: const EdgeInsets.only(left: 5, right: 5),
-            //padding: EdgeInsets.all(5),
-            //padding: EdgeInsets.all(8),
             child: TextFormField(
               onChanged: ((value) {}),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -105,15 +104,12 @@ class CustomRoundedTextField extends StatelessWidget {
               inputFormatters: inputFormatters,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(18),
-
                 prefixText: prefixText,
-                //labelText: labelText!,
                 prefixIcon: prefixIcon,
-                iconColor: Colors.black,
+                iconColor: AppColors.black,
                 hintText: labelText!,
                 filled: true,
-
-                fillColor: Colors.white,
+                fillColor: AppColors.white,
                 labelStyle:
                     TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 focusColor: Theme.of(context).colorScheme.onSurface,
@@ -185,7 +181,7 @@ class CustomRoundedTextFieldTT extends StatelessWidget {
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
-                  color: Colors.black,
+                  color: AppColors.black,
                   blurRadius: 10,
                   offset: Offset(0, 0),
                 ),
@@ -196,8 +192,6 @@ class CustomRoundedTextFieldTT extends StatelessWidget {
             ),
           ),
           Container(
-            //margin: EdgeInsets.only(bottom: 10),
-            //height: 55,
             child: TextFormField(
               onChanged: ((value) {}),
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -217,15 +211,12 @@ class CustomRoundedTextFieldTT extends StatelessWidget {
               inputFormatters: inputFormatters,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(18),
-
                 prefixText: prefixText,
-                //labelText: labelText!,
                 prefixIcon: prefixIcon,
-                iconColor: Colors.black,
+                iconColor: AppColors.black,
                 hintText: labelText!,
                 filled: true,
-
-                fillColor: Colors.white,
+                fillColor: AppColors.white,
                 labelStyle:
                     TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 focusColor: Theme.of(context).colorScheme.onSurface,

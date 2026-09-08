@@ -1,6 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 
 import 'custom_text_field.dart';
@@ -75,8 +76,8 @@ class _BookingdatePickerState extends State<BookingdatePicker> {
                 closeDialogOnOkTapped: true,
                 firstDayOfWeek: 1,
                 calendarType: CalendarDatePicker2Type.multi,
-                selectedDayTextStyle:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                selectedDayTextStyle: TextStyle(
+                    color: AppColors.white, fontWeight: FontWeight.w700),
                 //selectedDayHighlightColor: Colors.purple[800],
                 centerAlignModePicker: true,
                 // customModePickerIcon: Icon(Icons.push_pin_outlined),

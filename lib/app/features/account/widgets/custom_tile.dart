@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-//views/privacyPolicy
 class CustomTile extends StatelessWidget {
-  CustomTile({Key? key, required this.title, this.target, this.leading})
-      : super(key: key);
+  const CustomTile({super.key, required this.title, this.target, this.leading});
   final String title;
   final Widget? target;
   final Widget? leading;
@@ -16,8 +13,7 @@ class CustomTile extends StatelessWidget {
       title: Text(
         title,
       ),
-      //titleTextStyle: GoogleFonts.inter(fontSize: 12, color: Colors.black),
-      trailing: Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right),
       onTap: () {
         Navigator.push(
             context,

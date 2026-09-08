@@ -30,9 +30,7 @@ class HomeIcon extends StatelessWidget {
         ),
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          style: AppTypography.bodySmallSemiBold.copyWith(
             color: (currentState == expetedState)
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.surface,

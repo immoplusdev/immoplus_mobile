@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
@@ -11,17 +11,17 @@ import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:isar_community/isar.dart';
 
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 // White Luxury — fond blanc, pas de noir
-const Color _kBg = Color(0xFFFFFFFF);
-const Color _kGold = Color(0xFFC9A84C);
-const Color _kTextPrimary = Color(0xFF0A1128);
-const Color _kTextSecondary = Color(0xFF6B7280);
-const Color _kSeparator = Color(0xFFE5E7EB);
+const Color _kBg = AppColors.white;
+const Color _kGold = AppColors.goldLuxury;
+const Color _kTextPrimary = AppColors.textObsidian;
+const Color _kTextSecondary = AppColors.textLightGray;
+const Color _kSeparator = AppColors.borderSubtle;
 
 class FavoritePage extends StatefulWidget {
   final bool embedded;
@@ -90,11 +90,8 @@ class _FavoritePageState extends State<FavoritePage> {
                   centerTitle: false,
                   title: Text(
                     'Favoris',
-                    style: GoogleFonts.dmSans(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
+                    style: AppTypography.h1.copyWith(
                       color: _kTextPrimary,
-                      letterSpacing: -0.5,
                     ),
                   ),
                   leading: _isSelectionMode

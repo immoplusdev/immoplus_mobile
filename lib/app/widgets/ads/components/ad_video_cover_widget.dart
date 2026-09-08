@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 /// Affiche la miniature d'une vidéo du feed dans une carte de carrousel.
@@ -85,9 +86,9 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
             imageUrl: _thumbnailUrl!,
             fit: BoxFit.cover,
             placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(color: Colors.white),
+              baseColor: AppColors.grey300,
+              highlightColor: AppColors.grey100,
+              child: Container(color: AppColors.white),
             ),
             errorWidget: (context, url, error) {
               if (widget.buildErrorWidget != null) {
@@ -104,12 +105,12 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.35),
+                  color: AppColors.black.withValues(alpha: 0.35),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Iconsax.play,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 18,
                 ),
               ),

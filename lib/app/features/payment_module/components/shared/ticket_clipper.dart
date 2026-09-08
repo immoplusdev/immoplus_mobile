@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class TicketCardBackground extends StatelessWidget {
   const TicketCardBackground({
     super.key,
     required this.child,
     this.backgroundColor = Colors.white,
-    this.borderColor = const Color(0xFFD6E2FB),
+    this.borderColor = AppColors.borderD6E2FB,
     this.borderWidth = 1.2,
     this.punchOffsetY = 118.0,
     this.punchRadius = 14.0,

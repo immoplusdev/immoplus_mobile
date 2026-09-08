@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
@@ -14,12 +14,12 @@ import 'package:immoplus/app/widgets/custom_chip.dart';
 import 'package:shimmer/shimmer.dart';
 
 // White Luxury — cartes claires, pas de fond noir
-const Color _kSurface = Color(0xFFF9FAFB);
-const Color _kGold = Color(0xFF2744de);
-const Color _kTextPrimary = Color(0xFF0A1128);
-const Color _kTextSecondary = Color(0xFF6B7280);
-const Color _kSeparator = Color(0xFFE5E7EB);
-const Color _kTagBg = Color(0x26C9A84C); // rgba(201, 168, 76, 0.15)
+const Color _kSurface = AppColors.surfaceLight;
+const Color _kGold = AppColors.customBlue;
+const Color _kTextPrimary = AppColors.textObsidian;
+const Color _kTextSecondary = AppColors.textLightGray;
+const Color _kSeparator = AppColors.borderSubtle;
+const Color _kTagBg = AppColors.tagGoldBg;
 
 class FavoriteCard extends StatefulWidget {
   final bool isSelect;
@@ -76,9 +76,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
                   AutoSizeText(
                     widget.favotiteModel.name?.capitalizeWords() ?? '',
                     maxLines: 3,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.h4.copyWith(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
                       color: _kTextPrimary,
                       height: 1.25,
                     ),
@@ -99,9 +98,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
                           widget.favotiteModel.adress ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.dmSans(
+                          style: AppTypography.bodySmall.copyWith(
                             fontSize: 13,
-                            fontWeight: FontWeight.w400,
                             color: _kTextSecondary,
                           ),
                         ),
@@ -201,7 +199,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmSans(
+        style: AppTypography.microBold.copyWith(
           fontSize: 11,
           fontWeight: FontWeight.w600,
           color: Colors.black,
@@ -223,9 +221,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
         const Gap(4),
         Text(
           score?.toStringAsFixed(1) ?? '0.0',
-          style: GoogleFonts.dmSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          style: AppTypography.bodyMediumSemiBold.copyWith(
             color: _kTextSecondary,
           ),
         ),

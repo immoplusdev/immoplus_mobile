@@ -2,9 +2,10 @@ import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/utils/ad_action_handler.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -82,10 +83,9 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
             child: Text(
               widget.campaign.content.title!,
               textAlign: TextAlign.center,
-              style: GoogleFonts.dmSans(
-                fontSize: 20,
+              style: AppTypography.h3.copyWith(
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF1A1A2E),
+                color: AppColors.textCharcoal,
                 letterSpacing: -0.3,
               ),
             ),
@@ -142,14 +142,14 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
                               width: double.infinity,
                               height: double.infinity,
                               placeholder: (_, __) => Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(color: Colors.white),
+                                baseColor: AppColors.grey300,
+                                highlightColor: AppColors.grey100,
+                                child: Container(color: AppColors.white),
                               ),
                               errorWidget: (_, __, ___) => Container(
-                                color: Colors.grey[200],
+                                color: AppColors.grey200,
                                 child: const Icon(Icons.broken_image,
-                                    color: Colors.grey),
+                                    color: AppColors.grey),
                               ),
                             ),
                           );
@@ -186,9 +186,7 @@ class _AdCarouselWidgetState extends State<AdCarouselWidget> {
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: isActive
-                      ? const Color(0xFF898989)
-                      : const Color(0xffD9D9D9),
+                  color: isActive ? AppColors.textMuted : AppColors.D5D5D5,
                   borderRadius: BorderRadius.circular(4),
                 ),
               );

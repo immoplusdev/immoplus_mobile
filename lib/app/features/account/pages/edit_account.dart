@@ -93,7 +93,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF0D0D0D),
+                  color: AppColors.text0D0D0D,
                 ),
               ),
             ),
@@ -110,7 +110,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             _sheetTile(
               ctx: ctx,
               icon: Iconsax.gallery,
-              iconColor: const Color(0xFF6B7280),
+              iconColor: AppColors.textLightGray,
               label: "Choisir depuis la galerie",
               onTap: () => ImagePicker()
                   .pickImage(source: ImageSource.gallery, imageQuality: 50)
@@ -242,17 +242,17 @@ class _EditAccountPageState extends State<EditAccountPage> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF9FAFB),
+                              color: AppColors.surfaceLight,
                               borderRadius: BorderRadius.circular(12),
                               border:
-                                  Border.all(color: const Color(0xFFF2F4F7)),
+                                  Border.all(color: AppColors.borderF2F4F7),
                             ),
                             child: Row(
                               children: [
                                 Icon(
                                   Iconsax.info_circle,
                                   size: 18,
-                                  color: const Color(0xFF667085),
+                                  color: AppColors.textSecondaryMedium,
                                 ),
                                 const Gap(10),
                                 Expanded(
@@ -262,7 +262,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                                         .textTheme
                                         .bodySmall
                                         ?.copyWith(
-                                          color: const Color(0xFF667085),
+                                          color: AppColors.textSecondaryMedium,
                                           height: 1.4,
                                         ),
                                   ),
@@ -287,7 +287,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             decoration: BoxDecoration(
               color: AppColors.whiteBackground,
               border: const Border(
-                top: BorderSide(color: Color(0xFFF2F4F7)),
+                top: BorderSide(color: AppColors.borderF2F4F7),
               ),
             ),
             child: BlocBuilder<LoginCubit, LoginCubitState>(
@@ -340,7 +340,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: const Color(0xFFF9FAFB),
+      color: AppColors.surfaceLight,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -364,7 +364,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF1E1E1E),
+                  color: AppColors.text1E1E1E,
                 ),
               ),
             ],
@@ -384,7 +384,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF344054),
+            color: AppColors.text344054,
           ),
         ),
       ),
@@ -398,7 +398,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF344054),
+              color: AppColors.text344054,
               letterSpacing: 0.3,
             ),
       ),

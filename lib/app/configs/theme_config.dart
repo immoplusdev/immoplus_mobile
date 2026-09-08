@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
 class ThemeConfig {
   static ThemeData lightTheme({required BuildContext context}) => ThemeData(
-        textTheme: GoogleFonts.plusJakartaSansTextTheme().apply(),
+        textTheme: AppTypography.lightTextTheme(),
         useMaterial3: false,
         primaryColor: CupertinoColors.white,
         scaffoldBackgroundColor: CupertinoColors.white,
@@ -13,42 +13,35 @@ class ThemeConfig {
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30), // Bords très arrondis
+              borderRadius: BorderRadius.circular(30),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            textStyle: Theme.of(context).textTheme.titleMedium,
+            textStyle: AppTypography.button,
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: CupertinoColors.secondarySystemFill,
-          labelStyle: const TextStyle(color: CupertinoColors.black),
-
-          prefixStyle: const TextStyle(color: CupertinoColors.systemGrey),
-          hintStyle: const TextStyle(color: Color.fromARGB(179, 92, 90, 90)),
-          // enabledBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(color: Colors.white),
-          // ),
+          labelStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.black),
+          prefixStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.systemGrey),
+          hintStyle: AppTypography.bodyMedium.copyWith(color: const Color.fromARGB(179, 92, 90, 90)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(color: Colors.blue),
-          // ),
         ),
-        appBarTheme: const AppBarTheme(
-            centerTitle: false,
-            backgroundColor: CupertinoColors.white,
-            titleTextStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-              color: CupertinoColors.black,
-            ),
-            elevation: 0,
-            iconTheme: IconThemeData(
-              color: Colors.black,
-            )),
+        appBarTheme: AppBarTheme(
+          centerTitle: false,
+          backgroundColor: CupertinoColors.white,
+          titleTextStyle: AppTypography.h4.copyWith(
+            color: CupertinoColors.black,
+            fontWeight: FontWeight.bold,
+          ),
+          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
+        ),
         checkboxTheme: CheckboxThemeData(
           fillColor: WidgetStateProperty.all(AppColors.primary),
         ),
@@ -61,40 +54,31 @@ class ThemeConfig {
               onSecondary: CupertinoColors.white,
             ),
       );
-//DARK THEME
+
+  // DARK THEME
   static ThemeData darkTheme({required BuildContext context}) =>
       ThemeData.dark().copyWith(
         primaryColor: CupertinoColors.systemFill,
-        textTheme:
-            GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme)
-                .apply(
-          decorationColor: Colors.red,
-          bodyColor: CupertinoColors.white,
-          displayColor: Colors.blue,
-        ),
+        textTheme: AppTypography.darkTextTheme(),
         scaffoldBackgroundColor: CupertinoColors.black,
-        appBarTheme: const AppBarTheme(
-            centerTitle: false,
-            backgroundColor: CupertinoColors.black,
-            titleTextStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: CupertinoColors.white),
-            elevation: 0,
-            iconTheme: IconThemeData(
-              color: CupertinoColors.white,
-            )),
-        //scaffoldBackgroundColor: CupertinoColors.black,
+        appBarTheme: AppBarTheme(
+          centerTitle: false,
+          backgroundColor: CupertinoColors.black,
+          titleTextStyle: AppTypography.h4.copyWith(
+            color: CupertinoColors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: CupertinoColors.white,
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: CupertinoColors.systemFill.darkColor,
-          labelStyle: const TextStyle(color: CupertinoColors.white),
-
-          prefixStyle: const TextStyle(color: CupertinoColors.systemGrey3),
-          hintStyle: const TextStyle(color: Colors.white70),
-          // enabledBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(color: Colors.white),
-          // ),
+          labelStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.white),
+          prefixStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.systemGrey3),
+          hintStyle: AppTypography.bodyMedium.copyWith(color: Colors.white70),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
@@ -103,14 +87,13 @@ class ThemeConfig {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: CupertinoColors.darkBackgroundGray,
-            //textStyle: Tex
+            textStyle: AppTypography.button,
           ),
         ),
         checkboxTheme: CheckboxThemeData(
           fillColor:
               WidgetStateProperty.all(CupertinoColors.darkBackgroundGray),
         ),
-        //primarySwatch: Colors.green,
         colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: CupertinoColors.darkBackgroundGray,
               secondaryContainer: CupertinoColors.darkBackgroundGray,
@@ -118,7 +101,6 @@ class ThemeConfig {
               onPrimary: CupertinoColors.systemGrey5.darkColor,
               secondary: Colors.transparent,
               onSecondary: CupertinoColors.black,
-              //: Colors.blue,
             ),
       );
 }
@@ -132,11 +114,11 @@ class HomeSectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: GoogleFonts.plusJakartaSans(
-          fontSize: 15,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
-          color: Color(0xff0B1C30)),
+      style: AppTypography.button.copyWith(
+        color: AppColors.text0B1C30,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.3,
+      ),
     );
   }
 }

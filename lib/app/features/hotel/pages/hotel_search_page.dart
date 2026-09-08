@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
@@ -476,10 +476,9 @@ class _HotelSearchPageState extends State<HotelSearchPage>
               ),
               title: Text(
                 "Hôtel",
-                // style: GoogleFonts.plus(
-                //     color: Colors.white,
-                //     // fontWeight: FontWeight.bold,
-                //     fontSize: 22),
+                style: AppTypography.h3.copyWith(
+                  color: Colors.white,
+                ),
               ),
               centerTitle: true,
               actions: const [
@@ -835,16 +834,13 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                     ),
                     Text(
                       "Côte d'ivoire",
-                      style: GoogleFonts.oswald(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.h1.copyWith(
                         color: const Color(0xFFF08C00),
                       ),
                     ),
                     Text(
                       "Découvrir la Côte d'ivoire",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: AppTypography.h2,
                     ),
                     Gap(8),
                     Text(

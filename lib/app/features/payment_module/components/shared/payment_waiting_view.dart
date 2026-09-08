@@ -145,7 +145,7 @@ class PaymentWaitingView extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 13,
-              color: Color(0xFF64748B),
+              color: AppColors.textMuted,
               height: 1.3,
             ),
           ),

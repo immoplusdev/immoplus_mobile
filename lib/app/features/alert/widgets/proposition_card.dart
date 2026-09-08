@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
@@ -38,7 +38,7 @@ class PropositionCard extends StatelessWidget {
                 placeholder: (context, url) =>
                     Container(color: Colors.grey[200]),
                 errorWidget: (context, url, error) => Container(
-                    color: Colors.grey.shade100, child: Icon(Iconsax.image)),
+                    color: Colors.grey.shade100, child: const Icon(Iconsax.image)),
               ),
             ),
           ),
@@ -52,8 +52,7 @@ class PropositionCard extends StatelessWidget {
                   children: [
                     Text(
                       property.nom,
-                      style: GoogleFonts.dmSans(
-                        fontSize: 18,
+                      style: AppTypography.h4.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -65,8 +64,9 @@ class PropositionCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             property.location,
-                            style: GoogleFonts.dmSans(
-                                fontSize: 13, color: Colors.grey),
+                            style: AppTypography.bodySmall.copyWith(
+                              color: Colors.grey,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -79,16 +79,14 @@ class PropositionCard extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: currencyFormat.format(property.prix),
-                            style: GoogleFonts.dmSans(
-                              fontSize: 16,
+                            style: AppTypography.bodyLargeSemiBold.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
                           TextSpan(
                             text: ' / mois',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 14,
+                            style: AppTypography.bodyMedium.copyWith(
                               color: Colors.grey,
                             ),
                           ),
@@ -103,7 +101,7 @@ class PropositionCard extends StatelessWidget {
                   EstatePage.name,
                   pathParameters: {'idProduct': property.id},
                 ),
-                child: SmallButton(
+                child: const SmallButton(
                   text: 'Visiter',
                 ),
               ),

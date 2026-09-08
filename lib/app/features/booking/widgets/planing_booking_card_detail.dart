@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +31,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
               dense: true,
               title: const Text('ARRIVÉE'),
               contentPadding: EdgeInsets.zero.copyWith(left: 3),
-              titleTextStyle: GoogleFonts.inter(
+              titleTextStyle: AppTypography.labelMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -47,8 +47,10 @@ class PlaningBookingCardDetail extends StatelessWidget {
               dense: true,
               contentPadding: EdgeInsets.zero,
               title: const Text('DÉPART'),
-              titleTextStyle: GoogleFonts.inter(
-                  fontWeight: FontWeight.bold, color: Colors.black),
+              titleTextStyle: AppTypography.labelMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
               subtitle: (reservationModel.datesReservation.isNotEmpty)
                   ? AutoSizeText(
                       dateHeureFin,

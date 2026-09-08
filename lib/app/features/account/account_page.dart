@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -36,13 +36,13 @@ import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Design tokens — minimalist luxury, 2026
-const Color _kIconBg = Color(0xFFF2F2F2);
-const Color _kIconColor = Color(0xFF374151);
-const Color _kLabelColor = Color(0xFF0D0D0D);
-const Color _kSectionColor = Color(0xFF64748B);
-const Color _kTrailingColor = Color(0xFF374151);
-const Color _kBrandMuted = Color(0xFF9CA3AF); // muted light grey
-const Color _kSocialIcon = Color(0xFF6B7280); // monochromatic grey
+const Color _kIconBg = AppColors.iconBgLight;
+const Color _kIconColor = AppColors.textDarkGray;
+const Color _kLabelColor = AppColors.text0D0D0D;
+const Color _kSectionColor = AppColors.textMuted;
+const Color _kTrailingColor = AppColors.textDarkGray;
+const Color _kBrandMuted = AppColors.textBrandMuted; // muted light grey
+const Color _kSocialIcon = AppColors.textLightGray; // monochromatic grey
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -176,8 +176,7 @@ class _AccountPageState extends State<AccountPage> {
                     title: "Se Connecter / S`Inscrire",
                     titleColor: _kLabelColor,
                     trailingColor: _kTrailingColor,
-                    titleStyle: GoogleFonts.dmSans(
-                      fontSize: 16,
+                    titleStyle: AppTypography.bodyLarge.copyWith(
                       fontWeight: FontWeight.w500,
                       color: _kLabelColor,
                       height: 1.25,
@@ -263,7 +262,7 @@ class _AccountPageState extends State<AccountPage> {
       child: Center(
         child: Text(
           '@Afriq\'Solus',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.bodySmall.copyWith(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: _kBrandMuted,
@@ -324,7 +323,7 @@ class _AccountPageState extends State<AccountPage> {
         padding: const EdgeInsets.only(left: 20, bottom: 10),
         child: Text(
           title,
-          style: GoogleFonts.dmSans(
+          style: AppTypography.microBold.copyWith(
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: _kSectionColor,
@@ -345,8 +344,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Informations personnelles',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -365,8 +363,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Permissions',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -388,8 +385,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Notification',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -403,8 +399,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Historiques des réservations',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -418,8 +413,7 @@ class _AccountPageState extends State<AccountPage> {
         //   title: 'Mes demandes',
         //   titleColor: _kLabelColor,
         //   trailingColor: _kTrailingColor,
-        //   titleStyle: GoogleFonts.dmSans(
-        //     fontSize: 16,
+        //   titleStyle: AppTypography.bodyLarge.copyWith(
         //     fontWeight: FontWeight.w500,
         //     color: _kLabelColor,
         //     height: 1.25,
@@ -433,8 +427,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Réservations à payer',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -448,8 +441,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Historiques des visites',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -463,8 +455,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Historique des notes',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -478,8 +469,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Paiements',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -501,8 +491,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Déconnexion',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -526,7 +515,7 @@ class _AccountPageState extends State<AccountPage> {
             child: Center(
               child: Text(
                 'Supprimer mon compte',
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: Colors.red,
@@ -547,8 +536,7 @@ class _AccountPageState extends State<AccountPage> {
       title: 'Modifier mes identifiants de connexion',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,
-      titleStyle: GoogleFonts.dmSans(
-        fontSize: 16,
+      titleStyle: AppTypography.bodyLarge.copyWith(
         fontWeight: FontWeight.w500,
         color: _kLabelColor,
         height: 1.25,
@@ -565,8 +553,7 @@ class _AccountPageState extends State<AccountPage> {
       title: 'Termes et conditions',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,
-      titleStyle: GoogleFonts.dmSans(
-        fontSize: 16,
+      titleStyle: AppTypography.bodyLarge.copyWith(
         fontWeight: FontWeight.w500,
         color: _kLabelColor,
         height: 1.25,
@@ -588,8 +575,7 @@ class _AccountPageState extends State<AccountPage> {
             title: isLoggedIn ? 'Devenir Pro' : 'Publier un bien',
             titleColor: _kLabelColor,
             trailingColor: _kTrailingColor,
-            titleStyle: GoogleFonts.dmSans(
-              fontSize: 16,
+            titleStyle: AppTypography.bodyLarge.copyWith(
               fontWeight: FontWeight.w500,
               color: _kLabelColor,
               height: 1.25,

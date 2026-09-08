@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_body_model.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
@@ -107,7 +107,9 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                     },
                     child: Text(
                       'Mot de passe oublié',
-                      style: GoogleFonts.inter(color: AppColors.primary),
+                      style: AppTypography.bodySmallSemiBold.copyWith(
+                        color: AppColors.primary,
+                      ),
                     )),
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 
 class FurnitureDetailInfos extends StatelessWidget {
@@ -23,10 +24,11 @@ class FurnitureDetailInfos extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const Gap(14),
-            if (furnitureModel.codeFurniture != null) ...[
-              GestureDetector(
-                onTap: () async {
-                  await Clipboard.setData(
+            if (furnitureModel.codeFurniture != null &&
+                furnitureModel.codeFurniture!.isNotEmpty) ...[
+              InkWell(
+                onTap: () {
+                  Clipboard.setData(
                     ClipboardData(text: furnitureModel.codeFurniture ?? ""),
                   );
                   ToastUtils.success('Code du meuble copié');
@@ -34,10 +36,10 @@ class FurnitureDetailInfos extends StatelessWidget {
                 child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF7F8FA),
+                      color: AppColors.bgF7F8FA,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: const Color(0xFFEAECEF),
+                        color: AppColors.borderEAECEF,
                       ),
                     ),
                     child: Row(
@@ -104,10 +106,10 @@ class FurnitureDetailInfos extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
+          color: AppColors.bgF7F8FA,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFFEAECEF),
+            color: AppColors.borderEAECEF,
           ),
         ),
         child: Column(
@@ -130,7 +132,7 @@ class FurnitureDetailInfos extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF111827),
+                    color: AppColors.text111827,
                   ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,

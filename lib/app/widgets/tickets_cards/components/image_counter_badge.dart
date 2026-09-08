@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class ImageCounterBadge extends StatelessWidget {
   final int current;
@@ -14,7 +15,7 @@ class ImageCounterBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.55),
+        color: AppColors.black.withOpacity(0.55),
         borderRadius: BorderRadius.circular(20),
       ),
       child: RichText(
@@ -23,7 +24,7 @@ class ImageCounterBadge extends StatelessWidget {
             TextSpan(
               text: '$current',
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
@@ -31,7 +32,7 @@ class ImageCounterBadge extends StatelessWidget {
             TextSpan(
               text: '/$total',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
+                color: AppColors.white.withOpacity(0.7),
                 fontSize: 12,
                 fontWeight: FontWeight.normal,
               ),

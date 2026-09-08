@@ -23,9 +23,9 @@ enum FigmaToastType {
 }
 
 class _Constants {
-  static const Color borderColor = Color(0xFFE0E0E0);
-  static const Color warningColor = Color(0xFFF57C00);
-  static const Color descriptionColor = Color(0xFF9E9E9E);
+  static const Color borderColor = AppColors.borderE0;
+  static const Color warningColor = AppColors.orangeWarning;
+  static const Color descriptionColor = AppColors.textMuted;
 
   static const double horizontalMargin = 12;
   static const double verticalMargin = 6;
@@ -74,12 +74,12 @@ class FigmaToast extends StatelessWidget {
           vertical: _Constants.verticalPadding,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(_Constants.borderRadius),
           border: Border.all(color: _Constants.borderColor),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: _Constants.shadowAlpha),
+              color: AppColors.black.withValues(alpha: _Constants.shadowAlpha),
               blurRadius: _Constants.shadowBlur,
               offset: const Offset(0, _Constants.shadowOffsetY),
             ),

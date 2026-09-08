@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
@@ -25,7 +26,7 @@ class AdImageWidget extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
-          color: Colors.grey[100]!,
+          color: AppColors.grey100,
           borderRadius: BorderRadius.circular(16),
         ),
         clipBehavior: Clip.antiAlias,
@@ -35,12 +36,12 @@ class AdImageWidget extends StatelessWidget {
           width: double.infinity,
           fit: BoxFit.cover,
           placeholder: (context, url) => Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
+            baseColor: AppColors.grey300,
+            highlightColor: AppColors.grey100,
             child: Container(
               width: double.infinity,
               height: 380,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
           errorWidget: (context, url, error) => const SizedBox.shrink(),

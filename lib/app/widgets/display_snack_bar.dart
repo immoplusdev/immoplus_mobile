@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 displaySnackBar(
     {required BuildContext context,
@@ -8,11 +9,11 @@ displaySnackBar(
     bool removeUntil = true}) {
   ScaffoldMessenger.of(context)
       .showSnackBar(SnackBar(
-        duration: Duration(
+        duration: const Duration(
           seconds: 2,
         ),
         backgroundColor:
-            warning ? Colors.redAccent : Color.fromARGB(255, 104, 209, 151),
+            warning ? AppColors.redAccent : AppColors.green68D197,
         behavior: SnackBarBehavior.floating,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -26,7 +27,7 @@ displaySnackBar(
                     ? CupertinoIcons.exclamationmark_circle_fill
                     : CupertinoIcons.check_mark_circled_solid,
                 size: 30,
-                color: Colors.white,
+                color: AppColors.white,
               ),
               const SizedBox(
                 width: 10,

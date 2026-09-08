@@ -40,7 +40,7 @@ class CustomTabSelector extends StatelessWidget {
                 curve: Curves.easeInOut,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: selectedIndex == index ? color : Colors.transparent,
+                  color: selectedIndex == index ? color : AppColors.transparent,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Center(
@@ -48,8 +48,8 @@ class CustomTabSelector extends StatelessWidget {
                     duration: const Duration(milliseconds: 300),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedIndex == index
-                              ? Colors.white
-                              : unselectedColor ?? Colors.black,
+                              ? AppColors.white
+                              : unselectedColor ?? AppColors.black,
                           fontWeight: selectedIndex == index
                               ? FontWeight.bold
                               : FontWeight.normal,

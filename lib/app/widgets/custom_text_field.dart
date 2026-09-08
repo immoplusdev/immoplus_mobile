@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField({
@@ -119,7 +120,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusNode: _textFieldFocus,
         decoration: InputDecoration(
           isDense: widget.isDense,
-          errorStyle: const TextStyle(color: Colors.redAccent),
+          errorStyle: const TextStyle(color: AppColors.redAccent),
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 20),
           // prefixIconColor: _iconColor,
@@ -132,7 +133,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           //iconColor: Colors.black,
           hintText: widget.labelText,
           hintStyle: TextStyle(
-            color: Colors.grey,
+            color: AppColors.grey,
             //fontWeight: FontWeight.bold,
             fontSize: widget.fontSize ?? 15,
           ),

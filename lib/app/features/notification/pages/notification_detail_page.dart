@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:intl/intl.dart';
 
@@ -25,7 +25,7 @@ class NotificationDetailPage extends StatelessWidget {
         ),
         title: Text(
           'Détails',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.h4.copyWith(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -53,8 +53,7 @@ class NotificationDetailPage extends StatelessWidget {
                     children: [
                       Text(
                         notification.subject ?? 'Notification',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 18,
+                        style: AppTypography.h4.copyWith(
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF1F2937),
                         ),
@@ -63,8 +62,7 @@ class NotificationDetailPage extends StatelessWidget {
                       Text(
                         DateFormat('d MMMM yyyy, HH:mm', 'fr_FR')
                             .format(notification.createdAt ?? DateTime.now()),
-                        style: GoogleFonts.dmSans(
-                          fontSize: 14,
+                        style: AppTypography.bodyMedium.copyWith(
                           color: Colors.grey.shade500,
                         ),
                       ),
@@ -76,8 +74,7 @@ class NotificationDetailPage extends StatelessWidget {
             const Gap(32),
             Text(
               'Message',
-              style: GoogleFonts.dmSans(
-                fontSize: 16,
+              style: AppTypography.titleSmall.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade400,
                 letterSpacing: 0.5,
@@ -94,10 +91,8 @@ class NotificationDetailPage extends StatelessWidget {
               ),
               child: Text(
                 notification.message ?? 'Aucun contenu.',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLarge.copyWith(
                   color: const Color(0xFF4B5563),
-                  height: 1.6,
                 ),
               ),
             ),

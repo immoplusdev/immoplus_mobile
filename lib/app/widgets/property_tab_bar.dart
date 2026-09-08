@@ -95,7 +95,7 @@ class _PropertyTabBarState extends State<PropertyTabBar>
             fontWeight: FontWeight.w600,
           ),
           // Onglets inactifs
-          unselectedLabelColor: const Color(0xFFAAAAAA),
+          unselectedLabelColor: AppColors.unselectedGray,
           unselectedLabelStyle: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -108,14 +108,14 @@ class _PropertyTabBarState extends State<PropertyTabBar>
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           // Pas de ligne grise sous tout le TabBar
-          dividerColor: Colors.transparent,
+          dividerColor: AppColors.transparent,
           splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          overlayColor: WidgetStateProperty.all(AppColors.transparent),
           padding: EdgeInsets.zero,
           tabAlignment: TabAlignment.start,
           isScrollable: true,
         ),
-        const Divider(height: 1, thickness: 1, color: Color(0xFFF0F0F0)),
+        const Divider(height: 1, thickness: 1, color: AppColors.dividerLight),
         const SizedBox(height: 12),
         // Contenu de l'onglet actif
         AnimatedSwitcher(

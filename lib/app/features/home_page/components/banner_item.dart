@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:go_router/go_router.dart';
@@ -210,14 +210,11 @@ class BannerItem extends StatelessWidget {
     final defaultColor = Utils.parseColor(banner.textColor) ?? Colors.white;
     final iconColor = Utils.parseColor(banner.iconColor) ?? defaultColor;
 
-    final textStyle = GoogleFonts.plusJakartaSans(
+    final textStyle = AppTypography.labelMedium.copyWith(
       color: defaultColor,
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
     );
-    final ctaStyle = GoogleFonts.plusJakartaSans(
+    final ctaStyle = AppTypography.labelMedium.copyWith(
       color: defaultColor,
-      fontSize: 12,
       fontWeight: FontWeight.bold,
       decoration: TextDecoration.underline,
       decorationColor: defaultColor,

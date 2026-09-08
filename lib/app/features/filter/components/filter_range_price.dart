@@ -64,7 +64,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
             'Fourchette de prix',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF344054),
+                  color: AppColors.text344054,
                 ),
           ),
           const Gap(12),
@@ -73,7 +73,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFF2F4F7)),
+              border: Border.all(color: AppColors.borderF2F4F7),
             ),
             child: Column(
               children: [
@@ -108,7 +108,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     Container(
                       width: 24,
                       height: 1,
-                      color: const Color(0xFFD0D5DD),
+                      color: AppColors.borderMediumGray,
                     ),
                     const Gap(12),
                     Expanded(
@@ -143,7 +143,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                 SliderTheme(
                   data: SliderThemeData(
                     activeTrackColor: AppColors.primary,
-                    inactiveTrackColor: const Color(0xFFF2F4F7),
+                    inactiveTrackColor: AppColors.borderF2F4F7,
                     thumbColor: AppColors.primary,
                     overlayColor: AppColors.primary.withValues(alpha: 0.1),
                     rangeThumbShape: const RoundRangeSliderThumbShape(
@@ -197,9 +197,9 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFB),
+        color: AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.borderF2F4F7),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +209,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
             style: const TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF667085),
+              color: AppColors.textSecondaryMedium,
             ),
           ),
           Row(
@@ -221,7 +221,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF344054),
+                        color: AppColors.text344054,
                       ),
                   decoration: const InputDecoration(
                     isDense: true,
@@ -233,7 +233,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     suffixText: ' F',
                     suffixStyle: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF667085),
+                      color: AppColors.textSecondaryMedium,
                     ),
                   ),
                   onChanged: onChanged,

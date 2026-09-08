@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 class ReviewListTile extends StatelessWidget {
   const ReviewListTile(
@@ -11,7 +12,7 @@ class ReviewListTile extends StatelessWidget {
     return ListTile(
       leading: Text(
         title,
-        style: TextStyle(color: Colors.grey[600]),
+        style: const TextStyle(color: AppColors.grey600),
       ),
       trailing: Text(trailing,
           style: TextStyle(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
@@ -200,10 +200,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   duration: const Duration(milliseconds: 600),
                   child: Text(
                     data.title1,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.h1.copyWith(
                       fontSize: 55,
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF00122E),
+                      color: AppColors.textHeadingObsidian,
                       height: 1.1,
                     ),
                   ),
@@ -221,10 +221,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                       Expanded(
                         child: Text(
                           data.title2,
-                          style: GoogleFonts.dmSans(
+                          style: AppTypography.h1.copyWith(
                             fontSize: 55,
                             fontWeight: FontWeight.w900,
-                            color: const Color(0xFF00122E),
+                            color: AppColors.textHeadingObsidian,
                             height: 1.1,
                           ),
                         ),
@@ -236,10 +236,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   duration: const Duration(milliseconds: 800),
                   child: Text(
                     data.title3,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.h1.copyWith(
                       fontSize: 55,
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF00122E),
+                      color: AppColors.textHeadingObsidian,
                       height: 1.1,
                     ),
                   ),

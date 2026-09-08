@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/payment/operator_model.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
@@ -153,16 +153,12 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
                               ),
                               tileColor: Colors.white,
                               title: Text(operator.name),
-                              titleTextStyle: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
+                              titleTextStyle: AppTypography.h4.copyWith(
                                 color: Colors.black,
                               ),
                               subtitle: Text(
                                 "Frais : ${operator.fee} %",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12,
+                                style: AppTypography.bodySmall.copyWith(
                                   color: Colors.black,
                                 ),
                               ),

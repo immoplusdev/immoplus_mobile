@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/models/remote/alert/property_type.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
@@ -54,7 +54,7 @@ class AlertCard extends StatelessWidget {
                     children: [
                       Text(
                         '${(alert.criteria.propertyTypeObj?.label ?? '').capitalize()} · ${alert.criteria.location ?? 'Abidjan'}',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.bodySmallSemiBold.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
@@ -62,8 +62,7 @@ class AlertCard extends StatelessWidget {
                       if (alert.createdAt != null)
                         Text(
                           'Envoyée le ${DateFormat('dd MMMM yyyy', 'fr_FR').format(alert.createdAt!)}',
-                          style: GoogleFonts.dmSans(
-                              fontSize: 12, color: Colors.grey),
+                          style: AppTypography.caption.copyWith(color: Colors.grey),
                         ),
                     ],
                   ),
@@ -77,7 +76,7 @@ class AlertCard extends StatelessWidget {
                   ),
                   child: Text(
                     status.label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.micro.copyWith(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: status.textColor,
@@ -111,9 +110,8 @@ class AlertCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${alert.unreadMatchCount} ${(alert.unreadMatchCount ?? 0) > 1 ? 'nouvelles propositions disponibles' : 'nouvelle proposition disponible'}',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.bodySmallSemiBold.copyWith(
                           fontSize: 13,
-                          fontWeight: FontWeight.w600,
                           color: AppColors.primary,
                         ),
                       ),
@@ -144,7 +142,7 @@ class AlertCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text('Consulté',
-                            style: GoogleFonts.dmSans(
+                            style: AppTypography.button.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 13)),
                         const Gap(8),
                         const Icon(Icons.arrow_forward_ios, size: 12),
@@ -161,7 +159,7 @@ class AlertCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Archivée',
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.button.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey.shade500,
                         fontSize: 13,
@@ -196,7 +194,7 @@ class AlertCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text('Voir détails',
-                            style: GoogleFonts.dmSans(
+                            style: AppTypography.button.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 13)),
                         const Gap(8),
                         const Icon(Icons.arrow_forward_ios, size: 12),
@@ -229,7 +227,7 @@ class AlertCard extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade700),
+        style: AppTypography.caption.copyWith(color: Colors.grey.shade700),
       ),
     );
   }

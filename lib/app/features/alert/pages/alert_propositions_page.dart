@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
@@ -78,8 +78,7 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
         ),
         title: Text(
           'Mes propositions',
-          style: GoogleFonts.dmSans(
-            fontSize: 20,
+          style: AppTypography.h3.copyWith(
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -98,7 +97,7 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
                       const Gap(16),
                       Text(
                         'Aucune proposition pour le moment',
-                        style: GoogleFonts.dmSans(color: Colors.grey),
+                        style: AppTypography.bodyMedium.copyWith(color: Colors.grey),
                       ),
                     ],
                   ),

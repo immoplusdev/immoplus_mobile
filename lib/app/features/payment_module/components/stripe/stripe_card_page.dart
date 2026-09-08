@@ -12,6 +12,7 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/payment_module/components/stripe/stripe_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -143,7 +144,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
               Icon(
                 FontAwesomeIcons.creditCard.data,
                 size: 13,
-                color: Color(0xFF635BFF),
+                color: AppColors.stripePurple,
               ),
               const Gap(8),
               Text(

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
@@ -43,7 +43,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
     final defaultTheme = PinTheme(
       width: 52,
       height: 56,
-      textStyle: GoogleFonts.dmSans(
+      textStyle: AppTypography.h3.copyWith(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF0D0D0D),
@@ -85,7 +85,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
           ),
           title: Text(
             'Vérification',
-            style: GoogleFonts.dmSans(
+            style: AppTypography.h4.copyWith(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF0D0D0D),
@@ -103,7 +103,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
               Text(
                 'Entrez le code de vérification',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.h3.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: const Color(0xFF0D0D0D),
@@ -113,8 +113,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
               Text(
                 'Un code a été envoyé à votre $label.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
-                  fontSize: 14,
+                style: AppTypography.bodyMedium.copyWith(
                   color: const Color(0xFF64748B),
                   height: 1.5,
                 ),

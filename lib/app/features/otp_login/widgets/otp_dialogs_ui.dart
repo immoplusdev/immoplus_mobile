@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:pinput/pinput.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -27,22 +27,17 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
               Text(
                 'Envoyer le code par',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 18,
+                style: AppTypography.h4.copyWith(
                   fontWeight: FontWeight.w700,
                   color: AppColors.primary,
-                  height: 1.3,
                 ),
               ),
               const SizedBox(height: 12),
               Text(
                 'Choisissez comment vous souhaitez recevoir votre code de vérification.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFF64748B),
-                  height: 1.5,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textMuted,
                 ),
               ),
               const SizedBox(height: 24),
@@ -68,9 +63,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                   ),
                   child: Text(
                     'SMS',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.button.copyWith(
                       color: AppColors.primary,
                     ),
                   ),
@@ -136,8 +129,7 @@ Future<String?> showOtpInputDialog(
                         ? 'Entrez le code reçu par WhatsApp'
                         : 'Entrez le code reçu par SMS',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 18,
+                    style: AppTypography.h4.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary,
                     ),
@@ -146,10 +138,8 @@ Future<String?> showOtpInputDialog(
                   Text(
                     'Un code à 6 chiffres a été envoyé au $phoneNumber',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF64748B),
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.textMuted,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -162,9 +152,7 @@ Future<String?> showOtpInputDialog(
                       defaultPinTheme: PinTheme(
                         width: 45,
                         height: 45,
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                        textStyle: AppTypography.h3.copyWith(
                           color: Colors.black,
                         ),
                         decoration: BoxDecoration(
@@ -180,9 +168,7 @@ Future<String?> showOtpInputDialog(
                       focusedPinTheme: PinTheme(
                         width: 45,
                         height: 45,
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                        textStyle: AppTypography.h3.copyWith(
                           color: Colors.black,
                         ),
                         decoration: BoxDecoration(
@@ -209,7 +195,7 @@ Future<String?> showOtpInputDialog(
                     Text(
                       currentError!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.red, fontSize: 13),
+                      style: AppTypography.bodySmall.copyWith(color: Colors.red),
                     ),
                   ],
 
@@ -231,9 +217,7 @@ Future<String?> showOtpInputDialog(
                       onPressed: onResend,
                       child: Text(
                         'Renvoyer le code',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.labelLarge.copyWith(
                           color: AppColors.primary,
                         ),
                       ),

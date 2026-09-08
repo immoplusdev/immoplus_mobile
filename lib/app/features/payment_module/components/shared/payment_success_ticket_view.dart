@@ -156,7 +156,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       child: SvgPicture.asset(
                           "assets/svgs/icons/save_payment.svg"),
                     ),
-                    backgroundColor: const Color(0xFFEFF4FF),
+                    backgroundColor: AppColors.bgEFF4FF,
                     onTap: _isExporting
                         ? () {}
                         : () => _downloadScreenshot(displayPaymentId),
@@ -167,7 +167,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       child: SvgPicture.asset(
                           "assets/svgs/icons/share_payment.svg"),
                     ),
-                    backgroundColor: const Color(0xFFEFF4FF),
+                    backgroundColor: AppColors.bgEFF4FF,
                     onTap: _isExporting
                         ? () {}
                         : () => _shareScreenshot(
@@ -335,7 +335,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
   }) {
     return TicketCardBackground(
       punchOffsetY: 118.0,
-      borderColor: const Color(0xFFD6E2FB),
+      borderColor: AppColors.borderD6E2FB,
       borderWidth: 1.2,
       scallopCount: 7,
       scallopDepth: 9.0,
@@ -364,7 +364,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF8A94A6),
+                    color: AppColors.text8A94A6,
                     height: 1.35,
                   ),
                 ),
@@ -376,7 +376,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: _buildDottedLine(
-                color: const Color(0xFFCBD5E1),
+                color: AppColors.textCBD5E1,
                 dashWidth: 6,
                 dashSpace: 5,
                 horizontalPadding: 35),
@@ -412,14 +412,14 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF8A94A6),
+                                    color: AppColors.text8A94A6,
                                   ),
                                 ),
                                 const Gap(4),
                                 const Icon(
                                   CupertinoIcons.doc_on_doc,
                                   size: 13,
-                                  color: Color(0xFF8A94A6),
+                                  color: AppColors.text8A94A6,
                                 ),
                               ],
                             ),
@@ -445,7 +445,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF8A94A6),
+                            color: AppColors.text8A94A6,
                           ),
                         ),
                         const Gap(4),
@@ -475,7 +475,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF8A94A6),
+                          color: AppColors.text8A94A6,
                         ),
                       ),
                       const Gap(4),
@@ -540,7 +540,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF64748B),
+                                color: AppColors.textMuted,
                               ),
                             ),
                           ],
@@ -555,7 +555,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
 
           // ── POINTILLÉS INFÉRIEURS ──
           _buildDottedLine(
-            color: const Color(0xFFE2E8F0),
+            color: AppColors.textE2E8F0,
             dashWidth: 20,
             dashSpace: 5,
           ),
@@ -568,7 +568,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF94A3B8),
+                color: AppColors.text94A3B8,
               ),
             ),
           ),

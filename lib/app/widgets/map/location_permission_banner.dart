@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/services/location_service.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocationPermissionBanner extends StatefulWidget {
@@ -68,11 +69,11 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
         margin: const EdgeInsets.only(top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.black.withValues(alpha: 0.08),
               blurRadius: 12,
               offset: const Offset(0, 3),
             ),
@@ -84,11 +85,11 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: Colors.orange.shade50,
+                color: AppColors.orange50,
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.location_off_rounded,
-                  size: 16, color: Colors.orange.shade700),
+                  size: 16, color: AppColors.orange700),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -97,7 +98,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade700,
+                  color: AppColors.grey700,
                 ),
               ),
             ),
@@ -108,7 +109,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.orange.shade50,
+                    color: AppColors.orange50,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Text(
@@ -116,7 +117,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange.shade700,
+                      color: AppColors.orange700,
                     ),
                   ),
                 ),
@@ -125,7 +126,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
               GestureDetector(
                 onTap: _closeBanner,
                 child: Icon(Icons.close_rounded,
-                    size: 18, color: Colors.grey.shade400),
+                    size: 18, color: AppColors.grey400),
               ),
             ],
           ],

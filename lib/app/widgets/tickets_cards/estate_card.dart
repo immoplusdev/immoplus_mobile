@@ -90,7 +90,7 @@ class _EstateCardState extends State<EstateCard> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
-                                        .copyWith(color: Colors.grey.shade600),
+                                        .copyWith(color: AppColors.grey600),
                                   ),
                                 ),
                               ],
@@ -109,7 +109,7 @@ class _EstateCardState extends State<EstateCard> {
                               TextSpan(
                                   text:
                                       "/ ${widget.bienImmobilierModel.typeLocation}",
-                                  style: TextStyle(color: Colors.grey.shade600))
+                                  style: TextStyle(color: AppColors.grey600))
                             ]))
                           ],
                         ),
@@ -149,11 +149,11 @@ class _EstateCardState extends State<EstateCard> {
                 },
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: value ? Colors.red : Colors.grey.shade300,
+                  backgroundColor: value ? AppColors.red : AppColors.grey300,
                   child: Icon(
                     FontAwesomeIcons.solidHeart.data,
                     size: 16,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/image_counter_badge.dart';
@@ -129,8 +130,8 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
                   foregroundDecoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.black.withOpacity(0.5),
-                        Colors.transparent
+                        AppColors.black.withOpacity(0.5),
+                        AppColors.transparent
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -138,7 +139,7 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
                     ),
                   ),
                   width: double.infinity,
-                  color: Colors.grey.shade100,
+                  color: AppColors.grey100,
                   child: CachedNetworkImage(
                     imageUrl: url,
                     memCacheWidth: _targetWidth,
@@ -188,9 +189,9 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
 
   Widget _buildPlaceholder() {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Container(color: Colors.white),
+      baseColor: AppColors.grey300,
+      highlightColor: AppColors.grey100,
+      child: Container(color: AppColors.white),
     );
   }
 
@@ -199,34 +200,6 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
       alignment: Alignment.center,
       children: [
         _buildPlaceholder(),
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     SizedBox(
-        //       width: 30,
-        //       height: 30,
-        //       child: CircularProgressIndicator(
-        //         value: progress,
-        //         strokeWidth: 2,
-        //         valueColor: AlwaysStoppedAnimation<Color>(
-        //             Colors.white.withOpacity(0.5)),
-        //       ),
-        //     ),
-        //     const SizedBox(height: 10),
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 20),
-        //       child: SelectableText(
-        //         url,
-        //         textAlign: TextAlign.center,
-        //         style: const TextStyle(
-        //           fontSize: 18,
-        //           color: Colors.white70,
-        //           backgroundColor: Colors.black26,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }
@@ -236,20 +209,20 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
       onTap: () => _onRetry(index),
       behavior: HitTestBehavior.opaque,
       child: Container(
-        color: Colors.grey.shade200,
-        child: const Column(
+        color: AppColors.grey200,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.cloud_off,
               size: 50,
-              color: Colors.grey,
+              color: AppColors.grey,
             ),
             SizedBox(height: 8),
             Text(
               "Erreur de chargement\nAppuyez pour réessayer",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              style: TextStyle(color: AppColors.grey, fontSize: 12),
             ),
           ],
         ),

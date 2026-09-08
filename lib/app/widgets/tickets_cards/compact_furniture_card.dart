@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -65,18 +66,18 @@ class CompactFurnitureCard extends StatelessWidget {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.grey300,
+        highlightColor: AppColors.grey100,
         period: const Duration(milliseconds: 500),
-        child: Container(color: Colors.white),
+        child: Container(color: AppColors.white),
       ),
       errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
+        color: AppColors.grey200,
         child: Center(
           child: Icon(
             FontAwesomeIcons.images.data,
             size: 60,
-            color: Colors.grey.shade400,
+            color: AppColors.grey400,
           ),
         ),
       ),
@@ -94,10 +95,9 @@ class CompactFurnitureCard extends StatelessWidget {
       children: [
         Text(
           furniture.titre,
-          style: GoogleFonts.plusJakartaSans(
+          style: AppTypography.button.copyWith(
             fontWeight: FontWeight.bold,
-            fontSize: 15,
-            color: Colors.black87,
+            color: AppColors.black87,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -105,9 +105,8 @@ class CompactFurnitureCard extends StatelessWidget {
         const Gap(3),
         Text(
           location,
-          style: GoogleFonts.plusJakartaSans(
-            color: Colors.grey.shade600,
-            fontSize: 13,
+          style: AppTypography.bodySmall.copyWith(
+            color: AppColors.grey600,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -115,10 +114,9 @@ class CompactFurnitureCard extends StatelessWidget {
         const Gap(12),
         Text(
           '${CurrencyFormatter().format(furniture.prix.toString())} Fcfa',
-          style: GoogleFonts.plusJakartaSans(
+          style: AppTypography.button.copyWith(
             fontWeight: FontWeight.w900,
-            fontSize: 15,
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
       ],

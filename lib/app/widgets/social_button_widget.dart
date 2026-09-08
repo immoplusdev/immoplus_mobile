@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 
 enum LoginMode {
   phone,
@@ -42,7 +43,7 @@ class SocialLoginButtons extends StatelessWidget {
 
           // Bouton Google
           _SocialButton(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             onPressed: () {
               context.read<LoginCubit>().signInWithGoogle();
             },
@@ -55,12 +56,12 @@ class SocialLoginButtons extends StatelessWidget {
           // Bouton Apple
           if (Platform.isIOS)
             _SocialButton(
-              backgroundColor: Colors.black,
+              backgroundColor: AppColors.black,
               onPressed: () => context.read<LoginCubit>().signInWithApple(),
               child: Center(
-                child: const FaIcon(
+                child: FaIcon(
                   FontAwesomeIcons.apple,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 30,
                 ),
               ),
@@ -76,11 +77,11 @@ class SocialLoginButtons extends StatelessWidget {
       case LoginMode.phone:
         // Sur la page téléphone, affiche le bouton @ (vers email)
         return _SocialButton(
-          backgroundColor: Colors.blue,
+          backgroundColor: AppColors.blue,
           onPressed: onSwitchMode,
-          child: const FaIcon(
+          child: FaIcon(
             FontAwesomeIcons.at,
-            color: CupertinoColors.white,
+            color: AppColors.white,
             size: 40,
           ),
         );
@@ -88,11 +89,11 @@ class SocialLoginButtons extends StatelessWidget {
       case LoginMode.email:
         // Sur la page email, affiche le bouton PIN (vers téléphone)
         return _SocialButton(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: AppColors.blueGrey,
           onPressed: onSwitchMode,
-          child: const Icon(
+          child: Icon(
             Icons.pin,
-            color: CupertinoColors.white,
+            color: AppColors.white,
             size: 40,
           ),
         );
@@ -120,7 +121,7 @@ class _SocialButton extends StatelessWidget {
         shape: const CircleBorder(),
         padding: const EdgeInsets.all(3),
         backgroundColor: backgroundColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
       onPressed: onPressed,
       child: child,

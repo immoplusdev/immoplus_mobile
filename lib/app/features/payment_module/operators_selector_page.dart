@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
@@ -158,10 +158,8 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     ),
                     tileColor: Colors.white,
                     title: Text(operator.name),
-                    titleTextStyle: GoogleFonts.inter(
-                      fontWeight: FontWeight.w600,
+                    titleTextStyle: AppTypography.titleSmall.copyWith(
                       color: Colors.black,
-                      fontSize: 16,
                     ),
                     trailing: _isLoading && isStripe
                         ? const SizedBox(

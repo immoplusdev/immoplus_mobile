@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/configs/app_typography.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_request.dart';
 import 'package:immoplus/app/data/models/remote/alert/property_type.dart';
@@ -159,9 +159,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         ),
         title: Text(
           _isEditMode ? 'Modifier ma demande' : 'Nouvelle demande',
-          style: GoogleFonts.dmSans(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+          style: AppTypography.h3.copyWith(
             color: Colors.black,
           ),
         ),
@@ -207,9 +205,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
+      style: AppTypography.bodyMediumMedium.copyWith(
         color: Colors.grey.shade600,
       ),
     );
@@ -246,9 +242,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   const Gap(8),
                   Text(
                     type.label,
-                    style: GoogleFonts.dmSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                    style: AppTypography.captionMedium.copyWith(
                       color: isSelected ? Colors.white : Colors.grey.shade600,
                     ),
                   ),
@@ -281,7 +275,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               child: Center(
                 child: Text(
                   type.label,
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.button.copyWith(
                     fontWeight: FontWeight.bold,
                     color: isSelected ? Colors.white : Colors.grey.shade600,
                   ),
@@ -312,8 +306,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               child: Text(
                 _selectedAddress?.description ??
                     'Sélectionner une localisation',
-                style: GoogleFonts.dmSans(
-                  fontSize: 14,
+                style: AppTypography.bodyMedium.copyWith(
                   color: _selectedAddress != null
                       ? Colors.black
                       : Colors.grey.shade400,
@@ -347,8 +340,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
             child: Center(
               child: Text(
                 rooms == 5 ? '5+' : rooms.toString(),
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLargeSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
                   color: isSelected ? Colors.white : const Color(0xFF1E40AF),
                 ),
@@ -404,10 +396,10 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
-              style: GoogleFonts.dmSans(fontSize: 10, color: Colors.grey)),
+              style: AppTypography.micro.copyWith(fontSize: 10, color: Colors.grey)),
           Text(value,
-              style: GoogleFonts.dmSans(
-                  fontSize: 14, fontWeight: FontWeight.bold)),
+              style: AppTypography.bodyMediumSemiBold.copyWith(
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -420,7 +412,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       decoration: InputDecoration(
         hintText: 'Ex : Un grand jardin avec piscine',
         hintStyle:
-            GoogleFonts.dmSans(fontSize: 14, color: Colors.grey.shade400),
+            AppTypography.bodyMedium.copyWith(color: Colors.grey.shade400),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(

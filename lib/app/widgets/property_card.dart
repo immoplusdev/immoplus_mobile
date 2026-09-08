@@ -41,7 +41,7 @@ class BookNowButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: AppColors.white,
               letterSpacing: 0.3,
             ),
           ),
@@ -139,7 +139,7 @@ class PropertyCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -315,10 +315,10 @@ class PropertyImage extends StatelessWidget {
                       fit: BoxFit.cover,
                       memCacheWidth: (width * MediaQuery.devicePixelRatioOf(context)).toInt(),
                       placeholder: (_, __) =>
-                          Container(color: const Color(0xFFEEEEEE)),
-                      errorWidget: (_, __, ___) => _ImagePlaceholder(),
+                          Container(color: AppColors.borderLight),
+                      errorWidget: (context, url, error) => _buildPlaceholder(),
                     )
-                  : _ImagePlaceholder(),
+                  : _buildPlaceholder(),
             ),
           ),
           if (rating != null)
@@ -331,15 +331,26 @@ class PropertyImage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      width: double.infinity,
+      height: 180,
+      color: AppColors.borderLight,
+      child: Center(
+        child: Icon(Iconsax.building, color: AppColors.textMuted, size: 32),
+      ),
+    );
+  }
 }
 
 class _ImagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFEEEEEE),
-      child: const Center(
-        child: Icon(Iconsax.building, color: Color(0xFFBBBBBB), size: 32),
+      color: AppColors.borderLight,
+      child: Center(
+        child: Icon(Iconsax.building, color: AppColors.textMuted, size: 32),
       ),
     );
   }
@@ -355,18 +366,18 @@ class _RatingBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.60),
+        color: AppColors.black.withValues(alpha: 0.60),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.bolt, color: Color(0xFFFFD700), size: 13),
+          Icon(Icons.bolt, color: AppColors.goldLuxury, size: 13),
           const SizedBox(width: 2),
           Text(
             rating.toStringAsFixed(1),
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.white,
               fontSize: 11,
               fontWeight: FontWeight.w700,
             ),
@@ -417,7 +428,7 @@ class PropertyInfo extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A2E),
+                  color: AppColors.textCharcoal,
                   height: 1.2,
                 ),
                 maxLines: 2,
@@ -467,9 +478,9 @@ class PieceData {
 
 /// Couleurs par type de commodité.
 const _commoditeColors = {
-  'wifi': Color(0xFFFF5733),
-  'ac': Color(0xFF33FFBD),
-  'parking': Color(0xFFFFBD33),
+  'wifi': AppColors.amenityWifi,
+  'ac': AppColors.amenityAc,
+  'parking': AppColors.amenityParking,
 };
 
 /// Icônes Iconsax par type de commodité.
@@ -488,9 +499,9 @@ IconData _commoditeIcon(String iconKey) {
 
 /// Couleurs par type de pièce.
 const _pieceColors = {
-  'chambre': Color(0xFF2744DE),
-  'salon': Color(0xFFB833FF),
-  'cuisine': Color(0xFFFF3385),
+  'chambre': AppColors.customBlue,
+  'salon': AppColors.amenitySalon,
+  'cuisine': AppColors.amenityCuisine,
 };
 
 /// Icônes Iconsax par type de pièce.
@@ -577,7 +588,7 @@ class _CommoditeChip extends StatelessWidget {
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF1A1A2E),
+            color: AppColors.textCharcoal,
           ),
         ),
       ],
@@ -702,7 +713,7 @@ class _PieceCard extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1A2E),
+              color: AppColors.textCharcoal,
             ),
           ),
         ],
@@ -720,12 +731,12 @@ class LocationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Iconsax.location, size: 13, color: Colors.grey.shade500),
+        Icon(Iconsax.location, size: 13, color: AppColors.grey500),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
             location,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 12, color: AppColors.grey600),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -807,7 +818,7 @@ class PropertyPrice extends StatelessWidget {
 
     final bg = backgroundColor ?? AppColors.primaryLite;
     final accent = accentColor ?? AppColors.primary;
-    final fg = textColor ?? const Color(0xFF1A1A2E);
+    final fg = textColor ?? AppColors.textCharcoal;
 
     return Container(
       padding: padding,
