@@ -22,8 +22,10 @@ UpdateUserDto _$UpdateUserDtoFromJson(Map<String, dynamic> json) {
 mixin _$UpdateUserDto {
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get avatar => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get email => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateUserDto to a JSON map.
@@ -45,8 +47,8 @@ abstract class $UpdateUserDtoCopyWith<$Res> {
   $Res call(
       {String firstName,
       String lastName,
-      String? avatar,
-      String email,
+      @JsonKey(includeIfNull: false) String? avatar,
+      @JsonKey(includeIfNull: false) String? email,
       String phoneNumber});
 }
 
@@ -68,7 +70,7 @@ class _$UpdateUserDtoCopyWithImpl<$Res, $Val extends UpdateUserDto>
     Object? firstName = null,
     Object? lastName = null,
     Object? avatar = freezed,
-    Object? email = null,
+    Object? email = freezed,
     Object? phoneNumber = null,
   }) {
     return _then(_value.copyWith(
@@ -84,10 +86,10 @@ class _$UpdateUserDtoCopyWithImpl<$Res, $Val extends UpdateUserDto>
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -107,8 +109,8 @@ abstract class _$$UpdateUserDtoImplCopyWith<$Res>
   $Res call(
       {String firstName,
       String lastName,
-      String? avatar,
-      String email,
+      @JsonKey(includeIfNull: false) String? avatar,
+      @JsonKey(includeIfNull: false) String? email,
       String phoneNumber});
 }
 
@@ -128,7 +130,7 @@ class __$$UpdateUserDtoImplCopyWithImpl<$Res>
     Object? firstName = null,
     Object? lastName = null,
     Object? avatar = freezed,
-    Object? email = null,
+    Object? email = freezed,
     Object? phoneNumber = null,
   }) {
     return _then(_$UpdateUserDtoImpl(
@@ -144,10 +146,10 @@ class __$$UpdateUserDtoImplCopyWithImpl<$Res>
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -162,8 +164,8 @@ class _$UpdateUserDtoImpl implements _UpdateUserDto {
   const _$UpdateUserDtoImpl(
       {this.firstName = '',
       this.lastName = '',
-      this.avatar,
-      this.email = '',
+      @JsonKey(includeIfNull: false) this.avatar,
+      @JsonKey(includeIfNull: false) this.email,
       this.phoneNumber = ''});
 
   factory _$UpdateUserDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -176,10 +178,11 @@ class _$UpdateUserDtoImpl implements _UpdateUserDto {
   @JsonKey()
   final String lastName;
   @override
+  @JsonKey(includeIfNull: false)
   final String? avatar;
   @override
-  @JsonKey()
-  final String email;
+  @JsonKey(includeIfNull: false)
+  final String? email;
   @override
   @JsonKey()
   final String phoneNumber;
@@ -229,8 +232,8 @@ abstract class _UpdateUserDto implements UpdateUserDto {
   const factory _UpdateUserDto(
       {final String firstName,
       final String lastName,
-      final String? avatar,
-      final String email,
+      @JsonKey(includeIfNull: false) final String? avatar,
+      @JsonKey(includeIfNull: false) final String? email,
       final String phoneNumber}) = _$UpdateUserDtoImpl;
 
   factory _UpdateUserDto.fromJson(Map<String, dynamic> json) =
@@ -241,9 +244,11 @@ abstract class _UpdateUserDto implements UpdateUserDto {
   @override
   String get lastName;
   @override
+  @JsonKey(includeIfNull: false)
   String? get avatar;
   @override
-  String get email;
+  @JsonKey(includeIfNull: false)
+  String? get email;
   @override
   String get phoneNumber;
 

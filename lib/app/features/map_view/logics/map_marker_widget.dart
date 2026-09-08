@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:immoplus/main.dart';
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 class _Constants {
@@ -45,10 +46,12 @@ class MapMarkerWidget {
           .getSingleFile(imageUrl)
           .timeout(_Constants.requestTimeout);
       imageBytes = await file.readAsBytes();
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to cache marker image ($imageUrl): $e');
+    }
 
     final descriptor = await _MarkerWidget(
-      imageBytes: null,
+      imageBytes: imageBytes,
       price: price,
       bgColor: bgColor,
       textColor: textColor,

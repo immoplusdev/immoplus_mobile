@@ -15,12 +15,7 @@ import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
-// TODO(KYC): imports désactivés temporairement pour test Stripe
-// import 'package:immoplus/app/data/repositories/auth_repository.dart';
-// import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
-// import 'package:immoplus/app/core/network/utils/session_manager.dart';
-// import 'package:immoplus/app/core/config/injection.dart';
-// import 'dart:developer';
+import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -137,7 +132,9 @@ class BookingCubit extends Cubit<BookingRequestState> {
       try {
         existing =
             await residenceRepository.getReservation(id: e.reservationId);
-      } catch (_) {}
+      } catch (err, stack) {
+        talker.error('Failed to pre-fetch blocked reservation ${e.reservationId}', err, stack);
+      }
 
       if (!context.mounted) return;
 

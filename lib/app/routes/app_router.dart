@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/main.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
@@ -108,9 +109,7 @@ class AppRouter {
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
     ],
     redirect: (context, state) async {
-      print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
-      print('🔍 GoRouter redirect - Path: ${state.uri.path}');
-      print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
+      talker.debug('GoRouter redirect - Location: ${state.uri}');
 
       if (showOnboarding) return '/onboarding';
 
@@ -126,8 +125,8 @@ class AppRouter {
 
       if (path == PendingPaymentReservationsPage.routePath()) {
         if (sessionManager.currentUser == null) {
-          print(
-              '🔒 User not authenticated, redirecting from pending-payment-reservations to homePage');
+          talker.info(
+              'User not authenticated, redirecting from pending-payment-reservations to homePage');
           return state.namedLocation(HomePage.name);
         }
       }
@@ -502,7 +501,9 @@ class AppRouter {
             if (videoId != null && videoId.isNotEmpty) {
               return '/vivre/$videoId';
             }
-          } catch (_) {}
+          } catch (e, stack) {
+            talker.warning('Failed to resolve short code /v/$code', e, stack);
+          }
           return '/vivre';
         },
       ),

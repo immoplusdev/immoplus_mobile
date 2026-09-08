@@ -38,7 +38,6 @@ class DetailLogmentAvailableDay extends StatelessWidget {
                   customModePickerIcon: const SizedBox(),
                   firstDate: DateTime.now(),
                   selectableDayPredicate: (day) {
-                    print(day);
                     return false;
                   },
 

@@ -37,9 +37,7 @@ class AppDialog {
             ),
           ],
         ),
-      ).then((value) {
-        print('TOTO');
-      });
+      );
 
   static Future confirm(
           {required BuildContext context,
@@ -76,9 +74,7 @@ class AppDialog {
             ),
           ],
         ),
-      ).then((value) {
-        print('TOTO');
-      });
+      );
 
   /// Dialog avec titre, description, bouton primaire (filled) et bouton secondaire optionnel (outlined).
   /// Le bouton secondaire s'affiche au-dessus du bouton primaire.

@@ -28,6 +28,7 @@ import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
+import 'package:immoplus/main.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 
 class ReverseSearchMapPage extends StatefulWidget {
@@ -159,7 +160,9 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
             selectionExpireAt: detailed.selectionExpireAt,
           );
       _applyExpiry(detailed);
-    } catch (_) {}
+    } catch (e, st) {
+      talker.error('Failed to load active reverse search $searchId: $e', e, st);
+    }
   }
 
   Future<void> _loadExpiry(String searchId) async {
@@ -168,7 +171,9 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
           await getIt<ReverseSearchRepository>().getReverseSearchById(searchId);
       if (!mounted || detailed == null) return;
       _applyExpiry(detailed);
-    } catch (_) {}
+    } catch (e, st) {
+      talker.error('Failed to load reverse search expiry $searchId: $e', e, st);
+    }
   }
 
   void _applyExpiry(ReverseSearchItem detailed) {

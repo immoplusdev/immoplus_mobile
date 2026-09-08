@@ -11,9 +11,6 @@ class PaymentUtils {
       id: "cash", name: "Cash", country: "CI", method: "cash", currency: "XOF");
   static String? numberValidator(
       {required String number, required String operatorName}) {
-    log(operatorName);
-    log(number);
-    print(_checkPhoneOperator(operator: operatorName, numner: number));
     if (number.isEmpty || number.toString().isEmpty) {
       return 'veillez entrer votre numéro';
     } else if (!_checkPhoneOperator(operator: operatorName, numner: number)) {

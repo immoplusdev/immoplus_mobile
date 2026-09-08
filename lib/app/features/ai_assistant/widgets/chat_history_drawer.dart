@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/main.dart';
 
 import '../models/conversation_summary.dart';
 import '../services/chat_history_service.dart';
@@ -46,7 +47,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
     try {
       final list = await widget.service.getConversations(limit: 50);
       if (mounted) setState(() => _conversations = list);
-    } catch (_) {
+    } catch (e, st) {
+      talker.error('Failed to load chat history: $e', e, st);
       if (mounted)
         setState(() => _error = 'Impossible de charger l\'historique');
     } finally {
@@ -62,7 +64,9 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
       if (sessionId == widget.currentSessionId) {
         widget.onNewConversation();
       }
-    } catch (_) {}
+    } catch (e, st) {
+      talker.error('Failed to delete chat session: $e', e, st);
+    }
   }
 
   Future<void> _deleteAll() async {

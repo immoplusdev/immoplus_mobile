@@ -14,6 +14,7 @@ import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
+import 'package:immoplus/main.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 
@@ -25,7 +26,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  final List<DateTime?> markedDates = [];
+  List<DateTime> markedDates = [];
   Address? currentAddress;
 
   @override
@@ -41,7 +42,9 @@ class _FilterPageState extends State<FilterPage> {
       try {
         markedDates.add(DateTime.parse(FilterHandler.startDate!));
         markedDates.add(DateTime.parse(FilterHandler.endDate!));
-      } catch (e) {}
+      } catch (e, st) {
+        talker.debug('Failed to parse filter dates: $e', e, st);
+      }
     }
     super.initState();
   }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
@@ -9,7 +8,9 @@ import 'package:immoplus/app/features/payment_module/components/mtn/mtn_payment_
 import 'package:immoplus/app/features/payment_module/components/shared/payment_success_ticket_view.dart';
 import 'package:immoplus/app/features/payment_module/components/shared/payment_waiting_view.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/main.dart';
 
 class MtnValidatorPage extends StatefulWidget {
   const MtnValidatorPage({
@@ -70,9 +71,7 @@ class _MtnValidatorPageState extends State<MtnValidatorPage> {
         return;
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error checking payment status: $e');
-      }
+      talker.debug('Error checking payment status: $e');
     }
   }
 
@@ -97,7 +96,7 @@ class _MtnValidatorPageState extends State<MtnValidatorPage> {
 
     return PaymentWaitingView(
       onBack: () => widget.controller.goToPhoneNumber(),
-      loaderColor: Colors.yellow.shade600,
+      loaderColor: AppColors.yellow600,
       instructionMarkdown: Utils.getNextActionText(
         name: widget.paymentIntentModel.paymentMethod,
       ),

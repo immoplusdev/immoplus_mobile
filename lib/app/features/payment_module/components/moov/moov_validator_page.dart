@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
@@ -9,7 +8,9 @@ import 'package:immoplus/app/features/payment_module/components/moov/moov_paymen
 import 'package:immoplus/app/features/payment_module/components/shared/payment_success_ticket_view.dart';
 import 'package:immoplus/app/features/payment_module/components/shared/payment_waiting_view.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/main.dart';
 
 class MoovOptValidatorPage extends StatefulWidget {
   const MoovOptValidatorPage({
@@ -26,9 +27,9 @@ class MoovOptValidatorPage extends StatefulWidget {
 }
 
 class _MoovOptValidatorPageState extends State<MoovOptValidatorPage> {
+  Timer? _timer;
   PaymentItentModel? _paymentIntentModel;
   bool _paymentValidated = false;
-  Timer? _timer;
 
   @override
   void initState() {
@@ -70,9 +71,7 @@ class _MoovOptValidatorPageState extends State<MoovOptValidatorPage> {
         return;
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error checking payment status: $e');
-      }
+      talker.debug('Error checking payment status: $e');
     }
   }
 
@@ -97,7 +96,7 @@ class _MoovOptValidatorPageState extends State<MoovOptValidatorPage> {
 
     return PaymentWaitingView(
       onBack: () => widget.controller.goToPhoneNumber(),
-      loaderColor: Colors.orange,
+      loaderColor: AppColors.orange,
       instructionMarkdown: Utils.getNextActionText(
         name: widget.paymentIntentModel.paymentMethod,
       ),

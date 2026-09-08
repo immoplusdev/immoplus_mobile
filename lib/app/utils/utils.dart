@@ -339,8 +339,6 @@ class Utils {
 
     var iosUrl = "https://wa.me/$contact?text=${Uri.parse(defaultMessage)}";
 
-    print(iosUrl);
-
     try {
       if (Platform.isIOS) {
         await launchUrl(Uri.parse(iosUrl),
@@ -478,7 +476,7 @@ class Utils {
     return formattedAmount;
   }
 
-  void formatPhoneNumber(PhoneNumber number) async {
+  static Future<String> formatPhoneNumber(PhoneNumber number) async {
     String parsableNumber = await PhoneNumber.getParsableNumber(number);
     // Supprimer le signe "+" si présent
     if (parsableNumber.startsWith('+')) {
@@ -489,7 +487,7 @@ class Utils {
       RegExp(r'^(\d{3})(\d+)$'),
       (Match m) => '${m[1]}-${m[2]}',
     );
-    print(formattedNumber); // Affiche : 225-0701710065
+    return formattedNumber;
   }
 
   static DateTime toDateTime(String? dateString) {

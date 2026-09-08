@@ -5,6 +5,7 @@ import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/network/utils/env_handler.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
+import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
 import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
 import 'package:immoplus/firebase_options.dart';
@@ -19,9 +20,9 @@ Future<void> configureDependencies() async {
   try {
     final envHandler = EnvHandler();
     await envHandler.init().timeout(const Duration(seconds: 5));
-    print('✅ EnvHandler.init() done');
-  } catch (e) {
-    print('⚠️ EnvHandler.init() failed: $e');
+    talker.info('EnvHandler.init() done');
+  } catch (e, stack) {
+    talker.error('EnvHandler.init() failed: $e', e, stack);
     rethrow;
   }
 
@@ -29,9 +30,9 @@ Future<void> configureDependencies() async {
   try {
     final isarConfig = IsarConfig();
     await isarConfig.init().timeout(const Duration(seconds: 5));
-    print('✅ IsarConfig.init() done');
-  } catch (e) {
-    print('⚠️ IsarConfig.init() failed: $e');
+    talker.info('IsarConfig.init() done');
+  } catch (e, stack) {
+    talker.error('IsarConfig.init() failed: $e', e, stack);
     rethrow;
   }
 
@@ -40,36 +41,36 @@ Future<void> configureDependencies() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     ).timeout(const Duration(seconds: 10));
-    print('✅ Firebase.initializeApp() done');
-  } catch (e) {
-    print('⚠️ Firebase.initializeApp() failed: $e');
+    talker.info('Firebase.initializeApp() done');
+  } catch (e, stack) {
+    talker.error('Firebase.initializeApp() failed: $e', e, stack);
   }
 
   // 4. Now initialize GetIt (AnalyticsService will find Firebase available)
   try {
     getIt.init();
-    print('✅ getIt.init() done');
-  } catch (e) {
-    print('⚠️ getIt.init() failed: $e');
+    talker.info('getIt.init() done');
+  } catch (e, stack) {
+    talker.error('getIt.init() failed: $e', e, stack);
     rethrow;
   }
 
   // 5. Initialize EasyLoading
   try {
     await getIt<EasyLoadingHandler>().init().timeout(const Duration(seconds: 5));
-    print('✅ EasyLoadingHandler.init() done');
-  } catch (e) {
-    print('⚠️ EasyLoadingHandler.init() failed: $e');
+    talker.info('EasyLoadingHandler.init() done');
+  } catch (e, stack) {
+    talker.error('EasyLoadingHandler.init() failed: $e', e, stack);
   }
 
   // 6. Initialize OneSignal in background (after Firebase)
   Future(() async {
     try {
       await getIt<NotificationService>().initConfig().timeout(const Duration(seconds: 10));
-      print('✅ NotificationService.setupNotificationListener() done');
+      talker.info('NotificationService.setupNotificationListener() done');
       getIt<NotificationService>().setupNotificationListener();
-    } catch (e) {
-      print('⚠️ NotificationService initialization failed: $e');
+    } catch (e, stack) {
+      talker.error('NotificationService initialization failed: $e', e, stack);
     }
   });
 
@@ -77,9 +78,9 @@ Future<void> configureDependencies() async {
   Future(() async {
     try {
       await getIt<RemoteConfigService>().initialize().timeout(const Duration(seconds: 10));
-      print('✅ RemoteConfigService.initialize() done');
-    } catch (e) {
-      print('⚠️ RemoteConfigService.initialize() failed: $e');
+      talker.info('RemoteConfigService.initialize() done');
+    } catch (e, stack) {
+      talker.error('RemoteConfigService.initialize() failed: $e', e, stack);
     }
   });
 }

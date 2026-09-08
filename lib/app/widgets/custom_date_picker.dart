@@ -101,7 +101,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           );
 
           if (pickedTime != null) {
-            print(pickedTime.hour);
             DateTime dateTime = DateTime(pickedDate.year, pickedDate.month,
                 pickedDate.day, pickedTime.hour, pickedTime.minute);
 

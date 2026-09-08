@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
@@ -9,6 +8,8 @@ import 'package:immoplus/app/features/payment_module/components/shared/payment_s
 import 'package:immoplus/app/features/payment_module/components/shared/payment_waiting_view.dart';
 import 'package:immoplus/app/features/payment_module/components/wave/wave_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
+import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WaveValidatorPage extends StatefulWidget {
@@ -26,44 +27,46 @@ class WaveValidatorPage extends StatefulWidget {
 }
 
 class _WaveValidatorPageState extends State<WaveValidatorPage> {
+  Timer? _statusCheckTimer;
   PaymentItentModel? _paymentIntentModel;
   bool _paymentValidated = false;
-  Timer? _timer;
   bool _urlLaunched = false;
 
   @override
   void initState() {
     super.initState();
-    _startPaymentStatusCheck();
+    _startPaymentStatusPolling();
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _statusCheckTimer?.cancel();
     super.dispose();
   }
 
-  void _startPaymentStatusCheck() {
-    _timer = Timer.periodic(
+  void _startPaymentStatusPolling() {
+    _statusCheckTimer = Timer.periodic(
       const Duration(seconds: 4),
-      (timer) => _checkPaymentStatus(timer),
+      (timer) async {
+        await _checkPaymentStatus();
+      },
     );
   }
 
-  Future<void> _checkPaymentStatus(Timer timer) async {
+  Future<void> _checkPaymentStatus() async {
     try {
-      final paymentDetail = await PaymentRepository().getPayment(
+      final paymentRepository = PaymentRepository();
+      final paymentDetail = await paymentRepository.getPayment(
         widget.paymentIntentModel.id,
       );
 
       if (!mounted) {
-        timer.cancel();
+        _statusCheckTimer?.cancel();
         return;
       }
 
-      // ✅ Paiement validé
       if (paymentDetail.data.paymentStatus == PaymentStatus.successful.name) {
-        timer.cancel();
+        _statusCheckTimer?.cancel();
         setState(() {
           _paymentValidated = true;
           _paymentIntentModel = paymentDetail;
@@ -71,7 +74,6 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
         return;
       }
 
-      // ✅ URL Wave disponible
       if (paymentDetail.data.hub2NextAction?.data.url.isNotEmpty == true &&
           !_urlLaunched) {
         _urlLaunched = true;
@@ -81,9 +83,7 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
         await _launchUrl(paymentDetail.data.hub2NextAction!.data.url);
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error checking payment status: $e');
-      }
+      talker.debug('Error checking payment status: $e');
     }
   }
 
@@ -94,9 +94,7 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
         throw Exception('Could not launch $url');
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Error launching URL: $e');
-      }
+      talker.error('Error launching URL: $e');
     }
   }
 
@@ -122,14 +120,12 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
     final waveUrl = _paymentIntentModel?.data.hub2NextAction?.data.url;
 
     return PaymentWaitingView(
-      loaderColor: Colors.blue.shade600,
+      loaderColor: AppColors.blue600,
       isWaveStyle: true,
       actionButtonText: "Valider depuis Wave",
       onActionTap: waveUrl != null && waveUrl.isNotEmpty
           ? () {
-              if (kDebugMode) {
-                print('🔗 Launching Wave URL: $waveUrl');
-              }
+              talker.debug('Launching Wave URL: $waveUrl');
               _launchUrl(waveUrl);
             }
           : null,

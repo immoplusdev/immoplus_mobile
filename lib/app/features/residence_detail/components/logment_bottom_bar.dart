@@ -23,6 +23,7 @@ import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.da
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/main.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 
 /// ─────────────────────────────────────────────────────────────────────────────
@@ -96,14 +97,18 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
           unawaited(_refreshActiveReverseSearch());
         }
       });
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to init reverse search socket listener: $e');
+    }
   }
 
   Future<void> _refreshActiveReverseSearch() async {
     try {
       final active = await getIt<ReverseSearchRepository>().getActiveSearch();
       if (mounted) setState(() => _activeReverseSearch = active);
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to refresh active reverse search: $e');
+    }
   }
 
   /// Déclenché quand le compte à rebours du bandeau atteint zéro : passé les

@@ -276,8 +276,6 @@ class Utils {
 
     var iosUrl = "https://wa.me/$contact?text=${Uri.parse(defaultMessage)}";
 
-    print(iosUrl);
-
     try {
       if (Platform.isIOS) {
         await launchUrl(Uri.parse(iosUrl),

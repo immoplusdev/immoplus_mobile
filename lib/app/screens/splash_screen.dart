@@ -10,6 +10,7 @@ import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/main.dart';
 import 'package:immoplus/app/services/connectivity_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Si on n'est plus sur "/", c'est qu'un deep link a pris le contrôle
     if (currentPath != '/') {
-      print('✅ Deep link detected ($currentPath), skipping splash navigation');
+      talker.info('Deep link detected ($currentPath), skipping splash navigation');
       return; // ← NE PAS NAVIGUER
     }
 

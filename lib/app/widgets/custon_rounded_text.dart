@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 
-class CustomRoundedTextField extends StatelessWidget {
+class CustomRoundedTextField extends StatefulWidget {
   final String? labelText;
   final double height;
   final TextInputAction? textInputAction;
@@ -11,9 +11,9 @@ class CustomRoundedTextField extends StatelessWidget {
   final Widget? sufixIcon;
   final Widget? prefixIcon;
   final Function()? onTap;
-  Function(String?)? onSaved;
-  Function(String)? onFieldSubmitted;
-  TextEditingController? controller = TextEditingController(text: '');
+  final Function(String?)? onSaved;
+  final Function(String)? onFieldSubmitted;
+  final TextEditingController? controller;
   final FocusNode? focusNode;
   final int minLines;
   final int maxLines;
@@ -21,7 +21,7 @@ class CustomRoundedTextField extends StatelessWidget {
   final String? prefixText;
   final bool obscureText;
 
-  CustomRoundedTextField({
+  const CustomRoundedTextField({
     super.key,
     this.labelText,
     this.sufixIcon,
@@ -43,14 +43,37 @@ class CustomRoundedTextField extends StatelessWidget {
   });
 
   @override
+  State<CustomRoundedTextField> createState() => _CustomRoundedTextFieldState();
+}
+
+class _CustomRoundedTextFieldState extends State<CustomRoundedTextField> {
+  TextEditingController? _internalController;
+
+  TextEditingController get _effectiveController =>
+      widget.controller ?? (_internalController ??= TextEditingController());
+
+  @override
+  void didUpdateWidget(CustomRoundedTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller && widget.controller != null) {
+      _internalController?.dispose();
+      _internalController = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    _internalController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     const errorStyle = TextStyle(
       fontSize: 14,
     );
 
-    // Wrap everything in LayoutBuilder so that the available maxWidth is taken into account for the height calculation (important if you error text exceeds one line)
     return LayoutBuilder(builder: (context, constraints) {
-      // Use tp to calculate the height of the errorText
       final textPainter = TextPainter()
         ..text = const TextSpan(text: ' ', style: errorStyle)
         ..textDirection = TextDirection.ltr
@@ -59,14 +82,12 @@ class CustomRoundedTextField extends StatelessWidget {
       final heightErrorMessage = textPainter.size.height + 8;
       return Stack(
         children: [
-          // Separate container with identical height of text field which is placed behind the actual textfield
-
           const SizedBox(
             width: 400,
             height: 10,
           ),
           Container(
-            height: height,
+            height: widget.height,
             margin: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               boxShadow: const [
@@ -82,38 +103,39 @@ class CustomRoundedTextField extends StatelessWidget {
             ),
           ),
           Container(
-            // Add height of error message if it is displayed
-            height: validator != null ? height + heightErrorMessage : height,
+            height: widget.validator != null
+                ? widget.height + heightErrorMessage
+                : widget.height,
             margin: const EdgeInsets.only(left: 5, right: 5),
             child: TextFormField(
               onChanged: ((value) {}),
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: validator,
-              obscureText: obscureText,
-              minLines: minLines,
-              maxLines: maxLines,
-              controller: controller,
-              textInputAction: textInputAction,
-              onTap: onTap,
-              onSaved: onSaved,
-              onFieldSubmitted: onFieldSubmitted,
-              keyboardType: textInputType,
+              validator: widget.validator,
+              obscureText: widget.obscureText,
+              minLines: widget.minLines,
+              maxLines: widget.maxLines,
+              controller: _effectiveController,
+              textInputAction: widget.textInputAction,
+              onTap: widget.onTap,
+              onSaved: widget.onSaved,
+              onFieldSubmitted: widget.onFieldSubmitted,
+              keyboardType: widget.textInputType,
               cursorColor: Theme.of(context).colorScheme.onSurface,
               cursorRadius: const Radius.circular(5),
-              focusNode: focusNode,
-              inputFormatters: inputFormatters,
+              focusNode: widget.focusNode,
+              inputFormatters: widget.inputFormatters,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(18),
-                prefixText: prefixText,
-                prefixIcon: prefixIcon,
+                prefixText: widget.prefixText,
+                prefixIcon: widget.prefixIcon,
                 iconColor: AppColors.black,
-                hintText: labelText!,
+                hintText: widget.labelText ?? '',
                 filled: true,
                 fillColor: AppColors.white,
                 labelStyle:
                     TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 focusColor: Theme.of(context).colorScheme.onSurface,
-                suffixIcon: sufixIcon,
+                suffixIcon: widget.sufixIcon,
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(
@@ -135,8 +157,25 @@ class CustomRoundedTextField extends StatelessWidget {
   }
 }
 
-class CustomRoundedTextFieldTT extends StatelessWidget {
-  CustomRoundedTextFieldTT({
+class CustomRoundedTextFieldTT extends StatefulWidget {
+  final String? labelText;
+  final Widget? sufixIcon;
+  final Widget? prefixIcon;
+  final Function()? onTap;
+  final Function(String?)? onSaved;
+  final Function(String)? onFieldSubmitted;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final int minLines;
+  final int maxLines;
+  final TextInputAction textInputAction;
+  final TextInputType textInputType;
+  final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? prefixText;
+  final bool obscureText;
+
+  const CustomRoundedTextFieldTT({
     super.key,
     this.labelText,
     this.sufixIcon,
@@ -155,25 +194,36 @@ class CustomRoundedTextFieldTT extends StatelessWidget {
     this.prefixIcon,
     this.obscureText = false,
   });
-  final String? labelText;
-  final Widget? sufixIcon;
-  final Widget? prefixIcon;
-  final Function()? onTap;
-  Function(String?)? onSaved;
-  Function(String)? onFieldSubmitted;
-  TextEditingController? controller = TextEditingController(text: '');
-  final FocusNode? focusNode;
-  final int minLines;
-  final int maxLines;
-  final TextInputAction textInputAction;
-  final TextInputType textInputType;
-  final String? Function(String?)? validator;
-  final List<TextInputFormatter>? inputFormatters;
-  final String? prefixText;
-  final bool obscureText;
+
+  @override
+  State<CustomRoundedTextFieldTT> createState() =>
+      _CustomRoundedTextFieldTTState();
+}
+
+class _CustomRoundedTextFieldTTState extends State<CustomRoundedTextFieldTT> {
+  TextEditingController? _internalController;
+
+  TextEditingController get _effectiveController =>
+      widget.controller ?? (_internalController ??= TextEditingController());
+
+  @override
+  void didUpdateWidget(CustomRoundedTextFieldTT oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller && widget.controller != null) {
+      _internalController?.dispose();
+      _internalController = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    _internalController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, contrains) {
+    return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           Container(
@@ -191,39 +241,37 @@ class CustomRoundedTextFieldTT extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            child: TextFormField(
-              onChanged: ((value) {}),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: validator,
-              obscureText: obscureText,
-              minLines: minLines,
-              maxLines: maxLines,
-              controller: controller,
-              textInputAction: textInputAction,
-              onTap: onTap,
-              onSaved: onSaved,
-              onFieldSubmitted: onFieldSubmitted,
-              keyboardType: textInputType,
-              cursorColor: Theme.of(context).colorScheme.onSurface,
-              cursorRadius: const Radius.circular(5),
-              focusNode: focusNode,
-              inputFormatters: inputFormatters,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(18),
-                prefixText: prefixText,
-                prefixIcon: prefixIcon,
-                iconColor: AppColors.black,
-                hintText: labelText!,
-                filled: true,
-                fillColor: AppColors.white,
-                labelStyle:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                focusColor: Theme.of(context).colorScheme.onSurface,
-                suffixIcon: sufixIcon,
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
+          TextFormField(
+            onChanged: ((value) {}),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: widget.validator,
+            obscureText: widget.obscureText,
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
+            controller: _effectiveController,
+            textInputAction: widget.textInputAction,
+            onTap: widget.onTap,
+            onSaved: widget.onSaved,
+            onFieldSubmitted: widget.onFieldSubmitted,
+            keyboardType: widget.textInputType,
+            cursorColor: Theme.of(context).colorScheme.onSurface,
+            cursorRadius: const Radius.circular(5),
+            focusNode: widget.focusNode,
+            inputFormatters: widget.inputFormatters,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(18),
+              prefixText: widget.prefixText,
+              prefixIcon: widget.prefixIcon,
+              iconColor: AppColors.black,
+              hintText: widget.labelText ?? '',
+              filled: true,
+              fillColor: AppColors.white,
+              labelStyle:
+                  TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              focusColor: Theme.of(context).colorScheme.onSurface,
+              suffixIcon: widget.sufixIcon,
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
             ),
           ),
         ],

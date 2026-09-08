@@ -6,6 +6,7 @@ import 'package:immoplus/app/data/models/remote/rating/rating_model.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/main.dart';
 
 class RatingHistoryCard extends StatelessWidget {
   final RatingModel rating;
@@ -20,7 +21,9 @@ class RatingHistoryCard extends StatelessWidget {
         final d = Utils.toDateTime(rating.ratedAt);
         dateStr = DateFormat('d MMM yyyy').format(d);
       }
-    } catch (_) {}
+    } catch (e, st) {
+      talker.debug('Failed to format rating date: $e', e, st);
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 12),

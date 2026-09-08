@@ -308,10 +308,13 @@ class _EditAccountPageState extends State<EditAccountPage> {
                               isPhoneNumberValid) {
                             FocusScope.of(context).unfocus();
 
+                            final emailValue = _formController.email?.text.trim();
                             final body = UpdateUserDto(
                               firstName: _formController.firstName!.text,
                               lastName: _formController.lastName!.text,
-                              email: _formController.email!.text,
+                              email: (emailValue != null && emailValue.isNotEmpty)
+                                  ? emailValue
+                                  : null,
                               avatar:
                                   avatar ?? sessionManager.currentUser!.avatar,
                               phoneNumber: phoneNumber,

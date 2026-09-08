@@ -11,6 +11,7 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/main.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // État terminal du banner
@@ -250,7 +251,9 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
               result.data.first, StatusReservation.enAttentePaiementClient);
           return;
         }
-      } catch (_) {}
+      } catch (e) {
+        talker.debug('Failed to check pending payment reservations: $e');
+      }
 
       if (_reservation != null &&
           _secondsLeft > 0 &&
@@ -321,7 +324,9 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
       final raw = _reservation!.createdAt;
       created = (raw is DateTime ? raw : DateTime.tryParse(raw.toString()))
           as DateTime?;
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to parse reservation createdAt: $e');
+    }
     _totalSeconds = created != null
         ? deadline.difference(created).inSeconds.clamp(1, 999999)
         : const Duration(hours: 24).inSeconds;

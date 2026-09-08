@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:immoplus/main.dart';
 
 class SelectedZone {
   final String id;
@@ -249,7 +250,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
         if (address.isNotEmpty && address != 'Partager ma position') {
           locationName = address;
         }
-      } catch (_) {}
+      } catch (e, st) {
+        talker.debug('Failed to get formatted address: $e', e, st);
+      }
 
       if (mounted) {
         final zone = SelectedZone(
