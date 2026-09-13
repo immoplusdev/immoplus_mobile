@@ -28,6 +28,8 @@ import 'package:immoplus/app/core/services/analytics_service.dart' as _i1058;
 import 'package:immoplus/app/core/services/auth_redirect_service.dart' as _i944;
 import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart'
     as _i99;
+import 'package:immoplus/app/core/services/messaging_socket_service.dart'
+    as _i570;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/core/services/reverse_search_socket_service.dart'
@@ -41,6 +43,8 @@ import 'package:immoplus/app/data/repositories/furniture_repository.dart'
     as _i976;
 import 'package:immoplus/app/data/repositories/hotel_repository.dart' as _i374;
 import 'package:immoplus/app/data/repositories/kyc_repository.dart' as _i184;
+import 'package:immoplus/app/data/repositories/messaging_repository.dart'
+    as _i971;
 import 'package:immoplus/app/data/repositories/notification_repository.dart'
     as _i371;
 import 'package:immoplus/app/data/repositories/rating_repository.dart' as _i568;
@@ -75,6 +79,10 @@ import 'package:immoplus/app/features/hotel/cubit/hotel_room_cubit.dart'
     as _i634;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
+import 'package:immoplus/app/features/messaging/logic/conversation_thread_cubit.dart'
+    as _i835;
+import 'package:immoplus/app/features/messaging/logic/inbox_cubit.dart'
+    as _i169;
 import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart'
     as _i430;
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart'
@@ -128,10 +136,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i57.RemoteConfigService());
     gh.lazySingleton<_i944.AuthRedirectService>(
         () => _i944.AuthRedirectService());
-    gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
-    gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i997.ReverseSearchSocketService>(
         () => _i997.ReverseSearchSocketService());
+    gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
+    gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
+    gh.lazySingleton<_i570.MessagingSocketService>(
+        () => _i570.MessagingSocketService());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
@@ -167,6 +177,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i184.KycRepository>(() => _i184.KycRepository(gh<_i361.Dio>()));
     gh.factory<_i374.HotelRepository>(
         () => _i374.HotelRepository(gh<_i361.Dio>()));
+    gh.factory<_i971.MessagingRepository>(
+        () => _i971.MessagingRepository(gh<_i361.Dio>()));
     gh.factory<_i745.VisitCubit>(
         () => _i745.VisitCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i488.EstateCubit>(
@@ -179,6 +191,11 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i430.NotificationCubit>(
         () => _i430.NotificationCubit(gh<_i371.NotificationRepository>()));
+    gh.factory<_i169.InboxCubit>(() => _i169.InboxCubit(
+          gh<_i971.MessagingRepository>(),
+          gh<_i570.MessagingSocketService>(),
+          gh<_i22.SessionManager>(),
+        ));
     gh.factory<_i946.BookingServices>(
         () => _i946.BookingServices(gh<_i361.Dio>()));
     gh.factory<_i1028.MapViwerCubit>(() => _i1028.MapViwerCubit(
@@ -203,6 +220,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i427.HotelCubit(gh<_i374.HotelRepository>()));
     gh.factory<_i634.HotelRoomCubit>(
         () => _i634.HotelRoomCubit(gh<_i374.HotelRepository>()));
+    gh.factory<_i835.ConversationThreadCubit>(
+        () => _i835.ConversationThreadCubit(
+              gh<_i971.MessagingRepository>(),
+              gh<_i570.MessagingSocketService>(),
+            ));
     gh.factory<_i540.RatingCubit>(
         () => _i540.RatingCubit(gh<_i568.RatingRepository>()));
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit(

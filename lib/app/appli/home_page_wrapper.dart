@@ -15,13 +15,15 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
 import 'package:immoplus/app/appli/widgets/nav_badge.dart';
+import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
+import 'package:immoplus/app/data/repositories/messaging_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
-import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
+// import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
 
 class HomePageWrapper extends StatefulWidget {
   const HomePageWrapper({super.key, required this.child});
@@ -36,6 +38,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
   final _alertRepository = getIt<AlertRepository>();
+  final _messagingRepository = getIt<MessagingRepository>();
+  final _messagingSocketService = getIt<MessagingSocketService>();
+  StreamSubscription? _messagingNotificationSub;
   Timer? _videoFeedWarmupTimer;
   // Scroll-to-right désactivé : la pilule reste centrée.
   // Timer? _scrollIdleTimer;
@@ -58,7 +63,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     switch (state) {
       case PageState.home:
         return 0;
-      case PageState.explore:
+      case PageState.messages:
         return 1;
       case PageState.vivre:
         return 2;
@@ -66,6 +71,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
         return 3;
       case PageState.account:
         return 4;
+      case PageState.explore:
       case PageState.history:
       case PageState.map:
         return 0;
@@ -81,10 +87,31 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     });
   }
 
+  void _fetchUnreadMessagesCount() {
+    if (sessionManager.currentUser == null) return;
+    _messagingRepository.getTotalUnreadCount().then((count) {
+      if (mounted) Constantes.unreadMessagesCount.value = count;
+    });
+  }
+
+  /// Incrément local immédiat sur `notification_new` (spec messagerie §1),
+  /// pour que le badge bouge partout dans l'app, pas seulement pendant que
+  /// l'onglet Messages (et son `InboxCubit`) est ouvert. Le socket est déjà
+  /// connecté dès la session ouverte (voir `session_manager.dart`), donc ce
+  /// listener suffit sans reconnecter quoi que ce soit ici.
+  void _listenForUnreadMessages() {
+    _messagingNotificationSub?.cancel();
+    _messagingNotificationSub =
+        _messagingSocketService.onNotificationNew.listen((_) {
+      Constantes.unreadMessagesCount.value += 1;
+    });
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _fetchImatchBadge();
+      _fetchUnreadMessagesCount();
     }
   }
 
@@ -93,6 +120,8 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _fetchImatchBadge();
+    _fetchUnreadMessagesCount();
+    _listenForUnreadMessages();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _videoFeedWarmupTimer?.cancel();
       _videoFeedWarmupTimer = Timer(const Duration(milliseconds: 2500), () {
@@ -116,6 +145,22 @@ class _HomePageWrapperState extends State<HomePageWrapper>
 
   void _onItemTapped({required int index, required PageState pageState}) {
     if (_indexForState(pageState) == index) {
+      return;
+    }
+
+    // Si on clique sur "Messages" (index 1) sans être connecté, direction
+    // inscription/connexion plutôt que l'inbox (qui échouerait en 401).
+    if (index == 1 && sessionManager.currentUser == null) {
+      context.pushNamed(
+        AuthenticationPage.name,
+        extra: (
+          callback: () {
+            _fetchUnreadMessagesCount();
+            navigationHandler.switchPage(id: index, context: context);
+          },
+          popUntilRouteName: null,
+        ) as AuthRedirectData,
+      );
       return;
     }
 
@@ -151,6 +196,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _messagingNotificationSub?.cancel();
     _videoFeedWarmupTimer?.cancel();
     _videoFeedWarmupTimer = null;
     // _scrollIdleTimer?.cancel();
@@ -167,8 +213,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
           builder: (context, hideBottomNav, _) {
             return Scaffold(
               body: widget.child,
-              // floatingActionButton:
-              //     state == PageState.home ? const AiFloatingButton() : null,
+              floatingActionButton:
+                  // state == PageState.home ? const AiFloatingButton() : null,
+                  null,
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
@@ -220,10 +267,12 @@ class _HomePageWrapperState extends State<HomePageWrapper>
                                 immoMode: state == PageState.vivre,
                               ),
                               _buildNavItem(
-                                icon: Iconsax.location,
-                                label: "Carte",
-                                isActive: state == PageState.explore,
+                                icon: Iconsax.message,
+                                label: "Messages",
+                                isActive: state == PageState.messages,
                                 immoMode: state == PageState.vivre,
+                                badgeWidget: NavBadge(
+                                    notifier: Constantes.unreadMessagesCount),
                               ),
                               _buildNavItemVivre(
                                   isActive: state == PageState.vivre),

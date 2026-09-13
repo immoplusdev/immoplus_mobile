@@ -27,6 +27,8 @@ import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
+import 'package:immoplus/app/features/messaging/pages/message_thread_page.dart';
+import 'package:immoplus/app/features/messaging/pages/messages_inbox_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
@@ -481,6 +483,26 @@ class AppRouter {
               child: const MapViewer(),
             ),
           ),
+          // Remplace temporairement l'onglet "Carte" dans la tab bar (spec
+          // messagerie §1) — route `/map` volontairement conservée pour un
+          // retour en arrière trivial.
+          GoRoute(
+            path: MessagesInboxPage.routePath,
+            name: MessagesInboxPage.name,
+            // Accès direct (deep link, notification, saisie d'URL) sans être
+            // connecté : direction inscription/connexion plutôt qu'un inbox
+            // qui échouerait en 401 (le tap sur l'onglet est déjà gardé côté
+            // home_page_wrapper.dart, ceci couvre les autres chemins d'accès).
+            redirect: (context, state) {
+              if (getIt<SessionManager>().currentUser == null) {
+                return state.namedLocation(AuthenticationPage.name);
+              }
+              return null;
+            },
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: MessagesInboxPage(),
+            ),
+          ),
           GoRoute(
             path: '/account',
             name: AccountPage.name,
@@ -536,6 +558,20 @@ class AppRouter {
             reverseSearchPrixParNuit: reverseSearchPrixParNuit,
           );
         },
+      ),
+
+      GoRoute(
+        path: MessageThreadPage.routePath,
+        name: MessageThreadPage.name,
+        redirect: (context, state) {
+          if (getIt<SessionManager>().currentUser == null) {
+            return state.namedLocation(AuthenticationPage.name);
+          }
+          return null;
+        },
+        builder: (context, state) => MessageThreadPage(
+          conversationId: state.pathParameters['conversationId'] ?? '',
+        ),
       ),
 
       GoRoute(
@@ -754,8 +790,6 @@ class AppRouter {
         ),
       ),
       // Non utilisée par "Voir reservation" (qui résout le reservationId
-      // avant de naviguer, voir PaymentSuccessTicketView._onViewReservation) ;
-      // gardée en filet de sécurité pour un lien externe éventuel.
       GoRoute(
         path: '/payment/reverse_searches/:idProduct',
         redirect: (context, state) {
