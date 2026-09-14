@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -31,6 +32,18 @@ class RetryInterceptor extends Interceptor {
     final shouldRetry = isConnectionError || (isTimeout && isGetRequest);
 
     if (shouldRetry) {
+      try {
+        final connectivityResults = await Connectivity().checkConnectivity();
+        final hasConnection =
+            connectivityResults.any((r) => r != ConnectivityResult.none);
+        if (!hasConnection) {
+          // Aucun réseau actif sur l'appareil : inutile d'attendre et de retenter en boucle
+          return super.onError(err, handler);
+        }
+      } catch (_) {
+        // En cas de problème de détection, on continue le flux normal
+      }
+
       // Track the retry attempts in the extra field of RequestOptions
       int retries = requestOptions.extra['retries'] ?? 0;
 
