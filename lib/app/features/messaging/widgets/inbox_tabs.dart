@@ -6,8 +6,8 @@ import '../../../data/models/remote/messaging/conversation_type_count.dart';
 import '../../../utils/app_colors.dart';
 
 /// Rangée d'onglets "pills" (spec §4.1) : Toutes / Réservation / Visite /
-/// Support, calquée sur le pattern déjà utilisé pour les onglets d'alerte
-/// (`alert_list_page.dart`).
+/// Déménagement / Support, calquée sur le pattern déjà utilisé pour les
+/// onglets d'alerte (`alert_list_page.dart`).
 class InboxTabs extends StatelessWidget {
   const InboxTabs({
     super.key,
@@ -37,6 +37,7 @@ class InboxTabs extends StatelessWidget {
       (null, 'Toutes'),
       (ConversationType.reservation, 'Réservation'),
       (ConversationType.visite, 'Visite'),
+      (ConversationType.relais, 'Déménagement'),
       (ConversationType.support, 'Support'),
     ];
 

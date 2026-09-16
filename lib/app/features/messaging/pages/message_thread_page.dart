@@ -93,6 +93,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
         return 'Support ImmoPlus';
       case ConversationType.visite:
       case ConversationType.reservation:
+      case ConversationType.relais:
         return 'Propriétaire';
     }
   }
@@ -139,6 +140,11 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
 
       case ConversationType.support:
         // Pas d'identité individuelle — libellé fixe (spec §5.1).
+        break;
+
+      case ConversationType.relais:
+        // Pas de carte de contexte dédiée pour l'instant — le libellé
+        // générique "Propriétaire" (`_defaultPeerLabel`) suffit.
         break;
     }
   }

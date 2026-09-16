@@ -69,6 +69,25 @@ class MessageComposerSheet extends StatefulWidget {
     );
   }
 
+  static Future<void> showForRelais(
+    BuildContext context, {
+    required String relaisId,
+    required String title,
+    required String propertyLabel,
+    String? location,
+  }) {
+    return _show(
+      context,
+      MessageComposerSheet(
+        title: title,
+        placeholder: 'Écrivez votre message…',
+        contextCard: _SimpleContextCard(title: propertyLabel, subtitle: location),
+        onSubmit: (message) => getIt<MessagingRepository>()
+            .createRelaisConversation(relaisId: relaisId, message: message),
+      ),
+    );
+  }
+
   static Future<void> showForSupport(BuildContext context) {
     return _show(
       context,

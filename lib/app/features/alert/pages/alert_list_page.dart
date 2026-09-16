@@ -35,6 +35,232 @@ enum AlertStatusTab {
   const AlertStatusTab(this.label, this.value);
 }
 
+/// `extra` de la route `AlertStatusListPage` — titre + filtre de statut
+/// pour l'une des 4 cartes du hub bento "J'emménage".
+class AlertStatusArgs {
+  final String title;
+  final String? status;
+  const AlertStatusArgs(this.title, this.status);
+}
+
+/// Page dédiée pour un statut donné, ouverte depuis une carte du hub bento
+/// — même principe que `RelaisMyPage`/`RelaisMarketplacePage` côté "Je
+/// déménage" : chaque carte du hub mène à sa propre page plutôt qu'à un
+/// sous-onglet.
+class AlertStatusListPage extends StatefulWidget {
+  final String title;
+  final String? status;
+  const AlertStatusListPage({super.key, required this.title, this.status});
+  static const String name = 'ALERT_STATUS_LIST_PAGE';
+  static const String routePath = '/alerts/status';
+
+  @override
+  State<AlertStatusListPage> createState() => _AlertStatusListPageState();
+}
+
+class _AlertStatusListPageState extends State<AlertStatusListPage> {
+  final _refreshNotifier = ValueNotifier<int>(0);
+  bool _hasAlerts = false;
+
+  @override
+  void dispose() {
+    _refreshNotifier.dispose();
+    super.dispose();
+  }
+
+  Future<void> _createNewAlert() async {
+    final result = await context.pushNamed(AlertCreateEditPage.name);
+    if (result == true && mounted) {
+      await context.pushNamed(AlertSuccessPage.name);
+    }
+    _refreshNotifier.value++;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          widget.title,
+          style: GoogleFonts.dmSans(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        centerTitle: true,
+      ),
+      body: _AlertListContent(
+        status: widget.status,
+        refreshNotifier: _refreshNotifier,
+        onAlertsLoaded: (alerts) {
+          if (mounted) setState(() => _hasAlerts = alerts.isNotEmpty);
+        },
+      ),
+      floatingActionButton: _hasAlerts
+          ? FloatingActionButton(
+              onPressed: _createNewAlert,
+              backgroundColor: AppColors.primary,
+              shape: const CircleBorder(),
+              elevation: 0,
+              child: const Icon(Icons.add, color: Colors.white, size: 32),
+            )
+          : null,
+    );
+  }
+}
+
+class _AlertHubItem {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color color;
+  final String? status;
+
+  const _AlertHubItem({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.color,
+    required this.status,
+  });
+}
+
+final List<_AlertHubItem> _alertHubItems = [
+  _AlertHubItem(
+    title: 'Toutes',
+    subtitle: 'Toutes mes demandes',
+    icon: Iconsax.document_text,
+    color: AppColors.primary,
+    status: null,
+  ),
+  const _AlertHubItem(
+    title: 'En attente',
+    subtitle: 'Pas encore de proposition',
+    icon: Iconsax.clock,
+    color: Color(0xFFF59E0B),
+    status: 'en_attente',
+  ),
+  const _AlertHubItem(
+    title: 'Propositions',
+    subtitle: 'Offres reçues des pros',
+    icon: Iconsax.gift,
+    color: Color(0xFF1CA53F),
+    status: 'propositions',
+  ),
+  const _AlertHubItem(
+    title: 'Clôturées',
+    subtitle: 'Demandes terminées',
+    icon: Iconsax.archive_tick,
+    color: Color(0xFF6B7280),
+    status: 'cloturees',
+  ),
+];
+
+/// Hub bento "J'emménage" (dans Imatch) — même pattern que "Je déménage" :
+/// une carte par statut, chacune ouvre sa propre page (`AlertStatusListPage`)
+/// au lieu de sous-onglets.
+class _AlertHub extends StatelessWidget {
+  const _AlertHub();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 14,
+              crossAxisSpacing: 14,
+              childAspectRatio: 0.95,
+            ),
+            itemCount: _alertHubItems.length,
+            itemBuilder: (context, index) => _AlertHubCard(item: _alertHubItems[index]),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF7E6),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.25)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Iconsax.lamp_charge, color: Color(0xFFF59E0B), size: 18),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "Publiez une demande et recevez des propositions des professionnels selon vos critères.",
+                    style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade700, height: 1.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+}
+
+class _AlertHubCard extends StatelessWidget {
+  final _AlertHubItem item;
+  const _AlertHubCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () => context.pushNamed(
+        AlertStatusListPage.name,
+        extra: AlertStatusArgs(item.title, item.status),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: item.color.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(item.icon, color: item.color, size: 22),
+            ),
+            const Spacer(),
+            Text(
+              item.title,
+              style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              item.subtitle,
+              style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _AlertListPageState extends State<AlertListPage>
     with SingleTickerProviderStateMixin {
   final alertRepository = getIt<AlertRepository>();
@@ -67,6 +293,9 @@ class _AlertListPageState extends State<AlertListPage>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.embedded) {
+      return const _AlertHub();
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: widget.embedded

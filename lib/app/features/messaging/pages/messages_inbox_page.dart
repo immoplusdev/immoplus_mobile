@@ -39,6 +39,8 @@ class _MessagesInboxView extends StatelessWidget {
         return 'Aucune conversation liée à une visite.';
       case ConversationType.support:
         return "Vous n'avez pas encore contacté le support.";
+      case ConversationType.relais:
+        return 'Aucune conversation liée à un déménagement.';
       case null:
         return 'Pas encore de messages';
     }

@@ -42,18 +42,19 @@ class BookingHistoryCard extends StatelessWidget {
     final fmt = DateFormat('d MMM yyyy');
     final checkin = Utils.toDateTime(reservationModel.dateDebut);
     final checkout = Utils.toDateTime(reservationModel.dateFin);
-    final nights = reservationModel.datesReservation.length;
+    // `datesReservation` peut être vide (ex: réservation créée via
+    // confirmation de recherche inversée) : dateDebut/dateFin restent la
+    // source sûre pour le statut, et un simple diff de dates pour le nombre
+    // de nuits.
+    final nights = reservationModel.datesReservation.isNotEmpty
+        ? reservationModel.datesReservation.length
+        : checkout.difference(checkin).inDays.clamp(1, 1000000);
 
-    final bookingStatus = BookingUtils.getBookingStatus(
-      reservationModel.datesReservation.first.date!,
-      reservationModel.datesReservation.last.date!,
-    );
+    final bookingStatus = BookingUtils.getBookingStatus(checkin, checkout);
     final isOngoing = bookingStatus == BookingStatus.ongoing;
     final statusColor = isOngoing ? const Color(0xFF1CA53F) : Colors.blueGrey;
-    final statusLabel = BookingUtils.getStatusText(
-      startDate: reservationModel.datesReservation.first.date!,
-      endDate: reservationModel.datesReservation.last.date!,
-    );
+    final statusLabel =
+        BookingUtils.getStatusText(startDate: checkin, endDate: checkout);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 12),

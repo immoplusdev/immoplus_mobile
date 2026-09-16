@@ -75,6 +75,28 @@ class MessagingRepository {
     }
   }
 
+  /// `POST /conversations/relais` — réservé à l'occupant et au demandeur
+  /// avec un intérêt `in_progress` sur ce relais.
+  Future<CreateConversationResponse> createRelaisConversation({
+    required String relaisId,
+    required String message,
+  }) async {
+    try {
+      final response =
+          await MessagingProvider(dioClient).createRelaisConversation({
+        'relaisId': relaisId,
+        'message': message,
+      });
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      rethrow;
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to create relais conversation: $error');
+    }
+  }
+
   Future<List<ConversationModel>> getConversations({
     ConversationType? type,
   }) async {

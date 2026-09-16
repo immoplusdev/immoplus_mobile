@@ -1,0 +1,342 @@
+{
+  "data": {
+    "count": 12,
+    "hasMore": true,
+    "nextCursor": "eyJvZmZzZXQiOjEwfQ==",
+    "sections": [
+      {
+        "key": "near_you",
+        "title": "Près de chez vous",
+        "type": "residence_list",
+        "totalCount": 9,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/data/public/geolocalized?_lat=5.34&_long=-4.03&_radius=15",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "550e8400-e29b-41d4-a716-446655440000",
+              "name": "Villa Riviera",
+              "location": "Riviera Palmeraie",
+              "imageUrl": "722bee85-7d6e-4bd1-b107-0c3a95c8ec3b",
+              "pricePerNight": 45000,
+              "currency": "XOF"
+            }
+          },
+          {
+            "itemType": "ad",
+            "ad": {
+              "id": 21,
+              "placement": "HOME_FEED_NEAR_YOU",
+              "section_position": "inline",
+              "position_index": 1,
+              "campaign_category": "HORIZONTAL_AD",
+              "type": "IMAGE",
+              "content": { "title": "Découvrez nos résidences proches", "cta_label": "Explorer" },
+              "media": { "images": ["https://cdn.../near-you.jpg"], "videos": [] },
+              "action": "OPEN_RESIDENCE",
+              "scope": { "entity_id": null, "entity_ids": [], "filters": {} },
+              "url": null,
+              "priority": 5,
+              "start_date": "2026-09-01T00:00:00.000Z",
+              "end_date": "2026-09-30T23:59:59.000Z",
+              "status": "ACTIVE"
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "residences_ville_ville-abidjan-id",
+        "title": "Résidences à Abidjan",
+        "type": "residence_list",
+        "totalCount": 132,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/data/public/?_where=%5B%7B%22_field%22%3A%22ville.id%22%2C%22_op%22%3A%22eq%22%2C%22_val%22%3A%22ville-abidjan-id%22%7D%5D",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "bb0e8400-e29b-41d4-a716-446655440011",
+              "name": "Studio Plateau",
+              "location": "Plateau",
+              "imageUrl": null,
+              "pricePerNight": 20000,
+              "currency": "XOF"
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "residences_ville_ville-bouake-id",
+        "title": "Résidences à Bouaké",
+        "type": "residence_list",
+        "totalCount": 18,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/data/public/?_where=%5B%7B%22_field%22%3A%22ville.id%22%2C%22_op%22%3A%22eq%22%2C%22_val%22%3A%22ville-bouake-id%22%7D%5D",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "cc0e8400-e29b-41d4-a716-446655440012",
+              "name": "Villa Bouaké Centre",
+              "location": "Bouaké",
+              "imageUrl": null,
+              "pricePerNight": 28000,
+              "currency": "XOF"
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "poll_after_990e8400-e29b-41d4-a716-446655440004",
+        "title": "Où voulez-vous acheter à Bouaké ?",
+        "type": "poll_banner",
+        "totalCount": 1,
+        "page": 1,
+        "limit": 1,
+        "seeMoreEndpoint": "/polls/990e8400-e29b-41d4-a716-446655440004",
+        "items": [],
+        "poll": {
+          "pollId": "990e8400-e29b-41d4-a716-446655440004",
+          "question": "Où voulez-vous acheter à Bouaké ?",
+          "description": "Aidez-nous à connaître vos quartiers préférés",
+          "options": [
+            { "id": "opt-1", "label": "Air France", "voteCount": 512, "percentage": 41 },
+            { "id": "opt-2", "label": "Kennedy", "voteCount": 460, "percentage": 37 },
+            { "id": "opt-3", "label": "Belleville", "voteCount": 262, "percentage": 21 }
+          ],
+          "totalVotes": 1234,
+          "userHasVoted": false,
+          "expiresAt": "2026-09-16T23:59:59.000Z"
+        }
+      },
+
+      {
+        "key": "poll_before_aa1e8400-e29b-41d4-a716-446655440099",
+        "title": "Cherchez-vous plutôt à louer ou à acheter à Marcory ?",
+        "type": "poll_banner",
+        "totalCount": 1,
+        "page": 1,
+        "limit": 1,
+        "seeMoreEndpoint": "/polls/aa1e8400-e29b-41d4-a716-446655440099",
+        "items": [],
+        "poll": {
+          "pollId": "aa1e8400-e29b-41d4-a716-446655440099",
+          "question": "Cherchez-vous plutôt à louer ou à acheter à Marcory ?",
+          "description": null,
+          "options": [
+            { "id": "opt-4", "label": "Louer", "voteCount": 61, "percentage": 70 },
+            { "id": "opt-5", "label": "Acheter", "voteCount": 26, "percentage": 30 }
+          ],
+          "totalVotes": 87,
+          "userHasVoted": false,
+          "expiresAt": "2026-09-20T23:59:59.000Z"
+        }
+      },
+
+      {
+        "key": "residences_commune_commune-marcory-id",
+        "title": "Résidences à Marcory",
+        "type": "residence_list",
+        "totalCount": 26,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/data/public/?_where=%5B%7B%22_field%22%3A%22commune.id%22%2C%22_op%22%3A%22eq%22%2C%22_val%22%3A%22commune-marcory-id%22%7D%5D",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "aa0e8400-e29b-41d4-a716-446655440010",
+              "name": "Résidence Marcory Zone 4",
+              "location": "Marcory",
+              "imageUrl": null,
+              "pricePerNight": 35000,
+              "currency": "XOF"
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "residences_commune_commune-assinie-id",
+        "title": "Résidences à Assinie",
+        "type": "residence_list",
+        "totalCount": 0,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/data/public/?_where=%5B%7B%22_field%22%3A%22commune.id%22%2C%22_op%22%3A%22eq%22%2C%22_val%22%3A%22commune-assinie-id%22%7D%5D",
+        "items": []
+      },
+
+      {
+        "key": "new_this_week",
+        "title": "Nouveautés cette semaine",
+        "type": "residence_list",
+        "totalCount": 15,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/new-this-week",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "880e8400-e29b-41d4-a716-446655440003",
+              "name": "Maison du bonheur",
+              "location": "Cocody",
+              "imageUrl": null,
+              "pricePerNight": 30000,
+              "currency": "XOF",
+              "averageRating": null,
+              "totalReviews": 0,
+              "createdAt": "2026-09-08T10:30:00.000Z",
+              "daysOld": 3
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "available_now",
+        "title": "Disponible maintenant",
+        "type": "residence_list",
+        "totalCount": 48,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/residences/available-now",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "660e8400-e29b-41d4-a716-446655440001",
+              "name": "Appartement Cocody",
+              "location": "Cocody",
+              "imageUrl": null,
+              "pricePerNight": 25000,
+              "currency": "XOF"
+            }
+          },
+          {
+            "itemType": "ad",
+            "ad": {
+              "id": 12,
+              "placement": "HOME_FEED_AVAILABLE_NOW",
+              "section_position": "inline",
+              "position_index": 0,
+              "campaign_category": "HORIZONTAL_AD",
+              "type": "IMAGE",
+              "content": { "title": "-30% ce mois-ci", "cta_label": "En profiter" },
+              "media": { "images": ["https://cdn.../promo.jpg"], "videos": [] },
+              "action": "OPEN_PROPERTY",
+              "scope": { "entity_id": "550e8400-...", "entity_ids": [], "filters": {} },
+              "url": null,
+              "priority": 10,
+              "start_date": "2026-09-01T00:00:00.000Z",
+              "end_date": "2026-09-30T23:59:59.000Z",
+              "status": "ACTIVE"
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "ad_after_37",
+        "title": "Week-end détente à -20%",
+        "type": "ad_banner",
+        "totalCount": 1,
+        "page": 1,
+        "limit": 1,
+        "seeMoreEndpoint": null,
+        "items": [],
+        "ad": {
+          "id": 37,
+          "placement": "HOME_FEED_AVAILABLE_NOW",
+          "section_position": "after",
+          "position_index": null,
+          "campaign_category": "HORIZONTAL_AD",
+          "type": "IMAGE",
+          "content": { "title": "Week-end détente à -20%", "cta_label": "Réserver" },
+          "media": { "images": ["https://cdn.../weekend-promo.jpg"], "videos": [] },
+          "action": "OPEN_CATEGORY",
+          "scope": { "entity_id": null, "entity_ids": [], "filters": {} },
+          "url": null,
+          "priority": 8,
+          "start_date": "2026-09-01T00:00:00.000Z",
+          "end_date": "2026-09-30T23:59:59.000Z",
+          "status": "ACTIVE"
+        }
+      },
+
+      {
+        "key": "top_rated",
+        "title": "Les plus aimées",
+        "type": "residence_list",
+        "totalCount": 15,
+        "page": 1,
+        "limit": 10,
+        "seeMoreEndpoint": "/ratings/top-rated",
+        "items": [
+          {
+            "itemType": "item",
+            "item": {
+              "residenceId": "770e8400-e29b-41d4-a716-446655440002",
+              "name": "Sofitel Ivoire",
+              "location": "Riviera Palmeraie",
+              "imageUrl": "a1b2c3d4-...",
+              "averageRating": 4.8,
+              "totalReviews": 320,
+              "reviewerAvatars": [
+                { "userId": "u1", "firstName": "Ahmed", "lastName": "D.", "avatarId": "av1" },
+                { "userId": "u2", "firstName": "Marie", "lastName": "C.", "avatarId": "av2" }
+              ],
+              "reviewerCount": 32,
+              "remainingCount": 28
+            }
+          }
+        ]
+      },
+
+      {
+        "key": "biens_a_louer_par_ville",
+        "title": "Biens à louer par ville",
+        "type": "bien_groups_by_location",
+        "totalCount": 1,
+        "page": 1,
+        "limit": 5,
+        "seeMoreEndpoint": null,
+        "items": [
+          {
+            "locationId": "ville-abidjan-id",
+            "locationName": "Abidjan",
+            "itemCount": 47,
+            "page": 1,
+            "limit": 10,
+            "seeMoreEndpoint": "/biens-immobiliers/data/public/?_where=%5B%7B%22_field%22%3A%22ville.id%22%2C%22_op%22%3A%22eq%22%2C%22_val%22%3A%22ville-abidjan-id%22%7D%2C%7B%22_field%22%3A%22aLouer%22%2C%22_op%22%3A%22eq%22%2C%22_val%22%3Atrue%7D%5D",
+            "items": [
+              {
+                "itemType": "item",
+                "item": {
+                  "bienId": "dd0e8400-...",
+                  "name": "Studio meublé Plateau",
+                  "location": "Plateau",
+                  "imageUrl": null,
+                  "price": 15000,
+                  "currency": "XOF",
+                  "typeBienImmobilier": "studio",
+                  "aLouer": true,
+                  "typeLocation": "mois"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "generatedAt": "2026-09-12T12:00:00.000Z"
+  }
+}

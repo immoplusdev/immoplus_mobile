@@ -17,11 +17,11 @@ class NavigationHandler {
           id == 0
               ? PageState.home
               : id == 1
-                  ? PageState.messages
+                  ? PageState.forMe
                   : id == 2
                       ? PageState.vivre
                       : id == 3
-                          ? PageState.forMe
+                          ? PageState.messages
                           : PageState.account,
         );
 
@@ -30,15 +30,15 @@ class NavigationHandler {
         context.go('/homePage');
         break;
       case 1:
-        // Onglet "Messages" — remplace temporairement "Carte"/"/map" pour
-        // les tests de bout en bout du parcours de messagerie (spec §1).
-        context.go('/messages');
+        context.goNamed(MyChoicePage.name);
         break;
       case 2:
         context.go('/vivre');
         break;
       case 3:
-        context.goNamed(MyChoicePage.name);
+        // Onglet "Messages" — remplace temporairement "Carte"/"/map" pour
+        // les tests de bout en bout du parcours de messagerie (spec §1).
+        context.go('/messages');
         break;
       default:
         context.goNamed(AccountPage.name);

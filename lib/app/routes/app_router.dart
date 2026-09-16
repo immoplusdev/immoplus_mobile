@@ -31,6 +31,7 @@ import 'package:immoplus/app/features/messaging/pages/message_thread_page.dart';
 import 'package:immoplus/app/features/messaging/pages/messages_inbox_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
+import 'package:immoplus/app/features/for_you/see_more_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
@@ -85,6 +86,20 @@ import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
+import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
+import 'package:immoplus/app/features/immo_relais/models/relais_draft.dart';
+import 'package:immoplus/app/features/immo_relais/pages/edit_relais_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_detail_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_interests_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_marketplace_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_matches_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_my_interests_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_my_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/relais_received_interests_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/report_relais_step2_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/report_relais_summary_page.dart';
+import 'package:immoplus/app/features/immo_relais/pages/report_relais_success_page.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
@@ -141,8 +156,6 @@ class AppRouter {
         context.read<NavigationCubit>().switchPage(PageState.home);
       } else if (path.startsWith('/for_me')) {
         context.read<NavigationCubit>().switchPage(PageState.forMe);
-      } else if (path.startsWith('/map')) {
-        context.read<NavigationCubit>().switchPage(PageState.explore);
       } else if (path.startsWith('/account')) {
         context.read<NavigationCubit>().switchPage(PageState.account);
       }
@@ -441,6 +454,15 @@ class AppRouter {
           return const SizedBox.shrink();
         },
       ),
+      // Hors du ShellRoute (`HomePageWrapper`) volontairement : la carte
+      // s'ouvre comme une vraie page à part entière (transition standard,
+      // pas de bottom nav bar affichée dessus, retour via `context.pop()`
+      // depuis le bouton dédié dans `MapViewer`) plutôt que comme un onglet.
+      GoRoute(
+        path: '/map',
+        name: MapViewer.name,
+        builder: (context, state) => const MapViewer(),
+      ),
       ShellRoute(
         navigatorKey: _rootNavigatorKey,
         builder: (context, state, child) {
@@ -476,16 +498,6 @@ class AppRouter {
               ),
             ],
           ),
-          GoRoute(
-            path: '/map',
-            name: MapViewer.name,
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: const MapViewer(),
-            ),
-          ),
-          // Remplace temporairement l'onglet "Carte" dans la tab bar (spec
-          // messagerie §1) — route `/map` volontairement conservée pour un
-          // retour en arrière trivial.
           GoRoute(
             path: MessagesInboxPage.routePath,
             name: MessagesInboxPage.name,
@@ -667,6 +679,19 @@ class AppRouter {
         path: BestRatedResidencesPage.routePath,
         name: BestRatedResidencesPage.routeName,
         builder: (context, state) => const BestRatedResidencesPage(),
+      ),
+
+      GoRoute(
+        path: SeeMorePage.routePath,
+        name: SeeMorePage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return SeeMorePage(
+            title: extra['title'] as String,
+            seeMoreEndpoint: extra['seeMoreEndpoint'] as String,
+            contentType: extra['contentType'] as SeeMoreContentType,
+          );
+        },
       ),
 
       GoRoute(
@@ -888,6 +913,14 @@ class AppRouter {
         builder: (context, state) => const AlertListPage(),
       ),
       GoRoute(
+        path: AlertStatusListPage.routePath,
+        name: AlertStatusListPage.name,
+        builder: (context, state) {
+          final args = state.extra as AlertStatusArgs;
+          return AlertStatusListPage(title: args.title, status: args.status);
+        },
+      ),
+      GoRoute(
         path: '/alerts/create',
         name: AlertCreateEditPage.name,
         builder: (context, state) => AlertCreateEditPage(
@@ -913,6 +946,82 @@ class AppRouter {
         builder: (context, state) => AlertDetailPage(
           alert: state.extra as AlertModel,
         ),
+      ),
+      GoRoute(
+        path: ReportRelaisStep1Page.routePath,
+        name: ReportRelaisStep1Page.name,
+        builder: (context, state) => const ReportRelaisStep1Page(),
+      ),
+      GoRoute(
+        path: '/relais/report/step2',
+        name: ReportRelaisStep2Page.name,
+        builder: (context, state) => ReportRelaisStep2Page(
+          draft: state.extra as RelaisDraft,
+        ),
+      ),
+      GoRoute(
+        path: '/relais/report/summary',
+        name: ReportRelaisSummaryPage.name,
+        builder: (context, state) => ReportRelaisSummaryPage(
+          draft: state.extra as RelaisDraft,
+        ),
+      ),
+      GoRoute(
+        path: '/relais/report/success',
+        name: ReportRelaisSuccessPage.name,
+        builder: (context, state) => const ReportRelaisSuccessPage(),
+      ),
+      GoRoute(
+        path: '/relais/detail',
+        name: RelaisDetailPage.name,
+        builder: (context, state) {
+          final extra = state.extra;
+          final args = extra is RelaisDetailArgs
+              ? extra
+              : RelaisDetailArgs(extra as RelaisModel);
+          return RelaisDetailPage(relais: args.relais, isOwner: args.isOwner);
+        },
+      ),
+      GoRoute(
+        path: '/relais/edit',
+        name: EditRelaisPage.name,
+        builder: (context, state) => EditRelaisPage(
+          relais: state.extra as RelaisModel,
+        ),
+      ),
+      GoRoute(
+        path: '/relais/interests',
+        name: RelaisInterestsPage.name,
+        builder: (context, state) => RelaisInterestsPage(
+          relaisId: state.extra as String,
+        ),
+      ),
+      GoRoute(
+        path: '/relais/matches',
+        name: RelaisMatchesPage.name,
+        builder: (context, state) => RelaisMatchesPage(
+          relaisId: state.extra as String,
+        ),
+      ),
+      GoRoute(
+        path: RelaisMyPage.routePath,
+        name: RelaisMyPage.name,
+        builder: (context, state) => const RelaisMyPage(),
+      ),
+      GoRoute(
+        path: RelaisMarketplacePage.routePath,
+        name: RelaisMarketplacePage.name,
+        builder: (context, state) => const RelaisMarketplacePage(),
+      ),
+      GoRoute(
+        path: RelaisMyInterestsPage.routePath,
+        name: RelaisMyInterestsPage.name,
+        builder: (context, state) => const RelaisMyInterestsPage(),
+      ),
+      GoRoute(
+        path: RelaisReceivedInterestsPage.routePath,
+        name: RelaisReceivedInterestsPage.name,
+        builder: (context, state) => const RelaisReceivedInterestsPage(),
       ),
       GoRoute(
         path: '/notifications/detail',

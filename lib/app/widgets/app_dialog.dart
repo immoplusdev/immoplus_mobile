@@ -65,12 +65,12 @@ class AppDialog {
               },
             ),
             CupertinoDialogAction(
-              child: Text('Confirmer'),
               isDestructiveAction: isDestructiveAction,
               onPressed: rollback ??
                   () {
                     context.pop();
                   },
+              child: Text('Confirmer'),
             ),
           ],
         ),

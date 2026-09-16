@@ -21,7 +21,8 @@ enum ConversationStatus {
 enum ConversationType {
   reservation('reservation'),
   visite('visite'),
-  support('support');
+  support('support'),
+  relais('relais');
 
   final String value;
   const ConversationType(this.value);
@@ -47,6 +48,9 @@ class ConversationModel with _$ConversationModel {
 
     /// Non-null seulement pour `type == visite`.
     String? visiteId,
+
+    /// Non-null seulement pour `type == relais`.
+    String? relaisId,
 
     /// Toujours `null` pour `type == support` (boîte partagée, pas
     /// d'interlocuteur fixe).

@@ -133,7 +133,7 @@ class HomeSectionTitle extends StatelessWidget {
     return Text(
       title,
       style: GoogleFonts.plusJakartaSans(
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.3,
           color: Color(0xff0B1C30)),

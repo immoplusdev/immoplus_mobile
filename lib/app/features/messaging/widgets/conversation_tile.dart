@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/config/injection.dart';
+import '../../../data/enums/relais_property_type.dart';
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/repositories/bien_immobilier_repository.dart';
+import '../../../data/repositories/relais_repository.dart';
 import '../../../data/repositories/residence_repository.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/utils.dart';
@@ -86,6 +88,25 @@ class _ConversationTileState extends State<ConversationTile> {
             }
           },
         );
+      case ConversationType.relais:
+        final id = conversation.relaisId ?? '';
+        return _cache.putIfAbsent(
+          'relais:$id',
+          () async {
+            try {
+              final response = await getIt<RelaisRepository>().getRelaisById(id);
+              final relais = response.data;
+              return _TileInfo(
+                title: '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.location}',
+                photoUrl: relais.photos.isNotEmpty
+                    ? Utils.getImagePath(id: relais.photos.first)
+                    : null,
+              );
+            } catch (_) {
+              return const _TileInfo(title: 'Déménagement');
+            }
+          },
+        );
     }
   }
 
@@ -95,6 +116,7 @@ class _ConversationTileState extends State<ConversationTile> {
         return Icons.support_agent_outlined;
       case ConversationType.visite:
       case ConversationType.reservation:
+      case ConversationType.relais:
         return Icons.home_outlined;
     }
   }

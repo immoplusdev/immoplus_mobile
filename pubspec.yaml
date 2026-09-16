@@ -20,7 +20,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.24+71
 
 environment:
-  sdk: ^3.6.0
+    sdk: ^3.6.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -91,6 +91,7 @@ dependencies:
   hexcolor: ^3.0.1
   iconsax: ^0.0.8
   image_picker: ^1.1.2
+  native_glass_navbar: ^1.0.3
   infinite_scroll_pagination: ^4.1.0
   instagram_like_animation_button:
     git:
@@ -121,6 +122,7 @@ dependencies:
   smooth_video_progress: ^0.0.4
   sms_autofill: ^2.4.1
   step_progress_indicator: ^1.0.2
+  
   string_2_icon: ^0.0.2
   table_calendar: ^3.1.3
   # test: ^1.25.8
@@ -142,6 +144,7 @@ dependencies:
   pinput: ^5.0.1
   smart_auth: ^3.2.0
   firebase_remote_config: ^6.1.3
+
   new_version_plus: ^1.0.1
   confetti: ^0.8.0
   package_info_plus: ^9.0.0
@@ -164,6 +167,7 @@ dependencies:
   qr_flutter: ^4.1.0
   share_files_and_screenshot_widgets_plus: ^1.0.5
   gal: ^2.3.3
+  uuid: ^4.6.0
 
 
 dev_dependencies:
@@ -214,6 +218,8 @@ flutter:
     - assets/icons/empty.svg
     - assets/img/
     - assets/img/onboarding/
+    - assets/img/onglets/
+    - assets/img/pubs/
     - assets/icon/
     - assets/icon/icon_large.png
     - assets/icon/marker.png

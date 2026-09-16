@@ -37,7 +37,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
     });
 
     try {
-      if (value!.isNotEmpty) {
+      if (value.isNotEmpty) {
         results.clear();
 
         Response details = await Dio().get(
@@ -181,7 +181,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                     ),
                   ),
                 )
-                .toList(),
+                ,
           ]),
         ),
       ),

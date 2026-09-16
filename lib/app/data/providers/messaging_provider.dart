@@ -31,6 +31,14 @@ abstract class MessagingProvider {
     @Body() Map<String, dynamic> body,
   );
 
+  /// Réservé à l'occupant du relais et au demandeur ayant un intérêt
+  /// `in_progress` dessus (`403` sinon, `403` aussi si l'occupant a
+  /// plusieurs intérêts `in_progress` actifs — interlocuteur ambigu).
+  @POST('/conversations/relais')
+  Future<CreateConversationResponse> createRelaisConversation(
+    @Body() Map<String, dynamic> body,
+  );
+
   @GET('/conversations')
   Future<List<ConversationModel>> getConversations({
     @Query('type') String? type,

@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
+import 'package:native_glass_navbar/native_glass_navbar.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_feed_warmup_service.dart';
@@ -63,11 +64,11 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     switch (state) {
       case PageState.home:
         return 0;
-      case PageState.messages:
+      case PageState.forMe:
         return 1;
       case PageState.vivre:
         return 2;
-      case PageState.forMe:
+      case PageState.messages:
         return 3;
       case PageState.account:
         return 4;
@@ -148,9 +149,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       return;
     }
 
-    // Si on clique sur "Messages" (index 1) sans être connecté, direction
+    // Si on clique sur "Messages" (index 3) sans être connecté, direction
     // inscription/connexion plutôt que l'inbox (qui échouerait en 401).
-    if (index == 1 && sessionManager.currentUser == null) {
+    if (index == 3 && sessionManager.currentUser == null) {
       context.pushNamed(
         AuthenticationPage.name,
         extra: (
@@ -164,8 +165,8 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       return;
     }
 
-    // Si on clique sur "Imatch" (index 3), on vérifie si l'utilisateur est connecté
-    if (index == 3 && sessionManager.currentUser == null) {
+    // Si on clique sur "Imatch" (index 1), on vérifie si l'utilisateur est connecté
+    if (index == 1 && sessionManager.currentUser == null) {
       context.pushNamed(
         AuthenticationPage.name,
         extra: (
@@ -220,86 +221,90 @@ class _HomePageWrapperState extends State<HomePageWrapper>
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
                   ? null
-                  : Container(
-                      decoration: BoxDecoration(
-                        // borderRadius: const BorderRadius.only(
-                        //   topLeft: Radius.circular(20),
-                        //   topRight: Radius.circular(20),
-                        // ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        // borderRadius: const BorderRadius.only(
-                        //   topLeft: Radius.circular(20),
-                        //   topRight: Radius.circular(20),
-                        // ),
-                        child: SizedBox(
-                          height: Platform.isAndroid
-                              ? 80 + MediaQuery.of(context).padding.bottom
-                              : null,
-                          child: BottomNavigationBar(
-                            type: BottomNavigationBarType.fixed,
-                            backgroundColor: state == PageState.vivre
-                                ? Colors.black
-                                : Colors.white,
-                            currentIndex: _indexForState(state),
-                            onTap: (value) =>
-                                _onItemTapped(index: value, pageState: state),
-                            selectedFontSize: 12,
-                            unselectedFontSize: 12,
-                            showSelectedLabels: true,
-                            showUnselectedLabels: true,
-                            selectedItemColor: AppColors.primary,
-                            unselectedItemColor: state == PageState.vivre
-                                ? Colors.white
-                                : Colors.grey,
-                            items: [
-                              _buildNavItem(
-                                icon: Iconsax.home,
-                                label: "Accueil",
-                                isActive: state == PageState.home,
-                                immoMode: state == PageState.vivre,
-                              ),
-                              _buildNavItem(
-                                icon: Iconsax.message,
-                                label: "Messages",
-                                isActive: state == PageState.messages,
-                                immoMode: state == PageState.vivre,
-                                badgeWidget: NavBadge(
-                                    notifier: Constantes.unreadMessagesCount),
-                              ),
-                              _buildNavItemVivre(
-                                  isActive: state == PageState.vivre),
-                              _buildNavItem(
-                                icon: Iconsax.heart,
-                                label: "Imatch",
-                                isActive: state == PageState.forMe,
-                                immoMode: state == PageState.vivre,
-                                svgAsset: 'assets/svgs/icons/immomacth.svg',
-                                badgeWidget: NavBadge(
-                                    notifier: Constantes.imatchBadgeCount),
-                              ),
-                              _buildNavItem(
-                                icon: Iconsax.user,
-                                label: "Compte",
-                                isActive: state == PageState.account,
-                                immoMode: state == PageState.vivre,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                  : NativeGlassNavBar(
+                      currentIndex: _indexForState(state),
+                      onTap: (index) =>
+                          _onItemTapped(index: index, pageState: state),
+                      tintColor: AppColors.primary,
+                      tabs: const [
+                        NativeGlassNavBarItem(label: 'Accueil', symbol: 'house'),
+                        NativeGlassNavBarItem(label: 'Imatch', symbol: 'heart'),
+                        NativeGlassNavBarItem(label: 'Reels', symbol: 'play.rectangle'),
+                        NativeGlassNavBarItem(label: 'Messages', symbol: 'message'),
+                        NativeGlassNavBarItem(label: 'Compte', symbol: 'person'),
+                      ],
+                      // Android + iOS < 26 : bascule sur la barre native
+                      // "maison" existante (badges messages/imatch, icône
+                      // Reels custom) — aucune régression là où le glass
+                      // natif n'est pas disponible.
+                      fallback: _buildFallbackBar(context, state),
                     ),
             );
           },
         );
       },
+    );
+  }
+
+  /// Barre native "maison" (badges, icône Reels custom) — utilisée par
+  /// `NativeGlassNavBar.fallback` sur Android et iOS < 26, là où le rendu
+  /// glass natif n'est pas disponible.
+  Widget _buildFallbackBar(BuildContext context, PageState state) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey.shade200)),
+      ),
+      child: ClipRRect(
+        child: SizedBox(
+          height: Platform.isAndroid
+              ? 80 + MediaQuery.of(context).padding.bottom
+              : null,
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor:
+                state == PageState.vivre ? Colors.black : Colors.white,
+            currentIndex: _indexForState(state),
+            onTap: (value) => _onItemTapped(index: value, pageState: state),
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor:
+                state == PageState.vivre ? Colors.white : Colors.grey,
+            items: [
+              _buildNavItem(
+                icon: Iconsax.home,
+                label: "Accueil",
+                isActive: state == PageState.home,
+                immoMode: state == PageState.vivre,
+              ),
+              _buildNavItem(
+                icon: Iconsax.heart,
+                label: "Imatch",
+                isActive: state == PageState.forMe,
+                immoMode: state == PageState.vivre,
+                svgAsset: 'assets/svgs/icons/immomacth.svg',
+                badgeWidget: NavBadge(notifier: Constantes.imatchBadgeCount),
+              ),
+              _buildNavItemVivre(isActive: state == PageState.vivre),
+              _buildNavItem(
+                icon: Iconsax.messages_3,
+                label: "Messages",
+                isActive: state == PageState.messages,
+                immoMode: state == PageState.vivre,
+                badgeWidget: NavBadge(notifier: Constantes.unreadMessagesCount),
+              ),
+              _buildNavItem(
+                icon: Iconsax.user,
+                label: "Compte",
+                isActive: state == PageState.account,
+                immoMode: state == PageState.vivre,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -373,10 +378,6 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       icon: Container(
         height: 44,
         padding: const EdgeInsets.all(4),
-        // decoration: BoxDecoration(
-
-        //   borderRadius: BorderRadius.circular(12),
-        // ),
         child: Image.asset(
           'assets/img/icon_video_2.png',
           width: 26,
@@ -386,23 +387,4 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       label: 'Reels',
     );
   }
-// BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-//   return BottomNavigationBarItem(
-//     icon: Container(
-//       height: 40,
-//       padding: const EdgeInsets.all(8),
-//       child: isActive
-//           ? Icon(
-//               Iconsax.play5,
-//               color: AppColors.primary,
-//               size: 28,
-//             )
-//           : Icon(
-//               Iconsax.play,
-//               size: 28,
-//             ),
-//     ),
-//     label: 'Reels',
-//   );
-// }
 }

@@ -272,12 +272,18 @@ class BannerItem extends StatelessWidget {
               ],
             ),
           ),
+           const Gap(6),
           if (onDismiss != null)
-            IconButton(
-              icon: Icon(Icons.close, color: defaultColor, size: 16),
-              padding: const EdgeInsets.all(6),
-              constraints: const BoxConstraints(),
-              onPressed: onDismiss,
+            GestureDetector(
+              onTap: onDismiss,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(60),
+                ),
+                child: Icon(Icons.close, color: iconColor, size: 12),
+              ),
             ),
         ],
       ),
