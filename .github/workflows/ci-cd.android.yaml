@@ -1,4 +1,4 @@
-name: Deploy Android to Play Store
+name: Deploy Android to Play Stores
 
 on:
   push:
