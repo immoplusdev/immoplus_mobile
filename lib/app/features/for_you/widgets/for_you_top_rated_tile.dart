@@ -69,7 +69,7 @@ class ForYouTopRatedTile extends StatelessWidget {
                       color: Colors.grey.shade200,
                       child: Center(
                         child:
-                            Icon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
+                            FaIcon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
                       ),
                     ),
                   ),

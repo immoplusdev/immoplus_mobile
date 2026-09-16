@@ -1,3 +1,4 @@
+import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -32,6 +33,7 @@ class _DeepLinkEater extends WidgetsBindingObserver {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
   WidgetsBinding.instance.addObserver(_DeepLinkEater());
   // dotenv est chargé dans configureDependencies() → Stripe s'init après
   await configureDependencies();

@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
-import 'package:native_glass_navbar/native_glass_navbar.dart';
+import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_feed_warmup_service.dart';
@@ -120,6 +120,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
     _fetchImatchBadge();
     _fetchUnreadMessagesCount();
     _listenForUnreadMessages();
@@ -213,6 +214,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
           valueListenable: Constantes.hideBottomNavNotifier,
           builder: (context, hideBottomNav, _) {
             return Scaffold(
+              extendBody: true,
               body: widget.child,
               floatingActionButton:
                   // state == PageState.home ? const AiFloatingButton() : null,
@@ -221,22 +223,77 @@ class _HomePageWrapperState extends State<HomePageWrapper>
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
                   ? null
-                  : NativeGlassNavBar(
-                      currentIndex: _indexForState(state),
-                      onTap: (index) =>
+                  : AdaptiveLiquidBottomNavigationBar(
+                      selectedIndex: _indexForState(state),
+                      onDestinationSelected: (index) =>
                           _onItemTapped(index: index, pageState: state),
-                      tintColor: AppColors.primary,
-                      tabs: const [
-                        NativeGlassNavBarItem(label: 'Accueil', symbol: 'house'),
-                        NativeGlassNavBarItem(label: 'Imatch', symbol: 'heart'),
-                        NativeGlassNavBarItem(label: 'Reels', symbol: 'play.rectangle'),
-                        NativeGlassNavBarItem(label: 'Messages', symbol: 'message'),
-                        NativeGlassNavBarItem(label: 'Compte', symbol: 'person'),
+                      tint: AppColors.primary,
+                      items: [
+                        AdaptiveBottomNavItem(
+                          label: 'Accueil',
+                          iosIconName: 'immo_home',
+                          iosIconNameSelected: 'immo_home_fill',
+                          androidIcon: const Icon(Iconsax.home, size: 22),
+                          androidIconSelected: Icon(Iconsax.home5,
+                              color: AppColors.primary, size: 22),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Imatch',
+                          iosIconName: 'immo_heart',
+                          iosIconNameSelected: 'immo_heart_fill',
+                          androidIcon: SvgPicture.asset(
+                            'assets/svgs/icons/immomacth.svg',
+                            width: 22,
+                            height: 22,
+                            colorFilter: ColorFilter.mode(
+                              state == PageState.vivre
+                                  ? Colors.white
+                                  : Colors.grey.shade600,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          androidIconSelected: SvgPicture.asset(
+                            'assets/svgs/icons/immomacth.svg',
+                            width: 22,
+                            height: 22,
+                            colorFilter: ColorFilter.mode(
+                              AppColors.primary,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Reels',
+                          iosIconName: 'immo_reels',
+                          iosIconNameSelected: 'immo_reels_fill',
+                          androidIcon: Image.asset(
+                            'assets/img/icon_video_2.png',
+                            width: 22,
+                            height: 22,
+                          ),
+                          androidIconSelected: Image.asset(
+                            'assets/img/icon_video_2.png',
+                            width: 22,
+                            height: 22,
+                          ),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Messages',
+                          iosIconName: 'immo_message',
+                          iosIconNameSelected: 'immo_message_fill',
+                          androidIcon: const Icon(Iconsax.messages_3, size: 22),
+                          androidIconSelected: Icon(Iconsax.messages_35,
+                              color: AppColors.primary, size: 22),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Compte',
+                          iosIconName: 'immo_user',
+                          iosIconNameSelected: 'immo_user_fill',
+                          androidIcon: const Icon(Iconsax.user, size: 22),
+                          androidIconSelected: Icon(Iconsax.user5,
+                              color: AppColors.primary, size: 22),
+                        ),
                       ],
-                      // Android + iOS < 26 : bascule sur la barre native
-                      // "maison" existante (badges messages/imatch, icône
-                      // Reels custom) — aucune régression là où le glass
-                      // natif n'est pas disponible.
                       fallback: _buildFallbackBar(context, state),
                     ),
             );
@@ -247,7 +304,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   }
 
   /// Barre native "maison" (badges, icône Reels custom) — utilisée par
-  /// `NativeGlassNavBar.fallback` sur Android et iOS < 26, là où le rendu
+  /// `AdaptiveLiquidBottomNavigationBar.fallback` sur Android et iOS < 26, là où le rendu
   /// glass natif n'est pas disponible.
   Widget _buildFallbackBar(BuildContext context, PageState state) {
     return Container(

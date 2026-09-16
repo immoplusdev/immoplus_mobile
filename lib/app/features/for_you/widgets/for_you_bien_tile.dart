@@ -62,7 +62,7 @@ class ForYouBienTile extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         color: Colors.grey.shade200,
         child: Center(
-          child: Icon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
+          child: FaIcon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
         ),
       ),
     );

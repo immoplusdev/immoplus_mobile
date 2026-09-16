@@ -297,7 +297,7 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget _socialIcon(IconData icon, VoidCallback onTap) {
+  Widget _socialIcon(FaIconData icon, VoidCallback onTap) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -305,7 +305,7 @@ class _AccountPageState extends State<AccountPage> {
         borderRadius: BorderRadius.circular(20),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 22, color: _kSocialIcon),
+          child: FaIcon(icon, size: 22, color: _kSocialIcon),
         ),
       ),
     );
@@ -630,7 +630,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
+                FaIcon(
                   FontAwesomeIcons.chevronRight,
                   size: 14,
                   color: _kTrailingColor,

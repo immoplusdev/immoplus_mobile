@@ -91,7 +91,9 @@ dependencies:
   hexcolor: ^3.0.1
   iconsax: ^0.0.8
   image_picker: ^1.1.2
-  native_glass_navbar: ^1.0.3
+  adaptive_liquid_bottom_nav_bar:
+    git:
+      url: https://github.com/kitoko2/adaptive_bottom_nav_bar.git
   infinite_scroll_pagination: ^4.1.0
   instagram_like_animation_button:
     git:

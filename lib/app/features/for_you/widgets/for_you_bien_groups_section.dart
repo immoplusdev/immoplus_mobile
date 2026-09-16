@@ -43,7 +43,8 @@ class ForYouBienGroupsSection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: groups.length,
             separatorBuilder: (context, index) => const Gap(18),
-            itemBuilder: (context, index) => _LocationGroupCard(group: groups[index]),
+            itemBuilder: (context, index) =>
+                _LocationGroupCard(group: groups[index]),
           ),
         ),
       ],
@@ -109,7 +110,7 @@ class _LocationGroupCard extends StatelessWidget {
                       ),
                       errorWidget: (context, url, error) => Container(
                         color: Colors.grey.shade300,
-                        child: Icon(
+                        child: FaIcon(
                           FontAwesomeIcons.images,
                           size: 28,
                           color: Colors.grey.shade500,
@@ -118,7 +119,7 @@ class _LocationGroupCard extends StatelessWidget {
                     )
                   : Container(
                       color: Colors.grey.shade300,
-                      child: Icon(
+                      child: FaIcon(
                         FontAwesomeIcons.locationDot,
                         size: 28,
                         color: Colors.grey.shade500,
