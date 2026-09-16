@@ -11,6 +11,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
+import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
@@ -328,6 +329,30 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         title: "Voir l'itinéraire",
                         subtitle: "Ouvrir dans Maps",
                         onTap: () => _openMaps(state),
+                      ),
+                    ),
+                  ),
+                  const SliverGap(8),
+
+                  // Contacter le propriétaire (messagerie in-app, spec §2.2)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildActionTile(
+                        context,
+                        icon: Iconsax.message,
+                        title: 'Contacter le propriétaire',
+                        subtitle: 'Poser une question sur cette visite',
+                        onTap: () => MessageComposerSheet.showForVisite(
+                          context,
+                          demandeVisiteId: data.id,
+                          bienTitle: (data.bienImmobilier?.nom.isNotEmpty ?? false)
+                              ? data.bienImmobilier!.nom
+                              : 'Bien immobilier',
+                          bienPhotoUrl: (data.bienImmobilier?.images.isNotEmpty ?? false)
+                              ? Utils.getImagePath(id: data.bienImmobilier!.images.first)
+                              : null,
+                        ),
                       ),
                     ),
                   ),

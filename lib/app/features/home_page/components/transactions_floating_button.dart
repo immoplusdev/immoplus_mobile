@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +20,7 @@ import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/app/widgets/animated_photo_stack_icon.dart';
 import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -381,7 +381,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                 child: _isOpen
                     ? Icon(Icons.close_rounded,
                         color: AppColors.primary, size: 24)
-                    : const _TransactionsStackIcon(),
+                    : const AnimatedPhotoStackIcon(size: 34),
               ),
               // Un paiement en attente prime sur le décompte : c'est la seule
               // situation où l'utilisateur a quelque chose à faire.
@@ -584,122 +584,6 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
             ],
           ),
           child: _buildLabel(),
-        ),
-      ),
-    );
-  }
-}
-
-/// Mini pile de 3 cartes-images en éventail, avec rotation/décalage subtils
-/// et permutation périodique des positions (effet "shuffle").
-class _TransactionsStackIcon extends StatefulWidget {
-  const _TransactionsStackIcon();
-
-  @override
-  State<_TransactionsStackIcon> createState() => _TransactionsStackIconState();
-}
-
-class _StackSlot {
-  const _StackSlot({
-    required this.left,
-    required this.top,
-    required this.angle,
-    required this.opacity,
-  });
-
-  final double left;
-  final double top;
-  final double angle;
-  final double opacity;
-}
-
-class _TransactionsStackIconState extends State<_TransactionsStackIcon> {
-  static const List<String> _images = [
-    'assets/img/residence.png',
-    'assets/img/terrain.png',
-    'assets/img/meuble.png',
-  ];
-
-  static const List<_StackSlot> _slots = [
-    _StackSlot(left: 2, top: 10, angle: -0.13, opacity: 0.82), // arrière
-    _StackSlot(left: 12, top: 6, angle: 0.12, opacity: 0.9), // milieu
-    _StackSlot(left: 7, top: 12, angle: 0.0, opacity: 1), // avant-plan
-  ];
-
-  static const Duration _shuffleInterval = Duration(seconds: 3);
-  static const Duration _moveDuration = Duration(milliseconds: 550);
-
-  Timer? _shuffleTimer;
-  List<int> _slotForImage = [0, 1, 2];
-
-  @override
-  void initState() {
-    super.initState();
-    _shuffleTimer = Timer.periodic(_shuffleInterval, (_) {
-      if (!mounted) return;
-      setState(() {
-        _slotForImage = _slotForImage.map((s) => (s + 1) % 3).toList();
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _shuffleTimer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Ordre de peinture arrière → avant, selon le slot courant de chaque image.
-    final paintOrder = List<int>.generate(3, (i) => i)
-      ..sort((a, b) => _slotForImage[a].compareTo(_slotForImage[b]));
-
-    return SizedBox(
-      width: 34,
-      height: 34,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          for (final imageIndex in paintOrder)
-            _buildImage(imageIndex, _slots[_slotForImage[imageIndex]]),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImage(int imageIndex, _StackSlot slot) {
-    return AnimatedPositioned(
-      key: ValueKey(_images[imageIndex]),
-      duration: _moveDuration,
-      curve: Curves.easeInOutCubic,
-      left: slot.left,
-      top: slot.top,
-      child: AnimatedRotation(
-        turns: slot.angle / (2 * math.pi),
-        duration: _moveDuration,
-        curve: Curves.easeInOutCubic,
-        child: AnimatedOpacity(
-          opacity: slot.opacity,
-          duration: _moveDuration,
-          child: Container(
-            width: 18,
-            height: 18,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.18),
-                  blurRadius: 3,
-                  offset: const Offset(0, 1.5),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Image.asset(_images[imageIndex], fit: BoxFit.cover),
-            ),
-          ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
+import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:immoplus/app/appli/utils/navigation_handler.dart';
 import 'package:immoplus/app/features/prop_feed/feed_controller.dart';
 import 'package:immoplus/app/features/prop_feed/video_feed_warmup_service.dart';
@@ -15,13 +16,15 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 
 import 'package:immoplus/app/appli/widgets/nav_badge.dart';
+import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
+import 'package:immoplus/app/data/repositories/messaging_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
-import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
+// import 'package:immoplus/app/features/ai_assistant/widgets/ai_floating_button.dart';
 
 class HomePageWrapper extends StatefulWidget {
   const HomePageWrapper({super.key, required this.child});
@@ -36,6 +39,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   final navigationHandler = getIt<NavigationHandler>();
   final sessionManager = getIt<SessionManager>();
   final _alertRepository = getIt<AlertRepository>();
+  final _messagingRepository = getIt<MessagingRepository>();
+  final _messagingSocketService = getIt<MessagingSocketService>();
+  StreamSubscription? _messagingNotificationSub;
   Timer? _videoFeedWarmupTimer;
   // Scroll-to-right désactivé : la pilule reste centrée.
   // Timer? _scrollIdleTimer;
@@ -58,14 +64,15 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     switch (state) {
       case PageState.home:
         return 0;
-      case PageState.explore:
+      case PageState.forMe:
         return 1;
       case PageState.vivre:
         return 2;
-      case PageState.forMe:
+      case PageState.messages:
         return 3;
       case PageState.account:
         return 4;
+      case PageState.explore:
       case PageState.history:
       case PageState.map:
         return 0;
@@ -81,10 +88,31 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     });
   }
 
+  void _fetchUnreadMessagesCount() {
+    if (sessionManager.currentUser == null) return;
+    _messagingRepository.getTotalUnreadCount().then((count) {
+      if (mounted) Constantes.unreadMessagesCount.value = count;
+    });
+  }
+
+  /// Incrément local immédiat sur `notification_new` (spec messagerie §1),
+  /// pour que le badge bouge partout dans l'app, pas seulement pendant que
+  /// l'onglet Messages (et son `InboxCubit`) est ouvert. Le socket est déjà
+  /// connecté dès la session ouverte (voir `session_manager.dart`), donc ce
+  /// listener suffit sans reconnecter quoi que ce soit ici.
+  void _listenForUnreadMessages() {
+    _messagingNotificationSub?.cancel();
+    _messagingNotificationSub =
+        _messagingSocketService.onNotificationNew.listen((_) {
+      Constantes.unreadMessagesCount.value += 1;
+    });
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _fetchImatchBadge();
+      _fetchUnreadMessagesCount();
     }
   }
 
@@ -92,7 +120,10 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
     _fetchImatchBadge();
+    _fetchUnreadMessagesCount();
+    _listenForUnreadMessages();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _videoFeedWarmupTimer?.cancel();
       _videoFeedWarmupTimer = Timer(const Duration(milliseconds: 2500), () {
@@ -119,8 +150,24 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       return;
     }
 
-    // Si on clique sur "Imatch" (index 3), on vérifie si l'utilisateur est connecté
+    // Si on clique sur "Messages" (index 3) sans être connecté, direction
+    // inscription/connexion plutôt que l'inbox (qui échouerait en 401).
     if (index == 3 && sessionManager.currentUser == null) {
+      context.pushNamed(
+        AuthenticationPage.name,
+        extra: (
+          callback: () {
+            _fetchUnreadMessagesCount();
+            navigationHandler.switchPage(id: index, context: context);
+          },
+          popUntilRouteName: null,
+        ) as AuthRedirectData,
+      );
+      return;
+    }
+
+    // Si on clique sur "Imatch" (index 1), on vérifie si l'utilisateur est connecté
+    if (index == 1 && sessionManager.currentUser == null) {
       context.pushNamed(
         AuthenticationPage.name,
         extra: (
@@ -151,6 +198,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _messagingNotificationSub?.cancel();
     _videoFeedWarmupTimer?.cancel();
     _videoFeedWarmupTimer = null;
     // _scrollIdleTimer?.cancel();
@@ -166,91 +214,154 @@ class _HomePageWrapperState extends State<HomePageWrapper>
           valueListenable: Constantes.hideBottomNavNotifier,
           builder: (context, hideBottomNav, _) {
             return Scaffold(
+              extendBody: true,
               body: widget.child,
-              // floatingActionButton:
-              //     state == PageState.home ? const AiFloatingButton() : null,
+              floatingActionButton:
+                  // state == PageState.home ? const AiFloatingButton() : null,
+                  null,
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
                   ? null
-                  : Container(
-                      decoration: BoxDecoration(
-                        // borderRadius: const BorderRadius.only(
-                        //   topLeft: Radius.circular(20),
-                        //   topRight: Radius.circular(20),
-                        // ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
+                  : AdaptiveLiquidBottomNavigationBar(
+                      selectedIndex: _indexForState(state),
+                      onDestinationSelected: (index) =>
+                          _onItemTapped(index: index, pageState: state),
+                      tint: AppColors.primary,
+                      items: [
+                        AdaptiveBottomNavItem(
+                          label: 'Accueil',
+                          iosIconName: 'immo_home',
+                          iosIconNameSelected: 'immo_home_fill',
+                          androidIcon: const Icon(Iconsax.home, size: 22),
+                          androidIconSelected: Icon(Iconsax.home5,
+                              color: AppColors.primary, size: 22),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Imatch',
+                          iosIconName: 'immo_heart',
+                          iosIconNameSelected: 'immo_heart_fill',
+                          androidIcon: SvgPicture.asset(
+                            'assets/svgs/icons/immomacth.svg',
+                            width: 22,
+                            height: 22,
+                            colorFilter: ColorFilter.mode(
+                              state == PageState.vivre
+                                  ? Colors.white
+                                  : Colors.grey.shade600,
+                              BlendMode.srcIn,
+                            ),
                           ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        // borderRadius: const BorderRadius.only(
-                        //   topLeft: Radius.circular(20),
-                        //   topRight: Radius.circular(20),
-                        // ),
-                        child: SizedBox(
-                          height: Platform.isAndroid
-                              ? 80 + MediaQuery.of(context).padding.bottom
-                              : null,
-                          child: BottomNavigationBar(
-                            type: BottomNavigationBarType.fixed,
-                            backgroundColor: state == PageState.vivre
-                                ? Colors.black
-                                : Colors.white,
-                            currentIndex: _indexForState(state),
-                            onTap: (value) =>
-                                _onItemTapped(index: value, pageState: state),
-                            selectedFontSize: 12,
-                            unselectedFontSize: 12,
-                            showSelectedLabels: true,
-                            showUnselectedLabels: true,
-                            selectedItemColor: AppColors.primary,
-                            unselectedItemColor: state == PageState.vivre
-                                ? Colors.white
-                                : Colors.grey,
-                            items: [
-                              _buildNavItem(
-                                icon: Iconsax.home,
-                                label: "Accueil",
-                                isActive: state == PageState.home,
-                                immoMode: state == PageState.vivre,
-                              ),
-                              _buildNavItem(
-                                icon: Iconsax.location,
-                                label: "Carte",
-                                isActive: state == PageState.explore,
-                                immoMode: state == PageState.vivre,
-                              ),
-                              _buildNavItemVivre(
-                                  isActive: state == PageState.vivre),
-                              _buildNavItem(
-                                icon: Iconsax.heart,
-                                label: "Imatch",
-                                isActive: state == PageState.forMe,
-                                immoMode: state == PageState.vivre,
-                                svgAsset: 'assets/svgs/icons/immomacth.svg',
-                                badgeWidget: NavBadge(
-                                    notifier: Constantes.imatchBadgeCount),
-                              ),
-                              _buildNavItem(
-                                icon: Iconsax.user,
-                                label: "Compte",
-                                isActive: state == PageState.account,
-                                immoMode: state == PageState.vivre,
-                              ),
-                            ],
+                          androidIconSelected: SvgPicture.asset(
+                            'assets/svgs/icons/immomacth.svg',
+                            width: 22,
+                            height: 22,
+                            colorFilter: ColorFilter.mode(
+                              AppColors.primary,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
-                      ),
+                        AdaptiveBottomNavItem(
+                          label: 'Reels',
+                          iosIconName: 'immo_reels',
+                          iosIconNameSelected: 'immo_reels_fill',
+                          androidIcon: Image.asset(
+                            'assets/img/icon_video_2.png',
+                            width: 22,
+                            height: 22,
+                          ),
+                          androidIconSelected: Image.asset(
+                            'assets/img/icon_video_2.png',
+                            width: 22,
+                            height: 22,
+                          ),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Messages',
+                          iosIconName: 'immo_message',
+                          iosIconNameSelected: 'immo_message_fill',
+                          androidIcon: const Icon(Iconsax.messages_3, size: 22),
+                          androidIconSelected: Icon(Iconsax.messages_35,
+                              color: AppColors.primary, size: 22),
+                        ),
+                        AdaptiveBottomNavItem(
+                          label: 'Compte',
+                          iosIconName: 'immo_user',
+                          iosIconNameSelected: 'immo_user_fill',
+                          androidIcon: const Icon(Iconsax.user, size: 22),
+                          androidIconSelected: Icon(Iconsax.user5,
+                              color: AppColors.primary, size: 22),
+                        ),
+                      ],
+                      fallback: _buildFallbackBar(context, state),
                     ),
             );
           },
         );
       },
+    );
+  }
+
+  /// Barre native "maison" (badges, icône Reels custom) — utilisée par
+  /// `AdaptiveLiquidBottomNavigationBar.fallback` sur Android et iOS < 26, là où le rendu
+  /// glass natif n'est pas disponible.
+  Widget _buildFallbackBar(BuildContext context, PageState state) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey.shade200)),
+      ),
+      child: ClipRRect(
+        child: SizedBox(
+          height: Platform.isAndroid
+              ? 80 + MediaQuery.of(context).padding.bottom
+              : null,
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor:
+                state == PageState.vivre ? Colors.black : Colors.white,
+            currentIndex: _indexForState(state),
+            onTap: (value) => _onItemTapped(index: value, pageState: state),
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor:
+                state == PageState.vivre ? Colors.white : Colors.grey,
+            items: [
+              _buildNavItem(
+                icon: Iconsax.home,
+                label: "Accueil",
+                isActive: state == PageState.home,
+                immoMode: state == PageState.vivre,
+              ),
+              _buildNavItem(
+                icon: Iconsax.heart,
+                label: "Imatch",
+                isActive: state == PageState.forMe,
+                immoMode: state == PageState.vivre,
+                svgAsset: 'assets/svgs/icons/immomacth.svg',
+                badgeWidget: NavBadge(notifier: Constantes.imatchBadgeCount),
+              ),
+              _buildNavItemVivre(isActive: state == PageState.vivre),
+              _buildNavItem(
+                icon: Iconsax.messages_3,
+                label: "Messages",
+                isActive: state == PageState.messages,
+                immoMode: state == PageState.vivre,
+                badgeWidget: NavBadge(notifier: Constantes.unreadMessagesCount),
+              ),
+              _buildNavItem(
+                icon: Iconsax.user,
+                label: "Compte",
+                isActive: state == PageState.account,
+                immoMode: state == PageState.vivre,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -324,10 +435,6 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       icon: Container(
         height: 44,
         padding: const EdgeInsets.all(4),
-        // decoration: BoxDecoration(
-
-        //   borderRadius: BorderRadius.circular(12),
-        // ),
         child: Image.asset(
           'assets/img/icon_video_2.png',
           width: 26,
@@ -337,23 +444,4 @@ class _HomePageWrapperState extends State<HomePageWrapper>
       label: 'Reels',
     );
   }
-// BottomNavigationBarItem _buildNavItemVivre({required bool isActive}) {
-//   return BottomNavigationBarItem(
-//     icon: Container(
-//       height: 40,
-//       padding: const EdgeInsets.all(8),
-//       child: isActive
-//           ? Icon(
-//               Iconsax.play5,
-//               color: AppColors.primary,
-//               size: 28,
-//             )
-//           : Icon(
-//               Iconsax.play,
-//               size: 28,
-//             ),
-//     ),
-//     label: 'Reels',
-//   );
-// }
 }

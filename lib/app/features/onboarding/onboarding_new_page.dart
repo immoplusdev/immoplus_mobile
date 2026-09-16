@@ -185,7 +185,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
   }
 
   Widget _buildPage(OnboardingData data, int index) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Column(

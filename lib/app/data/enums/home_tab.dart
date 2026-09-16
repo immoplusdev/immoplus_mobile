@@ -1,14 +1,16 @@
 enum HomeTab {
-  residence(0),
-  hotel(1),
-  location(2),
-  furniture(3),
-  bien(4);
+  forYou(0),
+  residence(1),
+  hotel(2),
+  location(3),
+  furniture(4),
+  bien(5);
 
   final int value;
   const HomeTab(this.value);
 
   static List<HomeTab> get valuestabs => [
+        HomeTab.forYou,
         HomeTab.residence,
         HomeTab.location,
         // HomeTab.furniture,
@@ -25,6 +27,7 @@ enum HomeTab {
       };
 
   String get label => switch (this) {
+        HomeTab.forYou => 'Pour vous',
         HomeTab.residence => 'Résidences',
         HomeTab.hotel => 'Hôtel',
         HomeTab.location => 'Location',
@@ -33,6 +36,7 @@ enum HomeTab {
       };
 
   String get imagePath => switch (this) {
+        HomeTab.forYou => 'assets/img/menu_residence.jpg',
         HomeTab.residence => 'assets/img/menu_residence.jpg',
         HomeTab.hotel => 'assets/img/menu_hotel_1.jpg',
         HomeTab.location => 'assets/img/menu_location.png',

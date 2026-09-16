@@ -10,7 +10,6 @@ import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
-import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -19,6 +18,8 @@ import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
+import 'package:immoplus/app/features/for_you/for_you_view.dart';
+import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart';
 import 'package:immoplus/app/logic/ads/ads_cubit.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'components/home_search_appbar.dart';
@@ -29,6 +30,10 @@ import 'components/transactions_floating_button.dart';
 // part 'widgets/header_section.dart';
 // part 'widgets/home_section_loading.dart';
 
+/// Accueil sans onglets natifs (voir new.hoome.feed.md § 8) : la grille de
+/// cards (`HomeTabGrid`, dans `HomeSearchAppbar`) navigue vers des pages
+/// séparées, et le contenu affiché ici est toujours "Pour vous"
+/// (`ForYouView`) — il n'y a plus de sélection de contenu in-page.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static const String routePath = '/homePage';
@@ -37,10 +42,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> {
   static const double _scrollToTopThreshold = 420;
-  late TabController _tabController;
   late final ScrollController _scrollController;
   final sessionManager = getIt<SessionManager>();
   final _remoteConfig = getIt<RemoteConfigService>();
@@ -52,7 +55,6 @@ class _HomePageState extends State<HomePage>
     () {
       HistoryPageState.refrechAll();
     }();
-    _tabController = TabController(length: 5, vsync: this);
     _scrollController = ScrollController()..addListener(_handleScrollChanged);
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
@@ -76,7 +78,6 @@ class _HomePageState extends State<HomePage>
     _scrollController
       ..removeListener(_handleScrollChanged)
       ..dispose();
-    _tabController.dispose();
     super.dispose();
     FilterHandler.search = null;
     FilterHandler.lat = null;
@@ -107,145 +108,117 @@ class _HomePageState extends State<HomePage>
       create: (context) => getIt<BannersCubit>()
         ..fetchBanners()
         ..startPolling(),
-      child: BlocConsumer<HomePageCubit, HomePageState>(
-        listenWhen: (previous, current) =>
-            previous.indexPage != current.indexPage,
-        listener: (context, state) {
-          if (_tabController.index != state.indexPage && mounted) {
-            _tabController.animateTo(state.indexPage);
-          }
-        },
-        builder: (context, state) {
-          return EnvironmentsBadge(
-            child: Scaffold(
-              backgroundColor: AppColors.white,
-              body: DefaultTabController(
-                length: 5,
-                child: Stack(
-                  children: [
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        final bannersCubit = context.read<BannersCubit>();
-                        final adsCubit = context.read<AdsCubit>();
-                        await bannersCubit.fetchBanners();
-                        await adsCubit.fetchActiveCampaigns();
-                        if (state.indexPage == HomeTab.residence.value) {
-                          HomePageState.refreshResidences();
-                        } else {
-                          HomePageState.getPageListController(state.indexPage)
-                              .refresh();
-                        }
-                      },
-                      child: CustomScrollView(
-                        controller: _scrollController,
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics(),
-                        ),
-                        slivers: [
-                          HomeSearchAppbar(
-                            currentIndex: state.indexPage,
-                            controller: _tabController,
-                          ),
-                          const SliverToBoxAdapter(
-                            child: AdWidget(placement: AdPlacement.homeTop),
-                          ),
-                          ValueListenableBuilder<int>(
-                            valueListenable: FilterHandler.notifier,
-                            builder: (context, _, child) {
-                              return FilterHandler.hasActiveFilters
-                                  ? SliverToBoxAdapter(
-                                      child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                        ),
-                                        child: Row(
-                                          spacing: 8,
-                                          children: FilterHandler
-                                              .getActiveFiltersChips(
-                                            onRefresh: () async {
-                                              HomePageState
-                                                      .getPageListController(
-                                                          state.indexPage)
-                                                  .refresh();
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ))
-                                  : const SliverToBoxAdapter();
-                            },
-                          ),
-                          const SliverGap(10),
-                          HomePageState.getPageListFromIndex(state.indexPage),
-                          const SliverGap(15),
-                          const SliverToBoxAdapter(
-                            child: AdWidget(placement: AdPlacement.homeBottom),
-                          ),
-                        ],
-                      ),
+      child: EnvironmentsBadge(
+        child: Scaffold(
+          backgroundColor: AppColors.white,
+          body: Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: () async {
+                  final bannersCubit = context.read<BannersCubit>();
+                  final adsCubit = context.read<AdsCubit>();
+                  final forYouCubit = context.read<ForYouCubit>();
+                  await bannersCubit.fetchBanners();
+                  await adsCubit.fetchActiveCampaigns();
+                  await forYouCubit.fetch();
+                },
+                child: SafeArea(
+                  bottom: false,
+                  child: CustomScrollView(
+                  controller: _scrollController,
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
+                  slivers: [
+                    HomeSearchAppbar(currentIndex: HomeTab.forYou.value),
+                    const SliverToBoxAdapter(
+                      child: AdWidget(placement: AdPlacement.homeTop),
                     ),
-                    Positioned(
-                      right: 20,
-                      bottom: 15,
-                      child: IgnorePointer(
-                        ignoring: !_showScrollToTopButton,
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 180),
-                          opacity: _showScrollToTopButton ? 1 : 0,
-                          child: AnimatedSlide(
-                            duration: const Duration(milliseconds: 180),
-                            offset: _showScrollToTopButton
-                                ? Offset.zero
-                                : const Offset(0, 0.2),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: _scrollToTop,
-                                borderRadius: BorderRadius.circular(18),
-                                child: Ink(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(18),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Colors.black.withValues(alpha: 0.1),
-                                        blurRadius: 16,
-                                        offset: const Offset(0, 6),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.keyboard_arrow_up_rounded,
-                                    color: Colors.white,
-                                    size: 28,
+                    ValueListenableBuilder<int>(
+                      valueListenable: FilterHandler.notifier,
+                      builder: (context, _, child) {
+                        return FilterHandler.hasActiveFilters
+                            ? SliverToBoxAdapter(
+                                child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Row(
+                                    spacing: 8,
+                                    children: FilterHandler.getActiveFiltersChips(
+                                      onRefresh: () async {
+                                        context.read<ForYouCubit>().fetch();
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ))
+                            : const SliverToBoxAdapter();
+                      },
+                    ),
+                    const SliverGap(28),
+                    const ForYouView(),
+                    const SliverGap(15),
+                    const SliverToBoxAdapter(
+                      child: AdWidget(placement: AdPlacement.homeBottom),
+                    ),
+                  ],
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                bottom: 15,
+                child: IgnorePointer(
+                  ignoring: !_showScrollToTopButton,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 180),
+                    opacity: _showScrollToTopButton ? 1 : 0,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 180),
+                      offset: _showScrollToTopButton ? Offset.zero : const Offset(0, 0.2),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: _scrollToTop,
+                          borderRadius: BorderRadius.circular(18),
+                          child: Ink(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.keyboard_arrow_up_rounded,
+                              color: Colors.white,
+                              size: 28,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
-                      right: 20,
-                      bottom: 15 + 48 + 12,
-                      child: TransactionsFloatingButton(
-                        scrollController: _scrollController,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+              Positioned(
+                right: 20,
+                bottom: 15 + 48 + 12,
+                child: TransactionsFloatingButton(
+                  scrollController: _scrollController,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

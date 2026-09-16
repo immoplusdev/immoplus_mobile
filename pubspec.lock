@@ -17,6 +17,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.76"
+  adaptive_liquid_bottom_nav_bar:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "7be71221e0df24f1eb5ea7e2406aa66a293b5b42"
+      url: "https://github.com/kitoko2/adaptive_bottom_nav_bar.git"
+    source: git
+    version: "0.0.1"
   analyzer:
     dependency: transitive
     description:
@@ -417,6 +426,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  cupertino_native:
+    dependency: transitive
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "6c76f8ef3cb9995c064b98756b5f0b7c38e66538"
+      url: "https://github.com/kitoko2/cupertino_native.git"
+    source: git
+    version: "0.1.1"
   dart_earcut:
     dependency: transitive
     description:
@@ -3101,7 +3119,7 @@ packages:
     source: hosted
     version: "3.1.5"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       sha256: "9b129329f58692f6e6578329498a8fe9fbe98f090beb764ffbb8ee2eadd01dcd"

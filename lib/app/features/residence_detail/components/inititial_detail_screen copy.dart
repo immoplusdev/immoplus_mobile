@@ -25,7 +25,7 @@ class InitialDetailLogmentScreen extends StatelessWidget {
         },
         child: SingleChildScrollView(
           child: Column(children: [
-            Container(
+            SizedBox(
               //color: Colors.red,
               height: MediaQuery.of(context).size.height + 10,
               width: double.infinity,

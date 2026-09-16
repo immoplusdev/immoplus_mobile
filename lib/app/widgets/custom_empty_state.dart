@@ -71,6 +71,7 @@ class CustomEmptyState extends StatelessWidget {
               child: CustomButtom(
                 text: buttonText,
                 color: AppColors.primary,
+                onClick: onButtonPressed,
                 child: buttonIcon != null
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +88,6 @@ class CustomEmptyState extends StatelessWidget {
                         ],
                       )
                     : null,
-                onClick: onButtonPressed,
               ),
             )
           ],

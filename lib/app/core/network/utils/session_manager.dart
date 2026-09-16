@@ -1,6 +1,7 @@
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/core/services/reservation_socket_service.dart';
 import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
@@ -73,6 +74,9 @@ class SessionManager {
     // Login, inscription ou refresh token : (re)connecte le socket réservations
     // avec le token à jour (le handshake n'est vérifié qu'à la connexion).
     ReservationSocketService.connect(user.accessToken);
+    // Connecté dès la session ouverte (pas seulement à l'ouverture d'un fil)
+    // pour que le badge non-lu de l'onglet Messages reste à jour partout.
+    getIt<MessagingSocketService>().connect(user.accessToken);
   }
 
   /// logout user clear session and navigate to login page
@@ -100,6 +104,7 @@ class SessionManager {
         // Session déjà ouverte au démarrage de l'app (cold start) : connecte
         // le socket réservations sans attendre une action de login explicite.
         ReservationSocketService.connect(user.accessToken);
+        getIt<MessagingSocketService>().connect(user.accessToken);
       }
     }
 
@@ -121,6 +126,7 @@ class SessionManager {
     });
     currentUser = null;
     ReservationSocketService.disconnect();
+    getIt<MessagingSocketService>().disconnect();
   }
 
   Future<UserModelSchema?> getUserInIsolate() async {

@@ -46,7 +46,7 @@ class ProductInfo extends StatelessWidget {
                 color: primaryColor,
               ),
             ),
-            if (period != null && period.isNotEmpty)
+            if (period.isNotEmpty)
               TextSpan(
                 text: period,
                 style: GoogleFonts.inter(

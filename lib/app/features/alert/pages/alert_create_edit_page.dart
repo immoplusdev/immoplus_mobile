@@ -14,7 +14,6 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
-import 'alert_success_page.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 
 class AlertCreateEditPage extends StatefulWidget {

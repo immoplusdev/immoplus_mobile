@@ -12,6 +12,7 @@ import 'components/ad_carousel_offre_special_campaign_category.dart';
 import 'components/ad_carousel_video_widget.dart';
 import 'components/ad_carousel_ville_ads_campaign_category.dart';
 import 'components/ad_carousel_widget.dart';
+import 'components/ad_flash_offer_widget.dart';
 import 'components/ad_image_widget.dart';
 import 'components/ad_video_widget.dart';
 
@@ -68,7 +69,7 @@ class AdWidget extends StatelessWidget {
                       );
                 }
               },
-              child: _buildAdLayout(selectedCampaign),
+              child: buildAdCampaignLayout(selectedCampaign),
             );
           },
           orElse: () => const SizedBox.shrink(),
@@ -76,26 +77,32 @@ class AdWidget extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildAdLayout(AdCampaignModel campaign) {
-    switch (AdType.fromString(campaign.type)) {
-      case AdType.carousel:
-        final category =
-            AdCampaignCategory.fromString(campaign.campaignCategory);
-        switch (category) {
-          case AdCampaignCategory.villeAds:
-            return AdCarouselVilleAdsCampaignCategory(campaign: campaign);
-          case AdCampaignCategory.offreSpecial:
-            return AdCarouselOffreSpecialCampaignCategory(campaign: campaign);
-          default:
-            return AdCarouselWidget(campaign: campaign);
-        }
-      case AdType.video:
-        return AdVideoWidget(campaign: campaign);
-      case AdType.videoCarousel:
-        return AdCarouselVideoWidget(campaign: campaign);
-      case AdType.image:
-        return AdImageWidget(campaign: campaign);
-    }
+/// Rendu d'une pub déjà résolue (campagne connue), selon son `type`/
+/// `campaignCategory` — partagé entre `AdWidget` (sélection par placement
+/// via `AdsCubit`) et `ResolvedAdCard` (campagne déjà fournie, ex: pubs
+/// embarquées dans `GET /me/home`).
+Widget buildAdCampaignLayout(AdCampaignModel campaign) {
+  switch (AdType.fromString(campaign.type)) {
+    case AdType.carousel:
+      final category =
+          AdCampaignCategory.fromString(campaign.campaignCategory);
+      switch (category) {
+        case AdCampaignCategory.villeAds:
+          return AdCarouselVilleAdsCampaignCategory(campaign: campaign);
+        case AdCampaignCategory.offreSpecial:
+          return AdCarouselOffreSpecialCampaignCategory(campaign: campaign);
+        default:
+          return AdCarouselWidget(campaign: campaign);
+      }
+    case AdType.video:
+      return AdVideoWidget(campaign: campaign);
+    case AdType.videoCarousel:
+      return AdCarouselVideoWidget(campaign: campaign);
+    case AdType.image:
+      return AdImageWidget(campaign: campaign);
+    case AdType.flashOffer:
+      return AdFlashOfferWidget(campaign: campaign);
   }
 }

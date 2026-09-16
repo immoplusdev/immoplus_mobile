@@ -18,6 +18,7 @@ import 'package:immoplus/app/features/account/pages/change_credentials_page.dart
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/widgets/delete_account_dialog.dart';
 import 'package:immoplus/app/features/become_pro/pages/become_pro_intro_page.dart';
+import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
@@ -28,7 +29,6 @@ import 'package:immoplus/app/features/notification/pages/notification_page.dart'
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
-import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
@@ -280,16 +280,16 @@ class _AccountPageState extends State<AccountPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _socialIcon(FontAwesomeIcons.instagram.data,
+          _socialIcon(FontAwesomeIcons.instagram,
               () => _openUrl('https://www.instagram.com/immoplus_lapp')),
           const SizedBox(width: 28),
-          _socialIcon(FontAwesomeIcons.tiktok.data,
+          _socialIcon(FontAwesomeIcons.tiktok,
               () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
           // const SizedBox(width: 28),
           // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
           const SizedBox(width: 28),
           _socialIcon(
-              FontAwesomeIcons.facebook.data,
+              FontAwesomeIcons.facebook,
               () => _openUrl(
                   'https://www.facebook.com/profile.php?id=61584464421569')),
         ],
@@ -297,7 +297,7 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget _socialIcon(IconData icon, VoidCallback onTap) {
+  Widget _socialIcon(FaIconData icon, VoidCallback onTap) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -305,7 +305,7 @@ class _AccountPageState extends State<AccountPage> {
         borderRadius: BorderRadius.circular(20),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 22, color: _kSocialIcon),
+          child: FaIcon(icon, size: 22, color: _kSocialIcon),
         ),
       ),
     );
@@ -486,6 +486,21 @@ class _AccountPageState extends State<AccountPage> {
           ),
           onTap: () => context.pushNamed(PaymentHistoryPage.name),
         ),
+        SettingsTile(
+          shape: SettingsTile.shapeLast,
+          leading: _iconLeading(
+              FaIcon(FontAwesomeIcons.commentDots, size: 18, color: _kIconColor)),
+          title: 'Contacter le support',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: GoogleFonts.dmSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => MessageComposerSheet.showForSupport(context),
+        ),
       ]),
     );
   }
@@ -615,8 +630,8 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
-                  FontAwesomeIcons.chevronRight.data,
+                FaIcon(
+                  FontAwesomeIcons.chevronRight,
                   size: 14,
                   color: _kTrailingColor,
                 ),

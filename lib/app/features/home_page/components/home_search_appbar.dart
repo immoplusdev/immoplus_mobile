@@ -14,7 +14,7 @@ import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
-import 'package:immoplus/app/features/home_page/components/home_choice_menu.dart';
+import 'package:immoplus/app/features/home_page/components/home_tab_grid.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
@@ -37,10 +37,8 @@ import 'package:immoplus/app/features/home_page/components/home_search_field.dar
 class HomeSearchAppbar extends StatefulWidget {
   const HomeSearchAppbar({
     super.key,
-    required this.controller,
     required this.currentIndex,
   });
-  final TabController controller;
   final int currentIndex;
   @override
   State<HomeSearchAppbar> createState() => _HomeSearchAppbarState();
@@ -346,9 +344,6 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
   }
 
   // Filtres de sous-catégorie désactivés pour tous les onglets : Locations,
-  // Biens et Meubles utilisent désormais la disposition par ville (comme
-  // Résidences).
-  //
   Widget _buildEstateSubCategoryTabs() {
     const items = [
       EstateSubCategory.all,
@@ -476,97 +471,118 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
                 orElse: () => <BannerModel>[],
               );
 
+              // Non utilisé pour dimensionner un toolbarHeight (la bannière
+              // vit maintenant dans le bloc défilant "avant", pas dans la
+              // partie épinglée) — gardé pour l'affichage conditionnel de
+              // BannerCard.
+              // ignore: unused_local_variable
               final hasVisibleBanners =
                   apiBanners.isNotEmpty && !_isBannerDismissed;
 
-              return SliverAppBar(
-                automaticallyImplyLeading: false,
-                pinned: true,
-                snap: false,
-                floating: true,
-                titleSpacing: 0,
-                toolbarHeight: hasVisibleBanners
-                    ? _Constants.toolbarHeightWithBanner
-                    : _Constants.toolbarHeightWithoutBanner,
-                backgroundColor: AppColors.white,
-                title: Container(
-                  color: AppColors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          children: [
-                            BlocBuilder<LocationPermissionCubit,
-                                LocationPermissionState>(
-                              builder: (context, permissionState) {
-                                return GestureDetector(
-                                  onTap: () => _handleLocationTap(
-                                      context, permissionState),
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        Assets.img.locIc,
-                                        color: AppColors.primary,
+              return SliverMainAxisGroup(
+                slivers: [
+                  // ── Bloc "avant" : défile normalement, disparaît en
+                  // premier au scroll (localisation + bannière promo).
+                  SliverToBoxAdapter(
+                    child: Container(
+                      color: AppColors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              children: [
+                                BlocBuilder<LocationPermissionCubit,
+                                    LocationPermissionState>(
+                                  builder: (context, permissionState) {
+                                    return GestureDetector(
+                                      onTap: () => _handleLocationTap(
+                                          context, permissionState),
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            Assets.img.locIc,
+                                            color: AppColors.primary,
+                                          ),
+                                          const Gap(5),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 3),
+                                            constraints: const BoxConstraints(
+                                                maxWidth: 200),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(39),
+                                            ),
+                                            child: _buildLocationText(
+                                                context, permissionState),
+                                          ),
+                                        ],
                                       ),
-                                      const Gap(5),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 3),
-                                        constraints:
-                                            const BoxConstraints(maxWidth: 200),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primary,
-                                          borderRadius:
-                                              BorderRadius.circular(39),
-                                        ),
-                                        child: _buildLocationText(
-                                            context, permissionState),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                                const Spacer(),
+                                const NotificationBell(),
+                              ],
                             ),
-                            const Spacer(),
-                            const NotificationBell(),
-                          ],
+                          ),
+                          const Gap(14),
+                          BannerCard(
+                            onDismiss: () {
+                              setState(() {
+                                _isBannerDismissed = true;
+                              });
+                              context.read<BannersCubit>().setDismissed(true);
+                            },
+                          ),
+                          const Gap(12),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // ── Bloc épinglé : uniquement la barre de recherche —
+                  // reste seule visible en haut pendant que tout le reste
+                  // (onglets compris) défile derrière, même en scrollant
+                  // tout en bas.
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: _PinnedSearchHeaderDelegate(
+                      height: _Constants.pinnedHeaderHeight,
+                      child: Container(
+                        color: AppColors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+                          child: searchField,
                         ),
                       ),
-                      const Gap(14),
-                      BannerCard(
-                        onDismiss: () {
-                          setState(() {
-                            _isBannerDismissed = true;
-                          });
-                          context.read<BannersCubit>().setDismissed(true);
-                        },
+                    ),
+                  ),
+                  // ── Bloc "après" : défile normalement sous la barre de
+                  // recherche épinglée (les 2 lignes d'onglets + sous-
+                  // catégories) — disparaît entièrement au scroll.
+                  SliverToBoxAdapter(
+                    child: Container(
+                      color: AppColors.white,
+                      child: Column(
+                        children: [
+                          const Gap(24),
+                          const HomeTabGridRowOne(),
+                          const Gap(HomeTabGrid.rowGap),
+                          const HomeTabGridRowTwo(),
+                          if (isLocationTab) ...[
+                            const Gap(10),
+                            _buildEstateSubCategoryTabs(),
+                            const Gap(6),
+                          ],
+                          const Gap(8),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            15, hasVisibleBanners ? 12 : 0, 15, 0),
-                        child: searchField,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(
-                    isLocationTab ? 58 + 48.0 : 58.0,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const HomeChoiceMenu(),
-                      if (isLocationTab) ...[
-                        const Gap(10),
-                        _buildEstateSubCategoryTabs(),
-                        const Gap(6),
-                      ],
-                    ],
-                  ),
-                ),
+                ],
               );
             },
           );
@@ -577,6 +593,44 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
 }
 
 class _Constants {
-  static const double toolbarHeightWithBanner = 190;
-  static const double toolbarHeightWithoutBanner = 118;
+  // Padding top (12) + hauteur réelle de la barre de recherche (56, mesurée
+  // via l'erreur SliverGeometry — pas 60 comme estimé initialement). Les
+  // onglets ne sont plus épinglés — ils défilent avec le reste du contenu.
+  static const double pinnedHeaderHeight = 12 + 56;
+}
+
+/// Délégué pour le bloc épinglé (barre de recherche + 1ère ligne d'onglets)
+/// — hauteur fixe, pas de collapse/expand, juste un contenu qui reste au
+/// sommet du scroll pendant que le reste défile en dessous.
+class _PinnedSearchHeaderDelegate extends SliverPersistentHeaderDelegate {
+  const _PinnedSearchHeaderDelegate({
+    required this.height,
+    required this.child,
+  });
+
+  final double height;
+  final Widget child;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    // `SizedBox` force le child à occuper exactement `height`, quelle que
+    // soit sa taille naturelle : sans ça, le sliver déclare `maxExtent`
+    // (= `height`) mais peint la taille réelle du contenu, et si les deux
+    // diffèrent (ex: `HomeSearchField` plus petit que l'estimation),
+    // Flutter lève "layoutExtent exceeds paintExtent" (SliverGeometry
+    // invalide) sur ce header épinglé.
+    return SizedBox(height: height, child: child);
+  }
+
+  @override
+  bool shouldRebuild(covariant _PinnedSearchHeaderDelegate oldDelegate) {
+    return oldDelegate.height != height || oldDelegate.child != child;
+  }
 }

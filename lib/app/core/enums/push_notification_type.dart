@@ -12,6 +12,7 @@ import 'package:immoplus/app/features/user_preference/pages/user_preference_page
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/core/enums/marketing_notification_code.dart';
+import 'package:immoplus/app/features/messaging/pages/message_thread_page.dart';
 
 enum PushNotificationType {
   auth, // Inscription
@@ -28,6 +29,7 @@ enum PushNotificationType {
   alert, // Alerte reçue (match)
   marketing, // Marketing
   ratingRequest, // Demande d'évaluation
+  newMessage, // Nouveau message reçu dans une conversation
   reverseSearchPropositionDisponible, // Propriétaire a confirmé sa dispo → recherche en cours
   reverseSearchExpiree, // Recherche expirée
   reverseSearchSelectionExpiree, // Verrou de sélection expiré
@@ -64,6 +66,9 @@ enum PushNotificationType {
         return id != null
             ? BookingDetailPage.route(id: id, action: 'rate')
             : null;
+
+      case PushNotificationType.newMessage:
+        return id != null ? MessageThreadPage.route(id) : null;
 
       // Nécessite de recharger la recherche complète (zones, propositions...)
       // avant de naviguer : géré à part par NotificationService, pas par un
@@ -215,6 +220,9 @@ enum PushNotificationType {
 
       case 'rating_request':
         return PushNotificationType.ratingRequest;
+
+      case 'new_message':
+        return PushNotificationType.newMessage;
 
       case 'reverse_search_proposition_disponible':
         return PushNotificationType.reverseSearchPropositionDisponible;

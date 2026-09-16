@@ -11,6 +11,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
+import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
@@ -1032,6 +1033,26 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           onTap: _openMaps,
         ),
         const SizedBox(height: 8),
+
+        // Contacter le propriétaire (messagerie in-app, spec §2.2)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: _buildActionTile(
+            icon: Iconsax.message,
+            title: 'Contacter le propriétaire',
+            subtitle: 'Poser une question sur cette visite',
+            onTap: () => MessageComposerSheet.showForVisite(
+              context,
+              demandeVisiteId: widget.visitId,
+              bienTitle: widget.bienImmo.nom.isNotEmpty
+                  ? widget.bienImmo.nom
+                  : 'Bien immobilier',
+              bienPhotoUrl: widget.bienImmo.images.isNotEmpty
+                  ? Utils.getImagePath(id: widget.bienImmo.images.first)
+                  : null,
+            ),
+          ),
+        ),
 
         // Propriétaire (conditionnel)
         if (_shouldShowOwnerPhone && _visitData?.proprietaire != null)

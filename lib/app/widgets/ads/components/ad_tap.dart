@@ -20,6 +20,11 @@ class AdTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // `opaque` : toute la zone de la carte doit rester tapable même là où
+      // un widget interne (ex: le fond transparent d'un `Container` sans
+      // `color`) ne serait pas lui-même hit-testable — sinon `deferToChild`
+      // (comportement par défaut) peut laisser des zones "mortes".
+      behavior: HitTestBehavior.opaque,
       onTap: () => AdActionHandler.handleAdAction(context, campaign),
       onLongPress: () =>
           AdActionHandler.handleAdAction(context, campaign, isLongPress: true),
