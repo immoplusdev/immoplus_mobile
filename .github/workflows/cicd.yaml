@@ -3,7 +3,7 @@ name: Deploy iOS to TestFlight
 on:
   push:
     branches:
-      - test/develop
+      - develop
   workflow_dispatch:
     inputs:
       environment:
