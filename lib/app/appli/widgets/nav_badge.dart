@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/utils/utils.dart';
 
 /// Pastille rouge avec compteur, à poser sur une icône de navigation.
 /// Réactive à un [ValueNotifier<int>] : se cache automatiquement si count <= 0.
@@ -12,7 +13,8 @@ class NavBadge extends StatelessWidget {
     return ValueListenableBuilder<int>(
       valueListenable: notifier,
       builder: (_, count, __) {
-        if (count <= 0) return const SizedBox.shrink();
+        final badgeText = Utils.formatBadgeCount(count);
+        if (badgeText == null) return const SizedBox.shrink();
         return Container(
           padding: const EdgeInsets.all(3),
           constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
@@ -21,7 +23,7 @@ class NavBadge extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Text(
-            count > 99 ? '99+' : '$count',
+            badgeText,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 9,

@@ -20,11 +20,9 @@ packages:
   adaptive_liquid_bottom_nav_bar:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "7be71221e0df24f1eb5ea7e2406aa66a293b5b42"
-      url: "https://github.com/kitoko2/adaptive_bottom_nav_bar.git"
-    source: git
+      path: "/Users/kitoko/Documents/applications/adaptive_bottom_nav_bar"
+      relative: false
+    source: path
     version: "0.0.1"
   analyzer:
     dependency: transitive
@@ -429,11 +427,9 @@ packages:
   cupertino_native:
     dependency: transitive
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "6c76f8ef3cb9995c064b98756b5f0b7c38e66538"
-      url: "https://github.com/kitoko2/cupertino_native.git"
-    source: git
+      path: "../adaptive_bottom_nav_bar/packages/cupertino_native"
+      relative: true
+    source: path
     version: "0.1.1"
   dart_earcut:
     dependency: transitive

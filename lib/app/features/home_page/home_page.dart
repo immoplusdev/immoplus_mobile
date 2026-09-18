@@ -104,6 +104,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    final baseBottom = bottomInset + 10;
+
     return BlocProvider(
       create: (context) => getIt<BannersCubit>()
         ..fetchBanners()
@@ -125,51 +128,55 @@ class _HomePageState extends State<HomePage> {
                 child: SafeArea(
                   bottom: false,
                   child: CustomScrollView(
-                  controller: _scrollController,
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  slivers: [
-                    HomeSearchAppbar(currentIndex: HomeTab.forYou.value),
-                    const SliverToBoxAdapter(
-                      child: AdWidget(placement: AdPlacement.homeTop),
+                    controller: _scrollController,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
                     ),
-                    ValueListenableBuilder<int>(
-                      valueListenable: FilterHandler.notifier,
-                      builder: (context, _, child) {
-                        return FilterHandler.hasActiveFilters
-                            ? SliverToBoxAdapter(
-                                child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Row(
-                                    spacing: 8,
-                                    children: FilterHandler.getActiveFiltersChips(
-                                      onRefresh: () async {
-                                        context.read<ForYouCubit>().fetch();
-                                      },
+                    slivers: [
+                      HomeSearchAppbar(currentIndex: HomeTab.forYou.value),
+                      const SliverToBoxAdapter(
+                        child: AdWidget(placement: AdPlacement.homeTop),
+                      ),
+                      ValueListenableBuilder<int>(
+                        valueListenable: FilterHandler.notifier,
+                        builder: (context, _, child) {
+                          return FilterHandler.hasActiveFilters
+                              ? SliverToBoxAdapter(
+                                  child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      spacing: 8,
+                                      children:
+                                          FilterHandler.getActiveFiltersChips(
+                                        onRefresh: () async {
+                                          context.read<ForYouCubit>().fetch();
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ))
-                            : const SliverToBoxAdapter();
-                      },
-                    ),
-                    const SliverGap(28),
-                    const ForYouView(),
-                    const SliverGap(15),
-                    const SliverToBoxAdapter(
-                      child: AdWidget(placement: AdPlacement.homeBottom),
-                    ),
-                  ],
+                                ))
+                              : const SliverToBoxAdapter();
+                        },
+                      ),
+                      const SliverGap(28),
+                      const ForYouView(),
+                      const SliverGap(15),
+                      const SliverToBoxAdapter(
+                        child: AdWidget(placement: AdPlacement.homeBottom),
+                      ),
+                      SliverGap(baseBottom + 30),
+                    ],
                   ),
                 ),
               ),
               Positioned(
                 right: 20,
-                bottom: 15,
+                bottom: baseBottom,
                 child: IgnorePointer(
                   ignoring: !_showScrollToTopButton,
                   child: AnimatedOpacity(
@@ -177,7 +184,9 @@ class _HomePageState extends State<HomePage> {
                     opacity: _showScrollToTopButton ? 1 : 0,
                     child: AnimatedSlide(
                       duration: const Duration(milliseconds: 180),
-                      offset: _showScrollToTopButton ? Offset.zero : const Offset(0, 0.2),
+                      offset: _showScrollToTopButton
+                          ? Offset.zero
+                          : const Offset(0, 0.2),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -211,7 +220,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Positioned(
                 right: 20,
-                bottom: 15 + 48 + 12,
+                bottom: baseBottom + 48 + 12,
                 child: TransactionsFloatingButton(
                   scrollController: _scrollController,
                 ),
