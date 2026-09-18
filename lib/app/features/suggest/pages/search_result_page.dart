@@ -10,6 +10,8 @@ import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
@@ -69,6 +71,13 @@ class _SearchResultPageState extends State<SearchResultPage>
     EstateSubCategory.maison,
   ];
   EstateSubCategory _selectedSubCategory = EstateSubCategory.all;
+
+  HomeTab get _homeTab {
+    return HomeTab.values.firstWhere(
+      (t) => t.category == widget.category,
+      orElse: () => HomeTab.forYou,
+    );
+  }
 
   @override
   void onConnectionRestored() {
@@ -282,8 +291,16 @@ class _SearchResultPageState extends State<SearchResultPage>
                 child: SuggestSearchBar(
                   controller: _searchController,
                   readOnly: true,
-                  onTap: () =>
-                      context.pop(), // Go back to search suggestions page
+                  onTap: () {
+                    context.pushNamed(
+                      SearchContainerPage.routeName,
+                      extra: {
+                        'homeTab': _homeTab,
+                        'lat': FilterHandler.lat,
+                        'lng': FilterHandler.long,
+                      },
+                    );
+                  },
                   showClearButton: true,
                   onClear: () => context.pop(),
                   onBackPressed: () => context.pop(),

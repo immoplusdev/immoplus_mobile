@@ -9,6 +9,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
@@ -86,7 +87,10 @@ List<Widget> _buildCards(BuildContext context) {
       badgeColor: const Color(0xFFFF5C9E),
       onTap: () => context.push(
         SearchResultPage.routePath,
-        extra: {'category': 'residence', 'displayText': 'Résidences'},
+        extra: {
+          'category': HomeTab.residence.category,
+          'displayText': 'Résidences'
+        },
       ),
     ),
     _HomeTabCard(
@@ -98,7 +102,10 @@ List<Widget> _buildCards(BuildContext context) {
       badgeColor: const Color(0xFFE85C6B),
       onTap: () => context.push(
         SearchResultPage.routePath,
-        extra: {'category': 'location', 'displayText': 'Location'},
+        extra: {
+          'category': HomeTab.location.category,
+          'displayText': 'Location'
+        },
       ),
     ),
     _HomeTabCard(
@@ -119,7 +126,7 @@ List<Widget> _buildCards(BuildContext context) {
       badgeColor: const Color(0xFFFF9F43),
       onTap: () => context.push(
         SearchResultPage.routePath,
-        extra: {'category': 'bien', 'displayText': 'Biens'},
+        extra: {'category': HomeTab.bien.category, 'displayText': 'Biens'},
       ),
     ),
     _HomeTabCard(
