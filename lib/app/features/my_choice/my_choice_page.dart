@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/models/remote/relais/relais_module_status_response.dart';
+import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
@@ -22,14 +25,79 @@ class MyChoicePage extends StatefulWidget {
   State<MyChoicePage> createState() => _MyChoicePageState();
 }
 
-class _MyChoicePageState extends State<MyChoicePage>
+class _MyChoicePageState extends State<MyChoicePage> {
+  late Future<RelaisModuleStatusResponse> _moduleStatusFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _moduleStatusFuture =
+        getIt<RelaisRepository>().getModuleStatus().catchError(
+      (e) {
+        debugPrint('Relais module status check failed: $e');
+        return const RelaisModuleStatusResponse(active: true);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<RelaisModuleStatusResponse>(
+      future: _moduleStatusFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              title: const Text('Imatch'),
+              centerTitle: true,
+            ),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final isRelaisActive = snapshot.data?.active ?? true;
+        return _MyChoiceContentView(isRelaisActive: isRelaisActive);
+      },
+    );
+  }
+}
+
+class _MyChoiceContentView extends StatefulWidget {
+  final bool isRelaisActive;
+  const _MyChoiceContentView({required this.isRelaisActive});
+
+  @override
+  State<_MyChoiceContentView> createState() => _MyChoiceContentViewState();
+}
+
+class _MyChoiceContentViewState extends State<_MyChoiceContentView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+      length: widget.isRelaisActive ? 3 : 2,
+      vsync: this,
+    );
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) setState(() {});
     });
@@ -52,14 +120,45 @@ class _MyChoicePageState extends State<MyChoicePage>
     }
   }
 
+  Widget? _buildFloatingActionButton() {
+    if (widget.isRelaisActive) {
+      return switch (_tabController.index) {
+        0 => FloatingActionButton(
+            onPressed: _createNewRelaisRequest,
+            backgroundColor: AppColors.primary,
+            shape: const CircleBorder(),
+            elevation: 0,
+            child: const Icon(Icons.add, color: Colors.white, size: 32),
+          ),
+        1 => FloatingActionButton(
+            onPressed: _createNewAlert,
+            backgroundColor: AppColors.primary,
+            shape: const CircleBorder(),
+            elevation: 0,
+            child: const Icon(Icons.add, color: Colors.white, size: 32),
+          ),
+        _ => null,
+      };
+    } else {
+      return switch (_tabController.index) {
+        0 => FloatingActionButton(
+            onPressed: _createNewAlert,
+            backgroundColor: AppColors.primary,
+            shape: const CircleBorder(),
+            elevation: 0,
+            child: const Icon(Icons.add, color: Colors.white, size: 32),
+          ),
+        _ => null,
+      };
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Imatch',
-        ),
+        title: const Text('Imatch'),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -92,10 +191,10 @@ class _MyChoicePageState extends State<MyChoicePage>
                     fontWeight: FontWeight.w500,
                   ),
                   dividerColor: Colors.transparent,
-                  tabs: const [
-                    Tab(text: 'Je déménage'),
-                    Tab(text: 'J’emménage'),
-                    Tab(text: 'Mes favoris'),
+                  tabs: [
+                    if (widget.isRelaisActive) const Tab(text: 'Je déménage'),
+                    const Tab(text: 'J’emménage'),
+                    const Tab(text: 'Mes favoris'),
                   ],
                 ),
               ),
@@ -104,33 +203,17 @@ class _MyChoicePageState extends State<MyChoicePage>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  _MovingHub(),
-                  AlertListPage(embedded: true),
-                  FavoritePage(embedded: true),
+                children: [
+                  if (widget.isRelaisActive) const _MovingHub(),
+                  const AlertListPage(embedded: true),
+                  const FavoritePage(embedded: true),
                 ],
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: switch (_tabController.index) {
-        0 => FloatingActionButton(
-            onPressed: _createNewRelaisRequest,
-            backgroundColor: AppColors.primary,
-            shape: const CircleBorder(),
-            elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
-          ),
-        1 => FloatingActionButton(
-            onPressed: _createNewAlert,
-            backgroundColor: AppColors.primary,
-            shape: const CircleBorder(),
-            elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
-          ),
-        _ => null,
-      },
+      floatingActionButton: _buildFloatingActionButton(),
     );
   }
 }
@@ -204,7 +287,8 @@ class _MovingHub extends StatelessWidget {
               childAspectRatio: 0.95,
             ),
             itemCount: _movingHubItems.length,
-            itemBuilder: (context, index) => _MovingHubCard(item: _movingHubItems[index]),
+            itemBuilder: (context, index) =>
+                _MovingHubCard(item: _movingHubItems[index]),
           ),
           const SizedBox(height: 16),
           Container(
@@ -212,12 +296,14 @@ class _MovingHub extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFFFFF7E6),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.25)),
+              border: Border.all(
+                  color: const Color(0xFFF59E0B).withValues(alpha: 0.25)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Iconsax.lamp_charge, color: Color(0xFFF59E0B), size: 18),
+                const Icon(Iconsax.lamp_charge,
+                    color: Color(0xFFF59E0B), size: 18),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -271,12 +357,14 @@ class _MovingHubCard extends StatelessWidget {
             const Spacer(),
             Text(
               item.title,
-              style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+              style:
+                  GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(
               item.subtitle,
-              style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+              style:
+                  GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

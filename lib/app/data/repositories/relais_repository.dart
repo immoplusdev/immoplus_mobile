@@ -8,6 +8,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_interest_requests.
 import 'package:immoplus/app/data/models/remote/relais/relais_interests_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_list_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_matches_response.dart';
+import 'package:immoplus/app/data/models/remote/relais/relais_module_status_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_my_interests_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_received_interests_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_request.dart';
@@ -20,6 +21,29 @@ import 'package:injectable/injectable.dart';
 class RelaisRepository {
   final Dio dioClient;
   RelaisRepository(this.dioClient);
+
+  /// Statut d'activation globale du module Immo Relais (GET /relais/module-status).
+  Future<RelaisModuleStatusResponse> getModuleStatus() async {
+    try {
+      return await RelaisProvider(dioClient).getModuleStatus();
+    } on DioException catch (dioError) {
+      log('DioError (getModuleStatus): ${dioError.message}');
+      return const RelaisModuleStatusResponse(active: true);
+    } catch (error) {
+      log('getModuleStatus error: $error');
+      return const RelaisModuleStatusResponse(active: true);
+    }
+  }
+
+  /// Helper booléen pour vérifier si le module Relais est actif.
+  Future<bool> isModuleActive() async {
+    try {
+      final response = await getModuleStatus();
+      return response.active;
+    } catch (_) {
+      return true;
+    }
+  }
 
   Future<RelaisResponse> createRelais(RelaisRequest request) async {
     try {
