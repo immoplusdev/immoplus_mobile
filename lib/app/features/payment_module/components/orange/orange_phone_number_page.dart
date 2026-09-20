@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/features/payment_module/components/orange/orange_payment_controller.dart';
-import 'package:immoplus/app/features/payment_module/services/payment_services.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_utils.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
@@ -33,7 +32,6 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
   );
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _loadingButton = false;
 
   @override
   void dispose() {
@@ -117,7 +115,6 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
               ],
             ),
             CustomButtom(
-              isLoading: _loadingButton,
               text: 'Confirmer',
               onClick: () => _onConfirm(paymentData),
             ),
@@ -130,27 +127,8 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
   void _onConfirm(PaymentData paymentData) {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _loadingButton = true);
-
     final number = _formController.phoneNumber!.text.replaceAll(' ', '');
-    PaymentServices.initPayment(
-      context: context,
-      number: number,
-      collection: paymentData.productType,
-      itemID: paymentData.orderID,
-      extra: paymentData.extra,
-      onSuccess: (paymentIntentData) {
-        if (!mounted) return;
-
-        setState(() => _loadingButton = false);
-
-        // ✅ Naviguer vers l'étape suivante via le controller
-        widget.controller.goToOtpValidator(paymentIntentData, number);
-      },
-      onFailed: () {
-        if (!mounted) return;
-        setState(() => _loadingButton = false);
-      },
-    );
+    // ✅ Pour Orange, on passe directement à l'étape OTP (create-payment-intent sera appelé avec l'OTP)
+    widget.controller.goToOtpValidator(number);
   }
 }

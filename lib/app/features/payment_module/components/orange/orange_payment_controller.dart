@@ -4,6 +4,7 @@ import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart'
 enum OrangePaymentStep {
   phoneNumber,
   otpValidator,
+  validator,
 }
 
 class OrangePaymentController extends ChangeNotifier {
@@ -15,10 +16,15 @@ class OrangePaymentController extends ChangeNotifier {
   PaymentItentData? get paymentIntentData => _paymentIntentData;
   String? get phoneNumber => _phoneNumber;
 
-  void goToOtpValidator(PaymentItentData data, [String? number]) {
-    _paymentIntentData = data;
+  void goToOtpValidator(String number) {
     _phoneNumber = number;
     _currentStep = OrangePaymentStep.otpValidator;
+    notifyListeners();
+  }
+
+  void goToValidator(PaymentItentData data) {
+    _paymentIntentData = data;
+    _currentStep = OrangePaymentStep.validator;
     notifyListeners();
   }
 

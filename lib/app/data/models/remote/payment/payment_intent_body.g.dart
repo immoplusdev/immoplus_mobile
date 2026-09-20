@@ -13,6 +13,7 @@ _$PaymentIntentBodyImpl _$$PaymentIntentBodyImplFromJson(
       itemId: json['itemId'] as String? ?? '',
       paymentMethod: json['paymentMethod'] as String? ?? '',
       paymentCredentials: json['paymentCredentials'] as String? ?? '',
+      otp: json['otp'] as String?,
     );
 
 Map<String, dynamic> _$$PaymentIntentBodyImplToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$PaymentIntentBodyImplToJson(
       'itemId': instance.itemId,
       'paymentMethod': instance.paymentMethod,
       'paymentCredentials': instance.paymentCredentials,
+      if (instance.otp case final value?) 'otp': value,
     };

@@ -9,6 +9,7 @@ class PaymentIntentBody with _$PaymentIntentBody {
     @Default('') String itemId,
     @Default('') String paymentMethod,
     @Default('') String paymentCredentials,
+    @JsonKey(includeIfNull: false) String? otp,
   }) = _PaymentIntentBody;
 
   factory PaymentIntentBody.fromJson(Map<String, dynamic> json) =>

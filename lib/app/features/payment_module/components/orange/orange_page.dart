@@ -3,6 +3,7 @@ import 'package:immoplus/app/features/payment_module/components/orange/orange_pa
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/features/payment_module/components/orange/orange_phone_number_page.dart';
 import 'package:immoplus/app/features/payment_module/components/orange/orange_otp_validator_page.dart';
+import 'package:immoplus/app/features/payment_module/components/orange/orange_validator_page.dart';
 
 class OrangePage extends StatefulWidget {
   const OrangePage({
@@ -65,12 +66,17 @@ class _OrangePageState extends State<OrangePage> {
             },
             child: SizedBox(
               key: ValueKey(_controller.currentStep),
-              child: _controller.currentStep == OrangePaymentStep.phoneNumber
-                  ? OrangePhoneNumberPage(controller: _controller)
-                  : OrangeOptValidatorPage(
-                      controller: _controller,
-                      paymentIntentModel: _controller.paymentIntentData!,
-                    ),
+              child: switch (_controller.currentStep) {
+                OrangePaymentStep.phoneNumber =>
+                  OrangePhoneNumberPage(controller: _controller),
+                OrangePaymentStep.otpValidator =>
+                  OrangeOptValidatorPage(controller: _controller),
+                OrangePaymentStep.validator =>
+                  OrangeValidatorPage(
+                    controller: _controller,
+                    paymentIntentModel: _controller.paymentIntentData!,
+                  ),
+              },
             ),
           );
         },
