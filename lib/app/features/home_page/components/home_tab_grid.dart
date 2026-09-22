@@ -5,6 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/type/auth_redirect_data.dart';
+import 'package:immoplus/app/features/authentification/authentification_page.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
@@ -72,71 +77,90 @@ class HomeTabGridRowTwo extends StatelessWidget {
 }
 
 List<Widget> _buildCards(BuildContext context) {
-    return [
-      _HomeTabCard(
-        imagePath: 'assets/img/onglets/sejour.png',
-        labelLine1: 'Trouver un',
-        labelLine2: 'Séjour',
-        icon: Iconsax.calendar,
-        borderColor: const Color(0xFFFFEEF6),
-        badgeColor: const Color(0xFFFF5C9E),
-        onTap: () => context.push(
-          SearchResultPage.routePath,
-          extra: {'category': 'residence', 'displayText': 'Résidences'},
-        ),
+  return [
+    _HomeTabCard(
+      imagePath: 'assets/img/onglets/sejour.png',
+      labelLine1: 'Trouver un',
+      labelLine2: 'Séjour',
+      icon: Iconsax.calendar,
+      borderColor: const Color(0xFFFFEEF6),
+      badgeColor: const Color(0xFFFF5C9E),
+      onTap: () => context.push(
+        SearchResultPage.routePath,
+        extra: {
+          'category': HomeTab.residence.category,
+          'displayText': 'Résidences'
+        },
       ),
-      _HomeTabCard(
-        imagePath: 'assets/img/onglets/logement.png',
-        labelLine1: 'Trouver un',
-        labelLine2: 'Logement',
-        icon: Iconsax.home_2,
-        borderColor: const Color(0xFFF9DBDD),
-        badgeColor: const Color(0xFFE85C6B),
-        onTap: () => context.push(
-          SearchResultPage.routePath,
-          extra: {'category': 'location', 'displayText': 'Location'},
-        ),
+    ),
+    _HomeTabCard(
+      imagePath: 'assets/img/onglets/logement.png',
+      labelLine1: 'Trouver un',
+      labelLine2: 'Logement',
+      icon: Iconsax.home_2,
+      borderColor: const Color(0xFFF9DBDD),
+      badgeColor: const Color(0xFFE85C6B),
+      onTap: () => context.push(
+        SearchResultPage.routePath,
+        extra: {
+          'category': HomeTab.location.category,
+          'displayText': 'Location'
+        },
       ),
-      _HomeTabCard(
-        imagePath: 'assets/img/onglets/hotel.png',
-        labelLine1: 'Trouver un',
-        labelLine2: 'Hôtel',
-        icon: Iconsax.building,
-        borderColor: const Color(0xFFDAFCE7),
-        badgeColor: const Color(0xFF34C77B),
-        onTap: () => context.push(HotelSearchPage.routePath),
+    ),
+    _HomeTabCard(
+      imagePath: 'assets/img/onglets/hotel.png',
+      labelLine1: 'Trouver un',
+      labelLine2: 'Hôtel',
+      icon: Iconsax.building,
+      borderColor: const Color(0xFFDAFCE7),
+      badgeColor: const Color(0xFF34C77B),
+      onTap: () => context.push(HotelSearchPage.routePath),
+    ),
+    _HomeTabCard(
+      imagePath: 'assets/img/onglets/bien.png',
+      labelLine1: 'Acheter un',
+      labelLine2: 'Bien',
+      icon: Iconsax.buildings_2,
+      borderColor: const Color(0xFFFAE5CF),
+      badgeColor: const Color(0xFFFF9F43),
+      onTap: () => context.push(
+        SearchResultPage.routePath,
+        extra: {'category': HomeTab.bien.category, 'displayText': 'Biens'},
       ),
-      _HomeTabCard(
-        imagePath: 'assets/img/onglets/bien.png',
-        labelLine1: 'Acheter un',
-        labelLine2: 'Bien',
-        icon: Iconsax.buildings_2,
-        borderColor: const Color(0xFFFAE5CF),
-        badgeColor: const Color(0xFFFF9F43),
-        onTap: () => context.push(
-          SearchResultPage.routePath,
-          extra: {'category': 'bien', 'displayText': 'Biens'},
-        ),
-      ),
-      _HomeTabCard(
-        imagePath: 'assets/img/onglets/carte.png',
-        labelLine1: 'Explorer la',
-        labelLine2: 'Carte',
-        icon: Iconsax.location,
-        borderColor: const Color(0xFFF4F3CD),
-        badgeColor: const Color(0xFFF2C94C),
-        onTap: () => context.push('/map'),
-      ),
-      _HomeTabCard(
-        imagePath: 'assets/img/onglets/demenager.png',
-        labelLine1: 'Je veux',
-        labelLine2: 'Déménager',
-        icon: Iconsax.truck_fast,
-        borderColor: const Color(0xFFE8E1FF),
-        badgeColor: const Color(0xFF8C6FF5),
-        onTap: () => context.goNamed(MyChoicePage.name),
-      ),
-    ];
+    ),
+    _HomeTabCard(
+      imagePath: 'assets/img/onglets/carte.png',
+      labelLine1: 'Explorer la',
+      labelLine2: 'Carte',
+      icon: Iconsax.location,
+      borderColor: const Color(0xFFF4F3CD),
+      badgeColor: const Color(0xFFF2C94C),
+      onTap: () => context.push('/map'),
+    ),
+    _HomeTabCard(
+      imagePath: 'assets/img/onglets/demenager.png',
+      labelLine1: 'Je veux',
+      labelLine2: 'Déménager',
+      icon: Iconsax.truck_fast,
+      borderColor: const Color(0xFFE8E1FF),
+      badgeColor: const Color(0xFF8C6FF5),
+      onTap: () {
+        final sessionManager = getIt<SessionManager>();
+        if (sessionManager.currentUser == null) {
+          context.pushNamed(
+            AuthenticationPage.name,
+            extra: (
+              callback: () => context.goNamed(MyChoicePage.name),
+              popUntilRouteName: null,
+            ) as AuthRedirectData,
+          );
+        } else {
+          context.goNamed(MyChoicePage.name);
+        }
+      },
+    ),
+  ];
 }
 
 class _HomeTabCard extends StatelessWidget {

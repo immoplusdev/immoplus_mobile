@@ -19,6 +19,7 @@ class PaymentServices {
     required String number,
     required String collection,
     required String itemID,
+    String? otp,
     required Function(PaymentItentData p) onSuccess,
     required Function() onFailed,
     dynamic extra,
@@ -35,6 +36,7 @@ class PaymentServices {
         final hotelRequest = HotelPaymentRequest(
           paymentMethod: OrderPaymentController.selectedOperator.value,
           paymentCredentials: number.trim(),
+          otp: otp,
         );
         final hotelResponse = await getIt<HotelRepository>().initPayment(
           hotelId: hotelId,
@@ -50,6 +52,7 @@ class PaymentServices {
           itemId: itemID,
           paymentMethod: OrderPaymentController.selectedOperator.value,
           paymentCredentials: number.trim(),
+          otp: otp,
         ));
       }
 

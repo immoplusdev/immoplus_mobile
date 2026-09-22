@@ -22,7 +22,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "7be71221e0df24f1eb5ea7e2406aa66a293b5b42"
+      resolved-ref: "1abaf02da056abce73ae09da6a97a98d2df10712"
       url: "https://github.com/kitoko2/adaptive_bottom_nav_bar.git"
     source: git
     version: "0.0.1"
@@ -429,10 +429,10 @@ packages:
   cupertino_native:
     dependency: transitive
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "6c76f8ef3cb9995c064b98756b5f0b7c38e66538"
-      url: "https://github.com/kitoko2/cupertino_native.git"
+      path: "packages/cupertino_native"
+      ref: "1abaf02da056abce73ae09da6a97a98d2df10712"
+      resolved-ref: "1abaf02da056abce73ae09da6a97a98d2df10712"
+      url: "https://github.com/kitoko2/adaptive_bottom_nav_bar.git"
     source: git
     version: "0.1.1"
   dart_earcut:

@@ -5,6 +5,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_interest_requests.
 import 'package:immoplus/app/data/models/remote/relais/relais_interests_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_list_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_matches_response.dart';
+import 'package:immoplus/app/data/models/remote/relais/relais_module_status_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_my_interests_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_received_interests_response.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_request.dart';
@@ -16,6 +17,9 @@ part 'relais_provider.g.dart';
 @RestApi()
 abstract class RelaisProvider {
   factory RelaisProvider(Dio dio, {String baseUrl}) = _RelaisProvider;
+
+  @GET('/relais/module-status')
+  Future<RelaisModuleStatusResponse> getModuleStatus();
 
   @POST('/relais')
   Future<RelaisResponse> createRelais(@Body() RelaisRequest request);

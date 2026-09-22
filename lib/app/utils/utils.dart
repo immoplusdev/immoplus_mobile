@@ -7,12 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/features/login_page/login_page.dart';
-import 'package:immoplus/app/features/otp_login/otp_login_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/request_path.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -570,5 +566,12 @@ class Utils {
 
   static copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
+  }
+
+  /// Formate un compteur numérique en texte pour badge de navigation / pastille.
+  /// Retourne `null` si [count] <= 0 (pour masquer le badge), sinon la chaîne (ex: "3", "99+").
+  static String? formatBadgeCount(int count) {
+    if (count <= 0) return null;
+    return count > 99 ? '99+' : '$count';
   }
 }

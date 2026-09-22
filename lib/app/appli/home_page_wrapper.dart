@@ -21,6 +21,7 @@ import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/data/repositories/messaging_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
@@ -223,78 +224,54 @@ class _HomePageWrapperState extends State<HomePageWrapper>
                   FloatingActionButtonLocation.centerFloat,
               bottomNavigationBar: hideBottomNav
                   ? null
-                  : AdaptiveLiquidBottomNavigationBar(
-                      selectedIndex: _indexForState(state),
-                      onDestinationSelected: (index) =>
-                          _onItemTapped(index: index, pageState: state),
-                      tint: AppColors.primary,
-                      items: [
-                        AdaptiveBottomNavItem(
-                          label: 'Accueil',
-                          iosIconName: 'immo_home',
-                          iosIconNameSelected: 'immo_home_fill',
-                          androidIcon: const Icon(Iconsax.home, size: 22),
-                          androidIconSelected: Icon(Iconsax.home5,
-                              color: AppColors.primary, size: 22),
-                        ),
-                        AdaptiveBottomNavItem(
-                          label: 'Imatch',
-                          iosIconName: 'immo_heart',
-                          iosIconNameSelected: 'immo_heart_fill',
-                          androidIcon: SvgPicture.asset(
-                            'assets/svgs/icons/immomacth.svg',
-                            width: 22,
-                            height: 22,
-                            colorFilter: ColorFilter.mode(
-                              state == PageState.vivre
-                                  ? Colors.white
-                                  : Colors.grey.shade600,
-                              BlendMode.srcIn,
+                  : ListenableBuilder(
+                      listenable: Listenable.merge([
+                        Constantes.imatchBadgeCount,
+                        Constantes.unreadMessagesCount,
+                      ]),
+                      builder: (context, _) {
+                        final msgBadge = Utils.formatBadgeCount(
+                            Constantes.unreadMessagesCount.value);
+                        final imatchBadge = Utils.formatBadgeCount(
+                            Constantes.imatchBadgeCount.value);
+
+                        return AdaptiveLiquidBottomNavigationBar(
+                          selectedIndex: _indexForState(state),
+                          onDestinationSelected: (index) =>
+                              _onItemTapped(index: index, pageState: state),
+                          tint: AppColors.primary,
+                          items: [
+                            const AdaptiveBottomNavItem(
+                              label: 'Accueil',
+                              iosIconName: 'immo_home',
+                              iosIconNameSelected: 'immo_home_fill',
                             ),
-                          ),
-                          androidIconSelected: SvgPicture.asset(
-                            'assets/svgs/icons/immomacth.svg',
-                            width: 22,
-                            height: 22,
-                            colorFilter: ColorFilter.mode(
-                              AppColors.primary,
-                              BlendMode.srcIn,
+                            AdaptiveBottomNavItem(
+                              label: 'Imatch',
+                              iosIconName: 'immo_heart',
+                              iosIconNameSelected: 'immo_heart_fill',
+                              badgeValue: imatchBadge,
                             ),
-                          ),
-                        ),
-                        AdaptiveBottomNavItem(
-                          label: 'Reels',
-                          iosIconName: 'immo_reels',
-                          iosIconNameSelected: 'immo_reels_fill',
-                          androidIcon: Image.asset(
-                            'assets/img/icon_video_2.png',
-                            width: 22,
-                            height: 22,
-                          ),
-                          androidIconSelected: Image.asset(
-                            'assets/img/icon_video_2.png',
-                            width: 22,
-                            height: 22,
-                          ),
-                        ),
-                        AdaptiveBottomNavItem(
-                          label: 'Messages',
-                          iosIconName: 'immo_message',
-                          iosIconNameSelected: 'immo_message_fill',
-                          androidIcon: const Icon(Iconsax.messages_3, size: 22),
-                          androidIconSelected: Icon(Iconsax.messages_35,
-                              color: AppColors.primary, size: 22),
-                        ),
-                        AdaptiveBottomNavItem(
-                          label: 'Compte',
-                          iosIconName: 'immo_user',
-                          iosIconNameSelected: 'immo_user_fill',
-                          androidIcon: const Icon(Iconsax.user, size: 22),
-                          androidIconSelected: Icon(Iconsax.user5,
-                              color: AppColors.primary, size: 22),
-                        ),
-                      ],
-                      fallback: _buildFallbackBar(context, state),
+                            const AdaptiveBottomNavItem(
+                              label: 'Reels',
+                              iosIconName: 'immo_reels',
+                              iosIconNameSelected: 'immo_reels_fill',
+                            ),
+                            AdaptiveBottomNavItem(
+                              label: 'Messages',
+                              iosIconName: 'immo_message',
+                              iosIconNameSelected: 'immo_message_fill',
+                              badgeValue: msgBadge,
+                            ),
+                            const AdaptiveBottomNavItem(
+                              label: 'Compte',
+                              iosIconName: 'immo_user',
+                              iosIconNameSelected: 'immo_user_fill',
+                            ),
+                          ],
+                          fallback: _buildFallbackBar(context, state),
+                        );
+                      },
                     ),
             );
           },

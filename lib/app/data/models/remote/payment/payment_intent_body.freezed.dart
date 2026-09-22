@@ -24,6 +24,8 @@ mixin _$PaymentIntentBody {
   String get itemId => throw _privateConstructorUsedError;
   String get paymentMethod => throw _privateConstructorUsedError;
   String get paymentCredentials => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get otp => throw _privateConstructorUsedError;
 
   /// Serializes this PaymentIntentBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,7 +47,8 @@ abstract class $PaymentIntentBodyCopyWith<$Res> {
       {String collection,
       String itemId,
       String paymentMethod,
-      String paymentCredentials});
+      String paymentCredentials,
+      @JsonKey(includeIfNull: false) String? otp});
 }
 
 /// @nodoc
@@ -67,6 +70,7 @@ class _$PaymentIntentBodyCopyWithImpl<$Res, $Val extends PaymentIntentBody>
     Object? itemId = null,
     Object? paymentMethod = null,
     Object? paymentCredentials = null,
+    Object? otp = freezed,
   }) {
     return _then(_value.copyWith(
       collection: null == collection
@@ -85,6 +89,10 @@ class _$PaymentIntentBodyCopyWithImpl<$Res, $Val extends PaymentIntentBody>
           ? _value.paymentCredentials
           : paymentCredentials // ignore: cast_nullable_to_non_nullable
               as String,
+      otp: freezed == otp
+          ? _value.otp
+          : otp // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -101,7 +109,8 @@ abstract class _$$PaymentIntentBodyImplCopyWith<$Res>
       {String collection,
       String itemId,
       String paymentMethod,
-      String paymentCredentials});
+      String paymentCredentials,
+      @JsonKey(includeIfNull: false) String? otp});
 }
 
 /// @nodoc
@@ -121,6 +130,7 @@ class __$$PaymentIntentBodyImplCopyWithImpl<$Res>
     Object? itemId = null,
     Object? paymentMethod = null,
     Object? paymentCredentials = null,
+    Object? otp = freezed,
   }) {
     return _then(_$PaymentIntentBodyImpl(
       collection: null == collection
@@ -139,6 +149,10 @@ class __$$PaymentIntentBodyImplCopyWithImpl<$Res>
           ? _value.paymentCredentials
           : paymentCredentials // ignore: cast_nullable_to_non_nullable
               as String,
+      otp: freezed == otp
+          ? _value.otp
+          : otp // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -150,7 +164,8 @@ class _$PaymentIntentBodyImpl implements _PaymentIntentBody {
       {this.collection = '',
       this.itemId = '',
       this.paymentMethod = '',
-      this.paymentCredentials = ''});
+      this.paymentCredentials = '',
+      @JsonKey(includeIfNull: false) this.otp});
 
   factory _$PaymentIntentBodyImpl.fromJson(Map<String, dynamic> json) =>
       _$$PaymentIntentBodyImplFromJson(json);
@@ -167,10 +182,13 @@ class _$PaymentIntentBodyImpl implements _PaymentIntentBody {
   @override
   @JsonKey()
   final String paymentCredentials;
+  @override
+  @JsonKey(includeIfNull: false)
+  final String? otp;
 
   @override
   String toString() {
-    return 'PaymentIntentBody(collection: $collection, itemId: $itemId, paymentMethod: $paymentMethod, paymentCredentials: $paymentCredentials)';
+    return 'PaymentIntentBody(collection: $collection, itemId: $itemId, paymentMethod: $paymentMethod, paymentCredentials: $paymentCredentials, otp: $otp)';
   }
 
   @override
@@ -184,13 +202,14 @@ class _$PaymentIntentBodyImpl implements _PaymentIntentBody {
             (identical(other.paymentMethod, paymentMethod) ||
                 other.paymentMethod == paymentMethod) &&
             (identical(other.paymentCredentials, paymentCredentials) ||
-                other.paymentCredentials == paymentCredentials));
+                other.paymentCredentials == paymentCredentials) &&
+            (identical(other.otp, otp) || other.otp == otp));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, collection, itemId, paymentMethod, paymentCredentials);
+      runtimeType, collection, itemId, paymentMethod, paymentCredentials, otp);
 
   /// Create a copy of PaymentIntentBody
   /// with the given fields replaced by the non-null parameter values.
@@ -211,10 +230,12 @@ class _$PaymentIntentBodyImpl implements _PaymentIntentBody {
 
 abstract class _PaymentIntentBody implements PaymentIntentBody {
   const factory _PaymentIntentBody(
-      {final String collection,
-      final String itemId,
-      final String paymentMethod,
-      final String paymentCredentials}) = _$PaymentIntentBodyImpl;
+          {final String collection,
+          final String itemId,
+          final String paymentMethod,
+          final String paymentCredentials,
+          @JsonKey(includeIfNull: false) final String? otp}) =
+      _$PaymentIntentBodyImpl;
 
   factory _PaymentIntentBody.fromJson(Map<String, dynamic> json) =
       _$PaymentIntentBodyImpl.fromJson;
@@ -227,6 +248,9 @@ abstract class _PaymentIntentBody implements PaymentIntentBody {
   String get paymentMethod;
   @override
   String get paymentCredentials;
+  @override
+  @JsonKey(includeIfNull: false)
+  String? get otp;
 
   /// Create a copy of PaymentIntentBody
   /// with the given fields replaced by the non-null parameter values.
