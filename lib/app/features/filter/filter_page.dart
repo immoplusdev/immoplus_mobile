@@ -102,7 +102,7 @@ class _FilterPageState extends State<FilterPage> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.borderF2F4F7),
+                      border: Border.all(color: AppColors.immoBorderDefault),
                     ),
                     child: Row(
                       children: [
@@ -131,14 +131,14 @@ class _FilterPageState extends State<FilterPage> {
                                           ? FontWeight.w400
                                           : FontWeight.w600,
                                       color: currentAddress == null
-                                          ? AppColors.text98A2B3
-                                          : AppColors.text344054,
+                                          ? AppColors.immoTextDisabled
+                                          : AppColors.immoTextLabel,
                                     ),
                           ),
                         ),
                         Icon(
                           Iconsax.arrow_down_1,
-                          color: AppColors.text98A2B3,
+                          color: AppColors.immoTextDisabled,
                           size: 20,
                         ),
                       ],
@@ -165,7 +165,7 @@ class _FilterPageState extends State<FilterPage> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.borderF2F4F7),
+                    border: Border.all(color: AppColors.immoBorderDefault),
                   ),
                   child: CalendarDatePicker2(
                     config: CalendarDatePicker2Config(
@@ -217,8 +217,8 @@ class _FilterPageState extends State<FilterPage> {
               .copyWith(bottom: 16, top: 12),
           decoration: BoxDecoration(
             color: AppColors.whiteBackground,
-            border: const Border(
-              top: BorderSide(color: AppColors.borderF2F4F7),
+            border: Border(
+              top: BorderSide(color: AppColors.immoBorderDefault),
             ),
           ),
           child: SafeArea(
@@ -249,7 +249,7 @@ class _FilterPageState extends State<FilterPage> {
                       context.read<FilterCubit>().refresh(FilterHandler());
                       context.pop();
                     },
-                    icon: const Icon(Iconsax.filter, size: 18),
+                    icon: Icon(Iconsax.filter, size: 18),
                     label: const Text('Appliquer le filtre'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -259,7 +259,7 @@ class _FilterPageState extends State<FilterPage> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
@@ -282,9 +282,9 @@ class _FilterPageState extends State<FilterPage> {
                       context.pop();
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: AppColors.errorF04438,
+                      foregroundColor: AppColors.immoFeedbackError,
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -305,7 +305,7 @@ class _FilterPageState extends State<FilterPage> {
       text,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColors.text344054,
+            color: AppColors.immoTextLabel,
           ),
     );
   }

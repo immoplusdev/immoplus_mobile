@@ -273,7 +273,7 @@ class FurnitureUIConstants {
   // Elevation & Shadows (pour BoxShadow)
   static List<BoxShadow> get shadowLight => [
         BoxShadow(
-          color: AppColors.blue4227DE.withValues(alpha: 0.08),
+          color: AppColors.immoBrandPrimary.withValues(alpha: 0.08),
           offset: const Offset(0, 2),
           blurRadius: 8,
         ),
@@ -281,7 +281,7 @@ class FurnitureUIConstants {
 
   static List<BoxShadow> get shadowMedium => [
         BoxShadow(
-          color: AppColors.blue4227DE.withValues(alpha: 0.12),
+          color: AppColors.immoBrandPrimary.withValues(alpha: 0.12),
           offset: const Offset(0, 4),
           blurRadius: 16,
         ),

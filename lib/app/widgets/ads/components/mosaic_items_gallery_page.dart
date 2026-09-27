@@ -55,7 +55,7 @@ class _MosaicItemsGalleryPageState extends State<MosaicItemsGalleryPage> {
         centerTitle: true,
         leading: IconButton(
           icon: CircleAvatar(
-            backgroundColor: AppColors.borderLight,
+            backgroundColor: AppColors.immoBorderDefault,
             radius: 18,
             child: const Icon(
               CupertinoIcons.chevron_back,
@@ -70,7 +70,7 @@ class _MosaicItemsGalleryPageState extends State<MosaicItemsGalleryPage> {
                 widget.title!,
                 style: AppTypography.h4.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textNavyDeep,
+                  color: AppColors.immoTextPrimary,
                 ),
               )
             : null,
@@ -109,17 +109,17 @@ class _MosaicItemsGalleryPageState extends State<MosaicItemsGalleryPage> {
                           imageUrl: item.imageUrl,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: AppColors.grey200,
-                            highlightColor: AppColors.grey100,
+                            baseColor: AppColors.gray200,
+                            highlightColor: AppColors.gray100,
                             child: Container(
                               color: AppColors.white,
                             ),
                           ),
                           errorWidget: (context, url, error) => Container(
-                            color: AppColors.grey200,
+                            color: AppColors.gray200,
                             child: const Icon(
                               Icons.broken_image,
-                              color: AppColors.grey,
+                              color: AppColors.gray500,
                             ),
                           ),
                         ),

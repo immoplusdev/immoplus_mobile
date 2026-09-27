@@ -44,7 +44,7 @@ class AdCarouselVideoWidget extends StatelessWidget {
                 campaign.content.title!,
                 style: AppTypography.titleSmall.copyWith(
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textCharcoal,
+                  color: AppColors.navy900,
                   letterSpacing: -0.2,
                 ),
               ),
@@ -97,18 +97,18 @@ class _ErrorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.grey100,
+      color: AppColors.gray100,
       padding: const EdgeInsets.all(2),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.videocam_off, size: 36, color: AppColors.grey400),
+            Icon(Icons.videocam_off, size: 36, color: AppColors.gray400),
             const SizedBox(height: 8),
             Text(
               'Impossible de lire la vidéo',
               textAlign: TextAlign.center,
-              style: AppTypography.bodySmall.copyWith(color: AppColors.grey600),
+              style: AppTypography.bodySmall.copyWith(color: AppColors.gray500),
             ),
             const SizedBox(height: 6),
             TextButton(

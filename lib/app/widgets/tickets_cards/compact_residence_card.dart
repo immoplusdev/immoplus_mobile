@@ -117,20 +117,20 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: AppColors.grey300,
-        highlightColor: AppColors.grey100,
+        baseColor: AppColors.gray300,
+        highlightColor: AppColors.gray100,
         period: const Duration(milliseconds: 500),
         child: Container(
           color: AppColors.white,
         ),
       ),
       errorWidget: (context, url, error) => Container(
-        color: AppColors.grey200,
+        color: AppColors.gray200,
         child: Center(
           child: Icon(
             FontAwesomeIcons.images.data,
             size: 60,
-            color: AppColors.grey400,
+            color: AppColors.gray400,
           ),
         ),
       ),
@@ -168,7 +168,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
             widget.residence.nom.capitalizeFirst(),
             style: AppTypography.button.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.black87,
+              color: AppColors.gray950,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -180,7 +180,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           Text(
             "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.grey600,
+              color: AppColors.gray500,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -194,7 +194,7 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           Text(
             '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.grey500,
+              color: AppColors.gray1000,
               decoration: TextDecoration.lineThrough,
             ),
           ),
@@ -207,14 +207,14 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
                 style: AppTypography.button.copyWith(
                   fontWeight: FontWeight.w900,
                   color: widget.residence.hasReduction
-                      ? AppColors.redAccent
+                      ? AppColors.red600
                       : AppColors.black,
                 ),
               ),
               TextSpan(
                 text: '/nuit',
                 style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.grey600,
+                  color: AppColors.gray500,
                 ),
               ),
             ],

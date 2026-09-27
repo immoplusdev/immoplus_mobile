@@ -20,7 +20,7 @@ class VersionAppWidget extends StatelessWidget {
                   '${snapshot.data}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.grey,
+                    color: AppColors.gray500,
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w400,
                     fontSize: 12,

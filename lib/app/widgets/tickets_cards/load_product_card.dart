@@ -6,7 +6,7 @@ class LoadProductCard extends StatelessWidget {
   LoadProductCard({super.key});
 
   final _deco = BoxDecoration(
-    color: AppColors.yellow,
+    color: AppColors.gold400,
     borderRadius: BorderRadius.circular(15),
   );
 
@@ -21,8 +21,8 @@ class LoadProductCard extends StatelessWidget {
     final priceWidth = (availableWidth * 0.28).clamp(70.0, 100.0);
 
     return Shimmer.fromColors(
-      baseColor: AppColors.grey300,
-      highlightColor: AppColors.grey100,
+      baseColor: AppColors.gray300,
+      highlightColor: AppColors.gray100,
       period: const Duration(milliseconds: 500),
       child: Container(
         margin: const EdgeInsets.only(bottom: 15),

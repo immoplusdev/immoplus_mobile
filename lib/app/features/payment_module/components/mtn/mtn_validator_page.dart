@@ -96,7 +96,7 @@ class _MtnValidatorPageState extends State<MtnValidatorPage> {
 
     return PaymentWaitingView(
       onBack: () => widget.controller.goToPhoneNumber(),
-      loaderColor: AppColors.yellow600,
+      loaderColor: AppColors.gold600,
       instructionMarkdown: Utils.getNextActionText(
         name: widget.paymentIntentModel.paymentMethod,
       ),

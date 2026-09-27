@@ -14,7 +14,7 @@ class RatingEstateSection extends StatelessWidget {
         const Text('Note et avis'),
         RatingBar.builder(
           initialRating: 3,
-          unratedColor: AppColors.grey,
+          unratedColor: AppColors.gray500,
           minRating: 2,
           maxRating: 5,
           itemSize: 15,
@@ -23,9 +23,9 @@ class RatingEstateSection extends StatelessWidget {
           itemCount: 5,
           tapOnlyMode: true,
           itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-          itemBuilder: (context, _) => const Icon(
+          itemBuilder: (context, _) => Icon(
             Icons.star,
-            color: AppColors.amber,
+            color: AppColors.immoFeedbackWarning,
           ),
           onRatingUpdate: (rating) {},
         )

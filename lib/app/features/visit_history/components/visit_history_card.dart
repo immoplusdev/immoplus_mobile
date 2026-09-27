@@ -40,7 +40,7 @@ class VisitHistoryCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
-            border: Border.all(color: AppColors.borderF2F4F7),
+            border: Border.all(color: AppColors.immoBorderDefault),
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -55,8 +55,8 @@ class VisitHistoryCard extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: isExpress
-                          ? AppColors.bgFEF3F2
-                          : AppColors.bgF4F3FF,
+                          ? AppColors.immoFeedbackErrorSubtle
+                          : AppColors.immoBrandPrimarySubtle,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -66,7 +66,7 @@ class VisitHistoryCard extends StatelessWidget {
                           isExpress ? Iconsax.flash_1 : Iconsax.calendar_1,
                           size: 14,
                           color: isExpress
-                              ? AppColors.errorF04438
+                              ? AppColors.immoFeedbackError
                               : AppColors.purple7A5AF8,
                         ),
                         const Gap(4),
@@ -78,7 +78,7 @@ class VisitHistoryCard extends StatelessWidget {
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: isExpress
-                                ? AppColors.errorF04438
+                                ? AppColors.immoFeedbackError
                                 : AppColors.purple7A5AF8,
                           ),
                         ),
@@ -114,7 +114,7 @@ class VisitHistoryCard extends StatelessWidget {
                     Icon(
                       Iconsax.location,
                       size: 14,
-                      color: AppColors.textSecondaryMedium,
+                      color: AppColors.immoTextSecondary,
                     ),
                     const Gap(4),
                     Expanded(
@@ -123,7 +123,7 @@ class VisitHistoryCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textSecondaryMedium,
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),
@@ -141,15 +141,15 @@ class VisitHistoryCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.bgFFFAEB,
+                    color: AppColors.orange50,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Iconsax.calendar_remove,
                         size: 16,
-                        color: AppColors.amberF79009,
+                        color: AppColors.immoFeedbackWarning,
                       ),
                       const Gap(8),
                       Expanded(
@@ -157,7 +157,7 @@ class VisitHistoryCard extends StatelessWidget {
                           "Aucune date de visite planifiée",
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.amberB54708,
+                                    color: AppColors.amber800,
                                     fontWeight: FontWeight.w500,
                                   ),
                         ),

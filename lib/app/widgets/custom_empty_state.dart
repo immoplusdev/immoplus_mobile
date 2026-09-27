@@ -31,7 +31,7 @@ class CustomEmptyState extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         decoration: BoxDecoration(
-          color: AppColors.emptyStateBlueBg,
+          color: AppColors.blue75,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -52,7 +52,7 @@ class CustomEmptyState extends StatelessWidget {
               textAlign: TextAlign.center,
               style: AppTypography.h4.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.textHeadingObsidian,
+                color: AppColors.immoTextPrimary,
               ),
             ),
             const Gap(8),
@@ -60,7 +60,7 @@ class CustomEmptyState extends StatelessWidget {
               description,
               textAlign: TextAlign.center,
               style: AppTypography.bodySmall.copyWith(
-                color: AppColors.textSecondaryMedium,
+                color: AppColors.immoTextSecondary,
               ),
             ),
             const Gap(24),

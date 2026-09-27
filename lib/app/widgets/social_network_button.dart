@@ -23,7 +23,7 @@ class SocialNetworkButton extends StatelessWidget {
         //tileColor: Colors.red,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: AppColors.grey)),
+            side: const BorderSide(color: AppColors.gray500)),
         leading: CircleAvatar(
           backgroundColor: AppColors.transparent,
           child: icon,

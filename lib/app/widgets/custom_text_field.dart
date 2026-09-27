@@ -137,14 +137,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusNode: _textFieldFocus,
         decoration: InputDecoration(
           isDense: widget.isDense,
-          errorStyle: const TextStyle(color: AppColors.redAccent),
+          errorStyle: const TextStyle(color: AppColors.red600),
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 20),
           prefixText: widget.prefixText,
           prefixIcon: widget.prefixIcon,
           hintText: widget.labelText,
           hintStyle: TextStyle(
-            color: AppColors.grey,
+            color: AppColors.gray500,
             fontSize: widget.fontSize ?? 15,
           ),
           filled: true,

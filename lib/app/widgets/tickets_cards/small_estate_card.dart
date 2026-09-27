@@ -69,7 +69,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
             color: AppColors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: AppColors.borderSoftBlue,
+              color: AppColors.immoBorderBrandSubtle,
               width: 0.5,
             ),
           ),
@@ -95,12 +95,12 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                         fadeOutDuration: Duration.zero,
                         fit: BoxFit.cover,
                         placeholder: (_, __) =>
-                            Container(color: AppColors.grey100),
+                            Container(color: AppColors.gray100),
                         memCacheWidth: 400,
                         errorWidget: (_, __, ___) => Container(
-                          color: AppColors.grey100,
+                          color: AppColors.gray100,
                           child: FaIcon(FontAwesomeIcons.images,
-                              size: 32, color: AppColors.grey300),
+                              size: 32, color: AppColors.gray300),
                         ),
                       ),
                     ),
@@ -117,7 +117,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                         ),
                         child: Text(
                           bien.typeBienImmobilier,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.white,
                             fontSize: 9,
                             fontWeight: FontWeight.w600,
@@ -139,7 +139,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                           ),
                           child: Text(
                             '${bien.images.length} photos',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.white,
                               fontSize: 9,
                               fontWeight: FontWeight.w500,
@@ -165,7 +165,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                           child: Container(
                             width: 28,
                             height: 28,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               color: AppColors.white,
                               shape: BoxShape.circle,
                             ),
@@ -175,7 +175,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                                   : FontAwesomeIcons.heart.data,
                               size: 12,
                               color:
-                                  liked ? AppColors.redAccent : AppColors.primary,
+                                  liked ? AppColors.red600 : AppColors.primary,
                             ),
                           ),
                         ),
@@ -203,10 +203,10 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                                 bien.nom,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: AppColors.textPrimaryDark,
+                                  color: AppColors.immoTextPrimary,
                                 ),
                               ),
                               const SizedBox(height: 3),
@@ -222,9 +222,9 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                                           : '${bien.commune ?? ''}, ${bien.ville ?? ''}',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 11,
-                                        color: AppColors.textSecondary,
+                                        color: AppColors.immoTextSecondary,
                                       ),
                                     ),
                                   ),
@@ -247,9 +247,9 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                             ),
                             Text(
                               bien.aLouer ? '/ mois' : '',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 10,
-                                color: AppColors.textSecondary,
+                                color: AppColors.immoTextSecondary,
                               ),
                             ),
                           ],
@@ -257,12 +257,12 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                       ],
                     ),
 
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Divider(
                           height: 0.5,
                           thickness: 0.5,
-                          color: AppColors.borderLightGray),
+                          color: AppColors.immoBorderDefault),
                     ),
 
                     // Commodités
@@ -277,7 +277,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                         Container(
                             width: 0.5,
                             height: 22,
-                            color: AppColors.borderSoftBlue),
+                            color: AppColors.immoBorderBrandSubtle),
                         _AmenityItem(
                           icon: Icons.bathtub_outlined,
                           count: sdb > 0 ? sdb : 1,
@@ -286,7 +286,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                         Container(
                             width: 0.5,
                             height: 22,
-                            color: AppColors.borderSoftBlue),
+                            color: AppColors.immoBorderBrandSubtle),
                         _AmenityItem(
                           icon: Icons.soup_kitchen_outlined,
                           count: cuisines > 0 ? cuisines : 1,
@@ -295,12 +295,12 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                       ],
                     ),
 
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Divider(
                           height: 0.5,
                           thickness: 0.5,
-                          color: AppColors.borderLightGray),
+                          color: AppColors.immoBorderDefault),
                     ),
 
                     // Boutons CTA
@@ -316,7 +316,7 @@ class _SmallEstateCardState extends State<SmallEstateCard> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               alignment: Alignment.center,
-                              child: const Text(
+                              child: Text(
                                 'Voir détails',
                                 style: TextStyle(
                                   color: AppColors.white,
@@ -376,18 +376,18 @@ class _AmenityItem extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           '$count',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.immoTextPrimary,
           ),
         ),
         const SizedBox(width: 3),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
-            color: AppColors.textDarkGray,
+            color: AppColors.immoTextPrimary,
           ),
         ),
       ],
@@ -409,10 +409,10 @@ class _ActionIconButton extends StatelessWidget {
         width: 42,
         height: 42,
         decoration: BoxDecoration(
-          color: AppColors.softBlueBg,
+          color: AppColors.immoBgAppTinted,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: AppColors.borderSoftBlue,
+            color: AppColors.immoBorderBrandSubtle,
             width: 1,
           ),
         ),
@@ -427,7 +427,7 @@ class _TrianglePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = AppColors.white;
     final borderPaint = Paint()
-      ..color = AppColors.borderSoftBlue
+      ..color = AppColors.immoBorderBrandSubtle
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5;
 

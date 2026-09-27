@@ -44,7 +44,7 @@ class CustomButtom extends StatelessWidget {
                 ? (color == null)
                     ? AppColors.primary
                     : color
-                : AppColors.grey400,
+                : AppColors.gray400,
             shape: RoundedRectangleBorder(
                 borderRadius:
                     borderRadius ?? BorderRadius.circular(radiusButton)),

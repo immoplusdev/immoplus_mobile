@@ -25,14 +25,14 @@ class ContactUtils {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 4, bottom: 20),
                   child: Text(
                     "Nous contacter",
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.text0D0D0D,
+                      color: AppColors.immoTextPrimary,
                     ),
                   ),
                 ),
@@ -45,7 +45,7 @@ class ContactUtils {
                       color: AppColors.whatsAppGreen.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(Iconsax.message, size: 18, color: AppColors.whatsAppGreen),
+                    child: Icon(Iconsax.message, size: 18, color: AppColors.whatsAppGreen),
                   ),
                   title: "WhatsApp",
                   subtitle: "Écrivez-nous sur WhatsApp",
@@ -107,7 +107,7 @@ class ContactUtils {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: AppColors.surfaceLight,
+      color: AppColors.immoBgSurfaceMuted,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -124,24 +124,24 @@ class ContactUtils {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.text1E1E1E,
+                        color: AppColors.immoTextPrimary,
                       ),
                     ),
                     const Gap(2),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.textBrandMuted,
+                        color: AppColors.immoTextDisabled,
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: AppColors.borderD1D5DB, size: 20),
+              Icon(Icons.chevron_right_rounded, color: AppColors.immoBorderStrong, size: 20),
             ],
           ),
         ),

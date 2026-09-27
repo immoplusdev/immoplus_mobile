@@ -92,7 +92,7 @@ class _CustomRoundedTextFieldState extends State<CustomRoundedTextField> {
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
-                  color: AppColors.shadowA6ADB9,
+                  color: AppColors.gray400,
                   blurRadius: 8,
                   offset: Offset(0, 0),
                 ),

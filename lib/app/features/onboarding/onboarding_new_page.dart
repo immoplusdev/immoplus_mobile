@@ -106,7 +106,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   center: const Alignment(0, 0.4),
                   radius: 0.8,
                   colors: [
-                    AppColors.customBlue.withOpacity(0.4),
+                    AppColors.immoBrandPrimary.withOpacity(0.4),
                     Colors.transparent,
                   ],
                 ),
@@ -202,7 +202,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                     style: AppTypography.h1.copyWith(
                       fontSize: 55,
                       fontWeight: FontWeight.w900,
-                      color: AppColors.textHeadingObsidian,
+                      color: AppColors.immoTextPrimary,
                       height: 1.1,
                     ),
                   ),
@@ -223,7 +223,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                           style: AppTypography.h1.copyWith(
                             fontSize: 55,
                             fontWeight: FontWeight.w900,
-                            color: AppColors.textHeadingObsidian,
+                            color: AppColors.immoTextPrimary,
                             height: 1.1,
                           ),
                         ),
@@ -238,7 +238,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                     style: AppTypography.h1.copyWith(
                       fontSize: 55,
                       fontWeight: FontWeight.w900,
-                      color: AppColors.textHeadingObsidian,
+                      color: AppColors.immoTextPrimary,
                       height: 1.1,
                     ),
                   ),

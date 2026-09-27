@@ -18,7 +18,7 @@ class CustomChip extends StatelessWidget {
 
   const CustomChip({
     super.key,
-    this.backgroundColor = AppColors.grey,
+    this.backgroundColor = AppColors.gray500,
     this.iconColor = AppColors.black,
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
     this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 2),

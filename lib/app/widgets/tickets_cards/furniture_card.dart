@@ -95,7 +95,7 @@ class _FurnitureCardState extends State<FurnitureCard> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
-                                      .copyWith(color: AppColors.grey600),
+                                      .copyWith(color: AppColors.gray500),
                                 ),
                               ),
                             ],
@@ -168,7 +168,7 @@ class _FurnitureCardState extends State<FurnitureCard> {
               },
               child: CircleAvatar(
                 radius: 14,
-                backgroundColor: value ? AppColors.red : AppColors.grey300,
+                backgroundColor: value ? AppColors.immoFeedbackError : AppColors.gray300,
                 child: Icon(
                   FontAwesomeIcons.solidHeart.data,
                   size: 16,
@@ -200,7 +200,7 @@ class _FurnitureCardState extends State<FurnitureCard> {
                 color: color,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.grey300,
+                  color: AppColors.gray300,
                   width: 0.5,
                 ),
               ),

@@ -196,7 +196,7 @@ class UnifiedPropertyCard extends StatelessWidget {
       decoration: BoxDecoration(
         // color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.grey100, width: 1),
+        border: Border.all(color: AppColors.gray100, width: 1),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withOpacity(0.02),
@@ -250,7 +250,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.black87,
+                                  color: AppColors.gray950,
                                   fontSize: 16,
                                 ),
                         maxLines: 2,
@@ -263,7 +263,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                       Text(
                         location,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: AppColors.grey600,
+                              color: AppColors.gray500,
                               fontSize: 14,
                             ),
                         maxLines: 1,
@@ -290,7 +290,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.orange800,
+                            color: AppColors.amber800,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -301,7 +301,7 @@ class UnifiedPropertyCard extends StatelessWidget {
 
                       // Divider
                       const Gap(8),
-                      Divider(height: 1, color: AppColors.grey.withOpacity(.4)),
+                      Divider(height: 1, color: AppColors.gray500.withOpacity(.4)),
                       const Gap(8),
 
                       // Bottom Row: Date / Price
@@ -313,7 +313,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                           Text(
                             formattedDuration,
                             style: const TextStyle(
-                                color: AppColors.grey600, fontSize: 11),
+                                color: AppColors.gray500, fontSize: 11),
                           ),
                           const Gap(8),
                           Expanded(
@@ -326,7 +326,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                     originalPriceText,
                                     style: const TextStyle(
                                       fontSize: 11,
-                                      color: AppColors.grey500,
+                                      color: AppColors.gray1000,
                                       decoration: TextDecoration.lineThrough,
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -346,7 +346,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: hasReduction
-                                              ? AppColors.redAccent
+                                              ? AppColors.red600
                                               : AppColors.black,
                                         ),
                                       ),
@@ -355,7 +355,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                           priceSuffix,
                                           style: const TextStyle(
                                             fontSize: 12,
-                                            color: AppColors.grey600,
+                                            color: AppColors.gray500,
                                           ),
                                         ),
                                     ],
@@ -366,7 +366,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                     fraisIndiceText!,
                                     style: const TextStyle(
                                       fontSize: 10,
-                                      color: AppColors.grey500,
+                                      color: AppColors.gray1000,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -394,7 +394,7 @@ class UnifiedPropertyCard extends StatelessWidget {
       return Icon(
         iconsaxIcon,
         size: 15,
-        color: AppColors.grey700,
+        color: AppColors.gray700,
       );
     } else if (svgPath != null) {
       return SvgPicture.asset(
@@ -402,12 +402,12 @@ class UnifiedPropertyCard extends StatelessWidget {
         height: 15,
         width: 15,
         colorFilter: const ColorFilter.mode(
-          AppColors.grey700,
+          AppColors.gray700,
           BlendMode.srcIn,
         ),
       );
     } else {
-      return const Icon(Iconsax.element_4, size: 15, color: AppColors.grey700);
+      return const Icon(Iconsax.element_4, size: 15, color: AppColors.gray700);
     }
   }
 }

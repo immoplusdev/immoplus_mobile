@@ -49,7 +49,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
             AppDialog.info(
               barrierDismissible: false,
               content: "Votre demande a été envoyée avec succès.",
-              icon: const Text("Succès", style: TextStyle(color: Colors.green)),
+              icon: Text("Succès", style: TextStyle(color: Colors.green)),
               textButton: "Fermer",
               rollback: () {
                 while (context.canPop()) {
@@ -70,7 +70,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
               backgroundColor: Colors.white,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: () => context.pop(),
               ),
               systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -87,7 +87,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       "Créer votre compte\nprofessionnel",
                       textAlign: TextAlign.center,
                       style: AppTypography.h2.copyWith(
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.immoTextPrimary,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -98,13 +98,13 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       "Veuillez renseigner vos informations afin de vérifier\nvotre identité.",
                       textAlign: TextAlign.center,
                       style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.textSecondaryMedium,
+                        color: AppColors.immoTextSecondary,
                       ),
                     ),
                     const SizedBox(height: 32),
 
-                    const Divider(
-                        color: AppColors.borderLightGray, thickness: 1),
+                    Divider(
+                        color: AppColors.immoBorderDefault, thickness: 1),
                     const SizedBox(height: 24),
 
                     // Section Document
@@ -113,7 +113,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       child: Text(
                         "Document d'identité",
                         style: AppTypography.titleSmall.copyWith(
-                          color: AppColors.textPrimaryDark,
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
                     ),
@@ -174,14 +174,14 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       child: Text(
                         "Secteur d'activité :",
                         style: AppTypography.bodySmallMedium.copyWith(
-                          color: AppColors.textSecondaryMedium,
+                          color: AppColors.immoTextSecondary,
                         ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.borderLightGray),
+                        border: Border.all(color: AppColors.immoBorderDefault),
                         borderRadius: BorderRadius.circular(24),
                       ),
                       padding: const EdgeInsets.symmetric(
@@ -189,28 +189,28 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           isExpanded: true,
-                          hint: const Row(
+                          hint: Row(
                             children: [
                               Icon(Iconsax.briefcase,
-                                  color: AppColors.textSecondaryMedium,
+                                  color: AppColors.immoTextSecondary,
                                   size: 18),
                               SizedBox(width: 12),
                               Text("Sélectionner un secteur"),
                             ],
                           ),
                           value: _selectedSecteur,
-                          icon: const Icon(Icons.keyboard_arrow_down,
-                              color: AppColors.textSecondaryMedium),
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: AppColors.immoTextSecondary),
                           style: AppTypography.bodyMediumMedium.copyWith(
-                            color: AppColors.textPrimaryDark,
+                            color: AppColors.immoTextPrimary,
                           ),
                           items: _secteurs.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Row(
                                 children: [
-                                  const Icon(Iconsax.briefcase,
-                                      color: AppColors.textSecondaryMedium,
+                                  Icon(Iconsax.briefcase,
+                                      color: AppColors.immoTextSecondary,
                                       size: 18),
                                   const SizedBox(width: 12),
                                   Text(value),
@@ -232,11 +232,11 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.infoBgSoftBlue,
+                        color: AppColors.immoBgBrandSubtle,
                         borderRadius: BorderRadius.circular(8),
-                        border: const Border(
+                        border: Border(
                           left: BorderSide(
-                              color: AppColors.infoBorderBlue, width: 3),
+                              color: AppColors.immoFeedbackInfo, width: 3),
                         ),
                       ),
                       child: Text(
@@ -252,7 +252,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     // Passing Pro Button
                     CustomButtom(
                       text: "Passer pro",
-                      // color: AppColors.gradientTop,
+                      // color: AppColors.immoBecomeProGradientTop,
                       isLoading: isSubmitting,
                       borderRadius: BorderRadius.circular(28),
                       onClick: () async {
@@ -263,7 +263,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                             barrierDismissible: true,
                             content:
                                 "Veuillez remplir tous les champs et téléverser les documents.",
-                            icon: const Text("Attention"),
+                            icon: Text("Attention"),
                             textButton: "Compris",
                           );
                           return;
@@ -289,7 +289,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                           AppDialog.info(
                             barrierDismissible: true,
                             content: "Erreur lors de l'envoi des fichiers.",
-                            icon: const Text("Erreur"),
+                            icon: Text("Erreur"),
                             textButton: "Compris",
                           );
                         } finally {
@@ -323,7 +323,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
         Text(
           label,
           style: AppTypography.bodySmallMedium.copyWith(
-            color: AppColors.textSecondaryMedium,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const SizedBox(height: 8),
@@ -337,7 +337,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppColors.borderMediumGray,
+                color: AppColors.immoBorderStrong,
                 width: 1,
                 style: BorderStyle.none,
               ),
@@ -360,7 +360,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: AppColors.borderSoftBlue,
+                          color: AppColors.immoBorderBrandSubtle,
                           width: 2),
                     ),
                   ),
@@ -370,8 +370,8 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       children: [
                         SvgPicture.asset(
                           icon,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.infoBorderBlue,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.immoFeedbackInfo,
                             BlendMode.srcIn,
                           ),
                           width: 28,
@@ -381,7 +381,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                           actionText,
                           textAlign: TextAlign.center,
                           style: AppTypography.micro.copyWith(
-                            color: AppColors.infoBorderBlue,
+                            color: AppColors.immoFeedbackInfo,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

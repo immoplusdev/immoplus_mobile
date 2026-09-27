@@ -45,7 +45,7 @@ class PaymentWaitingView extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 CupertinoIcons.chevron_back,
                 color: Colors.black,
               ),
@@ -106,7 +106,7 @@ class PaymentWaitingView extends StatelessWidget {
                     ),
                     tileColor: AppColors.primary,
                     leading: actionIcon ??
-                        const Icon(
+                        Icon(
                           Icons.phone_android,
                           color: Colors.white,
                         ),
@@ -116,7 +116,7 @@ class PaymentWaitingView extends StatelessWidget {
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
-                    trailing: const Icon(
+                    trailing: Icon(
                       CupertinoIcons.chevron_right_circle_fill,
                       color: Colors.white,
                     ),
@@ -143,9 +143,9 @@ class PaymentWaitingView extends StatelessWidget {
                 "Une fois le paiement validé, veuillez patienter quelques instants. "
                     "Vous serez notifié du statut de votre paiement, puis celui de votre demande par ImmoPlus.",
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
-              color: AppColors.textMuted,
+              color: AppColors.immoTextSecondary,
               height: 1.3,
             ),
           ),

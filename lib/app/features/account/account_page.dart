@@ -36,13 +36,13 @@ import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Design tokens — minimalist luxury, 2026
-const Color _kIconBg = AppColors.iconBgLight;
-const Color _kIconColor = AppColors.textDarkGray;
-const Color _kLabelColor = AppColors.text0D0D0D;
-const Color _kSectionColor = AppColors.textMuted;
-const Color _kTrailingColor = AppColors.textDarkGray;
-const Color _kBrandMuted = AppColors.textBrandMuted; // muted light grey
-const Color _kSocialIcon = AppColors.textLightGray; // monochromatic grey
+final Color _kIconBg = AppColors.immoBgSurfaceMuted;
+final Color _kIconColor = AppColors.immoTextPrimary;
+final Color _kLabelColor = AppColors.immoTextPrimary;
+final Color _kSectionColor = AppColors.immoTextSecondary;
+final Color _kTrailingColor = AppColors.immoTextPrimary;
+final Color _kBrandMuted = AppColors.immoTextDisabled; // muted light grey
+final Color _kSocialIcon = AppColors.immoTextSecondary; // monochromatic grey
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -171,7 +171,7 @@ class _AccountPageState extends State<AccountPage> {
                 delegate: SliverChildListDelegate([
                   SettingsTile(
                     shape: SettingsTile.shapeFirst,
-                    leading: _iconLeading(const Icon(CupertinoIcons.person,
+                    leading: _iconLeading(Icon(CupertinoIcons.person,
                         size: 20, color: _kIconColor)),
                     title: "Se Connecter / S`Inscrire",
                     titleColor: _kLabelColor,
@@ -562,7 +562,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildTermsTile(dynamic shape) {
     return SettingsTile(
       shape: shape,
-      leading: _iconLeading(const Icon(CupertinoIcons.text_alignleft,
+      leading: _iconLeading(Icon(CupertinoIcons.text_alignleft,
           size: 20, color: _kIconColor)),
       title: 'Termes et conditions',
       titleColor: _kLabelColor,
@@ -585,7 +585,7 @@ class _AccountPageState extends State<AccountPage> {
           SettingsTile(
             shape: shape,
             leading: _iconLeading(
-                const Icon(Iconsax.crown_14, size: 20, color: _kIconColor)),
+                Icon(Iconsax.crown_14, size: 20, color: _kIconColor)),
             title: isLoggedIn ? 'Devenir Pro' : 'Publier un bien',
             titleColor: _kLabelColor,
             trailingColor: _kTrailingColor,
@@ -604,7 +604,7 @@ class _AccountPageState extends State<AccountPage> {
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Immo+ Pro",
                     style: TextStyle(
                       color: Colors.white,

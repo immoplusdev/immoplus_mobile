@@ -212,7 +212,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 Text(
                   "TYPE DE CHAMBRES",
                   style: TextStyle(
-                      color: AppColors.color8A8A86,
+                      color: AppColors.immoTextSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5),
@@ -247,7 +247,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 Text(
                   "SÉJOUR",
                   style: TextStyle(
-                      color: AppColors.color8A8A86,
+                      color: AppColors.immoTextSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5),
@@ -257,7 +257,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 // Date Arrivée
                 Text("Date d'arrivée *",
                     style: TextStyle(
-                      color: AppColors.color8A8A86,
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -290,7 +290,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 // Date Départ
                 Text("Date de départ *",
                     style: TextStyle(
-                      color: AppColors.color8A8A86,
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -323,7 +323,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 // Durée
                 Text("Durée",
                     style: TextStyle(
-                      color: AppColors.color8A8A86,
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -360,7 +360,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 // Occupants
                 Text("Occupants",
                     style: TextStyle(
-                      color: AppColors.color8A8A86,
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),

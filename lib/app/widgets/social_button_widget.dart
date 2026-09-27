@@ -77,7 +77,7 @@ class SocialLoginButtons extends StatelessWidget {
       case LoginMode.phone:
         // Sur la page téléphone, affiche le bouton @ (vers email)
         return _SocialButton(
-          backgroundColor: AppColors.blue,
+          backgroundColor: AppColors.immoBrandPrimary,
           onPressed: onSwitchMode,
           child: FaIcon(
             FontAwesomeIcons.at,
@@ -89,7 +89,7 @@ class SocialLoginButtons extends StatelessWidget {
       case LoginMode.email:
         // Sur la page email, affiche le bouton PIN (vers téléphone)
         return _SocialButton(
-          backgroundColor: AppColors.blueGrey,
+          backgroundColor: AppColors.slate500,
           onPressed: onSwitchMode,
           child: Icon(
             Icons.pin,

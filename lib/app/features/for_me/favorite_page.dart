@@ -17,11 +17,11 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 // White Luxury — fond blanc, pas de noir
-const Color _kBg = AppColors.white;
-const Color _kGold = AppColors.goldLuxury;
-const Color _kTextPrimary = AppColors.textObsidian;
-const Color _kTextSecondary = AppColors.textLightGray;
-const Color _kSeparator = AppColors.borderSubtle;
+final Color _kBg = AppColors.white;
+final Color _kGold = AppColors.gold600;
+final Color _kTextPrimary = AppColors.immoTextPrimary;
+final Color _kTextSecondary = AppColors.immoTextSecondary;
+final Color _kSeparator = AppColors.immoBorderDefault;
 
 class FavoritePage extends StatefulWidget {
   final bool embedded;
@@ -61,7 +61,7 @@ class _FavoritePageState extends State<FavoritePage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             backgroundColor: _kBg,
-            body: const Center(
+            body: Center(
               child: CircularProgressIndicator(color: _kGold),
             ),
           );

@@ -194,20 +194,20 @@ class AppTypography {
   static TextTheme lightTextTheme([TextTheme? base]) {
     final theme = base ?? ThemeData.light().textTheme;
     return GoogleFonts.plusJakartaSansTextTheme(theme).copyWith(
-      displayLarge: h1.copyWith(color: AppColors.text0B1C30),
-      displayMedium: h2.copyWith(color: AppColors.text0B1C30),
-      displaySmall: h3.copyWith(color: AppColors.text0B1C30),
-      headlineMedium: h4.copyWith(color: AppColors.text0B1C30),
-      headlineSmall: titleSmall.copyWith(color: AppColors.text0B1C30),
-      titleLarge: h3.copyWith(color: AppColors.text0B1C30),
-      titleMedium: h4.copyWith(color: AppColors.text0B1C30),
-      titleSmall: titleSmall.copyWith(color: AppColors.text0B1C30),
-      bodyLarge: bodyLarge.copyWith(color: AppColors.text1E293B),
-      bodyMedium: bodyMedium.copyWith(color: AppColors.text334155),
-      bodySmall: bodySmall.copyWith(color: AppColors.textMuted),
-      labelLarge: button.copyWith(color: AppColors.text0B1C30),
-      labelMedium: labelMedium.copyWith(color: AppColors.textMuted),
-      labelSmall: caption.copyWith(color: AppColors.text94A3B8),
+      displayLarge: h1.copyWith(color: AppColors.immoTextPrimary),
+      displayMedium: h2.copyWith(color: AppColors.immoTextPrimary),
+      displaySmall: h3.copyWith(color: AppColors.immoTextPrimary),
+      headlineMedium: h4.copyWith(color: AppColors.immoTextPrimary),
+      headlineSmall: titleSmall.copyWith(color: AppColors.immoTextPrimary),
+      titleLarge: h3.copyWith(color: AppColors.immoTextPrimary),
+      titleMedium: h4.copyWith(color: AppColors.immoTextPrimary),
+      titleSmall: titleSmall.copyWith(color: AppColors.immoTextPrimary),
+      bodyLarge: bodyLarge.copyWith(color: AppColors.slate800),
+      bodyMedium: bodyMedium.copyWith(color: AppColors.slate800),
+      bodySmall: bodySmall.copyWith(color: AppColors.immoTextSecondary),
+      labelLarge: button.copyWith(color: AppColors.immoTextPrimary),
+      labelMedium: labelMedium.copyWith(color: AppColors.immoTextSecondary),
+      labelSmall: caption.copyWith(color: AppColors.immoTextDisabled),
     );
   }
 
@@ -223,12 +223,12 @@ class AppTypography {
       titleLarge: h3.copyWith(color: Colors.white),
       titleMedium: h4.copyWith(color: Colors.white),
       titleSmall: titleSmall.copyWith(color: Colors.white),
-      bodyLarge: bodyLarge.copyWith(color: AppColors.textF1F5F9),
-      bodyMedium: bodyMedium.copyWith(color: AppColors.textE2E8F0),
-      bodySmall: bodySmall.copyWith(color: AppColors.text94A3B8),
+      bodyLarge: bodyLarge.copyWith(color: AppColors.slate100),
+      bodyMedium: bodyMedium.copyWith(color: AppColors.slate300),
+      bodySmall: bodySmall.copyWith(color: AppColors.immoTextDisabled),
       labelLarge: button.copyWith(color: Colors.white),
-      labelMedium: labelMedium.copyWith(color: AppColors.textCBD5E1),
-      labelSmall: caption.copyWith(color: AppColors.textMuted),
+      labelMedium: labelMedium.copyWith(color: AppColors.slate300),
+      labelSmall: caption.copyWith(color: AppColors.immoTextSecondary),
     );
   }
 }

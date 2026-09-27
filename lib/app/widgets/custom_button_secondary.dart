@@ -53,7 +53,7 @@ class CustomButtonSecondary extends StatelessWidget {
             elevation: elevation ?? 0,
             backgroundColor: backgroundColor ?? AppColors.white,
             side: BorderSide(
-              color: clickable ? borderColor : AppColors.grey400,
+              color: clickable ? borderColor : AppColors.gray400,
               width: borderWidth ?? 1.5,
             ),
             shape: RoundedRectangleBorder(

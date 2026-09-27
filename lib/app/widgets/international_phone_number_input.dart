@@ -116,10 +116,10 @@ class InternationalPhoneInputState extends State<InternationalPhoneInput> {
             builder: (context, _) {
               if (_controller.text.isEmpty) return const SizedBox.shrink();
               return IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Iconsax.close_circle,
                   size: 20,
-                  color: AppColors.grey,
+                  color: AppColors.gray500,
                 ),
                 onPressed: () {
                   _controller.clear();
@@ -135,17 +135,17 @@ class InternationalPhoneInputState extends State<InternationalPhoneInput> {
           fillColor: AppColors.transparent,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: const BorderSide(color: AppColors.borderLightGray),
+            borderSide: BorderSide(color: AppColors.immoBorderDefault),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: const BorderSide(color: AppColors.borderLightGray),
+            borderSide: BorderSide(color: AppColors.immoBorderDefault),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
             borderSide: BorderSide(color: AppColors.primaryLite, width: 2),
           ),
-          errorStyle: const TextStyle(color: AppColors.redAccent),
+          errorStyle: TextStyle(color: AppColors.red600),
           contentPadding: const EdgeInsets.symmetric(vertical: 20),
           hintText: "Numéro de téléphone",
         ),

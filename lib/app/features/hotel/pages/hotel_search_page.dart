@@ -519,7 +519,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                       decoration: BoxDecoration(
                         color: Color(0xffFCFEFF),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppColors.E9E9E9),
+                        border: Border.all(color: AppColors.immoBorderDefault),
                       ),
                       padding: const EdgeInsets.all(20),
                       child: Column(
@@ -533,7 +533,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                               height: 41,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(32),
-                                border: Border.all(color: AppColors.D5D5D5),
+                                border: Border.all(color: AppColors.immoBorderStrong),
                               ),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -592,7 +592,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(32),
                                       border:
-                                          Border.all(color: AppColors.D5D5D5),
+                                          Border.all(color: AppColors.immoBorderStrong),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
@@ -628,7 +628,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(32),
                                       border:
-                                          Border.all(color: AppColors.D5D5D5),
+                                          Border.all(color: AppColors.immoBorderStrong),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 6),
@@ -666,7 +666,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(32),
                                       border:
-                                          Border.all(color: AppColors.D5D5D5),
+                                          Border.all(color: AppColors.immoBorderStrong),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 6),

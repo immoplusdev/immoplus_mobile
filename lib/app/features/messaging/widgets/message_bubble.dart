@@ -125,11 +125,11 @@ class _StatusRow extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.error_outline, size: 14, color: AppColors.redFF0000),
+          Icon(Icons.error_outline, size: 14, color: AppColors.immoFeedbackError),
           const SizedBox(width: 4),
           Text(
             'Échec',
-            style: GoogleFonts.dmSans(fontSize: 11, color: AppColors.redFF0000),
+            style: GoogleFonts.dmSans(fontSize: 11, color: AppColors.immoFeedbackError),
           ),
           if (onRetry != null) ...[
             const SizedBox(width: 8),

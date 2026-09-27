@@ -32,12 +32,12 @@ class CustomLoadingButtom extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             elevation: 0,
-            disabledBackgroundColor: AppColors.softBlueBg,
+            disabledBackgroundColor: AppColors.immoBgAppTinted,
             backgroundColor: (clickable)
                 ? (color == null)
                     ? AppColors.primary
                     : color
-                : AppColors.grey400,
+                : AppColors.gray400,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radiusButton)),
           ),

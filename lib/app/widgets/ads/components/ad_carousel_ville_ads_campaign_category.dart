@@ -62,7 +62,7 @@ class AdCarouselVilleAdsCampaignCategory extends StatelessWidget {
                     child: Text(
                       title!,
                       style: AppTypography.h2.copyWith(
-                        color: AppColors.textNavyDeep,
+                        color: AppColors.immoTextPrimary,
                         letterSpacing: -0.5,
                       ),
                       maxLines: 1,
@@ -77,7 +77,7 @@ class AdCarouselVilleAdsCampaignCategory extends StatelessWidget {
                     ctaLabel,
                     style: AppTypography.button.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textLightGray,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                 ),

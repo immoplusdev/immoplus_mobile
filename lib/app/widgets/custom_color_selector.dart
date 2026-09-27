@@ -30,7 +30,7 @@ class CustomColorSelector extends StatelessWidget {
           boxShadow: [
             (isSelected)
                 ? const BoxShadow(
-                    color: AppColors.shadowBEBEBE,
+                    color: AppColors.gray300,
                     spreadRadius: 2,
                     blurRadius: 10,
                     offset: Offset(0, 0), // changes position of shadow

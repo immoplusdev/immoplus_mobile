@@ -25,8 +25,8 @@ class CustomMarker extends StatelessWidget {
           Container(
             width: 80,
             height: 80,
-            decoration: const BoxDecoration(
-              color: AppColors.amber,
+            decoration: BoxDecoration(
+              color: AppColors.immoFeedbackWarning,
               shape: BoxShape.circle,
             ),
             child: const Column(
@@ -55,7 +55,7 @@ class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.amber
+      ..color = AppColors.immoFeedbackWarning
       ..style = PaintingStyle.fill;
 
     final path = Path();

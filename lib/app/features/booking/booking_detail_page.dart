@@ -236,7 +236,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.green1CA53F,
+                                  color: AppColors.immoFeedbackSuccess,
                                 ),
                           ),
                         ],
@@ -464,7 +464,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
                         ),
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.green1CA53F,
+                          backgroundColor: AppColors.immoFeedbackSuccess,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -726,7 +726,7 @@ class _SectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -780,7 +780,7 @@ class _StatusRow extends StatelessWidget {
     if (status == PaymentStatus.paye.name ||
         status == 'accepte' ||
         status == 'confirme') {
-      return AppColors.green1CA53F;
+      return AppColors.immoFeedbackSuccess;
     }
     if (status == 'refuse' || status == 'annule') {
       return Colors.red;
@@ -883,14 +883,14 @@ class _DatesCard extends StatelessWidget {
       endDate: reservationModel.datesReservation.last.date!,
     );
     final statusColor = bookingStatus == BookingStatus.ongoing
-        ? AppColors.green1CA53F
+        ? AppColors.immoFeedbackSuccess
         : AppColors.primary;
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         children: [
@@ -936,7 +936,7 @@ class _DatesCard extends StatelessWidget {
                     date: fmt.format(checkin),
                     hour: reservationModel.residence.heureEntree,
                     icon: Iconsax.login,
-                    color: AppColors.green1CA53F,
+                    color: AppColors.immoFeedbackSuccess,
                   ),
                 ),
                 Container(

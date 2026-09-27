@@ -10,13 +10,13 @@ class RecommandeBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.badgeRecommendBlue,
+        color: AppColors.immoBrandPrimary,
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.star, color: AppColors.goldStar, size: 12),
+          Icon(Icons.star, color: AppColors.gold400, size: 12),
           Gap(4),
           Text(
             'Recommandé',
@@ -40,7 +40,7 @@ class FreeReverseBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.badgeUrgentOrange,
+        color: AppColors.immoFeedbackWarning,
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Text(

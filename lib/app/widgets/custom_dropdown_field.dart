@@ -41,10 +41,10 @@ class CustomDropDownField extends StatelessWidget {
         filled: true,
         focusColor: Theme.of(context).colorScheme.onSurface,
         suffixIcon: sufixIcon,
-        errorStyle: const TextStyle(color: AppColors.redAccent),
+        errorStyle: const TextStyle(color: AppColors.red600),
         contentPadding: const EdgeInsets.all(0).copyWith(left: 10),
         hintStyle: const TextStyle(
-          color: AppColors.grey,
+          color: AppColors.gray500,
           fontSize: 15,
         ),
         //fillColor: _color,

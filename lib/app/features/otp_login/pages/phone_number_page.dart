@@ -48,7 +48,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
-                        color: AppColors.text1F1F1F,
+                        color: AppColors.immoTextPrimary,
                       ),
                   textAlign: TextAlign.left,
                 ),
@@ -58,7 +58,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.textA3A3A3,
+                        color: AppColors.immoTextDisabled,
                       ),
                   textAlign: TextAlign.left,
                 ),

@@ -35,7 +35,7 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                 child: Text(
                   badge!,
                   style: AppTypography.h2.copyWith(
-                    color: AppColors.textNavyDeep,
+                    color: AppColors.immoTextPrimary,
                     letterSpacing: -0.4,
                   ),
                 ),
@@ -77,7 +77,7 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                                     title!,
                                     style: AppTypography.titleSmall.copyWith(
                                       fontWeight: FontWeight.w700,
-                                      color: AppColors.textPrimaryDark,
+                                      color: AppColors.immoTextPrimary,
                                       letterSpacing: -0.2,
                                     ),
                                     maxLines: 2,
@@ -88,7 +88,7 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                                   Text(
                                     subtitle!,
                                     style: AppTypography.bodySmall.copyWith(
-                                      color: AppColors.textLightGray,
+                                      color: AppColors.immoTextSecondary,
                                     ),
                                     maxLines: 4,
                                     overflow: TextOverflow.ellipsis,

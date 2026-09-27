@@ -128,7 +128,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     child: Text(
                       widget.reservation.residence.nom,
                       style: AppTypography.titleSmall.copyWith(
-                        color: AppColors.grey600,
+                        color: AppColors.gray500,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -140,7 +140,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                       dateLabel,
                       style: AppTypography.titleSmall.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: AppColors.grey500,
+                        color: AppColors.gray1000,
                       ),
                     ),
                   ],
@@ -153,7 +153,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 'Note de la résidence',
                 style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.grey800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(8),
@@ -164,9 +164,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 allowHalfRating: false,
                 itemCount: 5,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
+                itemBuilder: (context, _) => Icon(
                   Icons.star_rounded,
-                  color: AppColors.amberFFBB00,
+                  color: AppColors.immoFeedbackWarning,
                 ),
                 onRatingUpdate: (rating) {
                   setState(() => _propertyRating = rating.toInt());
@@ -179,7 +179,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 'Note de l\'accueil',
                 style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.grey800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(8),
@@ -190,9 +190,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 allowHalfRating: false,
                 itemCount: 5,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
+                itemBuilder: (context, _) => Icon(
                   Icons.star_rounded,
-                  color: AppColors.amberFFBB00,
+                  color: AppColors.immoFeedbackWarning,
                 ),
                 onRatingUpdate: (rating) {
                   setState(() => _hostRating = rating.toInt());
@@ -205,7 +205,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 'Qu\'avez-vous apprécié ?',
                 style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.grey800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(12),
@@ -234,14 +234,14 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                         border: Border.all(
                           color: isSelected
                               ? AppColors.primary
-                              : AppColors.grey300,
+                              : AppColors.gray300,
                         ),
                       ),
                       child: Text(
                         tag,
                         style: AppTypography.bodyMedium.copyWith(
                           color:
-                              isSelected ? AppColors.white : AppColors.grey700,
+                              isSelected ? AppColors.white : AppColors.gray700,
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.w500,
                         ),
@@ -257,7 +257,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 'Votre commentaire ( optionnel )',
                 style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.grey800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(12),
@@ -268,14 +268,14 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 decoration: InputDecoration(
                   fillColor: AppColors.transparent,
                   hintText: 'Découvrez votre expérience...',
-                  hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.grey400),
+                  hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.gray400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: AppColors.grey200),
+                    borderSide: BorderSide(color: AppColors.gray200),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: AppColors.grey200),
+                    borderSide: BorderSide(color: AppColors.gray200),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),

@@ -58,18 +58,18 @@ class CompactBienCard extends StatelessWidget {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: AppColors.grey300,
-        highlightColor: AppColors.grey100,
+        baseColor: AppColors.gray300,
+        highlightColor: AppColors.gray100,
         period: const Duration(milliseconds: 500),
         child: Container(color: AppColors.white),
       ),
       errorWidget: (context, url, error) => Container(
-        color: AppColors.grey200,
+        color: AppColors.gray200,
         child: Center(
           child: Icon(
             FontAwesomeIcons.images.data,
             size: 60,
-            color: AppColors.grey400,
+            color: AppColors.gray400,
           ),
         ),
       ),
@@ -89,7 +89,7 @@ class CompactBienCard extends StatelessWidget {
           bien.nom,
           style: AppTypography.button.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.black87,
+            color: AppColors.gray950,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -98,7 +98,7 @@ class CompactBienCard extends StatelessWidget {
         Text(
           location,
           style: AppTypography.bodySmall.copyWith(
-            color: AppColors.grey600,
+            color: AppColors.gray500,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -118,7 +118,7 @@ class CompactBienCard extends StatelessWidget {
                 TextSpan(
                   text: '/mois',
                   style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.grey600,
+                    color: AppColors.gray500,
                   ),
                 ),
             ],

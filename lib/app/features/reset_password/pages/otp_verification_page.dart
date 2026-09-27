@@ -115,7 +115,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightBlue, width: 2),
+                      border: Border.all(color: AppColors.immoBrandSecondary, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -128,7 +128,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       color: Colors.white,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.lightBlue,
+                      color: AppColors.immoBrandSecondary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -189,7 +189,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                             : "Renvoyer le code ($_resendCountdown s)",
                         style: TextStyle(
                           color: _canResendCode && !isLoading
-                              ? AppColors.lightBlue
+                              ? AppColors.immoBrandSecondary
                               : Colors.grey,
                           fontSize: 14,
                         ),

@@ -15,7 +15,7 @@ class EasyLoadingHandler {
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
       ..backgroundColor = AppColors.white
-      ..textColor = AppColors.textPrimaryDark
+      ..textColor = AppColors.immoTextPrimary
       ..indicatorColor = AppColors.primary
       ..radius = 16
       ..maskType = EasyLoadingMaskType.black
@@ -39,7 +39,7 @@ class EasyLoadingHandler {
   static void show({String? text, bool dismissOnTap = false}) {
     EasyLoading.instance
       ..backgroundColor = AppColors.white
-      ..textColor = AppColors.textPrimaryDark;
+      ..textColor = AppColors.immoTextPrimary;
     EasyLoading.show(
       status: text ?? "Chargement...",
       maskType: EasyLoadingMaskType.black,
@@ -91,7 +91,7 @@ class EasyLoadingHandler {
     EasyLoading.instance
       ..errorWidget = errorWidget
       ..backgroundColor = color ?? AppColors.white
-      ..textColor = AppColors.textPrimaryDark;
+      ..textColor = AppColors.immoTextPrimary;
     EasyLoading.showSuccess(
       text ?? "Succès",
       dismissOnTap: dismissOnTap,

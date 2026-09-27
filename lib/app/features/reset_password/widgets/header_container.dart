@@ -16,15 +16,15 @@ class HeaderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: AppColors.textObsidian,
+      decoration: BoxDecoration(
+        color: AppColors.immoTextPrimary,
       ),
       child: Column(
         children: [
           Icon(
             iconData,
             size: 80,
-            color: AppColors.lightBlue,
+            color: AppColors.immoBrandSecondary,
           ),
           const Gap(30),
           Text(

@@ -14,7 +14,7 @@ class BecomeProIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.gradientBottom,
+      backgroundColor: AppColors.immoBecomeProGradientBottom,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -30,7 +30,7 @@ class BecomeProIntroPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.gradientTop, AppColors.gradientBottom],
+                colors: [AppColors.immoBecomeProGradientTop, AppColors.immoBecomeProGradientBottom],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -113,7 +113,7 @@ class BecomeProIntroPage extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 32.0),
                     child: CustomButtom(
                       text: "Devenir Pro",
-                      // color: AppColors.darkBluePrimary,
+                      // color: AppColors.immoBecomeProPrimary,
                       borderRadius: BorderRadius.circular(28),
                       onClick: () {
                         context.replaceNamed(BecomeProFormPage.name);

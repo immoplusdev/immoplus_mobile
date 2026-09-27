@@ -93,7 +93,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.text0D0D0D,
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ),
@@ -110,7 +110,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             _sheetTile(
               ctx: ctx,
               icon: Iconsax.gallery,
-              iconColor: AppColors.textLightGray,
+              iconColor: AppColors.immoTextSecondary,
               label: "Choisir depuis la galerie",
               onTap: () => ImagePicker()
                   .pickImage(source: ImageSource.gallery, imageQuality: 50)
@@ -164,12 +164,12 @@ class _EditAccountPageState extends State<EditAccountPage> {
           backgroundColor: AppColors.whiteBackground,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: const Text('Informations personnelles'),
+            title: Text('Informations personnelles'),
             backgroundColor: AppColors.whiteBackground,
             surfaceTintColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left, size: 24),
+              icon: Icon(Iconsax.arrow_left, size: 24),
               onPressed: () => context.pop(),
             ),
             centerTitle: true,
@@ -199,7 +199,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                           _buildFieldLabel('Nom'),
                           CustomTextField(
                             controller: _formController.lastName,
-                            prefixIcon: const Icon(Iconsax.user, size: 20),
+                            prefixIcon: Icon(Iconsax.user, size: 20),
                             labelText: 'Nom',
                             validator: (String? value) =>
                                 FormUtils.fieldValidator(value: value),
@@ -207,7 +207,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                           _buildFieldLabel('Prénom'),
                           CustomTextField(
                             controller: _formController.firstName,
-                            prefixIcon: const Icon(Iconsax.user, size: 20),
+                            prefixIcon: Icon(Iconsax.user, size: 20),
                             labelText: 'Prénom',
                             validator: (String? value) =>
                                 FormUtils.fieldValidator(value: value),
@@ -229,7 +229,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                           const Gap(10),
                           CustomTextField(
                             controller: _formController.email,
-                            prefixIcon: const Icon(Iconsax.sms, size: 20),
+                            prefixIcon: Icon(Iconsax.sms, size: 20),
                             labelText: 'Email',
                             isEnabled: false,
                             textInputType: TextInputType.emailAddress,
@@ -242,17 +242,17 @@ class _EditAccountPageState extends State<EditAccountPage> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.surfaceLight,
+                              color: AppColors.immoBgSurfaceMuted,
                               borderRadius: BorderRadius.circular(12),
                               border:
-                                  Border.all(color: AppColors.borderF2F4F7),
+                                  Border.all(color: AppColors.immoBorderDefault),
                             ),
                             child: Row(
                               children: [
                                 Icon(
                                   Iconsax.info_circle,
                                   size: 18,
-                                  color: AppColors.textSecondaryMedium,
+                                  color: AppColors.immoTextSecondary,
                                 ),
                                 const Gap(10),
                                 Expanded(
@@ -262,7 +262,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                                         .textTheme
                                         .bodySmall
                                         ?.copyWith(
-                                          color: AppColors.textSecondaryMedium,
+                                          color: AppColors.immoTextSecondary,
                                           height: 1.4,
                                         ),
                                   ),
@@ -286,8 +286,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             decoration: BoxDecoration(
               color: AppColors.whiteBackground,
-              border: const Border(
-                top: BorderSide(color: AppColors.borderF2F4F7),
+              border: Border(
+                top: BorderSide(color: AppColors.immoBorderDefault),
               ),
             ),
             child: BlocBuilder<LoginCubit, LoginCubitState>(
@@ -343,7 +343,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: AppColors.surfaceLight,
+      color: AppColors.immoBgSurfaceMuted,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
@@ -364,10 +364,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
               const Gap(14),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.text1E1E1E,
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ],
@@ -384,10 +384,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
         alignment: Alignment.centerLeft,
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: AppColors.text344054,
+            color: AppColors.immoTextLabel,
           ),
         ),
       ),
@@ -401,7 +401,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.text344054,
+              color: AppColors.immoTextLabel,
               letterSpacing: 0.3,
             ),
       ),
@@ -488,7 +488,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       ),
                     ],
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Iconsax.camera,
                     size: 14,
                     color: Colors.white,

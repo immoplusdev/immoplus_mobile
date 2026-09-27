@@ -14,7 +14,7 @@ class EnvironmentsBadge extends StatelessWidget {
         : Banner(
             location: BannerLocation.topStart,
             message: flavor,
-            color: AppColors.purple,
+            color: AppColors.purple7A5AF8,
             child: child,
           );
   }

@@ -26,7 +26,7 @@ class AdImageWidget extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
-          color: AppColors.grey100,
+          color: AppColors.gray100,
           borderRadius: BorderRadius.circular(16),
         ),
         clipBehavior: Clip.antiAlias,
@@ -36,8 +36,8 @@ class AdImageWidget extends StatelessWidget {
           width: double.infinity,
           fit: BoxFit.cover,
           placeholder: (context, url) => Shimmer.fromColors(
-            baseColor: AppColors.grey300,
-            highlightColor: AppColors.grey100,
+            baseColor: AppColors.gray300,
+            highlightColor: AppColors.gray100,
             child: Container(
               width: double.infinity,
               height: 380,

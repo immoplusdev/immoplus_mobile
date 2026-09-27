@@ -55,7 +55,7 @@ class CustomPinput extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: hasError
-              ? (errorBorderColor ?? AppColors.red)
+              ? (errorBorderColor ?? AppColors.immoFeedbackError)
               : (borderColor ?? theme.colorScheme.primary.withOpacity(.5)),
         ),
       ),
@@ -65,7 +65,7 @@ class CustomPinput extends StatelessWidget {
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(
           color: hasError
-              ? (errorBorderColor ?? AppColors.red)
+              ? (errorBorderColor ?? AppColors.immoFeedbackError)
               : (focusedBorderColor ?? theme.colorScheme.primary),
           width: 1,
         ),
@@ -75,7 +75,7 @@ class CustomPinput extends StatelessWidget {
     final errorPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(
-          color: errorBorderColor ?? AppColors.red,
+          color: errorBorderColor ?? AppColors.immoFeedbackError,
           width: 1,
         ),
       ),
@@ -122,7 +122,7 @@ class CustomPinput extends StatelessWidget {
             child: Text(
               errorText!,
               style: TextStyle(
-                color: errorBorderColor ?? AppColors.red,
+                color: errorBorderColor ?? AppColors.immoFeedbackError,
                 fontSize: 12,
               ),
             ),

@@ -291,7 +291,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             focusedBorder: _fieldBorder(
                                 color: _nomError != null
                                     ? Colors.red
-                                    : AppColors.blue65BAF0,
+                                    : AppColors.immoBrandAccent,
                                 width: 1.5,
                                 radius: 16),
                             onChanged: (_) {
@@ -317,7 +317,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             focusedBorder: _fieldBorder(
                                 color: _prenomError != null
                                     ? Colors.red
-                                    : AppColors.blue65BAF0,
+                                    : AppColors.immoBrandAccent,
                                 width: 1.5,
                                 radius: 16),
                             onChanged: (_) {

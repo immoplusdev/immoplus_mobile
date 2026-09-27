@@ -64,7 +64,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
             'Fourchette de prix',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.text344054,
+                  color: AppColors.immoTextLabel,
                 ),
           ),
           const Gap(12),
@@ -73,7 +73,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.borderF2F4F7),
+              border: Border.all(color: AppColors.immoBorderDefault),
             ),
             child: Column(
               children: [
@@ -108,7 +108,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     Container(
                       width: 24,
                       height: 1,
-                      color: AppColors.borderMediumGray,
+                      color: AppColors.immoBorderStrong,
                     ),
                     const Gap(12),
                     Expanded(
@@ -143,7 +143,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                 SliderTheme(
                   data: SliderThemeData(
                     activeTrackColor: AppColors.primary,
-                    inactiveTrackColor: AppColors.borderF2F4F7,
+                    inactiveTrackColor: AppColors.immoBorderDefault,
                     thumbColor: AppColors.primary,
                     overlayColor: AppColors.primary.withValues(alpha: 0.1),
                     rangeThumbShape: const RoundRangeSliderThumbShape(
@@ -197,19 +197,19 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.borderF2F4F7),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: AppColors.textSecondaryMedium,
+              color: AppColors.immoTextSecondary,
             ),
           ),
           Row(
@@ -221,9 +221,9 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.text344054,
+                        color: AppColors.immoTextLabel,
                       ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.zero,
@@ -233,7 +233,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     suffixText: ' F',
                     suffixStyle: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondaryMedium,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                   onChanged: onChanged,

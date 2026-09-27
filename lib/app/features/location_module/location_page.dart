@@ -67,20 +67,20 @@ class _LocationPageState extends State<LocationPage> {
                           color: Colors.grey.shade100,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Iconsax.arrow_left,
                           size: 18,
-                          color: AppColors.textDark,
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Text(
+                    Text(
                       'Rechercher une adresse',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
+                        color: AppColors.immoTextPrimary,
                         letterSpacing: -0.3,
                       ),
                     ),

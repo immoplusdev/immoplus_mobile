@@ -9,10 +9,10 @@ import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 
-const Color _kIconBg = AppColors.iconBgLight;
-const Color _kIconColor = AppColors.textDarkGray;
-const Color _kLabelColor = AppColors.text0D0D0D;
-const Color _kTrailingColor = AppColors.textDarkGray;
+final Color _kIconBg = AppColors.immoBgSurfaceMuted;
+final Color _kIconColor = AppColors.immoTextPrimary;
+final Color _kLabelColor = AppColors.immoTextPrimary;
+final Color _kTrailingColor = AppColors.immoTextPrimary;
 
 class ChangeCredentialsPage extends StatelessWidget {
   const ChangeCredentialsPage({super.key});

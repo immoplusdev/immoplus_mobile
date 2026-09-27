@@ -96,7 +96,7 @@ class _MoovOptValidatorPageState extends State<MoovOptValidatorPage> {
 
     return PaymentWaitingView(
       onBack: () => widget.controller.goToPhoneNumber(),
-      loaderColor: AppColors.orange,
+      loaderColor: AppColors.orange500,
       instructionMarkdown: Utils.getNextActionText(
         name: widget.paymentIntentModel.paymentMethod,
       ),

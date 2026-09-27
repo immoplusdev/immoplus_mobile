@@ -176,8 +176,8 @@ class ImageCollage extends StatelessWidget {
   Widget _buildImageWidget(CollageItem item) {
     if (item.image.isEmpty) {
       return Container(
-        color: AppColors.grey100,
-        child: Icon(Icons.image_outlined, color: AppColors.grey, size: 20),
+        color: AppColors.gray100,
+        child: Icon(Icons.image_outlined, color: AppColors.gray500, size: 20),
       );
     }
 
@@ -187,7 +187,7 @@ class ImageCollage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       placeholder: (context, url) => Container(
-        color: AppColors.grey100,
+        color: AppColors.gray100,
         child: const Center(
           child: SizedBox(
             width: 16,
@@ -197,10 +197,10 @@ class ImageCollage extends StatelessWidget {
         ),
       ),
       errorWidget: (context, url, error) => Container(
-        color: AppColors.grey200,
+        color: AppColors.gray200,
         child: Icon(
           Icons.broken_image_outlined,
-          color: AppColors.grey,
+          color: AppColors.gray500,
           size: 16,
         ),
       ),

@@ -17,8 +17,8 @@ class CustomChipList extends StatefulWidget {
     required this.listOfChipNames,
     required this.listOfChipIndicesCurrentlySeclected,
     this.activeTextColorList = const [AppColors.white],
-    this.inactiveTextColorList = const [AppColors.blue],
-    this.activeBgColorList = const [AppColors.blue],
+    List<Color>? inactiveTextColorList,
+    List<Color>? activeBgColorList,
     this.inactiveBgColorList = const [AppColors.white],
     this.style,
     this.inactiveBorderColorList = const [AppColors.white],
@@ -42,7 +42,9 @@ class CustomChipList extends StatefulWidget {
     this.checkmarkColor,
     this.showCheckmark = true,
     this.listOfAvatar = const [],
-  }) : super(key: key);
+  }) : inactiveTextColorList = inactiveTextColorList ?? [AppColors.immoBrandPrimary],
+       activeBgColorList = activeBgColorList ?? [AppColors.immoBrandPrimary],
+       super(key: key);
 
   /// In case you chain some *more* logic to this widget's
   /// onTap event (maybe trigger updation of other UI components).

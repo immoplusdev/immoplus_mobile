@@ -29,14 +29,14 @@ class _PreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.previewBackground,
+      backgroundColor: AppColors.blue40,
       appBar: AppBar(
         title: const Text(
           'PropertyCard — Preview',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         backgroundColor: AppColors.white,
-        foregroundColor: AppColors.textCharcoal,
+        foregroundColor: AppColors.navy900,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -79,7 +79,7 @@ class _SectionLabel extends StatelessWidget {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: AppColors.grey500,
+          color: AppColors.gray1000,
           letterSpacing: 0.5,
         ),
       ),

@@ -116,7 +116,7 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                         child: Text(
                           'Ads',
                           style: AppTypography.captionSemiBold.copyWith(
-                            color: AppColors.textDark,
+                            color: AppColors.immoTextPrimary,
                           ),
                         ),
                       ),
@@ -160,7 +160,7 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                               campaign.content.title ?? '',
                               style: AppTypography.bodyMediumSemiBold.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.textDark,
+                                color: AppColors.immoTextPrimary,
                               ),
                             ),
                             if (campaign.content.subtitle?.isNotEmpty ==
@@ -169,7 +169,7 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                               Text(
                                 campaign.content.subtitle!,
                                 style: AppTypography.bodySmall.copyWith(
-                                  color: AppColors.grey600,
+                                  color: AppColors.gray500,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

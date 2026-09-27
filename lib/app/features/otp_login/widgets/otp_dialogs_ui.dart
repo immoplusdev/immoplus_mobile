@@ -37,7 +37,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                 'Choisissez comment vous souhaitez recevoir votre code de vérification.',
                 textAlign: TextAlign.center,
                 style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textMuted,
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
               const SizedBox(height: 24),
@@ -139,7 +139,7 @@ Future<String?> showOtpInputDialog(
                     'Un code à 6 chiffres a été envoyé au $phoneNumber',
                     textAlign: TextAlign.center,
                     style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.textMuted,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                   const SizedBox(height: 24),

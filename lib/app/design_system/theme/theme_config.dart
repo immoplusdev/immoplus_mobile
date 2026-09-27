@@ -120,7 +120,7 @@ class HomeSectionTitle extends StatelessWidget {
     return Text(
       title,
       style: AppTypography.button.copyWith(
-        color: AppColors.text0B1C30,
+        color: AppColors.immoTextPrimary,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.3,
       ),

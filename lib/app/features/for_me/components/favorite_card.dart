@@ -14,12 +14,12 @@ import 'package:immoplus/app/widgets/custom_chip.dart';
 import 'package:shimmer/shimmer.dart';
 
 // White Luxury — cartes claires, pas de fond noir
-const Color _kSurface = AppColors.surfaceLight;
-const Color _kGold = AppColors.customBlue;
-const Color _kTextPrimary = AppColors.textObsidian;
-const Color _kTextSecondary = AppColors.textLightGray;
-const Color _kSeparator = AppColors.borderSubtle;
-const Color _kTagBg = AppColors.tagGoldBg;
+final Color _kSurface = AppColors.immoBgSurfaceMuted;
+final Color _kGold = AppColors.immoBrandPrimary;
+final Color _kTextPrimary = AppColors.immoTextPrimary;
+final Color _kTextSecondary = AppColors.immoTextSecondary;
+final Color _kSeparator = AppColors.immoBorderDefault;
+final Color _kTagBg = AppColors.alphaViolet10;
 
 class FavoriteCard extends StatefulWidget {
   final bool isSelect;

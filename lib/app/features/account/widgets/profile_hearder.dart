@@ -106,10 +106,10 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   children: [
                     Text(
                       displayLabel.capitalizeFirst(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.text1E1E1E,
+                        color: AppColors.immoTextPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -119,7 +119,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                         email,
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.text1E1E1E.withValues(alpha: 0.5),
+                          color: AppColors.immoTextPrimary.withValues(alpha: 0.5),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

@@ -183,7 +183,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.customBlue,
+                    color: AppColors.immoBrandPrimary,
                     height: 1.2,
                   ),
                 ),
@@ -193,7 +193,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.grey700,
+                    color: AppColors.gray700,
                     height: 1.4,
                   ),
                 ),
@@ -204,7 +204,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: onButtonPressed,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.customBlue,
+                        backgroundColor: AppColors.immoBrandPrimary,
                         foregroundColor: AppColors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,

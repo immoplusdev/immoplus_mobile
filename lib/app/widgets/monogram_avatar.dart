@@ -125,7 +125,7 @@ class MonogramAvatar extends StatelessWidget {
     List<BoxShadow>? shadows;
 
     if (role == UserRole.newUser) {
-      border = Border.all(color: AppColors.grey.withValues(alpha: 0.3), width: 2);
+      border = Border.all(color: AppColors.gray500.withValues(alpha: 0.3), width: 2);
     } else if (role == UserRole.powerUser) {
       shadows = [
         BoxShadow(
@@ -286,7 +286,7 @@ class SkeuomorphicAvatar extends StatelessWidget {
             child: Text(
               initials,
               style: TextStyle(
-                color: AppColors.bgFBFBFB,
+                color: AppColors.immoBgSurfaceMuted,
                 fontSize: effectiveFontSize,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.2,

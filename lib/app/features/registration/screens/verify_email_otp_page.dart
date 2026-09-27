@@ -206,7 +206,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: AppColors.E6F5FF,
+                        color: AppColors.blue100,
                         borderRadius: BorderRadius.circular(22),
                       ),
                       child: Column(

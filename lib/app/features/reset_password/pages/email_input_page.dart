@@ -117,7 +117,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
                     child: Text(
                       "Retour à la connexion",
                       style: TextStyle(
-                        color: AppColors.lightBlue,
+                        color: AppColors.immoBrandSecondary,
                         fontSize: 16,
                       ),
                     ),

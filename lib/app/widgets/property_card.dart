@@ -315,7 +315,7 @@ class PropertyImage extends StatelessWidget {
                       fit: BoxFit.cover,
                       memCacheWidth: (width * MediaQuery.devicePixelRatioOf(context)).toInt(),
                       placeholder: (_, __) =>
-                          Container(color: AppColors.borderLight),
+                          Container(color: AppColors.immoBorderDefault),
                       errorWidget: (context, url, error) => _buildPlaceholder(),
                     )
                   : _buildPlaceholder(),
@@ -336,9 +336,9 @@ class PropertyImage extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 180,
-      color: AppColors.borderLight,
+      color: AppColors.immoBorderDefault,
       child: Center(
-        child: Icon(Iconsax.building, color: AppColors.textMuted, size: 32),
+        child: Icon(Iconsax.building, color: AppColors.immoTextSecondary, size: 32),
       ),
     );
   }
@@ -348,9 +348,9 @@ class _ImagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.borderLight,
+      color: AppColors.immoBorderDefault,
       child: Center(
-        child: Icon(Iconsax.building, color: AppColors.textMuted, size: 32),
+        child: Icon(Iconsax.building, color: AppColors.immoTextSecondary, size: 32),
       ),
     );
   }
@@ -372,7 +372,7 @@ class _RatingBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.bolt, color: AppColors.goldLuxury, size: 13),
+          Icon(Icons.bolt, color: AppColors.gold600, size: 13),
           const SizedBox(width: 2),
           Text(
             rating.toStringAsFixed(1),
@@ -428,7 +428,7 @@ class PropertyInfo extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textCharcoal,
+                  color: AppColors.navy900,
                   height: 1.2,
                 ),
                 maxLines: 2,
@@ -498,8 +498,8 @@ IconData _commoditeIcon(String iconKey) {
 }
 
 /// Couleurs par type de pièce.
-const _pieceColors = {
-  'chambre': AppColors.customBlue,
+final _pieceColors = {
+  'chambre': AppColors.immoBrandPrimary,
   'salon': AppColors.amenitySalon,
   'cuisine': AppColors.amenityCuisine,
 };
@@ -588,7 +588,7 @@ class _CommoditeChip extends StatelessWidget {
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: FontWeight.w600,
-            color: AppColors.textCharcoal,
+            color: AppColors.navy900,
           ),
         ),
       ],
@@ -713,7 +713,7 @@ class _PieceCard extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.w600,
-              color: AppColors.textCharcoal,
+              color: AppColors.navy900,
             ),
           ),
         ],
@@ -731,12 +731,12 @@ class LocationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Iconsax.location, size: 13, color: AppColors.grey500),
+        Icon(Iconsax.location, size: 13, color: AppColors.gray1000),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
             location,
-            style: TextStyle(fontSize: 12, color: AppColors.grey600),
+            style: TextStyle(fontSize: 12, color: AppColors.gray500),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -818,7 +818,7 @@ class PropertyPrice extends StatelessWidget {
 
     final bg = backgroundColor ?? AppColors.primaryLite;
     final accent = accentColor ?? AppColors.primary;
-    final fg = textColor ?? AppColors.textCharcoal;
+    final fg = textColor ?? AppColors.navy900;
 
     return Container(
       padding: padding,

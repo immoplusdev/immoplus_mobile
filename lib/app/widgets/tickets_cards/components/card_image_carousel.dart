@@ -123,7 +123,7 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
                 return Container(
                   key: ValueKey('${url}_$retryCount'),
                   width: double.infinity,
-                  color: AppColors.grey100,
+                  color: AppColors.gray100,
                   child: CachedNetworkImage(
                     imageUrl: url,
                     memCacheWidth: _targetWidth,
@@ -174,8 +174,8 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
 
   Widget _buildPlaceholder() {
     return Shimmer.fromColors(
-      baseColor: AppColors.grey300,
-      highlightColor: AppColors.grey100,
+      baseColor: AppColors.gray300,
+      highlightColor: AppColors.gray100,
       child: Container(color: AppColors.white),
     );
   }
@@ -194,21 +194,21 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
       onTap: () => _onRetry(index),
       behavior: HitTestBehavior.opaque,
       child: Container(
-        color: AppColors.grey200,
+        color: AppColors.gray200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               FontAwesomeIcons.circleExclamation.data,
               size: 40,
-              color: AppColors.grey400,
+              color: AppColors.gray400,
             ),
             const SizedBox(height: 10),
             Text(
               "Erreur de chargement\nAppuyez pour réessayer",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: AppColors.grey600,
+                color: AppColors.gray500,
                 fontSize: 12,
               ),
             ),

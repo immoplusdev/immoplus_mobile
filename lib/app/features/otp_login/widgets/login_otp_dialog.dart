@@ -195,7 +195,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
           'Choisissez comment vous souhaitez recevoir votre code de vérification.',
           textAlign: TextAlign.center,
           style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.textMuted,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(24),

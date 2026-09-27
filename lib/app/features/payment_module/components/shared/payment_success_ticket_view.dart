@@ -155,7 +155,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       child: SvgPicture.asset(
                           "assets/svgs/icons/save_payment.svg"),
                     ),
-                    backgroundColor: AppColors.bgEFF4FF,
+                    backgroundColor: AppColors.blue40,
                     onTap: _isExporting
                         ? () {}
                         : () => _downloadScreenshot(displayPaymentId),
@@ -166,7 +166,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       child: SvgPicture.asset(
                           "assets/svgs/icons/share_payment.svg"),
                     ),
-                    backgroundColor: AppColors.bgEFF4FF,
+                    backgroundColor: AppColors.blue40,
                     onTap: _isExporting
                         ? () {}
                         : () => _shareScreenshot(
@@ -338,7 +338,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
   }) {
     return TicketCardBackground(
       punchOffsetY: 118.0,
-      borderColor: AppColors.borderD6E2FB,
+      borderColor: AppColors.immoBorderBrandSubtle,
       borderWidth: 1.2,
       scallopCount: 7,
       scallopDepth: 9.0,
@@ -350,7 +350,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
             padding: const EdgeInsets.fromLTRB(24, 26, 24, 16),
             child: Column(
               children: [
-                const Text(
+                Text(
                   "Merci!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -361,13 +361,13 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                   ),
                 ),
                 const Gap(6),
-                const Text(
+                Text(
                   "Votre paiement a été traité\navec succès.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.text8A94A6,
+                    color: AppColors.immoTextSecondary,
                     height: 1.35,
                   ),
                 ),
@@ -379,7 +379,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: _buildDottedLine(
-                color: AppColors.textCBD5E1,
+                color: AppColors.slate300,
                 dashWidth: 6,
                 dashSpace: 5,
                 horizontalPadding: 35),
@@ -410,26 +410,26 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text(
+                                Text(
                                   "Payement ID",
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    color: AppColors.text8A94A6,
+                                    color: AppColors.immoTextSecondary,
                                   ),
                                 ),
                                 const Gap(4),
-                                const Icon(
+                                Icon(
                                   CupertinoIcons.doc_on_doc,
                                   size: 13,
-                                  color: AppColors.text8A94A6,
+                                  color: AppColors.immoTextSecondary,
                                 ),
                               ],
                             ),
                             const Gap(4),
                             Text(
                               displayPaymentId,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black,
@@ -443,18 +443,18 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text(
+                        Text(
                           "Montant",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.text8A94A6,
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
                         const Gap(4),
                         Text(
                           formattedAmount,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.black,
@@ -473,18 +473,18 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Date & heure",
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.text8A94A6,
+                          color: AppColors.immoTextSecondary,
                         ),
                       ),
                       const Gap(4),
                       Text(
                         formattedDate,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.black,
@@ -515,7 +515,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             ? NetworkImage(operatorLogo)
                             : null,
                         child: operatorLogo.isEmpty
-                            ? const Icon(
+                            ? Icon(
                                 CupertinoIcons.creditcard_fill,
                                 size: 18,
                                 color: Color(0xFF2B52F5),
@@ -531,7 +531,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               displayName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black87,
@@ -540,10 +540,10 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             const Gap(2),
                             Text(
                               displayMasked,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.textMuted,
+                                color: AppColors.immoTextSecondary,
                               ),
                             ),
                           ],
@@ -558,20 +558,20 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
 
           // ── POINTILLÉS INFÉRIEURS ──
           _buildDottedLine(
-            color: AppColors.textE2E8F0,
+            color: AppColors.slate300,
             dashWidth: 20,
             dashSpace: 5,
           ),
 
           // ── SIGNATURE / WATERMARK ──
-          const Padding(
+          Padding(
             padding: EdgeInsets.fromLTRB(20, 16, 20, 36),
             child: Text(
               "@afriqsolus",
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: AppColors.text94A3B8,
+                color: AppColors.immoTextDisabled,
               ),
             ),
           ),

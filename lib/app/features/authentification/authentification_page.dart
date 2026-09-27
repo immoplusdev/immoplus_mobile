@@ -57,7 +57,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: AppColors.blue65BAF0),
+                          shape: BoxShape.circle, color: AppColors.immoBrandAccent),
                       child: Icon(
                         Icons.arrow_back_ios_rounded,
                         color: AppColors.white,
@@ -117,7 +117,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                         context.pushNamed(LoginPage.name,
                             extra: widget.redirectData);
                       },
-                      color: AppColors.customBlue,
+                      color: AppColors.immoBrandPrimary,
                       borderRadius: BorderRadius.circular(radiusButton),
                     ),
                     Gap(6),

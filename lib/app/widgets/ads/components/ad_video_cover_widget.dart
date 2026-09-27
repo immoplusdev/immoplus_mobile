@@ -86,8 +86,8 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
             imageUrl: _thumbnailUrl!,
             fit: BoxFit.cover,
             placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: AppColors.grey300,
-              highlightColor: AppColors.grey100,
+              baseColor: AppColors.gray300,
+              highlightColor: AppColors.gray100,
               child: Container(color: AppColors.white),
             ),
             errorWidget: (context, url, error) {

@@ -85,11 +85,11 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: AppColors.orange50,
+                color: AppColors.immoFeedbackWarningSubtle,
                 shape: BoxShape.circle,
               ),
               child: Icon(Icons.location_off_rounded,
-                  size: 16, color: AppColors.orange700),
+                  size: 16, color: AppColors.immoFeedbackWarning),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -98,7 +98,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.grey700,
+                  color: AppColors.gray700,
                 ),
               ),
             ),
@@ -109,7 +109,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.orange50,
+                    color: AppColors.immoFeedbackWarningSubtle,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Text(
@@ -117,7 +117,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.orange700,
+                      color: AppColors.immoFeedbackWarning,
                     ),
                   ),
                 ),
@@ -126,7 +126,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
               GestureDetector(
                 onTap: _closeBanner,
                 child: Icon(Icons.close_rounded,
-                    size: 18, color: AppColors.grey400),
+                    size: 18, color: AppColors.gray400),
               ),
             ],
           ],

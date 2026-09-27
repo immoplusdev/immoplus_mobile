@@ -39,7 +39,7 @@ class CircleButton extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: iconColor ?? AppColors.textDark,
+              color: iconColor ?? AppColors.immoTextPrimary,
             ),
       ),
     );

@@ -93,7 +93,7 @@ class PendingSelectionCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onContinuePayment,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.green1CA53F,
+                backgroundColor: AppColors.immoFeedbackSuccess,
                 foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -123,7 +123,7 @@ class _ConfirmAPayerBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.green1CA53F,
+        color: AppColors.immoFeedbackSuccess,
         borderRadius: BorderRadius.circular(12),
       ),
       child: const Text(

@@ -216,13 +216,13 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.redFF0000.withValues(alpha: 0.08),
+                  color: AppColors.immoFeedbackError.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.redFF0000.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.immoFeedbackError.withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   _moderationBanner!,
-                  style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.redFF0000),
+                  style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.immoFeedbackError),
                 ),
               ),
               const SizedBox(height: 12),

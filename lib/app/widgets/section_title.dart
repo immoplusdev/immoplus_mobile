@@ -13,7 +13,7 @@ class SectionTitle extends StatelessWidget {
       title,
       style: useCalSans
           ? AppTypography.h3.copyWith(
-              color: AppColors.textCharcoal,
+              color: AppColors.navy900,
             )
           : AppTypography.h4.copyWith(
               fontWeight: FontWeight.w500,

@@ -21,11 +21,11 @@ class CustomTabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selectedColor ?? AppColors.blue65BAF0;
+    final color = selectedColor ?? AppColors.immoBrandAccent;
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.ECECEC,
+        color: backgroundColor ?? AppColors.immoBorderDefault,
         borderRadius: BorderRadius.circular(30),
       ),
       padding: const EdgeInsets.all(4),

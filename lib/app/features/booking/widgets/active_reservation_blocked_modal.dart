@@ -90,7 +90,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.customBlue,
+                        color: AppColors.immoBrandPrimary,
                         height: 1.2,
                       ),
                     ),
@@ -112,7 +112,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: onViewReservation,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.customBlue,
+                          backgroundColor: AppColors.immoBrandPrimary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(

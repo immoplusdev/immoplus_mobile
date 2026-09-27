@@ -11,9 +11,9 @@ enum FigmaToastType {
   Color get color {
     switch (this) {
       case FigmaToastType.error:
-        return AppColors.redFF0000;
+        return AppColors.immoFeedbackError;
       case FigmaToastType.success:
-        return AppColors.green1CA53F;
+        return AppColors.immoFeedbackSuccess;
       case FigmaToastType.info:
         return AppColors.primary;
       case FigmaToastType.warning:
@@ -23,8 +23,8 @@ enum FigmaToastType {
 }
 
 class _Constants {
-  static const Color borderColor = AppColors.borderE0;
-  static const Color warningColor = AppColors.orangeWarning;
+  static Color get borderColor => AppColors.immoBorderDefault;
+  static Color get warningColor => AppColors.immoFeedbackWarning;
 
   static const double horizontalMargin = 12;
   static const double verticalMargin = 6;

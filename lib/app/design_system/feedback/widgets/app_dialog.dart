@@ -49,9 +49,9 @@ class AppDialog {
         barrierDismissible: barrierDismissible,
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: const Icon(
+          title: Icon(
             CupertinoIcons.exclamationmark_triangle,
-            color: AppColors.red,
+            color: AppColors.immoFeedbackError,
           ),
           content: Text(
             content,
@@ -116,7 +116,7 @@ class AppDialog {
                   description,
                   textAlign: TextAlign.center,
                   style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 24),

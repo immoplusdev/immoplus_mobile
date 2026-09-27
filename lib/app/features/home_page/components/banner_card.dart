@@ -103,9 +103,9 @@ class _BannerCardState extends State<BannerCard> {
   Color _getBackgroundColor(List<BannerModel> apiBanners) {
     if (_currentIndex >= 0 && _currentIndex < apiBanners.length) {
       return Utils.parseColor(apiBanners[_currentIndex].bgColor) ??
-          AppColors.customBlue;
+          AppColors.immoBrandPrimary;
     }
-    return AppColors.customBlue;
+    return AppColors.immoBrandPrimary;
   }
 
   Widget _buildDots(int count) {

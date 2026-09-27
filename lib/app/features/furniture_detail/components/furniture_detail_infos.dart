@@ -36,10 +36,10 @@ class FurnitureDetailInfos extends StatelessWidget {
                 child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.bgF7F8FA,
+                      color: AppColors.immoBgSurfaceMuted,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppColors.borderEAECEF,
+                        color: AppColors.immoBorderDefault,
                       ),
                     ),
                     child: Row(
@@ -106,10 +106,10 @@ class FurnitureDetailInfos extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.bgF7F8FA,
+          color: AppColors.immoBgSurfaceMuted,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppColors.borderEAECEF,
+            color: AppColors.immoBorderDefault,
           ),
         ),
         child: Column(
@@ -132,7 +132,7 @@ class FurnitureDetailInfos extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.text111827,
+                    color: AppColors.immoTextPrimary,
                   ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,

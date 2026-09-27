@@ -51,7 +51,7 @@ class RatingHistoryCard extends StatelessWidget {
                     Text(
                       dateStr,
                       style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.grey500,
+                        color: AppColors.gray1000,
                       ),
                     ),
                 ],
@@ -66,7 +66,7 @@ class RatingHistoryCard extends StatelessWidget {
                   '"${rating.propertyFeedback}"',
                   style: AppTypography.bodyMedium.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: AppColors.grey700,
+                    color: AppColors.gray700,
                   ),
                 ),
               ],
@@ -107,15 +107,15 @@ class RatingHistoryCard extends StatelessWidget {
           child: Text(
             label,
             style: AppTypography.bodyMediumMedium.copyWith(
-              color: AppColors.grey600,
+              color: AppColors.gray500,
             ),
           ),
         ),
         RatingBarIndicator(
           rating: ratingValue.toDouble(),
-          itemBuilder: (context, index) => const Icon(
+          itemBuilder: (context, index) => Icon(
             Icons.star_rounded,
-            color: AppColors.amber,
+            color: AppColors.immoFeedbackWarning,
           ),
           itemCount: 5,
           itemSize: 16.0,

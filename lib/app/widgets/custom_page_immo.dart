@@ -19,7 +19,7 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.E9E9E9,
+      backgroundColor: AppColors.immoBorderDefault,
       body: Column(
         children: [
           Gap(100),
@@ -44,7 +44,7 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
                             height: _backIconSize,
                             padding: EdgeInsets.only(left: 5),
                             decoration: BoxDecoration(
-                                color: AppColors.blue65BAF0,
+                                color: AppColors.immoBrandAccent,
                                 shape: BoxShape.circle),
                             child: Center(
                               child: Icon(

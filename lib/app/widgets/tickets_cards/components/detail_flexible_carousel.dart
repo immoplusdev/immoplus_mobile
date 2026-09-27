@@ -139,7 +139,7 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
                     ),
                   ),
                   width: double.infinity,
-                  color: AppColors.grey100,
+                  color: AppColors.gray100,
                   child: CachedNetworkImage(
                     imageUrl: url,
                     memCacheWidth: _targetWidth,
@@ -189,8 +189,8 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
 
   Widget _buildPlaceholder() {
     return Shimmer.fromColors(
-      baseColor: AppColors.grey300,
-      highlightColor: AppColors.grey100,
+      baseColor: AppColors.gray300,
+      highlightColor: AppColors.gray100,
       child: Container(color: AppColors.white),
     );
   }
@@ -209,20 +209,20 @@ class _DetailFlexibleCarouselState extends State<DetailFlexibleCarousel> {
       onTap: () => _onRetry(index),
       behavior: HitTestBehavior.opaque,
       child: Container(
-        color: AppColors.grey200,
+        color: AppColors.gray200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.cloud_off,
               size: 50,
-              color: AppColors.grey,
+              color: AppColors.gray500,
             ),
             SizedBox(height: 8),
             Text(
               "Erreur de chargement\nAppuyez pour réessayer",
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.grey, fontSize: 12),
+              style: TextStyle(color: AppColors.gray500, fontSize: 12),
             ),
           ],
         ),

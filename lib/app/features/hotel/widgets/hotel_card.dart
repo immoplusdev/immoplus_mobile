@@ -98,7 +98,7 @@ class HotelCard extends StatelessWidget {
                               Text(
                                 "${formatPrice(price)} F/nuit",
                                 style: TextStyle(
-                                  color: AppColors.D5D5D5,
+                                  color: AppColors.immoBorderStrong,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 11,
                                 ),

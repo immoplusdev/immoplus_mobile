@@ -49,14 +49,14 @@ class StripeResultPage extends StatelessWidget {
                   'Paiement confirmé',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.green1CA53F,
+                        color: AppColors.immoFeedbackSuccess,
                       ),
                 ),
                 Gap(vGap * 0.2),
                 Text(
                   'Transaction traitée avec succès',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.grey500,
+                        color: AppColors.gray1000,
                       ),
                 ),
                 Gap(vGap),
@@ -83,7 +83,7 @@ class StripeResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
                           color:
-                              AppColors.green1CA53F.withValues(alpha: 0.08),
+                              AppColors.immoFeedbackSuccess.withValues(alpha: 0.08),
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(18)),
                         ),
@@ -94,7 +94,7 @@ class StripeResultPage extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
-                                  ?.copyWith(color: AppColors.grey500),
+                                  ?.copyWith(color: AppColors.gray1000),
                             ),
                             const Gap(2),
                             Text(
@@ -104,7 +104,7 @@ class StripeResultPage extends StatelessWidget {
                                   .headlineSmall
                                   ?.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.green1CA53F,
+                                    color: AppColors.immoFeedbackSuccess,
                                   ),
                             ),
                           ],
@@ -138,7 +138,7 @@ class StripeResultPage extends StatelessWidget {
                                 icon: Iconsax.tag,
                                 label: 'Référence',
                                 value: shortTx,
-                                iconColor: AppColors.grey,
+                                iconColor: AppColors.gray500,
                                 valueMono: true,
                               ),
                             ],
@@ -147,8 +147,8 @@ class StripeResultPage extends StatelessWidget {
                               icon: Iconsax.tick_circle,
                               label: 'Statut',
                               value: 'Approuvé',
-                              iconColor: AppColors.green1CA53F,
-                              valueColor: AppColors.green1CA53F,
+                              iconColor: AppColors.immoFeedbackSuccess,
+                              valueColor: AppColors.immoFeedbackSuccess,
                             ),
                           ],
                         ),
@@ -241,7 +241,7 @@ class _ReceiptRow extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.grey500,
+                      color: AppColors.gray1000,
                       fontSize: 10,
                     ),
               ),
@@ -249,7 +249,7 @@ class _ReceiptRow extends StatelessWidget {
                 value,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: valueColor ?? AppColors.black87,
+                      color: valueColor ?? AppColors.gray950,
                       fontFamily: valueMono ? 'monospace' : null,
                       fontSize: valueMono ? 11 : 13,
                     ),
@@ -279,7 +279,7 @@ class _DashedDivider extends StatelessWidget {
                   (_) => Container(
                     width: 5,
                     height: 1,
-                    color: AppColors.grey200,
+                    color: AppColors.gray200,
                   ),
                 ),
               );

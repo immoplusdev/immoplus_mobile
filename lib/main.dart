@@ -61,14 +61,14 @@ void main() async {
             children: [
               const Icon(
                 Icons.error_outline_rounded,
-                color: AppColors.redAccent,
+                color: AppColors.red600,
                 size: 40,
               ),
               const SizedBox(height: 12),
               Text(
                 "Une erreur inattendue est survenue",
                 style: AppTypography.titleSmall.copyWith(
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.immoTextPrimary,
                   fontWeight: FontWeight.w600,
                 ),
                 textAlign: TextAlign.center,
@@ -77,7 +77,7 @@ void main() async {
               Text(
                 "Veuillez rafraîchir l'écran ou réessayer ultérieurement.",
                 style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.textMuted,
+                  color: AppColors.immoTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

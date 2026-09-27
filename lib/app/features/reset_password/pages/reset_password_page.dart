@@ -34,7 +34,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         curve: Curves.easeInOut);
               }),
           foregroundColor: AppColors.white,
-          backgroundColor: AppColors.textObsidian,
+          backgroundColor: AppColors.immoTextPrimary,
           title: Text("Réinitialisation",
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.white,

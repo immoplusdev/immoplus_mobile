@@ -259,8 +259,8 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
             // pas d'interlocuteur unique à bloquer (spec §5.1).
             if (!isBlocked && type != ConversationType.support)
               ListTile(
-                leading: Icon(Icons.block, color: AppColors.redFF0000),
-                title: Text('Bloquer', style: TextStyle(color: AppColors.redFF0000)),
+                leading: Icon(Icons.block, color: AppColors.immoFeedbackError),
+                title: Text('Bloquer', style: TextStyle(color: AppColors.immoFeedbackError)),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   final cubit = context.read<ConversationThreadCubit>();
@@ -481,7 +481,7 @@ class _Header extends StatelessWidget {
                             width: 7,
                             height: 7,
                             decoration: BoxDecoration(
-                              color: AppColors.green1CA53F,
+                              color: AppColors.immoFeedbackSuccess,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -886,13 +886,13 @@ class _ModerationBanner extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.redFF0000.withValues(alpha: 0.08),
+        color: AppColors.immoFeedbackError.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.redFF0000.withValues(alpha: 0.3)),
+        border: Border.all(color: AppColors.immoFeedbackError.withValues(alpha: 0.3)),
       ),
       child: Text(
         message,
-        style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.redFF0000),
+        style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.immoFeedbackError),
       ),
     );
   }
