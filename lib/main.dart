@@ -6,9 +6,9 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/appli/my_app.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:talker/talker.dart';
 
@@ -52,7 +52,7 @@ void main() async {
   // Vue de repli élégante pour éviter l'écran rouge de crash en production
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Material(
-      color: AppColors.scaffoldBackgroundColor,
+      color: AppColors.whiteBackground,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),

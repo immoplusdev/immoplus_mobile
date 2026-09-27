@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LocationPermissionBanner extends StatefulWidget {

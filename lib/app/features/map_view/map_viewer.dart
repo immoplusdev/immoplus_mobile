@@ -17,7 +17,7 @@ import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 import 'package:immoplus/app/features/map_view/widgets/map_search_text_field.dart';
 import 'package:immoplus/app/features/map_view/map_constantes.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class MapViewer extends StatefulWidget {
   const MapViewer({super.key});

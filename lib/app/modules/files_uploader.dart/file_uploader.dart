@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader_controller.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 import 'package:shimmer/shimmer.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class DetailEstateTitle2 extends StatelessWidget {
   const DetailEstateTitle2({super.key, required this.title});

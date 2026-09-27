@@ -21,7 +21,7 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';

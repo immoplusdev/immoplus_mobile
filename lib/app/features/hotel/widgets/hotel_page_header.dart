@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// En-tête commun (bouton retour + titre "Hôtel" centré) affiché sur le
 /// bandeau bleu de la page Hôtel, que ce soit à l'état skeleton, "coming

@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
@@ -82,12 +82,14 @@ class _SearchResultPageState extends State<SearchResultPage>
   @override
   void onConnectionRestored() {
     if (widget.category == 'residence') {
-      if (_residencePagingController.itemList == null || _residencePagingController.itemList!.isEmpty) {
+      if (_residencePagingController.itemList == null ||
+          _residencePagingController.itemList!.isEmpty) {
         _residencePagingController.error = 'temporary_error_to_force_refresh';
         _residencePagingController.refresh();
       }
     } else {
-      if (_estatePagingController.itemList == null || _estatePagingController.itemList!.isEmpty) {
+      if (_estatePagingController.itemList == null ||
+          _estatePagingController.itemList!.isEmpty) {
         _estatePagingController.error = 'temporary_error_to_force_refresh';
         _estatePagingController.refresh();
       }
@@ -140,7 +142,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         _residencePagingController.appendPage(response.data ?? [], nextPageKey);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      _residencePagingController.error = error;
+      showConnectionErrorDialog(error);
     }
   }
 
@@ -188,7 +191,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         _estatePagingController.appendPage(response.data ?? [], nextPageKey);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      _estatePagingController.error = error;
+      showConnectionErrorDialog(error);
     }
   }
 

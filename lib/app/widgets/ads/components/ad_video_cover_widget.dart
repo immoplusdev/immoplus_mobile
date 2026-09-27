@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 /// Affiche la miniature d'une vidéo du feed dans une carte de carrousel.

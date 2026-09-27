@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class CustomEmptyState extends StatelessWidget {
@@ -65,13 +65,13 @@ class CustomEmptyState extends StatelessWidget {
             ),
             const Gap(24),
             SizedBox(
-              width: 220,
               child: CustomButtom(
                 text: buttonText,
                 color: AppColors.primary,
                 onClick: onButtonPressed,
                 child: buttonIcon != null
                     ? Row(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           buttonIcon!,

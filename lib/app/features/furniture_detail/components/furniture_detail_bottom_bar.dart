@@ -9,8 +9,8 @@ import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 class FurnitureDetailBottomBar extends StatelessWidget {

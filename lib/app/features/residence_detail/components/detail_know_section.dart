@@ -3,7 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// "À savoir" section with 3 info blocks matching Airbnb's layout:
 /// • Règlement intérieur

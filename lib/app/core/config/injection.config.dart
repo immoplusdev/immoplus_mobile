@@ -20,7 +20,7 @@ import 'package:immoplus/app/core/network/interceptors/error_interceptor.dart'
     as _i1023;
 import 'package:immoplus/app/core/network/interceptors/request_interceptor.dart'
     as _i358;
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
+import 'package:immoplus/app/design_system/design_system.dart'
     as _i415;
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;

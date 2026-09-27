@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 
 class FurnitureDetailAppBar extends StatefulWidget {

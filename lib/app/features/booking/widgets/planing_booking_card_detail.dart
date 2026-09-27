@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:intl/intl.dart';
 

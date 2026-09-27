@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/utils/ad_action_handler.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/ads/components/mosaic_items_gallery_page.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/widgets/alert_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 

@@ -26,7 +26,7 @@ import 'package:immoplus/app/services/share_service.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 
 class HotelRoomDetailPage extends StatefulWidget {

@@ -12,9 +12,9 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/payment_module/components/stripe/stripe_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 

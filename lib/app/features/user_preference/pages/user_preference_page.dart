@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -10,8 +10,8 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit.dart';
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 class UserPreferencePage extends StatelessWidget {

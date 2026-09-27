@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/models/remote/reservations/reservation_model.d
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
 

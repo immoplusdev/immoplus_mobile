@@ -7,7 +7,7 @@ import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/registration/widgets/otp_verification_dialog.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';

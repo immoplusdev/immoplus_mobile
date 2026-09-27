@@ -8,8 +8,8 @@ import '../../../core/config/injection.dart';
 import '../../../data/models/remote/messaging/create_conversation_response.dart';
 import '../../../data/models/remote/residence/residence_model.dart';
 import '../../../data/repositories/messaging_repository.dart';
-import '../../../utils/app_colors.dart';
-import '../../../utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import '../../../utils/utils.dart';
 import '../pages/message_thread_page.dart';
 

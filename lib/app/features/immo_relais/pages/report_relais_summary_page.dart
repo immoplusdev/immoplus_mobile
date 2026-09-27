@@ -10,7 +10,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_request.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/models/relais_draft.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_success_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 

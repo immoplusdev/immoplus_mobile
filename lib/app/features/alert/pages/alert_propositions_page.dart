@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/widgets/proposition_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class AlertPropositionsPage extends StatefulWidget {
   final String alertId;

@@ -15,7 +15,7 @@ import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.d
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:map_launcher/map_launcher.dart';

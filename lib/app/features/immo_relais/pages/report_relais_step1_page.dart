@@ -14,7 +14,7 @@ import 'package:immoplus/app/features/immo_relais/pages/report_relais_step2_page
 import 'package:immoplus/app/features/immo_relais/widgets/relais_intro_header.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../data/models/remote/messaging/message_model.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import '../utils/messaging_time_format.dart';
 
 /// Bulle de message (spec §5.3/5.4) : à droite/primary pour le client, à

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/otp_login/widgets/login_otp_dialog.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
 

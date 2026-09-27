@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Modal affiché quand l'utilisateur tente une nouvelle réservation
 /// alors qu'il en a déjà une active (en attente propriétaire ou paiement).

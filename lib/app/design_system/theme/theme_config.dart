@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
+import 'package:immoplus/app/design_system/tokens/app_typography.dart';
 
 class ThemeConfig {
   static ThemeData lightTheme({required BuildContext context}) => ThemeData(
@@ -52,7 +52,7 @@ class ThemeConfig {
               primary: AppColors.primary,
               secondaryContainer: CupertinoColors.white,
               onPrimary: CupertinoColors.white,
-              surface: CupertinoColors.systemGrey,
+              surface: CupertinoColors.white,
               secondary: const Color.fromARGB(255, 229, 228, 228),
               onSecondary: CupertinoColors.white,
             ),

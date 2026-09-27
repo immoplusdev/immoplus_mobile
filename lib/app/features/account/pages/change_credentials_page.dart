@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 const Color _kIconBg = AppColors.iconBgLight;
 const Color _kIconColor = AppColors.textDarkGray;

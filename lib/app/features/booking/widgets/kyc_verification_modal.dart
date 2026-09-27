@@ -11,7 +11,7 @@ import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
 import 'package:immoplus/app/data/models/remote/kyc/kyc_session_create_model.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class KycVerificationModal extends StatefulWidget {

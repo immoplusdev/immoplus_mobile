@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
+import 'package:immoplus/app/design_system/tokens/app_typography.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 

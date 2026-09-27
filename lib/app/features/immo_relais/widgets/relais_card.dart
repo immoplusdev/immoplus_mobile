@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Carte résumé d'un relais existant, dans la liste `GET /relais` de
 /// l'onglet "Je déménage". Tap → `RelaisDetailPage` (`GET /relais/:id`).

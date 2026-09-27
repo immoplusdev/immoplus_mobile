@@ -11,7 +11,7 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/suggest_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggestion_tile.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';

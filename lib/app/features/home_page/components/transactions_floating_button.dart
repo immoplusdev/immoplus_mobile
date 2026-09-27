@@ -17,11 +17,11 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/animated_photo_stack_icon.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:immoplus/app/extensions/monogram_extension.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Rôle utilisateur pour le style de l'avatar.
 enum UserRole {

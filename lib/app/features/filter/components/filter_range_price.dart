@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:intl/intl.dart';
 

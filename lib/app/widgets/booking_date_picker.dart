@@ -1,7 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 
 import 'custom_text_field.dart';

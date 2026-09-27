@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 
 /// Carte "Libre tout de suite" épinglée pour la résidence sélectionnée en

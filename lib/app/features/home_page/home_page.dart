@@ -12,7 +12,7 @@ import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';

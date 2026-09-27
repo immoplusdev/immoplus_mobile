@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Composer bas d'écran du fil (spec §5.8) : champ extensible + bouton
 /// d'envoi, désactivé tant que le champ est vide.

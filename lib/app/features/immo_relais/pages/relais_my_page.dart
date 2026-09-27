@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_my_section.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Page dédiée "Pour moi" — mes relais publiés, ouverte depuis la carte
 /// bento du hub "Je déménage".

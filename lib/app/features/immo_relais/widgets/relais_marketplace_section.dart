@@ -9,7 +9,7 @@ import 'package:immoplus/app/data/enums/relais_property_type.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/marketplace_relais_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 /// Sous-onglet "Autour de moi" — découverte des relais des autres

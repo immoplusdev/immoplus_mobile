@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class RatingEstateSection extends StatelessWidget {
   const RatingEstateSection({super.key, required this.bienImmobilier});

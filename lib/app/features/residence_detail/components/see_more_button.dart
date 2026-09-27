@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class SeeMoreButton extends StatelessWidget {
   const SeeMoreButton({super.key, required this.text});

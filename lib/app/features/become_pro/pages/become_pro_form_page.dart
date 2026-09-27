@@ -4,15 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/features/become_pro/logic/become_pro_cubit.dart';
 import 'package:immoplus/app/features/become_pro/logic/become_pro_state.dart';
 import 'package:immoplus/app/core/services/image_picker_service.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 

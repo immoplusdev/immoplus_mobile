@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/property_card.dart';
 
 void main() {

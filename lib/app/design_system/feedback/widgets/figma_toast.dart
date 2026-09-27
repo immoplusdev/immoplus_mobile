@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:toastification/toastification.dart';
 
 enum FigmaToastType {
@@ -25,7 +25,6 @@ enum FigmaToastType {
 class _Constants {
   static const Color borderColor = AppColors.borderE0;
   static const Color warningColor = AppColors.orangeWarning;
-  static const Color descriptionColor = AppColors.textMuted;
 
   static const double horizontalMargin = 12;
   static const double verticalMargin = 6;
@@ -102,7 +101,7 @@ class FigmaToast extends StatelessWidget {
                   Text(
                     description!,
                     style: TextStyle(
-                        color: color.withOpacity(.8),
+                        color: color.withValues(alpha: 0.8),
                         fontSize: _Constants.descriptionFontSize,
                         fontWeight: FontWeight.w200),
                   ),

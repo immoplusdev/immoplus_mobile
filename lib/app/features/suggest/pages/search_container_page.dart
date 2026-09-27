@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class SearchContainerPage extends StatefulWidget {
   final HomeTab? homeTab;

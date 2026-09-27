@@ -9,7 +9,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_mo
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_loading_card.dart';
 import 'package:immoplus/app/features/visit_history/components/visit_history_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 

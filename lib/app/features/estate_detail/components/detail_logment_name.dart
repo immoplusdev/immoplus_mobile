@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
 class DetailEstateName extends StatelessWidget {

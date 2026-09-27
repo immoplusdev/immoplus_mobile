@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/models/remote/messaging/conversation_type_count.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Rangée d'onglets "pills" (spec §4.1) : Toutes / Réservation / Visite /
 /// Déménagement / Support, calquée sur le pattern déjà utilisé pour les
@@ -42,7 +42,7 @@ class InboxTabs extends StatelessWidget {
     ];
 
     return SizedBox(
-      height: 48,
+      height: 50,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -55,7 +55,7 @@ class InboxTabs extends StatelessWidget {
           return GestureDetector(
             onTap: () => onSelect(type),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : Colors.white,
                 borderRadius: BorderRadius.circular(30),
@@ -69,7 +69,7 @@ class InboxTabs extends StatelessWidget {
                   Text(
                     label,
                     style: GoogleFonts.dmSans(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: isSelected ? Colors.white : AppColors.primary,
                     ),
@@ -77,7 +77,8 @@ class InboxTabs extends StatelessWidget {
                   if (unread > 0) ...[
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 1),
                       decoration: BoxDecoration(
                         color: isSelected ? Colors.white : AppColors.primary,
                         borderRadius: BorderRadius.circular(10),

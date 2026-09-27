@@ -13,7 +13,6 @@ abstract class BaseColors {
   Color get gold;
 
   // ── Backgrounds & Surfaces ──
-  Color get scaffoldBackground;
   Color get whiteBackground;
   Color get surface;
   Color get cardBackground;
@@ -85,10 +84,7 @@ class LightAppColors implements BaseColors {
 
   // ── Backgrounds & Surfaces ──
   @override
-  Color get scaffoldBackground => const Color(0xFFF8FDFE);
-
-  @override
-  Color get whiteBackground => const Color(0xFFF8FDFE);
+  Color get whiteBackground => const Color(0xFFFFFFFF);
 
   @override
   Color get surface => const Color(0xFFFFFFFF);
@@ -216,9 +212,6 @@ class DarkAppColors implements BaseColors {
 
   @override
   Color get gold => const Color(0xFFEAB308);
-
-  @override
-  Color get scaffoldBackground => const Color(0xFF121224);
 
   @override
   Color get whiteBackground => const Color(0xFF1E1E2E);
@@ -501,6 +494,8 @@ class AppColors {
   static const Color bgFEF3F2 = Color(0xFFFEF3F2);
   static const Color bgF4F3FF = Color(0xFFF4F3FF);
   static const Color bgFFFAEB = Color(0xFFFFFAEB);
+  static const Color bgF8FAFC = Color(0xFFF8FAFC);
+  static const Color bgF1F5F9 = Color(0xFFF1F5F9);
   static const Color surfaceLight = Color(0xFFF9FAFB);
   static const Color bgF7F8FA = Color(0xFFF7F8FA);
   static const Color bgFBFBFB = Color(0xFFFBFBFB);
@@ -549,6 +544,7 @@ class AppColors {
   static const Color borderD6E2FB = Color(0xFFD6E2FB);
   static const Color borderSoftBlue = Color(0xFFE0E6F8);
   static const Color borderSubtle = Color(0xFFE5E7EB);
+  static const Color borderE2E8F0 = Color(0xFFE2E8F0);
   static const Color borderEAECEF = Color(0xFFEAECEF);
   static const Color dividerLight = Color(0xFFF0F0F0);
   static const Color borderE0 = Color(0xFFE0E0E0);
@@ -624,9 +620,9 @@ class AppColors {
   // ── Rétrocompatibilité & Accès Dynamique ──
   static Color get primary => current.primary;
   static Color get primaryLite => current.primarySoft;
-  static Color get scafold => current.scaffoldBackground;
+  static Color get scafold => current.whiteBackground;
   static Color get whiteBackground => current.whiteBackground;
-  static Color get scaffoldBackgroundColor => current.scaffoldBackground;
+  static Color get surface => current.surface;
   static Color get noSelected => current.inactive;
   static Color get success => current.success;
   static Color get warning => current.warning;

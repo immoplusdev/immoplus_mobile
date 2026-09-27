@@ -15,9 +15,9 @@ import 'package:immoplus/app/features/immo_relais/pages/edit_relais_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_interests_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_matches_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/express_interest_sheet.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 

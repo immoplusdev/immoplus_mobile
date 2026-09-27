@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/home_feed_list_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/home_feed_section.dart';
 import 'package:immoplus/app/features/for_you/see_more_page.dart';

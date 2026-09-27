@@ -12,7 +12,7 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
 class UnifiedPropertyCard extends StatelessWidget {

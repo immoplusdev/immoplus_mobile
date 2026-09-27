@@ -5,7 +5,7 @@ import '../../../core/network/utils/constants.dart';
 import '../../../core/network/utils/session_manager.dart';
 import '../../../core/config/injection.dart';
 import '../../../data/models/remote/residence/residence_model.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import '../../messaging/widgets/message_composer_sheet.dart';
 
 /// Bloc "À propos de votre hôte" (spec messagerie §2.1).

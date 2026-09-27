@@ -20,7 +20,7 @@ import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/data/repositories/messaging_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';

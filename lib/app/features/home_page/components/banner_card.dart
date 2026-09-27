@@ -5,7 +5,7 @@ import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:immoplus/app/features/home_page/components/banner_item.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/logic/banners/banners_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:gap/gap.dart';
 

@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -13,14 +11,12 @@ import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/card_image_carousel.dart';
-import 'package:shimmer/shimmer.dart';
 
 class FurnitureCard extends StatefulWidget {
   const FurnitureCard({super.key, required this.furniture});

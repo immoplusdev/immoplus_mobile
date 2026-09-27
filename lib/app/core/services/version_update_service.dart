@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/force_update_required_page.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:new_version_plus/model/version_status.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 

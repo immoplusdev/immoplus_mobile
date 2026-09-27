@@ -6,7 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/widgets/date_creation_widget.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/features/visits/visit_pending_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
 

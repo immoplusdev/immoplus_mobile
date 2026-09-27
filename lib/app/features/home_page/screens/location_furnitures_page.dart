@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/data/repositories/furniture_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';

@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class OnboardingData {
   final String title1;

@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
@@ -15,7 +15,7 @@ import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
 class OperatorsSelectorPage extends StatefulWidget {

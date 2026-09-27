@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_collection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residences_collection.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';

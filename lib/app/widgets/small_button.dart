@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class SmallButton extends StatelessWidget {
   final String text;

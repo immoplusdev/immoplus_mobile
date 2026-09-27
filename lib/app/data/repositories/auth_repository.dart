@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
 import 'package:immoplus/app/data/models/auth/reset_password_body.dart';
@@ -58,7 +58,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -180,7 +180,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -199,7 +199,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load user: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -218,7 +218,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -238,7 +238,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to send email OTP: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -256,7 +256,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to send registration OTP: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -275,7 +275,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to reset password: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -293,7 +293,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to send email OTP: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -311,7 +311,7 @@ class AuthRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to delete account: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -329,7 +329,7 @@ class AuthRepository {
     } on DioException catch (_) {
       rethrow;
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -354,7 +354,7 @@ class AuthRepository {
       }
       throw Exception('Failed to create demande pro: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {

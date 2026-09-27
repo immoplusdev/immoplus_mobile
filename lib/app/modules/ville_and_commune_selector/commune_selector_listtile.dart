@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/data/models/remote/configs/commune_model.dart';
 import 'package:immoplus/app/modules/ville_and_commune_selector/commune_selector_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class CommuneSelectorListtile extends StatefulWidget {
   const CommuneSelectorListtile({super.key, required this.onSelect});

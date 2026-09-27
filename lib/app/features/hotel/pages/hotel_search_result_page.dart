@@ -6,7 +6,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotels_collection.dart';
 import 'package:immoplus/app/data/repositories/hotel_repository.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';

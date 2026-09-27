@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
@@ -134,8 +134,8 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                         }
                         if (widget.type == ContactChangeType.phone &&
                             (_phoneNumber == null || _phoneNumber!.isEmpty)) {
-                          EasyLoading.showError(
-                              'Veuillez entrer un numéro valide');
+                          ToastUtils.showError(
+                              description: 'Veuillez entrer un numéro valide');
                           return;
                         }
                         context.read<ContactChangeCubit>().requestChange(

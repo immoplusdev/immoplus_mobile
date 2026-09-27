@@ -6,7 +6,7 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart';
 import 'package:immoplus/app/features/for_you/logic/for_you_state.dart';
 import 'package:immoplus/app/features/for_you/widgets/for_you_section_view.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 
 /// Corps de l'onglet "Pour vous" — flux mixte agrégé via `GET /me/home`

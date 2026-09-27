@@ -8,7 +8,7 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/data/repositories/furniture_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/screens/location_furnitures_page.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_furniture_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';

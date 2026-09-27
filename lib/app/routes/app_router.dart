@@ -119,6 +119,11 @@ class AppRouter {
   static bool showOnboarding = false;
   static final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>();
+
+  /// Accès global et statique au BuildContext racine via GoRouter
+  static BuildContext? get context =>
+      router.routerDelegate.navigatorKey.currentContext;
+
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',

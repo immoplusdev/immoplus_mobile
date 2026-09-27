@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../data/models/remote/messaging/report_reason.dart';
-import '../../../utils/app_colors.dart';
-import '../../../utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Bottom sheet de signalement (spec §7.1).
 class ReportConversationSheet extends StatefulWidget {

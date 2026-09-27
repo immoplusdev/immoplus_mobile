@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';

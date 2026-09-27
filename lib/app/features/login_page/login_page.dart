@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/otp_login/pages/phone_number_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class LoginPage extends StatelessWidget {
   final AuthRedirectData? redirectData;

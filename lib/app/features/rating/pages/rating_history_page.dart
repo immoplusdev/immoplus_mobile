@@ -8,7 +8,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/rating/rating_model.dart';
 import 'package:immoplus/app/data/repositories/rating_repository.dart';
 import 'package:immoplus/app/features/rating/widgets/rating_history_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 

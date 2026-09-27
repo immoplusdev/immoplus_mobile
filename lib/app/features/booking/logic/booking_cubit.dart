@@ -12,7 +12,7 @@ import 'package:immoplus/app/features/booking/widgets/active_reservation_blocked
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/main.dart';

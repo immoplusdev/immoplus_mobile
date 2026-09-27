@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/models/remote/alert/property_type.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';

@@ -5,7 +5,7 @@ import 'package:immoplus/app/features/reset_password/cubit/reset_password_cubit.
 import 'package:immoplus/app/features/reset_password/pages/email_input_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/new_password_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/otp_verification_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
@@ -25,7 +25,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: BackButton(
-              color: AppColors.whiteBackground,
+              color: AppColors.white,
               onPressed: () {
                 _pageController.page == 0
                     ? context.pop()
@@ -34,7 +34,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         curve: Curves.easeInOut);
               }),
           foregroundColor: AppColors.white,
-          backgroundColor: AppColors.scaffoldBackgroundColor,
+          backgroundColor: AppColors.textObsidian,
           title: Text("Réinitialisation",
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.white,

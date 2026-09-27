@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/location_module/components/error_indicator.dart';
 import 'package:immoplus/app/features/location_module/location_controller.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 
 class MapBottomSheet extends GetView<LocationController> {

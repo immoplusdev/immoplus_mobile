@@ -7,7 +7,7 @@ import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/registration/register_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/gen/assets.gen.dart';

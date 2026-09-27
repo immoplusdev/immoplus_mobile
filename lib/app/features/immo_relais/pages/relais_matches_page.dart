@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_matches_response.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 
 /// Demandeurs (alertes) qui correspondent à mon relais — informatif,

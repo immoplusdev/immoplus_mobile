@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/core/services/navigation_service.dart';
-import 'package:immoplus/app/widgets/figma_toast.dart';
+import 'package:immoplus/app/design_system/feedback/widgets/figma_toast.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 import 'package:toastification/toastification.dart';
 
 class ToastUtils {
@@ -99,7 +99,7 @@ class ToastUtils {
     Alignment? alignment,
   }) {
     toastification.showCustom(
-      context: NavigationService.navigatorKey.currentContext,
+      context: AppRouter.context,
       autoCloseDuration: duration ?? _defaultDuration,
       alignment: alignment ?? Alignment.bottomCenter,
       builder: (context, holder) => FigmaToast(

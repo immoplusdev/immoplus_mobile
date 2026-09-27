@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';

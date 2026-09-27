@@ -8,7 +8,7 @@ import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/repositories/bien_immobilier_repository.dart';
 import '../../../data/repositories/relais_repository.dart';
 import '../../../data/repositories/residence_repository.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import '../../../utils/utils.dart';
 import '../utils/messaging_time_format.dart';
 

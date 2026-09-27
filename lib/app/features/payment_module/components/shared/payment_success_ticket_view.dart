@@ -18,8 +18,7 @@ import 'package:immoplus/app/features/payment_module/components/shared/ticket_cl
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/circle_button.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -264,7 +263,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
         text: shareText,
       );
     } catch (e) {
-      EasyLoading.showError("Impossible de partager le reçu");
+      ToastUtils.showError(description: "Impossible de partager le reçu");
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
@@ -280,7 +279,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
       final image = await boundary.toImage(pixelRatio: 3.0);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       return byteData?.buffer.asUint8List();
-    } catch (_) {
+    } catch (e) {
       return null;
     }
   }
@@ -292,21 +291,25 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
 
       final bytes = await _capturePng();
       if (bytes == null) {
-        EasyLoading.showError("Impossible de capturer le reçu");
+        EasyLoading.dismiss();
+        ToastUtils.showError(description: "Impossible de capturer le reçu");
         return;
       }
 
       final fileName = "recu_paiement_$paymentId";
       await Gal.putImageBytes(bytes, name: fileName);
-      EasyLoading.showSuccess("Reçu enregistré dans la galerie !");
+      EasyLoading.dismiss();
+      ToastUtils.showSuccess(description: "Reçu enregistré dans la galerie !");
     } on GalException catch (e) {
+      EasyLoading.dismiss();
       if (e.type == GalExceptionType.accessDenied) {
-        EasyLoading.showError("Accès à la galerie refusé");
+        ToastUtils.showError(description: "Accès à la galerie refusé");
       } else {
-        EasyLoading.showError("Erreur lors de l'enregistrement");
+        ToastUtils.showError(description: "Erreur lors de l'enregistrement");
       }
     } catch (e) {
-      EasyLoading.showError("Erreur lors du téléchargement");
+      EasyLoading.dismiss();
+      ToastUtils.showError(description: "Erreur lors du téléchargement");
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
@@ -399,7 +402,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                           Clipboard.setData(
                             ClipboardData(text: displayPaymentId),
                           );
-                          EasyLoading.showSuccess("ID copié !");
+                          ToastUtils.showSuccess(description: "ID copié !");
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

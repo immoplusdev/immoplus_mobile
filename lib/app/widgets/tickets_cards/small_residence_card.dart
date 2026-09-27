@@ -6,7 +6,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/services/share_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
 class SmallResidenceCard extends StatefulWidget {

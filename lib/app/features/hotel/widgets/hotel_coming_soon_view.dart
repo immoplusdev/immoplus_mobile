@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_page_header.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Affiché à la place du flux normal de la page Hôtel tant que le module
 /// est désactivé côté plateforme (GET /pms/hotels/module-status → active: false).

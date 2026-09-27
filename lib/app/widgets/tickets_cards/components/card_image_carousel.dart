@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/image_counter_badge.dart';
 import 'package:shimmer/shimmer.dart';
 

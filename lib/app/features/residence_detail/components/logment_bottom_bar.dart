@@ -20,11 +20,11 @@ import 'package:immoplus/app/features/residence_detail/components/pending_revers
 import 'package:immoplus/app/features/residence_detail/components/reverse_search_pay_bar.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/main.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// ─────────────────────────────────────────────────────────────────────────────
 /// CONTENEUR PRINCIPAL : Affiche la barre appropriée selon le mode

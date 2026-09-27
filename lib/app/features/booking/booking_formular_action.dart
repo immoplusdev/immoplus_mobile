@@ -21,11 +21,11 @@ import 'package:immoplus/app/features/booking/logic/booking_services.dart';
 import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
 import 'package:immoplus/app/modules/country_phone_number/country_phone_number.dart';
 import 'package:immoplus/app/extensions/safe_area_extensions.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 // TODO(KYC): import désactivé temporairement pour test Stripe
 // import 'package:immoplus/app/features/booking/widgets/kyc_verification_modal.dart';

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:immoplus/app/modules/photon_location_picker.dart/photon_model.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:shimmer/shimmer.dart';
 

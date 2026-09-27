@@ -28,6 +28,8 @@ import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
 import 'components/rating_logment_section.dart';
 
+import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/widgets/custom_empty_state.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
@@ -87,12 +89,35 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
     return BlocConsumer<ResidenceCubit, RequestState>(
       listener: (context, state) {
         if (state is REQUEST_ERROR) {
-          showConnectionErrorDialog();
+          showConnectionErrorDialog(state.error);
         }
       },
       builder: (context, state) {
-        if (state is REQUEST_LOADING || state is REQUEST_ERROR) {
+        if (state is REQUEST_LOADING) {
           return const LoadingPage();
+        }
+
+        if (state is REQUEST_ERROR) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(CupertinoIcons.arrow_left, color: Colors.black),
+                onPressed: () => context.pop(),
+              ),
+            ),
+            body: Center(
+              child: CustomEmptyState(
+                icon: CupertinoIcons.exclamationmark_circle,
+                title: "Logement introuvable",
+                description: "Cette annonce n'existe plus ou a été retirée.",
+                buttonText: "Retour",
+                onButtonPressed: () => context.pop(),
+              ),
+            ),
+          );
         }
 
         if (state is REQUEST_RESIDENCE_DATA) {

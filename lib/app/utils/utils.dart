@@ -2,12 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/request_path.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +28,65 @@ enum OPERATOR_NAME {
 }
 
 class Utils {
+  /// Vérifie si une liste de résultats de connectivité contient un réseau actif
+  static bool isOnline(List<ConnectivityResult> results) {
+    return results.any((r) => r != ConnectivityResult.none);
+  }
+
+  /// Vérifie de manière asynchrone si l'appareil a une connexion internet active
+  static Future<bool> hasInternetConnection() async {
+    try {
+      final results = await Connectivity().checkConnectivity();
+      return isOnline(results);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Détermine si une erreur reçue provient d'une panne réseau / déconnexion
+  /// plutôt que d'une réponse HTTP d'erreur (ex: 404 Not Found, 400 Bad Request, etc.)
+  static bool isNetworkError(dynamic error) {
+    if (error == null) return false;
+
+    if (error is SocketException) return true;
+
+    if (error is DioException) {
+      switch (error.type) {
+        case DioExceptionType.connectionTimeout:
+        case DioExceptionType.sendTimeout:
+        case DioExceptionType.receiveTimeout:
+        case DioExceptionType.connectionError:
+          return true;
+        case DioExceptionType.badResponse:
+        case DioExceptionType.cancel:
+        case DioExceptionType.badCertificate:
+        case DioExceptionType.unknown:
+        default:
+          return false;
+      }
+    }
+
+    if (error is String) {
+      final lower = error.toLowerCase();
+      // Si l'erreur mentionne un code HTTP (ex: 404, 400, 401, 500, etc.), ce n'est pas une panne de connexion
+      if (lower.contains('404') ||
+          lower.contains('introuvable') ||
+          lower.contains('not found') ||
+          lower.contains('status code of 4') ||
+          lower.contains('status code of 5') ||
+          lower.contains('bad response')) {
+        return false;
+      }
+      if (lower.contains('socketexception') ||
+          lower.contains('connection timeout') ||
+          lower.contains('connectionerror') ||
+          lower.contains('network is unreachable')) {
+        return true;
+      }
+    }
+
+    return false;
+  }
   static String formatDatOnly({required DateTime dateTime}) {
     String formattedDate = DateFormat("dd MMMM yyy").format(dateTime);
     return formattedDate;
@@ -344,7 +405,7 @@ class Utils {
             mode: LaunchMode.externalApplication);
       }
     } on Exception {
-      EasyLoading.showError('WhatsApp is not installed.');
+      ToastUtils.showError(description: "WhatsApp n'est pas installé.");
     }
   }
 
@@ -398,21 +459,6 @@ class Utils {
         return 'pas d\'action';
     }
   }
-
-  // static authentificationPopup({required BuildContext context}) {
-  //   showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //     backgroundColor: HexColor("#121224"),
-  //     enableDrag: true,
-  //     context: context,
-  //     builder: (context) => FractionallySizedBox(
-  //       heightFactor: 1,
-  //       child: ClipRRect(
-  //           borderRadius: BorderRadius.circular(30), child: const LoginPage()),
-  //     ),
-  //   );
-  // }
 
   static FaIconData getNotificationIcon(String collection) {
     if (collection == NotificationCollection.payments.name) {

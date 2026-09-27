@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Tuile de paramètres style premium : icône dans conteneur 40×40, typo alignée.
 class SettingsTile extends StatelessWidget {

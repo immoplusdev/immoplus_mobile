@@ -16,14 +16,14 @@ import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 class BestRatedResidencesConstants {

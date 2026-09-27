@@ -4,7 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:intl/intl.dart';
 

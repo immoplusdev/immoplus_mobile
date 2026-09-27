@@ -8,7 +8,7 @@ import 'package:immoplus/app/features/payment_module/components/moov/moov_paymen
 import 'package:immoplus/app/features/payment_module/components/shared/payment_success_ticket_view.dart';
 import 'package:immoplus/app/features/payment_module/components/shared/payment_waiting_view.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/main.dart';
 

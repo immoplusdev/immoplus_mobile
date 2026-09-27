@@ -21,6 +21,8 @@ import 'package:immoplus/app/logic/request_state.dart';
 import 'package:immoplus/svgs_icons.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
+import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/widgets/custom_empty_state.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 
@@ -77,12 +79,35 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
     return BlocConsumer<EstateCubit, RequestState>(
       listener: (context, state) {
         if (state is REQUEST_ERROR) {
-          showConnectionErrorDialog();
+          showConnectionErrorDialog(state.error);
         }
       },
       builder: (context, state) {
-        if (state is REQUEST_LOADING || state is REQUEST_ERROR) {
+        if (state is REQUEST_LOADING) {
           return const LoadingPage();
+        }
+
+        if (state is REQUEST_ERROR) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(CupertinoIcons.arrow_left, color: Colors.black),
+                onPressed: () => context.pop(),
+              ),
+            ),
+            body: Center(
+              child: CustomEmptyState(
+                icon: CupertinoIcons.exclamationmark_circle,
+                title: "Bien introuvable",
+                description: "Cette annonce n'existe plus ou a été retirée.",
+                buttonText: "Retour",
+                onButtonPressed: () => context.pop(),
+              ),
+            ),
+          );
         }
 
         if (state is REQUEST_BIEN_IMMOBILIER_DATA) {

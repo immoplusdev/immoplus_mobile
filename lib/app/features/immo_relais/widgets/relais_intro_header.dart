@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Carte d'intro + bandeau d'avertissement, identiques sur les 2 écrans du
 /// flux "Publiez votre ancien logement" (flux B, signalement anonyme).

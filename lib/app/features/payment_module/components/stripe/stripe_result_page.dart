@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/lottie_assets.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';

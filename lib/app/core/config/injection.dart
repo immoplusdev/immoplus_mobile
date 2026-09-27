@@ -6,7 +6,7 @@ import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/firebase_options.dart';
 
 import 'injection.config.dart';

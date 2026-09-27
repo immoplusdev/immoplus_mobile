@@ -17,7 +17,7 @@ import 'package:immoplus/app/features/hotel/pages/hotel_room_detail_page.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_detail_header.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_detail_shimmer.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_room_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 import 'package:immoplus/app/widgets/circle_button.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';

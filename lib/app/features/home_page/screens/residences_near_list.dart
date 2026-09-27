@@ -21,7 +21,7 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/empty_state_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 class NearResidencesConstants {

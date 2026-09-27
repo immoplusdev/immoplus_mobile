@@ -4,9 +4,8 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 
 class ConnectinityService {
   static ConnectivityResult? savecState;
@@ -29,17 +28,11 @@ class ConnectinityService {
 
   static listen() {
     try {
-      EasyLoading.init();
       subscription = Connectivity()
           .onConnectivityChanged
           .listen((List<ConnectivityResult> result) {
         if (savecState == ConnectivityResult.none) {
-          EasyLoading.instance
-            ..backgroundColor = Colors.green
-            ..textColor = Colors.white
-            ..radius = 20;
-          EasyLoading.showToast('Connexion internet rétablie',
-              toastPosition: EasyLoadingToastPosition.bottom);
+          ToastUtils.showSuccess(title: 'Connexion internet rétablie');
         }
         inspect(result);
         // Received changes in available connectivity types!
@@ -76,15 +69,7 @@ class ConnectinityService {
   }
 
   static _showErorConnexion() {
-    EasyLoading.instance
-      ..backgroundColor = Colors.red
-      ..textColor = Colors.white
-      ..radius = 20;
-
-    EasyLoading.showToast(
-      'Problème de connexion internet',
-      toastPosition: EasyLoadingToastPosition.bottom,
-    );
+    ToastUtils.showError(title: 'Problème de connexion internet');
   }
 
   static stop() async {

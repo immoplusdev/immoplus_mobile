@@ -3,7 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/utils/utils.dart';
 
 mixin ConnectivityMixin<T extends StatefulWidget> on State<T> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
@@ -15,8 +16,7 @@ mixin ConnectivityMixin<T extends StatefulWidget> on State<T> {
   /// Call this in `initState()`
   void setupConnectivityListener() {
     // Vérification initiale immédiate dès l'ouverture de la page
-    Connectivity().checkConnectivity().then((results) {
-      final hasConnection = results.any((r) => r != ConnectivityResult.none);
+    Utils.hasInternetConnection().then((hasConnection) {
       if (!hasConnection && mounted) {
         showConnectionErrorDialog();
       }
@@ -24,7 +24,7 @@ mixin ConnectivityMixin<T extends StatefulWidget> on State<T> {
 
     _connectivitySubscription =
         Connectivity().onConnectivityChanged.listen((results) async {
-      final hasConnection = results.any((r) => r != ConnectivityResult.none);
+      final hasConnection = Utils.isOnline(results);
       if (hasConnection) {
         // Wait a bit to ensure the network is actually ready for requests
         await Future.delayed(const Duration(seconds: 1));
@@ -56,7 +56,22 @@ mixin ConnectivityMixin<T extends StatefulWidget> on State<T> {
   /// Use this method to show a popup when a request fails or when connection is unavailable.
   /// Uses an atomic flag to strictly avoid stacked/duplicate dialogs.
   Future<void> showConnectionErrorDialog([dynamic error]) async {
-    // 1. Verrou synchrone immédiat contre les ouvertures concurrentes
+    // 1. Si une erreur explicite est fournie et qu'il s'agit d'une erreur HTTP (ex: 404),
+    // on ne doit PAS afficher le dialogue "Vérifiez votre connexion internet".
+    if (error != null && !Utils.isNetworkError(error)) {
+      return;
+    }
+
+    // 2. Si aucune erreur n'a été spécifiée, vérifier si l'appareil est réellement hors-ligne
+    if (error == null) {
+      final hasConnection = await Utils.hasInternetConnection();
+      if (hasConnection) {
+        // L'appareil est connecté à internet, ce n'est donc pas une perte de réseau
+        return;
+      }
+    }
+
+    // 3. Verrou synchrone immédiat contre les ouvertures concurrentes
     if (_isDialogShowing) return;
     _isDialogShowing = true;
 
@@ -79,7 +94,7 @@ mixin ConnectivityMixin<T extends StatefulWidget> on State<T> {
     } catch (_) {
       // Ignorer les erreurs d'affichage
     } finally {
-      // 2. Le verrou est libéré dès que la boîte de dialogue est fermée
+      // 4. Le verrou est libéré dès que la boîte de dialogue est fermée
       _isDialogShowing = false;
     }
   }

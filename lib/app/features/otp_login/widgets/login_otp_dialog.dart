@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -96,9 +97,10 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
       if (!mounted) return;
 
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
-        _showSnack(
-          'Un nouveau code a été envoyé par ${_isWhatsapp == true ? 'WhatsApp' : 'SMS'}.',
-          Colors.green,
+        ToastUtils.showSuccess(
+          title: "Code renvoyé",
+          description:
+              'Un nouveau code a été envoyé par ${_isWhatsapp == true ? 'WhatsApp' : 'SMS'}.',
         );
       }
     } catch (e) {
@@ -106,12 +108,6 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
     } finally {
       if (mounted) setState(() => _isSendingChannel = false);
     }
-  }
-
-  void _showSnack(String text, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(text), backgroundColor: color),
-    );
   }
 
   void _submitOtp(String code) {

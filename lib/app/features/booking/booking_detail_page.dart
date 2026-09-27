@@ -18,7 +18,7 @@ import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
 import 'package:immoplus/app/features/rating/widgets/rating_bottom_sheet.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'dart:async';

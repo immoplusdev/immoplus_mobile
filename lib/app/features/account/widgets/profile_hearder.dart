@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class ProfileHearder extends StatelessWidget {
   final UserModelSchema? currentUser;

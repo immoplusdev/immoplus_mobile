@@ -6,7 +6,7 @@ import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
 import 'package:immoplus/app/features/hotel/widgets/free_anulation_card.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class HotelCardSponsorise extends StatelessWidget {
   final HotelModel hotel;

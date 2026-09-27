@@ -14,7 +14,7 @@ import 'package:immoplus/app/features/suggest/widgets/budget_selection_sheet.dar
 import 'package:immoplus/app/features/suggest/widgets/date_selection_sheet.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_map_page.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 

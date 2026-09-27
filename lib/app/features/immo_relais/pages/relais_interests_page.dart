@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/enums/relais_interest_status.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_interest_requests.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_interests_response.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:intl/intl.dart';
 

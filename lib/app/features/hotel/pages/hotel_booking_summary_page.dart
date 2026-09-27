@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_estimation_request.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';

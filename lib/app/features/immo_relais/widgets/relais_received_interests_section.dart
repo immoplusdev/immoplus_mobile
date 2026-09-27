@@ -10,7 +10,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_received_interests
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_status_section.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 
 const List<RelaisInterestStatus> _statusOrder = [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/description_footer.dart';
 import 'package:immoplus/app/features/prop_feed/widgets/profile_avatar.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// En-tête de post type TikTok : avatar, nom, légende avec hashtags.
 /// Comportement Plus/Moins : tap sur description ou bouton → étend/replie avec animation.

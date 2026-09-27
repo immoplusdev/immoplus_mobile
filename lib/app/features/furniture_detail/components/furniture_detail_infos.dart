@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class FurnitureDetailInfos extends StatelessWidget {
   const FurnitureDetailInfos({super.key, required this.furnitureModel});

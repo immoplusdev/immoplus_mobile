@@ -9,7 +9,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 /// Un onglet pilule — "Toutes" (pas de filtre) + un par statut.

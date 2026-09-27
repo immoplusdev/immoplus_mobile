@@ -10,7 +10,7 @@ import '../logic/inbox_cubit.dart';
 import '../logic/inbox_state.dart';
 import '../widgets/conversation_tile.dart';
 import '../widgets/inbox_tabs.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'message_thread_page.dart';
 
 class MessagesInboxPage extends StatelessWidget {

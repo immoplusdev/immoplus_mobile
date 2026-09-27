@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 
 /// Système centralisé de typographie pour l'application ImmoPlus.
 ///

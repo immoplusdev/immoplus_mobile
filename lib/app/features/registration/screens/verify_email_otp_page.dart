@@ -5,11 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
 import 'package:immoplus/app/data/models/auth/verify_otp_extra.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
@@ -95,11 +96,9 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
       }
     } else {
       // Échec : feedback
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Code invalide ou expiré. Veuillez réessayer.'),
-          backgroundColor: Colors.red,
-        ),
+      ToastUtils.showError(
+        title: "Code invalide",
+        description: 'Code invalide ou expiré. Veuillez réessayer.',
       );
     }
   }
@@ -145,16 +144,17 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
             ? 'SMS'
             : (widget.email ?? widget.phoneNumber);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          ok
-              ? 'Un nouveau code a été envoyé par $destination.'
-              : 'Échec de l\'envoi du code. Réessayez.',
-        ),
-        backgroundColor: ok ? Colors.green : Colors.red,
-      ),
-    );
+    if (ok) {
+      ToastUtils.showSuccess(
+        title: "Code renvoyé",
+        description: 'Un nouveau code a été envoyé par $destination.',
+      );
+    } else {
+      ToastUtils.showError(
+        title: "Erreur d'envoi",
+        description: "Échec de l'envoi du code. Réessayez.",
+      );
+    }
   }
 
   @override

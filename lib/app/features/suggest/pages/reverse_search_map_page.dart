@@ -22,11 +22,11 @@ import 'package:immoplus/app/features/suggest/widgets/pending_selection_card.dar
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/main.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';

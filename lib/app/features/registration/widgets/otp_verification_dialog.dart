@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
 
@@ -90,13 +91,10 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
     setState(() => _isLoading = false);
 
     if (ok) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      ToastUtils.showSuccess(
+        title: "Code renvoyé",
+        description:
             'Un nouveau code a été envoyé par ${_isWhatsapp == true ? 'WhatsApp' : 'SMS'}.',
-          ),
-          backgroundColor: Colors.green,
-        ),
       );
     }
   }

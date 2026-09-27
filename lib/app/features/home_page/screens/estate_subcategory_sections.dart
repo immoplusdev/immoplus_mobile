@@ -11,7 +11,7 @@ import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/home_page/screens/location_biens_page.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_bien_card.dart';

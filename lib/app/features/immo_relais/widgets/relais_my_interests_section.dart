@@ -11,7 +11,7 @@ import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_detail_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_status_section.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Ordre d'affichage — en attente/en cours d'abord (ça bouge encore),
 /// décliné/terminé en dernier.

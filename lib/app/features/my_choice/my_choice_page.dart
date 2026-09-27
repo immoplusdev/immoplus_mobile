@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -15,7 +15,7 @@ import 'package:immoplus/app/features/immo_relais/pages/relais_my_interests_page
 import 'package:immoplus/app/features/immo_relais/pages/relais_my_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_received_interests_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class MyChoicePage extends StatefulWidget {
   const MyChoicePage({super.key});

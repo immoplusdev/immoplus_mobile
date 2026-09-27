@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';

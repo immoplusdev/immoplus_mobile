@@ -15,7 +15,7 @@ import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/main.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 
 class FilterPage extends StatefulWidget {

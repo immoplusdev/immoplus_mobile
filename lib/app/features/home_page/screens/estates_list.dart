@@ -17,7 +17,7 @@ import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.
 import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
 import 'package:immoplus/app/features/home_page/screens/estates_near_list.dart';
 import 'package:immoplus/app/features/home_page/screens/location_biens_page.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_bien_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';

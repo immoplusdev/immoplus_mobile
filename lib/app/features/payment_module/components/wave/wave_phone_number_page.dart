@@ -11,7 +11,7 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 import '../../utils/payment_data.dart';
 import '../../utils/payment_utils.dart';

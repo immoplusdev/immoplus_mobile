@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/payment/operator_model.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class HotelPaymentSelectorPage extends StatefulWidget {
   const HotelPaymentSelectorPage({

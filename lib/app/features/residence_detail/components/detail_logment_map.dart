@@ -5,7 +5,7 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 // import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-// import 'package:immoplus/app/utils/app_colors.dart';
+// import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:map_launcher/map_launcher.dart' as MPL;
 
 class DetailLogmentMap extends StatefulWidget {

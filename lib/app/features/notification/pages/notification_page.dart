@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/repositories/notification_repository.dart';
@@ -13,7 +13,7 @@ import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_tile.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 

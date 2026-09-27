@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class CustomPopup {
   static showLoagingToast({String? text, Color? color}) {

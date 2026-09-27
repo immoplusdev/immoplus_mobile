@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/configs/app_typography.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 

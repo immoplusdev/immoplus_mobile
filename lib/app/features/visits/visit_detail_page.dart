@@ -18,7 +18,7 @@ import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart';
 import 'package:immoplus/app/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus/app/features/visits/widgets/estate_info.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/payment_status_section.dart';

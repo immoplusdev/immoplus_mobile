@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/request_path.dart';
@@ -286,7 +286,7 @@ class Utils {
             mode: LaunchMode.externalApplication);
       }
     } on Exception {
-      EasyLoading.showError('WhatsApp is not installed.');
+      ToastUtils.showError(description: "WhatsApp n'est pas installé.");
     }
   }
 

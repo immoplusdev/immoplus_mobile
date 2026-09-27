@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/main.dart';
 
@@ -135,11 +136,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
   bool _tryAddZone(SelectedZone zone) {
     if (_tempSelected.contains(zone)) return true;
     if (_tempSelected.length >= 3) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('3 zones maximum sélectionnables.'),
-          duration: Duration(seconds: 2),
-        ),
+      ToastUtils.showWarning(
+        title: "Limite atteinte",
+        description: "3 zones maximum sélectionnables.",
       );
       return false;
     }
@@ -269,9 +268,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Impossible d\'obtenir votre position.')),
+        ToastUtils.showError(
+          title: "Position",
+          description: "Impossible d'obtenir votre position.",
         );
         setState(() => _isGettingLocation = false);
       }
