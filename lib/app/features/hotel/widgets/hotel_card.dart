@@ -60,9 +60,9 @@ class HotelCard extends StatelessWidget {
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
                       errorWidget: (_, __, ___) =>
-                          Container(color: Colors.grey.shade200),
+                          Container(color: AppColors.immoBorderDefault),
                     )
-                  : Container(color: Colors.grey.shade200),
+                  : Container(color: AppColors.immoBorderDefault),
 
               // Float overlay panel at the bottom (mockup inspired)
               Positioned(
@@ -82,7 +82,7 @@ class HotelCard extends StatelessWidget {
                         children: [
                           Text(
                             hotel.name,
-                            style: const TextStyle(
+                            style: AppTypography.font(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
@@ -97,7 +97,7 @@ class HotelCard extends StatelessWidget {
                               FreeAnulationCard(),
                               Text(
                                 "${formatPrice(price)} F/nuit",
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   color: AppColors.immoBorderStrong,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 11,

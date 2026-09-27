@@ -34,7 +34,7 @@ class _RelaisMyPageState extends State<RelaisMyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Pour moi'), centerTitle: true),
+      appBar: AppBar(title: Text('Pour moi'), centerTitle: true),
       body: RelaisMySection(
         refreshNotifier: _refreshNotifier,
         onRequestsLoaded: (hasRequests) {

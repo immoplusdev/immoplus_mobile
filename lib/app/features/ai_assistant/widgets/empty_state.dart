@@ -118,9 +118,9 @@ class _EmptyChatStateState extends State<EmptyChatState> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const _Logo(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             _HeroTitle(text: _greeting),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             // ─── Cards de suggestions (avant le composer) ───
             AnimatedOpacity(
               opacity: _cardsVisible ? 1.0 : 0.0,
@@ -134,7 +134,7 @@ class _EmptyChatStateState extends State<EmptyChatState> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             // ─── Composer (champ texte) en bas après les suggestions ───
             _HeroComposer(
               controller: _controller,
@@ -261,7 +261,7 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                             child: Container(
                               width: 56,
                               height: 56,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: LinearGradient(
                                   begin: Alignment.topCenter,
@@ -338,7 +338,7 @@ class _HeroTitleState extends State<_HeroTitle>
     TweenSequenceItem(tween: ConstantTween(0.0), weight: 56),
   ]).animate(_wave);
 
-  static const TextStyle _style = TextStyle(
+  static final TextStyle _style =AppTypography.font(
     fontSize: 28,
     fontWeight: FontWeight.w600,
     letterSpacing: -0.4,
@@ -377,7 +377,7 @@ class _HeroTitleState extends State<_HeroTitle>
           ),
         ),
         if (emoji.isNotEmpty) ...[
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           AnimatedBuilder(
             animation: _angle,
             builder: (context, child) => Transform.rotate(
@@ -418,7 +418,7 @@ class _HeroComposer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hintStyle = TextStyle(
+    final hintStyle = AppTypography.font(
       fontSize: 14,
       fontWeight: FontWeight.w400,
       color: placeholder,
@@ -436,7 +436,7 @@ class _HeroComposer extends StatelessWidget {
       child: Row(
         children: [
           Icon(Iconsax.message_edit, size: 18, color: placeholder),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Stack(
               alignment: Alignment.centerLeft,
@@ -464,13 +464,13 @@ class _HeroComposer extends StatelessWidget {
                   cursorWidth: 1.6,
                   textInputAction: TextInputAction.send,
                   onSubmitted: onSubmit,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: ink,
                     height: 1.3,
                   ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     isDense: true,
                     isCollapsed: true,
                     filled: true,
@@ -484,7 +484,7 @@ class _HeroComposer extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           ListenableBuilder(
             listenable: controller,
             builder: (_, __) => _SendButton(
@@ -569,7 +569,7 @@ class _SuggestionsGrid extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: cards.length,
-        separatorBuilder: (_, __) => const SizedBox(width: gap),
+        separatorBuilder: (_, __) => SizedBox(width: gap),
         itemBuilder: (context, i) {
           final c = cards[i];
           return SizedBox(
@@ -615,7 +615,7 @@ class _SuggestionCard extends StatelessWidget {
                   card.label,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: _EmptyChatStateState._ink,

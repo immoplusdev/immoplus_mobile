@@ -67,7 +67,7 @@ class _LocationTile extends StatelessWidget {
                       color: hasError ? Colors.red.shade400 : AppColors.primary,
                     ),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14),
             // Text
             Expanded(
               child: Column(
@@ -75,22 +75,18 @@ class _LocationTile extends StatelessWidget {
                 children: [
                   Text(
                     'Ma position actuelle',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.bodyLargeSemiBold.copyWith(
                       color: AppColors.immoTextPrimary,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     hasError
                         ? 'Localisation non disponible'
                         : 'Utiliser ma position GPS',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey.shade500,
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                 ],
@@ -101,7 +97,7 @@ class _LocationTile extends StatelessWidget {
               Icon(
                 Iconsax.arrow_right_3,
                 size: 16,
-                color: Colors.grey.shade400,
+                color: AppColors.immoIconMuted,
               ),
           ],
         ),

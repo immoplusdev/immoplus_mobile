@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -10,7 +11,7 @@ enum NotificationType {
   visit('visit', Icons.calendar_month, Colors.purple),
   payment('payment', Icons.account_balance_wallet, Colors.green),
   message('message', Icons.chat_bubble, Colors.indigo),
-  system('system', Icons.info, Colors.grey);
+  system('system', Icons.info, AppColors.gray500);
 
   final String value;
   final IconData icon;

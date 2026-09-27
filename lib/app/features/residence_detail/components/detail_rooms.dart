@@ -78,19 +78,19 @@ class _RoomItem extends StatelessWidget {
           size: 20,
           color: Color(0xff2744de),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           '$count',
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 15,
             fontWeight: FontWeight.w600,
             color: Color(0xFF3D4A5C),
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           name,
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Color(0xFF3D4A5C),

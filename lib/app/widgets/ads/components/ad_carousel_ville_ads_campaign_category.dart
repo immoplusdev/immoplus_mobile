@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/utils/ad_action_handler.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/ads/components/mosaic_items_gallery_page.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
@@ -108,7 +107,7 @@ class AdCarouselVilleAdsCampaignCategory extends StatelessWidget {
                       child: Container(
                         width: 36,
                         height: 36,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AppColors.black,
                           shape: BoxShape.circle,
                         ),

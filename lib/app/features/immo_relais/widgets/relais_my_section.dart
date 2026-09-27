@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/immo_relais_status.dart';
@@ -123,7 +122,7 @@ class _RelaisMySectionState extends State<RelaisMySection>
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmSans(
+        style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.w500,
           color: isSelected ? Colors.white : AppColors.primary,

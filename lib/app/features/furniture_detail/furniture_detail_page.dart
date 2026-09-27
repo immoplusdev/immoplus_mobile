@@ -88,7 +88,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
 
         if (state is FURNITURE_ERROR) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Détails')),
+            appBar: AppBar(title: Text('Détails')),
             body: Center(child: Text(state.error)),
           );
         }

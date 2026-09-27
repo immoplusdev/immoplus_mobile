@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:immoplus/views/appli/appli.dart';
@@ -18,7 +19,7 @@
 //             Icon(
 //               Icons.info,
 //               size: 50,
-//               color: Colors.grey,
+//               color: AppColors.immoTextSecondary,
 //             ),
 //             Center(
 //               child: Text(erreur),

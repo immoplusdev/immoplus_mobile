@@ -39,7 +39,7 @@ class HotelBookingRoomCard extends StatelessWidget {
           color: isSelected ? AppColors.primary.withOpacity(0.05) : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.grey.shade200,
+            color: isSelected ? AppColors.primary : AppColors.immoBorderDefault,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -62,7 +62,7 @@ class HotelBookingRoomCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Text(
                   shortCode,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                     color: isSelected ? AppColors.primary : const Color(0xFF666666),
@@ -74,7 +74,7 @@ class HotelBookingRoomCard extends StatelessWidget {
             // Room Name
             Text(
               room.nom,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
                 color: Color(0xFF111111),
@@ -87,7 +87,7 @@ class HotelBookingRoomCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -96,12 +96,12 @@ class HotelBookingRoomCard extends StatelessWidget {
                   TextSpan(
                     text: CurrencyFormatter().format(room.prixAPartirDe.toString()),
                   ),
-                  const TextSpan(
+                  TextSpan(
                     text: ' /nuit',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 11,
                       fontWeight: FontWeight.normal,
-                      color: Colors.grey,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                 ],
@@ -110,7 +110,7 @@ class HotelBookingRoomCard extends StatelessWidget {
             // Availability count
             Text(
               "${room.nombreChambres} dispo.",
-              style: TextStyle(
+              style: AppTypography.font(
                 color: isSelected ? const Color(0xFF2E7D32) : Colors.green.shade600,
                 fontSize: 11,
                 fontWeight: FontWeight.bold,

@@ -23,7 +23,7 @@ class ImageCounterBadge extends StatelessWidget {
           children: [
             TextSpan(
               text: '$current',
-              style: const TextStyle(
+              style: AppTypography.font(
                 color: AppColors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -31,7 +31,7 @@ class ImageCounterBadge extends StatelessWidget {
             ),
             TextSpan(
               text: '/$total',
-              style: TextStyle(
+              style: AppTypography.font(
                 color: AppColors.white.withOpacity(0.7),
                 fontSize: 12,
                 fontWeight: FontWeight.normal,

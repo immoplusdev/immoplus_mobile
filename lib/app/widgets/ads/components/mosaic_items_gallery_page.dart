@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 import 'package:shimmer/shimmer.dart';
 

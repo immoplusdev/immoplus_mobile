@@ -335,7 +335,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
             },
             child: Text(
               'Activer maintenant',
-              style: TextStyle(color: Colors.white),
+              style: AppTypography.font(color: Colors.white),
             ),
           ),
         ],

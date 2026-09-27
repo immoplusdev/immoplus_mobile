@@ -98,7 +98,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildAvatar(imageUrl: imageUrl, monogramName: monogramName),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +106,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   children: [
                     Text(
                       displayLabel.capitalizeFirst(),
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: AppColors.immoTextPrimary,
@@ -117,7 +117,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                     if (email.isNotEmpty)
                       Text(
                         email,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 12,
                           color: AppColors.immoTextPrimary.withValues(alpha: 0.5),
                         ),
@@ -145,10 +145,10 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                           size: 18,
                           color: AppColors.primary,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
                           'Service client',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primary,

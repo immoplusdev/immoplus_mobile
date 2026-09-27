@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,15 +49,15 @@ class _ChangePasswordState extends State<ChangePassword> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Modifier mon mot de passe',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 50,
               ),
               ValueListenableBuilder<bool>(
@@ -132,7 +133,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       },
                     );
                   }),
-              const SizedBox(
+              SizedBox(
                 height: 20,
               ),
               BlocBuilder<LoginCubit, LoginCubitState>(
@@ -154,7 +155,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   );
                 },
               ),
-              const SizedBox(
+              SizedBox(
                 height: 20,
               ),
             ],

@@ -59,7 +59,7 @@ class AppDialog {
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: const Text('Retour'),
+              child: Text('Retour'),
               onPressed: () {
                 context.pop();
               },
@@ -111,7 +111,7 @@ class AppDialog {
                     color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   description,
                   textAlign: TextAlign.center,
@@ -119,7 +119,7 @@ class AppDialog {
                     color: AppColors.immoTextSecondary,
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 CustomButtom(
                   text: primaryButtonText,
                   borderRadius: BorderRadius.circular(28),
@@ -128,7 +128,7 @@ class AppDialog {
                     onPrimary?.call();
                   },
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 if (secondButtonText != null) ...[
                   SizedBox(
                     height: 50,

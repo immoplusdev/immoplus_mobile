@@ -53,7 +53,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //   showCupertinoModalPopup(
   //     context: context,
   //     builder: (context) => CupertinoActionSheet(
-  //       title: const Text("Sélectionner une photo"),
+  //       title: Text("Sélectionner une photo"),
   //       actions: [
   //         CupertinoActionSheetAction(
   //           onPressed: () async {
@@ -72,7 +72,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //               });
   //             }
   //           },
-  //           child: const Text("Prendre une photo"),
+  //           child: Text("Prendre une photo"),
   //         ),
   //         CupertinoActionSheetAction(
   //           onPressed: () async {
@@ -91,13 +91,13 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //               });
   //             }
   //           },
-  //           child: const Text("Choisir depuis la galerie"),
+  //           child: Text("Choisir depuis la galerie"),
   //         ),
   //       ],
   //       cancelButton: CupertinoActionSheetAction(
   //         isDefaultAction: true,
   //         onPressed: () => Navigator.pop(context),
-  //         child: const Text("Annuler"),
+  //         child: Text("Annuler"),
   //       ),
   //     ),
   //   );
@@ -311,10 +311,10 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                     children: [
                       const Gap(10),
                       // Title
-                      const Text(
+                      Text(
                         "Vérifier votre identité",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                           color: Color(0xFF1D2939),
@@ -322,10 +322,10 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                       ),
                       const Gap(8),
                       // Subtitle
-                      const Text(
+                      Text(
                         "Veuillez renseigner vos informations afin de vérifier votre identité.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 14,
                           color: Color(0xFF667085),
                           height: 1.4,
@@ -399,7 +399,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                         onClick: _startDiditVerification,
                         isLoading: _isLoading,
                         clickable: !_isLoading,
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -410,7 +410,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                             Gap(8),
                             Text(
                               "Vérification automatisée",
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -436,7 +436,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                   },
                   child: Container(
                     padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Color(0xFFFF0000),
                       shape: BoxShape.circle,
                     ),
@@ -484,7 +484,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //                       onTap: () => _removeImage(isFront),
   //                       child: Container(
   //                         padding: const EdgeInsets.all(4),
-  //                         decoration: const BoxDecoration(
+  //                         decoration: BoxDecoration(
   //                           color: Colors.black54,
   //                           shape: BoxShape.circle,
   //                         ),
@@ -522,7 +522,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //                                 ? "Téléverser votre pièce\nd'identité (recto)"
   //                                 : "Téléverser votre pièce\nd'identité (verso)"),
   //                         textAlign: TextAlign.center,
-  //                         style: const TextStyle(
+  //                         style: AppTypography.font(
   //                           fontSize: 10,
   //                           fontWeight: FontWeight.w600,
   //                           color: Color(0xFF2172CB),

@@ -144,12 +144,12 @@ class Utils {
   static Widget getImageWidget({required String id}) => CachedNetworkImage(
         imageUrl: "${RequestPath.baseUrl}/files/raw/public/$id",
         placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: (Colors.grey[300])!,
+          baseColor: (AppColors.immoBorderStrong)!,
           highlightColor: Colors.white,
           period: const Duration(milliseconds: 600),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: AppColors.immoTextSecondary,
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -157,7 +157,7 @@ class Utils {
         errorWidget: (context, url, error) => Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               color: Colors.red,
               image: DecorationImage(
                 fit: BoxFit.cover,
@@ -257,7 +257,7 @@ class Utils {
       case 'non_paye':
         return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
       default:
-        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.grey);
+        return FaIcon(FontAwesomeIcons.hourglass, color: AppColors.immoTextSecondary);
     }
   }
 
@@ -282,7 +282,7 @@ class Utils {
       case 'non_paye':
         return Colors.red;
       default:
-        return Colors.grey;
+        return AppColors.immoTextSecondary;
     }
   }
 
@@ -319,7 +319,7 @@ class Utils {
       case 'express':
         return Colors.red;
       default:
-        return Colors.grey;
+        return AppColors.immoTextSecondary;
     }
   }
 

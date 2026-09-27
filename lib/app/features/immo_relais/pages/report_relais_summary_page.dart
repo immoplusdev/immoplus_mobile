@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -89,7 +88,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
         ),
         title: Text(
           'Ma demande',
-          style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: SafeArea(
@@ -100,7 +99,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
             children: [
               Text(
                 'Votre demande de logement',
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: AppColors.primary,
@@ -132,7 +131,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +147,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
                 ),
                 child: Text(
                   'Info active',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Colors.green.shade700,
@@ -157,7 +156,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
               ),
               Text(
                 'Publication anonyme',
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
           ),
@@ -185,19 +184,19 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade500)),
+              Text(label, style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary)),
               const Gap(12),
               Expanded(
                 child: Text(
                   value,
                   textAlign: TextAlign.end,
-                  style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
           ),
         ),
-        if (!noDivider) Divider(height: 1, color: Colors.grey.shade200),
+        if (!noDivider) Divider(height: 1, color: AppColors.immoBorderDefault),
       ],
     );
   }
@@ -207,7 +206,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -218,7 +217,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
           Expanded(
             child: Text(
               'Votre identité reste privée. Les utilisateurs voient uniquement l\'info de façon anonyme.',
-              style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
+              style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
             ),
           ),
         ],
@@ -232,27 +231,27 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Ce qui se passe ensuite',
-            style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+            style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
           ),
           const Gap(12),
           Text(
             'Votre info est envoyée à tous les utilisateurs qui cherchent des appartements à ${_draft.commune ?? ''}',
-            style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.primary, height: 1.4),
+            style: AppTypography.font(fontSize: 13, color: AppColors.primary, height: 1.4),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Divider(height: 1, color: Colors.grey.shade200),
+            child: Divider(height: 1, color: AppColors.immoBorderDefault),
           ),
           Text(
             "Imatch ne montre que l'information sans autre précision",
-            style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.primary, height: 1.4),
+            style: AppTypography.font(fontSize: 13, color: AppColors.primary, height: 1.4),
           ),
         ],
       ),

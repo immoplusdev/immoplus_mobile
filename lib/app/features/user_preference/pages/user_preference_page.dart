@@ -10,8 +10,6 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit.dart';
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit_state.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 class UserPreferencePage extends StatelessWidget {
@@ -60,7 +58,7 @@ class UserPreferenceView extends StatelessWidget {
         child: BlocBuilder<UserPreferenceCubit, UserPreferenceCubitState>(
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => Center(child: CircularProgressIndicator()),
               loaded: (options, selectedIntentId, selectedTypes,
                       selectedLocations, budgetMin, budgetMax, isSaving) =>
                   Column(
@@ -149,7 +147,7 @@ class UserPreferenceView extends StatelessWidget {
                               selectedIntentId == null &&
                               budgetMin == null &&
                               budgetMax == null)
-                          ? Colors.grey.shade300
+                          ? AppColors.immoBorderStrong
                           : AppColors.primary,
                       onClick: (selectedTypes.isEmpty &&
                               selectedLocations.isEmpty &&
@@ -169,13 +167,13 @@ class UserPreferenceView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Iconsax.warning_2,
-                          size: 64, color: Colors.grey.shade400),
+                          size: 64, color: AppColors.immoTextDisabled),
                       const Gap(16),
                       Text(
                         message,
                         textAlign: TextAlign.center,
                         style: AppTypography.bodyMedium.copyWith(
-                          color: Colors.grey.shade600,
+                          color: AppColors.immoTextSecondary,
                         ),
                       ),
                       const Gap(24),
@@ -232,7 +230,7 @@ class _PreferenceChip extends StatelessWidget {
           color: isSelected ? AppColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.grey.shade200,
+            color: isSelected ? AppColors.primary : AppColors.immoBorderDefault,
           ),
         ),
         child: Row(
@@ -241,7 +239,7 @@ class _PreferenceChip extends StatelessWidget {
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
-                color: isSelected ? Colors.white : Colors.grey.shade600,
+                color: isSelected ? Colors.white : AppColors.immoTextSecondary,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),
@@ -249,7 +247,7 @@ class _PreferenceChip extends StatelessWidget {
             Icon(
               Iconsax.add,
               size: 16,
-              color: isSelected ? Colors.white : Colors.grey.shade400,
+              color: isSelected ? Colors.white : AppColors.immoTextDisabled,
             ),
           ],
         ),

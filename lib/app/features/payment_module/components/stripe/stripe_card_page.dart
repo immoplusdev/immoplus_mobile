@@ -14,7 +14,6 @@ import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
@@ -91,7 +90,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
+      return Center(
           child: Text('Erreur: Données de paiement manquantes'));
     }
 
@@ -152,7 +151,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(color: Colors.grey[600]),
+                    ?.copyWith(color: AppColors.immoTextSecondary),
               ),
             ],
           ),
@@ -161,14 +160,14 @@ class _StripeCardPageState extends State<StripeCardPage> {
             isLoading: _isLoading,
             clickable: !_isLoading,
             onClick: () => _onPay(paymentData),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FaIcon(FontAwesomeIcons.lock, size: 13, color: Colors.white),
                 Gap(8),
                 Text(
                   "Payer par carte",
-                  style: TextStyle(
+                  style: AppTypography.font(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),

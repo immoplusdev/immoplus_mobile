@@ -76,7 +76,7 @@ class _BookingdatePickerState extends State<BookingdatePicker> {
                 closeDialogOnOkTapped: true,
                 firstDayOfWeek: 1,
                 calendarType: CalendarDatePicker2Type.multi,
-                selectedDayTextStyle: TextStyle(
+                selectedDayTextStyle: AppTypography.font(
                     color: AppColors.white, fontWeight: FontWeight.w700),
                 //selectedDayHighlightColor: Colors.purple[800],
                 centerAlignModePicker: true,
@@ -103,11 +103,11 @@ class _BookingdatePickerState extends State<BookingdatePicker> {
           // actions: <Widget>[
           //   TextButton(
           //     onPressed: () => Navigator.pop(context, 'Cancel'),
-          //     child: const Text('Cancel'),
+          //     child: Text('Cancel'),
           //   ),
           //   TextButton(
           //     onPressed: () => Navigator.pop(context, 'OK'),
-          //     child: const Text('OK'),
+          //     child: Text('OK'),
           //   ),
           // ],
         ),

@@ -152,7 +152,7 @@ class MonogramAvatar extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
-          style: TextStyle(
+          style: AppTypography.font(
             color: AppColors.white,
             fontSize: effectiveFontSize,
             fontWeight: FontWeight.w600,
@@ -285,7 +285,7 @@ class SkeuomorphicAvatar extends StatelessWidget {
           child: Center(
             child: Text(
               initials,
-              style: TextStyle(
+              style: AppTypography.font(
                 color: AppColors.immoBgSurfaceMuted,
                 fontSize: effectiveFontSize,
                 fontWeight: FontWeight.w600,

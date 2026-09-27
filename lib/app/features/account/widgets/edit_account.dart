@@ -80,7 +80,7 @@
 //       child: Scaffold(
 //         appBar: AppBar(
 //           automaticallyImplyLeading: false,
-//           title: const Text('Modifier mes informations'),
+//           title: Text('Modifier mes informations'),
 //           //backgroundColor: Colors.red,
 //           //backgroundColor: Theme.of(context).colorScheme.primaryVariant,
 
@@ -109,7 +109,7 @@
 //                 child: Column(
 //                   crossAxisAlignment: CrossAxisAlignment.center,
 //                   children: [
-//                     const SizedBox(
+//                     SizedBox(
 //                       height: 25,
 //                     ),
 //                     CustomTextField(
@@ -213,7 +213,7 @@
 //                           FormUtils.fieldValidator(value: value),
 //                     ),
 
-//                     const SizedBox(
+//                     SizedBox(
 //                       height: 300,
 //                     ),
 //                   ],

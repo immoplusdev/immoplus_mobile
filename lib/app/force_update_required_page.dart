@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:gap/gap.dart';
@@ -87,13 +88,13 @@ class _ForceUpdateRequiredPageState extends State<ForceUpdateRequiredPage>
                           Gap(30),
                           Text(
                             "Mise à jour obligatoire",
-                            style: TextStyle(
+                            style: AppTypography.font(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                           Text(
                             "Veuillez mettre à jour votre application pour continuer, elle contient des améliorations importantes.",
-                            style: TextStyle(
+                            style: AppTypography.font(
                                 fontSize: 16, fontWeight: FontWeight.w400),
                             textAlign: TextAlign.center,
                           ),

@@ -10,7 +10,6 @@ import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/widgets/proposition_card.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 class AlertPropositionsPage extends StatefulWidget {
   final String alertId;
@@ -86,18 +85,18 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
         centerTitle: true,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _propositions.isEmpty
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.search_off_outlined,
-                          size: 80, color: Colors.grey[200]),
+                          size: 80, color: AppColors.immoBorderDefault),
                       const Gap(16),
                       Text(
                         'Aucune proposition pour le moment',
-                        style: AppTypography.bodyMedium.copyWith(color: Colors.grey),
+                        style: AppTypography.bodyMedium.copyWith(color: AppColors.immoTextSecondary),
                       ),
                     ],
                   ),

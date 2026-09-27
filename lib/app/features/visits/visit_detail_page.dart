@@ -145,7 +145,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                         isExpress
                                             ? 'VISITE EXPRESS'
                                             : 'VISITE NORMALE',
-                                        style: TextStyle(
+                                        style: AppTypography.font(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
                                           color: isExpress
@@ -453,7 +453,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            textStyle: const TextStyle(
+                            textStyle: AppTypography.font(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -515,7 +515,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           if (context.canPop()) context.pop();
                         },
                         icon: const Icon(Iconsax.arrow_left, size: 18),
-                        label: const Text("Retour"),
+                        label: Text("Retour"),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary,
                           side: BorderSide(color: AppColors.primary),

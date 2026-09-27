@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:pinput/pinput.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 /// Dialog 1 : choix du canal d'envoi (WhatsApp ou SMS).
@@ -32,7 +31,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                   color: AppColors.primary,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 'Choisissez comment vous souhaitez recevoir votre code de vérification.',
                 textAlign: TextAlign.center,
@@ -40,7 +39,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                   color: AppColors.immoTextSecondary,
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Bouton WhatsApp (rempli)
               CustomButtom(
@@ -48,7 +47,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                 borderRadius: BorderRadius.circular(28),
                 onClick: () => Navigator.of(ctx).pop('whatsapp'),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
 
               // Bouton SMS (contour)
               SizedBox(
@@ -115,14 +114,14 @@ Future<String?> showOtpInputDialog(
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () => Navigator.of(ctx).pop(),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close,
                         size: 22,
-                        color: Colors.grey,
+                        color: AppColors.immoTextSecondary,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   Text(
                     isWhatsapp
@@ -134,7 +133,7 @@ Future<String?> showOtpInputDialog(
                       color: AppColors.primary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Un code à 6 chiffres a été envoyé au $phoneNumber',
                     textAlign: TextAlign.center,
@@ -142,7 +141,7 @@ Future<String?> showOtpInputDialog(
                       color: AppColors.immoTextSecondary,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // Champ OTP (6 cases)
                   Center(
@@ -191,7 +190,7 @@ Future<String?> showOtpInputDialog(
                   ),
 
                   if (currentError != null) ...[
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       currentError!,
                       textAlign: TextAlign.center,
@@ -199,7 +198,7 @@ Future<String?> showOtpInputDialog(
                     ),
                   ],
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // Bouton Valider
                   CustomButtom(
@@ -209,7 +208,7 @@ Future<String?> showOtpInputDialog(
                         ? () => Navigator.of(ctx).pop(otpController.text)
                         : null,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   // Bouton Renvoyer
                   Center(

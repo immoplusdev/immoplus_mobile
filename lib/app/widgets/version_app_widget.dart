@@ -19,7 +19,7 @@ class VersionAppWidget extends StatelessWidget {
                 child: Text(
                   '${snapshot.data}',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     color: AppColors.gray500,
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w400,
@@ -31,7 +31,7 @@ class VersionAppWidget extends StatelessWidget {
             ],
           );
         }
-        return const SizedBox();
+        return SizedBox();
       },
     );
   }

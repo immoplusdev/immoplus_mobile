@@ -1,7 +1,6 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 /// Une section titrée ("À venir (3)") + scroll horizontal de cartes —
 /// partagé par "Pour moi", "Mes intérêts" et "Reçues" ("Je déménage"),
 /// chacun groupant ses items par statut au lieu d'une seule liste plate.
@@ -28,7 +27,7 @@ class RelaisStatusSection<T> extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               '$title (${items.length})',
-              style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+              style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
           const Gap(12),

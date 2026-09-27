@@ -170,7 +170,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: const Text('Historique des paiements'),
+            title: Text('Historique des paiements'),
             // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
             //       fontWeight: FontWeight.w700,
             //     ),
@@ -221,8 +221,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Shimmer.fromColors(
-        baseColor: Colors.grey.shade200,
-        highlightColor: Colors.grey.shade50,
+        baseColor: AppColors.immoBorderDefault,
+        highlightColor: AppColors.immoBgSurfaceMuted,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -442,7 +442,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                         const Gap(4),
                         Text(
                           statusName,
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: statusColor,

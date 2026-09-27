@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/relais_interest_status.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_interest_requests.dart';
@@ -93,17 +92,17 @@ class _RelaisInterestsPageState extends State<RelaisInterestsPage> {
         ),
         title: Text(
           'Personnes intéressées',
-          style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator())
             : _interests.isEmpty
                 ? Center(
                     child: Text(
                       'Personne ne s\'est encore manifesté.',
-                      style: GoogleFonts.dmSans(color: Colors.grey.shade500),
+                      style: AppTypography.font(color: AppColors.immoTextSecondary),
                     ),
                   )
                 : RefreshIndicator(
@@ -151,7 +150,7 @@ class _InterestCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   interest.clientName ?? 'Utilisateur',
-                  style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -162,7 +161,7 @@ class _InterestCard extends StatelessWidget {
                 ),
                 child: Text(
                   status.label,
-                  style: GoogleFonts.dmSans(fontSize: 11, fontWeight: FontWeight.w600, color: status.textColor),
+                  style: AppTypography.font(fontSize: 11, fontWeight: FontWeight.w600, color: status.textColor),
                 ),
               ),
             ],
@@ -171,14 +170,14 @@ class _InterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               interest.message!,
-              style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
+              style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
             ),
           ],
           if (interest.meetingDate != null) ...[
             const Gap(8),
             Text(
               'Visite prévue le ${DateFormat('d MMM yyyy à HH:mm', 'fr_FR').format(interest.meetingDate!)}',
-              style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+              style: AppTypography.font(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
             ),
           ],
           if (isPending) ...[
@@ -193,7 +192,7 @@ class _InterestCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text('Décliner', style: GoogleFonts.dmSans(color: Colors.red, fontWeight: FontWeight.w600)),
+                    child: Text('Décliner', style: AppTypography.font(color: Colors.red, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const Gap(12),
@@ -207,7 +206,7 @@ class _InterestCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text('Planifier une visite',
-                        style: GoogleFonts.dmSans(color: Colors.white, fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(color: Colors.white, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],

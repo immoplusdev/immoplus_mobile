@@ -33,7 +33,7 @@ class AlertSuccessPage extends StatelessWidget {
                 'Nous vous proposerons des biens correspondant à vos critères dans les plus brefs délais.',
                 textAlign: TextAlign.center,
                 style: AppTypography.bodyMedium.copyWith(
-                  color: Colors.grey.shade500,
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
               const Spacer(),

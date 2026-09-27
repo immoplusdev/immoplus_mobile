@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class ReverseSearchChip extends StatelessWidget {
@@ -31,19 +32,19 @@ class ReverseSearchChip extends StatelessWidget {
           children: [
             Text(
               text,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
             if (badge != null && badge!.isNotEmpty) ...[
-              const SizedBox(width: 2),
+              SizedBox(width: 2),
               Transform.translate(
                 offset: const Offset(0, -6),
                 child: Text(
                   badge!,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF2744DE),

@@ -34,7 +34,7 @@ class DetailKnowSection extends StatelessWidget {
             onTap: () => _showRulesSheet(context),
           ),
 
-          Divider(height: 32, thickness: 0.5, color: Colors.grey.shade200),
+          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Sécurité et logement ──
           _KnowCard(
@@ -47,7 +47,7 @@ class DetailKnowSection extends StatelessWidget {
             ],
           ),
 
-          Divider(height: 32, thickness: 0.5, color: Colors.grey.shade200),
+          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Conditions d'annulation ──
           _KnowCard(
@@ -80,15 +80,15 @@ class DetailKnowSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 'Règlement intérieur',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF222222),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               _RuleRow(
                 icon: Iconsax.clock,
                 text: "Arrivée à partir de ${residenceModel.heureEntree}",
@@ -119,21 +119,21 @@ class DetailKnowSection extends StatelessWidget {
               ),
               if (residenceModel.reglesSupplementaires.isNotEmpty) ...[
                 Divider(
-                    height: 32, thickness: 0.5, color: Colors.grey.shade200),
-                const Text(
+                    height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
+                Text(
                   'Règles supplémentaires',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF222222),
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   residenceModel.reglesSupplementaires,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 15,
-                    color: Colors.grey.shade600,
+                    color: AppColors.immoTextSecondary,
                     height: 1.5,
                   ),
                 ),
@@ -177,7 +177,7 @@ class _KnowCard extends StatelessWidget {
             ),
             child: Icon(icon, size: 22, color: Color(0xff2744de)),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           // Content
           Expanded(
             child: Column(
@@ -185,23 +185,23 @@ class _KnowCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF222222),
                     height: 1.3,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 ...items.take(3).map(
                       (item) => Padding(
                         padding: const EdgeInsets.only(bottom: 2),
                         child: Text(
                           item,
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Colors.grey.shade500,
+                            color: AppColors.immoTextSecondary,
                             height: 1.45,
                           ),
                         ),
@@ -217,7 +217,7 @@ class _KnowCard extends StatelessWidget {
               child: Icon(
                 Iconsax.arrow_right_3,
                 size: 18,
-                color: Colors.grey.shade400,
+                color: AppColors.immoTextDisabled,
               ),
             ),
         ],
@@ -238,12 +238,12 @@ class _RuleRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          Icon(icon, size: 22, color: Colors.grey.shade700),
-          const SizedBox(width: 14),
+          Icon(icon, size: 22, color: AppColors.immoTextLabel),
+          SizedBox(width: 14),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF222222),

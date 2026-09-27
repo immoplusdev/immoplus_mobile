@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -390,7 +391,7 @@ class _AiAssistantPageState extends State<AiAssistantPage>
             Navigator.of(context).pop();
           },
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
       ],
     );
   }
@@ -415,14 +416,14 @@ class _AiAssistantPageState extends State<AiAssistantPage>
             _chat.startNewConversation();
           },
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
       ],
     );
   }
 
   Widget _buildThread() {
     if (_chat.loadingHistory) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
             strokeWidth: 2, color: ChatTokens.brand500),
       );
@@ -517,11 +518,11 @@ class _ConnectionBanner extends StatelessWidget {
                         color: fg,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                   ],
                   Text(
                     label,
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: fg,
@@ -591,33 +592,33 @@ class _SupportSheet extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 20),
+            Text(
               'Contacter le support',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: ChatTokens.neutral900,
                 letterSpacing: -0.3,
               ),
             ),
-            const SizedBox(height: 6),
-            const Text(
+            SizedBox(height: 6),
+            Text(
               'Notre équipe répond en moins de 24h.',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 14,
                 color: ChatTokens.neutral400,
                 height: 1.4,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             _SupportOption(
               icon: Iconsax.sms,
               label: 'Email',
               value: _email,
               onTap: _launchEmail,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _SupportOption(
               icon: Iconsax.message,
               label: 'WhatsApp',
@@ -673,24 +674,24 @@ class _SupportOption extends StatelessWidget {
                   ),
                   child: Icon(icon, size: 18, color: ChatTokens.brand500),
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         label,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: ChatTokens.neutral900,
                           letterSpacing: -0.1,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       Text(
                         value,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 12,
                           color: ChatTokens.neutral400,
                         ),

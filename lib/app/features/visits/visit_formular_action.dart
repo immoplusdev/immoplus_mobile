@@ -14,10 +14,7 @@ import 'package:immoplus/app/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus/app/features/visits/widgets/product_info.dart';
 import 'package:immoplus/app/features/visits/widgets/visit_listtile_action.dart';
 import 'package:immoplus/app/modules/country_phone_number/country_phone_number.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/widgets/bottom_immoplus.dart';
 import 'package:immoplus/app/widgets/client_service_chip.dart';
@@ -169,7 +166,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.immoBorderDefault),
                     ),
                     child: Column(
                       children: [

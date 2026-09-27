@@ -59,7 +59,7 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
                             child: Text(
                           widget.title,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),

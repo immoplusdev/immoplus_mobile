@@ -128,7 +128,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                       });
                       Navigator.of(ctx).pop();
                     },
-                    child: const Text('OK'),
+                    child: Text('OK'),
                   ),
                 ],
               ),
@@ -167,15 +167,15 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
         ),
         child: Row(
           children: [
-            const Icon(CupertinoIcons.calendar, color: Colors.grey, size: 20),
+            Icon(CupertinoIcons.calendar, color: AppColors.immoTextSecondary, size: 20),
             const Gap(12),
             Text(
               hasValue
                   ? DateFormat('MMMM yyyy', 'fr_FR').format(_birthDate!)
                   : 'Date de naissance',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 15,
-                color: hasValue ? Colors.black : Colors.grey,
+                color: hasValue ? Colors.black : AppColors.immoTextSecondary,
               ),
             ),
           ],
@@ -203,7 +203,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                 shape: BoxShape.circle,
                 color: AppColors.primary,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_back_ios_rounded,
                 color: Colors.white,
                 size: 16,
@@ -265,7 +265,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     // CustomTextField(
                     //   isEnabled: isEmailEmpty,
                     //   controller: _formController.email,
-                    //   prefixIcon: const Icon(CupertinoIcons.mail),
+                    //   prefixIcon: Icon(CupertinoIcons.mail),
                     //   labelText: 'Email',
                     //   textInputType: TextInputType.emailAddress,
                     //   validator: (String? value) =>
@@ -338,7 +338,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                         child: Text(
                           _nomError ?? _prenomError ?? _birthDateError ?? '',
                           style:
-                              const TextStyle(color: Colors.red, fontSize: 12),
+                              AppTypography.font(color: Colors.red, fontSize: 12),
                         ),
                       ),
                     ],
@@ -347,7 +347,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     //   valueListenable: _passwordNotifier,
                     //   builder: (BuildContext context, bool value, child) {
                     //     return CustomTextField(
-                    //       prefixIcon: const Icon(CupertinoIcons.lock),
+                    //       prefixIcon: Icon(CupertinoIcons.lock),
                     //       textInputType: TextInputType.visiblePassword,
                     //       textInputAction: TextInputAction.next,
                     //       controller: _formController.password,
@@ -377,7 +377,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     //     return CustomTextField(
                     //       textInputAction: TextInputAction.done,
                     //       textInputType: TextInputType.visiblePassword,
-                    //       prefixIcon: const Icon(CupertinoIcons.lock),
+                    //       prefixIcon: Icon(CupertinoIcons.lock),
                     //       controller: _formController.passwordConfirm,
                     //       obscureText: !value,
                     //       sufixIcon: IconButton(
@@ -432,11 +432,11 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                               size: 24,
                               color: value
                                   ? Theme.of(context).colorScheme.primary
-                                  : Colors.grey,
+                                  : AppColors.immoTextSecondary,
                             ),
                           ),
                           const Gap(8),
-                          const Text("j'approuve les"),
+                          Text("j'approuve les"),
                           TextButton(
                               onPressed: () {
                                 showModalBottomSheet(
@@ -454,7 +454,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                               },
                               child: Text(
                                 'Termes & conditions',
-                                style: TextStyle(
+                                style: AppTypography.font(
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               )),

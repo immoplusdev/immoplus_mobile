@@ -788,7 +788,7 @@ class AppRouter {
           },
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Réservation'),
+              title: Text('Réservation'),
               leading: IconButton(
                 onPressed: () {
                   context.goNamed(SplashScreen.name);
@@ -806,7 +806,7 @@ class AppRouter {
         path: '/payment/demandes_visites/:idProduct',
         builder: (context, state) => Scaffold(
           appBar: AppBar(
-            title: const Text('Demande de visite'),
+            title: Text('Demande de visite'),
             leading: IconButton(
               onPressed: () {
                 context.goNamed(SplashScreen.name);

@@ -63,7 +63,7 @@ class NotificationDetailPage extends StatelessWidget {
                         DateFormat('d MMMM yyyy, HH:mm', 'fr_FR')
                             .format(notification.createdAt ?? DateTime.now()),
                         style: AppTypography.bodyMedium.copyWith(
-                          color: Colors.grey.shade500,
+                          color: AppColors.immoTextSecondary,
                         ),
                       ),
                     ],
@@ -76,7 +76,7 @@ class NotificationDetailPage extends StatelessWidget {
               'Message',
               style: AppTypography.titleSmall.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.grey.shade400,
+                color: AppColors.immoTextDisabled,
                 letterSpacing: 0.5,
               ),
             ),
@@ -85,9 +85,9 @@ class NotificationDetailPage extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.grey.shade50,
+                color: AppColors.immoBgSurfaceMuted,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.grey.shade100),
+                border: Border.all(color: AppColors.immoBgSurfaceMuted),
               ),
               child: Text(
                 notification.message ?? 'Aucun contenu.',

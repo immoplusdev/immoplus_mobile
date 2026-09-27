@@ -60,7 +60,7 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
@@ -76,7 +76,7 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
         body: BlocBuilder<HotelCubit, HotelState>(
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => Center(child: CircularProgressIndicator()),
               estimationLoaded: (estimation) => SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                 child: HotelBookingCard(
@@ -93,24 +93,24 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             "SÉJOUR",
-                            style: TextStyle(
-                                color: Colors.grey,
+                            style: AppTypography.font(
+                                color: AppColors.immoTextSecondary,
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold),
                           ),
                           const Gap(8),
                           Text(
                             displayDates,
-                            style: const TextStyle(
+                            style: AppTypography.font(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           const Gap(4),
                           Text(
                             "${estimation.roomTypeName} • ${estimation.adults} adulte${estimation.adults > 1 ? 's' : ''}",
-                            style: TextStyle(
-                                color: Colors.grey.shade600, fontSize: 13),
+                            style: AppTypography.font(
+                                color: AppColors.immoTextSecondary, fontSize: 13),
                           ),
                         ],
                       ),
@@ -139,14 +139,14 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           "Total séjour",
-                          style: TextStyle(
+                          style: AppTypography.font(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           "${CurrencyFormatter().format(estimation.tarification.prixTotal.toString())} FCFA",
-                          style: const TextStyle(
+                          style: AppTypography.font(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -170,16 +170,16 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
+                              Text(
                                 "ACOMPTE À LA RÉSERVATION",
-                                style: TextStyle(
+                                style: AppTypography.font(
                                     color: Color(0xFF2744DE),
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 "${estimation.acompte.pourcentage}%",
-                                style: const TextStyle(
+                                style: AppTypography.font(
                                     color: Color(0xFF2744DE),
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold),
@@ -193,14 +193,14 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                                 TextSpan(
                                   text:
                                       "${CurrencyFormatter().format(estimation.acompte.montant.toString())}",
-                                  style: const TextStyle(
+                                  style: AppTypography.font(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF5D0014)),
                                 ),
-                                const TextSpan(
+                                TextSpan(
                                   text: " FCFA",
-                                  style: TextStyle(
+                                  style: AppTypography.font(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF5D0014)),
@@ -209,9 +209,9 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                             ),
                           ),
                           const Gap(4),
-                          const Text(
+                          Text(
                             "À payez maintenant",
-                            style: TextStyle(
+                            style: AppTypography.font(
                                 color: Color(0xFF2744DE),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500),
@@ -227,13 +227,13 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                             children: [
                               Text(
                                 "Solde au check-in",
-                                style: TextStyle(
+                                style: AppTypography.font(
                                     color: Colors.black.withOpacity(0.7),
                                     fontSize: 14),
                               ),
                               Text(
                                 "${CurrencyFormatter().format(estimation.montantRestant.toString())} FCFA",
-                                style: const TextStyle(
+                                style: AppTypography.font(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: Colors.black),
@@ -247,10 +247,10 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                     const Gap(24),
 
                     // ── POLITIQUE D'ANNULATION ──
-                    const Text(
+                    Text(
                       "POLITIQUE D'ANNULATION",
-                      style: TextStyle(
-                          color: Colors.grey,
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold),
                     ),
@@ -265,9 +265,9 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                       ),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 14),
-                      child: const Text(
+                      child: Text(
                         "Annulation gratuite",
-                        style: TextStyle(
+                        style: AppTypography.font(
                             color: Color(0xFF2744DE),
                             fontWeight: FontWeight.bold,
                             fontSize: 14),
@@ -348,7 +348,7 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                   ],
                 ),
               ),
-              orElse: () => const Center(
+              orElse: () => Center(
                   child: Text("Une erreur est survenue lors de l'estimation.")),
             );
           },
@@ -362,9 +362,9 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label,
-            style: TextStyle(color: Colors.grey.shade700, fontSize: 14)),
+            style: AppTypography.font(color: AppColors.immoTextLabel, fontSize: 14)),
         Text(amount,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            style: AppTypography.font(fontWeight: FontWeight.w600, fontSize: 14)),
       ],
     );
   }

@@ -84,7 +84,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   widget.type == ContactChangeType.phone
                       ? 'Entrez votre nouveau numéro de téléphone. Un code de vérification vous sera envoyé.'
@@ -94,7 +94,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 28),
+                SizedBox(height: 28),
                 if (widget.type == ContactChangeType.phone)
                   InternationalPhoneInput(
                     onValidPhoneNumber: (phone) {
@@ -149,7 +149,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                     );
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
               ],
             ),
           ),

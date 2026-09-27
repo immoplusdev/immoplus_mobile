@@ -108,7 +108,7 @@ class _NearResidencesPageState extends State<NearResidencesPage>
             Text(
               'Résidences dans un rayon de ${widget.radius.toInt()} km',
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade600,
+                    color: AppColors.immoTextSecondary,
                   ),
             ),
           ],
@@ -155,7 +155,7 @@ class _NearResidencesPageState extends State<NearResidencesPage>
                           Icon(
                             Icons.location_off_outlined,
                             size: 80,
-                            color: Colors.grey.shade300,
+                            color: AppColors.immoBorderStrong,
                           ),
                           const Gap(20),
                           Text(
@@ -183,7 +183,7 @@ class _NearResidencesPageState extends State<NearResidencesPage>
                       child: Text(
                         'Vous avez vu toutes les résidences',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey.shade600,
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),

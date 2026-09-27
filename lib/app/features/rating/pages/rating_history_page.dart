@@ -71,7 +71,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Historique des notes'),
+        title: Text('Historique des notes'),
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: AppColors.transparent,
         elevation: 0,
@@ -94,7 +94,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
             PagedSliverList<int, RatingModel>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate(
-                firstPageProgressIndicatorBuilder: (context) => const Padding(
+                firstPageProgressIndicatorBuilder: (context) => Padding(
                   padding: EdgeInsets.all(32),
                   child: Center(child: CircularProgressIndicator()),
                 ),
@@ -116,7 +116,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const Gap(20),
-                      const Text(
+                      Text(
                         "Vous n'avez pas encore évalué de séjour.",
                         textAlign: TextAlign.center,
                       ),

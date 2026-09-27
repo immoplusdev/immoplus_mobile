@@ -4,9 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
 
@@ -143,10 +141,10 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
                 alignment: Alignment.topRight,
                 child: GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(
+                  child: Icon(
                     Iconsax.close_circle,
                     size: 22,
-                    color: Colors.grey,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
               ),
@@ -256,7 +254,7 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
         ),
         if (_isLoading) ...[
           const Gap(20),
-          const Center(
+          Center(
             child: SizedBox(
               width: 22,
               height: 22,
@@ -268,7 +266,7 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
         Center(
           child: TextButton(
             onPressed: _isLoading ? null : _resend,
-            child: const Text('Renvoyer le code'),
+            child: Text('Renvoyer le code'),
           ),
         ),
       ],

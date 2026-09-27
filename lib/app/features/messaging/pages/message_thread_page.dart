@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/config/injection.dart';
@@ -26,9 +25,7 @@ import '../../../features/residence_detail/residence_page.dart';
 import '../../../features/suggest/logic/reverse_search_navigation.dart';
 import '../../../features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import '../../../utils/utils.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import '../logic/conversation_thread_cubit.dart';
 import '../logic/conversation_thread_state.dart';
 import '../utils/messaging_time_format.dart';
@@ -204,7 +201,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
             if (type == ConversationType.reservation && conversation.residenceId != null)
               ListTile(
                 leading: const Icon(Icons.home_outlined),
-                title: const Text('Voir la résidence'),
+                title: Text('Voir la résidence'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   context.pushNamed(
@@ -216,7 +213,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
             if (type == ConversationType.visite && _visitData?.bienImmobilier != null) ...[
               ListTile(
                 leading: const Icon(Icons.home_outlined),
-                title: const Text('Voir le bien'),
+                title: Text('Voir le bien'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   context.pushNamed(
@@ -227,7 +224,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
               ),
               ListTile(
                 leading: const Icon(Icons.event_note_outlined),
-                title: const Text('Voir la demande de visite'),
+                title: Text('Voir la demande de visite'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   context.pushNamed(
@@ -244,7 +241,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
             ],
             ListTile(
               leading: const Icon(Icons.flag_outlined),
-              title: const Text('Signaler'),
+              title: Text('Signaler'),
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 ReportConversationSheet.show(
@@ -260,7 +257,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
             if (!isBlocked && type != ConversationType.support)
               ListTile(
                 leading: Icon(Icons.block, color: AppColors.immoFeedbackError),
-                title: Text('Bloquer', style: TextStyle(color: AppColors.immoFeedbackError)),
+                title: Text('Bloquer', style: AppTypography.font(color: AppColors.immoFeedbackError)),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   final cubit = context.read<ConversationThreadCubit>();
@@ -302,7 +299,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
               return Column(
                 children: [
                   _MinimalHeader(onBack: () => Navigator.of(context).maybePop()),
-                  const Expanded(child: Center(child: CircularProgressIndicator())),
+                  Expanded(child: Center(child: CircularProgressIndicator())),
                 ],
               );
             }
@@ -317,17 +314,17 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.wifi_off, size: 40, color: Colors.grey.shade400),
-                            const SizedBox(height: 12),
+                            Icon(Icons.wifi_off, size: 40, color: AppColors.immoTextDisabled),
+                            SizedBox(height: 12),
                             Text(state.message, textAlign: TextAlign.center),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             OutlinedButton(
                               onPressed: () => context.read<ConversationThreadCubit>().retry(),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: AppColors.primary,
                                 side: BorderSide(color: AppColors.primary),
                               ),
-                              child: const Text('Réessayer'),
+                              child: Text('Réessayer'),
                             ),
                           ],
                         ),
@@ -378,11 +375,11 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
-                    color: Colors.grey.shade100,
+                    color: AppColors.immoBgSurfaceMuted,
                     child: Text(
                       'Vous ne pouvez plus échanger de messages dans cette conversation.',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700),
+                      style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel),
                     ),
                   )
                 else
@@ -414,7 +411,7 @@ class _MinimalHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
+        border: Border(bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1)),
       ),
       child: Row(
         children: [
@@ -444,7 +441,7 @@ class _Header extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
+        border: Border(bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1)),
       ),
       child: Row(
         children: [
@@ -460,14 +457,14 @@ class _Header extends StatelessWidget {
               color: AppColors.primary,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(peerLabel,
-                    style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.w600),
+                    style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
                 if (presenceLabel.isNotEmpty)
@@ -485,11 +482,11 @@ class _Header extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                         ],
                         Text(
                           presenceLabel,
-                          style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+                          style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
                         ),
                       ],
                     ),
@@ -612,16 +609,16 @@ class _ResidenceContextCardState extends State<_ResidenceContextCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.immoBorderDefault),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Demande d'information envoyée",
-              style: GoogleFonts.dmSans(fontSize: 11, color: Colors.grey.shade600),
+              style: AppTypography.font(fontSize: 11, color: AppColors.immoTextSecondary),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             InkWell(
               onTap: () => context.pushNamed(
                 ResidencePage.name,
@@ -634,16 +631,16 @@ class _ResidenceContextCardState extends State<_ResidenceContextCard> {
                     residence.nom,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w600),
+                    style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                   if (stayInfo != null) ...[
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       stayInfo,
-                      style: GoogleFonts.dmSans(fontSize: 11, color: Colors.grey.shade600),
+                      style: AppTypography.font(fontSize: 11, color: AppColors.immoTextSecondary),
                     ),
                   ],
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: SizedBox(
@@ -653,18 +650,18 @@ class _ResidenceContextCardState extends State<_ResidenceContextCard> {
                           ? CachedNetworkImage(
                               imageUrl: Utils.getImagePath(id: coverImageId),
                               fit: BoxFit.cover)
-                          : Container(color: Colors.grey.shade200),
+                          : Container(color: AppColors.immoBorderDefault),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               "L'hôte dispose de 24 heures pour répondre.",
-              style: GoogleFonts.dmSans(fontSize: 11, color: Colors.grey.shade600),
+              style: AppTypography.font(fontSize: 11, color: AppColors.immoTextSecondary),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               height: 40,
@@ -676,7 +673,7 @@ class _ResidenceContextCardState extends State<_ResidenceContextCard> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
                 ),
                 child: Text(bookingLabel,
-                    style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.w700)),
+                    style: AppTypography.font(fontSize: 13, fontWeight: FontWeight.w700)),
               ),
             ),
           ],
@@ -714,7 +711,7 @@ class _VisiteContextCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: Colors.grey.shade50,
+      color: AppColors.immoBgSurfaceMuted,
       child: Row(
         children: [
           ClipRRect(
@@ -724,10 +721,10 @@ class _VisiteContextCard extends StatelessWidget {
               height: 36,
               child: photoUrl != null
                   ? CachedNetworkImage(imageUrl: photoUrl, fit: BoxFit.cover)
-                  : Container(color: Colors.grey.shade200),
+                  : Container(color: AppColors.immoBorderDefault),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -735,13 +732,13 @@ class _VisiteContextCard extends StatelessWidget {
               children: [
                 Text(
                   bien.nom.isNotEmpty ? bien.nom : 'Bien immobilier',
-                  style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.w600),
+                  style: AppTypography.font(fontSize: 13, fontWeight: FontWeight.w600),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   '$dateLabel · $_statusLabel',
-                  style: GoogleFonts.dmSans(fontSize: 11, color: Colors.grey.shade600),
+                  style: AppTypography.font(fontSize: 11, color: AppColors.immoTextSecondary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -755,7 +752,7 @@ class _VisiteContextCard extends StatelessWidget {
             ),
             style: TextButton.styleFrom(foregroundColor: AppColors.primary),
             child: Text('Voir le bien',
-                style: GoogleFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w700)),
+                style: AppTypography.font(fontSize: 12, fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -780,13 +777,13 @@ class _SupportContextBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: Colors.grey.shade50,
+      color: AppColors.immoBgSurfaceMuted,
       child: Row(
         children: [
           Icon(Icons.support_agent_outlined, size: 18, color: AppColors.primary),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text('Assistance ImmoPlus',
-              style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.w600)),
+              style: AppTypography.font(fontSize: 13, fontWeight: FontWeight.w600)),
         ],
       ),
     );
@@ -892,7 +889,7 @@ class _ModerationBanner extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.immoFeedbackError),
+        style: AppTypography.font(fontSize: 13, color: AppColors.immoFeedbackError),
       ),
     );
   }

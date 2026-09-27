@@ -24,11 +24,11 @@ class RatingComponent extends StatelessWidget {
             color: AppColors.white, // Couleur de l'étoile
             size: 16, // Taille de l'icône
           ),
-          // const SizedBox(width: 5), // Espace entre l'étoile et la note
+          // SizedBox(width: 5), // Espace entre l'étoile et la note
           // Text(
           //   rating.toStringAsFixed(
           //       0), // Affiche la note avec un seul chiffre après la virgule
-          //   style: const TextStyle(
+          //   style: AppTypography.font(
           //     color: Colors.white, // Couleur du texte
           //     fontSize: 14, // Taille de la police
           //     fontWeight: FontWeight.w500, // Poids de la police

@@ -28,7 +28,7 @@ class DetailEstateName extends StatelessWidget {
                 ),
                 child: Text(
                   bienImmobilier.typeBienImmobilier,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -37,40 +37,40 @@ class DetailEstateName extends StatelessWidget {
                 ),
               ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // ── Name ──
             Text(
               bienImmobilier.nom,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF222222),
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             // ── Score + Location row ──
             Row(
               children: [
                 if (bienImmobilier.score != null) ...[
                   Icon(Iconsax.star1, size: 16, color: AppColors.primary),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     bienImmobilier.score!.toStringAsFixed(1),
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF222222),
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     '•',
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
+                    style: AppTypography.font(fontSize: 14, color: AppColors.immoTextDisabled),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                 ],
                 Flexible(
                   child: Row(
@@ -79,16 +79,16 @@ class DetailEstateName extends StatelessWidget {
                       Icon(
                         Iconsax.location,
                         size: 14,
-                        color: Colors.grey.shade500,
+                        color: AppColors.immoTextSecondary,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Flexible(
                         child: Text(
                           _buildLocation(),
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Colors.grey.shade600,
+                            color: AppColors.immoTextSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -100,7 +100,7 @@ class DetailEstateName extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             // ── Price ──
             RichText(
@@ -109,7 +109,7 @@ class DetailEstateName extends StatelessWidget {
                   TextSpan(
                     text:
                         "${CurrencyFormatter().format(bienImmobilier.prix.toString())} Fcfa",
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary,
@@ -118,10 +118,10 @@ class DetailEstateName extends StatelessWidget {
                   if (bienImmobilier.typeLocation.isNotEmpty)
                     TextSpan(
                       text: ' /${bienImmobilier.typeLocation}',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Colors.grey.shade600,
+                        color: AppColors.immoTextSecondary,
                       ),
                     ),
                 ],

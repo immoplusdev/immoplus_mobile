@@ -38,7 +38,7 @@ class BookNowButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: AppColors.white,
@@ -154,7 +154,7 @@ class PropertyCard extends StatelessWidget {
           //       height: imageHeight,
           //       // rating: rating,
           //     ),
-          //     const SizedBox(width: 12),
+          //     SizedBox(width: 12),
           //     Expanded(
           //       child: _PropertyInfo(
           //         title: title,
@@ -168,10 +168,10 @@ class PropertyCard extends StatelessWidget {
           //     ),
           //   ],
           // ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // const Divider(height: 1, thickness: 1, color: Color(0xFFF2F2F2)),
-          // const SizedBox(height: 12),
+          // SizedBox(height: 12),
           // _ActionRow(
           //   actions: effectiveActions,
           //   activeIndex: activeActionIndex,
@@ -373,10 +373,10 @@ class _RatingBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.bolt, color: AppColors.gold600, size: 13),
-          const SizedBox(width: 2),
+          SizedBox(width: 2),
           Text(
             rating.toStringAsFixed(1),
-            style: const TextStyle(
+            style: AppTypography.font(
               color: AppColors.white,
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -418,14 +418,14 @@ class PropertyInfo extends StatelessWidget {
         //   size: 28,
         //   imageUrl: avatarUrl,
         // ),
-        // const SizedBox(width: 12),
+        // SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title.capitalizeWords(),
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: AppColors.navy900,
@@ -434,7 +434,7 @@ class PropertyInfo extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               if (location != null && location!.isNotEmpty)
                 LocationRow(location: location!),
             ],
@@ -585,7 +585,7 @@ class _CommoditeChip extends StatelessWidget {
         SizedBox(width: pillStyle ? 6 : 3),
         Text(
           label,
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: fontSize,
             fontWeight: FontWeight.w600,
             color: AppColors.navy900,
@@ -710,7 +710,7 @@ class _PieceCard extends StatelessWidget {
           SizedBox(height: fontSize * 0.5),
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: fontSize,
               fontWeight: FontWeight.w600,
               color: AppColors.navy900,
@@ -732,11 +732,11 @@ class LocationRow extends StatelessWidget {
     return Row(
       children: [
         Icon(Iconsax.location, size: 13, color: AppColors.gray1000),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Expanded(
           child: Text(
             location,
-            style: TextStyle(fontSize: 12, color: AppColors.gray500),
+            style: AppTypography.font(fontSize: 12, color: AppColors.gray500),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -765,13 +765,13 @@ class VerifiedBadge extends StatelessWidget {
       children: [
         // Text(
         //   label,
-        //   style: const TextStyle(
+        //   style: AppTypography.font(
         //     fontSize: 12,
         //     color: Colors.black,
         //     fontWeight: FontWeight.normal,
         //   ),
         // ),
-        // const SizedBox(width: 4),
+        // SizedBox(width: 4),
         Icon(Iconsax.verify, color: AppColors.primary, size: iconSize),
       ],
     );
@@ -851,7 +851,7 @@ class PropertyPrice extends StatelessWidget {
           ],
           Text(
             displayPrice,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: priceFontSize,
               fontWeight: FontWeight.w800,
               color: accent,
@@ -861,7 +861,7 @@ class PropertyPrice extends StatelessWidget {
           if (period.isNotEmpty) ...[
             Text(
               ' / ',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: priceFontSize - 1,
                 fontWeight: FontWeight.w500,
                 color: fg.withValues(alpha: 0.5),
@@ -869,7 +869,7 @@ class PropertyPrice extends StatelessWidget {
             ),
             Text(
               period,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: priceFontSize - 2,
                 fontWeight: FontWeight.w500,
                 color: fg.withValues(alpha: 0.65),
@@ -907,7 +907,7 @@ class PropertyPrice extends StatelessWidget {
 //             child: Icon(
 //               action.icon,
 //               size: 20,
-//               color: isActive ? Colors.white : Colors.grey.shade600,
+//               color: isActive ? Colors.white : AppColors.immoTextSecondary,
 //             ),
 //           ),
 //         );

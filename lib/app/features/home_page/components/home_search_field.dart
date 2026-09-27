@@ -1,6 +1,6 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
@@ -104,7 +104,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
           padding: const EdgeInsets.only(left: 12.0, right: 8.0),
           child: Icon(
             Iconsax.search_normal_1,
-            color: Colors.grey.shade500,
+            color: AppColors.immoTextSecondary,
             size: 18,
           ),
         ),
@@ -124,7 +124,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                     onFieldSubmitted: widget.onFieldSubmitted,
                     onChanged: widget.onChanged,
                     textAlignVertical: TextAlignVertical.center,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: AppTypography.font(
                       fontSize: 15,
                       color: const Color(0xFF232323),
                       fontWeight: FontWeight.w500,
@@ -136,7 +136,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
                       hintText: _placeholder,
-                      hintStyle: GoogleFonts.plusJakartaSans(
+                      hintStyle: AppTypography.font(
                         color: const Color(0xFF232323),
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -155,7 +155,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                     widget.searchController.text.isNotEmpty
                         ? widget.searchController.text
                         : _placeholder,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: AppTypography.font(
                       color: const Color(0xFF232323),
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -190,8 +190,8 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           _cities[_currentCityIndex],
-                          style: GoogleFonts.plusJakartaSans(
-                            color: Colors.grey.shade500,
+                          style: AppTypography.font(
+                            color: AppColors.immoTextSecondary,
                             fontWeight: FontWeight.w500,
                             fontSize: 10,
                           ),
@@ -213,9 +213,9 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                       widget.onClear();
                       _focusNode.unfocus();
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.cancel,
-                      color: Colors.grey,
+                      color: AppColors.immoTextSecondary,
                       size: 18,
                     ),
                   )

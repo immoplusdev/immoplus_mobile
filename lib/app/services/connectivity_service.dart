@@ -6,14 +6,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
+import 'package:immoplus/app/utils/utils.dart';
 
 class ConnectinityService {
-  static ConnectivityResult? savecState;
+  static bool _isInitialized = false;
+  static bool? _wasOnline;
   static StreamSubscription<List<ConnectivityResult>>? subscription;
+
   static checkConnectivity() async {
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
-    if (connectivityResult.contains(ConnectionState.done) &&
+    if (connectivityResult.contains(ConnectivityResult.none) &&
         NavigationService.navigatorKey.currentContext != null) {
       AppDialog.info(
           content:
@@ -31,36 +34,24 @@ class ConnectinityService {
       subscription = Connectivity()
           .onConnectivityChanged
           .listen((List<ConnectivityResult> result) {
-        if (savecState == ConnectivityResult.none) {
-          ToastUtils.showSuccess(title: 'Connexion internet rétablie');
+        final bool isCurrentlyOnline = Utils.isOnline(result);
+
+        // Premier appel au lancement : on enregistre juste l'état initial sans afficher de toast
+        if (!_isInitialized) {
+          _isInitialized = true;
+          _wasOnline = isCurrentlyOnline;
+          return;
         }
-        inspect(result);
-        // Received changes in available connectivity types!
-        if (result.contains(ConnectivityResult.mobile)) {
-          // Mobile network available.
-        } else if (result.contains(ConnectivityResult.wifi)) {
-          // Wi-fi is available.
-          // Note for Android:
-          // When both mobile and Wi-Fi are turned on system will return Wi-Fi only as active network type
-        } else if (result.contains(ConnectivityResult.ethernet)) {
-          // Ethernet connection available.
-        } else if (result.contains(ConnectivityResult.vpn)) {
-          // Vpn connection active.
-          // Note for iOS and macOS:
-          // There is no separate network interface type for [vpn].
-          // It returns [other] on any device (also simulator)
-        } else if (result.contains(ConnectivityResult.bluetooth)) {
-          // Bluetooth connection available.
-        } else if (result.contains(ConnectivityResult.other)) {
-          // Connected to a network which is not in the above mentioned networks.
-        } else if (result.contains(ConnectivityResult.none)) {
-          // No available network types
-          savecState = result.first;
+
+        // Détection d'un vrai changement d'état
+        if (_wasOnline == true && !isCurrentlyOnline) {
+          _wasOnline = false;
           _showErorConnexion();
-          log('No available network types');
-        } else {
-          savecState = result.first;
-          _showErorConnexion();
+          log('Connexion internet perdue');
+        } else if (_wasOnline == false && isCurrentlyOnline) {
+          _wasOnline = true;
+          ToastUtils.showSuccess(title: 'Connexion internet rétablie');
+          log('Connexion internet rétablie');
         }
       });
     } catch (e) {
@@ -76,6 +67,8 @@ class ConnectinityService {
     if (subscription != null) {
       await subscription!.cancel();
     }
+    _isInitialized = false;
+    _wasOnline = null;
   }
 
   static pause() async {
@@ -84,3 +77,4 @@ class ConnectinityService {
     }
   }
 }
+

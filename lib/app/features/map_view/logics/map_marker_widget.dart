@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -145,7 +146,7 @@ class _MarkerWidget extends StatelessWidget {
   Widget _buildPrice() {
     return Text(
       price,
-      style: TextStyle(
+      style: AppTypography.font(
         color: textColor ?? Colors.white,
         fontWeight: FontWeight.w700,
         fontSize: _Constants.fontSize,

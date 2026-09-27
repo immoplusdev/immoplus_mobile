@@ -25,7 +25,7 @@ class HomeIcon extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.surface,
         ),
-        const SizedBox(
+        SizedBox(
           height: 4,
         ),
         Text(

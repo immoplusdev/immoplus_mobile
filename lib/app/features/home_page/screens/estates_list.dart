@@ -309,7 +309,7 @@ class _EstatesListState extends State<EstatesList> with ConnectivityMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(15),
-                            const SizedBox(
+                            SizedBox(
                               width: 150,
                               height: 20,
                               child: DecoratedBox(
@@ -423,7 +423,7 @@ class EstatesHorizontalSectionWidget extends StatelessWidget {
                 size: 20,
                 color: section.biens.isNotEmpty
                     ? Colors.black
-                    : Colors.grey.shade400,
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

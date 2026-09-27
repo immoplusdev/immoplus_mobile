@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -162,7 +161,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         ),
         title: Text(
           'Modifier ma demande',
-          style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: SafeArea(
@@ -219,26 +218,26 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
+      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
     );
   }
 
   Widget _buildTextField(TextEditingController controller, String hint) {
     return TextField(
       controller: controller,
-      style: GoogleFonts.dmSans(fontSize: 14),
+      style: AppTypography.font(fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade400),
+        hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.immoBorderStrong),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: AppColors.immoBorderStrong),
         ),
       ),
     );
@@ -301,7 +300,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                   color: isSelected ? AppColors.primaryLite : Colors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : Colors.grey.shade300,
+                    color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -309,14 +308,14 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                   children: [
                     type.svgIcon != null
                         ? SvgPicture.asset(type.svgIcon!, width: 26, height: 26)
-                        : Icon(type.fallbackIcon, size: 26, color: Colors.grey.shade700),
+                        : Icon(type.fallbackIcon, size: 26, color: AppColors.immoTextLabel),
                     const Gap(8),
                     Text(
                       type.label,
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.font(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade700,
+                        color: AppColors.immoTextLabel,
                       ),
                     ),
                   ],
@@ -331,7 +330,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
 
   Widget _buildCommuneChips() {
     if (_isLoadingCommunes) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
         child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)),
       );
@@ -348,14 +347,14 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
             decoration: BoxDecoration(
               color: isSelected ? AppColors.primary : Colors.white,
               borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
+              border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
             ),
             child: Text(
               commune.name,
-              style: GoogleFonts.dmSans(
+              style: AppTypography.font(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.grey.shade700,
+                color: isSelected ? Colors.white : AppColors.immoTextLabel,
               ),
             ),
           ),
@@ -369,7 +368,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.immoBorderStrong),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -377,7 +376,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
           _stepperButton(icon: Icons.add, onTap: () => setState(() => _rooms++)),
           Text(
             _rooms.toString().padLeft(2, '0'),
-            style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           _stepperButton(
             icon: Icons.remove,
@@ -417,11 +416,11 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : Colors.white,
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
+                border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
               ),
               child: Text(
                 preset.label,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontWeight: FontWeight.w600,
                   color: isSelected ? Colors.white : AppColors.primary,
                 ),
@@ -448,18 +447,18 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : Colors.grey.shade300,
+                  color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
                   width: isSelected ? 1.5 : 1,
                 ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(relation.label, style: GoogleFonts.dmSans(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text(relation.label, style: AppTypography.font(fontWeight: FontWeight.bold, fontSize: 15)),
                   const Gap(2),
                   Text(
                     relation.description,
-                    style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+                    style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),

@@ -51,9 +51,9 @@ class PendingPaymentReservationCard extends StatelessWidget {
                         color: Color(0xFFF79009),
                       ),
                       const Gap(4),
-                      const Text(
+                      Text(
                         'EN ATTENTE',
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontWeight: FontWeight.w600,
                           color: Color(0xFFB54708),
                           fontSize: 11,
@@ -93,7 +93,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
             ),
 
             const Gap(12),
-            Divider(thickness: 0.5, color: Colors.grey.shade200, height: 1),
+            Divider(thickness: 0.5, color: AppColors.immoBorderDefault, height: 1),
             const Gap(12),
 
             // Dates arrivée / départ
@@ -144,7 +144,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
                   );
                 },
                 icon: const Icon(Iconsax.card, size: 18),
-                label: const Text('Payer maintenant'),
+                label: Text('Payer maintenant'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -153,7 +153,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  textStyle: const TextStyle(
+                  textStyle: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
@@ -184,7 +184,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
               const Gap(4),
               Text(
                 label,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF667085),

@@ -38,14 +38,14 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Combien de voyageurs ?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 32),
+          Text('Combien de voyageurs ?',
+              style: AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold)),
+          SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(_tempPers >= 8 ? '8+' : '$_tempPers',
-                  style: const TextStyle(
+                  style: AppTypography.font(
                       fontSize: 50, fontWeight: FontWeight.bold)),
               Row(
                 children: [
@@ -54,7 +54,7 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
                       onTap: () {
                         if (_tempPers > 1) setState(() => _tempPers--);
                       }),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   _CustomIcButton(
                       icon: Icons.add,
                       onTap: () {
@@ -64,7 +64,7 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
               )
             ],
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [1, 2, 4, 6, 8].map((n) {
@@ -80,10 +80,10 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
                       border: Border.all(
                           color: isSelected
                               ? Colors.transparent
-                              : Colors.grey.shade400)),
+                              : AppColors.immoTextDisabled)),
                   child: Center(
                     child: Text(n == 8 ? '8+' : '$n',
-                        style: TextStyle(
+                        style: AppTypography.font(
                             color:
                                 isSelected ? Colors.white : Color(0xff797979),
                             fontSize: 18,
@@ -93,7 +93,7 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           CustomButtom(
             text: 'Continuer',
             onClick: () => Navigator.pop(context, _tempPers),
@@ -123,7 +123,7 @@ class _CustomIcButton extends StatelessWidget {
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: Colors.grey.shade300)),
+              side: BorderSide(color: AppColors.immoBorderStrong)),
         ),
         onPressed: onTap,
       ),

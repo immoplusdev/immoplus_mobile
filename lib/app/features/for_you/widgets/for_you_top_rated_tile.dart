@@ -1,8 +1,8 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_residence_item.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
@@ -60,16 +60,16 @@ class ForYouTopRatedTile extends StatelessWidget {
                     fadeInDuration: Duration.zero,
                     fadeOutDuration: Duration.zero,
                     placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
+                      baseColor: AppColors.immoBorderStrong,
+                      highlightColor: AppColors.immoBgSurfaceMuted,
                       period: const Duration(milliseconds: 500),
                       child: Container(color: Colors.white),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      color: Colors.grey.shade200,
+                      color: AppColors.immoBorderDefault,
                       child: Center(
                         child:
-                            FaIcon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
+                            FaIcon(FontAwesomeIcons.images, size: 60, color: AppColors.immoTextDisabled),
                       ),
                     ),
                   ),
@@ -124,7 +124,7 @@ class _Info extends StatelessWidget {
       children: [
         Text(
           residence.name,
-          style: GoogleFonts.plusJakartaSans(
+          style: AppTypography.font(
             fontWeight: FontWeight.w400,
             fontSize: 16,
             color: Colors.white,
@@ -133,16 +133,16 @@ class _Info extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         if (residence.location != null) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Iconsax.location, size: 12, color: Colors.white),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Flexible(
                 child: Text(
                   residence.location!,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: AppTypography.font(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
                     color: Colors.white,
@@ -155,10 +155,10 @@ class _Info extends StatelessWidget {
           ),
         ],
         if (residence.totalReviews != null) ...[
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Text(
             '${residence.totalReviews} avis',
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w500,
               fontSize: 9,
               color: Colors.white.withValues(alpha: 0.85),
@@ -278,7 +278,7 @@ class _ReviewerAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _letter,
-        style: GoogleFonts.plusJakartaSans(
+        style: AppTypography.font(
           fontWeight: FontWeight.w500,
           fontSize: 20,
           color: Colors.white,
@@ -289,7 +289,7 @@ class _ReviewerAvatar extends StatelessWidget {
     return Container(
       width: _ReviewerAvatarStack._size,
       height: _ReviewerAvatarStack._size,
-      decoration: const BoxDecoration(shape: BoxShape.circle),
+      decoration: BoxDecoration(shape: BoxShape.circle),
       clipBehavior: Clip.antiAlias,
       child: hasImage
           ? CachedNetworkImage(
@@ -319,7 +319,7 @@ class _RemainingBubble extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         '+$count',
-        style: GoogleFonts.plusJakartaSans(
+        style: AppTypography.font(
           fontWeight: FontWeight.w700,
           fontSize: 13,
           color: Colors.white,

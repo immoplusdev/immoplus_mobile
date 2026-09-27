@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/services/image_picker_service.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
@@ -95,7 +94,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
         ),
         title: Text(
           'Publiez votre ancien logement',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.font(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -142,7 +141,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(
+      style: AppTypography.font(
         fontSize: 15,
         fontWeight: FontWeight.w600,
         color: Colors.black,
@@ -186,7 +185,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                   color: isSelected ? AppColors.primaryLite : Colors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : Colors.grey.shade300,
+                    color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -194,14 +193,14 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                   children: [
                     type.svgIcon != null
                         ? SvgPicture.asset(type.svgIcon!, width: 26, height: 26)
-                        : Icon(type.fallbackIcon, size: 26, color: Colors.grey.shade700),
+                        : Icon(type.fallbackIcon, size: 26, color: AppColors.immoTextLabel),
                     const Gap(8),
                     Text(
                       type.label,
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.font(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade700,
+                        color: AppColors.immoTextLabel,
                       ),
                     ),
                   ],
@@ -225,7 +224,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
           color: selected != null ? AppColors.primaryLite : Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: selected != null ? AppColors.primary : Colors.grey.shade300,
+            color: selected != null ? AppColors.primary : AppColors.immoBorderStrong,
           ),
         ),
         child: Row(
@@ -237,14 +236,14 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                 selected ?? 'Choisir un quartier',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: selected != null ? Colors.black : Colors.grey.shade500,
+                  color: selected != null ? Colors.black : AppColors.immoTextSecondary,
                 ),
               ),
             ),
-            Icon(Icons.chevron_right_rounded, size: 20, color: Colors.grey.shade400),
+            Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.immoTextDisabled),
           ],
         ),
       ),
@@ -256,7 +255,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.immoBorderStrong),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,7 +268,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
           ),
           Text(
             _draft.rooms.toString().padLeft(2, '0'),
-            style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           _stepperButton(
             icon: Icons.add,
@@ -359,7 +358,7 @@ class _PhotoSlot extends StatelessWidget {
                 Text(
                   'Ajouter des photos',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.dmSans(fontSize: 10, color: AppColors.primary),
+                  style: AppTypography.font(fontSize: 10, color: AppColors.primary),
                 ),
               ],
             ),

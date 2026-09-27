@@ -25,7 +25,7 @@ class DetailLogmentInfos extends StatelessWidget {
               Flexible(
                 child: AutoSizeText(
                   reservation.adresse,
-                  style: TextStyle(color: AppColors.primary),
+                  style: AppTypography.font(color: AppColors.primary),
                 ),
               ),
             ],

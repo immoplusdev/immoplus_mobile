@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
@@ -44,12 +43,12 @@ class RelaisCard extends StatelessWidget {
                     children: [
                       Text(
                         '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.rooms} chambre${relais.rooms > 1 ? 's' : ''}',
-                        style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       const Gap(2),
                       Text(
                         relais.landmark ?? relais.location,
-                        style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                        style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -65,7 +64,7 @@ class RelaisCard extends StatelessWidget {
                   ),
                   child: Text(
                     status.label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: status.textColor,
@@ -78,7 +77,7 @@ class RelaisCard extends StatelessWidget {
               const Gap(12),
               Text(
                 'Disponible à partir du ${DateFormat('dd MMMM yyyy', 'fr_FR').format(relais.availabilityDate!)}',
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
             if (relais.interestedCount > 0) ...[
@@ -91,7 +90,7 @@ class RelaisCard extends StatelessWidget {
                 ),
                 child: Text(
                   '${relais.interestedCount} personne${relais.interestedCount > 1 ? 's' : ''} intéressée${relais.interestedCount > 1 ? 's' : ''}',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,

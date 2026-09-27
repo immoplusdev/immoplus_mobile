@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_detail_page.dart';
@@ -43,14 +42,14 @@ class MarketplaceRelaisCard extends StatelessWidget {
               aspectRatio: 4 / 3,
               child: imageUrl.isEmpty
                   ? Container(
-                      color: Colors.grey.shade100,
+                      color: AppColors.immoBgSurfaceMuted,
                       alignment: Alignment.center,
-                      child: Icon(Icons.home_outlined, color: Colors.grey.shade400, size: 32),
+                      child: Icon(Icons.home_outlined, color: AppColors.immoTextDisabled, size: 32),
                     )
                   : CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Container(color: Colors.grey.shade100),
+                      errorWidget: (context, url, error) => Container(color: AppColors.immoBgSurfaceMuted),
                     ),
             ),
             Padding(
@@ -60,14 +59,14 @@ class MarketplaceRelaisCard extends StatelessWidget {
                 children: [
                   Text(
                     '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.rooms} ch.',
-                    style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.bold),
+                    style: AppTypography.font(fontSize: 13, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Gap(2),
                   Text(
                     relais.location,
-                    style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                    style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -75,7 +74,7 @@ class MarketplaceRelaisCard extends StatelessWidget {
                     const Gap(4),
                     Text(
                       '${relais.interestedCount} intéressé${relais.interestedCount > 1 ? 's' : ''}',
-                      style: GoogleFonts.dmSans(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w600),
+                      style: AppTypography.font(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w600),
                     ),
                   ],
                   const Gap(8),
@@ -91,7 +90,7 @@ class MarketplaceRelaisCard extends StatelessWidget {
                       ),
                       child: Text(
                         'Je suis intéressé',
-                        style: GoogleFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: AppTypography.font(fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

@@ -1,8 +1,8 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:immoplus/app/core/config/injection.dart';
@@ -33,7 +33,7 @@ class HomeTabGrid extends StatelessWidget {
     return Column(
       children: [
         const HomeTabGridRowOne(),
-        const SizedBox(height: rowGap),
+        SizedBox(height: rowGap),
         const HomeTabGridRowTwo(),
       ],
     );
@@ -257,14 +257,14 @@ class _HomeTabCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 labelLine1,
                 maxLines: 1,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 10,
                   height: 1.1,
                   color: const Color(0xFF9CA3AF),
@@ -277,7 +277,7 @@ class _HomeTabCard extends StatelessWidget {
                 labelLine2,
                 maxLines: 1,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 11,
                   height: 1.1,
                   fontWeight: FontWeight.bold,

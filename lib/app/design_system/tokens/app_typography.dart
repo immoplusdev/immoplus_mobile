@@ -12,6 +12,43 @@ class AppTypography {
   /// Nom de la police principale de l'application
   static const String fontFamily = 'Plus Jakarta Sans';
 
+  /// Crée un TextStyle personnalisé basé sur la police officielle Plus Jakarta Sans
+  static TextStyle font({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    double? decorationThickness,
+    TextDecorationStyle? decorationStyle,
+    FontStyle? fontStyle,
+    Color? backgroundColor,
+    List<Shadow>? shadows,
+    List<FontFeature>? fontFeatures,
+    String? fontFamily,
+    TextOverflow? overflow,
+  }) =>
+      GoogleFonts.plusJakartaSans(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        height: height,
+        letterSpacing: letterSpacing,
+        decoration: decoration,
+        decorationColor: decorationColor,
+        decorationThickness: decorationThickness,
+        decorationStyle: decorationStyle,
+        fontStyle: fontStyle,
+        backgroundColor: backgroundColor,
+        shadows: shadows,
+      ).copyWith(
+        fontFeatures: fontFeatures,
+        fontFamily: fontFamily,
+        overflow: overflow,
+      );
+
   // ==========================================
   // HEADINGS / TITRES
   // ==========================================

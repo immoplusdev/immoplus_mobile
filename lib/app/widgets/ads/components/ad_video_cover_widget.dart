@@ -61,7 +61,7 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: SizedBox(
           width: 30,
           height: 30,
@@ -74,7 +74,7 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
       if (widget.buildErrorWidget != null) {
         return widget.buildErrorWidget!(_loadThumbnail);
       }
-      return const Center(child: Icon(Icons.error));
+      return Center(child: Icon(Icons.error));
     }
 
     return GestureDetector(
@@ -94,7 +94,7 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
               if (widget.buildErrorWidget != null) {
                 return widget.buildErrorWidget!(_loadThumbnail);
               }
-              return const Center(child: Icon(Icons.error));
+              return Center(child: Icon(Icons.error));
             },
           ),
           // Signale que la carte est cliquable pour lancer la vidéo dans

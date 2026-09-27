@@ -179,7 +179,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.arrow_back_ios,
+                    icon: Icon(Icons.arrow_back_ios,
                         color: Colors.black, size: 22),
                     onPressed: () => context.pop(),
                   ),
@@ -239,7 +239,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                         child: showSkeleton
                             ? const ReverseSearchFormSkeleton()
                             : state.maybeWhen(
-                                loading: () => const Center(
+                                loading: () => Center(
                                     child: CircularProgressIndicator()),
                                 orElse: () => _buildForm(),
                               ),
@@ -256,7 +256,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
   }
 
   Widget _buildForm() {
-    const textStyle = TextStyle(
+    final textStyle = AppTypography.font(
       fontSize: 30,
       fontWeight: FontWeight.w400,
       color: Color(0xFF4A4A4A),
@@ -278,9 +278,9 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                     Text(
                       'Que cherchez- vous ?',
                       style:
-                          TextStyle(color: Colors.grey.shade400, fontSize: 15),
+                          AppTypography.font(color: AppColors.immoTextDisabled, fontSize: 15),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     // ── Ligne 1: Je cherche a [Ville] ──
                     FittedBox(
@@ -289,7 +289,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('Je cherche a ', style: textStyle),
+                          Text('Je cherche a ', style: textStyle),
                           ReverseSearchChip(
                             text: _zonesText,
                             badge: _zoneBadgeText,
@@ -298,7 +298,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // ── Ligne 2: du [Dates] pour ──
                     FittedBox(
@@ -307,16 +307,16 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('du ', style: textStyle),
+                          Text('du ', style: textStyle),
                           ReverseSearchChip(
                             text: _dateText,
                             onTap: _showDateSheet,
                           ),
-                          const Text(' pour', style: textStyle),
+                          Text(' pour', style: textStyle),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // ── Ligne 3: [Personnes] , entre ──
                     FittedBox(
@@ -332,11 +332,11 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                             badge: _nombrePersonnes >= 8 ? '+' : null,
                             onTap: _showPersonnesSheet,
                           ),
-                          const Text(', entre', style: textStyle),
+                          Text(', entre', style: textStyle),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // ── Ligne 4: [Budget] ──
                     FittedBox(
@@ -350,7 +350,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                             onTap: _showBudgetSheet,
                           ),
                           if (_budgetMin != 0 || _budgetMax != 0)
-                            const Text(' par nuitée', style: textStyle),
+                            Text(' par nuitée', style: textStyle),
                         ],
                       ),
                     ),

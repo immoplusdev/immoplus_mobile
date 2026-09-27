@@ -29,7 +29,7 @@ class CustomMarker extends StatelessWidget {
               color: AppColors.immoFeedbackWarning,
               shape: BoxShape.circle,
             ),
-            child: const Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
@@ -39,7 +39,7 @@ class CustomMarker extends StatelessWidget {
                 ),
                 Text(
                   'Widget',
-                  style: TextStyle(color: AppColors.white, fontSize: 12),
+                  style: AppTypography.font(color: AppColors.white, fontSize: 12),
                 ),
               ],
             ),

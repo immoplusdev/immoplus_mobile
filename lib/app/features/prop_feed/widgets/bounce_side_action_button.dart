@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -59,10 +60,10 @@ class _BounceSideActionButtonState extends State<BounceSideActionButton> {
                 color: Colors.white,
                 size: 20,
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 widget.label,
-                style: TextStyle(
+                style: AppTypography.font(
                   color: labelColor,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,

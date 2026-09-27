@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../core/config/injection.dart';
 import '../../../data/enums/relais_property_type.dart';
 import '../../../data/models/remote/messaging/conversation_model.dart';
@@ -134,7 +132,7 @@ class _ConversationTileState extends State<ConversationTile> {
           color: isUnread
               ? AppColors.primary.withValues(alpha: 0.03)
               : Colors.transparent,
-          border: Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
+          border: Border(bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1)),
         ),
         child: FutureBuilder<_TileInfo>(
           future: _infoFuture(),
@@ -157,7 +155,7 @@ class _ConversationTileState extends State<ConversationTile> {
                         : _fallbackThumb(),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +166,7 @@ class _ConversationTileState extends State<ConversationTile> {
                           Expanded(
                             child: Text(
                               info?.title ?? '…',
-                              style: GoogleFonts.dmSans(
+                              style: AppTypography.font(
                                 fontSize: 15,
                                 fontWeight: isUnread ? FontWeight.bold : FontWeight.w600,
                                 color: const Color(0xFF1F2937),
@@ -177,25 +175,25 @@ class _ConversationTileState extends State<ConversationTile> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
                             formatLastMessageRelative(conversation.lastMessageAt),
-                            style: GoogleFonts.dmSans(
-                                fontSize: 11, color: Colors.grey.shade500),
+                            style: AppTypography.font(
+                                fontSize: 11, color: AppColors.immoTextSecondary),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Row(
                         children: [
                           Expanded(
                             child: Text(
                               conversation.lastMessagePreview ?? '',
-                              style: GoogleFonts.dmSans(
+                              style: AppTypography.font(
                                 fontSize: 13,
                                 color: isUnread
                                     ? const Color(0xFF1F2937)
-                                    : Colors.grey.shade500,
+                                    : AppColors.immoTextSecondary,
                                 fontWeight:
                                     isUnread ? FontWeight.w600 : FontWeight.normal,
                               ),
@@ -204,7 +202,7 @@ class _ConversationTileState extends State<ConversationTile> {
                             ),
                           ),
                           if (isUnread) ...[
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 7, vertical: 2),
@@ -216,7 +214,7 @@ class _ConversationTileState extends State<ConversationTile> {
                                 conversation.unreadCountClient > 99
                                     ? '99+'
                                     : '${conversation.unreadCountClient}',
-                                style: GoogleFonts.dmSans(
+                                style: AppTypography.font(
                                     fontSize: 11,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -226,17 +224,17 @@ class _ConversationTileState extends State<ConversationTile> {
                         ],
                       ),
                       if (conversation.statusEnum == ConversationStatus.blocked) ...[
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
                         Container(
                           padding:
                               const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
+                            color: AppColors.immoBorderDefault,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text('Bloqué',
-                              style: GoogleFonts.dmSans(
-                                  fontSize: 10, color: Colors.grey.shade600)),
+                              style: AppTypography.font(
+                                  fontSize: 10, color: AppColors.immoTextSecondary)),
                         ),
                       ],
                     ],
@@ -252,8 +250,8 @@ class _ConversationTileState extends State<ConversationTile> {
 
   Widget _fallbackThumb() {
     return Container(
-      color: Colors.grey.shade100,
-      child: Icon(_fallbackIcon, color: Colors.grey.shade400),
+      color: AppColors.immoBgSurfaceMuted,
+      child: Icon(_fallbackIcon, color: AppColors.immoTextDisabled),
     );
   }
 }

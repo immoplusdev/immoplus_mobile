@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -21,12 +22,12 @@ class SearchHistoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16),
         child: Row(
           children: [
-            const Icon(Icons.access_time_filled, color: Colors.grey, size: 18),
+            Icon(Icons.access_time_filled, color: AppColors.immoTextSecondary, size: 18),
             const Gap(12),
             Expanded(
               child: Text(
                 query,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,
@@ -36,7 +37,7 @@ class SearchHistoryTile extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.close, color: Colors.grey, size: 18),
+              icon: Icon(Icons.close, color: AppColors.immoTextSecondary, size: 18),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: onRemove,

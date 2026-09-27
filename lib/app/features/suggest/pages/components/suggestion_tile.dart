@@ -26,7 +26,7 @@ class SuggestionTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         leadingIcon,
-        color: Colors.grey.shade500,
+        color: AppColors.immoTextSecondary,
         size: 20,
       ),
       minLeadingWidth: 0,
@@ -34,8 +34,8 @@ class SuggestionTile extends StatelessWidget {
       subtitle: (suggestion.sublabel != null && suggestion.sublabel!.isNotEmpty)
           ? Text(
               suggestion.sublabel!,
-              style: TextStyle(
-                color: Colors.grey.shade600,
+              style: AppTypography.font(
+                color: AppColors.immoTextSecondary,
                 fontSize: 13,
               ),
             )
@@ -50,7 +50,7 @@ class SuggestionTile extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(color: AppColors.immoBorderDefault),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
@@ -58,7 +58,7 @@ class SuggestionTile extends StatelessWidget {
                   Utils.getImagePath(id: suggestion.miniatureUrl!),
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) =>
-                      const SizedBox(),
+                      SizedBox(),
                 ),
               ),
             ),
@@ -67,7 +67,7 @@ class SuggestionTile extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.arrow_outward_rounded,
-              color: Colors.grey.shade400,
+              color: AppColors.immoTextDisabled,
               size: 18,
             ),
             onPressed: () => onCopy(suggestion.label ?? ''),
@@ -83,7 +83,7 @@ class SuggestionTile extends StatelessWidget {
         !text.toLowerCase().contains(highlight.toLowerCase())) {
       return Text(
         text,
-        style: const TextStyle(fontSize: 16, color: Colors.black87),
+        style: AppTypography.font(fontSize: 16, color: Colors.black87),
       );
     }
 
@@ -94,12 +94,12 @@ class SuggestionTile extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
-        style: const TextStyle(fontSize: 16, color: Colors.black),
+        style: AppTypography.font(fontSize: 16, color: Colors.black),
         children: [
           TextSpan(text: preText),
           TextSpan(
             text: matchText,
-            style: TextStyle(
+            style: AppTypography.font(
               fontWeight: FontWeight.w600,
               color: AppColors.primary,
             ),

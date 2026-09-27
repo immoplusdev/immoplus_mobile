@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
@@ -18,13 +19,13 @@ class NavBadge extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(3),
           constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.red,
             shape: BoxShape.circle,
           ),
           child: Text(
             badgeText,
-            style: const TextStyle(
+            style: AppTypography.font(
               color: Colors.white,
               fontSize: 9,
               fontWeight: FontWeight.bold,

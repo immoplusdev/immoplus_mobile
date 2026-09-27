@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -27,7 +28,7 @@ class HotelBookingCard extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               title,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,

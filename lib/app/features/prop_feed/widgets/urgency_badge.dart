@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
@@ -143,11 +144,11 @@ class _UrgencyBadgeWithDelayState extends State<UrgencyBadgeWithDelay> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: Colors.white, size: 18),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Flexible(
             child: Text(
               label,
-              style: const TextStyle(
+              style: AppTypography.font(
                 color: Colors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,

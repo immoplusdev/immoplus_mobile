@@ -105,7 +105,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                     Gap(15),
                     Text("Commencez à visiter, louer, acheter, réserver",
                         // textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: AppColors.white,
@@ -138,7 +138,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                             children: [
                               TextSpan(
                                 text: "Inscrivez-vous",
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   decoration: TextDecoration.underline,
                                 ),
                               )
@@ -168,7 +168,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   Widget _infoTile({required String label}) {
     return Text(
       label,
-      style: TextStyle(
+      style: AppTypography.font(
         color: AppColors.black,
         fontSize: 40,
         fontWeight: FontWeight.w600,

@@ -71,7 +71,7 @@ class SettingsTile extends StatelessWidget {
         child: Text(
           title,
           style: titleStyle ??
-              TextStyle(
+              AppTypography.font(
                 color: titleColor ?? const Color(0xFF0D0D0D),
                 fontWeight: FontWeight.w500,
                 fontSize: 16,

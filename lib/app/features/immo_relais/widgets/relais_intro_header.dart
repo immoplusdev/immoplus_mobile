@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 
@@ -20,7 +19,7 @@ class RelaisIntroHeader extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.immoBorderDefault),
           ),
           child: Column(
             children: [
@@ -38,7 +37,7 @@ class RelaisIntroHeader extends StatelessWidget {
               Text(
                 'Publiez votre ancien logement',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -48,9 +47,9 @@ class RelaisIntroHeader extends StatelessWidget {
               Text(
                 'Votre bien sera visible immediatement aupres des personnes qui recherchent un logement dans votre quartier.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 13,
-                  color: Colors.grey.shade600,
+                  color: AppColors.immoTextSecondary,
                   height: 1.4,
                 ),
               ),
@@ -74,7 +73,7 @@ class RelaisIntroHeader extends StatelessWidget {
               Expanded(
                 child: Text(
                   "Ce logement ne vous appartient pas. Précisez votre lien avec le bien pour orienter les personnes intéressées.",
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
                     color: Colors.orange.shade900,
                     height: 1.4,

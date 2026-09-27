@@ -6,7 +6,6 @@ import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/features/suggest/pages/suggest_page.dart';
 import 'package:immoplus/app/features/suggest/pages/reverse_search_page.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 class SearchContainerPage extends StatefulWidget {
   final HomeTab? homeTab;
@@ -104,7 +103,7 @@ class _SearchContainerPageState extends State<SearchContainerPage>
       child: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: AppColors.immoBorderDefault,
           borderRadius: BorderRadius.circular(25),
         ),
         child: TabBar(
@@ -117,7 +116,7 @@ class _SearchContainerPageState extends State<SearchContainerPage>
             borderRadius: BorderRadius.circular(25),
           ),
           labelColor: Colors.white,
-          unselectedLabelColor: Colors.grey[500],
+          unselectedLabelColor: AppColors.immoTextSecondary,
           // Rule 5: identical fontWeight in both states prevents micro-shift
           // on toggle — the active state is distinguished solely by the
           // indicator pill background, not by text width changes.

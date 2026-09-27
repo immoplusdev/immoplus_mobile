@@ -74,7 +74,7 @@ class _DetailDescriptionState extends State<DetailDescription> {
         final isOverflowing = textPainter.didExceedMaxLines;
         final truncatedText = truncateTextToLines(
           text: widget.markdownText,
-          style: const TextStyle(fontSize: 16, color: Colors.grey),
+          style: AppTypography.font(fontSize: 16, color: AppColors.immoTextSecondary),
           maxWidth: constraints.maxWidth,
           maxLines: 4,
         );
@@ -83,12 +83,12 @@ class _DetailDescriptionState extends State<DetailDescription> {
           children: [
             TextSpan(
               text: truncatedText,
-              style: TextStyle(
-                color: Colors.grey.shade700,
+              style: AppTypography.font(
+                color: AppColors.immoTextLabel,
                 fontSize: 16,
               ),
             ),
-            const TextSpan(text: ' '),
+            TextSpan(text: ' '),
             if (isOverflowing &&
                 !_showFullText) // Espace entre le texte et "Voir Plus"
               WidgetSpan(
@@ -111,7 +111,7 @@ class _DetailDescriptionState extends State<DetailDescription> {
                             backgroundColor: Colors.transparent,
                             appBar: AppBar(
                               automaticallyImplyLeading: false,
-                              title: const Text('À propos du logement'),
+                              title: Text('À propos du logement'),
                               titleTextStyle:
                                   Theme.of(context).textTheme.headlineSmall,
                             ),
@@ -129,7 +129,7 @@ class _DetailDescriptionState extends State<DetailDescription> {
                   },
                   child: Text(
                     'Voir Plus...',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       color: AppColors.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

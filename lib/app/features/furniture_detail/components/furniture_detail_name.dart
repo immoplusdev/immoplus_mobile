@@ -60,7 +60,7 @@ class FurnitureDetailName extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .copyWith(color: Colors.grey.shade600),
+                        .copyWith(color: AppColors.immoTextSecondary),
                   ),
                 ),
               ],

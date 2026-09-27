@@ -5,9 +5,7 @@ import 'package:immoplus/app/data/models/remote/payment/operator_model.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 class HotelPaymentSelectorPage extends StatefulWidget {
   const HotelPaymentSelectorPage({
@@ -77,12 +75,12 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
       backgroundColor: AppColors.scafold,
       appBar: AppBar(
         backgroundColor: AppColors.scafold,
-        title: const Text('Moyen de paiement'),
+        title: Text('Moyen de paiement'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall,
         leading: const BackButton(color: Colors.black),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _errorMsg.isNotEmpty
               ? Center(child: Text("Erreur: $_errorMsg"))
               : CustomScrollView(

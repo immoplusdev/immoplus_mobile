@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class AddsTag extends StatelessWidget {
@@ -11,9 +12,9 @@ class AddsTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-      child: const Text(
+      child: Text(
         "Ads",
-        style: TextStyle(
+        style: AppTypography.font(
           color: Colors.black,
           fontWeight: FontWeight.w600,
           fontSize: 12,

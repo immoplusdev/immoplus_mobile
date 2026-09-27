@@ -6,7 +6,6 @@ import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/models/remote/alert/property_type.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
@@ -62,7 +61,7 @@ class AlertCard extends StatelessWidget {
                       if (alert.createdAt != null)
                         Text(
                           'Envoyée le ${DateFormat('dd MMMM yyyy', 'fr_FR').format(alert.createdAt!)}',
-                          style: AppTypography.caption.copyWith(color: Colors.grey),
+                          style: AppTypography.caption.copyWith(color: AppColors.immoTextSecondary),
                         ),
                     ],
                   ),
@@ -154,14 +153,14 @@ class AlertCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
+                      color: AppColors.immoBorderDefault,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       'Archivée',
                       style: AppTypography.button.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500,
+                        color: AppColors.immoTextSecondary,
                         fontSize: 13,
                       ),
                     ),
@@ -185,7 +184,7 @@ class AlertCard extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
                       side: BorderSide.none,
-                      backgroundColor: Colors.grey.shade400,
+                      backgroundColor: AppColors.immoTextDisabled,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(
@@ -227,7 +226,7 @@ class AlertCard extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: AppTypography.caption.copyWith(color: Colors.grey.shade700),
+        style: AppTypography.caption.copyWith(color: AppColors.immoTextLabel),
       ),
     );
   }

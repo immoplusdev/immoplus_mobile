@@ -10,7 +10,7 @@ class PermissionServices {
       /*showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Location Permission Denied'),
+          title: Text('Location Permission Denied'),
           content: Text(
               'Please grant location permission to access your current location.'),
           actions: <Widget>[

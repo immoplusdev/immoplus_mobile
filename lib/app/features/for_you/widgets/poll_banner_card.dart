@@ -1,6 +1,6 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/polls/poll_model.dart';
 import 'package:immoplus/app/data/repositories/poll_repository.dart';
@@ -139,7 +139,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
         children: [
           Text(
             'Sondage',
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w700,
               fontSize: 11,
               color: _PollColors.badge,
@@ -148,7 +148,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
           const Gap(8),
           Text(
             _poll.question,
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w700,
               fontSize: 13,
               color: _PollColors.question,
@@ -171,7 +171,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
               onTap: _isSubmitting ? null : _handleCancel,
               child: Text(
                 'Annuler mon vote',
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: _PollColors.meta,
@@ -186,7 +186,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
             children: [
               Text(
                 '${_poll.totalVotes} votes',
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 11,
                   color: _PollColors.meta,
                 ),
@@ -194,7 +194,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
               if (_expiryLabel.isNotEmpty)
                 Text(
                   _expiryLabel,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: AppTypography.font(
                     fontSize: 11,
                     color: _PollColors.meta,
                   ),
@@ -270,7 +270,7 @@ class _PollOptionBar extends StatelessWidget {
                       Expanded(
                         child: Text(
                           option.label,
-                          style: GoogleFonts.plusJakartaSans(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                             color: _PollColors.optionLabel,
@@ -280,7 +280,7 @@ class _PollOptionBar extends StatelessWidget {
                         ),
                       ),
                       if (isPending)
-                        const SizedBox(
+                        SizedBox(
                           width: 14,
                           height: 14,
                           child: CircularProgressIndicator(strokeWidth: 2),
@@ -288,7 +288,7 @@ class _PollOptionBar extends StatelessWidget {
                       else
                         Text(
                           '${option.percentage}%',
-                          style: GoogleFonts.plusJakartaSans(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                             color: _PollColors.percentage,

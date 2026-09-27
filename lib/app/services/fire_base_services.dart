@@ -33,8 +33,8 @@
 //           context: context,
 //           builder: (BuildContext context) {
 //             return AlertDialog(
-//               title: const Text("Autorisation définitivement refusée"),
-//               content: const Text(
+//               title: Text("Autorisation définitivement refusée"),
+//               content: Text(
 //                   "L'autorisation de notification est définitivement refusée. Veuillez accorder l'autorisation dans les paramètres de l'application pour utiliser cette fonctionnalité."),
 //               actions: <Widget>[
 //                 TextButton(

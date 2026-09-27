@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
@@ -33,7 +34,7 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
+      return Center(
         child: Text('Erreur: Données de paiement manquantes'),
       );
     }
@@ -131,7 +132,7 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
               length: 4,
               width: MediaQuery.of(context).size.width,
               fieldWidth: 50,
-              style: const TextStyle(fontSize: 17),
+              style: AppTypography.font(fontSize: 17),
               textFieldAlignment: MainAxisAlignment.spaceBetween,
               fieldStyle: FieldStyle.box,
               controller: _otpController,

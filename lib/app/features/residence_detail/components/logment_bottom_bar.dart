@@ -22,9 +22,7 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/main.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 /// ─────────────────────────────────────────────────────────────────────────────
 /// CONTENEUR PRINCIPAL : Affiche la barre appropriée selon le mode
@@ -265,7 +263,7 @@ class StandardBookingBottomBar extends StatelessWidget {
         color: Colors.white,
         border: Border(
           top: BorderSide(
-            color: Colors.grey.shade100,
+            color: AppColors.immoBgSurfaceMuted,
             width: 1,
           ),
         ),
@@ -290,16 +288,16 @@ class StandardBookingBottomBar extends StatelessWidget {
                       TextSpan(
                         text: CurrencyFormatter()
                             .format(residenceModel.prixReservation.toString()),
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF222222),
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: ' F',
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF222222),
@@ -308,13 +306,13 @@ class StandardBookingBottomBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   'par nuitée',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade500,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
               ],
@@ -334,13 +332,13 @@ class StandardBookingBottomBar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(60),
                 ),
-                textStyle: const TextStyle(
+                textStyle: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
               ),
-              child: const Text('Réserver'),
+              child: Text('Réserver'),
             ),
           ),
         ],

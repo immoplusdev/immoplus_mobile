@@ -25,8 +25,6 @@ import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart'
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/recommande_badge.dart';
 import 'package:immoplus/main.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
@@ -217,10 +215,10 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
     return Row(
       children: [
         Text('$libres Libres',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-        const SizedBox(width: 8),
+            style: AppTypography.font(fontWeight: FontWeight.bold, fontSize: 13)),
+        SizedBox(width: 8),
         Text('$enAttente En attente',
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 13)),
+            style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 13)),
       ],
     );
   }
@@ -474,7 +472,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                   width: 40,
                                   height: 4,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.shade300,
+                                    color: AppColors.immoBorderStrong,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
@@ -491,12 +489,12 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                         _isExpired
                                             ? 'Recherche expirée'
                                             : 'Recherche en cours',
-                                        style: TextStyle(
+                                        style: AppTypography.font(
                                             color: _isExpired
                                                 ? Colors.red.shade400
-                                                : Colors.grey.shade500,
+                                                : AppColors.immoTextSecondary,
                                             fontSize: 13)),
-                                    const SizedBox(height: 8),
+                                    SizedBox(height: 8),
                                     _expiresAt == null
                                         ? Row(
                                             mainAxisAlignment:
@@ -506,7 +504,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                             children: [
                                               Text(
                                                 '--:--',
-                                                style: TextStyle(
+                                                style: AppTypography.font(
                                                     color:
                                                         Colors.orange.shade800,
                                                     fontSize: 36,
@@ -556,7 +554,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                             ? 'Expiré'
                                                             : formatCountdown(
                                                                 remaining),
-                                                        style: TextStyle(
+                                                        style: AppTypography.font(
                                                             color: expired
                                                                 ? Colors.red
                                                                     .shade600
@@ -575,7 +573,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                   ),
                                                   if (progress != null &&
                                                       !expired) ...[
-                                                    const SizedBox(height: 10),
+                                                    SizedBox(height: 10),
                                                     ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -613,7 +611,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                       child: Container(
                                         height: 44,
                                         decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
+                                          color: AppColors.immoBgSurfaceMuted,
                                           borderRadius:
                                               BorderRadius.circular(22),
                                         ),
@@ -649,7 +647,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                           Alignment.center,
                                                       child: Text(
                                                         'Carte',
-                                                        style: TextStyle(
+                                                        style: AppTypography.font(
                                                           color: !show
                                                               ? Colors.white
                                                               : Colors.black87,
@@ -694,7 +692,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                           Alignment.center,
                                                       child: Text(
                                                         'Liste',
-                                                        style: TextStyle(
+                                                        style: AppTypography.font(
                                                           color: show
                                                               ? Colors.white
                                                               : Colors.black87,
@@ -713,7 +711,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    SizedBox(width: 12),
                                     Expanded(
                                       flex: 1,
                                       child: GestureDetector(
@@ -724,13 +722,13 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             border: Border.all(
-                                                color: Colors.grey.shade300),
+                                                color: AppColors.immoBorderStrong),
                                             borderRadius:
                                                 BorderRadius.circular(22),
                                           ),
                                           alignment: Alignment.center,
-                                          child: const Text('Annuler',
-                                              style: TextStyle(
+                                          child: Text('Annuler',
+                                              style: AppTypography.font(
                                                   color: Colors.black87)),
                                         ),
                                       ),
@@ -755,7 +753,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                           description:
                                               'Le propriétaire à confirmer vous payer c\'est reserve',
                                         ),
-                                        const SizedBox(height: 16),
+                                        SizedBox(height: 16),
                                         if (pendingSelection != null ||
                                             socketProps.isNotEmpty) ...[
                                           if (pendingSelection != null)
@@ -805,7 +803,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                               );
                                             },
                                           ),
-                                          const SizedBox(height: 24),
+                                          SizedBox(height: 24),
                                         ] else
                                           const ReverseSearchWaitingBanner(),
 
@@ -820,7 +818,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                   description:
                                                       'Les ${classicProps.length} autres qui correspondent à votre besoin. En attente de réponse du propriétaire.',
                                                 ),
-                                                const SizedBox(height: 16),
+                                                SizedBox(height: 16),
                                                 ...classicProps.map((prop) =>
                                                     Padding(
                                                       padding:

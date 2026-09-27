@@ -69,10 +69,10 @@ class PendingSelectionCard extends StatelessWidget {
                       children: [
                         const Icon(Iconsax.location,
                             size: 12, color: Colors.white),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           expired ? 'Expiré' : formatCountdown(remaining),
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             color: Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
@@ -103,9 +103,9 @@ class PendingSelectionCard extends StatelessWidget {
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text(
+              child: Text(
                 'Payer',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                style: AppTypography.font(fontWeight: FontWeight.w600, fontSize: 12),
               ),
             ),
           ),
@@ -126,9 +126,9 @@ class _ConfirmAPayerBadge extends StatelessWidget {
         color: AppColors.immoFeedbackSuccess,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Text(
+      child: Text(
         'Confirmer à payer',
-        style: TextStyle(
+        style: AppTypography.font(
           color: Colors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,

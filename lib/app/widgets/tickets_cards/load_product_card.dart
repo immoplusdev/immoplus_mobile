@@ -33,7 +33,7 @@ class LoadProductCard extends StatelessWidget {
               decoration: _deco,
               height: imageHeight,
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: 15),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,7 +58,7 @@ class LoadProductCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Flexible(
                   child: Align(
                     alignment: Alignment.topRight,

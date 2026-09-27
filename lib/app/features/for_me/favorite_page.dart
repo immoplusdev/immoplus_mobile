@@ -8,11 +8,9 @@ import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/features/for_me/components/empty_indicator.dart';
 import 'package:immoplus/app/features/for_me/components/favorite_card.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:isar_community/isar.dart';
 
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 

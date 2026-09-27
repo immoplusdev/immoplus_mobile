@@ -90,7 +90,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
               padding: const EdgeInsets.only(left: 4, bottom: 16),
               child: Text(
                 "Photo de profil",
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
                   color: AppColors.immoTextPrimary,
@@ -364,7 +364,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
               const Gap(14),
               Text(
                 label,
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: AppColors.immoTextPrimary,
@@ -384,7 +384,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         alignment: Alignment.centerLeft,
         child: Text(
           label,
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 13,
             fontWeight: FontWeight.w500,
             color: AppColors.immoTextLabel,
@@ -417,8 +417,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
     Widget avatar;
     if (_photoLoading) {
       avatar = Shimmer.fromColors(
-        baseColor: Colors.grey.shade200,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.immoBorderDefault,
+        highlightColor: AppColors.immoBgSurfaceMuted,
         child: Container(color: Colors.white),
       );
     } else if (hasLocalFile) {
@@ -433,8 +433,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
         memCacheWidth: 200,
         memCacheHeight: 200,
         placeholder: (_, __) => Shimmer.fromColors(
-          baseColor: Colors.grey.shade200,
-          highlightColor: Colors.grey.shade100,
+          baseColor: AppColors.immoBorderDefault,
+          highlightColor: AppColors.immoBgSurfaceMuted,
           child: Container(color: Colors.white),
         ),
         errorWidget: (_, __, ___) => EzCircleAvatar(
@@ -466,7 +466,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                     color: AppColors.primary.withValues(alpha: 0.25),
                     width: 3,
                   ),
-                  color: Colors.grey.shade100,
+                  color: AppColors.immoBgSurfaceMuted,
                 ),
                 child: ClipOval(child: avatar),
               ),
@@ -502,7 +502,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             hasLocalFile || hasNetworkPhoto
                 ? 'Changer la photo'
                 : 'Ajouter une photo',
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: AppColors.primary,

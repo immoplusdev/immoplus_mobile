@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/data/enums/relais_availability_preset.dart';
 import 'package:immoplus/app/data/enums/relais_reporter_relation.dart';
 import 'package:immoplus/app/features/immo_relais/models/relais_draft.dart';
@@ -72,7 +71,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
         ),
         title: Text(
           'Publiez votre ancien logement',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.font(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -101,16 +100,16 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
                   maxLines: 2,
                   decoration: InputDecoration(
                     hintText: 'Précisez votre lien avec ce logement',
-                    hintStyle: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade400),
+                    hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.immoBorderStrong),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.immoBorderStrong),
                     ),
                   ),
                 ),
@@ -126,7 +125,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
                       child: OutlinedButton(
                         onPressed: () => context.pop(),
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.grey.shade200,
+                          backgroundColor: AppColors.immoBorderDefault,
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(43),
@@ -134,9 +133,9 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
                         ),
                         child: Text(
                           'Retour',
-                          style: GoogleFonts.dmSans(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade500,
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
                       ),
@@ -163,7 +162,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(
+      style: AppTypography.font(
         fontSize: 15,
         fontWeight: FontWeight.w600,
         color: Colors.black,
@@ -185,12 +184,12 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             color: isSelected ? AppColors.primary : Colors.white,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
-              color: isSelected ? AppColors.primary : Colors.grey.shade300,
+              color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
             ),
           ),
           child: Text(
             preset.label,
-            style: GoogleFonts.dmSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w600,
               color: isSelected ? Colors.white : AppColors.primary,
             ),
@@ -213,7 +212,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isSelected ? AppColors.primary : Colors.grey.shade300,
+              color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
               width: isSelected ? 1.5 : 1,
             ),
           ),
@@ -222,12 +221,12 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             children: [
               Text(
                 relation.label,
-                style: GoogleFonts.dmSans(fontWeight: FontWeight.bold, fontSize: 15),
+                style: AppTypography.font(fontWeight: FontWeight.bold, fontSize: 15),
               ),
               const Gap(2),
               Text(
                 relation.description,
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
           ),
@@ -252,7 +251,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
               padding: const EdgeInsets.only(top: 12),
               child: Text(
                 "Je confirme que ce logement ne m'appartient pas et que je signale simplement sa disponibilité, à titre d'information.",
-                style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
+                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
               ),
             ),
           ),

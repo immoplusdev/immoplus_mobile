@@ -1,4 +1,5 @@
 library flutter_onboarding_slider;
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class OnBoardingSlider extends StatefulWidget {
   final String? finishButtonText;
 
   /// Text style for text inside last pages bottom button.
-  final TextStyle finishButtonTextStyle;
+  final TextStyle? finishButtonTextStyle;
 
   /// Color of the bottom page indicators.
   final Color? controllerColor;
@@ -127,14 +128,8 @@ class OnBoardingSlider extends StatefulWidget {
     this.middle,
     this.hasFloatingButton = true,
     this.hasSkip = true,
-    this.finishButtonTextStyle = const TextStyle(
-      fontSize: 20,
-      color: Colors.white,
-    ),
-    this.skipIcon = const Icon(
-      Icons.arrow_forward,
-      color: Colors.white,
-    ),
+    this.finishButtonTextStyle,
+    this.skipIcon = const Icon(Icons.arrow_forward, color: Colors.white),
     this.indicatorAbove = false,
     this.indicatorPosition = 90,
     this.skipFunctionOverride,
@@ -163,7 +158,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
         backgroundColor: widget.pageBackgroundColor ?? null,
         floatingActionButton: widget.hasFloatingButton
             ? BackgroundFinalButton(
-                buttonTextStyle: widget.finishButtonTextStyle,
+                buttonTextStyle: widget.finishButtonTextStyle ?? AppTypography.font(fontSize: 20, color: Colors.white),
                 skipIcon: widget.skipIcon,
                 addButton: widget.addButton,
                 currentPage: _currentPage,

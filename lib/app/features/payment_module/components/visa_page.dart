@@ -60,7 +60,7 @@ class _VisaPageState extends State<VisaPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Numéro de carte'),
+                Text('Numéro de carte'),
                 CustomTextField(
                   fillColor: Colors.white,
                   autofocus: true,
@@ -92,7 +92,7 @@ class _VisaPageState extends State<VisaPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Expiration'),
+                        Text('Expiration'),
                         CustomTextField(
                           fillColor: Colors.white,
                           //autofocus: true,
@@ -115,7 +115,7 @@ class _VisaPageState extends State<VisaPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('CVC'),
+                        Text('CVC'),
                         CustomTextField(
                           fillColor: Colors.white,
                           //autofocus: true,
@@ -135,7 +135,7 @@ class _VisaPageState extends State<VisaPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 5),
                   child: Text('Nom du propriétaire'),
                 ),

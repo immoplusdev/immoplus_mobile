@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
@@ -69,7 +70,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
             ),
             child: Text(
               'Avis ($_totalCount)',
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.3,
@@ -78,7 +79,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           SizedBox(
             height: 210,
             child: ListView.separated(
@@ -87,7 +88,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
               itemCount: _reviews.length,
               separatorBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                child: VerticalDivider(color: Colors.grey.shade200, width: 1),
+                child: VerticalDivider(color: AppColors.immoBorderDefault, width: 1),
               ),
               itemBuilder: (context, index) {
                 final screenWidth = MediaQuery.sizeOf(context).width;
@@ -98,7 +99,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
               },
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: appPadding),
             child: Center(
@@ -106,7 +107,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
                 onTap: () => _showAllReviews(context),
                 child: Text(
                   'Afficher les $_totalCount commentaires',
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: Color(0xff2744de),
@@ -147,25 +148,25 @@ class _ReviewsSkeleton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: appPadding),
         child: Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
+          baseColor: AppColors.immoBorderStrong,
+          highlightColor: AppColors.immoBgSurfaceMuted,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(width: 100, height: 16, color: Colors.white),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Row(
                 children: [
                   const CircleAvatar(radius: 24, backgroundColor: Colors.white),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Container(width: 120, height: 16, color: Colors.white),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Container(width: double.infinity, height: 12, color: Colors.white),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Container(width: double.infinity, height: 12, color: Colors.white),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Container(width: 180, height: 12, color: Colors.white),
             ],
           ),
@@ -234,14 +235,14 @@ class _AllReviewsSheetState extends State<_AllReviewsSheet> {
             padding: const EdgeInsets.symmetric(horizontal: appPadding),
             child: Text(
               'Avis (${widget.totalCount})',
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF222222),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Expanded(
             child: PagedListView<int, ResidenceReviewModel>(
               scrollController: scrollController,
@@ -255,11 +256,11 @@ class _AllReviewsSheetState extends State<_AllReviewsSheet> {
                   padding: const EdgeInsets.only(bottom: 24),
                   child: ResidenceReviewCard(review: review),
                 ),
-                firstPageProgressIndicatorBuilder: (context) => const Padding(
+                firstPageProgressIndicatorBuilder: (context) => Padding(
                   padding: EdgeInsets.only(top: 40),
                   child: Center(child: CircularProgressIndicator()),
                 ),
-                newPageProgressIndicatorBuilder: (context) => const Padding(
+                newPageProgressIndicatorBuilder: (context) => Padding(
                   padding: EdgeInsets.symmetric(vertical: 24),
                   child: Center(child: CircularProgressIndicator()),
                 ),

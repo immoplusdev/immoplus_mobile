@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -564,7 +565,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                             _status == StatusReservation.enAttentePaiementClient
                                 ? 'Propriétaire a confirmé votre demande'
                                 : 'Le propriétaire regarde votre demande',
-                            style: const TextStyle(
+                            style: AppTypography.font(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: _textPrimary,
@@ -573,7 +574,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 3),
+                          SizedBox(height: 3),
                           FadeTransition(
                             opacity: _messageOpacity,
                             child: Text(
@@ -581,7 +582,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                                       StatusReservation.enAttentePaiementClient
                                   ? 'Finalisez votre paiement pour confirmer'
                                   : _rotatingMessages[_messageIndex],
-                              style: const TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 11,
                                 color: _textMuted,
                                 height: 1.3,
@@ -663,7 +664,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                     children: [
                       Text(
                         _endTitle,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: _textPrimary,
@@ -672,10 +673,10 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 3),
+                      SizedBox(height: 3),
                       Text(
                         _endSubtitle,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 11,
                           color: _textMuted,
                           height: 1.4,

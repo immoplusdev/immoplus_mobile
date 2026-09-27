@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,8 +74,8 @@ class _MosaicLogmentImagesState extends State<MosaicLogmentImages> {
                               .value), //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
 
                       placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade400,
+                        baseColor: AppColors.immoBorderStrong,
+                        highlightColor: AppColors.immoTextDisabled,
                         period: const Duration(milliseconds: 500),
                         child: Container(
                           width: double.infinity,

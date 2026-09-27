@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_module_status_response.dart';
@@ -15,7 +14,6 @@ import 'package:immoplus/app/features/immo_relais/pages/relais_my_interests_page
 import 'package:immoplus/app/features/immo_relais/pages/relais_my_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_received_interests_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 class MyChoicePage extends StatefulWidget {
   const MyChoicePage({super.key});
@@ -50,19 +48,19 @@ class _MyChoicePageState extends State<MyChoicePage> {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              title: const Text('Imatch'),
+              title: Text('Imatch'),
               centerTitle: true,
             ),
             body: SafeArea(
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: AppColors.immoBorderDefault,
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
@@ -159,19 +157,19 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Imatch'),
+        title: Text('Imatch'),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: AppColors.immoBorderDefault,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: TabBar(
@@ -182,7 +180,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
                     borderRadius: BorderRadius.circular(25),
                   ),
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey[500],
+                  unselectedLabelColor: AppColors.immoTextSecondary,
                   labelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
@@ -191,14 +189,14 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
                   ),
                   dividerColor: Colors.transparent,
                   tabs: [
-                    if (widget.isRelaisActive) const Tab(text: 'Je déménage'),
-                    const Tab(text: 'J’emménage'),
-                    const Tab(text: 'Mes favoris'),
+                    if (widget.isRelaisActive) Tab(text: 'Je déménage'),
+                    Tab(text: 'J’emménage'),
+                    Tab(text: 'Mes favoris'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -289,7 +287,7 @@ class _MovingHub extends StatelessWidget {
             itemBuilder: (context, index) =>
                 _MovingHubCard(item: _movingHubItems[index]),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -303,13 +301,13 @@ class _MovingHub extends StatelessWidget {
               children: [
                 const Icon(Iconsax.lamp_charge,
                     color: Color(0xFFF59E0B), size: 18),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     "Vous déménagez ? On vous aide à trouver vite votre nouveau logement, avec des bonus à la clé.",
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 12,
-                      color: Colors.grey.shade700,
+                      color: AppColors.immoTextLabel,
                       height: 1.4,
                     ),
                   ),
@@ -317,7 +315,7 @@ class _MovingHub extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
       ),
     );
@@ -338,7 +336,7 @@ class _MovingHubCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.immoBorderDefault),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,13 +355,13 @@ class _MovingHubCard extends StatelessWidget {
             Text(
               item.title,
               style:
-                  GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+                  AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               item.subtitle,
               style:
-                  GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                  AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

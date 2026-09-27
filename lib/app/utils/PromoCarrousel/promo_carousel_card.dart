@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 /// Couleur principale de l'application
@@ -113,7 +114,7 @@ class PromoCarouselCard extends StatelessWidget {
                 children: [
                   Text(
                     data.title,
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       color: Colors.white,
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -121,12 +122,12 @@ class PromoCarouselCard extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   Expanded(
                     child: Text(
                       data.description,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         color: Colors.white.withOpacity(0.9),
                         fontSize: 16,
                         height: 1.5,
@@ -138,7 +139,7 @@ class PromoCarouselCard extends StatelessWidget {
                     onTap: data.onLinkTap,
                     child: Text(
                       data.linkText,
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -301,7 +302,7 @@ class _PromoCarouselWithIndicatorsState
           ),
         ),
         
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         
         // Indicateurs
         Row(

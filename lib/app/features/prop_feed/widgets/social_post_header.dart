@@ -74,7 +74,7 @@ class SocialPostHeader extends StatelessWidget {
           _buildProfileRow(context),
           // #17 — Use dynamic location instead of hardcoded 'Cocody, Abidjan'
           if (location != null && location!.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Row(
               children: [
                 Icon(
@@ -82,10 +82,10 @@ class SocialPostHeader extends StatelessWidget {
                   color: AppColors.white.withValues(alpha: 0.5),
                   size: 14,
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   location!,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     color: AppColors.white.withValues(alpha: 0.5),
                     fontSize: 12,
                   ),
@@ -94,7 +94,7 @@ class SocialPostHeader extends StatelessWidget {
             ),
           ],
           if (caption.isNotEmpty || hashtags.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             _buildDescriptionRow(context),
           ],
         ],
@@ -129,7 +129,7 @@ class SocialPostHeader extends StatelessWidget {
               verify: verify,
             ),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
         ],
         Expanded(
           child: Row(
@@ -138,7 +138,7 @@ class SocialPostHeader extends StatelessWidget {
               Flexible(
                 child: Text(
                   username,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     color: Colors.white,
                     fontSize: _usernameFontSize,
                     fontWeight: FontWeight.w600,
@@ -201,7 +201,7 @@ class SocialPostHeader extends StatelessWidget {
                   child: descriptionChild,
                 ),
                 if (isLong && !isExpanded) ...[
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   GestureDetector(
                     onTap: onMoreTap,
                     child: Container(
@@ -211,9 +211,9 @@ class SocialPostHeader extends StatelessWidget {
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Plus',
-                        style: TextStyle(
+                        style: AppTypography.font(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -226,7 +226,7 @@ class SocialPostHeader extends StatelessWidget {
             ),
             // Afficher le footer avec hashtags + date quand la description est expandue
             if (isExpanded) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               DescriptionFooter(
                 date: date,
                 hashtags: const ['immo', 'feed', 'immobilier'],
@@ -254,7 +254,7 @@ class SocialPostHeader extends StatelessWidget {
       spans.add(
         TextSpan(
           text: caption,
-          style: TextStyle(
+          style: AppTypography.font(
             color: Colors.white.withValues(alpha: 0.95),
             fontSize: _captionFontSize,
             height: 1.35,
@@ -264,13 +264,13 @@ class SocialPostHeader extends StatelessWidget {
     }
 
     if (hashtags.isNotEmpty) {
-      if (spans.isNotEmpty) spans.add(const TextSpan(text: ' '));
+      if (spans.isNotEmpty) spans.add(TextSpan(text: ' '));
       final hashtagText =
           hashtags.map((h) => h.startsWith('#') ? h : '#$h').join(' ');
       spans.add(
         TextSpan(
           text: hashtagText,
-          style: const TextStyle(
+          style: AppTypography.font(
             color: Colors.white,
             fontSize: _captionFontSize,
             fontWeight: FontWeight.bold,

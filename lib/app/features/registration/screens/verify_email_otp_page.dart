@@ -9,8 +9,6 @@ import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
@@ -254,7 +252,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                                             const EdgeInsets.only(top: 8.0),
                                         child: Text(
                                           err,
-                                          style: TextStyle(
+                                          style: AppTypography.font(
                                             color: theme.colorScheme.error,
                                             fontSize: 13,
                                           ),
@@ -280,7 +278,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                           Center(
                             child: TextButton(
                               onPressed: _isLoading ? null : _resend,
-                              child: const Text('Renvoyer le code'),
+                              child: Text('Renvoyer le code'),
                             ),
                           ),
                         ],

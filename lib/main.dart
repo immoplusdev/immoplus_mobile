@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/appli/my_app.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:talker/talker.dart';
 
@@ -64,7 +63,7 @@ void main() async {
                 color: AppColors.red600,
                 size: 40,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 "Une erreur inattendue est survenue",
                 style: AppTypography.titleSmall.copyWith(
@@ -73,7 +72,7 @@ void main() async {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               Text(
                 "Veuillez rafraîchir l'écran ou réessayer ultérieurement.",
                 style: AppTypography.bodySmall.copyWith(
@@ -95,7 +94,11 @@ void main() async {
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
   await Stripe.instance.applySettings();
   await GoogleFonts.pendingFonts([
-    GoogleFonts.plusJakartaSans(),
+    GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w400),
+    GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w500),
+    GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+    GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700),
+    GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800),
   ]);
   GoRouter.optionURLReflectsImperativeAPIs = true;
   OneSignal.initialize("3dcf3bc5-e4c7-4328-9d30-0f33cdedb1f0");

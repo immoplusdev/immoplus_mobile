@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 class FurnitureDetailInfos extends StatelessWidget {
   const FurnitureDetailInfos({super.key, required this.furnitureModel});
@@ -50,7 +49,7 @@ class FurnitureDetailInfos extends StatelessWidget {
                                 .toUpperCase(),
                           ),
                         ),
-                        Icon(Icons.copy, size: 16, color: Colors.grey.shade600),
+                        Icon(Icons.copy, size: 16, color: AppColors.immoTextSecondary),
                       ],
                     )),
               ),
@@ -118,8 +117,8 @@ class FurnitureDetailInfos extends StatelessWidget {
           children: [
             Text(
               label.toUpperCase(),
-              style: TextStyle(
-                color: Colors.grey.shade600,
+              style: AppTypography.font(
+                color: AppColors.immoTextSecondary,
                 fontSize: 11.5,
                 letterSpacing: 1.1,
                 fontWeight: FontWeight.w600,

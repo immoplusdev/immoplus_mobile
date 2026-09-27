@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import './promo_carousel_card.dart';
 
@@ -91,7 +92,7 @@ class CarouselDemoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text('Carrousel Promo'),
+        title: Text('Carrousel Promo'),
         backgroundColor: kPrimaryColor,
         foregroundColor: Colors.white,
       ),
@@ -99,21 +100,21 @@ class CarouselDemoPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             
             // Titre de section
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Version ListView (scroll horizontal)',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             
             // Carrousel simple avec ListView
             PromoCarousel(
@@ -123,21 +124,21 @@ class CarouselDemoPage extends StatelessWidget {
               spacing: 16,
             ),
             
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
             
             // Titre de section
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Version PageView avec indicateurs',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             
             // Carrousel avec PageView et indicateurs
             PromoCarouselWithIndicators(
@@ -146,21 +147,21 @@ class CarouselDemoPage extends StatelessWidget {
               indicatorActiveColor: kPrimaryColor,
             ),
             
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
             
             // Titre de section
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Carte individuelle',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             
             // Carte individuelle
             Padding(
@@ -178,7 +179,7 @@ class CarouselDemoPage extends StatelessWidget {
               ),
             ),
             
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
           ],
         ),
       ),

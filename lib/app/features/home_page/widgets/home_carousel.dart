@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // part of homePage;
 
 // class HomeCarousel extends StatelessWidget {
@@ -34,7 +35,7 @@
 //               : CarouselSlider(
 //                   items: [
 //                     Shimmer.fromColors(
-//                       baseColor: (Colors.grey[300])!,
+//                       baseColor: (AppColors.immoBorderStrong)!,
 //                       highlightColor: Colors.white,
 //                       period: Duration(milliseconds: 600),
 //                       child: Container(
@@ -87,7 +88,7 @@
 //                 fit: BoxFit.fill),
 //             boxShadow: [
 //               BoxShadow(
-//                 color: Colors.grey.withOpacity(0.5),
+//                 color: AppColors.immoTextSecondary.withOpacity(0.5),
 //                 spreadRadius: 3,
 //                 blurRadius: 7,
 //                 offset: Offset(0, 0), // changes position of shadow

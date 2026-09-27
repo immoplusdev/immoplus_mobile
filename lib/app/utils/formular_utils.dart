@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/request_path.dart';
 
 class FormUtils {
@@ -13,8 +12,8 @@ class FormUtils {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Alert'),
-        content: const Text('Proceed with destructive action?'),
+        title: Text('Alert'),
+        content: Text('Proceed with destructive action?'),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
             /// This parameter indicates this action is the default,
@@ -23,7 +22,7 @@ class FormUtils {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('No'),
+            child: Text('No'),
           ),
           CupertinoDialogAction(
             /// This parameter indicates the action would perform
@@ -33,7 +32,7 @@ class FormUtils {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Yes'),
+            child: Text('Yes'),
           ),
         ],
       ),
@@ -69,7 +68,9 @@ class FormUtils {
 
   static String? fieldValidator({String? value, String? label}) {
     if (value == null || value.isEmpty) {
-      return label != null ? 'Veuillez entrer $label' : 'Veuillez remplir ce champ';
+      return label != null
+          ? 'Veuillez entrer $label'
+          : 'Veuillez remplir ce champ';
     }
     return null;
   }
@@ -131,7 +132,7 @@ class FormUtils {
           height: MediaQuery.of(context).size.height * 0.5,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Jours disponible'),
+              title: Text('Jours disponible'),
             ),
             body: FutureBuilder(
                 future: getDateBooked(id: id),
@@ -145,13 +146,13 @@ class FormUtils {
                         disableModePicker: true,
                         firstDayOfWeek: 1,
                         calendarType: CalendarDatePicker2Type.multi,
-                        selectedDayTextStyle: TextStyle(
+                        selectedDayTextStyle: AppTypography.font(
                             decoration: TextDecoration.lineThrough,
                             color: AppColors.white,
                             fontWeight: FontWeight.w700),
                         selectedDayHighlightColor: CupertinoColors.systemFill,
                         centerAlignModePicker: true,
-                        customModePickerIcon: const SizedBox(),
+                        customModePickerIcon: SizedBox(),
                         firstDate: DateTime.now(),
                         selectableDayPredicate: (day) {
                           return false;
@@ -191,7 +192,7 @@ class FormUtils {
                       },
                     );
                   }
-                  return const Center(child: CupertinoActivityIndicator());
+                  return Center(child: CupertinoActivityIndicator());
                 }),
           ),
         ),

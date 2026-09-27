@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:gap/gap.dart';
@@ -13,8 +14,8 @@ class HotelShimmerCard extends StatelessWidget {
     final double imageHeight = isSponsored ? 200 : 130;
 
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
+      baseColor: AppColors.immoBorderStrong,
+      highlightColor: AppColors.immoBgSurfaceMuted,
       period: const Duration(milliseconds: 1000),
       child: Container(
         width: cardWidth,
@@ -28,7 +29,7 @@ class HotelShimmerCard extends StatelessWidget {
           children: [
             Container(
               height: imageHeight,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),

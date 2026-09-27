@@ -149,7 +149,7 @@ class _LocationFurnituresPageState extends State<LocationFurnituresPage>
                           Icon(
                             Icons.location_off_outlined,
                             size: 80,
-                            color: Colors.grey.shade300,
+                            color: AppColors.immoBorderStrong,
                           ),
                           const Gap(20),
                           Text(
@@ -171,7 +171,7 @@ class _LocationFurnituresPageState extends State<LocationFurnituresPage>
                       child: Text(
                         'Vous avez vu tous les meubles',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey.shade600,
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),

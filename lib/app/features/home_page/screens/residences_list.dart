@@ -266,7 +266,7 @@ class _ResidencesListState extends State<ResidencesList>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(15),
-                            const SizedBox(
+                            SizedBox(
                               width: 150,
                               height: 20,
                               child: DecoratedBox(
@@ -451,7 +451,7 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color:
-                    residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
+                    residences.isNotEmpty ? Colors.black : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

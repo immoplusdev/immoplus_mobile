@@ -42,7 +42,7 @@ class ViewerImageEstate extends StatelessWidget {
         body: PhotoViewGallery(
           loadingBuilder: (context, event) => Container(
             color: Colors.black,
-            child: const Center(
+            child: Center(
               child: CircularProgressIndicator(),
             ),
           ),

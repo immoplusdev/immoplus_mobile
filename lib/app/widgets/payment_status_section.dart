@@ -33,7 +33,7 @@ class _PaymentStatusSectionState extends State<PaymentStatusSection> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Statut de paiement :'),
+            Text('Statut de paiement :'),
             StatusChip(
                 status: widget.demandeVisitModel.statusFacture.toString(),
                 text: widget.demandeVisitModel.statusFacture.toString())

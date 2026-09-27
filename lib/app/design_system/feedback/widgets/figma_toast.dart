@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/design_system/tokens/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:toastification/toastification.dart';
 
 enum FigmaToastType {
@@ -91,16 +91,16 @@ class FigmaToast extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: AppTypography.font(
                       color: color,
                       fontWeight: FontWeight.bold,
                       fontSize: _Constants.titleFontSize,
                     ),
                   ),
-                  const SizedBox(height: _Constants.descriptionSpacing),
+                  SizedBox(height: _Constants.descriptionSpacing),
                   Text(
                     description!,
-                    style: TextStyle(
+                    style: AppTypography.font(
                         color: color.withValues(alpha: 0.8),
                         fontSize: _Constants.descriptionFontSize,
                         fontWeight: FontWeight.w200),
@@ -112,14 +112,14 @@ class FigmaToast extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         color: color,
                         fontWeight: FontWeight.bold,
                         fontSize: _Constants.titleFontSize,
                       ),
                     ),
                   ),
-                  const SizedBox(width: _Constants.iconSpacing),
+                  SizedBox(width: _Constants.iconSpacing),
                   Icon(
                     Icons.error_outline_rounded,
                     color: color,

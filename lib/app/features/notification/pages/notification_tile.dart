@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 class NotificationTile extends StatelessWidget {
   final NotificationModel notification;
@@ -40,7 +39,7 @@ class NotificationTile extends StatelessWidget {
                 ? Colors.transparent
                 : AppColors.primary.withOpacity(0.03),
             border: Border(
-              bottom: BorderSide(color: Colors.grey.shade100, width: 1),
+              bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1),
             ),
           ),
           child: Row(
@@ -80,7 +79,7 @@ class NotificationTile extends StatelessWidget {
                         Text(
                           _formatDate(notification.createdAt ?? DateTime.now()),
                           style: AppTypography.captionMedium.copyWith(
-                            color: Colors.grey.shade500,
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
                       ],

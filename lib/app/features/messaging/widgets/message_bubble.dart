@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../data/models/remote/messaging/message_model.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import '../utils/messaging_time_format.dart';
@@ -57,14 +55,14 @@ class MessageBubble extends StatelessWidget {
                         )
                       : null,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
               ],
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxWidth),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
-                    color: isClient ? AppColors.primary : Colors.grey.shade100,
+                    color: isClient ? AppColors.primary : AppColors.immoBgSurfaceMuted,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(18),
                       topRight: const Radius.circular(18),
@@ -74,7 +72,7 @@ class MessageBubble extends StatelessWidget {
                   ),
                   child: Text(
                     message.content,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 15,
                       height: 1.4,
                       color: isClient ? Colors.white : const Color(0xFF1F2937),
@@ -126,28 +124,28 @@ class _StatusRow extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.error_outline, size: 14, color: AppColors.immoFeedbackError),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             'Échec',
-            style: GoogleFonts.dmSans(fontSize: 11, color: AppColors.immoFeedbackError),
+            style: AppTypography.font(fontSize: 11, color: AppColors.immoFeedbackError),
           ),
           if (onRetry != null) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             GestureDetector(
               onTap: onRetry,
               child: Text('Réessayer',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                       fontSize: 11,
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600)),
             ),
           ],
           if (onDelete != null) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             GestureDetector(
               onTap: onDelete,
               child: Text('Supprimer',
-                  style: GoogleFonts.dmSans(fontSize: 11, color: Colors.grey)),
+                  style: AppTypography.font(fontSize: 11, color: AppColors.immoTextSecondary)),
             ),
           ],
         ],
@@ -158,25 +156,25 @@ class _StatusRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(timeLabel,
-            style: GoogleFonts.dmSans(fontSize: 11, color: Colors.grey.shade500)),
+            style: AppTypography.font(fontSize: 11, color: AppColors.immoTextSecondary)),
         if (isClient) ...[
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           if (message.deliveryState == MessageDeliveryState.sending)
             SizedBox(
               width: 10,
               height: 10,
               child: CircularProgressIndicator(
                 strokeWidth: 1.5,
-                color: Colors.grey.shade400,
+                color: AppColors.immoTextDisabled,
               ),
             )
           else
-            Icon(Icons.done, size: 13, color: Colors.grey.shade400),
+            Icon(Icons.done, size: 13, color: AppColors.immoTextDisabled),
         ],
         if (isClient && showReadMarker) ...[
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text('Lu',
-              style: GoogleFonts.dmSans(
+              style: AppTypography.font(
                   fontSize: 11,
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600)),
@@ -199,13 +197,13 @@ class DaySeparator extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.grey.shade100,
+            color: AppColors.immoBgSurfaceMuted,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             label,
-            style: GoogleFonts.dmSans(
-                fontSize: 12, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
+            style: AppTypography.font(
+                fontSize: 12, color: AppColors.immoTextSecondary, fontWeight: FontWeight.w500),
           ),
         ),
       ),

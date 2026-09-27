@@ -64,7 +64,7 @@ class _PendingPaymentReservationsPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Réservations à payer'),
+        title: Text('Réservations à payer'),
         // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
         //       fontWeight: FontWeight.w700,
         //     ),

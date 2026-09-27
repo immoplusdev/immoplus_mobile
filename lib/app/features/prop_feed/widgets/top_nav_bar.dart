@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'property_type_dropdown.dart';
 
@@ -176,7 +177,7 @@ class _TabItem extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.font(
                 color: isSelected
                     ? Colors.white
                     : Colors.white.withValues(alpha: 0.7),
@@ -191,7 +192,7 @@ class _TabItem extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 2,

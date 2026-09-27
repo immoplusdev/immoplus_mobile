@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_interest_requests.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
@@ -35,12 +34,12 @@ Future<void> showExpressRelaisInterestSheet(
         children: [
           Text(
             'Exprimer votre intérêt',
-            style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const Gap(4),
           Text(
             "L'occupant sera notifié et pourra vous proposer une visite.",
-            style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade600),
+            style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
           ),
           const Gap(16),
           TextField(
@@ -49,10 +48,10 @@ Future<void> showExpressRelaisInterestSheet(
             maxLength: 2000,
             decoration: InputDecoration(
               hintText: 'Un message pour l\'occupant (optionnel)',
-              hintStyle: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade400),
+              hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.immoBorderStrong),
               ),
             ),
           ),
@@ -72,7 +71,7 @@ Future<void> showExpressRelaisInterestSheet(
               ),
               child: Text(
                 'Envoyer',
-                style: GoogleFonts.dmSans(color: Colors.white, fontWeight: FontWeight.bold),
+                style: AppTypography.font(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),

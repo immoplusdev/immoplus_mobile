@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/models/remote/messaging/conversation_type_count.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
@@ -47,7 +45,7 @@ class InboxTabs extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         itemCount: items.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => SizedBox(width: 8),
         itemBuilder: (context, index) {
           final (type, label) = items[index];
           final isSelected = type == activeType;
@@ -68,14 +66,14 @@ class InboxTabs extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: isSelected ? Colors.white : AppColors.primary,
                     ),
                   ),
                   if (unread > 0) ...[
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 1),
@@ -85,7 +83,7 @@ class InboxTabs extends StatelessWidget {
                       ),
                       child: Text(
                         unread > 99 ? '99+' : '$unread',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.font(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           color: isSelected ? AppColors.primary : Colors.white,

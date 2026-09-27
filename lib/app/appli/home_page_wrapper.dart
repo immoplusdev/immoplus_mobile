@@ -286,7 +286,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   Widget _buildFallbackBar(BuildContext context, PageState state) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey.shade200)),
+        border: Border(top: BorderSide(color: AppColors.immoBorderDefault)),
       ),
       child: ClipRRect(
         child: SizedBox(
@@ -305,7 +305,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
             showUnselectedLabels: true,
             selectedItemColor: AppColors.primary,
             unselectedItemColor:
-                state == PageState.vivre ? Colors.white : Colors.grey,
+                state == PageState.vivre ? Colors.white : AppColors.immoTextSecondary,
             items: [
               _buildNavItem(
                 icon: Iconsax.home,
@@ -350,7 +350,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     String? svgAsset,
     Widget? badgeWidget,
   }) {
-    final inactiveColor = immoMode ? Colors.white : Colors.grey.shade600;
+    final inactiveColor = immoMode ? Colors.white : AppColors.immoTextSecondary;
 
     Widget buildIcon({required bool active}) {
       Widget base;

@@ -20,7 +20,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: AppColors.immoTextSecondary),
       ),
       height: 70,
       child: Row(
@@ -29,7 +29,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
           Flexible(
             child: ListTile(
               dense: true,
-              title: const Text('ARRIVÉE'),
+              title: Text('ARRIVÉE'),
               contentPadding: EdgeInsets.zero.copyWith(left: 3),
               titleTextStyle: AppTypography.labelMedium.copyWith(
                 fontWeight: FontWeight.bold,
@@ -38,15 +38,15 @@ class PlaningBookingCardDetail extends StatelessWidget {
               subtitle: AutoSizeText(dateHeureDebut),
             ),
           ),
-          const VerticalDivider(
+          VerticalDivider(
             thickness: 1,
-            color: Colors.grey,
+            color: AppColors.immoTextSecondary,
           ),
           Flexible(
             child: ListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              title: const Text('DÉPART'),
+              title: Text('DÉPART'),
               titleTextStyle: AppTypography.labelMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,

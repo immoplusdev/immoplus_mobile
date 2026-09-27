@@ -74,7 +74,7 @@ class VisitHistoryCard extends StatelessWidget {
                           demandeVisiteModel.typeDemandeVisite
                               .toString()
                               .toUpperCase(),
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: isExpress
@@ -132,7 +132,7 @@ class VisitHistoryCard extends StatelessWidget {
               ],
 
               const Gap(12),
-              Divider(thickness: 0.5, color: Colors.grey.shade200, height: 1),
+              Divider(thickness: 0.5, color: AppColors.immoBorderDefault, height: 1),
               const Gap(12),
 
               // Date de visite ou message "pas de date"
@@ -186,7 +186,7 @@ class VisitHistoryCard extends StatelessWidget {
                             Utils.formatDatOnly(
                                 dateTime: demandeVisiteModel
                                     .datesDemandeVisite.first.date!),
-                            style: TextStyle(
+                            style: AppTypography.font(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.primary,
@@ -214,7 +214,7 @@ class VisitHistoryCard extends StatelessWidget {
                             Utils.formatTimeOnly(
                                 dateTime: demandeVisiteModel
                                     .datesDemandeVisite.first.date!),
-                            style: TextStyle(
+                            style: AppTypography.font(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.primary,

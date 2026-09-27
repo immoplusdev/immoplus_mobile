@@ -18,7 +18,7 @@ class SmallButton extends StatelessWidget {
         child: Center(
             child: Text(
           text,
-          style: const TextStyle(color: AppColors.white),
+          style: AppTypography.font(color: AppColors.white),
         )),
       ),
     );

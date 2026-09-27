@@ -24,7 +24,7 @@ class NotificationBell extends StatelessWidget {
       child: Container(
         width: 48,
         height: 48,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Color(0xFFEFF4FF),
         ),

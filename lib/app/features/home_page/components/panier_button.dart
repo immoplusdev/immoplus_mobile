@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:immoplus/constantes/immo_icons.dart';
@@ -27,7 +28,7 @@
 //                 isLabelVisible: snapshot.data!.isNotEmpty,
 //                 label: Text(
 //                   '${snapshot.data!.length}',
-//                   style: const TextStyle(
+//                   style: AppTypography.font(
 //                     color: Colors.white,
 //                     fontSize: 12,
 //                   ),
@@ -53,7 +54,7 @@
 //             height: 40,
 //             padding: EdgeInsets.all(8),
 //             decoration: BoxDecoration(
-//               border: Border.all(color: Colors.grey.shade300),
+//               border: Border.all(color: AppColors.immoBorderStrong),
 //               borderRadius: BorderRadius.circular(60),
 //             ),
 //             child: ImmoIcon(

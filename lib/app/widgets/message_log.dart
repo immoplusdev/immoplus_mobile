@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ void messageLog({required BuildContext context, required String message}) {
           CupertinoDialogAction(
               child: Text(
                 "OK",
-                style: TextStyle(
+                style: AppTypography.font(
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),

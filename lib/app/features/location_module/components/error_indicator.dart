@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -14,7 +15,7 @@ class ErrorIndicator extends StatelessWidget {
     final hasContent = GetUtils.isNullOrBlank(title) == false ||
         GetUtils.isNullOrBlank(description) == false;
 
-    if (!hasContent) return const SizedBox();
+    if (!hasContent) return SizedBox();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -32,7 +33,7 @@ class ErrorIndicator extends StatelessWidget {
               size: 20,
               color: Color(0xFFEF4444),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +42,7 @@ class ErrorIndicator extends StatelessWidget {
                   if (title != null)
                     Text(
                       title!,
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFFB91C1C),
@@ -51,7 +52,7 @@ class ErrorIndicator extends StatelessWidget {
                   if (description != null)
                     Text(
                       description!,
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                         color: Color(0xFFDC2626),

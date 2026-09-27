@@ -64,7 +64,7 @@ class PriceSetterButton extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontSize: 10),
+                        style: AppTypography.font(fontSize: 10),
                       ),
                       Text(Utils.formatCurrency(amount)),
                     ],
@@ -83,7 +83,7 @@ class PriceSetterButton extends StatelessWidget {
                         left: BorderSide(),
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: FaIcon(
                         FontAwesomeIcons.plus,
                         size: 20,

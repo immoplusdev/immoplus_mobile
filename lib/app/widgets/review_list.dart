@@ -12,10 +12,10 @@ class ReviewListTile extends StatelessWidget {
     return ListTile(
       leading: Text(
         title,
-        style: const TextStyle(color: AppColors.gray500),
+        style: AppTypography.font(color: AppColors.gray500),
       ),
       trailing: Text(trailing,
-          style: TextStyle(
+          style: AppTypography.font(
             fontWeight: FontWeight.bold,
           )),
     );

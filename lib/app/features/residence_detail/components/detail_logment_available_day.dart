@@ -35,7 +35,7 @@ class DetailLogmentAvailableDay extends StatelessWidget {
 
                   selectedDayHighlightColor: CupertinoColors.systemFill,
                   centerAlignModePicker: true,
-                  customModePickerIcon: const SizedBox(),
+                  customModePickerIcon: SizedBox(),
                   firstDate: DateTime.now(),
                   selectableDayPredicate: (day) {
                     return false;
@@ -76,7 +76,7 @@ class DetailLogmentAvailableDay extends StatelessWidget {
                 },
               );
             }
-            return const Center(child: CupertinoActivityIndicator());
+            return Center(child: CupertinoActivityIndicator());
           }),
     );
   }

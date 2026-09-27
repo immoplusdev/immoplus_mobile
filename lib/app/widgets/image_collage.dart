@@ -132,7 +132,7 @@ class ImageCollage extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 '+${effectiveItems.length - 4}',
-                                style: const TextStyle(
+                                style: AppTypography.font(
                                   color: AppColors.white,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -188,7 +188,7 @@ class ImageCollage extends StatelessWidget {
       height: double.infinity,
       placeholder: (context, url) => Container(
         color: AppColors.gray100,
-        child: const Center(
+        child: Center(
           child: SizedBox(
             width: 16,
             height: 16,

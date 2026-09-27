@@ -42,7 +42,7 @@ class SimpleAppBar extends StatelessWidget implements PreferredSize {
       centerTitle: true,
       title: Text(
         title,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontWeight: FontWeight.bold,
         ),
       ),

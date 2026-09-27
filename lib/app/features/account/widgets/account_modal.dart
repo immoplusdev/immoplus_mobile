@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,7 @@
 //     builder: (BuildContext context) {
 //       return Container(
 //         padding: const EdgeInsets.only(top: 1),
-//         decoration: const BoxDecoration(
+//         decoration: BoxDecoration(
 //             borderRadius: BorderRadius.only(
 //                 topLeft: Radius.circular(30), topRight: Radius.circular(30))),
 //         height: MediaQuery.of(context).size.height - 250,
@@ -63,14 +64,14 @@
 //                             (state.status)
 //                                 ? "Opperation réussit"
 //                                 : "Opperation échoué",
-//                             style: TextStyle(
+//                             style: AppTypography.font(
 //                               fontSize: 20,
 //                               color: (state.status)
 //                                   ? Color.fromARGB(255, 81, 150, 92)
 //                                   : Colors.redAccent,
 //                             ),
 //                           ),
-//                           const SizedBox(
+//                           SizedBox(
 //                             height: 20,
 //                           ),
 //                           (state.status)

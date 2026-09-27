@@ -25,7 +25,7 @@ class DetailEstateInfos extends StatelessWidget {
               Flexible(
                 child: AutoSizeText(
                   bienImmobilier.adresse,
-                  style: TextStyle(color: AppColors.primary),
+                  style: AppTypography.font(color: AppColors.primary),
                 ),
               ),
               // Gap(8),
@@ -36,7 +36,7 @@ class DetailEstateInfos extends StatelessWidget {
               // ),
               // Text(
               //   "4",
-              //   style: TextStyle(
+              //   style: AppTypography.font(
               //     fontSize: 12,
               //     color: Colors.orange,
               //   ),

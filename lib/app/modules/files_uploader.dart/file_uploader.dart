@@ -56,7 +56,7 @@ class _FileUploaderState extends State<FileUploader> {
                 );
               },
               leading: const FaIcon(FontAwesomeIcons.camera),
-              title: const Text("À partir de la caméra"),
+              title: Text("À partir de la caméra"),
             ),
             const Divider(),
             ListTile(
@@ -71,7 +71,7 @@ class _FileUploaderState extends State<FileUploader> {
                 );
               },
               leading: const FaIcon(FontAwesomeIcons.folder),
-              title: const Text("À partir de la gallérie"),
+              title: Text("À partir de la gallérie"),
             ),
             const Gap(30),
           ],
@@ -86,7 +86,7 @@ class _FileUploaderState extends State<FileUploader> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-                spreadRadius: 3, blurRadius: 8, color: Colors.grey.shade300)
+                spreadRadius: 3, blurRadius: 8, color: AppColors.immoBorderStrong)
           ]),
       padding: const EdgeInsets.all(5),
       child: Column(
@@ -119,7 +119,7 @@ class _FileUploaderState extends State<FileUploader> {
                   ? Shimmer.fromColors(
                       period: const Duration(milliseconds: 800),
                       baseColor: CupertinoColors.tertiarySystemFill,
-                      highlightColor: Colors.grey.shade100,
+                      highlightColor: AppColors.immoBgSurfaceMuted,
                       child: Container(
                         width: widget.width ?? 180,
                         height: widget.height ?? 180,
@@ -133,7 +133,7 @@ class _FileUploaderState extends State<FileUploader> {
                       width: widget.width ?? 180,
                       height: widget.height ?? 180,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
+                        color: AppColors.immoBorderDefault,
                         borderRadius: BorderRadius.circular(15),
                         image: (widget.fileUploaderController.filePath == null)
                             ? null
@@ -154,8 +154,8 @@ class _FileUploaderState extends State<FileUploader> {
 
                                 placeholder: (context, url) =>
                                     Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade400,
+                                  baseColor: AppColors.immoBorderStrong,
+                                  highlightColor: AppColors.immoTextDisabled,
                                   period: const Duration(milliseconds: 500),
                                   child: Container(
                                     width: double.infinity,
@@ -175,7 +175,7 @@ class _FileUploaderState extends State<FileUploader> {
                                     widget.iconPlaceholder ??
                                         FontAwesomeIcons.camera.data,
                                     size: 50,
-                                    color: Colors.grey.shade500,
+                                    color: AppColors.immoTextSecondary,
                                   ),
                                 )
                               : null,

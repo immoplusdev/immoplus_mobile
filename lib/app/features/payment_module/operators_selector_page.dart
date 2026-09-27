@@ -15,7 +15,6 @@ import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
 class OperatorsSelectorPage extends StatefulWidget {
@@ -87,7 +86,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
         slivers: [
           SliverAppBar(
             backgroundColor: AppColors.scafold,
-            title: const Text('Moyen de paiement'),
+            title: Text('Moyen de paiement'),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             leading: BackButton(color: Colors.black),
             actions: const [],
@@ -107,7 +106,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       .titleLarge!
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
-                subtitle: const Text('Montant à payer'),
+                subtitle: Text('Montant à payer'),
                 trailing: Icon(
                   FontAwesomeIcons.moneyBill.data,
                   color: Colors.green,
@@ -162,7 +161,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       color: Colors.black,
                     ),
                     trailing: _isLoading && isStripe
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),

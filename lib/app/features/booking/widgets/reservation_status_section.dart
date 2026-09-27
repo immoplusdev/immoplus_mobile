@@ -24,7 +24,7 @@ class ReservationStatusSection extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Statut de réservation :",
           ),
           StatusChip(

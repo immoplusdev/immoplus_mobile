@@ -45,7 +45,7 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
+      return Center(
         child: Text('Erreur: Données de paiement manquantes'),
       );
     }

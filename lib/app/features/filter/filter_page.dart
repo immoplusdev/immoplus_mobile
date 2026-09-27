@@ -179,7 +179,7 @@ class _FilterPageState extends State<FilterPage> {
                       firstDayOfWeek: 1,
                       calendarType: CalendarDatePicker2Type.range,
                       centerAlignModePicker: true,
-                      customModePickerIcon: const SizedBox(),
+                      customModePickerIcon: SizedBox(),
                       firstDate: DateTime.now(),
                       selectedDayHighlightColor: AppColors.primary,
                       selectedRangeHighlightColor:
@@ -250,7 +250,7 @@ class _FilterPageState extends State<FilterPage> {
                       context.pop();
                     },
                     icon: Icon(Iconsax.filter, size: 18),
-                    label: const Text('Appliquer le filtre'),
+                    label: Text('Appliquer le filtre'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -259,7 +259,7 @@ class _FilterPageState extends State<FilterPage> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      textStyle: TextStyle(
+                      textStyle: AppTypography.font(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
@@ -284,12 +284,12 @@ class _FilterPageState extends State<FilterPage> {
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.immoFeedbackError,
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      textStyle: TextStyle(
+                      textStyle: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    child: const Text('Annuler les filtres'),
+                    child: Text('Annuler les filtres'),
                   ),
                 ),
               ],

@@ -80,7 +80,7 @@ class _MoovOptValidatorPageState extends State<MoovOptValidatorPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
+      return Center(
         child: Text('Erreur: Données de paiement manquantes'),
       );
     }

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -19,7 +20,7 @@ class ReverseSearchListHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -28,9 +29,9 @@ class ReverseSearchListHeader extends StatelessWidget {
         Expanded(
           child: Text(
             description,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 11,
-              color: Colors.grey.shade500,
+              color: AppColors.immoTextSecondary,
             ),
             textAlign: TextAlign.right,
           ),

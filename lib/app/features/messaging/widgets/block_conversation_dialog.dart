@@ -15,7 +15,7 @@ Future<void> showBlockConversationDialog(
         builder: (context, setState) {
           return CupertinoAlertDialog(
             title: Text('Bloquer $hostLabel ?'),
-            content: const Text(
+            content: Text(
               'Vous ne pourrez plus envoyer ni recevoir de messages dans '
               'cette conversation.',
             ),
@@ -23,7 +23,7 @@ Future<void> showBlockConversationDialog(
               CupertinoDialogAction(
                 isDefaultAction: true,
                 onPressed: isLoading ? null : () => Navigator.of(dialogContext).pop(),
-                child: const Text('Annuler'),
+                child: Text('Annuler'),
               ),
               CupertinoDialogAction(
                 isDestructiveAction: true,
@@ -38,7 +38,7 @@ Future<void> showBlockConversationDialog(
                       },
                 child: isLoading
                     ? const CupertinoActivityIndicator()
-                    : const Text('Bloquer'),
+                    : Text('Bloquer'),
               ),
             ],
           );

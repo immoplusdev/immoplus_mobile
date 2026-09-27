@@ -7,8 +7,6 @@ import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 
@@ -99,7 +97,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'Entrez le code de vérification',
                 textAlign: TextAlign.center,
@@ -109,7 +107,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                   color: const Color(0xFF0D0D0D),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 'Un code a été envoyé à votre $label.',
                 textAlign: TextAlign.center,
@@ -118,7 +116,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 36),
+              SizedBox(height: 36),
               Pinput(
                 controller: _pinController,
                 length: 6,
@@ -153,7 +151,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                   );
                 },
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
             ],
           ),
         ),

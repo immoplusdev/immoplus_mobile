@@ -118,7 +118,7 @@ class _ErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const Gap(12),
-            TextButton(onPressed: onRetry, child: const Text('Réessayer')),
+            TextButton(onPressed: onRetry, child: Text('Réessayer')),
           ],
         ),
       ),

@@ -236,7 +236,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
                 size: 20,
                 color: _nearEstates.isNotEmpty
                     ? Colors.black
-                    : Colors.grey.shade400,
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -376,7 +376,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
             onPressed: _loadNearEstates,
             child: Text(
               'Réessayer',
-              style: TextStyle(color: Colors.red.shade700),
+              style: AppTypography.font(color: Colors.red.shade700),
             ),
           ),
         ],

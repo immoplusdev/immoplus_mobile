@@ -12,7 +12,7 @@ class RelaisReceivedInterestsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Reçues'), centerTitle: true),
+      appBar: AppBar(title: Text('Reçues'), centerTitle: true),
       body: const RelaisReceivedInterestsSection(),
     );
   }

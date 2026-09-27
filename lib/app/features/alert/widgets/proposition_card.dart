@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
@@ -51,9 +50,9 @@ class PropositionCard extends StatelessWidget {
                     imageUrl: property.miniature ?? '',
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
-                        Container(color: Colors.grey[200]),
+                        Container(color: AppColors.immoBorderDefault),
                     errorWidget: (context, url, error) => Container(
-                        color: Colors.grey.shade100,
+                        color: AppColors.immoBgSurfaceMuted,
                         child: Icon(Iconsax.image)),
                   ),
                   if (_isRelais)
@@ -69,7 +68,7 @@ class PropositionCard extends StatelessWidget {
                         ),
                         child: Text(
                           'Immo Relais',
-                          style: GoogleFonts.dmSans(
+                          style: AppTypography.font(
                               fontSize: 11, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -94,14 +93,14 @@ class PropositionCard extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.location_on,
-                            size: 14, color: Colors.grey),
+                        Icon(Icons.location_on,
+                            size: 14, color: AppColors.immoTextSecondary),
                         const Gap(4),
                         Expanded(
                           child: Text(
                             property.location,
                             style: AppTypography.bodySmall.copyWith(
-                              color: Colors.grey,
+                              color: AppColors.immoTextSecondary,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -116,7 +115,7 @@ class PropositionCard extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: currencyFormat.format(property.prix),
-                              style: GoogleFonts.dmSans(
+                              style: AppTypography.font(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -124,9 +123,9 @@ class PropositionCard extends StatelessWidget {
                             ),
                             TextSpan(
                               text: ' / mois',
-                              style: GoogleFonts.dmSans(
+                              style: AppTypography.font(
                                 fontSize: 14,
-                                color: Colors.grey,
+                                color: AppColors.immoTextSecondary,
                               ),
                             ),
                           ],

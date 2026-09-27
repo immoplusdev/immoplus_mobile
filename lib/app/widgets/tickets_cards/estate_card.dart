@@ -41,7 +41,7 @@ class _EstateCardState extends State<EstateCard> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
-      //color: Colors.grey,
+      //color: AppColors.immoTextSecondary,
       child: Stack(
         children: [
           InkWell(
@@ -109,7 +109,7 @@ class _EstateCardState extends State<EstateCard> {
                               TextSpan(
                                   text:
                                       "/ ${widget.bienImmobilierModel.typeLocation}",
-                                  style: TextStyle(color: AppColors.gray500))
+                                  style: AppTypography.font(color: AppColors.gray500))
                             ]))
                           ],
                         ),

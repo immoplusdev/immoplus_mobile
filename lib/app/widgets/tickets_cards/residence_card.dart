@@ -56,7 +56,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
               CardImageCarousel(images: widget.residence.images),
               Gap(10),
               Container(
-                //color: Colors.grey,
+                //color: AppColors.immoTextSecondary,
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

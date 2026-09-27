@@ -7,9 +7,6 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 
 class AlertDetailPage extends StatefulWidget {
@@ -60,7 +57,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         ),
         actions: [
           if (_isLoading)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(right: 16),
               child: Center(
                 child: SizedBox(
@@ -132,7 +129,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                 Text(
                   'Envoyée le ${DateFormat('d MMM yyyy', 'fr_FR').format(alert.createdAt!)}',
                   style: AppTypography.bodyMedium.copyWith(
-                    color: Colors.grey.shade500,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
             ],
@@ -191,7 +188,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.immoBorderDefault),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -199,7 +196,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           Text(
             label,
             style: AppTypography.caption.copyWith(
-              color: Colors.grey.shade400,
+              color: AppColors.immoTextDisabled,
             ),
           ),
           const Gap(4),
@@ -224,7 +221,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           'Votre budget :',
           style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(12),
@@ -232,9 +229,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           children: [
             Expanded(
                 child: _buildBudgetField('Minimum', alert.criteria.priceMin)),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text('—', style: TextStyle(color: Colors.grey)),
+              child: Text('—', style: AppTypography.font(color: AppColors.immoTextSecondary)),
             ),
             Expanded(
                 child: _buildBudgetField('Maximum', alert.criteria.priceMax)),
@@ -249,7 +246,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -257,8 +254,8 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         children: [
           Text(
             label,
-            style:
-                AppTypography.micro.copyWith(fontSize: 10, color: Colors.grey.shade500),
+            style: AppTypography.micro
+                .copyWith(fontSize: 10, color: AppColors.immoTextSecondary),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +269,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               Text(
                 'fcfa',
                 style: AppTypography.caption.copyWith(
-                  color: Colors.grey.shade500,
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
             ],
@@ -290,7 +287,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           'Localisation:',
           style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(12),
@@ -328,7 +325,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           'Précisions supplémentaires :',
           style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(12),
@@ -336,7 +333,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.immoBorderDefault),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -358,7 +355,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           'Suivi de la demande :',
           style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(20),
@@ -415,7 +412,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                       ? const Color(0xFFFBBF24)
                       : (isCompleted
                           ? const Color(0xFF10B981)
-                          : Colors.grey.shade300),
+                          : AppColors.immoBorderStrong),
                   width: 2,
                 ),
               ),
@@ -426,7 +423,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                           child: Container(
                             width: 10,
                             height: 10,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
                             ),
@@ -440,7 +437,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                 height: 40,
                 color: isCompleted
                     ? const Color(0xFF10B981)
-                    : Colors.grey.shade200,
+                    : AppColors.immoBorderDefault,
               ),
           ],
         ),
@@ -455,7 +452,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color:
-                      isActive ? const Color(0xFF1F2937) : Colors.grey.shade400,
+                      isActive ? const Color(0xFF1F2937) : AppColors.immoTextDisabled,
                 ),
               ),
               Text(
@@ -465,8 +462,8 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                   color: isHighlighted
                       ? const Color(0xFFD97706)
                       : (isActive
-                          ? Colors.grey.shade500
-                          : Colors.grey.shade400),
+                          ? AppColors.immoTextSecondary
+                          : AppColors.immoTextDisabled),
                 ),
               ),
             ],
@@ -490,7 +487,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             },
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: BorderSide(color: Colors.grey.shade300),
+              side: BorderSide(color: AppColors.immoBorderStrong),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

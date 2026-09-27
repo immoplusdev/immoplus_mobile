@@ -95,7 +95,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Historique De Réservations'),
+        title: Text('Historique De Réservations'),
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
@@ -148,7 +148,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const Gap(20),
-                    const Text(
+                    Text(
                       "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
                       textAlign: TextAlign.center,
                     ),

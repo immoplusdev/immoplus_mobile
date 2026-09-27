@@ -11,7 +11,7 @@ class RatingEstateSection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Note et avis'),
+        Text('Note et avis'),
         RatingBar.builder(
           initialRating: 3,
           unratedColor: AppColors.gray500,

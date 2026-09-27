@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -28,7 +29,7 @@ class DetailEstateKnowSection extends StatelessWidget {
             ],
           ),
 
-          Divider(height: 32, thickness: 0.5, color: Colors.grey.shade200),
+          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Informations légales ──
           const _KnowCard(
@@ -40,7 +41,7 @@ class DetailEstateKnowSection extends StatelessWidget {
             ],
           ),
 
-          Divider(height: 32, thickness: 0.5, color: Colors.grey.shade200),
+          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Contact agent ──
           // const _KnowCard(
@@ -77,35 +78,35 @@ class _KnowCard extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: Colors.grey.shade50,
+            color: AppColors.immoBgSurfaceMuted,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(icon, size: 22, color: Colors.grey.shade700),
+          child: Icon(icon, size: 22, color: AppColors.immoTextLabel),
         ),
-        const SizedBox(width: 14),
+        SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF222222),
                   height: 1.3,
                 ),
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               ...items.take(3).map(
                     (item) => Padding(
                       padding: const EdgeInsets.only(bottom: 2),
                       child: Text(
                         item,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade500,
+                          color: AppColors.immoTextSecondary,
                           height: 1.45,
                         ),
                       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_matches_response.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
@@ -56,17 +55,17 @@ class _RelaisMatchesPageState extends State<RelaisMatchesPage> {
         ),
         title: Text(
           'Demandeurs correspondants',
-          style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator())
             : _matches.isEmpty
                 ? Center(
                     child: Text(
                       'Aucune correspondance pour le moment.',
-                      style: GoogleFonts.dmSans(color: Colors.grey.shade500),
+                      style: AppTypography.font(color: AppColors.immoTextSecondary),
                     ),
                   )
                 : RefreshIndicator(
@@ -107,7 +106,7 @@ class _MatchCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   match.title ?? match.userName ?? 'Recherche',
-                  style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               if (match.matchScore != null)
@@ -119,7 +118,7 @@ class _MatchCard extends StatelessWidget {
                   ),
                   child: Text(
                     '${match.matchScore!.round()}%',
-                    style: GoogleFonts.dmSans(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF1CA53F)),
+                    style: AppTypography.font(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF1CA53F)),
                   ),
                 ),
             ],
@@ -128,7 +127,7 @@ class _MatchCard extends StatelessWidget {
             const Gap(4),
             Text(
               match.userName!,
-              style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+              style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
             ),
           ],
           if (criteria?.location != null || criteria?.priceMin != null) ...[
@@ -154,7 +153,7 @@ class _MatchCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(20)),
-      child: Text(text, style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade700)),
+      child: Text(text, style: AppTypography.font(fontSize: 12, color: AppColors.immoTextLabel)),
     );
   }
 }

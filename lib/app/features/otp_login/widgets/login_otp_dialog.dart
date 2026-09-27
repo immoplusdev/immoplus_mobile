@@ -7,10 +7,8 @@ import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -157,10 +155,10 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(
+                    child: Icon(
                       Iconsax.close_circle,
                       size: 22,
-                      color: Colors.grey,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                 ),
@@ -271,7 +269,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         ),
         if (_isSubmittingOtp) ...[
           const Gap(20),
-          const Center(
+          Center(
             child: SizedBox(
               width: 22,
               height: 22,
@@ -283,7 +281,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         Center(
           child: TextButton(
             onPressed: (_isSendingChannel || _isSubmittingOtp) ? null : _resend,
-            child: const Text('Renvoyer le code'),
+            child: Text('Renvoyer le code'),
           ),
         ),
       ],

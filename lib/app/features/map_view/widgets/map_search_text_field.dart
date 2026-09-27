@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -134,8 +135,8 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
             controller: _controller,
             focusNode: widget.focusNode,
             placeholder: "Rechercher une adresse...",
-            placeholderStyle: TextStyle(
-              color: Colors.grey.shade400,
+            placeholderStyle: AppTypography.font(
+              color: AppColors.immoTextDisabled,
               fontSize: 15,
               fontWeight: FontWeight.w400,
             ),
@@ -144,11 +145,11 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
             prefix: Padding(
               padding: const EdgeInsets.only(left: 14.0),
               child: Icon(CupertinoIcons.search,
-                  size: 20, color: Colors.grey.shade500),
+                  size: 20, color: AppColors.immoTextSecondary),
             ),
             onChanged: _onSearchChanged,
             clearButtonMode: OverlayVisibilityMode.editing,
-            decoration: const BoxDecoration(), // géré par le Container parent
+            decoration: BoxDecoration(), // géré par le Container parent
           ),
         ),
 
@@ -176,7 +177,7 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
               separatorBuilder: (_, __) => Divider(
                 height: 1,
                 indent: 56,
-                color: Colors.grey.shade100,
+                color: AppColors.immoBgSurfaceMuted,
               ),
               itemBuilder: (context, index) {
                 final prediction = _predictions[index];
@@ -185,13 +186,13 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
+                      color: AppColors.immoBgSurfaceMuted,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
                       FontAwesomeIcons.locationDot.data,
                       size: 14,
-                      color: Colors.grey.shade600,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                   padding:
@@ -201,10 +202,10 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
                     prediction['description'] ?? "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade800,
+                      color: AppColors.immoTextLabel,
                     ),
                   ),
                 );

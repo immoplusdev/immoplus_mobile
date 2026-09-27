@@ -14,7 +14,7 @@ class MapBottomSheet extends GetView<LocationController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -29,7 +29,7 @@ class MapBottomSheet extends GetView<LocationController> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.immoBorderStrong,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -53,10 +53,10 @@ class MapBottomSheet extends GetView<LocationController> {
                     color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Text(
+                SizedBox(width: 12),
+                Text(
                   'Votre adresse',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF222222),
@@ -72,8 +72,8 @@ class MapBottomSheet extends GetView<LocationController> {
 
           // ── Error ──
           controller.obx(
-            (state) => const SizedBox(),
-            onLoading: const SizedBox(),
+            (state) => SizedBox(),
+            onLoading: SizedBox(),
             onError: (error) => ErrorIndicator(description: error),
           ),
 
@@ -102,7 +102,7 @@ class MapBottomSheet extends GetView<LocationController> {
                               Text(
                                 controller.cameraAddress.value.description ??
                                     '',
-                                style: const TextStyle(
+                                style: AppTypography.font(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -111,10 +111,10 @@ class MapBottomSheet extends GetView<LocationController> {
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 2),
-                              const Text(
+                              SizedBox(height: 2),
+                              Text(
                                 'Sélectionner cette adresse',
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white70,
@@ -123,7 +123,7 @@ class MapBottomSheet extends GetView<LocationController> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Container(
                           width: 36,
                           height: 36,
@@ -148,11 +148,11 @@ class MapBottomSheet extends GetView<LocationController> {
                   color: AppColors.primary.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Center(
+                child: Center(
                   child: CupertinoActivityIndicator(color: Colors.white),
                 ),
               ),
-              onError: (_) => const SizedBox(),
+              onError: (_) => SizedBox(),
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 /// Bouton d'action latéral du feed vidéo (like, commentaire, partage).
@@ -44,10 +45,10 @@ class SideActionButton extends StatelessWidget {
                   )
                 : Icon(icon, color: iconColor, size: iconSize),
           ),
-          const SizedBox(height: 1),
+          SizedBox(height: 1),
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               color: iconColor,
               fontSize: 16,
               fontWeight: FontWeight.w500,

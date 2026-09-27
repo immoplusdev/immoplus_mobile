@@ -13,14 +13,14 @@ class RecommandeBadge extends StatelessWidget {
         color: AppColors.immoBrandPrimary,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.star, color: AppColors.gold400, size: 12),
           Gap(4),
           Text(
             'Recommandé',
-            style: TextStyle(
+            style: AppTypography.font(
               color: AppColors.white,
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -43,9 +43,9 @@ class FreeReverseBadge extends StatelessWidget {
         color: AppColors.immoFeedbackWarning,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Text(
+      child: Text(
         'Libre',
-        style: TextStyle(
+        style: AppTypography.font(
           color: AppColors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,

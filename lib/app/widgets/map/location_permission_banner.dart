@@ -91,11 +91,11 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
               child: Icon(Icons.location_off_rounded,
                   size: 16, color: AppColors.immoFeedbackWarning),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: Text(
                 'Activez la localisation pour plus de précision',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: AppColors.gray700,
@@ -114,7 +114,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                   ),
                   child: Text(
                     'Activer',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: AppColors.immoFeedbackWarning,
@@ -122,7 +122,7 @@ class _LocationPermissionBannerState extends State<LocationPermissionBanner>
                   ),
                 ),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               GestureDetector(
                 onTap: _closeBanner,
                 child: Icon(Icons.close_rounded,

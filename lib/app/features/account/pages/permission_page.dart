@@ -18,7 +18,7 @@ class _PermissionPageState extends State<PermissionPage> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text('Permission non accordée'),
+        title: Text('Permission non accordée'),
         content: Text(title),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
@@ -29,7 +29,7 @@ class _PermissionPageState extends State<PermissionPage> {
             onPressed: () {
               context.pop();
             },
-            child: const Text('OK'),
+            child: Text('OK'),
           ),
           CupertinoDialogAction(
             /// This parameter indicates the action would perform
@@ -40,7 +40,7 @@ class _PermissionPageState extends State<PermissionPage> {
               context.pop();
               openAppSettings();
             },
-            child: const Text('Paramètre'),
+            child: Text('Paramètre'),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'dart:ui';
 
@@ -302,7 +303,7 @@ class _VideoPageItemState extends State<VideoPageItem>
                         ),
                       ),
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.black45,
                           shape: BoxShape.circle,
                         ),
@@ -383,7 +384,7 @@ class _VideoPageItemState extends State<VideoPageItem>
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   // #14 — Like button with elasticOut scale animation
                   GestureDetector(
                     key: _likeKey,
@@ -408,10 +409,10 @@ class _VideoPageItemState extends State<VideoPageItem>
                                 : Colors.white,
                             size: 24,
                           ),
-                          const SizedBox(height: 1),
+                          SizedBox(height: 1),
                           Text(
                             _formatCount(likesCount),
-                            style: const TextStyle(
+                            style: AppTypography.font(
                               color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -430,16 +431,16 @@ class _VideoPageItemState extends State<VideoPageItem>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   // #15 — SideActionButton now uses bounce wrapper
                   _BounceSideAction(
                     icon: Iconsax.link,
                     label: 'Partager',
                     onTap: () => _onShareTap(video.id),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   _buildPriceBadge(video),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   EntityActionButton(
                     relatedTo: video.relatedTo,
                     onTap: () => _showReservationSheet(video),
@@ -502,7 +503,7 @@ class _VideoPageItemState extends State<VideoPageItem>
             ),
             child: Text(
               price,
-              style: const TextStyle(
+              style: AppTypography.font(
                 color: Colors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.w900,
@@ -676,10 +677,10 @@ class _BounceSideAction extends StatelessWidget {
             radius: 18,
             child: Icon(icon, color: Colors.white, size: 24),
           ),
-          const SizedBox(height: 1),
+          SizedBox(height: 1),
           Text(
             label,
-            style: const TextStyle(
+            style: AppTypography.font(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500,

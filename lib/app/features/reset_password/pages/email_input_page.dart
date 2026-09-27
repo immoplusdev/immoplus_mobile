@@ -116,7 +116,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
                     onPressed: () => context.pop(),
                     child: Text(
                       "Retour à la connexion",
-                      style: TextStyle(
+                      style: AppTypography.font(
                         color: AppColors.immoBrandSecondary,
                         fontSize: 16,
                       ),

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -251,11 +252,11 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
         builder: (context, scrollController) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 'Équipements',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF222222),
@@ -270,7 +271,7 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                 itemCount: data.amentities.length,
                 separatorBuilder: (_, __) =>
-                    Divider(height: 1, color: Colors.grey.shade100),
+                    Divider(height: 1, color: AppColors.immoBgSurfaceMuted),
                 itemBuilder: (context, index) {
                   final item = data.amentities[index];
                   final iconsaxIcon = SVGMap.iconsaxMap[item.icon];
@@ -282,25 +283,25 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                       children: [
                         if (iconsaxIcon != null)
                           Icon(iconsaxIcon,
-                              size: 24, color: Colors.grey.shade700)
+                              size: 24, color: AppColors.immoTextLabel)
                         else if (svgPath != null)
                           SvgPicture.asset(
                             svgPath,
                             height: 24,
                             width: 24,
                             colorFilter: ColorFilter.mode(
-                              Colors.grey.shade700,
+                              AppColors.immoTextLabel,
                               BlendMode.srcIn,
                             ),
                           )
                         else
                           Icon(Iconsax.element_4,
-                              size: 24, color: Colors.grey.shade700),
+                              size: 24, color: AppColors.immoTextLabel),
                         const Gap(16),
                         Expanded(
                           child: Text(
                             item.text,
-                            style: const TextStyle(
+                            style: AppTypography.font(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
                               color: Color(0xFF222222),
@@ -344,10 +345,10 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
               builder: (context, constraints) {
                 final textSpan = TextSpan(
                   text: widget.description.capitalizeWords(),
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade700,
+                    color: AppColors.immoTextLabel,
                     height: 1.55,
                   ),
                 );
@@ -369,7 +370,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                   widget.description.capitalizeWords(),
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: Colors.black.withOpacity(0.90),
@@ -381,7 +382,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
 
             // "Lire la suite >"
             if (_hasOverflow) ...[
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               GestureDetector(
                 onTap: () => _showFullDescription(context),
                 child: Row(
@@ -389,13 +390,13 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                   children: [
                     Text(
                       'Lire la suite',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: const Color(0xff2744de).withOpacity(0.80),
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Icon(
                       Icons.chevron_right,
                       size: 15,
@@ -432,21 +433,21 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'À propos du bien',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF222222),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 widget.description.capitalizeWords(),
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
-                  color: Colors.grey.shade700,
+                  color: AppColors.immoTextLabel,
                   height: 1.6,
                 ),
               ),
@@ -471,7 +472,7 @@ class _SliverDivider extends StatelessWidget {
         child: Divider(
           height: 1,
           thickness: 0.5,
-          color: Colors.grey.shade200,
+          color: AppColors.immoBorderDefault,
         ),
       ),
     );
@@ -493,13 +494,13 @@ class _ViewAllLink extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 15,
               fontWeight: FontWeight.w100,
               color: const Color(0xFF343333).withOpacity(0.80),
             ),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Icon(
             Icons.chevron_right,
             size: 15,

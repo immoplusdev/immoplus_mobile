@@ -87,24 +87,24 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                     Text(
                       'Réservation en cours',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: AppColors.immoBrandPrimary,
                         height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Text(
                       message,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
-                        color: Colors.grey[700],
+                        color: AppColors.immoTextLabel,
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28),
 
                     // ── Bouton principal ──────────────────────────────────
                     SizedBox(
@@ -120,9 +120,9 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
+                        child: Text(
                           'Voir ma réservation',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -130,7 +130,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
 
                     // ── Bouton secondaire ─────────────────────────────────
                     SizedBox(
@@ -138,12 +138,12 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       child: TextButton(
                         onPressed: onDismiss,
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.grey[600],
+                          foregroundColor: AppColors.immoTextSecondary,
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Plus tard',
-                          style: TextStyle(fontSize: 15),
+                          style: AppTypography.font(fontSize: 15),
                         ),
                       ),
                     ),

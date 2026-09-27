@@ -29,7 +29,7 @@ class ContactUtils {
                   padding: EdgeInsets.only(left: 4, bottom: 20),
                   child: Text(
                     "Nous contacter",
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
                       color: AppColors.immoTextPrimary,
@@ -124,7 +124,7 @@ class ContactUtils {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: AppColors.immoTextPrimary,
@@ -133,7 +133,7 @@ class ContactUtils {
                     const Gap(2),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 12,
                         color: AppColors.immoTextDisabled,
                       ),

@@ -18,10 +18,8 @@ import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart'
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/animated_photo_stack_icon.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -410,7 +408,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                     child: Text(
                       _pendingCount > 99 ? '99+' : '$_pendingCount',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         color: Colors.white,
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
@@ -533,7 +531,7 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
     super.dispose();
   }
 
-  static const TextStyle _labelStyle = TextStyle(
+  static final TextStyle _labelStyle =AppTypography.font(
     color: Colors.white,
     fontSize: 9,
     height: 1.1,
@@ -639,22 +637,22 @@ class _TransactionsMenuPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: Text(
               'Mes réservations',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           if (isLoading)
             const _TransactionsMenuSkeleton()
           else if (_hasNothing)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
               child: Text(
                 'Retrouvez ici toutes vos réservations et demandes de visite, où que vous soyez.',
-                style: TextStyle(fontSize: 13, color: Color(0xFF667085)),
+                style: AppTypography.font(fontSize: 13, color: Color(0xFF667085)),
               ),
             )
           else
@@ -737,9 +735,9 @@ class _TransactionsMenuSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: const Column(
+      baseColor: AppColors.immoBorderStrong,
+      highlightColor: AppColors.immoBgSurfaceMuted,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _SkeletonRow(),
@@ -767,7 +765,7 @@ class _SkeletonRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -780,7 +778,7 @@ class _SkeletonRow extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 Container(
                   height: 8,
                   width: 90,
@@ -841,14 +839,14 @@ class _TransactionCard extends StatelessWidget {
                     ),
                     child: Icon(icon, color: iconColor, size: 18),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF1A1A1A),
@@ -856,10 +854,10 @@ class _TransactionCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           subtitle,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
                             color: Color(0xFF667085),
                           ),
@@ -899,7 +897,7 @@ class _CloseCircleButton extends StatelessWidget {
         child: Container(
           width: 20,
           height: 20,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Color(0xFFF2F4F7),
             shape: BoxShape.circle,
           ),

@@ -287,7 +287,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                       if (perNightIndiceText != null) ...[
                         Text(
                           perNightIndiceText!,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: AppColors.amber800,
@@ -312,7 +312,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                         children: [
                           Text(
                             formattedDuration,
-                            style: const TextStyle(
+                            style: AppTypography.font(
                                 color: AppColors.gray500, fontSize: 11),
                           ),
                           const Gap(8),
@@ -324,7 +324,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                 if (hasReduction)
                                   Text(
                                     originalPriceText,
-                                    style: const TextStyle(
+                                    style: AppTypography.font(
                                       fontSize: 11,
                                       color: AppColors.gray1000,
                                       decoration: TextDecoration.lineThrough,
@@ -342,7 +342,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                     children: [
                                       Text(
                                         priceText,
-                                        style: TextStyle(
+                                        style: AppTypography.font(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: hasReduction
@@ -353,7 +353,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                       if (priceSuffix.isNotEmpty)
                                         Text(
                                           priceSuffix,
-                                          style: const TextStyle(
+                                          style: AppTypography.font(
                                             fontSize: 12,
                                             color: AppColors.gray500,
                                           ),
@@ -364,7 +364,7 @@ class UnifiedPropertyCard extends StatelessWidget {
                                 if (fraisIndiceText != null)
                                   Text(
                                     fraisIndiceText!,
-                                    style: const TextStyle(
+                                    style: AppTypography.font(
                                       fontSize: 10,
                                       color: AppColors.gray1000,
                                     ),

@@ -232,7 +232,7 @@ class _EstateSubCategorySectionsListState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Gap(15),
-                        const SizedBox(
+                        SizedBox(
                           width: 150,
                           height: 20,
                           child: DecoratedBox(
@@ -329,7 +329,7 @@ class BiensHorizontalListBySubCategory extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color: biens.isNotEmpty ? Colors.black : Colors.grey.shade400,
+                color: biens.isNotEmpty ? Colors.black : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

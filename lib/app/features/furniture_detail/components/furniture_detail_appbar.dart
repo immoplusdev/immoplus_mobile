@@ -57,7 +57,7 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
           ),
           icon: Container(
               width: 30,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white),
               child: Center(
                   child: Icon(
@@ -85,7 +85,7 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
               },
               child: CircleAvatar(
                 radius: 15,
-                backgroundColor: value ? Colors.red : Colors.grey.shade300,
+                backgroundColor: value ? Colors.red : AppColors.immoBorderStrong,
                 child: Icon(
                   FontAwesomeIcons.solidHeart.data,
                   size: 16,

@@ -51,8 +51,8 @@ class HotelSearchSkeletonView extends StatelessWidget {
     double? width,
   }) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
+      baseColor: AppColors.immoBorderStrong,
+      highlightColor: AppColors.immoBgSurfaceMuted,
       period: const Duration(milliseconds: 1000),
       child: Container(
         width: width,

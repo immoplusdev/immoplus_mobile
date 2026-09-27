@@ -115,7 +115,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         readOnly: widget.readOnly,
         enabled: widget.isEnabled,
         style: (widget.fontSize != null)
-            ? TextStyle(fontSize: widget.fontSize)
+            ? AppTypography.font(fontSize: widget.fontSize)
             : null,
         autofocus: widget.autofocus ?? false,
         onChanged: widget.onChanged,
@@ -137,13 +137,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusNode: _textFieldFocus,
         decoration: InputDecoration(
           isDense: widget.isDense,
-          errorStyle: const TextStyle(color: AppColors.red600),
+          errorStyle: AppTypography.font(color: AppColors.red600),
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 20),
           prefixText: widget.prefixText,
           prefixIcon: widget.prefixIcon,
           hintText: widget.labelText,
-          hintStyle: TextStyle(
+          hintStyle: AppTypography.font(
             color: AppColors.gray500,
             fontSize: widget.fontSize ?? 15,
           ),

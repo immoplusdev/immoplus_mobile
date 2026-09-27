@@ -466,7 +466,7 @@ class _CustomChipListState extends State<CustomChipList> {
                         ? widget.style!.copyWith(
                             color: _textColorizer(index),
                           )
-                        : const TextStyle().copyWith(
+                        : AppTypography.font().copyWith(
                             color: _textColorizer(index),
                           ),
                   ),
@@ -526,7 +526,7 @@ class _CustomChipListState extends State<CustomChipList> {
                                   ? widget.style!.copyWith(
                                       color: _textColorizer(index),
                                     )
-                                  : const TextStyle().copyWith(
+                                  : AppTypography.font().copyWith(
                                       color: _textColorizer(index),
                                     ),
                             ),
@@ -585,7 +585,7 @@ class _CustomChipListState extends State<CustomChipList> {
                                   ? widget.style!.copyWith(
                                       color: _textColorizer(index),
                                     )
-                                  : const TextStyle().copyWith(
+                                  : AppTypography.font().copyWith(
                                       color: _textColorizer(index),
                                     ),
                             ),

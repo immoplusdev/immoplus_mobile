@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
@@ -149,14 +150,14 @@ class _AlertConfirmationCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(Iconsax.notification_bing,
                   size: 16, color: ChatTokens.brand500),
               SizedBox(width: 8),
               Text(
                 'Alerte prête',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: ChatTokens.neutral900,
@@ -166,7 +167,7 @@ class _AlertConfirmationCard extends StatelessWidget {
             ],
           ),
           if (chips.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -174,10 +175,10 @@ class _AlertConfirmationCard extends StatelessWidget {
             ),
           ],
           if (payload.missingFieldLabels.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               'Tu peux encore preciser: ${payload.missingFieldLabels.join(', ')}',
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 12,
                 height: 1.4,
                 color: ChatTokens.neutral400,
@@ -185,7 +186,7 @@ class _AlertConfirmationCard extends StatelessWidget {
             ),
           ],
           if (countLabel != null || payload.fromCache == true) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -268,10 +269,10 @@ class _InfoCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 16, color: accentColor),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 title,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: ChatTokens.neutral900,
@@ -281,14 +282,14 @@ class _InfoCard extends StatelessWidget {
             ],
           ),
           if (rows.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             for (var index = 0; index < rows.length; index++) ...[
-              if (index > 0) const SizedBox(height: 8),
+              if (index > 0) SizedBox(height: 8),
               _LabeledValue(row: rows[index]),
             ],
           ],
           if (footer != null) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             footer!,
           ],
         ],
@@ -310,7 +311,7 @@ class _LabeledValue extends StatelessWidget {
           width: 88,
           child: Text(
             row.label,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 12,
               fontWeight: FontWeight.w500,
               color: ChatTokens.neutral400,
@@ -320,7 +321,7 @@ class _LabeledValue extends StatelessWidget {
         Expanded(
           child: Text(
             row.value,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: ChatTokens.neutral900,
@@ -360,7 +361,7 @@ class _InlinePrimaryButton extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w700,
               color: ChatTokens.neutral0,
@@ -388,7 +389,7 @@ class _Tag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: ChatTokens.brand500,
@@ -413,7 +414,7 @@ class _SoftBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.w600,
           color: ChatTokens.neutral400,

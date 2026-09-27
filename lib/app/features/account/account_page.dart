@@ -8,12 +8,10 @@ import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/demande_pro_particulier_status.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/widgets/delete_account_dialog.dart';
@@ -31,7 +29,6 @@ import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -281,12 +278,12 @@ class _AccountPageState extends State<AccountPage> {
         children: [
           _socialIcon(FontAwesomeIcons.instagram,
               () => _openUrl('https://www.instagram.com/immoplus_lapp')),
-          const SizedBox(width: 28),
+          SizedBox(width: 28),
           _socialIcon(FontAwesomeIcons.tiktok,
               () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
-          // const SizedBox(width: 28),
+          // SizedBox(width: 28),
           // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
-          const SizedBox(width: 28),
+          SizedBox(width: 28),
           _socialIcon(
               FontAwesomeIcons.facebook,
               () => _openUrl(
@@ -606,7 +603,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   child: Text(
                     "Immo+ Pro",
-                    style: TextStyle(
+                    style: AppTypography.font(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 10,
@@ -614,7 +611,7 @@ class _AccountPageState extends State<AccountPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 FaIcon(
                   FontAwesomeIcons.chevronRight,
                   size: 14,

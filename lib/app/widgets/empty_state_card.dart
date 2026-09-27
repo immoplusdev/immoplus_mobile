@@ -160,7 +160,7 @@ class _EmptyStateCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: AppColors.white),
+      decoration: BoxDecoration(color: AppColors.white),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -180,25 +180,25 @@ class _EmptyStateCardContent extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: AppColors.immoBrandPrimary,
                     height: 1.2,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   subtitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
                     color: AppColors.gray700,
                     height: 1.4,
                   ),
                 ),
                 if (buttonText != null) ...[
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -217,7 +217,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                       ),
                       child: Text(
                         buttonText!,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

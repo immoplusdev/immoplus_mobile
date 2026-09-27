@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/home_feed_list_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/home_feed_section.dart';
@@ -103,26 +102,26 @@ class _LocationGroupCard extends StatelessWidget {
                       fadeInDuration: Duration.zero,
                       fadeOutDuration: Duration.zero,
                       placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
+                        baseColor: AppColors.immoBorderStrong,
+                        highlightColor: AppColors.immoBgSurfaceMuted,
                         period: const Duration(milliseconds: 500),
                         child: Container(color: Colors.white),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        color: Colors.grey.shade300,
+                        color: AppColors.immoBorderStrong,
                         child: FaIcon(
                           FontAwesomeIcons.images,
                           size: 28,
-                          color: Colors.grey.shade500,
+                          color: AppColors.immoTextSecondary,
                         ),
                       ),
                     )
                   : Container(
-                      color: Colors.grey.shade300,
+                      color: AppColors.immoBorderStrong,
                       child: FaIcon(
                         FontAwesomeIcons.locationDot,
                         size: 28,
-                        color: Colors.grey.shade500,
+                        color: AppColors.immoTextSecondary,
                       ),
                     ),
               DecoratedBox(
@@ -148,7 +147,7 @@ class _LocationGroupCard extends StatelessWidget {
                   children: [
                     Text(
                       group.locationName,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: AppTypography.font(
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
                         color: Colors.white,
@@ -160,7 +159,7 @@ class _LocationGroupCard extends StatelessWidget {
                     const Gap(1),
                     Text(
                       '${group.itemCount} biens',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: AppTypography.font(
                         fontWeight: FontWeight.w500,
                         fontSize: 8,
                         color: const Color(0xFFCECECE),

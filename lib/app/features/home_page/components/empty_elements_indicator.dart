@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
@@ -34,14 +35,14 @@ class EmptyElementsIndicator extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: 40),
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
               children: [
                 TextSpan(
                   text: '$titlePrefix ',
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     color: Colors.black,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -49,7 +50,7 @@ class EmptyElementsIndicator extends StatelessWidget {
                 ),
                 TextSpan(
                   text: titleSufix,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     color: Colors.blue,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -58,12 +59,12 @@ class EmptyElementsIndicator extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             subTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey[600],
+            style: AppTypography.font(
+              color: AppColors.immoTextSecondary,
               fontSize: 16,
             ),
           ),

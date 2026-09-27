@@ -209,7 +209,7 @@ class _SearchResultPageState extends State<SearchResultPage>
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: _estateSubCategories.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) => SizedBox(width: 8),
         itemBuilder: (context, index) {
           final item = _estateSubCategories[index];
           final isSelected = item == _selectedSubCategory;
@@ -224,7 +224,7 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
               child: Text(
                 item.label,
-                style: TextStyle(
+                style: AppTypography.font(
                   color: isSelected ? Colors.white : const Color(0xff333333),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   fontSize: 12,
@@ -250,10 +250,10 @@ class _SearchResultPageState extends State<SearchResultPage>
               firstPageProgressIndicatorBuilder: (context) => Column(
                 children: List.generate(5, (index) => LoadProductCard()),
               ),
-              noItemsFoundIndicatorBuilder: (context) => const Center(
+              noItemsFoundIndicatorBuilder: (context) => Center(
                 child: Text(
                   'Aucun résultat trouvé pour votre recherche.',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 16),
                 ),
               ),
               itemBuilder: (context, item, index) => Padding(
@@ -268,10 +268,10 @@ class _SearchResultPageState extends State<SearchResultPage>
               firstPageProgressIndicatorBuilder: (context) => Column(
                 children: List.generate(5, (index) => LoadProductCard()),
               ),
-              noItemsFoundIndicatorBuilder: (context) => const Center(
+              noItemsFoundIndicatorBuilder: (context) => Center(
                 child: Text(
                   'Aucun résultat trouvé pour votre recherche.',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 16),
                 ),
               ),
               itemBuilder: (context, item, index) => Padding(
@@ -329,7 +329,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 ),
               ),
             if (showEstateSubTabs) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               _buildEstateSubCategoryTabs(),
             ],
             Expanded(

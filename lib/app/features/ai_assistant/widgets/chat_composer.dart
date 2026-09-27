@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
@@ -76,7 +77,7 @@ class _ChatComposerState extends State<ChatComposer> {
             height: 20,
             child: IgnorePointer(
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -112,7 +113,7 @@ class _ChatComposerState extends State<ChatComposer> {
                     size: 18,
                     color: ChatTokens.placeholder,
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Expanded(
                     child: TextField(
                       controller: _controller,
@@ -124,7 +125,7 @@ class _ChatComposerState extends State<ChatComposer> {
                       cursorColor: ChatTokens.brand500,
                       cursorWidth: 1.6,
                       cursorRadius: const Radius.circular(1),
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
                         color: ChatTokens.neutral900,
                         fontWeight: FontWeight.w400,
@@ -133,7 +134,7 @@ class _ChatComposerState extends State<ChatComposer> {
                       decoration: InputDecoration(
                         hintText: widget.hint ??
                             'Demande quoi que ce soit sur l\'immo…',
-                        hintStyle: const TextStyle(
+                        hintStyle: AppTypography.font(
                           fontSize: 14,
                           color: ChatTokens.placeholder,
                           fontWeight: FontWeight.w400,
@@ -154,7 +155,7 @@ class _ChatComposerState extends State<ChatComposer> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 180),
                     transitionBuilder: (child, anim) => ScaleTransition(

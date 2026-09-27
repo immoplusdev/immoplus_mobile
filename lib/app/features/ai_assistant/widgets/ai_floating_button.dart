@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 // import 'package:animated_text_kit/animated_text_kit.dart';
@@ -74,7 +75,7 @@ class AiFloatingButton extends StatefulWidget {
   State<AiFloatingButton> createState() => _AiFloatingButtonState();
 }
 
-const TextStyle _pillTextStyle = TextStyle(
+final TextStyle _pillTextStyle =AppTypography.font(
   fontSize: 16,
   fontWeight: FontWeight.w900,
   // letterSpacing: 0.3,
@@ -245,7 +246,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                                     child: Container(
                                       width: 32,
                                       height: 32,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         gradient: LinearGradient(
                                           begin: Alignment.topCenter,
@@ -301,7 +302,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                                     width: 24,
                                     height: 24,
                                   ),
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8),
                                   BlocBuilder<HomePageCubit, HomePageState>(
                                     buildWhen: (p, n) =>
                                         p.indexPage != n.indexPage,

@@ -58,28 +58,28 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Quand ?', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
+          Text('Quand ?', style: AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold)),
+          SizedBox(height: 8),
           CalendarDatePicker2(
             config: CalendarDatePicker2Config(
               calendarType: CalendarDatePicker2Type.range,
               selectedDayHighlightColor: AppColors.primary,
               weekdayLabels: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-              weekdayLabelTextStyle: const TextStyle(
-                color: Colors.grey,
+              weekdayLabelTextStyle: AppTypography.font(
+                color: AppColors.immoTextSecondary,
                 fontWeight: FontWeight.bold,
               ),
               firstDayOfWeek: 1, // Start on Monday
-              controlsTextStyle: const TextStyle(
+              controlsTextStyle: AppTypography.font(
                 color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
-              dayTextStyle: const TextStyle(
+              dayTextStyle: AppTypography.font(
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
               ),
-              selectedDayTextStyle: const TextStyle(
+              selectedDayTextStyle: AppTypography.font(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -87,7 +87,7 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
             value: _dialogCalendarPickerValue,
             onValueChanged: (dates) => setState(() => _dialogCalendarPickerValue = dates),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           CustomButtom(
             text: buttonText,
             onClick: () {
@@ -107,7 +107,7 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
               }
             },
           ),
-          const SizedBox(height: 16), // SafeArea bottom spacing
+          SizedBox(height: 16), // SafeArea bottom spacing
         ],
       ),
     );

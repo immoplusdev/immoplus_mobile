@@ -87,7 +87,7 @@ class _EstateUserPageState extends State<EstateUserPage>
           SliverAppBar(
             floating: true,
             snap: true,
-            title: const Text('Biens de l\'utilisateur'),
+            title: Text('Biens de l\'utilisateur'),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(60),
               child: Padding(

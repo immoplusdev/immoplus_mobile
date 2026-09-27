@@ -126,7 +126,7 @@ class _ReductionResidencesPageState extends State<ReductionResidencesPage> {
                           Icon(
                             Icons.local_offer_outlined,
                             size: 80,
-                            color: Colors.grey.shade300,
+                            color: AppColors.immoBorderStrong,
                           ),
                           const Gap(20),
                           Text(
@@ -148,7 +148,7 @@ class _ReductionResidencesPageState extends State<ReductionResidencesPage> {
                       child: Text(
                         'Vous avez vu toutes les résidences en réduction',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey.shade600,
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
@@ -11,7 +10,6 @@ import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_success_page.dart';
 import 'package:immoplus/app/features/alert/widgets/alert_card.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
@@ -86,7 +84,7 @@ class _AlertStatusListPageState extends State<AlertStatusListPage> {
         elevation: 0,
         title: Text(
           widget.title,
-          style: GoogleFonts.dmSans(
+          style: AppTypography.font(
               fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
@@ -184,7 +182,7 @@ class _AlertHub extends StatelessWidget {
             itemBuilder: (context, index) =>
                 _AlertHubCard(item: _alertHubItems[index]),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -198,18 +196,18 @@ class _AlertHub extends StatelessWidget {
               children: [
                 const Icon(Iconsax.lamp_charge,
                     color: Color(0xFFF59E0B), size: 18),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     "Publiez une demande et recevez des propositions des professionnels selon vos critères.",
-                    style: GoogleFonts.dmSans(
-                        fontSize: 12, color: Colors.grey.shade700, height: 1.4),
+                    style: AppTypography.font(
+                        fontSize: 12, color: AppColors.immoTextLabel, height: 1.4),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
       ),
     );
@@ -233,7 +231,7 @@ class _AlertHubCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.immoBorderDefault),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,13 +250,13 @@ class _AlertHubCard extends StatelessWidget {
             Text(
               item.title,
               style:
-                  GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+                  AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               item.subtitle,
               style:
-                  GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                  AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -398,7 +396,7 @@ class _AlertListPageState extends State<AlertListPage>
       '$total $demandesLabel · $withPropositions $propositionsLabel',
       style: AppTypography.button.copyWith(
         fontWeight: FontWeight.normal,
-        color: Colors.grey.shade500,
+        color: AppColors.immoTextSecondary,
       ),
     );
   }
@@ -475,7 +473,7 @@ class _AlertListContentState extends State<_AlertListContent> {
   Widget build(BuildContext context) {
     final bool alertIsEmpty = _alerts.isEmpty;
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
 
     if (alertIsEmpty) {

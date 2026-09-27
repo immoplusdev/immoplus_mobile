@@ -12,7 +12,6 @@ import 'package:immoplus/app/logic/authentification/registration_cubit_state.dar
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
@@ -208,7 +207,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                                   valueListenable: _emailController,
                                   builder: (context, value, _) {
                                     if (value.text.isEmpty) {
-                                      return const SizedBox();
+                                      return SizedBox();
                                     }
                                     return IconButton(
                                       tooltip: "Effacer",

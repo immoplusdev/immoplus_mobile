@@ -14,7 +14,6 @@ import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
@@ -193,11 +192,11 @@ class _OtpPageState extends State<OtpPage> {
                 onPressed: _isResending ? null : _showResendChannelChoice,
                 child: Text(
                   _isResending ? 'Envoi en cours...' : 'Renvoyer',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 16,
                     decoration: TextDecoration.underline,
                     color: _isResending
-                        ? Colors.grey
+                        ? AppColors.immoTextSecondary
                         : const Color.fromRGBO(62, 116, 165, 1),
                   ),
                 ),

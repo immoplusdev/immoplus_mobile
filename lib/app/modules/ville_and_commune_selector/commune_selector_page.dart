@@ -52,7 +52,7 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: const Text('Sélectionner une ville'),
+            title: Text('Sélectionner une ville'),
             backgroundColor: AppColors.scafold,
             centerTitle: true,
           ),
@@ -74,8 +74,8 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
                     (index) => Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
+                        baseColor: AppColors.immoBorderStrong,
+                        highlightColor: AppColors.immoBgSurfaceMuted,
                         child: const CupertinoListTile(
                           backgroundColor: Colors.red,
                           title: Text("•••••••••••••••••••"),

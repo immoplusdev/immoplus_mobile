@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/become_pro/pages/become_pro_form_page.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/gen/assets.gen.dart';
@@ -72,7 +71,7 @@ class BecomeProIntroPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 48),
+                  SizedBox(height: 48),
 
                   // Title
                   Center(
@@ -84,7 +83,7 @@ class BecomeProIntroPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // Subtitle
                   Center(
@@ -96,13 +95,13 @@ class BecomeProIntroPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40),
 
                   // Badges
                   _buildFeatureBadge("Publier des appartements et terrains"),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   _buildFeatureBadge("Gérer vos demandes facilement"),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   _buildFeatureBadge("Toucher plus de clients"),
 
                   const Spacer(),

@@ -69,20 +69,20 @@ class _CustomRoundedTextFieldState extends State<CustomRoundedTextField> {
 
   @override
   Widget build(BuildContext context) {
-    const errorStyle = TextStyle(
+    final errorStyle = AppTypography.font(
       fontSize: 14,
     );
 
     return LayoutBuilder(builder: (context, constraints) {
       final textPainter = TextPainter()
-        ..text = const TextSpan(text: ' ', style: errorStyle)
+        ..text = TextSpan(text: ' ', style: errorStyle)
         ..textDirection = TextDirection.ltr
         ..layout(maxWidth: constraints.maxWidth);
 
       final heightErrorMessage = textPainter.size.height + 8;
       return Stack(
         children: [
-          const SizedBox(
+          SizedBox(
             width: 400,
             height: 10,
           ),
@@ -133,7 +133,7 @@ class _CustomRoundedTextFieldState extends State<CustomRoundedTextField> {
                 filled: true,
                 fillColor: AppColors.white,
                 labelStyle:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                    AppTypography.font(color: Theme.of(context).colorScheme.onSurface),
                 focusColor: Theme.of(context).colorScheme.onSurface,
                 suffixIcon: widget.sufixIcon,
                 border: OutlineInputBorder(
@@ -267,7 +267,7 @@ class _CustomRoundedTextFieldTTState extends State<CustomRoundedTextFieldTT> {
               filled: true,
               fillColor: AppColors.white,
               labelStyle:
-                  TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  AppTypography.font(color: Theme.of(context).colorScheme.onSurface),
               focusColor: Theme.of(context).colorScheme.onSurface,
               suffixIcon: widget.sufixIcon,
               border: InputBorder.none,

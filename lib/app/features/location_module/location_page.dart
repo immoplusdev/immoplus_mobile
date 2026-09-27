@@ -46,7 +46,7 @@ class _LocationPageState extends State<LocationPage> {
                   width: 36,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: AppColors.immoBorderStrong,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -64,7 +64,7 @@ class _LocationPageState extends State<LocationPage> {
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: AppColors.immoBgSurfaceMuted,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -74,10 +74,10 @@ class _LocationPageState extends State<LocationPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Text(
                       'Rechercher une adresse',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: AppColors.immoTextPrimary,
@@ -88,7 +88,7 @@ class _LocationPageState extends State<LocationPage> {
                 ),
               ),
 
-              Divider(height: 1, thickness: 0.5, color: Colors.grey.shade200),
+              Divider(height: 1, thickness: 0.5, color: AppColors.immoBorderDefault),
 
               // ── Search + Map button ──
               Padding(
@@ -104,8 +104,8 @@ class _LocationPageState extends State<LocationPage> {
 
               // ── Error banner ──
               controller.obx(
-                (state) => const SizedBox(),
-                onLoading: const SizedBox(),
+                (state) => SizedBox(),
+                onLoading: SizedBox(),
                 onError: (error) =>
                     ErrorIndicator(description: error.toString()),
               ),
@@ -116,28 +116,28 @@ class _LocationPageState extends State<LocationPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Divider(
-                    height: 1, thickness: 0.5, color: Colors.grey.shade100),
+                    height: 1, thickness: 0.5, color: AppColors.immoBgSurfaceMuted),
               ),
 
               // ── Section label ──
               controller.obx(
                 (state) {
-                  if (state?.isEmpty ?? true) return const SizedBox();
+                  if (state?.isEmpty ?? true) return SizedBox();
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
                     child: Text(
                       'RÉSULTATS',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: Colors.grey.shade400,
+                        color: AppColors.immoTextDisabled,
                         letterSpacing: 1.2,
                       ),
                     ),
                   );
                 },
-                onLoading: const SizedBox(),
-                onError: (_) => const SizedBox(),
+                onLoading: SizedBox(),
+                onError: (_) => SizedBox(),
               ),
 
               // ── Autocomplete list ──
@@ -145,7 +145,7 @@ class _LocationPageState extends State<LocationPage> {
                 child: controller.obx(
                   (state) => const PlaceAutocompleteList(),
                   onLoading: const LocationIndicator(),
-                  onError: (error) => const SizedBox(),
+                  onError: (error) => SizedBox(),
                 ),
               ),
             ],

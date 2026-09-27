@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../core/network/utils/constants.dart';
 import '../../../core/network/utils/session_manager.dart';
 import '../../../core/config/injection.dart';
@@ -32,7 +30,7 @@ class HostInfoSection extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade100),
+            border: Border.all(color: AppColors.immoBgSurfaceMuted),
           ),
           child: Row(
             children: [
@@ -41,24 +39,24 @@ class HostInfoSection extends StatelessWidget {
                 backgroundColor: AppColors.primaryLite,
                 child: Icon(Icons.verified_user_outlined, color: AppColors.primary),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Propriétaire vérifié',
-                      style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.w600),
+                      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'Hébergé par un professionnel ImmoPlus',
-                      style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                      style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               OutlinedButton(
                 onPressed: () =>
                     MessageComposerSheet.showForResidence(context, residenceModel: residenceModel),
@@ -68,7 +66,7 @@ class HostInfoSection extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 ),
                 child: Text('Contacter',
-                    style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.w600)),
+                    style: AppTypography.font(fontSize: 13, fontWeight: FontWeight.w600)),
               ),
             ],
           ),

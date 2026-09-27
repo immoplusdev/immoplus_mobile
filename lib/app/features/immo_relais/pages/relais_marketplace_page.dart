@@ -12,7 +12,7 @@ class RelaisMarketplacePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Autour de moi'), centerTitle: true),
+      appBar: AppBar(title: Text('Autour de moi'), centerTitle: true),
       body: const RelaisMarketplaceSection(),
     );
   }

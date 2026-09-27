@@ -124,7 +124,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                           ),
                           child: Text(
                             '${residence.images.length} photos',
-                            style: TextStyle(
+                            style: AppTypography.font(
                               color: AppColors.white,
                               fontSize: 9,
                               fontWeight: FontWeight.w500,
@@ -189,18 +189,18 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                                 residence.nom,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.immoTextPrimary,
                                 ),
                               ),
-                              const SizedBox(height: 3),
+                              SizedBox(height: 3),
                               Row(
                                 children: [
                                   Icon(Icons.location_on_rounded,
                                       size: 10, color: AppColors.primary),
-                                  const SizedBox(width: 3),
+                                  SizedBox(width: 3),
                                   Expanded(
                                     child: Text(
                                       residence.adresse.isNotEmpty
@@ -208,7 +208,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                                           : '${residence.commune}, ${residence.ville}',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: AppTypography.font(
                                         fontSize: 11,
                                         color: AppColors.immoTextSecondary,
                                       ),
@@ -219,14 +219,14 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         // Prix
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
                               '$price F',
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.primary,
@@ -234,7 +234,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                             ),
                             Text(
                               '/ nuit',
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 10,
                                 color: AppColors.immoTextSecondary,
                               ),
@@ -306,7 +306,7 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                               alignment: Alignment.center,
                               child: Text(
                                 'Voir détails',
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   color: AppColors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -315,14 +315,14 @@ class _SmallResidenceCardState extends State<SmallResidenceCard> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         // Partager
                         _ActionIconButton(
                           key: _shareButtonKey,
                           icon: Icons.share_outlined,
                           onTap: _handleShareTap,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         // Fermer
                         _ActionIconButton(
                           icon: Icons.close_rounded,
@@ -363,19 +363,19 @@ class _AmenityItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 18, color: AppColors.primary),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           '$count',
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 12,
             fontWeight: FontWeight.w700,
             color: AppColors.immoTextPrimary,
           ),
         ),
-        const SizedBox(width: 3),
+        SizedBox(width: 3),
         Text(
           label,
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 10,
             color: AppColors.immoTextPrimary,
           ),

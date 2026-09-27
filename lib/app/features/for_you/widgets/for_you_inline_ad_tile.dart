@@ -1,8 +1,8 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
@@ -73,7 +73,7 @@ class ForYouInlineAdTile extends StatelessWidget {
                         if (campaign.content.title != null)
                           Text(
                             campaign.content.title!,
-                            style: GoogleFonts.plusJakartaSans(
+                            style: AppTypography.font(
                               fontWeight: FontWeight.w600,
                               fontSize: 9,
                               color: Colors.white,
@@ -85,7 +85,7 @@ class ForYouInlineAdTile extends StatelessWidget {
                           const Gap(2),
                           Text(
                             campaign.content.subtitle!,
-                            style: GoogleFonts.plusJakartaSans(
+                            style: AppTypography.font(
                               fontWeight: FontWeight.w500,
                               fontSize: 8,
                               color: Colors.white.withValues(alpha: 0.85),

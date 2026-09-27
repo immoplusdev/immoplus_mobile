@@ -142,13 +142,13 @@ class BookingHistoryCard extends StatelessWidget {
                         ),
                         const Gap(4),
                         Icon(Iconsax.arrow_right_3,
-                            size: 16, color: Colors.grey[400]),
+                            size: 16, color: AppColors.immoTextDisabled),
                       ],
                     ),
                   ),
 
                   Divider(
-                      height: 1, thickness: 0.5, color: Colors.grey.shade100),
+                      height: 1, thickness: 0.5, color: AppColors.immoBgSurfaceMuted),
 
                   // ── Dates ──
                   Padding(
@@ -167,7 +167,7 @@ class BookingHistoryCard extends StatelessWidget {
                         Container(
                           width: 1,
                           height: 36,
-                          color: Colors.grey.shade200,
+                          color: AppColors.immoBorderDefault,
                           margin: const EdgeInsets.symmetric(horizontal: 8),
                         ),
                         Expanded(
@@ -183,7 +183,7 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
 
                   Divider(
-                      height: 1, thickness: 0.5, color: Colors.grey.shade100),
+                      height: 1, thickness: 0.5, color: AppColors.immoBgSurfaceMuted),
 
                   // ── Nuits + montant ──
                   Padding(
@@ -195,14 +195,14 @@ class BookingHistoryCard extends StatelessWidget {
                         Row(
                           children: [
                             Icon(Iconsax.moon,
-                                size: 14, color: Colors.grey[500]),
+                                size: 14, color: AppColors.immoTextSecondary),
                             const Gap(4),
                             Text(
                               '$nights ${nights > 1 ? 'jours' : 'jour'}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
-                                  ?.copyWith(color: Colors.grey[600]),
+                                  ?.copyWith(color: AppColors.immoTextSecondary),
                             ),
                           ],
                         ),
@@ -237,14 +237,14 @@ class BookingHistoryCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Iconsax.star1, size: 12, color: Colors.white),
                         Gap(4),
                         Text(
                           'À évaluer',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             color: Colors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -262,7 +262,7 @@ class BookingHistoryCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: AppColors.immoBorderStrong,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -271,13 +271,13 @@ class BookingHistoryCard extends StatelessWidget {
                         Icon(
                           _isRated ? Iconsax.star1 : Iconsax.clock,
                           size: 12,
-                          color: Colors.grey.shade600,
+                          color: AppColors.immoTextSecondary,
                         ),
                         const Gap(4),
                         Text(
                           _isRated ? 'Déjà noté' : 'Notation expirée',
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
+                          style: AppTypography.font(
+                            color: AppColors.immoTextSecondary,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -322,7 +322,7 @@ class _Badge extends StatelessWidget {
           ],
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: color,
@@ -357,7 +357,7 @@ class _DateCell extends StatelessWidget {
             const Gap(3),
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 color: color,

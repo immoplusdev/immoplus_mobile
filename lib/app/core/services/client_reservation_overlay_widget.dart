@@ -119,13 +119,13 @@ class _ClientReservationOverlayWidgetState
                     color: isWaitingPayment ? Colors.green : AppColors.primary,
                     size: 20,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       isWaitingPayment
                           ? 'Réservation confirmée !'
                           : 'En attente de confirmation',
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -133,7 +133,7 @@ class _ClientReservationOverlayWidgetState
                   ),
                   GestureDetector(
                     onTap: widget.onDismiss,
-                    child: const Icon(Icons.close, size: 20, color: Colors.grey),
+                    child: Icon(Icons.close, size: 20, color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),
@@ -154,50 +154,50 @@ class _ClientReservationOverlayWidgetState
                             placeholder: (_, __) => Container(
                               width: 50,
                               height: 50,
-                              color: Colors.grey.shade200,
-                              child: const Icon(Icons.home, color: Colors.grey),
+                              color: AppColors.immoBorderDefault,
+                              child: Icon(Icons.home, color: AppColors.immoTextSecondary),
                             ),
                             errorWidget: (_, __, ___) => Container(
                               width: 50,
                               height: 50,
-                              color: Colors.grey.shade200,
-                              child: const Icon(Icons.home, color: Colors.grey),
+                              color: AppColors.immoBorderDefault,
+                              child: Icon(Icons.home, color: AppColors.immoTextSecondary),
                             ),
                           )
                         : Container(
                             width: 50,
                             height: 50,
-                            color: Colors.grey.shade200,
-                            child: const Icon(Icons.home, color: Colors.grey),
+                            color: AppColors.immoBorderDefault,
+                            child: Icon(Icons.home, color: AppColors.immoTextSecondary),
                           ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           residence.nom,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           '${_dateFormat.format(Utils.toDateTime(widget.reservation.dateDebut))} → ${_dateFormat.format(Utils.toDateTime(widget.reservation.dateFin))}',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           Utils.formatCurrency(
                               widget.reservation.montantTotalReservation),
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primary,
@@ -219,13 +219,13 @@ class _ClientReservationOverlayWidgetState
                     size: 16,
                     color: _timerColor(),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       isWaitingPayment
                           ? 'Finalisez votre paiement dans : ${_formatDuration(_remaining)}'
                           : 'Le propriétaire répond dans : ${_formatDuration(_remaining)}',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 13,
                         color: _timerColor(),
                         fontWeight: FontWeight.w500,
@@ -234,12 +234,12 @@ class _ClientReservationOverlayWidgetState
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: LinearProgressIndicator(
                   value: _progressValue(),
-                  backgroundColor: Colors.grey.shade200,
+                  backgroundColor: AppColors.immoBorderDefault,
                   valueColor: AlwaysStoppedAnimation<Color>(_timerColor()),
                   minHeight: 6,
                 ),
@@ -247,13 +247,13 @@ class _ClientReservationOverlayWidgetState
 
               // Pay button (only for waitingPayment)
               if (isWaitingPayment) ...[
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: widget.onPayNow,
-                    icon: const Icon(Icons.credit_card, size: 18),
-                    label: const Text('Payer maintenant'),
+                    icon: Icon(Icons.credit_card, size: 18),
+                    label: Text('Payer maintenant'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,

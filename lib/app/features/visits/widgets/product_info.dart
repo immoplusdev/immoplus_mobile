@@ -18,7 +18,7 @@ class ProductInfo extends StatelessWidget {
       tileColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Colors.grey.shade200),
+        side: BorderSide(color: AppColors.immoBorderDefault),
       ),
       leading: CircleAvatar(
         radius: 22,
@@ -47,7 +47,7 @@ class ProductInfo extends StatelessWidget {
               TextSpan(
                 text: period,
                 style: AppTypography.bodySmall.copyWith(
-                  color: Colors.grey.shade500,
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
           ],

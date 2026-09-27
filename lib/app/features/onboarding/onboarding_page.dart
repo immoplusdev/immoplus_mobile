@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // import "package:flutter/material.dart";
 // import 'package:go_router/go_router.dart';
 // import 'package:immoplus/app/features/home_page/home_page.dart';
@@ -7,7 +8,7 @@
 
 // class OnBoardingPage extends StatelessWidget {
 //   static String name = 'ONBOARDING';
-//   final TextStyle _textStyle = const TextStyle(
+//   final TextStyle _textStyle = AppTypography.font(
 //     fontWeight: FontWeight.bold,
 //     color: Colors.white,
 //     shadows: [
@@ -36,8 +37,8 @@
 
 //         centerBackground: true,
 //         finishButtonText: 'Commencer',
-//         middle: const Text('Skip'),
-//         trailing: const Text('Login'),
+//         middle: Text('Skip'),
+//         trailing: Text('Login'),
 //         indicatorPosition: 110,
 //         finishButtonStyle: FinishButtonStyle(
 //             backgroundColor: Theme.of(context).colorScheme.primary,

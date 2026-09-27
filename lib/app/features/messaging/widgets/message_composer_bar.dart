@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Composer bas d'écran du fil (spec §5.8) : champ extensible + bouton
@@ -48,7 +46,7 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade100, width: 1)),
+        border: Border(top: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -61,12 +59,12 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
                 minLines: 1,
                 maxLines: 5,
                 textCapitalization: TextCapitalization.sentences,
-                style: GoogleFonts.dmSans(fontSize: 15),
+                style: AppTypography.font(fontSize: 15),
                 decoration: InputDecoration(
                   hintText: 'Écrire un message…',
-                  hintStyle: GoogleFonts.dmSans(color: Colors.grey.shade400),
+                  hintStyle: AppTypography.font(color: AppColors.immoTextDisabled),
                   filled: true,
-                  fillColor: Colors.grey.shade100,
+                  fillColor: AppColors.immoBgSurfaceMuted,
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   border: OutlineInputBorder(
@@ -83,12 +81,12 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           IconButton(
             onPressed: _hasText ? _send : null,
             icon: Icon(
               Icons.send_rounded,
-              color: _hasText ? AppColors.primary : Colors.grey.shade300,
+              color: _hasText ? AppColors.primary : AppColors.immoBorderStrong,
             ),
           ),
         ],

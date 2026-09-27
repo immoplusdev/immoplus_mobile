@@ -108,7 +108,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
       label: Text(label),
       selected: isSelected,
       selectedColor: Colors.black,
-      labelStyle: TextStyle(
+      labelStyle: AppTypography.font(
         color: isSelected ? Colors.white : Colors.black,
         fontSize: 13,
         fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -117,7 +117,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side:
-            BorderSide(color: isSelected ? Colors.black : Colors.grey.shade300),
+            BorderSide(color: isSelected ? Colors.black : AppColors.immoBorderStrong),
       ),
       onSelected: (_) {
         setState(() {
@@ -141,11 +141,11 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Quel budget pour les nuits ?',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Quick selection chips with clear "k" notations
           Wrap(
@@ -160,7 +160,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
               _buildBudgetChoice(150000, 200000, '150k +'),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Manual price entry fields
           Row(
@@ -174,7 +174,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                     fillColor: Colors.transparent,
                     labelText: 'Budget min (F)',
                     labelStyle:
-                        TextStyle(color: AppColors.primary, fontSize: 13),
+                        AppTypography.font(color: AppColors.primary, fontSize: 13),
                     hintText: 'ex: 30000',
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 14),
@@ -197,7 +197,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                   onChanged: _onMinChanged,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: TextField(
                   controller: _maxController,
@@ -207,7 +207,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                     fillColor: Colors.transparent,
                     labelText: 'Budget max (F)',
                     labelStyle:
-                        TextStyle(color: AppColors.primary, fontSize: 13),
+                        AppTypography.font(color: AppColors.primary, fontSize: 13),
                     hintText: 'ex: 150000',
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 14),
@@ -232,7 +232,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
               ),
             ],
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: 40),
 
           // Price Slider
           Column(
@@ -240,7 +240,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: AppColors.primary,
-                  inactiveTrackColor: Colors.grey.shade200,
+                  inactiveTrackColor: AppColors.immoBorderDefault,
                   thumbColor: AppColors.primary,
                   overlayColor: AppColors.primary.withValues(alpha: 0.1),
                   trackHeight: 4,
@@ -249,7 +249,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                   rangeValueIndicatorShape:
                       const PaddleRangeSliderValueIndicatorShape(),
                   valueIndicatorColor: AppColors.primary,
-                  valueIndicatorTextStyle: const TextStyle(
+                  valueIndicatorTextStyle: AppTypography.font(
                     color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -284,19 +284,19 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                     Text(
                       '0 F',
                       style:
-                          TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                          AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 12),
                     ),
                     Text(
                       '200 000 F+',
                       style:
-                          TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                          AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 12),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           CustomButtom(
             text: 'Continuer',
             onClick: _submit,

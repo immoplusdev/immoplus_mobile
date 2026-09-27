@@ -165,14 +165,14 @@ class StripeResultPage extends StatelessWidget {
                   child: FilledButton.icon(
                     onPressed: () => context.go('/booking-history'),
                     icon: const Icon(Iconsax.receipt_item, size: 16),
-                    label: const Text('Voir mes réservations'),
+                    label: Text('Voir mes réservations'),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      textStyle: const TextStyle(
+                      textStyle: AppTypography.font(
                           fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
@@ -183,13 +183,13 @@ class StripeResultPage extends StatelessWidget {
                   child: OutlinedButton.icon(
                     onPressed: () => context.go('/'),
                     icon: const Icon(Iconsax.home, size: 16),
-                    label: const Text('Retour à l\'accueil'),
+                    label: Text('Retour à l\'accueil'),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      textStyle: const TextStyle(
+                      textStyle: AppTypography.font(
                           fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),

@@ -31,9 +31,9 @@ class _PreviewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.blue40,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'PropertyCard — Preview',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.navy900,
@@ -76,7 +76,7 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         text,
-        style: TextStyle(
+        style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: AppColors.gray1000,

@@ -39,7 +39,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
             titleTextStyle: Theme.of(context)
                 .textTheme
                 .titleSmall!
-                .copyWith(color: Colors.grey),
+                .copyWith(color: AppColors.immoTextSecondary),
             subtitleTextStyle: Theme.of(context).textTheme.bodyLarge!,
             subtitle:
                 SelectableText('praizoeuroieazhfoiehafherfhrzeugfzuregbvztr'),
@@ -100,7 +100,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 "Retirer l'argent",
               ),
             ),

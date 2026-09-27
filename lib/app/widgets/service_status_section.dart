@@ -19,7 +19,7 @@ class ServiceStatusSection extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Statut du service :",
           ),
           StatusChip(

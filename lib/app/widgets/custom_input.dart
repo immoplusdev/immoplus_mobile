@@ -45,7 +45,7 @@ class CustomPinput extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: width,
       height: height,
-      textStyle: TextStyle(
+      textStyle: AppTypography.font(
         fontSize: fontSize,
         color: AppColors.black,
         fontWeight: FontWeight.w600,
@@ -116,12 +116,12 @@ class CustomPinput extends StatelessWidget {
           ),
         ),
         if (hasError) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               errorText!,
-              style: TextStyle(
+              style: AppTypography.font(
                 color: errorBorderColor ?? AppColors.immoFeedbackError,
                 fontSize: 12,
               ),

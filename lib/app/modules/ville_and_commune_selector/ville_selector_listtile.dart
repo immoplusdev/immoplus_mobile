@@ -24,7 +24,7 @@ class _VilleSelectorListtileState extends State<VilleSelectorListtile> {
           : CupertinoColors.tertiarySystemFill,
       leading: FaIcon(
         FontAwesomeIcons.treeCity,
-        color: (villeModel != null) ? AppColors.primary : Colors.grey.shade400,
+        color: (villeModel != null) ? AppColors.primary : AppColors.immoTextDisabled,
       ),
       title: Text(
         (villeModel != null) ? villeModel!.name : "Selectioner une ville",

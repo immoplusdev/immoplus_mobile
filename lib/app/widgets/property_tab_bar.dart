@@ -90,13 +90,13 @@ class _PropertyTabBarState extends State<PropertyTabBar>
               .toList(),
           // Onglet actif
           labelColor: AppColors.primary,
-          labelStyle: TextStyle(
+          labelStyle: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
           // Onglets inactifs
           unselectedLabelColor: AppColors.immoIconInactive,
-          unselectedLabelStyle: TextStyle(
+          unselectedLabelStyle: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -116,7 +116,7 @@ class _PropertyTabBarState extends State<PropertyTabBar>
           isScrollable: true,
         ),
         Divider(height: 1, thickness: 1, color: AppColors.immoBorderDefault),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         // Contenu de l'onglet actif
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),

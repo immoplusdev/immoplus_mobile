@@ -203,11 +203,11 @@ class _CardImageCarouselState extends State<CardImageCarousel> {
               size: 40,
               color: AppColors.gray400,
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Text(
               "Erreur de chargement\nAppuyez pour réessayer",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTypography.font(
                 color: AppColors.gray500,
                 fontSize: 12,
               ),

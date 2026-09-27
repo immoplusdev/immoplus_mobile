@@ -119,11 +119,11 @@ class SuggestSearchBar extends StatelessWidget {
                     fillColor: AppColors.white,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.immoBorderStrong),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.immoBorderStrong),
                     ),
                   ),
                 ),

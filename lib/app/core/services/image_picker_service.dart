@@ -155,7 +155,7 @@ class ImagePickerService {
           barrierDismissible: true,
           content:
               "Vous devez autoriser l'accès à votre caméra avant de continuer",
-          icon: const Text("Permission non accordée"),
+          icon: Text("Permission non accordée"),
           textButton: "Paramètre",
           rollback: () {
             openAppSettings();
@@ -166,7 +166,7 @@ class ImagePickerService {
           barrierDismissible: true,
           content:
               "Vous devez autoriser l'accès à votre librairie photo avant de continuer",
-          icon: const Text("Permission non accordée"),
+          icon: Text("Permission non accordée"),
           textButton: "Paramètre",
           rollback: () {
             openAppSettings();
@@ -176,7 +176,7 @@ class ImagePickerService {
         AppDialog.info(
           barrierDismissible: true,
           content: e.message ?? "Un problème est survenue",
-          icon: const Text("Impossible"),
+          icon: Text("Impossible"),
           textButton: "Compris !",
         );
       }

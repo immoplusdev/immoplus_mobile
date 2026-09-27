@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../core/config/injection.dart';
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../widgets/custom_empty_state.dart';
@@ -59,7 +57,7 @@ class _MessagesInboxView extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Messages',
-            style: GoogleFonts.dmSans(fontWeight: FontWeight.bold, color: Colors.black)),
+            style: AppTypography.font(fontWeight: FontWeight.bold, color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
@@ -138,17 +136,17 @@ class _MessagesInboxView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.wifi_off, size: 40, color: Colors.grey.shade400),
-                    const SizedBox(height: 12),
+                    Icon(Icons.wifi_off, size: 40, color: AppColors.immoTextDisabled),
+                    SizedBox(height: 12),
                     Text(message, textAlign: TextAlign.center),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     OutlinedButton(
                       onPressed: () => context.read<InboxCubit>().load(),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primary,
                         side: BorderSide(color: AppColors.primary),
                       ),
-                      child: const Text('Réessayer'),
+                      child: Text('Réessayer'),
                     ),
                   ],
                 ),
@@ -170,7 +168,7 @@ class _ConversationSkeleton extends StatelessWidget {
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: Colors.grey.shade100,
+            color: AppColors.immoBgSurfaceMuted,
             borderRadius: BorderRadius.circular(6),
           ),
         );
@@ -183,17 +181,17 @@ class _ConversationSkeleton extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
+              color: AppColors.immoBgSurfaceMuted,
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 bar(120, 14),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 bar(180, 12),
               ],
             ),

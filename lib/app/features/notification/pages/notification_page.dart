@@ -13,7 +13,6 @@ import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_tile.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
@@ -133,7 +132,7 @@ class _NotificationsPageState extends State<NotificationsPage>
               backgroundColor: Colors.white,
               elevation: 0,
               centerTitle: false,
-              title: const Text('Notifications'),
+              title: Text('Notifications'),
               actions: [
                 if (_hasUnread)
                   TextButton(
@@ -195,13 +194,13 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Container(
                               padding: const EdgeInsets.all(24),
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade50,
+                                color: AppColors.immoBgSurfaceMuted,
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
                                 Iconsax.notification,
                                 size: 64,
-                                color: Colors.grey.shade300,
+                                color: AppColors.immoBorderStrong,
                               ),
                             ),
                             const Gap(24),
@@ -217,7 +216,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                               'Vous n\'avez pas encore reçu de notifications.',
                               textAlign: TextAlign.center,
                               style: AppTypography.bodyMedium.copyWith(
-                                color: Colors.grey.shade500,
+                                color: AppColors.immoTextSecondary,
                               ),
                             ),
                           ],
@@ -243,7 +242,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Text(
                               _pagingController.error?.toString() ?? '',
                               textAlign: TextAlign.center,
-                              style: AppTypography.bodyMedium.copyWith(color: Colors.grey),
+                              style: AppTypography.bodyMedium.copyWith(color: AppColors.immoTextSecondary),
                             ),
                             const Gap(24),
                             ElevatedButton(

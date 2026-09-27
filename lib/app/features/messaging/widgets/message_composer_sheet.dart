@@ -2,13 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../core/config/injection.dart';
 import '../../../data/models/remote/messaging/create_conversation_response.dart';
 import '../../../data/models/remote/residence/residence_model.dart';
 import '../../../data/repositories/messaging_repository.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import '../../../utils/utils.dart';
 import '../pages/message_thread_page.dart';
@@ -198,18 +195,18 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
           children: [
             Text(
               widget.title,
-              style: GoogleFonts.dmSans(fontSize: 20, fontWeight: FontWeight.bold),
+              style: AppTypography.font(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             if (widget.contextCard != null) ...[
               widget.contextCard!,
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ] else ...[
               Text(
                 'Notre équipe vous répond généralement sous quelques heures.',
-                style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade600),
+                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ],
             if (_moderationBanner != null) ...[
               Container(
@@ -222,10 +219,10 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                 ),
                 child: Text(
                   _moderationBanner!,
-                  style: GoogleFonts.dmSans(fontSize: 13, color: AppColors.immoFeedbackError),
+                  style: AppTypography.font(fontSize: 13, color: AppColors.immoFeedbackError),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
             ],
             TextField(
               controller: _controller,
@@ -241,17 +238,17 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
               },
               decoration: InputDecoration(
                 hintText: widget.placeholder,
-                hintStyle: GoogleFonts.dmSans(color: Colors.grey.shade400),
+                hintStyle: AppTypography.font(color: AppColors.immoTextDisabled),
                 filled: true,
-                fillColor: Colors.grey.shade50,
+                fillColor: AppColors.immoBgSurfaceMuted,
                 contentPadding: const EdgeInsets.all(14),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
+                  borderSide: BorderSide(color: AppColors.immoBorderDefault),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
+                  borderSide: BorderSide(color: AppColors.immoBorderDefault),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -259,7 +256,7 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               height: 52,
@@ -267,9 +264,9 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                 onPressed: _canSend ? _send : null,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.primary,
-                  disabledForegroundColor: Colors.grey.shade400,
+                  disabledForegroundColor: AppColors.immoTextDisabled,
                   side: BorderSide(
-                    color: _canSend ? AppColors.primary : Colors.grey.shade300,
+                    color: _canSend ? AppColors.primary : AppColors.immoBorderStrong,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(60),
@@ -284,7 +281,7 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                       )
                     : Text(
                         'Envoyer',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.font(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
               ),
@@ -329,12 +326,12 @@ class _SimpleContextCard extends StatelessWidget {
             child: (photoUrl?.isNotEmpty ?? false)
                 ? CachedNetworkImage(imageUrl: photoUrl!, fit: BoxFit.cover)
                 : Container(
-                    color: Colors.grey.shade100,
-                    child: Icon(Icons.home_outlined, color: Colors.grey.shade400),
+                    color: AppColors.immoBgSurfaceMuted,
+                    child: Icon(Icons.home_outlined, color: AppColors.immoTextDisabled),
                   ),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -343,11 +340,11 @@ class _SimpleContextCard extends StatelessWidget {
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.w600),
+                style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.w600),
               ),
               if (subtitle != null && subtitle!.isNotEmpty)
                 Text(subtitle!,
-                    style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey)),
+                    style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary)),
             ],
           ),
         ),

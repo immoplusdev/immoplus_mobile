@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/relais_interest_status.dart';
@@ -108,7 +107,7 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
           child: Text(
             "Aucune demande reçue pour le moment.",
             textAlign: TextAlign.center,
-            style: GoogleFonts.dmSans(color: Colors.grey.shade500),
+            style: AppTypography.font(color: AppColors.immoTextSecondary),
           ),
         ),
       );
@@ -175,7 +174,7 @@ class _ReceivedInterestCard extends StatelessWidget {
         children: [
           Text(
             interest.clientName ?? 'Utilisateur',
-            style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+            style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -183,7 +182,7 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(4),
             Text(
               '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.location}',
-              style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+              style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -192,7 +191,7 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               interest.message!,
-              style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
+              style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
@@ -201,7 +200,7 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               'Visite prévue le ${DateFormat('d MMM yyyy à HH:mm', 'fr_FR').format(interest.meetingDate!)}',
-              style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+              style: AppTypography.font(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
             ),
           ],
           if (isPending) ...[
@@ -216,7 +215,7 @@ class _ReceivedInterestCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text('Décliner', style: GoogleFonts.dmSans(color: Colors.red, fontWeight: FontWeight.w600)),
+                    child: Text('Décliner', style: AppTypography.font(color: Colors.red, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const Gap(12),
@@ -230,7 +229,7 @@ class _ReceivedInterestCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text('Planifier',
-                        style: GoogleFonts.dmSans(color: Colors.white, fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(color: Colors.white, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],
@@ -254,7 +253,7 @@ class _ReceivedInterestCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: Text('Contacter', style: GoogleFonts.dmSans(fontWeight: FontWeight.w600)),
+                child: Text('Contacter', style: AppTypography.font(fontWeight: FontWeight.w600)),
               ),
             ),
           ],

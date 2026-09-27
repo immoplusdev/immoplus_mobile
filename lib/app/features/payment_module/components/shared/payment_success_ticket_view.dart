@@ -353,7 +353,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                 Text(
                   "Merci!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: Colors.black,
@@ -364,7 +364,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                 Text(
                   "Votre paiement a été traité\navec succès.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
                     color: AppColors.immoTextSecondary,
@@ -412,7 +412,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               children: [
                                 Text(
                                   "Payement ID",
-                                  style: TextStyle(
+                                  style: AppTypography.font(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                     color: AppColors.immoTextSecondary,
@@ -429,7 +429,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             const Gap(4),
                             Text(
                               displayPaymentId,
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black,
@@ -445,7 +445,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       children: [
                         Text(
                           "Montant",
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             color: AppColors.immoTextSecondary,
@@ -454,7 +454,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                         const Gap(4),
                         Text(
                           formattedAmount,
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.black,
@@ -475,7 +475,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     children: [
                       Text(
                         "Date & heure",
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: AppColors.immoTextSecondary,
@@ -484,7 +484,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       const Gap(4),
                       Text(
                         formattedDate,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.black,
@@ -531,7 +531,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               displayName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black87,
@@ -540,7 +540,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             const Gap(2),
                             Text(
                               displayMasked,
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.immoTextSecondary,
@@ -568,7 +568,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
             padding: EdgeInsets.fromLTRB(20, 16, 20, 36),
             child: Text(
               "@afriqsolus",
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: AppColors.immoTextDisabled,

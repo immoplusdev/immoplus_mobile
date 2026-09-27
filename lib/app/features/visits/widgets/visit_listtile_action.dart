@@ -34,7 +34,7 @@ class VisitListTileAction extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.grey.shade200,
+            color: AppColors.immoBorderDefault,
             width: 1.2,
           ),
         ),
@@ -65,7 +65,7 @@ class VisitListTileAction extends StatelessWidget {
                     ),
             ),
 
-            const SizedBox(width: 14),
+            SizedBox(width: 14),
 
             // Title + subtitle
             Expanded(
@@ -88,7 +88,7 @@ class VisitListTileAction extends StatelessWidget {
                         ),
                       ),
                       if (price != null && price!.isNotEmpty) ...[
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -110,13 +110,13 @@ class VisitListTileAction extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
 
                   // Subtitle
                   Text(
                     subtitle,
                     style: AppTypography.bodySmall.copyWith(
-                      color: Colors.grey.shade600,
+                      color: AppColors.immoTextSecondary,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -124,14 +124,14 @@ class VisitListTileAction extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
 
             // Trailing
             trailing ??
                 Icon(
                   CupertinoIcons.chevron_forward,
                   size: 20,
-                  color: Colors.grey.shade400,
+                  color: AppColors.immoTextDisabled,
                 ),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -125,9 +124,9 @@ class _SeeMoreTile extends StatelessWidget {
             height: 170,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.grey.shade100.withValues(alpha: 0.5),
+              color: AppColors.immoBgSurfaceMuted.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.grey.shade200),
+              border: Border.all(color: AppColors.immoBorderDefault),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -136,10 +135,10 @@ class _SeeMoreTile extends StatelessWidget {
                 const Gap(14),
                 Text(
                   'Voir plus',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: Colors.grey.shade700,
+                    color: AppColors.immoTextLabel,
                   ),
                 ),
               ],

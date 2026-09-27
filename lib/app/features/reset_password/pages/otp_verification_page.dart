@@ -98,19 +98,19 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   defaultPinTheme: PinTheme(
                     width: 50,
                     height: 50,
-                    textStyle: const TextStyle(
+                    textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300, width: 2),
+                      border: Border.all(color: AppColors.immoBorderStrong, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   focusedPinTheme: PinTheme(
                     width: 50,
                     height: 50,
-                    textStyle: const TextStyle(
+                    textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -122,7 +122,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   submittedPinTheme: PinTheme(
                     width: 50,
                     height: 50,
-                    textStyle: const TextStyle(
+                    textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -187,10 +187,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         _canResendCode
                             ? "Renvoyer le code"
                             : "Renvoyer le code ($_resendCountdown s)",
-                        style: TextStyle(
+                        style: AppTypography.font(
                           color: _canResendCode && !isLoading
                               ? AppColors.immoBrandSecondary
-                              : Colors.grey,
+                              : AppColors.immoTextSecondary,
                           fontSize: 14,
                         ),
                       ),

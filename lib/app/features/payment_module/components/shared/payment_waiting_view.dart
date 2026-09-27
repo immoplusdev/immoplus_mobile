@@ -143,7 +143,7 @@ class PaymentWaitingView extends StatelessWidget {
                 "Une fois le paiement validé, veuillez patienter quelques instants. "
                     "Vous serez notifié du statut de votre paiement, puis celui de votre demande par ImmoPlus.",
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               color: AppColors.immoTextSecondary,
               height: 1.3,

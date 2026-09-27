@@ -105,13 +105,13 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                 (index) => Shimmer.fromColors(
                       period: Duration(milliseconds: 800),
                       baseColor: CupertinoColors.tertiarySystemFill,
-                      highlightColor: Colors.grey.shade100,
+                      highlightColor: AppColors.immoBgSurfaceMuted,
                       child: ListTile(
                         leading: CircleAvatar(),
                         title: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
+                            color: AppColors.immoTextSecondary,
                           ),
                           width: 200,
                           height: 20,
@@ -120,7 +120,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                           margin: EdgeInsets.only(top: 5, right: 20),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
+                            color: AppColors.immoTextSecondary,
                           ),
                           width: 100,
                           height: 20,
@@ -151,7 +151,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                     CupertinoIcons.location_fill,
                     color: Colors.blue,
                   ),
-                  title: const Text('Prendre ma position actuelle'),
+                  title: Text('Prendre ma position actuelle'),
                 ),
               ),
             ),

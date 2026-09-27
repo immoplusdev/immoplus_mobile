@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,7 +45,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
         padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.grey[200]!),
+          border: Border.all(color: AppColors.immoBorderDefault!),
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
@@ -58,13 +59,13 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 18, color: const Color(0xFF4227DE)),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               text,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Colors.grey[800],
+                color: AppColors.immoTextLabel,
               ),
             ),
           ],
@@ -79,7 +80,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
 
     return Container(
       padding: EdgeInsets.only(bottom: bottomInsets),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28.0)),
       ),
@@ -97,21 +98,21 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 24),
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: AppColors.immoBorderStrong,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-              const Text(
+              Text(
                 "Assistant Immo+",
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
                   color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
@@ -138,14 +139,14 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
                     margin: const EdgeInsets.only(right: 12, bottom: 4),
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: AppColors.immoBgSurfaceMuted,
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -158,7 +159,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: AppColors.immoBgSurfaceMuted,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(color: Colors.transparent),
                       ),
@@ -171,13 +172,13 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                             maxLines: 4,
                             minLines: 1,
                             textInputAction: TextInputAction.send,
-                            style: const TextStyle(
+                            style: AppTypography.font(
                                 fontSize: 16, color: Colors.black87),
                             decoration: InputDecoration(
                               hintText:
                                   "Décrivez le bien ou posez une question...",
-                              hintStyle: TextStyle(
-                                color: Colors.grey[500],
+                              hintStyle: AppTypography.font(
+                                color: AppColors.immoTextSecondary,
                                 fontSize: 14,
                                 height: 1.4,
                               ),
@@ -208,9 +209,9 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                                   )
                                 ],
                               ),
-                              child: const Text(
+                              child: Text(
                                 "PRO",
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   color: Colors.white,
                                   fontSize: 9,
                                   fontWeight: FontWeight.bold,
@@ -231,7 +232,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(14),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Color(0xFF1E1E1E),
                           shape: BoxShape.circle,
                         ),
@@ -245,7 +246,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
             ],
           ),
         ),

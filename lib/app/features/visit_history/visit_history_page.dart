@@ -80,7 +80,7 @@ class _VisitHistoryPageState extends State<VisitHistoryPage>
       backgroundColor: AppColors.whiteBackground,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Historiques Des Visites'),
+        title: Text('Historiques Des Visites'),
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: Colors.transparent,
         elevation: 0,

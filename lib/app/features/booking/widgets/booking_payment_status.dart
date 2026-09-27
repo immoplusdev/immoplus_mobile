@@ -24,7 +24,7 @@ class BookingPaymentStatus extends StatelessWidget {
       ),
       horizontalTitleGap: 3,
       dense: true,
-      title: const Text('Statut de paiement :'),
+      title: Text('Statut de paiement :'),
       trailing: StatusChip(
           text: Utils.getServiceStatus(reservationModel.statusFacture ?? ''),
           status: reservationModel.statusFacture),

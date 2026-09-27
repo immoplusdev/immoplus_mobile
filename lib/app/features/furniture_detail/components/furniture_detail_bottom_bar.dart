@@ -10,7 +10,6 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 class FurnitureDetailBottomBar extends StatelessWidget {
@@ -36,7 +35,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
             _proceed(context);
           }
         },
-        child: const Text('CONTACTER'),
+        child: Text('CONTACTER'),
       ),
     );
   }
@@ -85,7 +84,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                     color: Colors.green,
                   ),
                 ),
-                title: const Text('Contacter sur WhatsApp'),
+                title: Text('Contacter sur WhatsApp'),
                 titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                 trailing: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,
@@ -114,7 +113,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
                   FontAwesomeIcons.headset.data,
                   color: Colors.black,
                 ),
-                title: const Text('Contacter par appel'),
+                title: Text('Contacter par appel'),
                 titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                 trailing: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,

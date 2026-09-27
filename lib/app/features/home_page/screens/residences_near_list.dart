@@ -232,7 +232,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
                 size: 20,
                 color: _nearResidences.isNotEmpty
                     ? Colors.black
-                    : Colors.grey.shade400,
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -358,10 +358,10 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: AppColors.immoBorderDefault,
           width: 1,
         ),
       ),
@@ -372,21 +372,21 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             Icon(
               Icons.home_outlined,
               size: 48,
-              color: Colors.grey.shade400,
+              color: AppColors.immoTextDisabled,
             ),
             const Gap(12),
             Text(
               'Aucune résidence proche',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade700,
+                    color: AppColors.immoTextLabel,
                   ),
             ),
             const Gap(6),
             Text(
               'Aucune résidence trouvée dans un rayon de ${widget.radius.toInt()} km',
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade600,
+                    color: AppColors.immoTextSecondary,
                   ),
               textAlign: TextAlign.center,
             ),
@@ -423,7 +423,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             onPressed: _loadNearResidences,
             child: Text(
               'Réessayer',
-              style: TextStyle(color: Colors.red.shade700),
+              style: AppTypography.font(color: Colors.red.shade700),
             ),
           ),
         ],

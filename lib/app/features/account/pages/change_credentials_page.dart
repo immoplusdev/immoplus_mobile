@@ -7,7 +7,6 @@ import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/account/pages/change_password.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/settings/contact_change/view/request_contact_change_page.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 
 final Color _kIconBg = AppColors.immoBgSurfaceMuted;
 final Color _kIconColor = AppColors.immoTextPrimary;

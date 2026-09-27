@@ -23,9 +23,7 @@ import 'package:immoplus/app/modules/country_phone_number/country_phone_number.d
 import 'package:immoplus/app/extensions/safe_area_extensions.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 // TODO(KYC): import désactivé temporairement pour test Stripe
 // import 'package:immoplus/app/features/booking/widgets/kyc_verification_modal.dart';
@@ -195,7 +193,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
         backgroundColor: AppColors.whiteBackground,
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        title: const Text('Réservation'),
+        title: Text('Réservation'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
             ),
@@ -227,7 +225,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                   selectedDates.isNotEmpty
                       ? '$totalDays jour${totalDays > 1 ? 's' : ''}'
                       : 'Aucun jour',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: selectedDates.isNotEmpty
@@ -344,7 +342,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                               CalendarDatePicker2Type.range,
                                           centerAlignModePicker: true,
                                           customModePickerIcon:
-                                              const SizedBox(),
+                                              SizedBox(),
                                           firstDate: DateTime.now(),
                                           selectedDayHighlightColor:
                                               AppColors.primary,
@@ -384,7 +382,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                                     child: Text(
                                                       date.day.toString(),
                                                       style: (textStyle ??
-                                                              const TextStyle())
+                                                              AppTypography.font())
                                                           .copyWith(
                                                         color: const Color(
                                                             0xFFF04438),
@@ -474,7 +472,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                       );
                                     });
                               }
-                              return const Center(
+                              return Center(
                                   child: CupertinoActivityIndicator());
                             }),
                       ),
@@ -755,7 +753,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
               const Gap(4),
               Text(
                 label,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF667085),

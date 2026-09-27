@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
@@ -176,11 +177,11 @@ class _Header extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: 16, color: ChatTokens.brand500),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Text(
                   label,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: ChatTokens.neutral900,
@@ -191,7 +192,7 @@ class _Header extends StatelessWidget {
               InkWell(
                 onTap: onManage,
                 customBorder: const CircleBorder(),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(6),
                   child: Icon(
                     Iconsax.more,
@@ -231,7 +232,7 @@ class _CriteriaChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: ChatTokens.brand500,
@@ -247,7 +248,7 @@ class _EmptyMatches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: ChatTokens.s24, horizontal: 14),
       child: Column(
         children: [
@@ -256,7 +257,7 @@ class _EmptyMatches extends StatelessWidget {
           Text(
             'Aucun bien ne matche pour le moment.\nJe te notifie dès qu\'un apparaît.',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 12,
               fontWeight: FontWeight.w400,
               color: ChatTokens.neutral400,
@@ -309,7 +310,7 @@ class _Footer extends StatelessWidget {
                 extraCount > 0
                     ? 'Voir tous les matches ($extraCount)'
                     : 'Voir les matches',
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: ChatTokens.brand500,
@@ -318,13 +319,13 @@ class _Footer extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: onManage,
-            child: const Text(
+            child: Text(
               'Gérer l\'alerte',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: ChatTokens.neutral400,

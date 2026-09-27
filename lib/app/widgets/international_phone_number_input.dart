@@ -145,7 +145,7 @@ class InternationalPhoneInputState extends State<InternationalPhoneInput> {
             borderRadius: BorderRadius.circular(radiusButton),
             borderSide: BorderSide(color: AppColors.primaryLite, width: 2),
           ),
-          errorStyle: TextStyle(color: AppColors.red600),
+          errorStyle: AppTypography.font(color: AppColors.red600),
           contentPadding: const EdgeInsets.symmetric(vertical: 20),
           hintText: "Numéro de téléphone",
         ),

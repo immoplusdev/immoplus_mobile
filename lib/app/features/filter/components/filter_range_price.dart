@@ -206,7 +206,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 11,
               fontWeight: FontWeight.w500,
               color: AppColors.immoTextSecondary,
@@ -231,7 +231,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     filled: true,
                     fillColor: Colors.transparent,
                     suffixText: ' F',
-                    suffixStyle: TextStyle(
+                    suffixStyle: AppTypography.font(
                       fontWeight: FontWeight.w600,
                       color: AppColors.immoTextSecondary,
                     ),

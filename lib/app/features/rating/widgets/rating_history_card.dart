@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/rating/rating_model.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/main.dart';

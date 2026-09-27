@@ -26,7 +26,7 @@ class _CommuneSelectorListtileState extends State<CommuneSelectorListtile> {
       leading: FaIcon(
         FontAwesomeIcons.treeCity,
         color:
-            (communeModel != null) ? AppColors.primary : Colors.grey.shade400,
+            (communeModel != null) ? AppColors.primary : AppColors.immoTextDisabled,
       ),
       title: Text(
         (communeModel != null) ? communeModel!.name : "Selectioner une commune",

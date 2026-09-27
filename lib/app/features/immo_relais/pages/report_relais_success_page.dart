@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
@@ -26,7 +25,7 @@ class ReportRelaisSuccessPage extends StatelessWidget {
               Text(
                 'Votre demande est en ligne',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -42,7 +41,7 @@ class ReportRelaisSuccessPage extends StatelessWidget {
                 ),
                 child: Text(
                   'Publication active',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -53,9 +52,9 @@ class ReportRelaisSuccessPage extends StatelessWidget {
               Text(
                 'Nous vous proposerons des biens correspondant à vos critères dans les plus brefs délais.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 14,
-                  color: Colors.grey.shade500,
+                  color: AppColors.immoTextSecondary,
                   height: 1.5,
                 ),
               ),

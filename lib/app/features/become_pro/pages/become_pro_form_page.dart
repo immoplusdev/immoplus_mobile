@@ -11,8 +11,6 @@ import 'package:immoplus/app/features/become_pro/logic/become_pro_cubit.dart';
 import 'package:immoplus/app/features/become_pro/logic/become_pro_state.dart';
 import 'package:immoplus/app/core/services/image_picker_service.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/gen/assets.gen.dart';
 
@@ -49,7 +47,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
             AppDialog.info(
               barrierDismissible: false,
               content: "Votre demande a été envoyée avec succès.",
-              icon: Text("Succès", style: TextStyle(color: Colors.green)),
+              icon: Text("Succès", style: AppTypography.font(color: Colors.green)),
               textButton: "Fermer",
               rollback: () {
                 while (context.canPop()) {
@@ -91,7 +89,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         letterSpacing: -0.5,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
 
                     // Subtitle
                     Text(
@@ -101,11 +99,11 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         color: AppColors.immoTextSecondary,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
 
                     Divider(
                         color: AppColors.immoBorderDefault, thickness: 1),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // Section Document
                     Align(
@@ -117,7 +115,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     // Two Upload Buttons Row
                     Row(
@@ -143,7 +141,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                             },
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
                           child: _buildUploadCard(
                             label: "Photo d'identité :",
@@ -166,7 +164,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // Secteur d'activité Dropdown
                     Align(
@@ -178,7 +176,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.immoBorderDefault),
@@ -212,7 +210,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                                   Icon(Iconsax.briefcase,
                                       color: AppColors.immoTextSecondary,
                                       size: 18),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12),
                                   Text(value),
                                 ],
                               ),
@@ -226,7 +224,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
                     // Info Security Box
                     Container(
@@ -247,7 +245,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 48),
+                    SizedBox(height: 48),
 
                     // Passing Pro Button
                     CustomButtom(
@@ -299,7 +297,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                         }
                       },
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -326,7 +324,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
             color: AppColors.immoTextSecondary,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
@@ -376,7 +374,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                           ),
                           width: 28,
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
                         Text(
                           actionText,
                           textAlign: TextAlign.center,

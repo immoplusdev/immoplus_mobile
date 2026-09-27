@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -123,7 +124,7 @@ class _PropertyTypeOption extends StatelessWidget {
                 child: Container(
                   width: 4,
                   height: 4,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -131,7 +132,7 @@ class _PropertyTypeOption extends StatelessWidget {
               ),
             Text(
               type.label,
-              style: TextStyle(
+              style: AppTypography.font(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,

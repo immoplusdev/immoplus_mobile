@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 
 class BottomImmoPlus extends StatelessWidget {
@@ -5,12 +6,12 @@ class BottomImmoPlus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
         height: 50,
         child: Center(
           child: Text(
             "©Afriq'Solus",
-            style: TextStyle(color: Color.fromARGB(255, 182, 181, 181)),
+            style: AppTypography.font(color: Color.fromARGB(255, 182, 181, 181)),
           ),
         ));
   }

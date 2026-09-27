@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
 
@@ -59,7 +58,7 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                       borderRadius: 16,
                       spacing: 4,
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14),
 
                     // Détails à droite
                     Expanded(
@@ -84,7 +83,7 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 if (subtitle?.isNotEmpty == true) ...[
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     subtitle!,
                                     style: AppTypography.bodySmall.copyWith(
