@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus/app/features/map_view/logics/map_card_overlay_service.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
@@ -310,15 +311,29 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
           ),
 
           // ══════════════════════════════════════════════
-          // ── SEARCH BAR EN HAUT ──
+          // ── RETOUR + SEARCH BAR EN HAUT ──
           // ══════════════════════════════════════════════
+          // Page à part entière (hors ShellRoute, pas de bottom nav) : le
+          // seul moyen de revenir en arrière est ce bouton (+ le geste/
+          // bouton système).
           Positioned(
             top: topPadding + 14,
             left: 16,
             right: 16,
-            child: _searchExpanded
-                ? _buildExpandedSearch()
-                : _buildCollapsedSearchBar(),
+            child: Row(
+              children: [
+                _buildMapButton(
+                  icon: Icons.arrow_back_ios_new_rounded,
+                  onTap: () => context.pop(),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _searchExpanded
+                      ? _buildExpandedSearch()
+                      : _buildCollapsedSearchBar(),
+                ),
+              ],
+            ),
           ),
 
           // ── Bouton "Voir les biens ici" ──

@@ -8,7 +8,10 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_m
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/app/data/enums/home_tab.dart';
+import 'package:immoplus/app/features/suggest/pages/search_container_page.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
@@ -55,6 +58,26 @@ class _SearchResultPageState extends State<SearchResultPage>
       getIt<BienImmobilierRepository>();
 
   late final TextEditingController _searchController;
+
+  /// Sous-filtre par type de bien — uniquement pour la catégorie "bien"
+  /// (achat), état local à cette page (pas l'ancien `FilterHandler` global
+  /// lié à la home, pour ne pas coupler les deux écrans).
+  static const List<EstateSubCategory> _estateSubCategories = [
+    EstateSubCategory.all,
+    EstateSubCategory.villa,
+    EstateSubCategory.duplex,
+    EstateSubCategory.studio,
+    EstateSubCategory.appartement,
+    EstateSubCategory.maison,
+  ];
+  EstateSubCategory _selectedSubCategory = EstateSubCategory.all;
+
+  HomeTab get _homeTab {
+    return HomeTab.values.firstWhere(
+      (t) => t.category == widget.category,
+      orElse: () => HomeTab.forYou,
+    );
+  }
 
   @override
   void onConnectionRestored() {
@@ -141,6 +164,11 @@ class _SearchResultPageState extends State<SearchResultPage>
         allFilters.add('{"_field": "aLouer", "_op": "eq", "_val": true}');
       } else if (widget.category == 'bien') {
         allFilters.add('{"_field": "aLouer", "_op": "eq", "_val": false}');
+        if (_selectedSubCategory != EstateSubCategory.all &&
+            _selectedSubCategory.value != null) {
+          allFilters.add(
+              '{"_field": "typeBienImmobilier", "_op": "eq", "_val": "${_selectedSubCategory.value}"}');
+        }
       }
 
       whereParams['_where'] = allFilters;
@@ -164,10 +192,52 @@ class _SearchResultPageState extends State<SearchResultPage>
     }
   }
 
+  void _onSubCategoryTap(EstateSubCategory category) {
+    if (category == _selectedSubCategory) return;
+    setState(() => _selectedSubCategory = category);
+    _estatePagingController.refresh();
+  }
+
+  Widget _buildEstateSubCategoryTabs() {
+    return SizedBox(
+      height: 32,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        itemCount: _estateSubCategories.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final item = _estateSubCategories[index];
+          final isSelected = item == _selectedSubCategory;
+          return GestureDetector(
+            onTap: () => _onSubCategoryTap(item),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primary : const Color(0xffEDF1F7),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Text(
+                item.label,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : const Color(0xff333333),
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isResidence = widget.category == 'residence';
     final showBanner = widget.bannerImageId?.isNotEmpty == true;
+    final showEstateSubTabs = widget.category == 'bien';
 
     final resultsList = isResidence
         ? PagedListView<int, ResidenceModel>(
@@ -221,8 +291,16 @@ class _SearchResultPageState extends State<SearchResultPage>
                 child: SuggestSearchBar(
                   controller: _searchController,
                   readOnly: true,
-                  onTap: () =>
-                      context.pop(), // Go back to search suggestions page
+                  onTap: () {
+                    context.pushNamed(
+                      SearchContainerPage.routeName,
+                      extra: {
+                        'homeTab': _homeTab,
+                        'lat': FilterHandler.lat,
+                        'lng': FilterHandler.long,
+                      },
+                    );
+                  },
                   showClearButton: true,
                   onClear: () => context.pop(),
                   onBackPressed: () => context.pop(),
@@ -246,6 +324,10 @@ class _SearchResultPageState extends State<SearchResultPage>
                   ),
                 ),
               ),
+            if (showEstateSubTabs) ...[
+              const SizedBox(height: 8),
+              _buildEstateSubCategoryTabs(),
+            ],
             Expanded(
               child: Padding(
                 padding:

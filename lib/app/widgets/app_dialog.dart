@@ -70,7 +70,7 @@ class AppDialog {
                   () {
                     context.pop();
                   },
-              child: const Text('Confirmer'),
+              child: Text('Confirmer'),
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:immoplus/app/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.dart';
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart';
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart';
+import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart';
 import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart';
@@ -77,6 +78,9 @@ class AppBlocs {
     ),
     BlocProvider<AdsCubit>(
       create: (context) => getIt<AdsCubit>()..fetchActiveCampaigns(),
+    ),
+    BlocProvider<ForYouCubit>(
+      create: (context) => getIt<ForYouCubit>(),
     ),
   ];
 }

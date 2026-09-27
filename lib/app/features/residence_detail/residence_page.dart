@@ -12,10 +12,12 @@ import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_highlights.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_know_section.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_logment_title2.dart';
+import 'package:immoplus/app/features/residence_detail/components/host_info_section.dart';
 import 'package:immoplus/app/features/residence_detail/components/detail_rooms.dart';
 import 'package:immoplus/app/features/residence_detail/components/inititial_detail_screen.dart';
 import 'package:immoplus/app/features/residence_detail/components/logment_bottom_bar.dart';
 import 'package:immoplus/app/features/residence_detail/cubit/residence_cubit.dart';
+import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
 import 'package:immoplus/app/logic/request_state.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/svgs_icons.dart';
@@ -196,10 +198,27 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
 
                 const _SliverDivider(),
 
+                // ── "À propos de votre hôte" (spec messagerie §2.1) ──
+                const DetailLogmentTitle2(title: 'À propos de votre hôte'),
+                const SliverGap(8),
+                HostInfoSection(residenceModel: data),
+
+                const _SliverDivider(),
+
                 // ── "À savoir" (Rules, Safety, Cancellation) ──
                 const DetailLogmentTitle2(title: 'À savoir'),
                 const SliverGap(12),
                 DetailKnowSection(residenceModel: data),
+
+                const _SliverDivider(),
+
+                // ── Besoin d'aide : contacter le support ImmoPlus ──
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: appPadding),
+                    child: const _SupportContactLink(),
+                  ),
+                ),
 
                 // ── Bottom spacing for bottom bar ──
                 const SliverGap(120),
@@ -473,6 +492,35 @@ class _SliverDivider extends StatelessWidget {
           height: 1,
           thickness: 0.5,
           color: Colors.grey.shade200,
+        ),
+      ),
+    );
+  }
+}
+
+// ─── "Besoin d'aide ? Contactez le support" ─────────────────────────────────
+class _SupportContactLink extends StatelessWidget {
+  const _SupportContactLink();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: () => MessageComposerSheet.showForSupport(context),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.support_agent_outlined, size: 18, color: Color(0xff2744de)),
+            const SizedBox(width: 6),
+            Text(
+              "Besoin d'aide ? Contactez le support",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xff2744de),
+              ),
+            ),
+          ],
         ),
       ),
     );

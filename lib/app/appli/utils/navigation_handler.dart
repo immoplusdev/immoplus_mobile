@@ -13,44 +13,32 @@ class NavigationHandler {
   SessionManager sessionManager;
   NavigationHandler(this.sessionManager);
   switchPage({required int id, required BuildContext context}) {
-    if (sessionManager.currentUser == null) {
-      context.read<NavigationCubit>().switchPage(
-            id == 0
-                ? PageState.home
-                : id == 1
-                    ? PageState.explore
-                    : id == 2
-                        ? PageState.vivre
-                        : id == 3
-                            ? PageState.forMe
-                            : PageState.account,
-          );
-    } else {
-      context.read<NavigationCubit>().switchPage(
-            id == 0
-                ? PageState.home
-                : id == 1
-                    ? PageState.explore
-                    : id == 2
-                        ? PageState.vivre
-                        : id == 3
-                            ? PageState.forMe
-                            : PageState.account,
-          );
-    }
+    context.read<NavigationCubit>().switchPage(
+          id == 0
+              ? PageState.home
+              : id == 1
+                  ? PageState.forMe
+                  : id == 2
+                      ? PageState.vivre
+                      : id == 3
+                          ? PageState.messages
+                          : PageState.account,
+        );
 
     switch (id) {
       case 0:
         context.go('/homePage');
         break;
       case 1:
-        context.go('/map');
+        context.goNamed(MyChoicePage.name);
         break;
       case 2:
         context.go('/vivre');
         break;
       case 3:
-        context.goNamed(MyChoicePage.name);
+        // Onglet "Messages" — remplace temporairement "Carte"/"/map" pour
+        // les tests de bout en bout du parcours de messagerie (spec §1).
+        context.go('/messages');
         break;
       default:
         context.goNamed(AccountPage.name);

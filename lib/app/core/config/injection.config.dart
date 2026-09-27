@@ -28,6 +28,8 @@ import 'package:immoplus/app/core/services/analytics_service.dart' as _i1058;
 import 'package:immoplus/app/core/services/auth_redirect_service.dart' as _i944;
 import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart'
     as _i99;
+import 'package:immoplus/app/core/services/messaging_socket_service.dart'
+    as _i570;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/core/services/reverse_search_socket_service.dart'
@@ -39,11 +41,18 @@ import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
     as _i398;
 import 'package:immoplus/app/data/repositories/furniture_repository.dart'
     as _i976;
+import 'package:immoplus/app/data/repositories/home_feed_repository.dart'
+    as _i922;
 import 'package:immoplus/app/data/repositories/hotel_repository.dart' as _i374;
 import 'package:immoplus/app/data/repositories/kyc_repository.dart' as _i184;
+import 'package:immoplus/app/data/repositories/messaging_repository.dart'
+    as _i971;
 import 'package:immoplus/app/data/repositories/notification_repository.dart'
     as _i371;
+import 'package:immoplus/app/data/repositories/poll_repository.dart' as _i610;
 import 'package:immoplus/app/data/repositories/rating_repository.dart' as _i568;
+import 'package:immoplus/app/data/repositories/relais_repository.dart'
+    as _i1054;
 import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart'
@@ -65,6 +74,8 @@ import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart'
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart' as _i79;
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
     as _i374;
+import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart'
+    as _i943;
 import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart'
     as _i123;
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
@@ -75,6 +86,10 @@ import 'package:immoplus/app/features/hotel/cubit/hotel_room_cubit.dart'
     as _i634;
 import 'package:immoplus/app/features/map_view/logics/map_viwer.cubit.dart'
     as _i1028;
+import 'package:immoplus/app/features/messaging/logic/conversation_thread_cubit.dart'
+    as _i835;
+import 'package:immoplus/app/features/messaging/logic/inbox_cubit.dart'
+    as _i169;
 import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart'
     as _i430;
 import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart'
@@ -97,6 +112,7 @@ import 'package:immoplus/app/logic/authentification/registration_cubit.dart'
     as _i783;
 import 'package:immoplus/app/logic/banners/banners_cubit.dart' as _i974;
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart' as _i1001;
+import 'package:immoplus/app/services/device_id_service.dart' as _i639;
 import 'package:injectable/injectable.dart' as _i526;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -124,14 +140,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i415.EasyLoadingHandler());
     gh.lazySingleton<_i242.EnvHandler>(() => _i242.EnvHandler());
     gh.lazySingleton<_i1058.AnalyticsService>(() => _i1058.AnalyticsService());
+    gh.lazySingleton<_i570.MessagingSocketService>(
+        () => _i570.MessagingSocketService());
     gh.lazySingleton<_i57.RemoteConfigService>(
         () => _i57.RemoteConfigService());
     gh.lazySingleton<_i944.AuthRedirectService>(
         () => _i944.AuthRedirectService());
-    gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
-    gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i997.ReverseSearchSocketService>(
         () => _i997.ReverseSearchSocketService());
+    gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
+    gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
+    gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
@@ -164,6 +183,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i743.SuggestRepository(gh<_i361.Dio>()));
     gh.factory<_i143.ResidenceRepository>(
         () => _i143.ResidenceRepository(gh<_i361.Dio>()));
+    gh.factory<_i971.MessagingRepository>(
+        () => _i971.MessagingRepository(gh<_i361.Dio>()));
+    gh.factory<_i1054.RelaisRepository>(
+        () => _i1054.RelaisRepository(gh<_i361.Dio>()));
     gh.factory<_i184.KycRepository>(() => _i184.KycRepository(gh<_i361.Dio>()));
     gh.factory<_i374.HotelRepository>(
         () => _i374.HotelRepository(gh<_i361.Dio>()));
@@ -179,6 +202,11 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i430.NotificationCubit>(
         () => _i430.NotificationCubit(gh<_i371.NotificationRepository>()));
+    gh.factory<_i169.InboxCubit>(() => _i169.InboxCubit(
+          gh<_i971.MessagingRepository>(),
+          gh<_i570.MessagingSocketService>(),
+          gh<_i22.SessionManager>(),
+        ));
     gh.factory<_i946.BookingServices>(
         () => _i946.BookingServices(gh<_i361.Dio>()));
     gh.factory<_i1028.MapViwerCubit>(() => _i1028.MapViwerCubit(
@@ -199,10 +227,20 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i184.KycRepository>(),
           gh<_i1058.AnalyticsService>(),
         ));
+    gh.factory<_i610.PollRepository>(() => _i610.PollRepository(
+          gh<_i361.Dio>(),
+          gh<_i639.DeviceIdService>(),
+          gh<_i22.SessionManager>(),
+        ));
     gh.factory<_i427.HotelCubit>(
         () => _i427.HotelCubit(gh<_i374.HotelRepository>()));
     gh.factory<_i634.HotelRoomCubit>(
         () => _i634.HotelRoomCubit(gh<_i374.HotelRepository>()));
+    gh.factory<_i835.ConversationThreadCubit>(
+        () => _i835.ConversationThreadCubit(
+              gh<_i971.MessagingRepository>(),
+              gh<_i570.MessagingSocketService>(),
+            ));
     gh.factory<_i540.RatingCubit>(
         () => _i540.RatingCubit(gh<_i568.RatingRepository>()));
     gh.factory<_i368.HomePageCubit>(() => _i368.HomePageCubit(
@@ -211,6 +249,10 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i123.FurnitureCubit>(
         () => _i123.FurnitureCubit(gh<_i976.FurnitureRepository>()));
+    gh.factory<_i922.HomeFeedRepository>(() => _i922.HomeFeedRepository(
+          gh<_i361.Dio>(),
+          gh<_i639.DeviceIdService>(),
+        ));
     gh.lazySingleton<_i99.ClientReservationOverlayService>(
         () => _i99.ClientReservationOverlayService(
               gh<_i143.ResidenceRepository>(),
@@ -243,6 +285,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i997.ReverseSearchSocketService>(),
           gh<_i22.SessionManager>(),
         ));
+    gh.lazySingleton<_i943.ForYouCubit>(
+        () => _i943.ForYouCubit(gh<_i922.HomeFeedRepository>()));
     return this;
   }
 }

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
+import 'package:immoplus/app/features/for_you/for_you_view.dart';
+import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/estates_list.dart';
 import 'package:immoplus/app/features/home_page/screens/furnitures_list.dart';
 import 'package:immoplus/app/features/home_page/screens/lands_list.dart';
@@ -29,7 +32,9 @@ class HomePageState {
 
   /// Refresh sécurisé : incrémente le token pour l'index de la tab résidences
   static void refreshPage(int index) {
-    if (index == HomeTab.residence.value) {
+    if (index == HomeTab.forYou.value) {
+      getIt<ForYouCubit>().fetch();
+    } else if (index == HomeTab.residence.value) {
       refreshResidences();
     } else {
       getPageListController(index).refresh();
@@ -45,6 +50,7 @@ class HomePageState {
       orElse: () => HomeTab.residence,
     );
     return switch (tab) {
+      HomeTab.forYou => const ForYouView(),
       HomeTab.residence => const ResidencesList(),
       HomeTab.hotel => const SizedBox.shrink(),
       HomeTab.location => const EstatesList(),
@@ -53,12 +59,17 @@ class HomePageState {
     };
   }
 
+  /// Ne couvre pas `HomeTab.forYou` : son flux (sections hétérogènes,
+  /// pagination par curseur) ne rentre pas dans le `PagingController<int,T>`
+  /// générique — géré séparément via `ForYouCubit` (voir `home_page.dart`,
+  /// `onRefresh`).
   static PagingController getPageListController(int index) {
     final tab = HomeTab.values.firstWhere(
       (t) => t.value == index,
       orElse: () => HomeTab.residence,
     );
     return switch (tab) {
+      HomeTab.forYou => pagingControllerResidence,
       HomeTab.residence => pagingControllerResidence,
       HomeTab.hotel => pagingControllerResidence,
       HomeTab.location => pagingControllerEstate,

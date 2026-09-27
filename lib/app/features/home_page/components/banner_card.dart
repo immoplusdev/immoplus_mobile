@@ -56,7 +56,7 @@ class _BannerCardState extends State<BannerCard> {
             padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
             decoration: BoxDecoration(
               color: _getBackgroundColor(activeBanners),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(90),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -65,7 +65,7 @@ class _BannerCardState extends State<BannerCard> {
                   carouselController: _carouselController,
                   itemCount: activeBanners.length,
                   options: CarouselOptions(
-                    height: 24,
+                    height: 40,
                     viewportFraction: 1.0,
                     enableInfiniteScroll: activeBanners.length > 1,
                     autoPlay: activeBanners.length > 1,

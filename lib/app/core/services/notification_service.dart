@@ -92,7 +92,8 @@ class NotificationService {
         final typeString = data['type'] as String?;
         final id = data['id']?.toString() ??
             data['alertId']?.toString() ??
-            data['reservationId']?.toString();
+            data['reservationId']?.toString() ??
+            data['conversationId']?.toString();
 
         final type = PushNotificationType.fromString(typeString);
 

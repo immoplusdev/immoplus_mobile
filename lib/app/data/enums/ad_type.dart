@@ -2,7 +2,8 @@ enum AdType {
   image('IMAGE'),
   video('VIDEO'),
   carousel('CAROUSEL'),
-  videoCarousel('VIDEO_CAROUSEL');
+  videoCarousel('VIDEO_CAROUSEL'),
+  flashOffer('FLASH_OFFER');
 
   final String value;
   const AdType(this.value);

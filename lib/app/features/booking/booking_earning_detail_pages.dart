@@ -65,7 +65,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   context: context,
-                  builder: (context) => Container(
+                  builder: (context) => SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
                     child: Scaffold(
                       backgroundColor: AppColors.scafold,

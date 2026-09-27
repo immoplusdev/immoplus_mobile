@@ -18,8 +18,10 @@ class AdCampaignModel with _$AdCampaignModel {
   const factory AdCampaignModel({
     required int id,
     required String placement,
+    @JsonKey(name: 'section_position') String? sectionPosition,
     @JsonKey(name: 'position_index') int? positionIndex,
     @JsonKey(name: 'campaign_category') String? campaignCategory,
+    String? location,
     required String type,
     required AdCampaignContent content,
     required AdCampaignMedia media,

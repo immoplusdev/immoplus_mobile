@@ -1,9 +1,9 @@
-name: Deploy iOS to TestFlight
+name: Deploy iOS to TestFlights
 
 on:
   push:
     branches:
-      - test/develop
+      - develop
   workflow_dispatch:
     inputs:
       environment:
@@ -117,7 +117,6 @@ jobs:
         with:
           flutter-version: '3.41.4'
           channel: 'stable'
-          flutter-version: '3.41.4'
           cache: true
 
       - name: 🔍 Afficher versions Flutter/Dart

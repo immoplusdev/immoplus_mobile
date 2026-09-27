@@ -22,9 +22,12 @@ class ThemeConfig {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: CupertinoColors.secondarySystemFill,
-          labelStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.black),
-          prefixStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.systemGrey),
-          hintStyle: AppTypography.bodyMedium.copyWith(color: const Color.fromARGB(179, 92, 90, 90)),
+          labelStyle:
+              AppTypography.bodyMedium.copyWith(color: CupertinoColors.black),
+          prefixStyle: AppTypography.bodyMedium
+              .copyWith(color: CupertinoColors.systemGrey),
+          hintStyle: AppTypography.bodyMedium
+              .copyWith(color: const Color.fromARGB(179, 92, 90, 90)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
@@ -76,8 +79,10 @@ class ThemeConfig {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: CupertinoColors.systemFill.darkColor,
-          labelStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.white),
-          prefixStyle: AppTypography.bodyMedium.copyWith(color: CupertinoColors.systemGrey3),
+          labelStyle:
+              AppTypography.bodyMedium.copyWith(color: CupertinoColors.white),
+          prefixStyle: AppTypography.bodyMedium
+              .copyWith(color: CupertinoColors.systemGrey3),
           hintStyle: AppTypography.bodyMedium.copyWith(color: Colors.white70),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

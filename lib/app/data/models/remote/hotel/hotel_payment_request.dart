@@ -8,6 +8,7 @@ class HotelPaymentRequest with _$HotelPaymentRequest {
   const factory HotelPaymentRequest({
     required String paymentMethod,
     required String paymentCredentials,
+    @JsonKey(includeIfNull: false) String? otp,
   }) = _HotelPaymentRequest;
 
   factory HotelPaymentRequest.fromJson(Map<String, dynamic> json) =>

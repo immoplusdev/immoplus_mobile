@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -88,6 +88,7 @@ void main() async {
     );
   };
 
+  await AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
   WidgetsBinding.instance.addObserver(_DeepLinkEater());
   // dotenv est chargé dans configureDependencies() → Stripe s'init après
   await configureDependencies();
@@ -100,4 +101,3 @@ void main() async {
   OneSignal.initialize("3dcf3bc5-e4c7-4328-9d30-0f33cdedb1f0");
   return runApp(const MyApp());
 }
-

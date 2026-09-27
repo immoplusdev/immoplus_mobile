@@ -41,7 +41,7 @@ class VisitListTileAction extends StatelessWidget {
         child: Row(
           children: [
             // Leading icon / image
-            Container(
+            SizedBox(
               width: 56,
               // height: 56,
               // decoration: BoxDecoration(

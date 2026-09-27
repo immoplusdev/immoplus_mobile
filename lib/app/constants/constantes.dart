@@ -16,6 +16,7 @@ enum PageState {
   map,
   account,
   forMe,
+  messages,
 }
 
 enum LogmentType {
@@ -71,6 +72,10 @@ class Constantes {
 
   /// Nombre de propositions non vues pour le badge Imatch.
   static ValueNotifier<int> imatchBadgeCount = ValueNotifier<int>(0);
+
+  /// Total des messages non lus (tous fils confondus) pour le badge de
+  /// l'onglet Messages de la tab bar.
+  static ValueNotifier<int> unreadMessagesCount = ValueNotifier<int>(0);
   static ValueNotifier<VilleModel> villeUser =
       ValueNotifier<VilleModel>(const VilleModel(id: "0000", name: ''));
 

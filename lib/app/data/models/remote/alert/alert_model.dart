@@ -106,6 +106,7 @@ class AlertCriteriaModel with _$AlertCriteriaModel {
   factory AlertCriteriaModel.fromJson(Map<String, dynamic> json) =>
       _$AlertCriteriaModelFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       if (extras != null && extras!.isNotEmpty) 'extras': extras,

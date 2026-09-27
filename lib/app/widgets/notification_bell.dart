@@ -5,7 +5,6 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class NotificationBell extends StatelessWidget {
   const NotificationBell({super.key});
@@ -25,9 +24,9 @@ class NotificationBell extends StatelessWidget {
       child: Container(
         width: 48,
         height: 48,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.F2F2F2,
+          color: Color(0xFFEFF4FF),
         ),
         child: Center(child: SvgPicture.asset("assets/svgs/icons/bell.svg")),
       ),
