@@ -79,7 +79,7 @@ class FurnitureDetailName extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: color,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 1.5),
+                      border: Border.all(color: AppColors.white, width: 1.5),
                     ),
                   ),
                 );

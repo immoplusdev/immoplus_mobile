@@ -539,9 +539,42 @@ class AppColors {
   // 3. COULEURS SPÉCIFIQUES APPLICATION HORS FIGMA (Avatars, Dégradés Auth)
   // =========================================================================
 
-  static const Color white = Colors.white;
-  static const Color black = Colors.black;
-  static const Color transparent = Colors.transparent;
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color(0xFF000000);
+  static const Color transparent = Color(0x00000000);
+  static const Color grey = gray500;
+  static const Color gray = gray500;
+  static const Color red = red500;
+  static const Color green = green500;
+  static const Color orange = orange500;
+  static const Color blue = blue500;
+  static const Color amber = orange500;
+  static const Color purple = purple7A5AF8;
+  static const Color yellow = gold400;
+  static const Color pink = Color(0xFFE91E63);
+  static const Color pinkAccent = Color(0xFFFF4081);
+  static const Color cyan = Color(0xFF00BCD4);
+  static const Color indigo = Color(0xFF3F51B5);
+  static const Color deepPurple = Color(0xFF673AB7);
+  static const Color lightGreen = Color(0xFF8BC34A);
+  static const Color blueGrey = gray400;
+  static const Color redAccent = red500;
+
+  // ── Opacités Constantes (Black & White) ──
+  static const Color black87 = Color(0xDD000000);
+  static const Color black54 = Color(0x8A000000);
+  static const Color black45 = Color(0x73000000);
+  static const Color black38 = Color(0x61000000);
+  static const Color black26 = Color(0x42000000);
+  static const Color black12 = Color(0x1F000000);
+  static const Color white70 = Color(0xB3FFFFFF);
+  static const Color white60 = Color(0x99FFFFFF);
+  static const Color white54 = Color(0x8AFFFFFF);
+  static const Color white38 = Color(0x61FFFFFF);
+  static const Color white30 = Color(0x4DFFFFFF);
+  static const Color white24 = Color(0x3DFFFFFF);
+  static const Color white12 = Color(0x1FFFFFFF);
+  static const Color white10 = Color(0x1AFFFFFF);
 
   // ── Social & Paiements ──
   static const Color whatsAppGreen = Color(0xFF25D366);
@@ -588,7 +621,13 @@ class AppColors {
   static Color get surface => current.surface;
   static Color get noSelected => current.inactive;
   static Color get success => current.success;
+  static Color get successDark => current.successDark;
   static Color get warning => current.warning;
+  static Color get warningDark => current.warningDark;
   static Color get error => current.error;
+  static Color get errorDark => current.errorDark;
   static Color get info => current.info;
+  static Color get previewBackground => current.previewBackground;
+  static Color get borderLight => current.borderLight;
+  static Color get divider => current.divider;
 }

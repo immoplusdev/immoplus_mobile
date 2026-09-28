@@ -63,7 +63,7 @@ class ForYouTopRatedTile extends StatelessWidget {
                       baseColor: AppColors.immoBorderStrong,
                       highlightColor: AppColors.immoBgSurfaceMuted,
                       period: const Duration(milliseconds: 500),
-                      child: Container(color: Colors.white),
+                      child: Container(color: AppColors.white),
                     ),
                     errorWidget: (context, url, error) => Container(
                       color: AppColors.immoBorderDefault,
@@ -78,7 +78,7 @@ class ForYouTopRatedTile extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.75)],
+                        colors: [AppColors.transparent, AppColors.black.withValues(alpha: 0.75)],
                         stops: const [0.4, 1.0],
                       ),
                     ),
@@ -127,7 +127,7 @@ class _Info extends StatelessWidget {
           style: AppTypography.font(
             fontWeight: FontWeight.w400,
             fontSize: 16,
-            color: Colors.white,
+            color: AppColors.white,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -137,7 +137,7 @@ class _Info extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Iconsax.location, size: 12, color: Colors.white),
+              const Icon(Iconsax.location, size: 12, color: AppColors.white),
               SizedBox(width: 4),
               Flexible(
                 child: Text(
@@ -145,7 +145,7 @@ class _Info extends StatelessWidget {
                   style: AppTypography.font(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -161,7 +161,7 @@ class _Info extends StatelessWidget {
             style: AppTypography.font(
               fontWeight: FontWeight.w500,
               fontSize: 9,
-              color: Colors.white.withValues(alpha: 0.85),
+              color: AppColors.white.withValues(alpha: 0.85),
             ),
           ),
         ],
@@ -189,7 +189,7 @@ class _ReviewerAvatarStack extends StatelessWidget {
   /// gauche) au plus foncé (la bulle "+N", tout à droite) — dégradé,
   /// pas une couleur unique par avatar.
   static const Color _lightest = Color(0xFFAEB8FF);
-  static const Color _darkest = Color(0xFF2744DE);
+  static const Color _darkest = AppColors.blue500;
 
   static List<ForYouReviewerAvatar> _displayAvatars(
       List<ForYouReviewerAvatar> avatars, int total) {
@@ -281,7 +281,7 @@ class _ReviewerAvatar extends StatelessWidget {
         style: AppTypography.font(
           fontWeight: FontWeight.w500,
           fontSize: 20,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );
@@ -322,7 +322,7 @@ class _RemainingBubble extends StatelessWidget {
         style: AppTypography.font(
           fontWeight: FontWeight.w700,
           fontSize: 13,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

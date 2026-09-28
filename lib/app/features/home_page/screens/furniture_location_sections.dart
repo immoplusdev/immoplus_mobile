@@ -178,7 +178,7 @@ class _FurnitureLocationSectionsListState
                           height: 20,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Colors.black12,
+                              color: AppColors.black12,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(4)),
                             ),
@@ -265,7 +265,7 @@ class FurnituresHorizontalListByLocation extends StatelessWidget {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color:
-                    furnitures.isNotEmpty ? Colors.black : AppColors.immoTextDisabled,
+                    furnitures.isNotEmpty ? AppColors.black : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

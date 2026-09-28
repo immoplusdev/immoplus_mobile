@@ -166,7 +166,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
             automaticallyImplyLeading: false,
             title: Text('Informations personnelles'),
             backgroundColor: AppColors.whiteBackground,
-            surfaceTintColor: Colors.transparent,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             leading: IconButton(
               icon: Icon(Iconsax.arrow_left, size: 24),
@@ -419,7 +419,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
       avatar = Shimmer.fromColors(
         baseColor: AppColors.immoBorderDefault,
         highlightColor: AppColors.immoBgSurfaceMuted,
-        child: Container(color: Colors.white),
+        child: Container(color: AppColors.white),
       );
     } else if (hasLocalFile) {
       avatar = Image.file(
@@ -435,7 +435,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         placeholder: (_, __) => Shimmer.fromColors(
           baseColor: AppColors.immoBorderDefault,
           highlightColor: AppColors.immoBgSurfaceMuted,
-          child: Container(color: Colors.white),
+          child: Container(color: AppColors.white),
         ),
         errorWidget: (_, __, ___) => EzCircleAvatar(
           name: fullName.isNotEmpty ? fullName : 'U',
@@ -479,7 +479,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2.5),
+                    border: Border.all(color: AppColors.white, width: 2.5),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.3),
@@ -491,7 +491,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                   child: Icon(
                     Iconsax.camera,
                     size: 14,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),

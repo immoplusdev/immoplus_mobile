@@ -13,7 +13,7 @@ class DateSelectionSheet extends StatefulWidget {
     return showModalBottomSheet<DateTimeRange>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => DateSelectionSheet(initialStartDate: start, initialEndDate: end),
     );
@@ -71,16 +71,16 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
               ),
               firstDayOfWeek: 1, // Start on Monday
               controlsTextStyle: AppTypography.font(
-                color: Colors.black,
+                color: AppColors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
               dayTextStyle: AppTypography.font(
-                color: Colors.black,
+                color: AppColors.black,
                 fontWeight: FontWeight.w500,
               ),
               selectedDayTextStyle: AppTypography.font(
-                color: Colors.white,
+                color: AppColors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -356,7 +356,7 @@ class _ConversationTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               horizontal: ChatTokens.s12, vertical: ChatTokens.s10),
           decoration: BoxDecoration(
-            color: isActive ? ChatTokens.brandSurface : Colors.transparent,
+            color: isActive ? ChatTokens.brandSurface : AppColors.transparent,
             borderRadius: BorderRadius.circular(ChatTokens.s12),
             border: isActive
                 ? Border.all(color: ChatTokens.brandBorder15, width: 1)

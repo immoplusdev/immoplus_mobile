@@ -18,7 +18,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
         "${formatDate.format(Utils.toDateTime(reservationModel.dateFin))} avant ${reservationModel.residence.heureDepart} ";
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppColors.immoTextSecondary),
       ),
@@ -33,7 +33,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
               contentPadding: EdgeInsets.zero.copyWith(left: 3),
               titleTextStyle: AppTypography.labelMedium.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               subtitle: AutoSizeText(dateHeureDebut),
             ),
@@ -49,7 +49,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
               title: Text('DÉPART'),
               titleTextStyle: AppTypography.labelMedium.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               subtitle: (reservationModel.datesReservation.isNotEmpty)
                   ? AutoSizeText(

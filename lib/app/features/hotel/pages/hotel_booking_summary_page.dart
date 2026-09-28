@@ -61,13 +61,13 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 shape: BoxShape.circle,
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
                 icon:
-                    const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+                    const Icon(Icons.arrow_back, color: AppColors.black, size: 20),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -158,10 +158,10 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2744DE).withOpacity(0.06),
+                        color: AppColors.immoBrandPrimary.withOpacity(0.06),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                            color: const Color(0xFF2744DE).withOpacity(0.15)),
+                            color: AppColors.immoBrandPrimary.withOpacity(0.15)),
                       ),
                       padding: const EdgeInsets.all(20),
                       child: Column(
@@ -173,14 +173,14 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                               Text(
                                 "ACOMPTE À LA RÉSERVATION",
                                 style: AppTypography.font(
-                                    color: Color(0xFF2744DE),
+                                    color: AppColors.immoBrandPrimary,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 "${estimation.acompte.pourcentage}%",
                                 style: AppTypography.font(
-                                    color: Color(0xFF2744DE),
+                                    color: AppColors.immoBrandPrimary,
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -212,13 +212,13 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                           Text(
                             "À payez maintenant",
                             style: AppTypography.font(
-                                color: Color(0xFF2744DE),
+                                color: AppColors.immoBrandPrimary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500),
                           ),
                           const Gap(16),
                           Divider(
-                              color: const Color(0xFF2744DE).withOpacity(0.15),
+                              color: AppColors.immoBrandPrimary.withOpacity(0.15),
                               height: 1,
                               thickness: 0.5),
                           const Gap(16),
@@ -228,7 +228,7 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                               Text(
                                 "Solde au check-in",
                                 style: AppTypography.font(
-                                    color: Colors.black.withOpacity(0.7),
+                                    color: AppColors.black.withOpacity(0.7),
                                     fontSize: 14),
                               ),
                               Text(
@@ -236,7 +236,7 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                                 style: AppTypography.font(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
-                                    color: Colors.black),
+                                    color: AppColors.black),
                               ),
                             ],
                           ),
@@ -258,9 +258,9 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2744DE).withOpacity(0.06),
+                        color: AppColors.immoBrandPrimary.withOpacity(0.06),
                         border: Border.all(
-                            color: const Color(0xFF2744DE).withOpacity(0.3)),
+                            color: AppColors.immoBrandPrimary.withOpacity(0.3)),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(
@@ -268,7 +268,7 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                       child: Text(
                         "Annulation gratuite",
                         style: AppTypography.font(
-                            color: Color(0xFF2744DE),
+                            color: AppColors.immoBrandPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 14),
                       ),

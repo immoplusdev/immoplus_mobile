@@ -93,7 +93,7 @@ class _MarkerWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(_Constants.borderRadius),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
+                color: AppColors.black.withValues(alpha: 0.12),
                 blurRadius: 8,
                 spreadRadius: 0,
                 offset: const Offset(0, 2),
@@ -124,7 +124,7 @@ class _MarkerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: textColor ?? Colors.white,
+          color: textColor ?? AppColors.white,
           width: _Constants.imageBorderWidth,
         ),
       ),
@@ -132,10 +132,10 @@ class _MarkerWidget extends StatelessWidget {
         child: imageBytes != null
             ? Image.memory(imageBytes!, fit: BoxFit.cover)
             : Container(
-                color: Colors.white24,
+                color: AppColors.white24,
                 child: Icon(
                   Icons.home_rounded,
-                  color: textColor ?? Colors.white,
+                  color: textColor ?? AppColors.white,
                   size: _Constants.iconSize,
                 ),
               ),
@@ -147,7 +147,7 @@ class _MarkerWidget extends StatelessWidget {
     return Text(
       price,
       style: AppTypography.font(
-        color: textColor ?? Colors.white,
+        color: textColor ?? AppColors.white,
         fontWeight: FontWeight.w700,
         fontSize: _Constants.fontSize,
       ),

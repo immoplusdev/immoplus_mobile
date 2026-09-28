@@ -239,7 +239,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
             imageUrl: Utils.getImagePath(id: bien.images.first),
             price: "${CurrencyFormatter().format(bien.prix.toString())} F",
             bgColor: AppColors.white,
-            textColor: Colors.black);
+            textColor: AppColors.black);
 
         return Marker(
           icon: icon,

@@ -38,7 +38,7 @@ class RecommendationForYouTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasImage = images.isNotEmpty;
     final dotColor = hasImage ? AppColors.immoTextDisabled : AppColors.primary;
-    final textColor = hasImage ? Colors.black87 : AppColors.primary;
+    final textColor = hasImage ? AppColors.black87 : AppColors.primary;
 
     return InkWell(
       onTap: onTap,

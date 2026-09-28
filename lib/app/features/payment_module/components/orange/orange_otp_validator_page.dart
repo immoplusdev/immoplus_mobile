@@ -67,7 +67,7 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
               Transform.scale(
                 scale: 2.5,
                 child: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.orange),
                   strokeWidth: 2,
                 ),
               ),
@@ -97,9 +97,9 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
         ),
         CustomButtom(
           elevation: 2,
-          color: Colors.white,
+          color: AppColors.white,
           text: 'Composer #144*82#',
-          textColor: Colors.black,
+          textColor: AppColors.black,
           onClick: () {
             Utils.ssdPayment(
               paymentType: OPERATOR_NAME.Orange.name.toLowerCase(),
@@ -127,7 +127,7 @@ class _OrangeOptValidatorPageState extends State<OrangeOptValidatorPage> {
                 setState(() => _otp = value);
               },
               otpFieldStyle: OtpFieldStyle(
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.white,
               ),
               length: 4,
               width: MediaQuery.of(context).size.width,

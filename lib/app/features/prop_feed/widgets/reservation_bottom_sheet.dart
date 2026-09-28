@@ -217,12 +217,12 @@ class ReservationBottomSheet extends StatelessWidget {
       isScrollControlled: true,
       useRootNavigator: true,
       useSafeArea: false,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black54,
+      backgroundColor: AppColors.transparent,
+      barrierColor: AppColors.black54,
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: FutureBuilder<ReservationSheetResult>(
@@ -265,7 +265,7 @@ class ReservationBottomSheet extends StatelessWidget {
                         style: AppTypography.font(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1A1A2E),
+                          color: AppColors.navy900,
                         ),
                       ),
                       SizedBox(height: 6),
@@ -339,8 +339,8 @@ class ReservationBottomSheet extends StatelessWidget {
       isScrollControlled: true,
       useRootNavigator: true,
       useSafeArea: false,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black54,
+      backgroundColor: AppColors.transparent,
+      barrierColor: AppColors.black54,
       //showDragHandle: true,
       builder: (context) {
         Widget content = ReservationBottomSheet(
@@ -368,7 +368,7 @@ class ReservationBottomSheet extends StatelessWidget {
         }
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: content,
@@ -475,7 +475,7 @@ class ReservationBottomSheet extends StatelessWidget {
                             Text(
                               'Description',
                               style: AppTypography.font(
-                                color: Colors.black,
+                                color: AppColors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -554,10 +554,10 @@ class ReservationBottomSheet extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 border: Border(
                   top: BorderSide(
-                      color: Colors.black.withValues(alpha: 0.1), width: 0.5),
+                      color: AppColors.black.withValues(alpha: 0.1), width: 0.5),
                 ),
               ),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
@@ -805,7 +805,7 @@ class _FurnitureCaracteristiques extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A2E),
+                color: AppColors.navy900,
               ),
             ),
             SizedBox(height: 8),
@@ -835,11 +835,11 @@ class _CaracChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F4FF),
+        color: AppColors.previewBackground,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -855,7 +855,7 @@ class _CaracChip extends StatelessWidget {
             style: AppTypography.font(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A2E),
+              color: AppColors.navy900,
               letterSpacing: 0.2,
             ),
           ),
@@ -876,11 +876,11 @@ class _ColorChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F4FF),
+        color: AppColors.previewBackground,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -891,7 +891,7 @@ class _ColorChip extends StatelessWidget {
         style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF1A1A2E),
+          color: AppColors.navy900,
           letterSpacing: 0.2,
         ),
       ),

@@ -314,7 +314,7 @@ class _EstatesListState extends State<EstatesList> with ConnectivityMixin {
                               height: 20,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: Colors.black12,
+                                  color: AppColors.black12,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(4)),
                                 ),
@@ -422,7 +422,7 @@ class EstatesHorizontalSectionWidget extends StatelessWidget {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: section.biens.isNotEmpty
-                    ? Colors.black
+                    ? AppColors.black
                     : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,

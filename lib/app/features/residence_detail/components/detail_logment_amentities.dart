@@ -85,7 +85,7 @@ class _AmenityItem extends StatelessWidget {
             Icon(
               iconsaxIcon,
               size: 22,
-              color: Color(0xff2744de),
+              color: AppColors.immoBrandPrimary,
             )
           else if (svgPath != null)
             SvgPicture.asset(
@@ -93,12 +93,12 @@ class _AmenityItem extends StatelessWidget {
               height: 22,
               width: 22,
               colorFilter: ColorFilter.mode(
-                Color(0xff2744de),
+                AppColors.immoBrandPrimary,
                 BlendMode.srcIn,
               ),
             )
           else
-            Icon(Iconsax.element_4, size: 22, color: Color(0xff2744de)),
+            Icon(Iconsax.element_4, size: 22, color: AppColors.immoBrandPrimary),
           SizedBox(width: 12),
           Flexible(
             child: Text(

@@ -32,7 +32,7 @@ class EmptyChatState extends StatefulWidget {
 }
 
 class _EmptyChatStateState extends State<EmptyChatState> {
-  static const Color _ink = Color(0xFF1A1A1A);
+  static const Color _ink = AppColors.gray900;
   static const Color _placeholder = Color(0xFFBBBBBB);
   static const Color _composerBorder = Color(0xFFF0F0F0);
 
@@ -209,13 +209,13 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
+              color: AppColors.black.withValues(alpha: 0.12),
               blurRadius: 28,
               spreadRadius: 1,
               offset: const Offset(0, 12),
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.black.withValues(alpha: 0.06),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -231,14 +231,14 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withValues(alpha: 0.95),
+                    AppColors.white.withValues(alpha: 0.95),
                     const Color(0xFFF5F3EF).withValues(alpha: 0.85),
                     const Color(0xFFE8E4DC).withValues(alpha: 0.75),
                   ],
                   stops: const [0.0, 0.55, 1.0],
                 ),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: AppColors.white.withValues(alpha: 0.9),
                   width: 1,
                 ),
               ),
@@ -289,8 +289,8 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.white.withValues(alpha: 0.95),
-                              Colors.white.withValues(alpha: 0),
+                              AppColors.white.withValues(alpha: 0.95),
+                              AppColors.white.withValues(alpha: 0),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(60),
@@ -429,7 +429,7 @@ class _HeroComposer extends StatelessWidget {
       height: 54,
       padding: const EdgeInsets.fromLTRB(20, 0, 8, 0),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: borderColor, width: 0.8),
       ),
@@ -474,7 +474,7 @@ class _HeroComposer extends StatelessWidget {
                     isDense: true,
                     isCollapsed: true,
                     filled: true,
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.transparent,
                     contentPadding: EdgeInsets.symmetric(vertical: 18),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -539,7 +539,7 @@ class _SendButtonState extends State<_SendButton> {
             child: const Icon(
               Iconsax.arrow_up_3,
               size: 18,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ),
@@ -591,13 +591,13 @@ class _SuggestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Ink(
           decoration: BoxDecoration(
-            color: Colors.transparent,
+            color: AppColors.transparent,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: AppColors.primary.withValues(alpha: 0.25),

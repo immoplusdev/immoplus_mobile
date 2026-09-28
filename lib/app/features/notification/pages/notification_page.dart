@@ -127,9 +127,9 @@ class _NotificationsPageState extends State<NotificationsPage>
       child: Builder(
         builder: (context) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               centerTitle: false,
               title: Text('Notifications'),
@@ -230,7 +230,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                           children: [
                             const Gap(80),
                             Icon(Iconsax.warning_2,
-                                size: 48, color: Colors.red.shade300),
+                                size: 48, color: AppColors.red500),
                             const Gap(16),
                             Text(
                               'Oups! Une erreur est survenue',
@@ -249,7 +249,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                               onPressed: _refresh,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
+                                foregroundColor: AppColors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),

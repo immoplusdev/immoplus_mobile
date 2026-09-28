@@ -191,7 +191,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
       backgroundColor: AppColors.whiteBackground,
       appBar: AppBar(
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         centerTitle: false,
         title: Text('Réservation'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -218,7 +218,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                   size: 16,
                   color: selectedDates.isNotEmpty
                       ? AppColors.primary
-                      : const Color(0xFF98A2B3),
+                      : AppColors.immoTextDisabled,
                 ),
                 const Gap(6),
                 Text(
@@ -230,7 +230,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                     fontWeight: FontWeight.w600,
                     color: selectedDates.isNotEmpty
                         ? AppColors.primary
-                        : const Color(0xFF98A2B3),
+                        : AppColors.immoTextDisabled,
                   ),
                 ),
               ],
@@ -289,9 +289,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                 const Gap(8),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFF2F4F7)),
+                    border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                   ),
                   child: Column(
                     children: [
@@ -309,7 +309,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                     children: [
                                       Icon(Iconsax.warning_2,
                                           size: 32,
-                                          color: const Color(0xFFF04438)),
+                                          color: AppColors.immoFeedbackError),
                                       const Gap(8),
                                       Text(
                                         "Erreur de chargement",
@@ -317,7 +317,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                             .textTheme
                                             .bodyMedium
                                             ?.copyWith(
-                                              color: const Color(0xFFF04438),
+                                              color: AppColors.immoFeedbackError,
                                             ),
                                       ),
                                     ],
@@ -375,7 +375,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                     color:
-                                                        const Color(0xFFFEF3F2),
+                                                        AppColors.immoFeedbackErrorSubtle,
                                                     shape: BoxShape.circle,
                                                   ),
                                                   child: Center(
@@ -384,14 +384,12 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                                       style: (textStyle ??
                                                               AppTypography.font())
                                                           .copyWith(
-                                                        color: const Color(
-                                                            0xFFF04438),
+                                                        color: AppColors.immoFeedbackError,
                                                         decoration:
                                                             TextDecoration
                                                                 .lineThrough,
                                                         decorationColor:
-                                                            const Color(
-                                                                0xFFF04438),
+                                                            AppColors.immoFeedbackError,
                                                       ),
                                                     ),
                                                   ),
@@ -478,7 +476,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                       ),
 
                       // Arrivée / Départ
-                      Divider(height: 1, color: const Color(0xFFF2F4F7)),
+                      Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Row(
@@ -496,7 +494,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                             Container(
                               width: 1,
                               height: 40,
-                              color: const Color(0xFFF2F4F7),
+                              color: AppColors.immoFeedbackNeutralSubtle,
                             ),
                             Expanded(
                               child: _buildDateInfo(
@@ -527,7 +525,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
           color: AppColors.whiteBackground,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: AppColors.black.withOpacity(0.04),
               offset: const Offset(0, -4),
               blurRadius: 12,
             ),
@@ -601,7 +599,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF667085),
+                                      color: AppColors.immoTextSecondary,
                                     ),
                           ),
                         ],
@@ -622,7 +620,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                           maxLines: 1,
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFF98A2B3),
+                                    color: AppColors.immoTextDisabled,
                                     fontSize: 10,
                                   ),
                         ),
@@ -632,14 +630,14 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    color: const Color(0xFFD0D5DD),
+                                    color: AppColors.immoBorderStrong,
                                   ),
                         ),
                         Text(
                           'Sélectionnez vos dates',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFF98A2B3),
+                                    color: AppColors.immoTextDisabled,
                                     fontSize: 10,
                                   ),
                         ),
@@ -656,7 +654,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                     height:
                         52, // Fixe la hauteur du bouton pour un rendu uniforme
                     child: CustomLoadingButtom(
-                      textColor: Colors.white,
+                      textColor: AppColors.white,
                       text: 'Réserver',
                       isLoading: state is LOADING_BOOKING,
                       onClick: (state is INITIAL_BOOKING)
@@ -731,7 +729,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
       text,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF344054),
+            color: AppColors.immoTextLabel,
           ),
     );
   }
@@ -749,14 +747,14 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
         children: [
           Row(
             children: [
-              Icon(icon, size: 14, color: const Color(0xFF667085)),
+              Icon(icon, size: 14, color: AppColors.immoTextSecondary),
               const Gap(4),
               Text(
                 label,
                 style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF667085),
+                  color: AppColors.immoTextSecondary,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -769,14 +767,14 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
               value,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF344054),
+                    color: AppColors.immoTextLabel,
                   ),
             )
           else
             Text(
               '-- --- ----',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF98A2B3),
+                    color: AppColors.immoTextDisabled,
                   ),
             ),
         ],

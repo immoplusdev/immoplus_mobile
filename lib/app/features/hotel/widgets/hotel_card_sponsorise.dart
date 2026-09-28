@@ -24,7 +24,7 @@ class HotelCardSponsorise extends StatelessWidget {
       width: 373,
       margin: const EdgeInsets.only(right: 16),
       child: Card(
-        color: Colors.white,
+        color: AppColors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -64,7 +64,7 @@ class HotelCardSponsorise extends StatelessWidget {
                         style: AppTypography.font(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

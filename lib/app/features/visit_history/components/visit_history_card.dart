@@ -39,7 +39,7 @@ class VisitHistoryCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Colors.white,
+            color: AppColors.white,
             border: Border.all(color: AppColors.immoBorderDefault),
           ),
           padding: const EdgeInsets.all(16),

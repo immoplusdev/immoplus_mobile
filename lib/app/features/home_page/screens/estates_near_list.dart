@@ -235,7 +235,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: _nearEstates.isNotEmpty
-                    ? Colors.black
+                    ? AppColors.black
                     : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
@@ -309,10 +309,10 @@ class _EstatesNearListState extends State<EstatesNearList> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.orange.shade50,
+        color: AppColors.orange50,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.orange.shade200,
+          color: AppColors.orange500,
           width: 1,
         ),
       ),
@@ -320,7 +320,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
         children: [
           Icon(
             Icons.location_off_outlined,
-            color: Colors.orange.shade700,
+            color: AppColors.amber800,
             size: 28,
           ),
           const Gap(12),
@@ -328,7 +328,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
             child: Text(
               _errorMessage ?? NearEstatesConstants.locationErrorMessage,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.orange.shade900,
+                    color: AppColors.amber800,
                   ),
             ),
           ),
@@ -336,7 +336,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
           IconButton(
             icon: Icon(
               Icons.close,
-              color: Colors.orange.shade700,
+              color: AppColors.amber800,
               size: 20,
             ),
             onPressed: _dismissLocationError,
@@ -358,14 +358,14 @@ class _EstatesNearListState extends State<EstatesNearList> {
             'Erreur de chargement',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.red.shade700,
+                  color: AppColors.red600,
                 ),
           ),
           const Gap(6),
           Text(
             _errorMessage ?? 'Une erreur est survenue',
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.red.shade600,
+                  color: AppColors.red600,
                 ),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -376,7 +376,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
             onPressed: _loadNearEstates,
             child: Text(
               'Réessayer',
-              style: AppTypography.font(color: Colors.red.shade700),
+              style: AppTypography.font(color: AppColors.red600),
             ),
           ),
         ],

@@ -56,7 +56,7 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       shape: shape ?? shapeSingle,
-      tileColor: tileColor ?? Colors.white,
+      tileColor: tileColor ?? AppColors.white,
       onTap: onTap,
       horizontalTitleGap: 16,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),

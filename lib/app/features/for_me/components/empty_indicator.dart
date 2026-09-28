@@ -13,7 +13,7 @@ class EmptyIndicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const RippleAnimation(
-            color: Colors.blue,
+            color: AppColors.blue,
             delay: Duration(milliseconds: 300),
             repeat: true,
             minRadius: 50,
@@ -21,11 +21,11 @@ class EmptyIndicator extends StatelessWidget {
             duration: Duration(seconds: 3),
             child: CircleAvatar(
               radius: 40,
-              backgroundColor: Colors.blue,
+              backgroundColor: AppColors.blue,
               child: Icon(
                 Icons.error_outline,
                 size: 40,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
           ),
@@ -37,7 +37,7 @@ class EmptyIndicator extends StatelessWidget {
                 TextSpan(
                   text: 'Aucun ',
                   style: AppTypography.font(
-                    color: Colors.black,
+                    color: AppColors.black,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -45,7 +45,7 @@ class EmptyIndicator extends StatelessWidget {
                 TextSpan(
                   text: 'favori disponible',
                   style: AppTypography.font(
-                    color: Colors.blue,
+                    color: AppColors.blue,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),

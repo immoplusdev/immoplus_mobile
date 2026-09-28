@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,7 @@ class NotificationBell extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Color(0xFFEFF4FF),
+          color: AppColors.blue40,
         ),
         child: Center(child: SvgPicture.asset("assets/svgs/icons/bell.svg")),
       ),

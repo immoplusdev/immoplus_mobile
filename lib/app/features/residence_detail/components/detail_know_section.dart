@@ -66,7 +66,7 @@ class DetailKnowSection extends StatelessWidget {
 
   void _showRulesSheet(BuildContext context) {
     showModalBottomSheet(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       showDragHandle: true,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -85,7 +85,7 @@ class DetailKnowSection extends StatelessWidget {
                 style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
               SizedBox(height: 24),
@@ -125,7 +125,7 @@ class DetailKnowSection extends StatelessWidget {
                   style: AppTypography.font(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF222222),
+                    color: AppColors.immoTextPrimary,
                   ),
                 ),
                 SizedBox(height: 12),
@@ -172,10 +172,10 @@ class _KnowCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Color(0xff2744de).withOpacity(0.04),
+              color: AppColors.immoBrandPrimary.withOpacity(0.04),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 22, color: Color(0xff2744de)),
+            child: Icon(icon, size: 22, color: AppColors.immoBrandPrimary),
           ),
           SizedBox(width: 14),
           // Content
@@ -188,7 +188,7 @@ class _KnowCard extends StatelessWidget {
                   style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF222222),
+                    color: AppColors.immoTextPrimary,
                     height: 1.3,
                   ),
                 ),
@@ -246,7 +246,7 @@ class _RuleRow extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
                 height: 1.3,
               ),
             ),

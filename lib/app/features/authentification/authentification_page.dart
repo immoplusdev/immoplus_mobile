@@ -47,7 +47,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           leading: context.canPop()
               ? UnconstrainedBox(
                   child: GestureDetector(
@@ -149,7 +149,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                                 ?.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
-                                    color: Colors.black),
+                                    color: AppColors.black),
                           ),
                         ),
                       ),

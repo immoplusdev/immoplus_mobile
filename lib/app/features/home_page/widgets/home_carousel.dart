@@ -36,13 +36,13 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //                   items: [
 //                     Shimmer.fromColors(
 //                       baseColor: (AppColors.immoBorderStrong)!,
-//                       highlightColor: Colors.white,
+//                       highlightColor: AppColors.white,
 //                       period: Duration(milliseconds: 600),
 //                       child: Container(
 //                         height: 180,
 //                         margin: const EdgeInsets.only(top: 10, bottom: 10),
 //                         decoration: BoxDecoration(
-//                           color: Colors.red,
+//                           color: AppColors.red,
 //                           borderRadius: BorderRadius.circular(10),
 //                         ),
 //                       ),
@@ -79,7 +79,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //           width: double.infinity,
 //           height: 250,
 //           decoration: BoxDecoration(
-//             color: Colors.white,
+//             color: AppColors.white,
 //             borderRadius: BorderRadius.circular(10),
 //             image: DecorationImage(
 //                 image: AssetImage(

@@ -77,7 +77,7 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
         backgroundColor: AppColors.scafold,
         title: Text('Moyen de paiement'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(color: AppColors.black),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -95,7 +95,7 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          tileColor: Colors.white,
+                          tileColor: AppColors.white,
                           title: Text(
                             '${widget.paymentPageAdapter.amount} FCFA',
                             style: Theme.of(context)
@@ -149,15 +149,15 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
                               leading: CircleAvatar(
                                 foregroundImage: NetworkImage(operator.logo),
                               ),
-                              tileColor: Colors.white,
+                              tileColor: AppColors.white,
                               title: Text(operator.name),
                               titleTextStyle: AppTypography.h4.copyWith(
-                                color: Colors.black,
+                                color: AppColors.black,
                               ),
                               subtitle: Text(
                                 "Frais : ${operator.fee} %",
                                 style: AppTypography.bodySmall.copyWith(
-                                  color: Colors.black,
+                                  color: AppColors.black,
                                 ),
                               ),
                               trailing: const Icon(Icons.arrow_forward_ios),

@@ -81,7 +81,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             width: double.infinity,
-            //color: Colors.red,
+            //color: AppColors.red,
             child: CupertinoSearchTextField(
               autofocus: true,
               onChanged: (value) {
@@ -135,7 +135,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10)
                     .copyWith(bottom: 15),
                 child: ListTile(
-                  tileColor: Colors.white,
+                  tileColor: AppColors.white,
                   onTap: () async {
                     isloading = true;
                     final a = await LocationService().getCurrentGeoJson();
@@ -149,7 +149,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                       const Icon(CupertinoIcons.chevron_right_circle_fill),
                   leading: const Icon(
                     CupertinoIcons.location_fill,
-                    color: Colors.blue,
+                    color: AppColors.blue,
                   ),
                   title: Text('Prendre ma position actuelle'),
                 ),
@@ -160,17 +160,17 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                   (e) => Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: ListTile(
-                      tileColor: Colors.white,
+                      tileColor: AppColors.white,
                       onTap: () {
                         inspect(e.geoJson);
                         widget.onSeleted!(e);
                       },
                       leading: const CircleAvatar(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: AppColors.transparent,
                           child: Icon(
                             CupertinoIcons.location_solid,
                             size: 30,
-                            color: Colors.blue,
+                            color: AppColors.blue,
                           )),
                       title: (e.properties!.city == null)
                           ? Text(e.properties!.name ?? 'name')

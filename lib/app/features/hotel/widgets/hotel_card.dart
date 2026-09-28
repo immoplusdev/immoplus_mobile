@@ -83,7 +83,7 @@ class HotelCard extends StatelessWidget {
                           Text(
                             hotel.name,
                             style: AppTypography.font(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),

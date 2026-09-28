@@ -154,7 +154,7 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: _bestRatedResidences.isNotEmpty
-                    ? Colors.black
+                    ? AppColors.black
                     : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,

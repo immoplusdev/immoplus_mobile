@@ -73,7 +73,7 @@ class _SearchContainerPageState extends State<SearchContainerPage>
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: TabBarView(
           controller: _tabController,
@@ -115,14 +115,14 @@ class _SearchContainerPageState extends State<SearchContainerPage>
             color: AppColors.primary,
             borderRadius: BorderRadius.circular(25),
           ),
-          labelColor: Colors.white,
+          labelColor: AppColors.white,
           unselectedLabelColor: AppColors.immoTextSecondary,
           // Rule 5: identical fontWeight in both states prevents micro-shift
           // on toggle — the active state is distinguished solely by the
           // indicator pill background, not by text width changes.
           labelStyle: AppTypography.bodyMediumMedium,
           unselectedLabelStyle: AppTypography.bodyMediumMedium,
-          dividerColor: Colors.transparent,
+          dividerColor: AppColors.transparent,
           labelPadding: EdgeInsets.zero, // Rule 3: no extra padding asymmetry
           tabs: const [
             Tab(text: 'On cherche pour toi'),

@@ -174,7 +174,7 @@ class _HomeTabItem extends StatelessWidget {
           vertical: _Constants.itemVerticalPadding,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
+          color: isSelected ? AppColors.primary : AppColors.transparent,
           borderRadius: BorderRadius.circular(_Constants.borderRadius),
           border: Border.all(
             color: AppColors.primary.withOpacity(_Constants.borderOpacity),
@@ -206,7 +206,7 @@ class _HomeTabItem extends StatelessWidget {
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       fontSize: _Constants.textFontSize,
                       fontWeight: FontWeight.w600,
-                      color: isSelected ? Colors.white : AppColors.primary,
+                      color: isSelected ? AppColors.white : AppColors.primary,
                     ),
               ),
             ),

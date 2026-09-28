@@ -173,7 +173,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
       isScrollControlled: true,
       enableDrag: true,
       showDragHandle: false,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => const FractionallySizedBox(
@@ -327,7 +327,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
   void _showGuestsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -435,7 +435,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
         : "${dateFormat.format(_selectedDateRange!.start)} - ${dateFormat.format(_selectedDateRange!.end)}";
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
@@ -467,16 +467,16 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                     height: 48,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
-                    child: Icon(Icons.arrow_back, color: Colors.black),
+                    child: Icon(Icons.arrow_back, color: AppColors.black),
                   ),
                 ),
               ),
               title: Text(
                 "Hôtel",
                 style: AppTypography.h3.copyWith(
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
               centerTitle: true,
@@ -555,7 +555,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                         color:
                                             _destinationController.text.isEmpty
                                                 ? AppColors.immoTextDisabled
-                                                : Colors.black,
+                                                : AppColors.black,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),

@@ -45,7 +45,7 @@ class DetailEstateName extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
               ),
             ),
 
@@ -62,7 +62,7 @@ class DetailEstateName extends StatelessWidget {
                     style: AppTypography.font(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF222222),
+                      color: AppColors.immoTextPrimary,
                     ),
                   ),
                   SizedBox(width: 4),

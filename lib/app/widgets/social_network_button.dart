@@ -20,7 +20,7 @@ class SocialNetworkButton extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 15),
       child: ListTile(
         onTap: onTap,
-        //tileColor: Colors.red,
+        //tileColor: AppColors.red,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
             side: const BorderSide(color: AppColors.gray500)),

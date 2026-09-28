@@ -82,7 +82,7 @@ class _VisitHistoryPageState extends State<VisitHistoryPage>
         automaticallyImplyLeading: false,
         title: Text('Historiques Des Visites'),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),
@@ -143,7 +143,7 @@ class _VisitHistoryPageState extends State<VisitHistoryPage>
                         "Vos demandes de visite apparaîtront ici. Explorez nos résidences et planifiez votre première visite !",
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: AppColors.immoTextSecondary,
                               height: 1.5,
                             ),
                       ),

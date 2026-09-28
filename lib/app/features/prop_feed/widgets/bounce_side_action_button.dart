@@ -18,7 +18,7 @@ class BounceSideActionButton extends StatefulWidget {
   final VoidCallback onTap;
   final Color? labelColor;
 
-  static const Color _ctaBlue = Color(0xFF2563EB);
+  static const Color _ctaBlue = AppColors.blue500;
 
   @override
   State<BounceSideActionButton> createState() => _BounceSideActionButtonState();
@@ -29,7 +29,7 @@ class _BounceSideActionButtonState extends State<BounceSideActionButton> {
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = widget.labelColor ?? Colors.white;
+    final labelColor = widget.labelColor ?? AppColors.white;
     return GestureDetector(
       onTapDown: (_) => setState(() => _pressed = true),
       onTapUp: (_) => setState(() => _pressed = false),
@@ -57,7 +57,7 @@ class _BounceSideActionButtonState extends State<BounceSideActionButton> {
             children: [
               Icon(
                 widget.icon,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 20,
               ),
               SizedBox(height: 4),

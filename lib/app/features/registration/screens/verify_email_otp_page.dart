@@ -213,10 +213,10 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                           Center(
                             child: _isWhatsapp == true
                                 ? const Icon(Icons.chat,
-                                    color: Colors.green, size: 35)
+                                    color: AppColors.green, size: 35)
                                 : _isWhatsapp == false
                                     ? const Icon(Icons.sms,
-                                        color: Colors.blue, size: 35)
+                                        color: AppColors.blue, size: 35)
                                     : Image.asset(
                                         Assets.img.email.path,
                                         width: 35,

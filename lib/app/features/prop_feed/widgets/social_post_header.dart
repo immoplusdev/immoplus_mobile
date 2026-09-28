@@ -66,7 +66,7 @@ class SocialPostHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final content = Container(
       padding: const EdgeInsets.all(_padding),
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +139,7 @@ class SocialPostHeader extends StatelessWidget {
                 child: Text(
                   username,
                   style: AppTypography.font(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: _usernameFontSize,
                     fontWeight: FontWeight.w600,
                   ),
@@ -208,13 +208,13 @@ class SocialPostHeader extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppColors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         'Plus',
                         style: AppTypography.font(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
@@ -255,7 +255,7 @@ class SocialPostHeader extends StatelessWidget {
         TextSpan(
           text: caption,
           style: AppTypography.font(
-            color: Colors.white.withValues(alpha: 0.95),
+            color: AppColors.white.withValues(alpha: 0.95),
             fontSize: _captionFontSize,
             height: 1.35,
           ),
@@ -271,7 +271,7 @@ class SocialPostHeader extends StatelessWidget {
         TextSpan(
           text: hashtagText,
           style: AppTypography.font(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: _captionFontSize,
             fontWeight: FontWeight.bold,
             height: 1.35,

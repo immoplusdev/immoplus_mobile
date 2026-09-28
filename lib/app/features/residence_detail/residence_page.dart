@@ -100,12 +100,12 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
 
         if (state is REQUEST_ERROR) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(CupertinoIcons.arrow_left, color: Colors.black),
+                icon: const Icon(CupertinoIcons.arrow_left, color: AppColors.black),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -270,7 +270,7 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
 
   void _showAllAmenities(BuildContext context, dynamic data) {
     showModalBottomSheet(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       showDragHandle: true,
       enableDrag: true,
       isScrollControlled: true,
@@ -293,7 +293,7 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                 style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ),
@@ -343,7 +343,7 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                             style: AppTypography.font(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              color: Color(0xFF222222),
+                              color: AppColors.immoTextPrimary,
                             ),
                           ),
                         ),
@@ -416,7 +416,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                   style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black.withOpacity(0.90),
+                    color: AppColors.black.withOpacity(0.90),
                     height: 1.55,
                   ),
                 );
@@ -436,14 +436,14 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                       style: AppTypography.font(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xff2744de),
+                        color: AppColors.immoBrandPrimary,
                       ),
                     ),
                     SizedBox(width: 4),
                     Icon(
                       Icons.chevron_right,
                       size: 15,
-                      color: const Color(0xff2744de).withOpacity(0.80),
+                      color: AppColors.immoBrandPrimary.withOpacity(0.80),
                     ),
                   ],
                 ),
@@ -461,7 +461,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -481,7 +481,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                 style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
               SizedBox(height: 20),
@@ -536,14 +536,14 @@ class _SupportContactLink extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.support_agent_outlined, size: 18, color: Color(0xff2744de)),
+            const Icon(Icons.support_agent_outlined, size: 18, color: AppColors.blue500),
             SizedBox(width: 6),
             Text(
               "Besoin d'aide ? Contactez le support",
               style: AppTypography.font(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xff2744de),
+                color: AppColors.immoBrandPrimary,
               ),
             ),
           ],
@@ -570,13 +570,13 @@ class _ViewAllLink extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
-                color: const Color(0xff2744de),
+                color: AppColors.immoBrandPrimary,
               )),
           SizedBox(width: 4),
           Icon(
             Icons.chevron_right,
             size: 15,
-            color: const Color(0xff2744de),
+            color: AppColors.immoBrandPrimary,
           ),
         ],
       ),

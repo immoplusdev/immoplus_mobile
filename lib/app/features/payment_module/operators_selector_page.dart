@@ -88,7 +88,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
             backgroundColor: AppColors.scafold,
             title: Text('Moyen de paiement'),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-            leading: BackButton(color: Colors.black),
+            leading: BackButton(color: AppColors.black),
             actions: const [],
           ),
           SliverToBoxAdapter(
@@ -98,7 +98,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 title: Text(
                   '${widget.paymentPageAdapter.amount} FCFA',
                   style: Theme.of(context)
@@ -109,7 +109,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                 subtitle: Text('Montant à payer'),
                 trailing: Icon(
                   FontAwesomeIcons.moneyBill.data,
-                  color: Colors.green,
+                  color: AppColors.green,
                 ),
               ),
             ),
@@ -155,10 +155,10 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     leading: CircleAvatar(
                       foregroundImage: NetworkImage(operator.logo),
                     ),
-                    tileColor: Colors.white,
+                    tileColor: AppColors.white,
                     title: Text(operator.name),
                     titleTextStyle: AppTypography.titleSmall.copyWith(
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                     trailing: _isLoading && isStripe
                         ? SizedBox(

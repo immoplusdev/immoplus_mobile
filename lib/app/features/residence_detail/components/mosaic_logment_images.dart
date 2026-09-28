@@ -26,10 +26,10 @@ class _MosaicLogmentImagesState extends State<MosaicLogmentImages> {
       tag: widget.tag,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           leading: IconButton(
             icon: const CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               radius: 15,
               child: Icon(
                 CupertinoIcons.chevron_back,
@@ -80,7 +80,7 @@ class _MosaicLogmentImagesState extends State<MosaicLogmentImages> {
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                       errorWidget: (context, url, error) =>

@@ -28,10 +28,10 @@ class ErrorIndicator extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(
+            Icon(
               Iconsax.warning_2,
               size: 20,
-              color: Color(0xFFEF4444),
+              color: AppColors.immoFeedbackError,
             ),
             SizedBox(width: 10),
             Expanded(
@@ -55,7 +55,7 @@ class ErrorIndicator extends StatelessWidget {
                       style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFFDC2626),
+                        color: AppColors.red600,
                         height: 1.3,
                       ),
                     ),

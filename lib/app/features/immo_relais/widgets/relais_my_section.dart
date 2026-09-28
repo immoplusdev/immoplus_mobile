@@ -93,8 +93,8 @@ class _RelaisMySectionState extends State<RelaisMySection>
         TabBar(
           controller: _tabController,
           isScrollable: true,
-          indicatorColor: Colors.transparent,
-          dividerColor: Colors.transparent,
+          indicatorColor: AppColors.transparent,
+          dividerColor: AppColors.transparent,
           labelPadding: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           tabAlignment: TabAlignment.start,
@@ -114,10 +114,10 @@ class _RelaisMySectionState extends State<RelaisMySection>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : Colors.white,
+        color: isSelected ? AppColors.primary : AppColors.white,
         borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isSelected ? AppColors.primary : Colors.blue.shade100,
+          color: isSelected ? AppColors.primary : AppColors.blue100,
         ),
       ),
       child: Text(
@@ -125,7 +125,7 @@ class _RelaisMySectionState extends State<RelaisMySection>
         style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.w500,
-          color: isSelected ? Colors.white : AppColors.primary,
+          color: isSelected ? AppColors.white : AppColors.primary,
         ),
       ),
     );
@@ -148,7 +148,7 @@ class _RelaisMySectionState extends State<RelaisMySection>
         description:
             'Publiez votre recherche. Propriétaires et Imatch travaillent pour vous.',
         buttonText: 'Faire une demande',
-        buttonIcon: const Icon(Icons.add, color: Colors.white, size: 20),
+        buttonIcon: const Icon(Icons.add, color: AppColors.white, size: 20),
         onButtonPressed: _createNewRequest,
       );
     }

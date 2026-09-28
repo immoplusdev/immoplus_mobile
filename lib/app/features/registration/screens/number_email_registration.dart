@@ -93,7 +93,7 @@ class NumberEmailRegistration extends StatelessWidget {
                       fillColor: value
                           ? WidgetStateProperty.all(
                               Theme.of(context).colorScheme.primary)
-                          : WidgetStateProperty.all(Colors.white),
+                          : WidgetStateProperty.all(AppColors.white),
                       onChanged: (val) {
                         _cguNotifier.value = !_cguNotifier.value;
                       }),

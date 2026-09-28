@@ -167,7 +167,7 @@ class _TabItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         // decoration: BoxDecoration(
         //   border: Border.all(
-        //     color: Colors.white.withValues(alpha: 0.2),
+        //     color: AppColors.white.withValues(alpha: 0.2),
         //     width: 1,
         //   ),
         //   borderRadius: BorderRadius.circular(20),
@@ -179,8 +179,8 @@ class _TabItem extends StatelessWidget {
               label,
               style: AppTypography.font(
                 color: isSelected
-                    ? Colors.white
-                    : Colors.white.withValues(alpha: 0.7),
+                    ? AppColors.white
+                    : AppColors.white.withValues(alpha: 0.7),
                 fontSize: 15,
                 fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
                 shadows: [
@@ -198,7 +198,7 @@ class _TabItem extends StatelessWidget {
               height: 2,
               width: isSelected ? 24 : 0,
               decoration: BoxDecoration(
-                color: isSelected ? Colors.white : Colors.transparent,
+                color: isSelected ? AppColors.white : AppColors.transparent,
                 borderRadius: BorderRadius.circular(1),
               ),
             ),

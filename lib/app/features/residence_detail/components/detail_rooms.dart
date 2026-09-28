@@ -76,7 +76,7 @@ class _RoomItem extends StatelessWidget {
         Icon(
           _icon,
           size: 20,
-          color: Color(0xff2744de),
+          color: AppColors.immoBrandPrimary,
         ),
         SizedBox(width: 6),
         Text(

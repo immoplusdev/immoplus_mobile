@@ -22,7 +22,7 @@ class UserHeader extends StatelessWidget {
     }
     return Container(
       padding: const EdgeInsets.all(_padding),
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +39,7 @@ class UserHeader extends StatelessWidget {
         TextSpan(
           text: caption,
           style: AppTypography.font(
-            color: Colors.white.withValues(alpha: 0.95),
+            color: AppColors.white.withValues(alpha: 0.95),
             fontSize: _captionFontSize,
             height: 1.35,
           ),
@@ -55,7 +55,7 @@ class UserHeader extends StatelessWidget {
         TextSpan(
           text: hashtagText,
           style: AppTypography.font(
-            color: Colors.white,
+            color: AppColors.white,
             fontSize: _captionFontSize,
             fontWeight: FontWeight.bold,
             height: 1.35,

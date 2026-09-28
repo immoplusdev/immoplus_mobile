@@ -73,7 +73,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         extendBodyBehindAppBar: true,
         body: BlocBuilder<HotelCubit, HotelState>(
           builder: (context, hotelState) {
@@ -156,7 +156,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
         room.images.where((img) => img.trim().isNotEmpty).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
@@ -167,8 +167,8 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 300,
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.transparent,
+            backgroundColor: AppColors.white,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -208,7 +208,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                   valueListenable: _liked,
                   builder: (context, liked, _) => CircleButton(
                     icon: liked ? Iconsax.heart5 : Iconsax.heart,
-                    iconColor: liked ? Colors.red : null,
+                    iconColor: liked ? AppColors.red : null,
                     onTap: () => _liked.value = !liked,
                   ),
                 ),
@@ -231,7 +231,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
               child: Container(
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
               ),
@@ -306,7 +306,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                       style: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                     ),
                     const Spacer(),
@@ -415,7 +415,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
       bottomNavigationBar: Container(
         height: 130,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           border: Border(top: BorderSide(color: AppColors.immoBgSurfaceMuted)),
         ),
         padding: EdgeInsets.only(
@@ -435,7 +435,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                     text: TextSpan(
                       style: AppTypography.font(
                         fontSize: 16,
-                        color: Colors.black,
+                        color: AppColors.black,
                         fontWeight: FontWeight.bold,
                       ),
                       children: [
@@ -444,7 +444,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                           style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                         TextSpan(
@@ -453,7 +453,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                           style: AppTypography.font(
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -473,7 +473,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                         style: AppTypography.font(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black.withOpacity(0.55),
+                          color: AppColors.black.withOpacity(0.55),
                         ),
                       );
                     },
@@ -491,7 +491,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                       'Annulation gratuite',
                       style: AppTypography.font(
                         fontSize: 10,
-                        color: Color(0xFF222222),
+                        color: AppColors.immoTextPrimary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -516,7 +516,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                   textAlign: TextAlign.center,
                   style: AppTypography.font(
                     fontSize: 14,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -555,7 +555,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           style: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.black.withOpacity(0.65),
+            color: AppColors.black.withOpacity(0.65),
           ),
         ),
         SizedBox(width: 8),
@@ -566,7 +566,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
             style: AppTypography.font(
               fontSize: 14,
               fontWeight: isBoldValue ? FontWeight.bold : FontWeight.w500,
-              color: isBoldValue ? Colors.black : Colors.red.shade700,
+              color: isBoldValue ? AppColors.black : AppColors.red600,
             ),
           ),
         ),
@@ -589,7 +589,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
               SizedBox(height: 4),
@@ -598,7 +598,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black.withOpacity(0.55),
+                  color: AppColors.black.withOpacity(0.55),
                   height: 1.4,
                 ),
               ),
@@ -621,7 +621,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
         style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.bold,
-          color: Colors.black54,
+          color: AppColors.black54,
         ),
       ),
     );
@@ -669,7 +669,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
             style: AppTypography.font(
               fontSize: 15,
               fontWeight: FontWeight.w400,
-              color: Colors.black.withOpacity(0.90),
+              color: AppColors.black.withOpacity(0.90),
               height: 1.55,
             ),
           );
@@ -693,7 +693,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                   style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black.withOpacity(0.90),
+                    color: AppColors.black.withOpacity(0.90),
                     height: 1.55,
                   ),
                 ),
@@ -712,14 +712,14 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                           style: AppTypography.font(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xff2744de),
+                            color: AppColors.immoBrandPrimary,
                           ),
                         ),
                         SizedBox(width: 4),
                         Icon(
                           Icons.chevron_right,
                           size: 15,
-                          color: const Color(0xff2744de).withOpacity(0.80),
+                          color: AppColors.immoBrandPrimary.withOpacity(0.80),
                         ),
                       ],
                     ),
@@ -739,7 +739,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -759,7 +759,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                 style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
               SizedBox(height: 20),
@@ -768,7 +768,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                 style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black.withOpacity(0.90),
+                  color: AppColors.black.withOpacity(0.90),
                   height: 1.55,
                 ),
               ),

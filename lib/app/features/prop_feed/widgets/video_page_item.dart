@@ -304,13 +304,13 @@ class _VideoPageItemState extends State<VideoPageItem>
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black45,
+                          color: AppColors.black45,
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(12),
                         child: Icon(
                           isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: 42,
                         ),
                       ),
@@ -406,14 +406,14 @@ class _VideoPageItemState extends State<VideoPageItem>
                             isLiked ? Iconsax.heart5 : Iconsax.heart,
                             color: isLiked
                                 ? const Color(0xFFFF2D55)
-                                : Colors.white,
+                                : AppColors.white,
                             size: 24,
                           ),
                           SizedBox(height: 1),
                           Text(
                             _formatCount(likesCount),
                             style: AppTypography.font(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               // #18 — tabularFigures prevents counter "dancing"
@@ -487,15 +487,15 @@ class _VideoPageItemState extends State<VideoPageItem>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.white.withValues(alpha: 0.2),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.15),
+                  color: AppColors.black.withValues(alpha: 0.15),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -504,7 +504,7 @@ class _VideoPageItemState extends State<VideoPageItem>
             child: Text(
               price,
               style: AppTypography.font(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.w900,
                 // #18 — tabularFigures for price stability
@@ -640,9 +640,9 @@ class _VideoProgressBarState extends State<_VideoProgressBar> {
       valueListenable: _progress,
       builder: (_, value, __) => LinearProgressIndicator(
         value: value,
-        backgroundColor: Colors.white.withValues(alpha: 0.15),
+        backgroundColor: AppColors.white.withValues(alpha: 0.15),
         valueColor: AlwaysStoppedAnimation<Color>(
-          Colors.white.withValues(alpha: 0.85),
+          AppColors.white.withValues(alpha: 0.85),
         ),
         minHeight: 2.5,
       ),
@@ -673,15 +673,15 @@ class _BounceSideAction extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.transparent,
             radius: 18,
-            child: Icon(icon, color: Colors.white, size: 24),
+            child: Icon(icon, color: AppColors.white, size: 24),
           ),
           SizedBox(height: 1),
           Text(
             label,
             style: AppTypography.font(
-              color: Colors.white,
+              color: AppColors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),

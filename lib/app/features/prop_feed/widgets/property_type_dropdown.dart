@@ -57,18 +57,18 @@ class _PropertyTypeDropdownState extends State<PropertyTypeDropdown> {
           filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: AppColors.white.withValues(alpha: 0.08),
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
                 left: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
                 right: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -112,8 +112,8 @@ class _PropertyTypeOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.white.withValues(alpha: 0.12)
-              : Colors.transparent,
+              ? AppColors.white.withValues(alpha: 0.12)
+              : AppColors.transparent,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -125,7 +125,7 @@ class _PropertyTypeOption extends StatelessWidget {
                   width: 4,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -133,7 +133,7 @@ class _PropertyTypeOption extends StatelessWidget {
             Text(
               type.label,
               style: AppTypography.font(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),

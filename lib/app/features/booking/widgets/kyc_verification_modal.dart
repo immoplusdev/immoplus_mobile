@@ -288,18 +288,18 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: AppColors.black.withOpacity(0.15),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
           ],
         ),
         child: Material(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           child: Stack(
             children: [
               Padding(
@@ -327,7 +327,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                         textAlign: TextAlign.center,
                         style: AppTypography.font(
                           fontSize: 14,
-                          color: Color(0xFF667085),
+                          color: AppColors.immoTextSecondary,
                           height: 1.4,
                         ),
                       ),
@@ -346,7 +346,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                       //       value: _selectedDocumentType,
                       //       isExpanded: true,
                       //       icon: const Icon(Iconsax.arrow_down_1,
-                      //           color: Color(0xFF667085)),
+                      //           color: AppColors.immoTextSecondary),
                       //       items: const [
                       //         DropdownMenuItem(
                       //           value: 'national_id',
@@ -405,7 +405,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                             Icon(
                               Iconsax.security_safe,
                               size: 18,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                             Gap(8),
                             Text(
@@ -413,7 +413,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                               style: AppTypography.font(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           ],
@@ -437,13 +437,13 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                   child: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: Color(0xFFFF0000),
+                      color: AppColors.immoFeedbackError,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.close,
                       size: 16,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -463,7 +463,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //     child: Container(
   //       height: 140,
   //       decoration: BoxDecoration(
-  //         color: Colors.white,
+  //         color: AppColors.white,
   //         borderRadius: BorderRadius.circular(16),
   //         border: Border.all(color: const Color(0xFF2172CB), width: 1.5),
   //       ),
@@ -485,13 +485,13 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //                       child: Container(
   //                         padding: const EdgeInsets.all(4),
   //                         decoration: BoxDecoration(
-  //                           color: Colors.black54,
+  //                           color: AppColors.black54,
   //                           shape: BoxShape.circle,
   //                         ),
   //                         child: const Icon(
   //                           Icons.delete,
   //                           size: 14,
-  //                           color: Colors.white,
+  //                           color: AppColors.white,
   //                         ),
   //                       ),
   //                     ),

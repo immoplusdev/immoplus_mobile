@@ -102,7 +102,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               foregroundImage: NetworkImage(
                 OrderPaymentController.selectedOperator.logo,
               ),
@@ -114,7 +114,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
             trailing: IconButton(
               icon: const Icon(
                 CupertinoIcons.clear_circled_solid,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               onPressed: () {
                 AppDialog.confirm(
@@ -129,9 +129,9 @@ class _StripeCardPageState extends State<StripeCardPage> {
             ),
           ),
           ListTile(
-            tileColor: Colors.white,
+            tileColor: AppColors.white,
             leading:
-                const FaIcon(FontAwesomeIcons.moneyBill, color: Colors.green),
+                const FaIcon(FontAwesomeIcons.moneyBill, color: AppColors.green),
             title: Text(Utils.formatCurrency(paymentData.amount)),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
           ),
@@ -163,12 +163,12 @@ class _StripeCardPageState extends State<StripeCardPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FaIcon(FontAwesomeIcons.lock, size: 13, color: Colors.white),
+                FaIcon(FontAwesomeIcons.lock, size: 13, color: AppColors.white),
                 Gap(8),
                 Text(
                   "Payer par carte",
                   style: AppTypography.font(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

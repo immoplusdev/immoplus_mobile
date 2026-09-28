@@ -10,7 +10,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //   static String name = 'ONBOARDING';
 //   final TextStyle _textStyle = AppTypography.font(
 //     fontWeight: FontWeight.bold,
-//     color: Colors.white,
+//     color: AppColors.white,
 //     shadows: [
 //       Shadow(
 //           blurRadius: 3,
@@ -32,8 +32,8 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //         // imageVerticalOffset: -100,
 
 //         hasFloatingButton: true,
-//         headerBackgroundColor: Colors.transparent,
-//         controllerColor: Colors.white,
+//         headerBackgroundColor: AppColors.transparent,
+//         controllerColor: AppColors.white,
 
 //         centerBackground: true,
 //         finishButtonText: 'Commencer',
@@ -79,7 +79,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //         totalPage: 3,
 //         speed: 1,
 
-//         pageBackgroundColor: Colors.white,
+//         pageBackgroundColor: AppColors.white,
 //         pageBodies: [
 //           Container(
 //             padding: const EdgeInsets.symmetric(horizontal: 40),

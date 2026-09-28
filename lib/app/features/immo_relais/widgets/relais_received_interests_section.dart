@@ -165,7 +165,7 @@ class _ReceivedInterestCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.primary, width: .2),
       ),
@@ -211,11 +211,11 @@ class _ReceivedInterestCard extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: onDecline,
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.red),
+                      side: const BorderSide(color: AppColors.red),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text('Décliner', style: AppTypography.font(color: Colors.red, fontWeight: FontWeight.w600)),
+                    child: Text('Décliner', style: AppTypography.font(color: AppColors.red, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const Gap(12),
@@ -229,7 +229,7 @@ class _ReceivedInterestCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text('Planifier',
-                        style: AppTypography.font(color: Colors.white, fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(color: AppColors.white, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],

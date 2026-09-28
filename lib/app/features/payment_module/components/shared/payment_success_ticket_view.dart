@@ -124,7 +124,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                 },
                 color: AppColors.primary,
                 textColor: AppColors.primary,
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.white,
                 buttonHeight: 52,
                 borderRadius: BorderRadius.circular(30),
               ),
@@ -139,7 +139,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     ? () {}
                     : () => _onViewReservation(),
                 color: AppColors.primary,
-                textColor: Colors.white,
+                textColor: AppColors.white,
                 buttonHeight: 52,
                 borderRadius: BorderRadius.circular(30),
               ),
@@ -356,7 +356,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                   style: AppTypography.font(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
-                    color: Colors.black,
+                    color: AppColors.black,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -432,7 +432,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               style: AppTypography.font(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.black,
+                                color: AppColors.black,
                               ),
                             ),
                           ],
@@ -457,7 +457,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                           style: AppTypography.font(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -487,7 +487,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                         style: AppTypography.font(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       ),
                     ],
@@ -510,7 +510,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     children: [
                       CircleAvatar(
                         radius: 18,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.white,
                         foregroundImage: operatorLogo.isNotEmpty
                             ? NetworkImage(operatorLogo)
                             : null,
@@ -518,7 +518,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             ? Icon(
                                 CupertinoIcons.creditcard_fill,
                                 size: 18,
-                                color: Color(0xFF2B52F5),
+                                color: AppColors.blue2B52F5,
                               )
                             : null,
                       ),
@@ -534,7 +534,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               style: AppTypography.font(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                                color: AppColors.black87,
                               ),
                             ),
                             const Gap(2),

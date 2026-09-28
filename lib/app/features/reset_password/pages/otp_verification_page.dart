@@ -125,7 +125,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.immoBrandSecondary,

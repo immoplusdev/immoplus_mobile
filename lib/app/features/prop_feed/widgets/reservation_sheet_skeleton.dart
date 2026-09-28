@@ -53,10 +53,10 @@ class ReservationSheetSkeleton extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 border: Border(
                   top: BorderSide(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: AppColors.black.withValues(alpha: 0.1),
                     width: 0.5,
                   ),
                 ),

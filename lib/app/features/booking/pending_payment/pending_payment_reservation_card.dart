@@ -26,8 +26,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFF2F4F7)),
+          color: AppColors.white,
+          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,23 +39,23 @@ class PendingPaymentReservationCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFFAEB),
+                    color: AppColors.orange50,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Iconsax.timer_1,
                         size: 14,
-                        color: Color(0xFFF79009),
+                        color: AppColors.immoFeedbackWarning,
                       ),
                       const Gap(4),
                       Text(
                         'EN ATTENTE',
                         style: AppTypography.font(
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFFB54708),
+                          color: AppColors.amber800,
                           fontSize: 11,
                         ),
                       ),
@@ -80,13 +80,13 @@ class PendingPaymentReservationCard extends StatelessWidget {
             Row(
               children: [
                 Icon(Iconsax.calendar_1,
-                    size: 16, color: const Color(0xFF667085)),
+                    size: 16, color: AppColors.immoTextSecondary),
                 const Gap(6),
                 Text(
                   "$nbJours jour${nbJours > 1 ? 's' : ''} de réservation",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF344054),
+                        color: AppColors.immoTextLabel,
                       ),
                 ),
               ],
@@ -112,7 +112,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 40,
-                  color: const Color(0xFFF2F4F7),
+                  color: AppColors.immoFeedbackNeutralSubtle,
                 ),
                 Expanded(
                   child: _buildDateBlock(
@@ -147,7 +147,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
                 label: Text('Payer maintenant'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -180,14 +180,14 @@ class PendingPaymentReservationCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, size: 14, color: const Color(0xFF667085)),
+              Icon(icon, size: 14, color: AppColors.immoTextSecondary),
               const Gap(4),
               Text(
                 label,
                 style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF667085),
+                  color: AppColors.immoTextSecondary,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -199,13 +199,13 @@ class PendingPaymentReservationCard extends StatelessWidget {
             date,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF344054),
+                  color: AppColors.immoTextLabel,
                 ),
           ),
           Text(
             time,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: const Color(0xFF98A2B3),
+                  color: AppColors.immoTextDisabled,
                 ),
           ),
         ],

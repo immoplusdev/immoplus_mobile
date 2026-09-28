@@ -196,7 +196,7 @@ class _HomeTabCard extends StatelessWidget {
         height: _height,
         padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 17),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           border: Border.all(color: borderColor, width: 1),
           borderRadius: BorderRadius.circular(13),
           boxShadow: const [
@@ -225,7 +225,7 @@ class _HomeTabCard extends StatelessWidget {
                       height: _imageSize,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
-                          const ColoredBox(color: Colors.transparent),
+                          const ColoredBox(color: AppColors.transparent),
                     ),
                   ),
                   Positioned(
@@ -281,7 +281,7 @@ class _HomeTabCard extends StatelessWidget {
                   fontSize: 11,
                   height: 1.1,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: AppColors.black87,
                 ),
               ),
             ),

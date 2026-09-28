@@ -72,14 +72,14 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
         backgroundColor: AppColors.whiteBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Mes propositions',
           style: AppTypography.h3.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
         centerTitle: true,

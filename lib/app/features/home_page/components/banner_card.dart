@@ -119,7 +119,7 @@ class _BannerCardState extends State<BannerCard> {
           height: 3,
           margin: const EdgeInsets.symmetric(horizontal: 1.5),
           decoration: BoxDecoration(
-            color: Colors.white
+            color: AppColors.white
                 .withValues(alpha: _currentIndex == index ? 1.0 : 0.4),
             borderRadius: BorderRadius.circular(1.5),
           ),

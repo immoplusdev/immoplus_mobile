@@ -132,7 +132,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                     ),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.transparent,
+                      fillColor: AppColors.transparent,
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
                       hintText: _placeholder,

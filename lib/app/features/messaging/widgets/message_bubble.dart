@@ -75,7 +75,7 @@ class MessageBubble extends StatelessWidget {
                     style: AppTypography.font(
                       fontSize: 15,
                       height: 1.4,
-                      color: isClient ? Colors.white : const Color(0xFF1F2937),
+                      color: isClient ? AppColors.white : const Color(0xFF1F2937),
                     ),
                   ),
                 ),

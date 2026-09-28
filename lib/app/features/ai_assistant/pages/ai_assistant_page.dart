@@ -222,7 +222,7 @@ class _AiAssistantPageState extends State<AiAssistantPage>
     HapticFeedback.lightImpact();
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -366,10 +366,10 @@ class _AiAssistantPageState extends State<AiAssistantPage>
 
   PreferredSizeWidget _buildChatAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       elevation: 0,
       scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: AppColors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: _AppBarIcon(
         icon: Iconsax.menu_1,
@@ -398,10 +398,10 @@ class _AiAssistantPageState extends State<AiAssistantPage>
 
   PreferredSizeWidget _buildHistoryAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       elevation: 0,
       scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: AppColors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: _AppBarIcon(
         icon: Iconsax.arrow_left_2,
@@ -473,8 +473,8 @@ class _ConnectionBanner extends StatelessWidget {
       ChatConnectionState.connecting => (
           null,
           false,
-          Colors.transparent,
-          Colors.transparent,
+          AppColors.transparent,
+          AppColors.transparent,
         ),
       ChatConnectionState.reconnecting => (
           'Reconnexion…',
@@ -494,7 +494,7 @@ class _ConnectionBanner extends StatelessWidget {
           ChatTokens.bannerErrorBg,
           ChatTokens.bannerErrorFg,
         ),
-      _ => (null, false, Colors.transparent, Colors.transparent),
+      _ => (null, false, AppColors.transparent, AppColors.transparent),
     };
 
     return AnimatedSize(
@@ -648,7 +648,7 @@ class _SupportOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();

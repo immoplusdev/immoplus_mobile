@@ -48,7 +48,7 @@ class CustomDropDownField extends StatelessWidget {
           fontSize: 15,
         ),
         //fillColor: _color,
-        //focusColor: Colors.white,
+        //focusColor: AppColors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,

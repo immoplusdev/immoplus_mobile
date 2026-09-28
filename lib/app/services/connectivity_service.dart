@@ -24,7 +24,7 @@ class ConnectinityService {
           icon: const Icon(
             CupertinoIcons.wifi_exclamationmark,
             size: 50,
-            color: Colors.red,
+            color: AppColors.red,
           ));
     }
   }

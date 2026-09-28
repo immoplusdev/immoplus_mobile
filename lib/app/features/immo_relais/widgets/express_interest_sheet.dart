@@ -18,7 +18,7 @@ Future<void> showExpressRelaisInterestSheet(
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.white,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
     builder: (sheetContext) => Padding(
@@ -71,7 +71,7 @@ Future<void> showExpressRelaisInterestSheet(
               ),
               child: Text(
                 'Envoyer',
-                style: AppTypography.font(color: Colors.white, fontWeight: FontWeight.bold),
+                style: AppTypography.font(color: AppColors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),

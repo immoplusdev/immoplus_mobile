@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'dart:developer';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -30,7 +31,7 @@ class DetailLogmentAvailableDay extends StatelessWidget {
                       .bodySmall!
                       .copyWith(
                           decoration: TextDecoration.lineThrough,
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.w700),
 
                   selectedDayHighlightColor: CupertinoColors.systemFill,
@@ -52,13 +53,13 @@ class DetailLogmentAvailableDay extends StatelessWidget {
                     ignoring: true,
                     child: CircleAvatar(
                       backgroundColor:
-                          isSelected! ? Colors.red : Colors.transparent,
+                          isSelected! ? AppColors.red : AppColors.transparent,
                       child: Text(
                         date.day.toString(),
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: (isSelected)
                                   ? CupertinoColors.white
-                                  : Colors.black,
+                                  : AppColors.black,
                               decoration: isSelected
                                   ? TextDecoration.lineThrough
                                   : TextDecoration.none,

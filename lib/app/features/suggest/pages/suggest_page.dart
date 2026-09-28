@@ -444,7 +444,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
               ),
             ),
           SizedBox(height: 16), // Rule 4: 16px = 2×8
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
+          const Divider(height: 1, color: AppColors.greyMaterial200),
           SizedBox(height: 16), // Rule 4: 16px = 2×8
         ],
         // Rule 6: mode-aware section header for recommendations
@@ -461,7 +461,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                   style: AppTypography.font(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+                      color: AppColors.black87),
                 ),
               ),
               InkWell(

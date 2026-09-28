@@ -128,7 +128,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 ),
               ),
               Material(
-                color: Colors.transparent,
+                color: AppColors.transparent,
                 child: InkWell(
                   onTap: onServiceClientPressed,
                   borderRadius: BorderRadius.circular(24),

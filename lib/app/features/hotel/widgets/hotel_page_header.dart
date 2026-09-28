@@ -20,7 +20,7 @@ class HotelPageHeader extends StatelessWidget {
             Text(
               "Hôtel",
               style: AppTypography.h4.copyWith(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -40,9 +40,9 @@ class HotelPageHeader extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
-                  child: const Icon(Icons.arrow_back, color: Colors.black),
+                  child: const Icon(Icons.arrow_back, color: AppColors.black),
                 ),
               ),
             ),

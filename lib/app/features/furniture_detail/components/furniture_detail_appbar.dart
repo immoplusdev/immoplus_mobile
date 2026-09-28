@@ -58,7 +58,7 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
           icon: Container(
               width: 30,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white),
+                  shape: BoxShape.circle, color: AppColors.white),
               child: Center(
                   child: Icon(
                 CupertinoIcons.chevron_back,
@@ -85,11 +85,11 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
               },
               child: CircleAvatar(
                 radius: 15,
-                backgroundColor: value ? Colors.red : AppColors.immoBorderStrong,
+                backgroundColor: value ? AppColors.red : AppColors.immoBorderStrong,
                 child: Icon(
                   FontAwesomeIcons.solidHeart.data,
                   size: 16,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),

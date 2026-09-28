@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// Tokens design du chat IA — source de vérité pour l'UI.
@@ -6,14 +7,14 @@ class ChatTokens {
   ChatTokens._();
 
   // Brand — #2744DE est un signal, pas un fond.
-  static const Color brand500 = Color(0xFF2744DE);
+  static const Color brand500 = AppColors.blue500;
   static const Color brand600 = Color(0xFF1E38C4); // pressed / hover
-  static const Color brandSurface = Color(0xFFEEF1FC); // ~rgba(39,68,222,0.08)
-  static Color brandBorder20 = const Color(0xFF2744DE).withValues(alpha: 0.20);
-  static Color brandBorder15 = const Color(0xFF2744DE).withValues(alpha: 0.15);
+  static const Color brandSurface = AppColors.blue50; // ~rgba(39,68,222,0.08)
+  static Color brandBorder20 = AppColors.immoBrandPrimary.withValues(alpha: 0.20);
+  static Color brandBorder15 = AppColors.immoBrandPrimary.withValues(alpha: 0.15);
 
   // Neutres
-  static const Color neutral0 = Color(0xFFFFFFFF);
+  static const Color neutral0 = AppColors.white;
   static const Color neutral50 = Color(0xFFFAFAFA);
   static const Color composerSurface = Color(0xFFF7F7F7);
   static const Color neutral100 = Color(0xFFF4F4F5);
@@ -25,12 +26,12 @@ class ChatTokens {
   static const Color neutral400 = Color(0xFF9A9A9A); // inkSecondary
   static const Color readOnlyChipText = Color(0xFF525252);
   static const Color neutral700 = Color(0xFF3F3F46);
-  static const Color neutral900 = Color(0xFF1A1A1A); // inkPrimary
+  static const Color neutral900 = AppColors.gray900; // inkPrimary
 
   // Sémantique
   static const Color success500 = Color(0xFF16A34A);
-  static const Color warning500 = Color(0xFFF59E0B);
-  static const Color danger500 = Color(0xFFDC2626);
+  static const Color warning500 = AppColors.orange500;
+  static const Color danger500 = AppColors.red600;
   static const Color dangerSurface = Color(0xFFFEF2F2);
   static const Color scoreHighBg = Color(0xFFDCFCE7);
   static const Color scoreHighFg = Color(0xFF15803D);
@@ -43,7 +44,7 @@ class ChatTokens {
   static const Color bannerWarnBg = Color(0xFFFEF9EC);
   static const Color bannerWarnFg = Color(0xFF92400E);
   static const Color bannerErrorBg = Color(0xFFFEF2F2);
-  static const Color bannerErrorFg = Color(0xFF991B1B);
+  static const Color bannerErrorFg = AppColors.red600;
 
   // Rayons
   static const double bubbleRadius = 20;
@@ -74,7 +75,7 @@ class ChatTokens {
   // Shadow standard
   static List<BoxShadow> get cardShadow => [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.06),
+          color: AppColors.black.withValues(alpha: 0.06),
           blurRadius: 12,
           offset: const Offset(0, 2),
         ),

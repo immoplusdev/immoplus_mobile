@@ -52,7 +52,7 @@ class PlaceAutocompleteItem extends GetView<LocationController> {
                     style: AppTypography.font(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF222222),
+                      color: AppColors.immoTextPrimary,
                       height: 1.3,
                     ),
                     maxLines: 1,

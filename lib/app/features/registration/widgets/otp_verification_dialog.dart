@@ -19,7 +19,7 @@ Future<void> showOtpVerificationDialog({
   return showDialog<void>(
     context: context,
     barrierDismissible: barrierDismissible,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (dialogContext) => _OtpFlowDialog(
       phoneNumber: phoneNumber,
       onVerified: (response) {
@@ -125,7 +125,7 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -178,7 +178,7 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
           'Choisissez comment vous souhaitez recevoir votre code de vérification.',
           textAlign: TextAlign.center,
           style: AppTypography.bodyMedium.copyWith(
-            color: const Color(0xFF64748B),
+            color: AppColors.slate500,
           ),
         ),
         const Gap(24),

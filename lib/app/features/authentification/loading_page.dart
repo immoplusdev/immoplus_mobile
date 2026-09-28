@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gif/gif.dart';
@@ -42,10 +43,10 @@ class _LoadingPageState extends State<LoadingPage>
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           elevation: 0,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         body: Center(
           child: Gif(
             width: 220,

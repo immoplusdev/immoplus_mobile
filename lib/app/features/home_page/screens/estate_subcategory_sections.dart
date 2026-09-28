@@ -237,7 +237,7 @@ class _EstateSubCategorySectionsListState
                           height: 20,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Colors.black12,
+                              color: AppColors.black12,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(4)),
                             ),
@@ -329,7 +329,7 @@ class BiensHorizontalListBySubCategory extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color: biens.isNotEmpty ? Colors.black : AppColors.immoTextDisabled,
+                color: biens.isNotEmpty ? AppColors.black : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

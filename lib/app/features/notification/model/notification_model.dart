@@ -6,11 +6,11 @@ part 'notification_model.freezed.dart';
 part 'notification_model.g.dart';
 
 enum NotificationType {
-  alert('alert', Icons.notifications_active, Colors.orange),
-  proposal('proposal', Icons.home_work, Colors.blue),
-  visit('visit', Icons.calendar_month, Colors.purple),
-  payment('payment', Icons.account_balance_wallet, Colors.green),
-  message('message', Icons.chat_bubble, Colors.indigo),
+  alert('alert', Icons.notifications_active, AppColors.orange),
+  proposal('proposal', Icons.home_work, AppColors.blue),
+  visit('visit', Icons.calendar_month, AppColors.purple),
+  payment('payment', Icons.account_balance_wallet, AppColors.green),
+  message('message', Icons.chat_bubble, AppColors.indigo),
   system('system', Icons.info, AppColors.gray500);
 
   final String value;

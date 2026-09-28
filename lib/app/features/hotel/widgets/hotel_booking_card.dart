@@ -17,7 +17,7 @@ class HotelBookingCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Color(0xffE7E7E3))),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -31,7 +31,7 @@ class HotelBookingCard extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ),

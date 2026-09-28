@@ -13,7 +13,7 @@ class RatingComponent extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        // color: Colors.blue.shade50, // Couleur d'arrière-plan
+        // color: AppColors.blue50, // Couleur d'arrière-plan
         borderRadius: BorderRadius.circular(20), // Bordures arrondies
       ),
       child: Row(
@@ -29,7 +29,7 @@ class RatingComponent extends StatelessWidget {
           //   rating.toStringAsFixed(
           //       0), // Affiche la note avec un seul chiffre après la virgule
           //   style: AppTypography.font(
-          //     color: Colors.white, // Couleur du texte
+          //     color: AppColors.white, // Couleur du texte
           //     fontSize: 14, // Taille de la police
           //     fontWeight: FontWeight.w500, // Poids de la police
           //   ),

@@ -14,7 +14,7 @@ class BookingLoadingCard extends StatelessWidget {
         baseColor: AppColors.immoBorderStrong,
         highlightColor: AppColors.immoBgSurfaceMuted,
         child: ListTile(
-          tileColor: Colors.white,
+          tileColor: AppColors.white,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           leading: ClipRRect(
@@ -33,7 +33,7 @@ class BookingLoadingCard extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     height: double.infinity,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),

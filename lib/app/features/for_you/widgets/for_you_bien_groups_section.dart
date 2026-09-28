@@ -105,7 +105,7 @@ class _LocationGroupCard extends StatelessWidget {
                         baseColor: AppColors.immoBorderStrong,
                         highlightColor: AppColors.immoBgSurfaceMuted,
                         period: const Duration(milliseconds: 500),
-                        child: Container(color: Colors.white),
+                        child: Container(color: AppColors.white),
                       ),
                       errorWidget: (context, url, error) => Container(
                         color: AppColors.immoBorderStrong,
@@ -131,8 +131,8 @@ class _LocationGroupCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     stops: const [0.45, 1.0],
                     colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.75),
+                      AppColors.transparent,
+                      AppColors.black.withValues(alpha: 0.75),
                     ],
                   ),
                 ),
@@ -150,7 +150,7 @@ class _LocationGroupCard extends StatelessWidget {
                       style: AppTypography.font(
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
-                        color: Colors.white,
+                        color: AppColors.white,
                         height: 1.1,
                       ),
                       maxLines: 1,

@@ -223,7 +223,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                               SizedBox(
                                 height: 80,
                                 child: InternationalPhoneInput(
-                                  backgroundColor: Colors.transparent,
+                                  backgroundColor: AppColors.transparent,
                                   onValidPhoneNumber: (value) {
                                     phoneNumber = value;
                                   },
@@ -249,7 +249,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                                   ? AppColors.primary
                                   : (isPhoneNumberValid
                                       ? AppColors.primary
-                                      : Colors.blueGrey.shade200),
+                                      : AppColors.blueGrey),
                             ),
                             const Gap(24),
                             Text(

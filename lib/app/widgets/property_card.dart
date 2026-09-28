@@ -170,7 +170,7 @@ class PropertyCard extends StatelessWidget {
           // ),
           SizedBox(height: 16),
 
-          // const Divider(height: 1, thickness: 1, color: Color(0xFFF2F2F2)),
+          // const Divider(height: 1, thickness: 1, color: AppColors.gray100),
           // SizedBox(height: 12),
           // _ActionRow(
           //   actions: effectiveActions,
@@ -767,7 +767,7 @@ class VerifiedBadge extends StatelessWidget {
         //   label,
         //   style: AppTypography.font(
         //     fontSize: 12,
-        //     color: Colors.black,
+        //     color: AppColors.black,
         //     fontWeight: FontWeight.normal,
         //   ),
         // ),
@@ -901,13 +901,13 @@ class PropertyPrice extends StatelessWidget {
 //             width: 46,
 //             height: 46,
 //             decoration: BoxDecoration(
-//               color: isActive ? AppColors.primary : const Color(0xFFF4F4F4),
+//               color: isActive ? AppColors.blue500 : const Color(0xFFF4F4F4),
 //               shape: BoxShape.circle,
 //             ),
 //             child: Icon(
 //               action.icon,
 //               size: 20,
-//               color: isActive ? Colors.white : AppColors.immoTextSecondary,
+//               color: isActive ? AppColors.white : AppColors.immoTextSecondary,
 //             ),
 //           ),
 //         );

@@ -117,14 +117,14 @@ class _FavoritePageState extends State<FavoritePage> {
                             }
                           });
                         },
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete_outline),
                         onPressed: _selectedItems.isEmpty
                             ? null
                             : () => _showDeleteDialog(favorites),
-                        color: Colors.red,
+                        color: AppColors.red,
                       ),
                     ] else
                       IconButton(
@@ -151,14 +151,14 @@ class _FavoritePageState extends State<FavoritePage> {
                       ? null
                       : Container(
                           decoration: BoxDecoration(
-                            color: Colors.red.shade800,
+                            color: AppColors.red600,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
                           child: Icon(
                             FontAwesomeIcons.trashCan.data,
-                            color: Colors.white,
+                            color: AppColors.white,
                             size: 22,
                           ),
                         ),
@@ -230,14 +230,14 @@ class _FavoritePageState extends State<FavoritePage> {
       height: 32,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: selected ? Colors.red : Colors.transparent,
+        color: selected ? AppColors.red : AppColors.transparent,
         border: Border.all(
-          color: selected ? Colors.red : _kSeparator,
+          color: selected ? AppColors.red : _kSeparator,
           width: 2,
         ),
       ),
       child: selected
-          ? const Icon(Icons.check, size: 18, color: Colors.white)
+          ? const Icon(Icons.check, size: 18, color: AppColors.white)
           : null,
     );
   }

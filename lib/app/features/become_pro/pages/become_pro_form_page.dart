@@ -47,7 +47,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
             AppDialog.info(
               barrierDismissible: false,
               content: "Votre demande a été envoyée avec succès.",
-              icon: Text("Succès", style: AppTypography.font(color: Colors.green)),
+              icon: Text("Succès", style: AppTypography.font(color: AppColors.green)),
               textButton: "Fermer",
               rollback: () {
                 while (context.canPop()) {
@@ -63,12 +63,12 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
           final isSubmitting = _isLoading || state is BecomeProLoading;
 
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.black),
+                icon: Icon(Icons.arrow_back, color: AppColors.black),
                 onPressed: () => context.pop(),
               ),
               systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -332,7 +332,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
             height: 140,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: AppColors.immoBorderStrong,

@@ -129,7 +129,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.hasFloatingButton = true,
     this.hasSkip = true,
     this.finishButtonTextStyle,
-    this.skipIcon = const Icon(Icons.arrow_forward, color: Colors.white),
+    this.skipIcon = const Icon(Icons.arrow_forward, color: AppColors.white),
     this.indicatorAbove = false,
     this.indicatorPosition = 90,
     this.skipFunctionOverride,
@@ -158,7 +158,7 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
         backgroundColor: widget.pageBackgroundColor ?? null,
         floatingActionButton: widget.hasFloatingButton
             ? BackgroundFinalButton(
-                buttonTextStyle: widget.finishButtonTextStyle ?? AppTypography.font(fontSize: 20, color: Colors.white),
+                buttonTextStyle: widget.finishButtonTextStyle ?? AppTypography.font(fontSize: 20, color: AppColors.white),
                 skipIcon: widget.skipIcon,
                 addButton: widget.addButton,
                 currentPage: _currentPage,

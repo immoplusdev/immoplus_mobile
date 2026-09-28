@@ -85,7 +85,7 @@ class SuggestSearchBar extends StatelessWidget {
                       },
                       child: const Icon(
                         Iconsax.search_normal_1,
-                        color: Colors.black,
+                        color: AppColors.black,
                         size: 18,
                       ),
                     ),

@@ -46,7 +46,7 @@ class _MyChoicePageState extends State<MyChoicePage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
               title: Text('Imatch'),
               centerTitle: true,
@@ -127,14 +127,14 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
             backgroundColor: AppColors.primary,
             shape: const CircleBorder(),
             elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
+            child: const Icon(Icons.add, color: AppColors.white, size: 32),
           ),
         1 => FloatingActionButton(
             onPressed: _createNewAlert,
             backgroundColor: AppColors.primary,
             shape: const CircleBorder(),
             elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
+            child: const Icon(Icons.add, color: AppColors.white, size: 32),
           ),
         _ => null,
       };
@@ -145,7 +145,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
             backgroundColor: AppColors.primary,
             shape: const CircleBorder(),
             elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
+            child: const Icon(Icons.add, color: AppColors.white, size: 32),
           ),
         _ => null,
       };
@@ -155,7 +155,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text('Imatch'),
         centerTitle: true,
@@ -179,7 +179,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  labelColor: Colors.white,
+                  labelColor: AppColors.white,
                   unselectedLabelColor: AppColors.immoTextSecondary,
                   labelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
@@ -187,7 +187,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
                   unselectedLabelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
-                  dividerColor: Colors.transparent,
+                  dividerColor: AppColors.transparent,
                   tabs: [
                     if (widget.isRelaisActive) Tab(text: 'Je déménage'),
                     Tab(text: 'J’emménage'),
@@ -236,7 +236,7 @@ final List<_MovingHubItem> _movingHubItems = [
     title: 'Pour moi',
     subtitle: 'Mes demandes publiées',
     icon: Iconsax.truck_fast,
-    color: const Color(0xFF2548E5),
+    color: AppColors.blue550,
     onTap: (context) => context.pushNamed(RelaisMyPage.name),
   ),
   _MovingHubItem(
@@ -294,13 +294,13 @@ class _MovingHub extends StatelessWidget {
               color: const Color(0xFFFFF7E6),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                  color: const Color(0xFFF59E0B).withValues(alpha: 0.25)),
+                  color: AppColors.immoFeedbackWarning.withValues(alpha: 0.25)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Iconsax.lamp_charge,
-                    color: Color(0xFFF59E0B), size: 18),
+                Icon(Iconsax.lamp_charge,
+                    color: AppColors.immoFeedbackWarning, size: 18),
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -334,7 +334,7 @@ class _MovingHubCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.immoBorderDefault),
         ),

@@ -29,7 +29,7 @@ class DetailEstateVideo extends StatelessWidget {
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.3,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
               ),
             ),
             SizedBox(height: 14),
@@ -38,7 +38,7 @@ class DetailEstateVideo extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Container(
-                  color: Colors.black,
+                  color: AppColors.black,
                   child: VideoPlayerPage(videoID: bienImmobilier.video!),
                 ),
               ),

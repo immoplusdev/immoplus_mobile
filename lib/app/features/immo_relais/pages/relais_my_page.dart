@@ -33,7 +33,7 @@ class _RelaisMyPageState extends State<RelaisMyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(title: Text('Pour moi'), centerTitle: true),
       body: RelaisMySection(
         refreshNotifier: _refreshNotifier,
@@ -47,7 +47,7 @@ class _RelaisMyPageState extends State<RelaisMyPage> {
               backgroundColor: AppColors.primary,
               shape: const CircleBorder(),
               elevation: 0,
-              child: const Icon(Icons.add, color: Colors.white, size: 32),
+              child: const Icon(Icons.add, color: AppColors.white, size: 32),
             )
           : null,
     );

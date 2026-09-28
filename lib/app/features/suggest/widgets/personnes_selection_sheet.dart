@@ -79,13 +79,13 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
                       shape: BoxShape.circle,
                       border: Border.all(
                           color: isSelected
-                              ? Colors.transparent
+                              ? AppColors.transparent
                               : AppColors.immoTextDisabled)),
                   child: Center(
                     child: Text(n == 8 ? '8+' : '$n',
                         style: AppTypography.font(
                             color:
-                                isSelected ? Colors.white : Color(0xff797979),
+                                isSelected ? AppColors.white : Color(0xff797979),
                             fontSize: 18,
                             fontWeight: FontWeight.w600)),
                   ),
@@ -120,7 +120,7 @@ class _CustomIcButton extends StatelessWidget {
       child: IconButton(
         icon: Icon(icon),
         style: IconButton.styleFrom(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(color: AppColors.immoBorderStrong)),

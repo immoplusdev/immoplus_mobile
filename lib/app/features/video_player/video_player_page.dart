@@ -139,8 +139,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           materialProgressColors: ChewieProgressColors(
             playedColor: Theme.of(context).primaryColor,
             handleColor: Theme.of(context).primaryColor,
-            // backgroundColor: Colors.red,
-            bufferedColor: Colors.lightGreen,
+            // backgroundColor: AppColors.red,
+            bufferedColor: AppColors.lightGreen,
           ),
           placeholder: Center(
             child: Icon(
@@ -155,14 +155,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 children: [
                   Icon(
                     Icons.error,
-                    color: Colors.red,
+                    color: AppColors.red,
                     size: 60,
                   ),
                   SizedBox(height: 16),
                   Text(
                     'Erreur de lecture vidéo',
                     style: AppTypography.font(
-                      color: Colors.red,
+                      color: AppColors.red,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -270,12 +270,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.4),
+                  color: AppColors.black.withValues(alpha: 0.4),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   _isMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 18,
                 ),
               ),
@@ -327,7 +327,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             style: AppTypography.font(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
           SizedBox(height: 8),
@@ -339,7 +339,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 textAlign: TextAlign.center,
                 style: AppTypography.font(
                   fontSize: 12,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),
@@ -376,7 +376,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           Text(
             'Chargement de la vidéo...',
             style: AppTypography.font(
-              color: Colors.white,
+              color: AppColors.white,
               fontSize: 12,
             ),
           ),

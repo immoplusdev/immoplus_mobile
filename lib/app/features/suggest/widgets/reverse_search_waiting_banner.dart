@@ -68,7 +68,7 @@ class _ReverseSearchWaitingBannerState
               style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87.withValues(alpha: 0.7),
+                color: AppColors.black87.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -182,10 +182,10 @@ class _SearchingImageFanState extends State<_SearchingImageFan> {
               height: _cardSize,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(color: AppColors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
+                    color: AppColors.black.withValues(alpha: 0.12),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),

@@ -67,7 +67,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   height: 80,
                   child: InternationalPhoneInput(
                     key: _phoneFieldKey,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: AppColors.transparent,
                     onValidPhoneNumber: (value) {
                       phoneNumber = value;
                     },
@@ -93,7 +93,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
             color: isPhoneNumberValid
                 ? AppColors.primary
-                : Colors.blueGrey.shade200,
+                : AppColors.blueGrey,
           ),
         ),
       ],

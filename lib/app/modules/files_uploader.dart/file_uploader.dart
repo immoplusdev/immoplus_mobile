@@ -45,7 +45,7 @@ class _FileUploaderState extends State<FileUploader> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              tileColor: Colors.white,
+              tileColor: AppColors.white,
               onTap: () {
                 ImagePicker()
                     .pickImage(source: ImageSource.camera, imageQuality: 40)
@@ -60,7 +60,7 @@ class _FileUploaderState extends State<FileUploader> {
             ),
             const Divider(),
             ListTile(
-              tileColor: Colors.white,
+              tileColor: AppColors.white,
               onTap: () {
                 ImagePicker()
                     .pickImage(source: ImageSource.gallery, imageQuality: 40)
@@ -82,7 +82,7 @@ class _FileUploaderState extends State<FileUploader> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -124,7 +124,7 @@ class _FileUploaderState extends State<FileUploader> {
                         width: widget.width ?? 180,
                         height: widget.height ?? 180,
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: AppColors.red,
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
@@ -160,7 +160,7 @@ class _FileUploaderState extends State<FileUploader> {
                                   child: Container(
                                     width: double.infinity,
                                     height: double.infinity,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                   ),
                                 ),
                                 errorWidget: (context, url, error) =>

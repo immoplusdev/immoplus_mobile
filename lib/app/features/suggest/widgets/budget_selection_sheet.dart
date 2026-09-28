@@ -107,17 +107,17 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
     return ChoiceChip(
       label: Text(label),
       selected: isSelected,
-      selectedColor: Colors.black,
+      selectedColor: AppColors.black,
       labelStyle: AppTypography.font(
-        color: isSelected ? Colors.white : Colors.black,
+        color: isSelected ? AppColors.white : AppColors.black,
         fontSize: 13,
         fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side:
-            BorderSide(color: isSelected ? Colors.black : AppColors.immoBorderStrong),
+            BorderSide(color: isSelected ? AppColors.black : AppColors.immoBorderStrong),
       ),
       onSelected: (_) {
         setState(() {
@@ -171,7 +171,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     filled: false,
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.transparent,
                     labelText: 'Budget min (F)',
                     labelStyle:
                         AppTypography.font(color: AppColors.primary, fontSize: 13),
@@ -204,7 +204,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     filled: false,
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.transparent,
                     labelText: 'Budget max (F)',
                     labelStyle:
                         AppTypography.font(color: AppColors.primary, fontSize: 13),
@@ -250,7 +250,7 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                       const PaddleRangeSliderValueIndicatorShape(),
                   valueIndicatorColor: AppColors.primary,
                   valueIndicatorTextStyle: AppTypography.font(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),

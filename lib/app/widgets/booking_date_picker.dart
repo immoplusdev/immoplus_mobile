@@ -78,7 +78,7 @@ class _BookingdatePickerState extends State<BookingdatePicker> {
                 calendarType: CalendarDatePicker2Type.multi,
                 selectedDayTextStyle: AppTypography.font(
                     color: AppColors.white, fontWeight: FontWeight.w700),
-                //selectedDayHighlightColor: Colors.purple[800],
+                //selectedDayHighlightColor: AppColors.purple[800],
                 centerAlignModePicker: true,
                 // customModePickerIcon: Icon(Icons.push_pin_outlined),
                 //   dayBuilder: _yourDayBuilder,

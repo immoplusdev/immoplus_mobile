@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,7 @@ class OnBoardingNavigationBar extends StatelessWidget
           ? finishButton == null
               ? SizedBox.shrink()
               : Container(
-                  color: Colors.transparent,
+                  color: AppColors.transparent,
                   child: TextButton(
                     onPressed: () => onFinish?.call(),
                     child: finishButton!,
@@ -54,7 +55,7 @@ class OnBoardingNavigationBar extends StatelessWidget
           : skipTextButton == null
               ? SizedBox.shrink()
               : Container(
-                  color: Colors.transparent,
+                  color: AppColors.transparent,
                   child: TextButton(
                     onPressed: () {
                       if (skipFunctionOverride == null) {
@@ -67,7 +68,7 @@ class OnBoardingNavigationBar extends StatelessWidget
                   ),
                 ),
       border: Border(
-        bottom: BorderSide(color: Colors.transparent),
+        bottom: BorderSide(color: AppColors.transparent),
       ),
       backgroundColor: headerBackgroundColor,
     );

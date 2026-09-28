@@ -15,7 +15,7 @@ class ProductInfo extends StatelessWidget {
 
     return ListTile(
       visualDensity: const VisualDensity(vertical: -4),
-      tileColor: Colors.white,
+      tileColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(color: AppColors.immoBorderDefault),
@@ -28,7 +28,7 @@ class ProductInfo extends StatelessWidget {
       title: Text(
         bienImmobilierModel.nom,
         style: AppTypography.labelLarge.copyWith(
-          color: Colors.black87,
+          color: AppColors.black87,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

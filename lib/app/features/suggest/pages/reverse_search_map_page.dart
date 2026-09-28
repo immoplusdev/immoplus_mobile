@@ -80,8 +80,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
         imageUrl: Utils.getImagePath(id: prop.data.miniature),
         price:
             "${CurrencyFormatter().format(prop.montantTotal.round().toString())} F",
-        bgColor: Colors.white,
-        textColor: Colors.black,
+        bgColor: AppColors.white,
+        textColor: AppColors.black,
       );
       return Marker(
         markerId: MarkerId('socket_${prop.data.id}'),
@@ -372,7 +372,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
             _showExitDialog(currentSearchId);
           },
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             body: BlocListener<ReverseSearchCubit, ReverseSearchState>(
               listener: (context, state) {
                 state.maybeWhen(
@@ -421,11 +421,11 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
+                              color: AppColors.black.withValues(alpha: 0.15),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),
@@ -433,7 +433,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                         ),
                         child: const Icon(
                           Icons.arrow_back_ios_new,
-                          color: Colors.black87,
+                          color: AppColors.black87,
                           size: 18,
                         ),
                       ),
@@ -450,12 +450,12 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                     builder: (context, scrollController) {
                       return Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(24)),
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
+                                color: AppColors.black.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, -4)),
                           ],
@@ -491,7 +491,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                             : 'Recherche en cours',
                                         style: AppTypography.font(
                                             color: _isExpired
-                                                ? Colors.red.shade400
+                                                ? AppColors.red500
                                                 : AppColors.immoTextSecondary,
                                             fontSize: 13)),
                                     SizedBox(height: 8),
@@ -506,7 +506,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                 '--:--',
                                                 style: AppTypography.font(
                                                     color:
-                                                        Colors.orange.shade800,
+                                                        AppColors.amber800,
                                                     fontSize: 36,
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -556,10 +556,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                                 remaining),
                                                         style: AppTypography.font(
                                                             color: expired
-                                                                ? Colors.red
-                                                                    .shade600
-                                                                : Colors.orange
-                                                                    .shade800,
+                                                                ? AppColors.red600
+                                                                : AppColors.amber800,
                                                             fontSize: expired
                                                                 ? 24
                                                                 : 36,
@@ -582,13 +580,11 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                           LinearProgressIndicator(
                                                         value: progress,
                                                         minHeight: 6,
-                                                        backgroundColor: Colors
-                                                            .grey.shade200,
+                                                        backgroundColor: AppColors.gray200,
                                                         valueColor:
                                                             AlwaysStoppedAnimation<
                                                                     Color>(
-                                                                Colors.orange
-                                                                    .shade800),
+                                                                AppColors.amber800),
                                                       ),
                                                     ),
                                                   ],
@@ -649,8 +645,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                         'Carte',
                                                         style: AppTypography.font(
                                                           color: !show
-                                                              ? Colors.white
-                                                              : Colors.black87,
+                                                              ? AppColors.white
+                                                              : AppColors.black87,
                                                           fontWeight: !show
                                                               ? FontWeight.bold
                                                               : FontWeight
@@ -694,8 +690,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                         'Liste',
                                                         style: AppTypography.font(
                                                           color: show
-                                                              ? Colors.white
-                                                              : Colors.black87,
+                                                              ? AppColors.white
+                                                              : AppColors.black87,
                                                           fontWeight: show
                                                               ? FontWeight.bold
                                                               : FontWeight
@@ -720,7 +716,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                         child: Container(
                                           height: 44,
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                             border: Border.all(
                                                 color: AppColors.immoBorderStrong),
                                             borderRadius:
@@ -729,7 +725,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                           alignment: Alignment.center,
                                           child: Text('Annuler',
                                               style: AppTypography.font(
-                                                  color: Colors.black87)),
+                                                  color: AppColors.black87)),
                                         ),
                                       ),
                                     ),

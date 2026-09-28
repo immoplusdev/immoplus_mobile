@@ -10,10 +10,10 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
   return showDialog<String>(
     context: context,
     barrierDismissible: true,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (ctx) {
       return Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -94,10 +94,10 @@ Future<String?> showOtpInputDialog(
   return showDialog<String>(
     context: context,
     barrierDismissible: true,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (ctx) {
       return Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -152,14 +152,14 @@ Future<String?> showOtpInputDialog(
                         width: 45,
                         height: 45,
                         textStyle: AppTypography.h3.copyWith(
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: currentError != null
-                                ? Colors.red
+                                ? AppColors.red
                                 : AppColors.primary.withValues(alpha: 0.5),
                           ),
                         ),
@@ -168,10 +168,10 @@ Future<String?> showOtpInputDialog(
                         width: 45,
                         height: 45,
                         textStyle: AppTypography.h3.copyWith(
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(10),
                           border:
                               Border.all(color: AppColors.primary, width: 2),
@@ -194,7 +194,7 @@ Future<String?> showOtpInputDialog(
                     Text(
                       currentError!,
                       textAlign: TextAlign.center,
-                      style: AppTypography.bodySmall.copyWith(color: Colors.red),
+                      style: AppTypography.bodySmall.copyWith(color: AppColors.red),
                     ),
                   ],
 

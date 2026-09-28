@@ -73,22 +73,22 @@ class FurnitureDetailBottomBar extends StatelessWidget {
               elevation: 2,
               borderRadius: BorderRadius.circular(20),
               child: ListTile(
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
                 leading: CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.white,
                   child: Icon(
                     FontAwesomeIcons.whatsapp.data,
-                    color: Colors.green,
+                    color: AppColors.green,
                   ),
                 ),
                 title: Text('Contacter sur WhatsApp'),
                 titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                 trailing: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,
-                  color: Colors.green,
+                  color: AppColors.green,
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -105,19 +105,19 @@ class FurnitureDetailBottomBar extends StatelessWidget {
               elevation: 2,
               borderRadius: BorderRadius.circular(20),
               child: ListTile(
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
                 leading: Icon(
                   FontAwesomeIcons.headset.data,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 title: Text('Contacter par appel'),
                 titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                 trailing: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 onTap: () {
                   Navigator.pop(context);

@@ -61,12 +61,12 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -74,7 +74,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
           style: AppTypography.font(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
       ),
@@ -102,7 +102,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
                     hintText: 'Précisez votre lien avec ce logement',
                     hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: AppColors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
                       borderSide: BorderSide(color: AppColors.immoBorderStrong),
@@ -165,7 +165,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
       style: AppTypography.font(
         fontSize: 15,
         fontWeight: FontWeight.w600,
-        color: Colors.black,
+        color: AppColors.black,
       ),
     );
   }
@@ -181,7 +181,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
           padding: const EdgeInsets.symmetric(vertical: 14),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : Colors.white,
+            color: isSelected ? AppColors.primary : AppColors.white,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
               color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
@@ -191,7 +191,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             preset.label,
             style: AppTypography.font(
               fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.white : AppColors.primary,
+              color: isSelected ? AppColors.white : AppColors.primary,
             ),
           ),
         ),
@@ -209,7 +209,7 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,

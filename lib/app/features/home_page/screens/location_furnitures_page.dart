@@ -97,14 +97,14 @@ class _LocationFurnituresPageState extends State<LocationFurnituresPage>
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black87),
           onPressed: () => context.pop(),
         ),
         title: Text(
           widget.title,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.black87,
               ),
         ),
       ),

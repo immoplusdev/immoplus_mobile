@@ -75,7 +75,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.3,
                 height: 1.2,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
               ),
             ),
           ),
@@ -110,7 +110,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
                   style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xff2744de),
+                    color: AppColors.immoBrandPrimary,
                   ),
                 ),
               ),
@@ -127,7 +127,7 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -153,21 +153,21 @@ class _ReviewsSkeleton extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(width: 100, height: 16, color: Colors.white),
+              Container(width: 100, height: 16, color: AppColors.white),
               SizedBox(height: 16),
               Row(
                 children: [
-                  const CircleAvatar(radius: 24, backgroundColor: Colors.white),
+                  const CircleAvatar(radius: 24, backgroundColor: AppColors.white),
                   SizedBox(width: 12),
-                  Container(width: 120, height: 16, color: Colors.white),
+                  Container(width: 120, height: 16, color: AppColors.white),
                 ],
               ),
               SizedBox(height: 12),
-              Container(width: double.infinity, height: 12, color: Colors.white),
+              Container(width: double.infinity, height: 12, color: AppColors.white),
               SizedBox(height: 8),
-              Container(width: double.infinity, height: 12, color: Colors.white),
+              Container(width: double.infinity, height: 12, color: AppColors.white),
               SizedBox(height: 8),
-              Container(width: 180, height: 12, color: Colors.white),
+              Container(width: 180, height: 12, color: AppColors.white),
             ],
           ),
         ),
@@ -238,7 +238,7 @@ class _AllReviewsSheetState extends State<_AllReviewsSheet> {
               style: AppTypography.font(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
               ),
             ),
           ),

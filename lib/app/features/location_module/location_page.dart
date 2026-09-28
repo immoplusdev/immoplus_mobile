@@ -35,7 +35,7 @@ class _LocationPageState extends State<LocationPage> {
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         child: Container(
-          color: Colors.white,
+          color: AppColors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -141,8 +141,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                   return CustomLoadingButtom(
                     text: 'Mettre à jour',
                     isLoading: state is LOGIN_LOADING,
-                    //color: Colors.white,
-                    textColor: Colors.white,
+                    //color: AppColors.white,
+                    textColor: AppColors.white,
                     onClick: () async {
                       if (_formKey.currentState!.validate()) {
                         context.read<LoginCubit>().updatePassword(

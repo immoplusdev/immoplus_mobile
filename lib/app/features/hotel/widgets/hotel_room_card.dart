@@ -56,7 +56,7 @@ class HotelRoomCard extends StatelessWidget {
                   left: 14,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     padding:
@@ -64,7 +64,7 @@ class HotelRoomCard extends StatelessWidget {
                     child: Text(
                       "${room.nombreChambres} chambre${room.nombreChambres > 1 ? 's' : ''}",
                       style: AppTypography.font(
-                        color: Colors.black,
+                        color: AppColors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
@@ -89,7 +89,7 @@ class HotelRoomCard extends StatelessWidget {
             Text(
               "$formattedPrice fcfa /nuits",
               style: AppTypography.font(
-                color: Colors.black.withOpacity(0.45),
+                color: AppColors.black.withOpacity(0.45),
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),

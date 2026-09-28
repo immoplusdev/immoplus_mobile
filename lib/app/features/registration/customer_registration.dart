@@ -114,7 +114,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
       builder: (ctx) {
         return Container(
           height: 260,
-          color: Colors.white,
+          color: AppColors.white,
           child: Column(
             children: [
               Row(
@@ -158,10 +158,10 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           borderRadius: BorderRadius.circular(radiusButton),
           border: Border.all(
-            color: _birthDateError != null ? Colors.red : _fieldBorderColor,
+            color: _birthDateError != null ? AppColors.red : _fieldBorderColor,
             width: _birthDateError != null ? 1.3 : 1,
           ),
         ),
@@ -175,7 +175,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                   : 'Date de naissance',
               style: AppTypography.font(
                 fontSize: 15,
-                color: hasValue ? Colors.black : AppColors.immoTextSecondary,
+                color: hasValue ? AppColors.black : AppColors.immoTextSecondary,
               ),
             ),
           ],
@@ -187,9 +187,9 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leadingWidth: 64,
         leading: Padding(
@@ -205,7 +205,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
               ),
               child: Icon(
                 Icons.arrow_back_ios_rounded,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 16,
               ),
             ),
@@ -281,16 +281,16 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             labelText: "Nom",
                             autofocus: true,
                             fontSize: 15,
-                            fillColor: Colors.transparent,
+                            fillColor: AppColors.transparent,
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 18),
                             enabledBorder: _fieldBorder(
-                                color: _nomError != null ? Colors.red : null,
+                                color: _nomError != null ? AppColors.red : null,
                                 width: _nomError != null ? 1.3 : 1,
                                 radius: 16),
                             focusedBorder: _fieldBorder(
                                 color: _nomError != null
-                                    ? Colors.red
+                                    ? AppColors.red
                                     : AppColors.immoBrandAccent,
                                 width: 1.5,
                                 radius: 16),
@@ -307,16 +307,16 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             controller: _formController.lastName,
                             labelText: "Prénom",
                             fontSize: 15,
-                            fillColor: Colors.transparent,
+                            fillColor: AppColors.transparent,
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 18),
                             enabledBorder: _fieldBorder(
-                                color: _prenomError != null ? Colors.red : null,
+                                color: _prenomError != null ? AppColors.red : null,
                                 width: _prenomError != null ? 1.3 : 1,
                                 radius: 16),
                             focusedBorder: _fieldBorder(
                                 color: _prenomError != null
-                                    ? Colors.red
+                                    ? AppColors.red
                                     : AppColors.immoBrandAccent,
                                 width: 1.5,
                                 radius: 16),
@@ -338,7 +338,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                         child: Text(
                           _nomError ?? _prenomError ?? _birthDateError ?? '',
                           style:
-                              AppTypography.font(color: Colors.red, fontSize: 12),
+                              AppTypography.font(color: AppColors.red, fontSize: 12),
                         ),
                       ),
                     ],

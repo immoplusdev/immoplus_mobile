@@ -78,14 +78,14 @@ class _AlertStatusListPageState extends State<AlertStatusListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         title: Text(
           widget.title,
           style: AppTypography.font(
-              fontWeight: FontWeight.bold, color: Colors.black),
+              fontWeight: FontWeight.bold, color: AppColors.black),
         ),
         centerTitle: true,
       ),
@@ -102,7 +102,7 @@ class _AlertStatusListPageState extends State<AlertStatusListPage> {
               backgroundColor: AppColors.primary,
               shape: const CircleBorder(),
               elevation: 0,
-              child: const Icon(Icons.add, color: Colors.white, size: 32),
+              child: const Icon(Icons.add, color: AppColors.white, size: 32),
             )
           : null,
     );
@@ -133,25 +133,25 @@ final List<_AlertHubItem> _alertHubItems = [
     color: AppColors.primary,
     status: null,
   ),
-  const _AlertHubItem(
+  _AlertHubItem(
     title: 'En attente',
     subtitle: 'Pas encore de proposition',
     icon: Iconsax.clock,
-    color: Color(0xFFF59E0B),
+    color: AppColors.immoFeedbackWarning,
     status: 'en_attente',
   ),
-  const _AlertHubItem(
+  _AlertHubItem(
     title: 'Propositions',
     subtitle: 'Offres reçues des pros',
     icon: Iconsax.gift,
-    color: Color(0xFF1CA53F),
+    color: AppColors.green500,
     status: 'propositions',
   ),
-  const _AlertHubItem(
+  _AlertHubItem(
     title: 'Clôturées',
     subtitle: 'Demandes terminées',
     icon: Iconsax.archive_tick,
-    color: Color(0xFF6B7280),
+    color: AppColors.gray500,
     status: 'cloturees',
   ),
 ];
@@ -189,13 +189,13 @@ class _AlertHub extends StatelessWidget {
               color: const Color(0xFFFFF7E6),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                  color: const Color(0xFFF59E0B).withValues(alpha: 0.25)),
+                  color: AppColors.immoFeedbackWarning.withValues(alpha: 0.25)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Iconsax.lamp_charge,
-                    color: Color(0xFFF59E0B), size: 18),
+                Icon(Iconsax.lamp_charge,
+                    color: AppColors.immoFeedbackWarning, size: 18),
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -229,7 +229,7 @@ class _AlertHubCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.immoBorderDefault),
         ),
@@ -303,15 +303,15 @@ class _AlertListPageState extends State<AlertListPage>
       return const _AlertHub();
     }
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: widget.embedded
           ? null
           : AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios,
-                    color: Colors.black, size: 20),
+                    color: AppColors.black, size: 20),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -327,7 +327,7 @@ class _AlertListPageState extends State<AlertListPage>
                   Text(
                     'Mes demandes',
                     style: AppTypography.h1.copyWith(
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                   ),
                   const Gap(4),
@@ -340,8 +340,8 @@ class _AlertListPageState extends State<AlertListPage>
           TabBar(
             controller: _tabController,
             isScrollable: true,
-            indicatorColor: Colors.transparent,
-            dividerColor: Colors.transparent,
+            indicatorColor: AppColors.transparent,
+            dividerColor: AppColors.transparent,
             tabAlignment: TabAlignment.start,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             labelPadding: const EdgeInsets.symmetric(horizontal: 4),
@@ -379,7 +379,7 @@ class _AlertListPageState extends State<AlertListPage>
               backgroundColor: AppColors.primary,
               shape: const CircleBorder(),
               elevation: 4,
-              child: const Icon(Icons.add, color: Colors.white, size: 32),
+              child: const Icon(Icons.add, color: AppColors.white, size: 32),
             ),
     );
   }
@@ -406,17 +406,17 @@ class _AlertListPageState extends State<AlertListPage>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : Colors.white,
+        color: isSelected ? AppColors.primary : AppColors.white,
         borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isSelected ? AppColors.primary : Colors.blue.shade100,
+          color: isSelected ? AppColors.primary : AppColors.blue100,
           width: 1,
         ),
       ),
       child: Text(
         label,
         style: AppTypography.bodyMediumMedium.copyWith(
-          color: isSelected ? Colors.white : AppColors.primary,
+          color: isSelected ? AppColors.white : AppColors.primary,
         ),
       ),
     );
@@ -483,7 +483,7 @@ class _AlertListContentState extends State<_AlertListContent> {
         description:
             "Vous n'avez pas encore fait de demande Décrivez le bien idéal et laissez les professionnels venir à vous.",
         buttonText: 'Faire une demande',
-        buttonIcon: const Icon(Icons.add, color: Colors.white, size: 20),
+        buttonIcon: const Icon(Icons.add, color: AppColors.white, size: 20),
         onButtonPressed: () async {
           final result = await context.pushNamed(AlertCreateEditPage.name);
           if (result == true && context.mounted) {

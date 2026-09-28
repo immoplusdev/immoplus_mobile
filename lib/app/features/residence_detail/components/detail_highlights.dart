@@ -122,13 +122,13 @@ class _HighlightTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: Color(0xff2744de).withOpacity(0.04),
+              color: AppColors.immoBrandPrimary.withOpacity(0.04),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               data.icon,
               size: 22,
-              color: Color(0xff2744de),
+              color: AppColors.immoBrandPrimary,
             ),
           ),
           SizedBox(width: 14),
@@ -141,7 +141,7 @@ class _HighlightTile extends StatelessWidget {
                   style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF222222),
+                    color: AppColors.immoTextPrimary,
                     height: 1.3,
                   ),
                 ),

@@ -23,7 +23,7 @@ class SearchInput extends GetView<LocationController> {
           style: AppTypography.font(
             fontSize: 15,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF222222),
+            color: AppColors.immoTextPrimary,
           ),
           decoration: InputDecoration(
             hintText: 'Saisissez une adresse...',

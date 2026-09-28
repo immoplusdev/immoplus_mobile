@@ -82,7 +82,7 @@ class _OtpPageState extends State<OtpPage> {
 
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
         CustomPopup.toast(
-          color: Colors.green,
+          color: AppColors.green,
           toastPosition: EasyLoadingToastPosition.bottom,
           text: "Code renvoyé avec succès",
         );
@@ -94,7 +94,7 @@ class _OtpPageState extends State<OtpPage> {
     } catch (e) {
       if (!mounted) return;
       CustomPopup.toast(
-        color: Colors.red,
+        color: AppColors.red,
         toastPosition: EasyLoadingToastPosition.bottom,
         text: "Envoi de OTP code échoué, veuillez réessayer",
       );

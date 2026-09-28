@@ -54,17 +54,17 @@ Color _getStatusColor(String status) {
       status == PaymentStatus.paye.name) {
     return const Color(0xFF12B76A);
   } else if (status == PaymentStatus.pending.name) {
-    return const Color(0xFF667085);
+    return AppColors.immoTextSecondary;
   } else if (status == PaymentStatus.action_required.name) {
-    return const Color(0xFFF79009);
+    return AppColors.immoFeedbackWarning;
   } else if (status == PaymentStatus.payment_required.name) {
-    return const Color(0xFF7A5AF8);
+    return AppColors.purple7A5AF8;
   } else if (status == PaymentStatus.failed.name) {
-    return const Color(0xFFF04438);
+    return AppColors.immoFeedbackError;
   } else if (status == PaymentStatus.processing.name) {
     return const Color(0xFF2E90FA);
   }
-  return const Color(0xFFF04438);
+  return AppColors.immoFeedbackError;
 }
 
 Color _getStatusBgColor(String status) {
@@ -72,17 +72,17 @@ Color _getStatusBgColor(String status) {
       status == PaymentStatus.paye.name) {
     return const Color(0xFFECFDF3);
   } else if (status == PaymentStatus.pending.name) {
-    return const Color(0xFFF2F4F7);
+    return AppColors.immoFeedbackNeutralSubtle;
   } else if (status == PaymentStatus.action_required.name) {
-    return const Color(0xFFFFFAEB);
+    return AppColors.orange50;
   } else if (status == PaymentStatus.payment_required.name) {
     return const Color(0xFFF4F3FF);
   } else if (status == PaymentStatus.failed.name) {
-    return const Color(0xFFFEF3F2);
+    return AppColors.immoFeedbackErrorSubtle;
   } else if (status == PaymentStatus.processing.name) {
     return const Color(0xFFEFF8FF);
   }
-  return const Color(0xFFFEF3F2);
+  return AppColors.immoFeedbackErrorSubtle;
 }
 
 String getPaymentStatusName({required String status}) {
@@ -187,7 +187,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
             ),
             centerTitle: true,
             backgroundColor: AppColors.whiteBackground,
-            surfaceTintColor: Colors.transparent,
+            surfaceTintColor: AppColors.transparent,
             pinned: true,
           ),
           CupertinoSliverRefreshControl(
@@ -226,7 +226,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
@@ -235,7 +235,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
@@ -244,22 +244,22 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(width: 120, height: 14, color: Colors.white),
+                    Container(width: 120, height: 14, color: AppColors.white),
                     const Gap(6),
-                    Container(width: 80, height: 12, color: Colors.white),
+                    Container(width: 80, height: 12, color: AppColors.white),
                   ],
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(width: 70, height: 14, color: Colors.white),
+                  Container(width: 70, height: 14, color: AppColors.white),
                   const Gap(6),
                   Container(
                       width: 60,
                       height: 22,
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(6))),
                 ],
               ),
@@ -298,7 +298,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
             "Vos transactions apparaîtront ici une fois que vous aurez effectué un paiement.",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF667085),
+                  color: AppColors.immoTextSecondary,
                   height: 1.5,
                 ),
           ),
@@ -343,9 +343,9 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFF2F4F7)),
+            border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
           ),
           child: Row(
             children: [
@@ -356,7 +356,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: const Color(0xFFF9FAFB),
-                  border: Border.all(color: const Color(0xFFF2F4F7)),
+                  border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(11),
@@ -394,7 +394,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                       child: Row(
                         children: [
                           Icon(Iconsax.copy,
-                              size: 12, color: const Color(0xFF667085)),
+                              size: 12, color: AppColors.immoTextSecondary),
                           const Gap(4),
                           Flexible(
                             child: Text(
@@ -405,7 +405,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                                   .textTheme
                                   .bodySmall
                                   ?.copyWith(
-                                    color: const Color(0xFF667085),
+                                    color: AppColors.immoTextSecondary,
                                   ),
                             ),
                           ),
@@ -455,7 +455,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                   Text(
                     Utils.formatDate(dateTime: item.updatedAt!),
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: const Color(0xFF98A2B3),
+                          color: AppColors.immoTextDisabled,
                         ),
                   ),
                 ],

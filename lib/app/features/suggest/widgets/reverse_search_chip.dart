@@ -22,8 +22,8 @@ class ReverseSearchChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFC0CAFF),
           borderRadius: BorderRadius.circular(20),
-          border: const Border(
-            bottom: BorderSide(color: Color(0xFF2744DE), width: 2),
+          border: Border(
+            bottom: BorderSide(color: AppColors.immoBrandPrimary, width: 2),
           ),
         ),
         child: Row(
@@ -35,7 +35,7 @@ class ReverseSearchChip extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
             if (badge != null && badge!.isNotEmpty) ...[
@@ -47,7 +47,7 @@ class ReverseSearchChip extends StatelessWidget {
                   style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2744DE),
+                    color: AppColors.immoBrandPrimary,
                   ),
                 ),
               ),

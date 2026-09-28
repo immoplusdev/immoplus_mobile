@@ -43,7 +43,7 @@ class _VisaPageState extends State<VisaPage> {
               trailing: IconButton(
                 icon: const Icon(
                   CupertinoIcons.clear_circled_solid,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 onPressed: () {
                   AppDialog.confirm(
@@ -62,7 +62,7 @@ class _VisaPageState extends State<VisaPage> {
               children: [
                 Text('Numéro de carte'),
                 CustomTextField(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.white,
                   autofocus: true,
                   controller: _formController.phoneNumber,
                   textInputType: TextInputType.number,
@@ -94,7 +94,7 @@ class _VisaPageState extends State<VisaPage> {
                       children: [
                         Text('Expiration'),
                         CustomTextField(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.white,
                           //autofocus: true,
                           //controller: _formController.phoneNumber,
                           textInputType: TextInputType.number,
@@ -117,7 +117,7 @@ class _VisaPageState extends State<VisaPage> {
                       children: [
                         Text('CVC'),
                         CustomTextField(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.white,
                           //autofocus: true,
                           //controller: _formController.phoneNumber,
                           textInputType: TextInputType.number,
@@ -140,7 +140,7 @@ class _VisaPageState extends State<VisaPage> {
                   child: Text('Nom du propriétaire'),
                 ),
                 CustomTextField(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.white,
                   //autofocus: true,
 
                   textInputType: TextInputType.text,

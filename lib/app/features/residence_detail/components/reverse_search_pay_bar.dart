@@ -32,7 +32,7 @@ class ReverseSearchPayBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         border: Border(
           top: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1),
         ),
@@ -58,7 +58,7 @@ class ReverseSearchPayBar extends StatelessWidget {
                         style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -67,7 +67,7 @@ class ReverseSearchPayBar extends StatelessWidget {
                         style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
                     ],
@@ -92,7 +92,7 @@ class ReverseSearchPayBar extends StatelessWidget {
               onPressed: isLoading ? null : onTap,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.white,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 shape: RoundedRectangleBorder(
@@ -110,7 +110,7 @@ class ReverseSearchPayBar extends StatelessWidget {
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                       ),
                     )
                   : Text('Payer'),

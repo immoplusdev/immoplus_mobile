@@ -71,7 +71,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.immoBorderDefault),
             ),
@@ -229,7 +229,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     contentPadding: EdgeInsets.zero,
                     // Ajoutez ces deux lignes :
                     filled: true,
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.transparent,
                     suffixText: ' F',
                     suffixStyle: AppTypography.font(
                       fontWeight: FontWeight.w600,

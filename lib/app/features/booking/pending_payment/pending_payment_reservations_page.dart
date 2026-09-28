@@ -80,7 +80,7 @@ class _PendingPaymentReservationsPageState
           },
         ),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         centerTitle: true,
       ),
       backgroundColor: AppColors.whiteBackground,
@@ -139,7 +139,7 @@ class _PendingPaymentReservationsPageState
                           textAlign: TextAlign.center,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: const Color(0xFF667085),
+                                    color: AppColors.immoTextSecondary,
                                     height: 1.5,
                                   ),
                         ),

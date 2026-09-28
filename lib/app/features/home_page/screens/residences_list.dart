@@ -271,7 +271,7 @@ class _ResidencesListState extends State<ResidencesList>
                               height: 20,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: Colors.black12,
+                                  color: AppColors.black12,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(4)),
                                 ),
@@ -451,7 +451,7 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color:
-                    residences.isNotEmpty ? Colors.black : AppColors.immoTextDisabled,
+                    residences.isNotEmpty ? AppColors.black : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -495,7 +495,7 @@ class _LocationSectionData {
 
 class AppPrimaryColors {
   static const Color primary = kPrimaryColor;
-  static const Color primary50 = Color(0xffEEF1FC);
+  static const Color primary50 = AppColors.blue50;
   static const Color primary100 = Color(0xffC5CFF5);
   static const Color primary200 = Color(0xff9BADEF);
   static const Color primary300 = Color(0xff6B85E6);

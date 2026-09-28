@@ -58,12 +58,12 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: AppColors.black),
             onPressed: () => context.pop(),
           ),
           title: Text(
@@ -90,7 +90,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                       ? 'Entrez votre nouveau numéro de téléphone. Un code de vérification vous sera envoyé.'
                       : 'Entrez votre nouvelle adresse email. Un code de vérification vous sera envoyé.',
                   style: AppTypography.bodyMedium.copyWith(
-                    color: const Color(0xFF64748B),
+                    color: AppColors.slate500,
                     height: 1.5,
                   ),
                 ),
@@ -109,7 +109,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                     decoration: InputDecoration(
                       hintText: 'Nouvelle adresse email',
                       filled: true,
-                      fillColor: const Color(0xFFECECEC),
+                      fillColor: AppColors.immoBorderDefault,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(28),
                         borderSide: BorderSide.none,

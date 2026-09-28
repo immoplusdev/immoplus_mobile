@@ -42,7 +42,7 @@ class ThemeConfig {
           ),
           elevation: 0,
           iconTheme: const IconThemeData(
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
         checkboxTheme: CheckboxThemeData(
@@ -83,7 +83,7 @@ class ThemeConfig {
               AppTypography.bodyMedium.copyWith(color: CupertinoColors.white),
           prefixStyle: AppTypography.bodyMedium
               .copyWith(color: CupertinoColors.systemGrey3),
-          hintStyle: AppTypography.bodyMedium.copyWith(color: Colors.white70),
+          hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.white70),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
@@ -104,7 +104,7 @@ class ThemeConfig {
               secondaryContainer: CupertinoColors.darkBackgroundGray,
               surface: CupertinoColors.white,
               onPrimary: CupertinoColors.systemGrey5.darkColor,
-              secondary: Colors.transparent,
+              secondary: AppColors.transparent,
               onSecondary: CupertinoColors.black,
             ),
       );

@@ -22,7 +22,7 @@ class EstateInfo extends StatelessWidget {
         TextSpan(
             text: Utils.formatCurrency(bienImmobilierModel.prix),
             style: AppTypography.font(
-                color: Colors.black, fontWeight: FontWeight.w700)),
+                color: AppColors.black, fontWeight: FontWeight.w700)),
         TextSpan(
             text: ' Par mois', style: AppTypography.font(color: AppColors.immoTextSecondary))
       ])),

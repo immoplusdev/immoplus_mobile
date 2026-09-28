@@ -593,7 +593,7 @@ class _NewAlertChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();
@@ -639,7 +639,7 @@ class _Box extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(radius),
       ),
     );
@@ -832,7 +832,7 @@ class _PropertyCardsSkeleton extends StatelessWidget {
         child: Container(
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
           ),
         ),

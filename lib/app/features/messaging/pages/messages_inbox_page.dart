@@ -54,11 +54,11 @@ class _MessagesInboxView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text('Messages',
-            style: AppTypography.font(fontWeight: FontWeight.bold, color: Colors.black)),
-        backgroundColor: Colors.white,
+            style: AppTypography.font(fontWeight: FontWeight.bold, color: AppColors.black)),
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: false,
       ),

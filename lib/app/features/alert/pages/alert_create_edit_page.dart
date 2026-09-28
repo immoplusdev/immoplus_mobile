@@ -152,13 +152,13 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         backgroundColor: AppColors.whiteBackground,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           _isEditMode ? 'Modifier ma demande' : 'Nouvelle demande',
           style: AppTypography.h3.copyWith(
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
         centerTitle: true,
@@ -224,7 +224,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               height: 90,
               margin: const EdgeInsets.only(right: 12),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                     color:
@@ -241,7 +241,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   Text(
                     type.label,
                     style: AppTypography.captionMedium.copyWith(
-                      color: isSelected ? Colors.white : AppColors.immoTextSecondary,
+                      color: isSelected ? AppColors.white : AppColors.immoTextSecondary,
                     ),
                   ),
                 ],
@@ -264,7 +264,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               margin: const EdgeInsets.symmetric(horizontal: 4),
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                     color:
@@ -275,7 +275,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   type.label,
                   style: AppTypography.button.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.white : AppColors.immoTextSecondary,
+                    color: isSelected ? AppColors.white : AppColors.immoTextSecondary,
                   ),
                 ),
               ),
@@ -292,7 +292,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.immoBorderDefault),
         ),
@@ -306,7 +306,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                     'Sélectionner une localisation',
                 style: AppTypography.bodyMedium.copyWith(
                   color: _selectedAddress != null
-                      ? Colors.black
+                      ? AppColors.black
                       : AppColors.immoTextDisabled,
                 ),
               ),
@@ -330,7 +330,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
             width: 60,
             height: 45,
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : Colors.white,
+              color: isSelected ? AppColors.primary : AppColors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                   color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
@@ -340,7 +340,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                 rooms == 5 ? '5+' : rooms.toString(),
                 style: AppTypography.bodyLargeSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.white : const Color(0xFF1E40AF),
+                  color: isSelected ? AppColors.white : const Color(0xFF1E40AF),
                 ),
               ),
             ),
@@ -413,7 +413,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         hintStyle:
             AppTypography.bodyMedium.copyWith(color: AppColors.immoTextDisabled),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: AppColors.immoBorderDefault),

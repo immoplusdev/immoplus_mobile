@@ -205,7 +205,7 @@ class BannerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultColor = Utils.parseColor(banner.textColor) ?? Colors.white;
+    final defaultColor = Utils.parseColor(banner.textColor) ?? AppColors.white;
     final iconColor = Utils.parseColor(banner.iconColor) ?? defaultColor;
 
     final textStyle = AppTypography.labelMedium.copyWith(
@@ -274,7 +274,7 @@ class BannerItem extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: AppColors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(60),
                 ),
                 child: Icon(Icons.close, color: iconColor, size: 12),

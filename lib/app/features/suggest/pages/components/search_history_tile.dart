@@ -30,7 +30,7 @@ class SearchHistoryTile extends StatelessWidget {
                 style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: AppColors.black87,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

@@ -32,13 +32,13 @@ class DetailEstateInfos extends StatelessWidget {
               // Icon(
               //   Icons.star,
               //   size: 15,
-              //   color: Colors.orange,
+              //   color: AppColors.orange,
               // ),
               // Text(
               //   "4",
               //   style: AppTypography.font(
               //     fontSize: 12,
-              //     color: Colors.orange,
+              //     color: AppColors.orange,
               //   ),
               // ),
 

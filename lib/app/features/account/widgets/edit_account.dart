@@ -1,4 +1,5 @@
-// import 'package:flutter/cupertino.dart';
+// import 'package:immoplus/app/design_system/tokens/app_colors.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:go_router/go_router.dart';
@@ -81,7 +82,7 @@
 //         appBar: AppBar(
 //           automaticallyImplyLeading: false,
 //           title: Text('Modifier mes informations'),
-//           //backgroundColor: Colors.red,
+//           //backgroundColor: AppColors.red,
 //           //backgroundColor: Theme.of(context).colorScheme.primaryVariant,
 
 //           elevation: 0,

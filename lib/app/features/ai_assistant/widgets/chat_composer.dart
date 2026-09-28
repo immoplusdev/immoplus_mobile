@@ -81,7 +81,7 @@ class _ChatComposerState extends State<ChatComposer> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x00FFFFFF), Color(0xFFFFFFFF)],
+                    colors: [AppColors.transparent, AppColors.white],
                   ),
                 ),
               ),
@@ -97,7 +97,7 @@ class _ChatComposerState extends State<ChatComposer> {
             child: Container(
               constraints: const BoxConstraints(minHeight: 54),
               decoration: BoxDecoration(
-                color: Colors.transparent,
+                color: AppColors.transparent,
                 borderRadius: BorderRadius.circular(ChatTokens.inputRadius),
                 border: Border.all(
                   color: ChatTokens.borderStandard,
@@ -141,7 +141,7 @@ class _ChatComposerState extends State<ChatComposer> {
                           height: 1.3,
                         ),
                         filled: false,
-                        fillColor: Colors.transparent,
+                        fillColor: AppColors.transparent,
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -236,7 +236,7 @@ class _PrimaryButtonState extends State<_PrimaryButton> {
             color: widget.background,
             shape: BoxShape.circle,
           ),
-          child: Icon(widget.icon, size: widget.iconSize, color: Colors.white),
+          child: Icon(widget.icon, size: widget.iconSize, color: AppColors.white),
         ),
       ),
     );

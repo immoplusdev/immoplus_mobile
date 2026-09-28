@@ -26,7 +26,7 @@ class ButtonMap extends StatelessWidget {
         child: const Icon(
           Iconsax.map_1,
           size: 20,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

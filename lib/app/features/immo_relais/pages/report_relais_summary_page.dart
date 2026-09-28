@@ -78,17 +78,17 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Ma demande',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
         ),
       ),
       body: SafeArea(
@@ -142,7 +142,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50,
+                  color: AppColors.green50,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -150,7 +150,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
                   style: AppTypography.font(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Colors.green.shade700,
+                    color: AppColors.emerald700,
                   ),
                 ),
               ),
@@ -212,7 +212,7 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Iconsax.location, size: 18, color: Colors.black87),
+          const Icon(Iconsax.location, size: 18, color: AppColors.black87),
           const Gap(10),
           Expanded(
             child: Text(

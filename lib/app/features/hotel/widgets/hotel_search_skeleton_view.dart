@@ -14,7 +14,7 @@ class HotelSearchSkeletonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
           Container(
@@ -58,7 +58,7 @@ class HotelSearchSkeletonView extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(radius),
         ),
       ),

@@ -61,9 +61,9 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leadingWidth: 64,
         leading: Padding(
@@ -79,7 +79,7 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
               ),
               child: const Icon(
                 Icons.arrow_back_ios_rounded,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 16,
               ),
             ),
@@ -128,7 +128,7 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                           height: 80,
                           child: InternationalPhoneInput(
                             key: _phoneFieldKey,
-                            backgroundColor: Colors.transparent,
+                            backgroundColor: AppColors.transparent,
                             onValidPhoneNumber: (value) {
                               phoneNumber = value;
                             },
@@ -151,8 +151,8 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                     isLoading: isLoading,
                     clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
                     color: isPhoneNumberValid
-                        ? const Color(0xFF2744DE)
-                        : Colors.blueGrey.shade200,
+                        ? AppColors.immoBrandPrimary
+                        : AppColors.blueGrey,
                   ),
                 ),
               ],

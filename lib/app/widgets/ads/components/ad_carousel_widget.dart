@@ -45,7 +45,7 @@ class AdCarouselWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: AppColors.immoBgSurfaceMuted, width: 0.5),
         ),
@@ -64,7 +64,7 @@ class AdCarouselWidget extends StatelessWidget {
                 style: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1A1A2E),
+                  color: AppColors.navy900,
                 ),
               ),
             if (campaign.content.subtitle?.isNotEmpty == true) ...[
@@ -217,11 +217,11 @@ class _PhotoFan extends StatelessWidget {
         height: height,
         padding: const EdgeInsets.all(_borderWidth),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(_radius),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.black.withValues(alpha: 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -237,7 +237,7 @@ class _PhotoFan extends StatelessWidget {
             placeholder: (_, __) => Shimmer.fromColors(
               baseColor: AppColors.immoBorderStrong!,
               highlightColor: AppColors.immoBgSurfaceMuted!,
-              child: Container(color: Colors.white),
+              child: Container(color: AppColors.white),
             ),
             errorWidget: (_, __, ___) => Container(
               color: AppColors.immoBorderDefault,
@@ -258,18 +258,18 @@ class _WatchVideosPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
+        color: AppColors.black.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Iconsax.video_play, size: 14, color: Colors.white),
+          Icon(Iconsax.video_play, size: 14, color: AppColors.white),
           SizedBox(width: 6),
           Text(
             'Voir les vidéos',
             style: AppTypography.font(
-                fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white),
+                fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.white),
           ),
         ],
       ),

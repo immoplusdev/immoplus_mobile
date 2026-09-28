@@ -43,7 +43,7 @@ class DescriptionFooter extends StatelessWidget {
         Text(
           hashtagsText,
           style: AppTypography.font(
-            color: Colors.white.withValues(alpha: 0.8),
+            color: AppColors.white.withValues(alpha: 0.8),
             fontSize: _fontSize,
             fontWeight: FontWeight.w600,
             height: 1.35,
@@ -54,7 +54,7 @@ class DescriptionFooter extends StatelessWidget {
           Text(
             formattedDate,
             style: AppTypography.font(
-              color: Colors.white.withValues(alpha: 0.6),
+              color: AppColors.white.withValues(alpha: 0.6),
               fontSize: _fontSize,
               fontWeight: FontWeight.w400,
               height: 1.35,

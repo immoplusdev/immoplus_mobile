@@ -114,10 +114,10 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
   late Animation<double> _messageOpacity;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
-  static const Color _bgColor = Color(0xFFFFFFFF);
+  static const Color _bgColor = AppColors.white;
   static const Color _iconBg = Color(0xFFAB8DFF);
   static const Color _accentLight = Color(0xFFEEE8FF);
-  static const Color _textPrimary = Color(0xFF1A1A1A);
+  static const Color _textPrimary = AppColors.gray900;
   static const Color _textMuted = Color(0xFF888888);
   static const Color _errorBg = Color(0xFFFF5A5A);
 
@@ -653,7 +653,7 @@ class _ReservationPendingBannerState extends State<ReservationPendingBanner>
                 width: 64,
                 color: _errorBg,
                 child: Center(
-                    child: Icon(_endIcon, color: Colors.white, size: 22)),
+                    child: Icon(_endIcon, color: AppColors.white, size: 22)),
               ),
               Expanded(
                 child: Padding(

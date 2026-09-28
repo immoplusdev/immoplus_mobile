@@ -95,7 +95,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           // Radial Gradient
@@ -107,7 +107,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   radius: 0.8,
                   colors: [
                     AppColors.immoBrandPrimary.withOpacity(0.4),
-                    Colors.transparent,
+                    AppColors.transparent,
                   ],
                 ),
               ),
@@ -125,9 +125,9 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.6),
-                    Colors.black.withOpacity(0.9),
+                    AppColors.transparent,
+                    AppColors.black.withOpacity(0.6),
+                    AppColors.black.withOpacity(0.9),
                   ],
                 ),
               ),
@@ -370,7 +370,7 @@ class CurvePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 

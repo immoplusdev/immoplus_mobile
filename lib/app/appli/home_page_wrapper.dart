@@ -296,7 +296,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor:
-                state == PageState.vivre ? Colors.black : Colors.white,
+                state == PageState.vivre ? AppColors.black : AppColors.white,
             currentIndex: _indexForState(state),
             onTap: (value) => _onItemTapped(index: value, pageState: state),
             selectedFontSize: 12,
@@ -305,7 +305,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
             showUnselectedLabels: true,
             selectedItemColor: AppColors.primary,
             unselectedItemColor:
-                state == PageState.vivre ? Colors.white : AppColors.immoTextSecondary,
+                state == PageState.vivre ? AppColors.white : AppColors.immoTextSecondary,
             items: [
               _buildNavItem(
                 icon: Iconsax.home,
@@ -350,7 +350,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     String? svgAsset,
     Widget? badgeWidget,
   }) {
-    final inactiveColor = immoMode ? Colors.white : AppColors.immoTextSecondary;
+    final inactiveColor = immoMode ? AppColors.white : AppColors.immoTextSecondary;
 
     Widget buildIcon({required bool active}) {
       Widget base;

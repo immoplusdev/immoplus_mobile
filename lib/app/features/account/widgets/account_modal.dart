@@ -12,7 +12,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //     shape: const RoundedRectangleBorder(
 //         borderRadius: BorderRadius.only(
 //             topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-//     backgroundColor: Colors.white,
+//     backgroundColor: AppColors.white,
 //     context: context,
 //     builder: (BuildContext context) {
 //       return Container(
@@ -22,9 +22,9 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //                 topLeft: Radius.circular(30), topRight: Radius.circular(30))),
 //         height: MediaQuery.of(context).size.height - 250,
 //         child: Scaffold(
-//           backgroundColor: Colors.transparent,
+//           backgroundColor: AppColors.transparent,
 //           appBar: AppBar(
-//             backgroundColor: Colors.transparent,
+//             backgroundColor: AppColors.transparent,
 //             automaticallyImplyLeading: false,
 //             actions: [
 //               IconButton(
@@ -44,7 +44,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //             builder: (context, state) {
 //               return (state is AccounReadyState)
 //                   ? Container(
-//                       //color: Colors.amber,
+//                       //color: AppColors.amber,
 //                       width: double.infinity,
 //                       height: 300,
 //                       child: Column(
@@ -58,7 +58,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //                             size: 100,
 //                             color: (state.status)
 //                                 ? Color.fromARGB(255, 81, 150, 92)
-//                                 : Colors.redAccent,
+//                                 : AppColors.redAccent,
 //                           ),
 //                           Text(
 //                             (state.status)
@@ -68,7 +68,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //                               fontSize: 20,
 //                               color: (state.status)
 //                                   ? Color.fromARGB(255, 81, 150, 92)
-//                                   : Colors.redAccent,
+//                                   : AppColors.redAccent,
 //                             ),
 //                           ),
 //                           SizedBox(
@@ -94,7 +94,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //                     )
 //                   : (state is AccountPendingState)
 //                       ? Container(
-//                           //color: Colors.red,
+//                           //color: AppColors.red,
 //                           //width: double.infinity,
 //                           height: 300,
 //                           child: Center(

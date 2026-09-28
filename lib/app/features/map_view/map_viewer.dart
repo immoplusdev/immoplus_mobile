@@ -297,7 +297,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
               child: GestureDetector(
                 onTap: _collapseSearch,
                 child: Container(
-                  color: Colors.black.withValues(alpha: 0.4),
+                  color: AppColors.black.withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -374,14 +374,14 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.refresh_rounded,
-                              size: 16, color: Colors.white),
+                              size: 16, color: AppColors.white),
                           SizedBox(width: 8),
                           Text(
                             'Voir les biens ici',
                             style: AppTypography.font(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                         ],
@@ -457,11 +457,11 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: AppColors.black.withValues(alpha: 0.1),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -482,11 +482,11 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
+              color: AppColors.black.withValues(alpha: 0.12),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -543,14 +543,14 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
         height: cardHeight + bottomPad,
         padding: EdgeInsets.only(bottom: bottomPad),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.black.withValues(alpha: 0.08),
               blurRadius: 16,
               offset: const Offset(0, -4),
             ),
@@ -621,7 +621,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 18, color: Colors.white),
+          child: Icon(icon, size: 18, color: AppColors.white),
         ),
         SizedBox(width: 10),
         Column(
@@ -635,7 +635,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                 style: AppTypography.font(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1A1A),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ),
@@ -643,7 +643,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
               label,
               style: AppTypography.font(
                 fontSize: 11,
-                color: Color(0xFF999999),
+                color: AppColors.immoFeedbackNeutral,
               ),
             ),
           ],

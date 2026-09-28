@@ -82,17 +82,17 @@ class _RelaisInterestsPageState extends State<RelaisInterestsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Personnes intéressées',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
         ),
       ),
       body: SafeArea(
@@ -138,7 +138,7 @@ class _InterestCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.primary, width: .2),
       ),
@@ -188,11 +188,11 @@ class _InterestCard extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: onDecline,
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.red),
+                      side: const BorderSide(color: AppColors.red),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text('Décliner', style: AppTypography.font(color: Colors.red, fontWeight: FontWeight.w600)),
+                    child: Text('Décliner', style: AppTypography.font(color: AppColors.red, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const Gap(12),
@@ -206,7 +206,7 @@ class _InterestCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text('Planifier une visite',
-                        style: AppTypography.font(color: Colors.white, fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(color: AppColors.white, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],

@@ -143,19 +143,19 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           final res = state.reservationResponse.data;
           final paid = hasPaid(state.reservationResponse);
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Iconsax.arrow_left, color: Colors.black),
+                icon: const Icon(Iconsax.arrow_left, color: AppColors.black),
                 onPressed: () =>
                     context.canPop() ? context.pop() : context.go('/'),
               ),
               title: Text('Détails réservation'),
               titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
               centerTitle: false,
             ),
@@ -250,7 +250,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     children: [
                       Row(
                         children: [
-                          _IconBox(icon: Iconsax.tag, color: Colors.purple),
+                          _IconBox(icon: Iconsax.tag, color: AppColors.purple),
                           const Gap(12),
                           Expanded(
                             child: Column(
@@ -269,7 +269,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                        color: Colors.purple,
+                                        color: AppColors.purple,
                                         fontFamily: 'monospace',
                                       ),
                                 ),
@@ -352,7 +352,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           child: Row(
                             children: [
                               _IconBox(
-                                  icon: Iconsax.user, color: Colors.orange),
+                                  icon: Iconsax.user, color: AppColors.orange),
                               const Gap(12),
                               Expanded(
                                 child: Column(
@@ -429,7 +429,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       _ActionRow(
                         icon: Iconsax.headphone,
                         label: 'Support client',
-                        iconColor: Colors.deepPurple,
+                        iconColor: AppColors.deepPurple,
                         onTap: () => ContactUtils.showContact(id: widget.id),
                       ),
                     ],
@@ -555,7 +555,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               backgroundColor: AppColors.scafold,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Iconsax.arrow_left, color: Colors.black),
+                icon: const Icon(Iconsax.arrow_left, color: AppColors.black),
                 onPressed: () =>
                     context.canPop() ? context.pop() : context.go('/'),
               ),
@@ -606,7 +606,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           children: [
             Row(
               children: [
-                _IconBox(icon: Iconsax.scan_barcode, color: Colors.blue),
+                _IconBox(icon: Iconsax.scan_barcode, color: AppColors.blue),
                 const Gap(12),
                 Expanded(
                   child: Text(
@@ -634,7 +634,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     children: [
                       Text(
                         _qrError!,
-                        style: AppTypography.font(color: Colors.red),
+                        style: AppTypography.font(color: AppColors.red),
                         textAlign: TextAlign.center,
                       ),
                       const Gap(8),
@@ -654,12 +654,12 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: AppColors.immoBorderDefault!),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
+                          color: AppColors.black.withOpacity(0.03),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -677,7 +677,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       width: 204,
                       height: 204,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
+                        color: AppColors.white.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Center(
@@ -724,7 +724,7 @@ class _SectionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.immoBorderDefault),
       ),
@@ -783,9 +783,9 @@ class _StatusRow extends StatelessWidget {
       return AppColors.immoFeedbackSuccess;
     }
     if (status == 'refuse' || status == 'annule') {
-      return Colors.red;
+      return AppColors.red;
     }
-    return Colors.orange;
+    return AppColors.orange;
   }
 
   String _text() => Utils.getServiceStatus(status);
@@ -888,7 +888,7 @@ class _DatesCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.immoBorderDefault),
       ),
@@ -951,7 +951,7 @@ class _DatesCard extends StatelessWidget {
                     date: fmt.format(checkout),
                     hour: reservationModel.residence.heureDepart,
                     icon: Iconsax.logout,
-                    color: Colors.redAccent,
+                    color: AppColors.redAccent,
                   ),
                 ),
               ],

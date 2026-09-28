@@ -55,10 +55,10 @@ class InboxTabs extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : Colors.blue.shade100,
+                  color: isSelected ? AppColors.primary : AppColors.blue100,
                 ),
               ),
               child: Row(
@@ -69,7 +69,7 @@ class InboxTabs extends StatelessWidget {
                     style: AppTypography.font(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : AppColors.primary,
+                      color: isSelected ? AppColors.white : AppColors.primary,
                     ),
                   ),
                   if (unread > 0) ...[
@@ -78,7 +78,7 @@ class InboxTabs extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 1),
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.white : AppColors.primary,
+                        color: isSelected ? AppColors.white : AppColors.primary,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -86,7 +86,7 @@ class InboxTabs extends StatelessWidget {
                         style: AppTypography.font(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? AppColors.primary : Colors.white,
+                          color: isSelected ? AppColors.primary : AppColors.white,
                         ),
                       ),
                     ),

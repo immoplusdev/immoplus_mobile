@@ -77,7 +77,7 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
                         baseColor: AppColors.immoBorderStrong,
                         highlightColor: AppColors.immoBgSurfaceMuted,
                         child: const CupertinoListTile(
-                          backgroundColor: Colors.red,
+                          backgroundColor: AppColors.red,
                           title: Text("•••••••••••••••••••"),
                         ),
                       ),

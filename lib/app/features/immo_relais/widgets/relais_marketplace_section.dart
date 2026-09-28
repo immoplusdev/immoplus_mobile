@@ -84,7 +84,7 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
     final result = await showModalBottomSheet<_AdvancedFilters>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (_) => _AdvancedFiltersSheet(
         initialRooms: _roomsFilter,
         initialPriceMin: _priceMinFilter,
@@ -143,7 +143,7 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
                   child: Icon(
                     Iconsax.setting_4,
                     size: 18,
-                    color: _hasAdvancedFilters ? Colors.white : AppColors.immoTextSecondary,
+                    color: _hasAdvancedFilters ? AppColors.white : AppColors.immoTextSecondary,
                   ),
                 ),
               ),
@@ -167,7 +167,7 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.white,
+                    color: isSelected ? AppColors.primary : AppColors.white,
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
                   ),
@@ -176,7 +176,7 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
                     style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : AppColors.immoTextLabel,
+                      color: isSelected ? AppColors.white : AppColors.immoTextLabel,
                     ),
                   ),
                 ),
@@ -283,7 +283,7 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -319,7 +319,7 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
                       style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: _rooms == rooms ? Colors.white : AppColors.immoTextLabel,
+                        color: _rooms == rooms ? AppColors.white : AppColors.immoTextLabel,
                       ),
                     ),
                   ),
@@ -354,7 +354,7 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
                   text: 'Appliquer',
                   onClick: _apply,
                   color: AppColors.primary,
-                  textColor: Colors.white,
+                  textColor: AppColors.white,
                   elevation: 0,
                 ),
               ),

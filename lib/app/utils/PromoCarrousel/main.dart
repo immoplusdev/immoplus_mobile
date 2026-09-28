@@ -42,7 +42,7 @@ class CarouselDemoPage extends StatelessWidget {
         bottomWidget: const Icon(
           Icons.savings,
           size: 60,
-          color: Colors.white70,
+          color: AppColors.white70,
         ),
       ),
       PromoCardData(
@@ -56,7 +56,7 @@ class CarouselDemoPage extends StatelessWidget {
         bottomWidget: const Icon(
           Icons.card_giftcard,
           size: 60,
-          color: Colors.white70,
+          color: AppColors.white70,
         ),
       ),
       PromoCardData(
@@ -70,7 +70,7 @@ class CarouselDemoPage extends StatelessWidget {
         bottomWidget: const Icon(
           Icons.local_offer,
           size: 60,
-          color: Colors.white70,
+          color: AppColors.white70,
         ),
       ),
       PromoCardData(
@@ -84,7 +84,7 @@ class CarouselDemoPage extends StatelessWidget {
         bottomWidget: const Icon(
           Icons.support_agent,
           size: 60,
-          color: Colors.white70,
+          color: AppColors.white70,
         ),
       ),
     ];
@@ -94,7 +94,7 @@ class CarouselDemoPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Carrousel Promo'),
         backgroundColor: kPrimaryColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
       body: SingleChildScrollView(
         child: Column(

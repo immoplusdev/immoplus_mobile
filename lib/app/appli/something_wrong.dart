@@ -12,7 +12,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //     return MaterialApp(
 //       debugShowCheckedModeBanner: false,
 //       home: Scaffold(
-//         //backgroundColor: Colors.red,
+//         //backgroundColor: AppColors.red,
 //         body: Column(
 //           mainAxisAlignment: MainAxisAlignment.center,
 //           children: [

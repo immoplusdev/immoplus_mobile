@@ -60,7 +60,7 @@ class ForYouResidenceTile extends StatelessWidget {
         baseColor: AppColors.immoBorderStrong,
         highlightColor: AppColors.immoBgSurfaceMuted,
         period: const Duration(milliseconds: 500),
-        child: Container(color: Colors.white),
+        child: Container(color: AppColors.white),
       ),
       errorWidget: (context, url, error) => Container(
         color: AppColors.immoBorderDefault,
@@ -81,7 +81,7 @@ class ForYouResidenceTile extends StatelessWidget {
           style: AppTypography.font(
             fontWeight: FontWeight.bold,
             fontSize: 15,
-            color: Colors.black87,
+            color: AppColors.black87,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -106,7 +106,7 @@ class ForYouResidenceTile extends StatelessWidget {
                   style: AppTypography.font(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
                 ),
                 TextSpan(

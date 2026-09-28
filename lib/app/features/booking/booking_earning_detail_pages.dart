@@ -34,7 +34,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
             info: 'Residence les rose',
           ),
           ListTile(
-            tileColor: Colors.white,
+            tileColor: AppColors.white,
             title: Text('ID réservation'),
             titleTextStyle: Theme.of(context)
                 .textTheme
@@ -79,7 +79,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
                         itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: ListTile(
-                            tileColor: Colors.white,
+                            tileColor: AppColors.white,
                             title: Text('La résidence est indisponible'),
                             trailing: Checkbox(
                               value: true,

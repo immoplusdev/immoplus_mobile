@@ -16,10 +16,10 @@ class BecomeProIntroPage extends StatelessWidget {
       backgroundColor: AppColors.immoBecomeProGradientBottom,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => context.pop(),
         ),
       ),
@@ -51,8 +51,8 @@ class BecomeProIntroPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.3)
+                          AppColors.transparent,
+                          AppColors.black.withValues(alpha: 0.3)
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -79,7 +79,7 @@ class BecomeProIntroPage extends StatelessWidget {
                       "Passez en compte\nprofessionnel",
                       textAlign: TextAlign.center,
                       style: AppTypography.h1.copyWith(
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                   ),
@@ -91,7 +91,7 @@ class BecomeProIntroPage extends StatelessWidget {
                       "Publiez vos biens, gérez vos annonces et atteignez\nplus de clients avec Immo Plus.",
                       textAlign: TextAlign.center,
                       style: AppTypography.bodyMedium.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: AppColors.white.withOpacity(0.9),
                       ),
                     ),
                   ),
@@ -132,13 +132,13 @@ class BecomeProIntroPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
+        color: AppColors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Text(
         text,
         style: AppTypography.labelMedium.copyWith(
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

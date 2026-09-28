@@ -155,7 +155,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
     final amenitiesList = _getAvailableAmenities(hotel.amenities);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
@@ -166,8 +166,8 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 300,
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.transparent,
+            backgroundColor: AppColors.white,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -204,7 +204,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                 padding: const EdgeInsets.only(right: 12),
                 child: CircleButton(
                   icon: _isLiked ? Iconsax.heart5 : Iconsax.heart,
-                  iconColor: _isLiked ? Colors.red : null,
+                  iconColor: _isLiked ? AppColors.red : null,
                   onTap: () {
                     setState(() => _isLiked = !_isLiked);
                   },
@@ -230,7 +230,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
               child: Container(
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
               ),
@@ -345,7 +345,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                         style: AppTypography.font(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: AppColors.black87,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -450,7 +450,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
       bottomNavigationBar: Container(
         height: 130,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           border: Border(top: BorderSide(color: AppColors.immoBgSurfaceMuted)),
         ),
         padding: EdgeInsets.only(
@@ -470,7 +470,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                     text: TextSpan(
                       style: AppTypography.font(
                         fontSize: 16,
-                        color: Colors.black,
+                        color: AppColors.black,
                         fontWeight: FontWeight.bold,
                       ),
                       children: [
@@ -479,7 +479,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                           style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                         TextSpan(
@@ -488,7 +488,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                           style: AppTypography.font(
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -508,7 +508,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                         style: AppTypography.font(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black.withOpacity(0.55),
+                          color: AppColors.black.withOpacity(0.55),
                         ),
                       );
                     },
@@ -526,7 +526,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                       'Annulation gratuite',
                       style: AppTypography.font(
                         fontSize: 10,
-                        color: Color(0xFF222222),
+                        color: AppColors.immoTextPrimary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -552,7 +552,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                   style: AppTypography.font(
                     fontSize: 13,
                     height: 1.2,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -624,7 +624,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
           style: AppTypography.font(
             fontSize: 15,
             fontWeight: FontWeight.w400,
-            color: Colors.black.withOpacity(0.90),
+            color: AppColors.black.withOpacity(0.90),
             height: 1.55,
           ),
         );
@@ -646,7 +646,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
               style: AppTypography.font(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
-                color: Colors.black.withOpacity(0.90),
+                color: AppColors.black.withOpacity(0.90),
                 height: 1.55,
               ),
             ),
@@ -662,14 +662,14 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                       style: AppTypography.font(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xff2744de),
+                        color: AppColors.immoBrandPrimary,
                       ),
                     ),
                     SizedBox(width: 4),
                     Icon(
                       Icons.chevron_right,
                       size: 15,
-                      color: Color(0xff2744de),
+                      color: AppColors.immoBrandPrimary,
                     ),
                   ],
                 ),
@@ -687,7 +687,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -707,7 +707,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                 style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
               SizedBox(height: 20),
@@ -740,7 +740,7 @@ class _SliverDivider extends StatelessWidget {
         child: Divider(
           height: 1,
           thickness: 0.5,
-          color: Color(0xFFEEEEEE),
+          color: AppColors.greyMaterial200,
         ),
       ),
     );

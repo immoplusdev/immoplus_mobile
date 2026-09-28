@@ -452,7 +452,7 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
             style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Colors.black54,
+              color: AppColors.black54,
             ),
           ),
           SizedBox(height: 8),
@@ -464,21 +464,21 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
               return ChoiceChip(
                 label: Text(z.nom),
                 selected: isSelected,
-                selectedColor: Colors.black,
-                backgroundColor: Colors.white,
+                selectedColor: AppColors.black,
+                backgroundColor: AppColors.white,
                 showCheckmark: false,
                 visualDensity: VisualDensity.compact,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 labelStyle: AppTypography.font(
-                  color: isSelected ? Colors.white : AppColors.immoTextLabel,
+                  color: isSelected ? AppColors.white : AppColors.immoTextLabel,
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: BorderSide(
-                    color: isSelected ? Colors.black : AppColors.immoBorderStrong,
+                    color: isSelected ? AppColors.black : AppColors.immoBorderStrong,
                     width: 1.0,
                   ),
                 ),

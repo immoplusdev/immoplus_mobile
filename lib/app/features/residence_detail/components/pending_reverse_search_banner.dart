@@ -26,8 +26,8 @@ class PendingReverseSearchBanner extends StatelessWidget {
     this.onExpired,
   });
 
-  static const _amber = Color(0xFFB54708);
-  static const _amberBg = Color(0xFFFFFAEB);
+  static const _amber = AppColors.amber800;
+  static const _amberBg = AppColors.orange50;
   static const _amberBorder = Color(0xFFFEC84B);
 
   @override

@@ -63,7 +63,7 @@ class PropositionCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -118,7 +118,7 @@ class PropositionCard extends StatelessWidget {
                               style: AppTypography.font(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: AppColors.black,
                               ),
                             ),
                             TextSpan(

@@ -89,10 +89,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   colorScheme: theme.colorScheme.copyWith(
                     surface: Theme.of(context).colorScheme.onPrimary,
                     // Change the primary color
-                    // surface: Colors.white,
-                    // background: Colors.white,
-                    // onPrimary: Colors.black, // Change the text color on primary
-                    // onSurface: Colors.black, // Change the text color on surface
+                    // surface: AppColors.white,
+                    // background: AppColors.white,
+                    // onPrimary: AppColors.black, // Change the text color on primary
+                    // onSurface: AppColors.black, // Change the text color on surface
                   ),
                 ),
                 child: child!,

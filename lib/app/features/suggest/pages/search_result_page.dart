@@ -219,13 +219,13 @@ class _SearchResultPageState extends State<SearchResultPage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : const Color(0xffEDF1F7),
+                color: isSelected ? AppColors.blue500 : const Color(0xffEDF1F7),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Text(
                 item.label,
                 style: AppTypography.font(
-                  color: isSelected ? Colors.white : const Color(0xff333333),
+                  color: isSelected ? AppColors.white : const Color(0xff333333),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   fontSize: 12,
                 ),

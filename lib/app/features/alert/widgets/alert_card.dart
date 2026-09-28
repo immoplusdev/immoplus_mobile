@@ -36,7 +36,7 @@ class AlertCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.primary, width: .2),
         ),
@@ -132,7 +132,7 @@ class AlertCard extends StatelessWidget {
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(
@@ -182,7 +182,7 @@ class AlertCard extends StatelessWidget {
                       onRefresh?.call();
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       side: BorderSide.none,
                       backgroundColor: AppColors.immoTextDisabled,
                       shape: RoundedRectangleBorder(
@@ -221,7 +221,7 @@ class AlertCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

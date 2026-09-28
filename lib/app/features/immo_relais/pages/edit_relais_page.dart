@@ -151,17 +151,17 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Modifier ma demande',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
         ),
       ),
       body: SafeArea(
@@ -218,7 +218,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
+      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
     );
   }
 
@@ -230,7 +230,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         hintText: hint,
         hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: AppColors.immoBorderStrong),
@@ -297,7 +297,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryLite : Colors.white,
+                  color: isSelected ? AppColors.primaryLite : AppColors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
@@ -345,7 +345,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : Colors.white,
+              color: isSelected ? AppColors.primary : AppColors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
             ),
@@ -354,7 +354,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               style: AppTypography.font(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : AppColors.immoTextLabel,
+                color: isSelected ? AppColors.white : AppColors.immoTextLabel,
               ),
             ),
           ),
@@ -414,7 +414,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               padding: const EdgeInsets.symmetric(vertical: 14),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
               ),
@@ -422,7 +422,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                 preset.label,
                 style: AppTypography.font(
                   fontWeight: FontWeight.w600,
-                  color: isSelected ? Colors.white : AppColors.primary,
+                  color: isSelected ? AppColors.white : AppColors.primary,
                 ),
               ),
             ),
@@ -444,7 +444,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,

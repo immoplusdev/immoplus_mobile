@@ -99,17 +99,17 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   Widget build(BuildContext context) {
     final status = _relais.statusEnum;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Ma demande',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
         ),
         actions: [
           if (_isLoading)
@@ -238,7 +238,7 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
+      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
     );
   }
 
@@ -362,7 +362,7 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             ),
             child: Text(
               'Modifier',
-              style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+              style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.black),
             ),
           ),
         ),
@@ -372,12 +372,12 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             onPressed: _confirmCancel,
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: BorderSide(color: Colors.red),
+              side: BorderSide(color: AppColors.red),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
               'Annuler',
-              style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+              style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.red),
             ),
           ),
         ),

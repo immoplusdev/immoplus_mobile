@@ -9,7 +9,7 @@ class HotelDetailShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Shimmer.fromColors(
         baseColor: AppColors.immoBorderStrong,
         highlightColor: AppColors.immoBgSurfaceMuted,
@@ -22,7 +22,7 @@ class HotelDetailShimmer extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 300,
-                color: Colors.white,
+                color: AppColors.white,
               ),
               Transform.translate(
                 offset: const Offset(0, -20),
@@ -30,7 +30,7 @@ class HotelDetailShimmer extends StatelessWidget {
                   width: double.infinity,
                   height: 200,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
                   ),
@@ -42,19 +42,19 @@ class HotelDetailShimmer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(height: 20, width: 120, color: Colors.white),
+                    Container(height: 20, width: 120, color: AppColors.white),
                     const Gap(12),
                     Container(
                         height: 14,
                         width: double.infinity,
-                        color: Colors.white),
+                        color: AppColors.white),
                     const Gap(8),
                     Container(
                         height: 14,
                         width: double.infinity,
-                        color: Colors.white),
+                        color: AppColors.white),
                     const Gap(8),
-                    Container(height: 14, width: 200, color: Colors.white),
+                    Container(height: 14, width: 200, color: AppColors.white),
                   ],
                 ),
               ),

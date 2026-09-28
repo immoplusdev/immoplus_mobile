@@ -45,7 +45,7 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
         bottom: MediaQuery.of(context).padding.bottom + 8,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1)),
       ),
       child: Row(

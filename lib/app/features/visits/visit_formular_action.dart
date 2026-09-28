@@ -117,10 +117,10 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
         );
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent,
+          backgroundColor: AppColors.white,
+          surfaceTintColor: AppColors.transparent,
           elevation: 0,
           automaticallyImplyLeading: true,
           centerTitle: true,
@@ -128,7 +128,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
             'Demande de visite',
             style: AppTypography.h4.copyWith(
               fontWeight: FontWeight.w700,
-              color: Colors.black,
+              color: AppColors.black,
             ),
           ),
           // actions: const [
@@ -164,7 +164,7 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: AppColors.immoBorderDefault),
                     ),
@@ -286,7 +286,7 @@ class _SectionLabel extends StatelessWidget {
         Text(
           title,
           style: AppTypography.button.copyWith(
-            color: Colors.black87,
+            color: AppColors.black87,
           ),
         ),
       ],

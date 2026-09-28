@@ -24,10 +24,10 @@ class NotificationTile extends StatelessWidget {
       key: Key(notification.id),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red.shade400,
+        color: AppColors.red500,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 24),
-        child: const Icon(Icons.delete_outline, color: Colors.white, size: 28),
+        child: const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
       ),
       onDismissed: (_) => onDelete?.call(),
       child: InkWell(
@@ -36,7 +36,7 @@ class NotificationTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             color: isRead
-                ? Colors.transparent
+                ? AppColors.transparent
                 : AppColors.primary.withOpacity(0.03),
             border: Border(
               bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1),

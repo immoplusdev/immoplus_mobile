@@ -83,12 +83,12 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   bool _hasPurchaseLogged = false;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
-  static const Color _primaryBlue = Color(0xFF2744DE);
-  static const Color _successGreen = Color(0xFF22C55E);
+  static const Color _primaryBlue = AppColors.blue500;
+  static const Color _successGreen = AppColors.green500;
   static const Color _warningOrange = Color(0xFFF68A3A);
   static const Color _errorRed = Color(0xFFE63946);
-  static const Color _bgColor = Color(0xFFFFFFFF);
-  static const Color _textPrimary = Color(0xFF1A1A1A);
+  static const Color _bgColor = AppColors.white;
+  static const Color _textPrimary = AppColors.gray900;
   static const Color _textSecondary = Color(0xFF666666);
 
   @override
@@ -324,9 +324,9 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -344,7 +344,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
       ),
       body: Stack(
         children: [
-          Container(color: Colors.white),
+          Container(color: AppColors.white),
 
           // ── Lottie ──────────────────────────────────────────────────────────
           Positioned(
@@ -376,7 +376,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                       const BorderRadius.vertical(top: Radius.circular(24)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
+                      color: AppColors.black.withValues(alpha: 0.08),
                       blurRadius: 24,
                       offset: const Offset(0, -4),
                     ),
@@ -392,7 +392,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                         width: 36,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.12),
+                          color: AppColors.black.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -488,7 +488,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           bg: const Color(0xFFEBFFF3),
           border: const Color(0xFF86EFAC),
           iconColor: _successGreen,
-          textColor: const Color(0xFF166534),
+          textColor: AppColors.successDark,
         );
 
       case ReservationBannerState.endedRefused:
@@ -728,7 +728,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.white,
             padding: const EdgeInsets.symmetric(vertical: 14),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -763,7 +763,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             foregroundColor: _primaryBlue,
             padding: const EdgeInsets.symmetric(vertical: 14),
             side: const BorderSide(color: _primaryBlue, width: 1.5),

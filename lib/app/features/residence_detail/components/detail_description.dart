@@ -99,16 +99,16 @@ class _DetailDescriptionState extends State<DetailDescription> {
                       isScrollControlled: true,
                       useSafeArea: true,
                       showDragHandle: true,
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       builder: (BuildContext context) {
                         return Container(
                           padding: const EdgeInsets.only(top: 10),
                           height: MediaQuery.of(context).size.height * 0.8,
-                          color: Colors.transparent,
+                          color: AppColors.transparent,
                           child: Scaffold(
-                            backgroundColor: Colors.transparent,
+                            backgroundColor: AppColors.transparent,
                             appBar: AppBar(
                               automaticallyImplyLeading: false,
                               title: Text('À propos du logement'),

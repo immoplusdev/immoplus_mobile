@@ -295,7 +295,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _socialIcon(FaIconData icon, VoidCallback onTap) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
@@ -517,7 +517,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildDeleteAccountAction(BuildContext context) {
     return SliverToBoxAdapter(
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: () => showDeleteAccountDialog(context),
           borderRadius: BorderRadius.circular(12),
@@ -529,7 +529,7 @@ class _AccountPageState extends State<AccountPage> {
                 style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: Colors.red,
+                  color: AppColors.red,
                 ),
               ),
             ),
@@ -604,7 +604,7 @@ class _AccountPageState extends State<AccountPage> {
                   child: Text(
                     "Immo+ Pro",
                     style: AppTypography.font(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 10,
                       letterSpacing: 1,

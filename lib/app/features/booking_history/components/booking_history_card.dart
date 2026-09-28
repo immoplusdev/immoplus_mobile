@@ -52,18 +52,18 @@ class BookingHistoryCard extends StatelessWidget {
 
     final bookingStatus = BookingUtils.getBookingStatus(checkin, checkout);
     final isOngoing = bookingStatus == BookingStatus.ongoing;
-    final statusColor = isOngoing ? const Color(0xFF1CA53F) : Colors.blueGrey;
+    final statusColor = isOngoing ? AppColors.green500 : AppColors.blueGrey;
     final statusLabel =
         BookingUtils.getStatusText(startDate: checkin, endDate: checkout);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 12),
       child: Material(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         elevation: 0,
-        shadowColor: Colors.black.withValues(alpha: 0.06),
+        shadowColor: AppColors.black.withValues(alpha: 0.06),
         child: InkWell(
           onTap: clickable
               ? () async {
@@ -175,7 +175,7 @@ class BookingHistoryCard extends StatelessWidget {
                             label: 'DÉPART',
                             date: fmt.format(checkout),
                             icon: Iconsax.logout,
-                            color: Colors.redAccent,
+                            color: AppColors.redAccent,
                           ),
                         ),
                       ],
@@ -240,12 +240,12 @@ class BookingHistoryCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Iconsax.star1, size: 12, color: Colors.white),
+                        Icon(Iconsax.star1, size: 12, color: AppColors.white),
                         Gap(4),
                         Text(
                           'À évaluer',
                           style: AppTypography.font(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -371,7 +371,7 @@ class _DateCell extends StatelessWidget {
           date,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: AppColors.black87,
               ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

@@ -56,7 +56,7 @@ class AdFlashOfferWidget extends StatelessWidget {
                   style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: AppColors.white.withValues(alpha: 0.9),
                   ),
                 ),
               if (title?.isNotEmpty == true) ...[
@@ -66,7 +66,7 @@ class AdFlashOfferWidget extends StatelessWidget {
                   style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.white,
                     height: 1.15,
                   ),
                   maxLines: 1,
@@ -118,7 +118,7 @@ class _CountdownPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: AppColors.black,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -126,7 +126,7 @@ class _CountdownPill extends StatelessWidget {
         style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

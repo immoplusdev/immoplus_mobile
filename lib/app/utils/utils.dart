@@ -145,7 +145,7 @@ class Utils {
         imageUrl: "${RequestPath.baseUrl}/files/raw/public/$id",
         placeholder: (context, url) => Shimmer.fromColors(
           baseColor: (AppColors.immoBorderStrong)!,
-          highlightColor: Colors.white,
+          highlightColor: AppColors.white,
           period: const Duration(milliseconds: 600),
           child: Container(
             decoration: BoxDecoration(
@@ -158,7 +158,7 @@ class Utils {
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
-              color: Colors.red,
+              color: AppColors.red,
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage('https://via.placeholder.com/500x400'),
@@ -239,23 +239,23 @@ class Utils {
   static Widget getServiceStatusIcon(String status) {
     switch (status) {
       case 'en_cours_validation_user':
-        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: AppColors.orange);
       case 'en_cours_validation_admin':
-        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: AppColors.orange);
       case 'successful':
-        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.green);
       case 'valide':
-        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.green);
       case 'failed':
-        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: AppColors.red);
       case 'rejete':
-        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: AppColors.red);
       case 'paye':
-        return const FaIcon(FontAwesomeIcons.circleCheck, color: Colors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.green);
       case 'en_attente_validation':
-        return const FaIcon(FontAwesomeIcons.hourglass, color: Colors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass, color: AppColors.orange);
       case 'non_paye':
-        return const FaIcon(FontAwesomeIcons.circleXmark, color: Colors.red);
+        return const FaIcon(FontAwesomeIcons.circleXmark, color: AppColors.red);
       default:
         return FaIcon(FontAwesomeIcons.hourglass, color: AppColors.immoTextSecondary);
     }
@@ -264,23 +264,23 @@ class Utils {
   static Color getServiceStatusColor(String status) {
     switch (status) {
       case 'en_cours_validation_user':
-        return Colors.orange;
+        return AppColors.orange;
       case 'en_cours_validation_admin':
-        return Colors.orange;
+        return AppColors.orange;
       case 'successful':
-        return Colors.green;
+        return AppColors.green;
       case 'valide':
-        return Colors.green;
+        return AppColors.green;
       case 'failed':
-        return Colors.red;
+        return AppColors.red;
       case 'rejete':
-        return Colors.red;
+        return AppColors.red;
       case 'paye':
-        return Colors.green;
+        return AppColors.green;
       case 'en_attente_validation':
-        return Colors.orange;
+        return AppColors.orange;
       case 'non_paye':
-        return Colors.red;
+        return AppColors.red;
       default:
         return AppColors.immoTextSecondary;
     }
@@ -315,9 +315,9 @@ class Utils {
   static Color getTypeVisiteColor(String status) {
     switch (status) {
       case 'normal':
-        return Colors.purple;
+        return AppColors.purple;
       case 'express':
-        return Colors.red;
+        return AppColors.red;
       default:
         return AppColors.immoTextSecondary;
     }
@@ -348,7 +348,7 @@ class Utils {
     } else if (status == 'en_cours_recuperation') {
       return CupertinoColors.systemGrey2;
     } else if (status == 'en_cours_livraison') {
-      return Colors.green.shade200;
+      return AppColors.green500;
     } else if (status == 'failed') {
       return CupertinoColors.systemRed;
     } else if (status == 'canceled') {

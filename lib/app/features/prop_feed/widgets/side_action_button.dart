@@ -7,7 +7,7 @@ class SideActionButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.label,
-    this.iconColor = Colors.white,
+    this.iconColor = AppColors.white,
     this.iconSize = 24.0,
     this.iconRadius = 18.0,
     this.onTap,
@@ -32,7 +32,7 @@ class SideActionButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.transparent,
             radius: iconRadius,
             child: isLoading
                 ? SizedBox(

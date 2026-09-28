@@ -68,12 +68,12 @@ class PendingSelectionCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Iconsax.location,
-                            size: 12, color: Colors.white),
+                            size: 12, color: AppColors.white),
                         SizedBox(width: 4),
                         Text(
                           expired ? 'Expiré' : formatCountdown(remaining),
                           style: AppTypography.font(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                           ),
@@ -94,12 +94,12 @@ class PendingSelectionCard extends StatelessWidget {
               onPressed: onContinuePayment,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.immoFeedbackSuccess,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 shape: const StadiumBorder(),
                 elevation: 0,
-                shadowColor: Colors.transparent,
+                shadowColor: AppColors.transparent,
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -129,7 +129,7 @@ class _ConfirmAPayerBadge extends StatelessWidget {
       child: Text(
         'Confirmer à payer',
         style: AppTypography.font(
-          color: Colors.white,
+          color: AppColors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),

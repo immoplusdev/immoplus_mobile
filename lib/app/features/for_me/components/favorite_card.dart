@@ -49,13 +49,13 @@ class _FavoriteCardState extends State<FavoriteCard> {
         height: 160,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border:
               Border.all(color: AppColors.primary.withOpacity(0.05), width: 1),
           // boxShadow: [
           //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.06),
+          //     color: AppColors.black.withOpacity(0.06),
           //     blurRadius: 24,
           //     offset: const Offset(0, 4),
           //     spreadRadius: 0,
@@ -165,8 +165,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.2),
+                      AppColors.transparent,
+                      AppColors.black.withOpacity(0.2),
                     ],
                   ),
                 ),
@@ -178,7 +178,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
               child: CustomChip(
                 label: widget.favotiteModel.type!,
                 labelStyle: Theme.of(context).textTheme.labelMedium,
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.white,
               ),
             ),
           ],
@@ -192,7 +192,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         // border: Border.all(color: _kGold, width: 1),
       ),
@@ -201,7 +201,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
         style: AppTypography.microBold.copyWith(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: Colors.black,
+          color: AppColors.black,
         ),
       ),
     );
@@ -214,7 +214,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
       children: [
         Icon(
           FontAwesomeIcons.solidStar.data,
-          color: Colors.orange,
+          color: AppColors.orange,
           size: 14,
         ),
         const Gap(4),

@@ -131,7 +131,7 @@ class _ConversationTileState extends State<ConversationTile> {
         decoration: BoxDecoration(
           color: isUnread
               ? AppColors.primary.withValues(alpha: 0.03)
-              : Colors.transparent,
+              : AppColors.transparent,
           border: Border(bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1)),
         ),
         child: FutureBuilder<_TileInfo>(
@@ -216,7 +216,7 @@ class _ConversationTileState extends State<ConversationTile> {
                                     : '${conversation.unreadCountClient}',
                                 style: AppTypography.font(
                                     fontSize: 11,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),

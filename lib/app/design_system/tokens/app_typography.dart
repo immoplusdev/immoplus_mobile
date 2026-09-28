@@ -252,18 +252,18 @@ class AppTypography {
   static TextTheme darkTextTheme([TextTheme? base]) {
     final theme = base ?? ThemeData.dark().textTheme;
     return GoogleFonts.plusJakartaSansTextTheme(theme).copyWith(
-      displayLarge: h1.copyWith(color: Colors.white),
-      displayMedium: h2.copyWith(color: Colors.white),
-      displaySmall: h3.copyWith(color: Colors.white),
-      headlineMedium: h4.copyWith(color: Colors.white),
-      headlineSmall: titleSmall.copyWith(color: Colors.white),
-      titleLarge: h3.copyWith(color: Colors.white),
-      titleMedium: h4.copyWith(color: Colors.white),
-      titleSmall: titleSmall.copyWith(color: Colors.white),
+      displayLarge: h1.copyWith(color: AppColors.white),
+      displayMedium: h2.copyWith(color: AppColors.white),
+      displaySmall: h3.copyWith(color: AppColors.white),
+      headlineMedium: h4.copyWith(color: AppColors.white),
+      headlineSmall: titleSmall.copyWith(color: AppColors.white),
+      titleLarge: h3.copyWith(color: AppColors.white),
+      titleMedium: h4.copyWith(color: AppColors.white),
+      titleSmall: titleSmall.copyWith(color: AppColors.white),
       bodyLarge: bodyLarge.copyWith(color: AppColors.slate100),
       bodyMedium: bodyMedium.copyWith(color: AppColors.slate300),
       bodySmall: bodySmall.copyWith(color: AppColors.immoTextDisabled),
-      labelLarge: button.copyWith(color: Colors.white),
+      labelLarge: button.copyWith(color: AppColors.white),
       labelMedium: labelMedium.copyWith(color: AppColors.slate300),
       labelSmall: caption.copyWith(color: AppColors.immoTextSecondary),
     );

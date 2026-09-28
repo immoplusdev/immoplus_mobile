@@ -47,12 +47,12 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     final propertyType = _alert.criteria.propertyTypeObj;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         actions: [
@@ -100,7 +100,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: AppColors.blue50,
             borderRadius: BorderRadius.circular(12),
           ),
           child: alert.criteria.propertyTypeObj != null
@@ -406,7 +406,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                     ? const Color(0xFFFBBF24)
                     : (isCompleted
                         ? const Color(0xFF10B981).withOpacity(0.2)
-                        : Colors.white),
+                        : AppColors.white),
                 border: Border.all(
                   color: isHighlighted
                       ? const Color(0xFFFBBF24)
@@ -425,7 +425,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                             height: 10,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                         )
@@ -452,7 +452,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color:
-                      isActive ? const Color(0xFF1F2937) : AppColors.immoTextDisabled,
+                      isActive ? const Color(0xFF1F2937) : AppColors.gray400,
                 ),
               ),
               Text(
@@ -460,7 +460,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                 style: AppTypography.bodySmall.copyWith(
                   fontSize: 13,
                   color: isHighlighted
-                      ? const Color(0xFFD97706)
+                      ? AppColors.warningDark
                       : (isActive
                           ? AppColors.immoTextSecondary
                           : AppColors.immoTextDisabled),
@@ -496,7 +496,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               'Modifier',
               style: AppTypography.button.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ),
@@ -507,7 +507,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             onPressed: () => _showDeleteConfirmation(context),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: const BorderSide(color: Colors.red),
+              side: const BorderSide(color: AppColors.red),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -516,7 +516,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               'Annuler',
               style: AppTypography.button.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.red,
+                color: AppColors.red,
               ),
             ),
           ),

@@ -71,7 +71,7 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
               trailing: IconButton(
                 icon: const Icon(
                   CupertinoIcons.clear_circled_solid,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 onPressed: () {
                   AppDialog.confirm(
@@ -86,17 +86,17 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
               ),
             ),
             ListTile(
-              tileColor: Colors.white,
+              tileColor: AppColors.white,
               leading: Icon(
                 FontAwesomeIcons.moneyBill.data,
-                color: Colors.green,
+                color: AppColors.green,
               ),
               title: Text(Utils.formatCurrency(paymentData.amount)),
               titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),
             CustomTextField(
-              fillColor: Colors.white,
+              fillColor: AppColors.white,
               autofocus: true,
               controller: _formController.phoneNumber,
               textInputType: TextInputType.number,

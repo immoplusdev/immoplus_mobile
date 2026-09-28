@@ -12,7 +12,7 @@ class ReportRelaisSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -28,7 +28,7 @@ class ReportRelaisSuccessPage extends StatelessWidget {
                 style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.black,
                   height: 1.2,
                 ),
               ),
@@ -80,14 +80,14 @@ class ReportRelaisSuccessPage extends StatelessWidget {
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: Colors.green.shade100.withValues(alpha: 0.5),
+            color: AppColors.green50.withValues(alpha: 0.5),
             shape: BoxShape.circle,
           ),
         ),
         Icon(
           Icons.verified,
           size: 140,
-          color: Colors.green.shade400,
+          color: AppColors.green500,
         ),
       ],
     );

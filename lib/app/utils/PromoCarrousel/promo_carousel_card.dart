@@ -2,7 +2,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 /// Couleur principale de l'application
-const Color kPrimaryColor = Color(0xff2744de);
+const Color kPrimaryColor = AppColors.blue500;
 
 /// Couleurs complémentaires dérivées
 class AppComplementaryColors {
@@ -22,7 +22,7 @@ class AppComplementaryColors {
   // Rouge-orange (comme dans l'image)
   static const Color redOrange = Color(0xffE23C2C);
   // Variantes plus claires
-  static const Color primary50 = Color(0xffEEF1FC);   // Très clair (backgrounds)
+  static const Color primary50 = AppColors.blue50;   // Très clair (backgrounds)
   static const Color primary100 = Color(0xffC5CFF5);  // Clair
   static const Color primary200 = Color(0xff9BADEF);  // 
   static const Color primary300 = Color(0xff6B85E6);  // 
@@ -115,7 +115,7 @@ class PromoCarouselCard extends StatelessWidget {
                   Text(
                     data.title,
                     style: AppTypography.font(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
@@ -128,7 +128,7 @@ class PromoCarouselCard extends StatelessWidget {
                     child: Text(
                       data.description,
                       style: AppTypography.font(
-                        color: Colors.white.withOpacity(0.9),
+                        color: AppColors.white.withOpacity(0.9),
                         fontSize: 16,
                         height: 1.5,
                       ),
@@ -140,11 +140,11 @@ class PromoCarouselCard extends StatelessWidget {
                     child: Text(
                       data.linkText,
                       style: AppTypography.font(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         decoration: TextDecoration.underline,
-                        decorationColor: Colors.white,
+                        decorationColor: AppColors.white,
                         decorationThickness: 2,
                       ),
                     ),
@@ -243,7 +243,7 @@ class PromoCarouselWithIndicators extends StatefulWidget {
     this.cardPadding = const EdgeInsets.symmetric(horizontal: 16),
     this.cardColors,
     this.indicatorActiveColor = kPrimaryColor,
-    this.indicatorInactiveColor = const Color(0xFFE0E0E0),
+    this.indicatorInactiveColor = AppColors.gray200,
   });
 
   @override

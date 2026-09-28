@@ -72,7 +72,7 @@ class Utils {
         imageUrl: "${RequestPath.baseUrl}/api/file//files/raw/public/$id",
         placeholder: (context, url) => Shimmer.fromColors(
           baseColor: (AppColors.immoBorderStrong)!,
-          highlightColor: Colors.white,
+          highlightColor: AppColors.white,
           period: const Duration(milliseconds: 600),
           child: Container(
             decoration: BoxDecoration(
@@ -85,7 +85,7 @@ class Utils {
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
-              color: Colors.red,
+              color: AppColors.red,
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage('https://via.placeholder.com/500x400'),
@@ -209,7 +209,7 @@ class Utils {
     } else if (status == 'en_cours_recuperation') {
       return CupertinoColors.systemGrey2;
     } else if (status == 'en_cours_livraison') {
-      return Colors.green.shade200;
+      return AppColors.green500;
     } else if (status == 'failed') {
       return CupertinoColors.systemRed;
     } else if (status == 'canceled') {

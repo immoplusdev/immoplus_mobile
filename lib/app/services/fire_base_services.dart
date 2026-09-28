@@ -124,7 +124,7 @@
 //           ),
 //           // ending: Icon(
 //           //   Icons.arrow_right_alt,
-//           //   color: Colors.red,
+//           //   color: AppColors.red,
 //           // ),
 //           description: message.notification!.body,
 //           onTap: () {

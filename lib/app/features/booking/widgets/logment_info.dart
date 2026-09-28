@@ -14,9 +14,9 @@ class LogmentInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
       ),
       child: Row(
         children: [
@@ -70,7 +70,7 @@ class LogmentInfo extends StatelessWidget {
                     Text(
                       ' / nuit',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: AppColors.immoTextSecondary,
                           ),
                     ),
                   ],

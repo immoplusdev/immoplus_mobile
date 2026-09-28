@@ -18,7 +18,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 // class _SimilarLogmentSectionState extends State<SimilarLogmentSection> {
 //   BoxDecoration loadCardDecoration = BoxDecoration(
 //     borderRadius: BorderRadius.circular(15),
-//     color: Colors.red,
+//     color: AppColors.red,
 //   );
 //   List<ResidenceModel> datas = [];
 //   bool _isLoading = true;

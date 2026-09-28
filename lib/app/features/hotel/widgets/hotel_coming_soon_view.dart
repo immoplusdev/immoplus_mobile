@@ -12,7 +12,7 @@ class HotelComingSoonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           Container(
@@ -40,7 +40,7 @@ class HotelComingSoonView extends StatelessWidget {
                             width: 96,
                             height: 96,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.white,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
@@ -63,7 +63,7 @@ class HotelComingSoonView extends StatelessWidget {
                             "Bientôt disponible",
                             textAlign: TextAlign.center,
                             style: AppTypography.h3.copyWith(
-                              color: Colors.black,
+                              color: AppColors.black,
                             ),
                           ),
                           const Gap(12),

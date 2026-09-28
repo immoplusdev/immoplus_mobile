@@ -76,9 +76,9 @@ class _ClientReservationOverlayWidgetState
 
   Color _timerColor() {
     final seconds = _remaining.inSeconds;
-    if (seconds > 60) return Colors.green;
-    if (seconds > 30) return Colors.orange;
-    return Colors.red;
+    if (seconds > 60) return AppColors.green;
+    if (seconds > 30) return AppColors.orange;
+    return AppColors.red;
   }
 
   double _progressValue() {
@@ -104,7 +104,7 @@ class _ClientReservationOverlayWidgetState
       child: Material(
         elevation: 8,
         borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
+        color: AppColors.white,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -116,7 +116,7 @@ class _ClientReservationOverlayWidgetState
                 children: [
                   Icon(
                     isWaitingPayment ? Icons.check_circle : Icons.notifications,
-                    color: isWaitingPayment ? Colors.green : AppColors.primary,
+                    color: isWaitingPayment ? AppColors.green : AppColors.primary,
                     size: 20,
                   ),
                   SizedBox(width: 8),
@@ -256,7 +256,7 @@ class _ClientReservationOverlayWidgetState
                     label: Text('Payer maintenant'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

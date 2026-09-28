@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                           ? Offset.zero
                           : const Offset(0, 0.2),
                       child: Material(
-                        color: Colors.transparent,
+                        color: AppColors.transparent,
                         child: InkWell(
                           onTap: _scrollToTop,
                           borderRadius: BorderRadius.circular(18),
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(18),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
+                                  color: AppColors.black.withValues(alpha: 0.1),
                                   blurRadius: 16,
                                   offset: const Offset(0, 6),
                                 ),
@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: const Icon(
                               Icons.keyboard_arrow_up_rounded,
-                              color: Colors.white,
+                              color: AppColors.white,
                               size: 28,
                             ),
                           ),

@@ -24,7 +24,7 @@ Future<void> showLoginOtpDialog({
   final loginCubit = context.read<LoginCubit>();
   return showDialog<void>(
     context: context,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (dialogContext) => BlocProvider.value(
       value: loginCubit,
       child: _LoginOtpFlowDialog(phoneNumber: phoneNumber),
@@ -139,7 +139,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         }
       },
       child: Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),

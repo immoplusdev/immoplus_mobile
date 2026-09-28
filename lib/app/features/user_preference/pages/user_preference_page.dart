@@ -53,7 +53,7 @@ class UserPreferenceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: BlocBuilder<UserPreferenceCubit, UserPreferenceCubitState>(
           builder: (context, state) {
@@ -73,7 +73,7 @@ class UserPreferenceView extends StatelessWidget {
                           Text(
                             'Choisis ce qui te plaît',
                             style: AppTypography.h1.copyWith(
-                              color: Colors.black,
+                              color: AppColors.black,
                             ),
                           ),
                           const Gap(32),
@@ -201,7 +201,7 @@ class UserPreferenceView extends StatelessWidget {
     return Text(
       title,
       style: AppTypography.bodyLargeSemiBold.copyWith(
-        color: Colors.black87,
+        color: AppColors.black87,
         fontWeight: FontWeight.w500,
       ),
     );
@@ -227,7 +227,7 @@ class _PreferenceChip extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white,
+          color: isSelected ? AppColors.primary : AppColors.white,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.immoBorderDefault,
@@ -239,7 +239,7 @@ class _PreferenceChip extends StatelessWidget {
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
-                color: isSelected ? Colors.white : AppColors.immoTextSecondary,
+                color: isSelected ? AppColors.white : AppColors.immoTextSecondary,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),
@@ -247,7 +247,7 @@ class _PreferenceChip extends StatelessWidget {
             Icon(
               Iconsax.add,
               size: 16,
-              color: isSelected ? Colors.white : AppColors.immoTextDisabled,
+              color: isSelected ? AppColors.white : AppColors.immoTextDisabled,
             ),
           ],
         ),

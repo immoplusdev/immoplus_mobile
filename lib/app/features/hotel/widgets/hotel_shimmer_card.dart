@@ -21,7 +21,7 @@ class HotelShimmerCard extends StatelessWidget {
         width: cardWidth,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -30,7 +30,7 @@ class HotelShimmerCard extends StatelessWidget {
             Container(
               height: imageHeight,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
@@ -46,19 +46,19 @@ class HotelShimmerCard extends StatelessWidget {
                     Container(
                       width: cardWidth * 0.7,
                       height: 16,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                     const Gap(8),
                     Container(
                       width: cardWidth * 0.4,
                       height: 12,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                     const Gap(8),
                     Container(
                       width: double.infinity,
                       height: 12,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ],
                 ),

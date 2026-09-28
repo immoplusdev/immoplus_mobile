@@ -83,7 +83,7 @@ class SuggestionTile extends StatelessWidget {
         !text.toLowerCase().contains(highlight.toLowerCase())) {
       return Text(
         text,
-        style: AppTypography.font(fontSize: 16, color: Colors.black87),
+        style: AppTypography.font(fontSize: 16, color: AppColors.black87),
       );
     }
 
@@ -94,7 +94,7 @@ class SuggestionTile extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
-        style: AppTypography.font(fontSize: 16, color: Colors.black),
+        style: AppTypography.font(fontSize: 16, color: AppColors.black),
         children: [
           TextSpan(text: preText),
           TextSpan(

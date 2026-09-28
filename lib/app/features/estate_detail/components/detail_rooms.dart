@@ -76,7 +76,7 @@ class _RoomCard extends StatelessWidget {
       width: 165,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.immoBorderDefault, width: 1.2),
       ),
@@ -97,7 +97,7 @@ class _RoomCard extends StatelessWidget {
             style: AppTypography.font(
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF222222),
+              color: AppColors.immoTextPrimary,
               height: 1.2,
             ),
             maxLines: 1,

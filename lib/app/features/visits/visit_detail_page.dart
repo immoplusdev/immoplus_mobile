@@ -109,9 +109,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xFFF2F4F7)),
+                          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                       horizontal: 10, vertical: 5),
                                   decoration: BoxDecoration(
                                     color: isExpress
-                                        ? const Color(0xFFFEF3F2)
+                                        ? AppColors.immoFeedbackErrorSubtle
                                         : const Color(0xFFF4F3FF),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -137,8 +137,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                             : Iconsax.calendar_1,
                                         size: 14,
                                         color: isExpress
-                                            ? const Color(0xFFF04438)
-                                            : const Color(0xFF7A5AF8),
+                                            ? AppColors.immoFeedbackError
+                                            : AppColors.purple7A5AF8,
                                       ),
                                       const Gap(4),
                                       Text(
@@ -149,8 +149,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
                                           color: isExpress
-                                              ? const Color(0xFFF04438)
-                                              : const Color(0xFF7A5AF8),
+                                              ? AppColors.immoFeedbackError
+                                              : AppColors.purple7A5AF8,
                                         ),
                                       ),
                                     ],
@@ -174,7 +174,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                              color: const Color(0xFF667085),
+                                              color: AppColors.immoTextSecondary,
                                             ),
                                       ),
                                       const Gap(2),
@@ -185,7 +185,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                             .bodyMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.w600,
-                                              color: const Color(0xFF344054),
+                                              color: AppColors.immoTextLabel,
                                             ),
                                       ),
                                     ],
@@ -231,15 +231,15 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xFFF2F4F7)),
+                          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                         ),
                         child: Column(
                           children: [
                             ServiceStatusSection(
                                 status: data.statusDemandeVisite ?? ''),
-                            Divider(height: 1, color: const Color(0xFFF2F4F7)),
+                            Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
                             PaymentStatusSection(demandeVisitModel: data),
                           ],
                         ),
@@ -255,9 +255,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xFFF2F4F7)),
+                          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                         ),
                         child: Row(
                           children: [
@@ -266,7 +266,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                               height: 44,
                               decoration: BoxDecoration(
                                 color: data.datesDemandeVisite.isEmpty
-                                    ? const Color(0xFFFFFAEB)
+                                    ? AppColors.orange50
                                     : AppColors.primaryLite,
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -274,7 +274,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                 Iconsax.calendar_1,
                                 size: 20,
                                 color: data.datesDemandeVisite.isEmpty
-                                    ? const Color(0xFFF79009)
+                                    ? AppColors.immoFeedbackWarning
                                     : AppColors.primary,
                               ),
                             ),
@@ -289,7 +289,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                         .textTheme
                                         .bodySmall
                                         ?.copyWith(
-                                          color: const Color(0xFF667085),
+                                          color: AppColors.immoTextSecondary,
                                         ),
                                   ),
                                   const Gap(2),
@@ -305,7 +305,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                         ?.copyWith(
                                           fontWeight: FontWeight.w600,
                                           color: data.datesDemandeVisite.isEmpty
-                                              ? const Color(0xFFB54708)
+                                              ? AppColors.amber800
                                               : AppColors.primary,
                                         ),
                                   ),
@@ -423,8 +423,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         .copyWith(bottom: 24, top: 12),
                     decoration: BoxDecoration(
                       color: AppColors.whiteBackground,
-                      border: const Border(
-                        top: BorderSide(color: Color(0xFFF2F4F7)),
+                      border: Border(
+                        top: BorderSide(color: AppColors.immoFeedbackNeutralSubtle),
                       ),
                     ),
                     child: SafeArea(
@@ -447,7 +447,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
+                            foregroundColor: AppColors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
@@ -470,7 +470,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
             appBar: AppBar(
               automaticallyImplyLeading: true,
               backgroundColor: AppColors.whiteBackground,
-              surfaceTintColor: Colors.transparent,
+              surfaceTintColor: AppColors.transparent,
             ),
             body: Center(
               child: Padding(
@@ -482,13 +482,13 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFEF3F2),
+                        color: AppColors.immoFeedbackErrorSubtle,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Iconsax.info_circle,
                         size: 36,
-                        color: Color(0xFFF04438),
+                        color: AppColors.immoFeedbackError,
                       ),
                     ),
                     const Gap(24),
@@ -503,7 +503,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       "Vous n'avez pas accès à cet élément ou aucun élément correspondant n'a été trouvé.",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: AppColors.immoTextSecondary,
                             height: 1.5,
                           ),
                     ),
@@ -551,9 +551,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFF2F4F7)),
+          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
         ),
         child: Row(
           children: [
@@ -580,7 +580,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: const Color(0xFF667085),
+                          color: AppColors.immoTextSecondary,
                         ),
                   ),
                 ],
@@ -590,7 +590,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                 Icon(
                   Iconsax.arrow_right_3,
                   size: 20,
-                  color: const Color(0xFF98A2B3),
+                  color: AppColors.immoTextDisabled,
                 ),
           ],
         ),

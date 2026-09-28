@@ -61,7 +61,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: AppColors.white,
       child: Stack(
         children: [
           Column(
@@ -69,7 +69,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
             children: [
               // ── Animation Lottie ──────────────────────────────────────────
               Container(
-                color: const Color(0xFFF0F4FF),
+                color: AppColors.previewBackground,
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 28),
                 child: Lottie.asset(
@@ -113,7 +113,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                         onPressed: onViewReservation,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.immoBrandPrimary,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -161,11 +161,11 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
               onTap: onDismiss,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.25),
+                  color: AppColors.black.withValues(alpha: 0.25),
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(6),
-                child: const Icon(Icons.close, color: Colors.white, size: 18),
+                child: const Icon(Icons.close, color: AppColors.white, size: 18),
               ),
             ),
           ),

@@ -44,12 +44,12 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
         margin: const EdgeInsets.only(right: 12.0),
         padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           border: Border.all(color: AppColors.immoBorderDefault!),
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: AppColors.black.withOpacity(0.02),
               blurRadius: 4,
               offset: const Offset(0, 2),
             )
@@ -58,7 +58,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18, color: const Color(0xFF4227DE)),
+            Icon(icon, size: 18, color: AppColors.immoBrandPrimary),
             SizedBox(width: 8),
             Text(
               text,
@@ -81,7 +81,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
     return Container(
       padding: EdgeInsets.only(bottom: bottomInsets),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(28.0)),
       ),
       child: SafeArea(
@@ -109,7 +109,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
-                  color: Colors.black87,
+                  color: AppColors.black87,
                 ),
               ),
               SizedBox(height: 16),
@@ -150,7 +150,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.add, color: Colors.black87),
+                      icon: const Icon(Icons.add, color: AppColors.black87),
                       onPressed: () {
                         HapticFeedback.selectionClick();
                       },
@@ -161,19 +161,19 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                       decoration: BoxDecoration(
                         color: AppColors.immoBgSurfaceMuted,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.transparent),
+                        border: Border.all(color: AppColors.transparent),
                       ),
                       child: Stack(
                         alignment: Alignment.centerRight,
                         children: [
                           TextField(
                             focusNode: _focusNode,
-                            cursorColor: const Color(0xFF4227DE),
+                            cursorColor: AppColors.immoBrandPrimary,
                             maxLines: 4,
                             minLines: 1,
                             textInputAction: TextInputAction.send,
                             style: AppTypography.font(
-                                fontSize: 16, color: Colors.black87),
+                                fontSize: 16, color: AppColors.black87),
                             decoration: InputDecoration(
                               hintText:
                                   "Décrivez le bien ou posez une question...",
@@ -196,14 +196,14 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                                   horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Colors.indigo, Colors.pinkAccent],
+                                  colors: [AppColors.indigo, AppColors.pinkAccent],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.pink.withOpacity(0.2),
+                                    color: AppColors.pink.withOpacity(0.2),
                                     blurRadius: 4,
                                     offset: const Offset(0, 2),
                                   )
@@ -212,7 +212,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                               child: Text(
                                 "PRO",
                                 style: AppTypography.font(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   fontSize: 9,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 0.5,
@@ -238,7 +238,7 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                         ),
                         child: const Icon(
                           Icons.mic_rounded,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: 22,
                         ),
                       ),

@@ -77,7 +77,7 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
                         baseColor: AppColors.immoBorderStrong,
                         highlightColor: AppColors.immoBgSurfaceMuted,
                         child: const CupertinoListTile(
-                          backgroundColor: Colors.red,
+                          backgroundColor: AppColors.red,
                           title: Text("•••••••••••••••••••"),
                         ),
                       ),

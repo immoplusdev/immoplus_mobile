@@ -84,12 +84,12 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -97,7 +97,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
           style: AppTypography.font(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
       ),
@@ -144,7 +144,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
       style: AppTypography.font(
         fontSize: 15,
         fontWeight: FontWeight.w600,
-        color: Colors.black,
+        color: AppColors.black,
       ),
     );
   }
@@ -182,7 +182,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryLite : Colors.white,
+                  color: isSelected ? AppColors.primaryLite : AppColors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
@@ -221,7 +221,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: selected != null ? AppColors.primaryLite : Colors.white,
+          color: selected != null ? AppColors.primaryLite : AppColors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: selected != null ? AppColors.primary : AppColors.immoBorderStrong,
@@ -239,7 +239,7 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                 style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: selected != null ? Colors.black : AppColors.immoTextSecondary,
+                  color: selected != null ? AppColors.black : AppColors.immoTextSecondary,
                 ),
               ),
             ),
@@ -324,10 +324,10 @@ class _PhotoSlot extends StatelessWidget {
                   height: 22,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
+                    color: AppColors.black.withValues(alpha: 0.55),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.close_rounded, size: 14, color: Colors.white),
+                  child: const Icon(Icons.close_rounded, size: 14, color: AppColors.white),
                 ),
               ),
             ),

@@ -127,7 +127,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       useSafeArea: true,
       builder: (_) => FractionallySizedBox(
         heightFactor: 1.0,
@@ -192,13 +192,13 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                 borderRadius: BorderRadius.circular(60),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.12),
+                    color: AppColors.black.withOpacity(0.12),
                     blurRadius: 24,
                     spreadRadius: 1,
                     offset: const Offset(0, 10),
                   ),
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: AppColors.black.withOpacity(0.06),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -214,7 +214,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.white.withOpacity(0.95),
+                            AppColors.white.withOpacity(0.95),
                             const Color(0xFFF5F3EF).withOpacity(0.85),
                             const Color(0xFFE8E4DC).withOpacity(0.75),
                           ],
@@ -222,7 +222,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                         ),
                         borderRadius: BorderRadius.circular(60),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.9),
+                          color: AppColors.white.withOpacity(0.9),
                           width: 1,
                         ),
                       ),
@@ -277,8 +277,8 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
                                     colors: [
-                                      Colors.white.withOpacity(0.95),
-                                      Colors.white.withOpacity(0),
+                                      AppColors.white.withOpacity(0.95),
+                                      AppColors.white.withOpacity(0),
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(60),

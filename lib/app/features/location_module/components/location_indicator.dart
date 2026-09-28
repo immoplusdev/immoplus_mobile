@@ -30,7 +30,7 @@ class _ShimmerTile extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
@@ -44,7 +44,7 @@ class _ShimmerTile extends StatelessWidget {
                     height: 14,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -53,7 +53,7 @@ class _ShimmerTile extends StatelessWidget {
                     height: 11,
                     width: 160,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),

@@ -190,13 +190,13 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.arrow_back,
-                      color: Colors.black, size: 20),
+                      color: AppColors.black, size: 20),
                   onPressed: () => context.pop(),
                 ),
               ),
@@ -277,7 +277,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                           : "Sélectionner la date d'arrivée",
                       style: AppTypography.font(
                         color:
-                            _checkInDate != null ? Colors.black : AppColors.immoTextSecondary,
+                            _checkInDate != null ? AppColors.black : AppColors.immoTextSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -310,7 +310,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                           : "Sélectionner la date de départ",
                       style: AppTypography.font(
                         color:
-                            _checkOutDate != null ? Colors.black : AppColors.immoTextSecondary,
+                            _checkOutDate != null ? AppColors.black : AppColors.immoTextSecondary,
                         fontSize: 14,
                       ),
                     ),

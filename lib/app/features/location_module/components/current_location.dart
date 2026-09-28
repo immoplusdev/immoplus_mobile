@@ -49,7 +49,7 @@ class _LocationTile extends StatelessWidget {
               height: 44,
               decoration: BoxDecoration(
                 color: hasError
-                    ? Colors.red.shade50
+                    ? AppColors.red50
                     : AppColors.primary.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -64,7 +64,7 @@ class _LocationTile extends StatelessWidget {
                   : Icon(
                       Iconsax.gps,
                       size: 22,
-                      color: hasError ? Colors.red.shade400 : AppColors.primary,
+                      color: hasError ? AppColors.red500 : AppColors.primary,
                     ),
             ),
             SizedBox(width: 14),

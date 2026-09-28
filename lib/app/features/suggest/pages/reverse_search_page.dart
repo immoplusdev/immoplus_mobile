@@ -169,7 +169,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
     return BlocProvider.value(
       value: _cubit,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         body: Column(
           children: [
             Padding(
@@ -180,7 +180,7 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                     icon: Icon(Icons.arrow_back_ios,
-                        color: Colors.black, size: 22),
+                        color: AppColors.black, size: 22),
                     onPressed: () => context.pop(),
                   ),
                 ],

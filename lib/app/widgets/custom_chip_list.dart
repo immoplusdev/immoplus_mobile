@@ -71,7 +71,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.white].
+  /// Defults to [AppColors.white].
   List<Color> inactiveBgColorList;
 
   /// The background color of an active [ChoiceChip].
@@ -83,7 +83,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.blue].
+  /// Defults to [AppColors.blue].
   List<Color> activeBgColorList;
 
   /// The text color of an active [ChoiceChip].
@@ -95,7 +95,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.white].
+  /// Defults to [AppColors.white].
   List<Color> activeTextColorList;
 
   /// The text color of an inactive [ChoiceChip].
@@ -107,7 +107,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.blue].
+  /// Defults to [AppColors.blue].
   List<Color> inactiveTextColorList;
 
   /// Initial `index` that must be selected.
@@ -220,7 +220,7 @@ class CustomChipList extends StatefulWidget {
   /// for all chips, whilst they're inactive,
   /// then set only one color here.
   ///
-  /// Defaults to [Colors.white].
+  /// Defaults to [AppColors.white].
   List<Color> inactiveBorderColorList;
 
   /// If you want to customize the
@@ -231,7 +231,7 @@ class CustomChipList extends StatefulWidget {
   /// for all chips, whilst they're active,
   /// then set only one color here.
   ///
-  /// Defaults to [Colors.white].
+  /// Defaults to [AppColors.white].
   List<Color> activeBorderColorList;
 
   /// Use this to alter the padding of

@@ -5,7 +5,7 @@ class TicketCardBackground extends StatelessWidget {
   const TicketCardBackground({
     super.key,
     required this.child,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = AppColors.white,
     this.borderColor,
     this.borderWidth = 1.2,
     this.punchOffsetY = 118.0,

@@ -8,11 +8,11 @@ import 'package:immoplus/app/data/repositories/poll_repository.dart';
 /// Palette du sondage — regroupée ici pour pouvoir l'ajuster en un seul
 /// endroit sans chasser des couleurs éparpillées dans le widget.
 class _PollColors {
-  static const Color background = Colors.white;
+  static const Color background = AppColors.white;
   static const Color border = Color(0xFFEFEFEF);
-  static const Color badge = Color(0xFFFF3B30);
+  static const Color badge = AppColors.red500;
   static const Color question = Color(0xFF111111);
-  static const Color optionLabel = Color(0xFF1A1A1A);
+  static const Color optionLabel = AppColors.gray900;
   static const Color percentage = Color(0xFF111111);
   static const Color track = Color(0xFFF5F5F6);
   static const Color fillBase = Color(0xFF8B7CF6);
@@ -231,7 +231,7 @@ class _PollOptionBar extends StatelessWidget {
     final fillAlpha = (0.28 + 0.72 * pct).clamp(0.28, 1.0).toDouble();
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: canVote ? onTap : null,
         borderRadius: BorderRadius.circular(_radius),

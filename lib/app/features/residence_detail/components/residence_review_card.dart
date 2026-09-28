@@ -69,7 +69,7 @@ class ResidenceReviewCard extends StatelessWidget {
                             : '?',
                         style: AppTypography.font(
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
               ),
@@ -79,7 +79,7 @@ class ResidenceReviewCard extends StatelessWidget {
                 style: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ],
@@ -122,7 +122,7 @@ class _Stars extends StatelessWidget {
         return Icon(
           i < rating ? Icons.star_rounded : Icons.star_border_rounded,
           size: 16,
-          color: const Color(0xFF222222),
+          color: AppColors.immoTextPrimary,
         );
       }),
     );
@@ -184,7 +184,7 @@ class _ExpandableFeedbackState extends State<_ExpandableFeedback> {
               style: AppTypography.font(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
                 decoration: TextDecoration.underline,
               ),
             ),
@@ -200,7 +200,7 @@ class _ExpandableFeedbackState extends State<_ExpandableFeedback> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),

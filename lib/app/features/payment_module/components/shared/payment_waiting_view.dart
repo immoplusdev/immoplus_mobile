@@ -47,7 +47,7 @@ class PaymentWaitingView extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 CupertinoIcons.chevron_back,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               onPressed: onBack,
             ),
@@ -108,24 +108,24 @@ class PaymentWaitingView extends StatelessWidget {
                     leading: actionIcon ??
                         Icon(
                           Icons.phone_android,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                     title: Text(actionButtonText!),
                     titleTextStyle:
                         Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontWeight: FontWeight.w600,
                             ),
                     trailing: Icon(
                       CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   )
                 : CustomButtom(
                     elevation: 2,
-                    color: Colors.white,
+                    color: AppColors.white,
                     text: actionButtonText!,
-                    textColor: Colors.black,
+                    textColor: AppColors.black,
                     onClick: onActionTap!,
                   ),
           ),

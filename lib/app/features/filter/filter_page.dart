@@ -100,7 +100,7 @@ class _FilterPageState extends State<FilterPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(color: AppColors.immoBorderDefault),
                     ),
@@ -163,7 +163,7 @@ class _FilterPageState extends State<FilterPage> {
               sliver: SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: AppColors.immoBorderDefault),
                   ),
@@ -253,7 +253,7 @@ class _FilterPageState extends State<FilterPage> {
                     label: Text('Appliquer le filtre'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),

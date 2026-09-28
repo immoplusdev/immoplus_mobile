@@ -28,7 +28,7 @@ class HotelDetailHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
@@ -42,7 +42,7 @@ class HotelDetailHeader extends StatelessWidget {
             style: AppTypography.font(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: Colors.black,
+              color: AppColors.black,
               letterSpacing: -0.5,
             ),
           ),
@@ -53,7 +53,7 @@ class HotelDetailHeader extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on_outlined, size: 16, color: Colors.red),
+                const Icon(Icons.location_on_outlined, size: 16, color: AppColors.red),
                 const Gap(4),
                 Flexible(
                   child: Text(
@@ -83,7 +83,7 @@ class HotelDetailHeader extends StatelessWidget {
                 style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: AppColors.black87,
                 ),
               ),
             ),
@@ -118,7 +118,7 @@ class HotelDetailHeader extends StatelessWidget {
               style: AppTypography.font(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ],
@@ -145,7 +145,7 @@ class HotelDetailHeader extends StatelessWidget {
                       return Icon(
                         Icons.star,
                         size: 14,
-                        color: index < rating.floor() ? Colors.amber : AppColors.immoBorderDefault,
+                        color: index < rating.floor() ? AppColors.amber : AppColors.immoBorderDefault,
                       );
                     }),
                   ),

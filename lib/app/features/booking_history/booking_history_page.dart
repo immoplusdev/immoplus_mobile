@@ -97,7 +97,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
         automaticallyImplyLeading: false,
         title: Text('Historique De Réservations'),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),

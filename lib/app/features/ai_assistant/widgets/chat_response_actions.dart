@@ -100,7 +100,7 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = _colorsFor(action);
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap == null
             ? null
@@ -165,7 +165,7 @@ class _QuickReplyChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap == null
             ? null

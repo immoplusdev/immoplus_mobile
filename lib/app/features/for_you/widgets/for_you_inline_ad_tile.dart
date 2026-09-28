@@ -57,7 +57,7 @@ class ForYouInlineAdTile extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.55)],
+                        colors: [AppColors.transparent, AppColors.black.withValues(alpha: 0.55)],
                         stops: const [0.4, 1.0],
                       ),
                     ),
@@ -76,7 +76,7 @@ class ForYouInlineAdTile extends StatelessWidget {
                             style: AppTypography.font(
                               fontWeight: FontWeight.w600,
                               fontSize: 9,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -88,7 +88,7 @@ class ForYouInlineAdTile extends StatelessWidget {
                             style: AppTypography.font(
                               fontWeight: FontWeight.w500,
                               fontSize: 8,
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: AppColors.white.withValues(alpha: 0.85),
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

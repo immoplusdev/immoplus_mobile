@@ -47,13 +47,13 @@ class Constantes {
   Constantes({required this.context});
   static ColorScheme colorScheme = ColorScheme(
     primary: HexColor("#2072ca"),
-    secondary: const Color(0xFFABABAB),
+    secondary: AppColors.immoTextDisabled,
     surface: const Color.fromARGB(255, 166, 173, 180),
-    error: const Color(0xFFFFFFFF),
-    onPrimary: const Color(0xFFFFFFFF),
+    error: AppColors.white,
+    onPrimary: AppColors.white,
     onSecondary: HexColor("04b4fc"),
     onSurface: const Color(0xFF3E3C3C),
-    onError: const Color(0xFFFFFFFF),
+    onError: AppColors.white,
     brightness: Brightness.light,
   );
   static DateFormat dateFormat = DateFormat('dd/MM/yyyy');
@@ -289,7 +289,7 @@ class FurnitureUIConstants {
 
   static List<BoxShadow> get shadowHeavy => [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.15),
+          color: AppColors.black.withValues(alpha: 0.15),
           offset: const Offset(0, 8),
           blurRadius: 24,
         ),

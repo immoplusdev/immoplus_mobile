@@ -15,7 +15,7 @@ class MapBottomSheet extends GetView<LocationController> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -59,7 +59,7 @@ class MapBottomSheet extends GetView<LocationController> {
                   style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF222222),
+                    color: AppColors.immoTextPrimary,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -105,7 +105,7 @@ class MapBottomSheet extends GetView<LocationController> {
                                 style: AppTypography.font(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   height: 1.3,
                                 ),
                                 maxLines: 2,
@@ -117,7 +117,7 @@ class MapBottomSheet extends GetView<LocationController> {
                                 style: AppTypography.font(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.white70,
+                                  color: AppColors.white70,
                                 ),
                               ),
                             ],
@@ -128,13 +128,13 @@ class MapBottomSheet extends GetView<LocationController> {
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: AppColors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
                             Iconsax.arrow_right_3,
                             size: 18,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ],
@@ -149,7 +149,7 @@ class MapBottomSheet extends GetView<LocationController> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
-                  child: CupertinoActivityIndicator(color: Colors.white),
+                  child: CupertinoActivityIndicator(color: AppColors.white),
                 ),
               ),
               onError: (_) => SizedBox(),

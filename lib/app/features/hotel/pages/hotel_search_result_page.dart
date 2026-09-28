@@ -105,10 +105,10 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                   height: 40,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   child: const Icon(Icons.arrow_back,
-                      color: Colors.black, size: 20),
+                      color: AppColors.black, size: 20),
                 ),
               ),
             ),
@@ -127,7 +127,7 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                           ? 'Tous les hôtels'
                           : widget.destination,
                       style: AppTypography.font(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
@@ -137,21 +137,21 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                     Row(
                       children: [
                         const Icon(Iconsax.calendar_1,
-                            size: 14, color: Colors.white70),
+                            size: 14, color: AppColors.white70),
                         const Gap(4),
                         Text(
                           datesText,
                           style: AppTypography.font(
-                              color: Colors.white70, fontSize: 13),
+                              color: AppColors.white70, fontSize: 13),
                         ),
                         const Gap(12),
                         const Icon(Iconsax.user,
-                            size: 14, color: Colors.white70),
+                            size: 14, color: AppColors.white70),
                         const Gap(4),
                         Text(
                           '${widget.adults} Ad. • ${widget.lits} Lit(s)',
                           style: AppTypography.font(
-                              color: Colors.white70, fontSize: 13),
+                              color: AppColors.white70, fontSize: 13),
                         ),
                       ],
                     ),

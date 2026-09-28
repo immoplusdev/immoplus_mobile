@@ -20,13 +20,13 @@ class NavBadge extends StatelessWidget {
           padding: const EdgeInsets.all(3),
           constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: AppColors.red,
             shape: BoxShape.circle,
           ),
           child: Text(
             badgeText,
             style: AppTypography.font(
-              color: Colors.white,
+              color: AppColors.white,
               fontSize: 9,
               fontWeight: FontWeight.bold,
             ),

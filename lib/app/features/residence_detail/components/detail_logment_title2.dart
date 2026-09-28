@@ -22,7 +22,7 @@ class DetailLogmentTitle2 extends StatelessWidget {
             fontWeight: FontWeight.w700,
             letterSpacing: -0.3,
             height: 1.2,
-            color: Color(0xFF222222),
+            color: AppColors.immoTextPrimary,
           ),
         ),
       ),

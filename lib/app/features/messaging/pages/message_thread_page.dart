@@ -283,7 +283,7 @@ class _ThreadViewState extends State<_ThreadView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: BlocConsumer<ConversationThreadCubit, ConversationThreadState>(
           listener: (context, state) {
@@ -607,7 +607,7 @@ class _ResidenceContextCardState extends State<_ResidenceContextCard> {
         margin: const EdgeInsets.fromLTRB(16, 4, 16, 12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: AppColors.immoBorderDefault),
         ),

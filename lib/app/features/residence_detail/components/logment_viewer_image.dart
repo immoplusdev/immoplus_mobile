@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,7 @@ class ViewerImageLogment extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(
                   CupertinoIcons.chevron_left,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
                 onPressed: () {
                   context.pop();
@@ -35,13 +36,13 @@ class ViewerImageLogment extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           elevation: 0,
         ),
         extendBodyBehindAppBar: true,
         body: PhotoViewGallery(
           loadingBuilder: (context, event) => Container(
-            color: Colors.black,
+            color: AppColors.black,
             child: Center(
               child: CircularProgressIndicator(),
             ),

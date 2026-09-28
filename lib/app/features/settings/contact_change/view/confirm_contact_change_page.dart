@@ -47,7 +47,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
         color: const Color(0xFF0D0D0D),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFECECEC),
+        color: AppColors.immoBorderDefault,
         borderRadius: BorderRadius.circular(12),
       ),
     );
@@ -73,12 +73,12 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: AppColors.black),
             onPressed: () => context.pop(),
           ),
           title: Text(
@@ -112,7 +112,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                 'Un code a été envoyé à votre $label.',
                 textAlign: TextAlign.center,
                 style: AppTypography.bodyMedium.copyWith(
-                  color: const Color(0xFF64748B),
+                  color: AppColors.slate500,
                   height: 1.5,
                 ),
               ),
@@ -124,7 +124,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                 defaultPinTheme: defaultTheme,
                 focusedPinTheme: defaultTheme.copyWith(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: AppColors.primary, width: 2),
                   ),

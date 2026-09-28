@@ -18,7 +18,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //             }
 //             return FloatingActionButton(
 //               elevation: 5,
-//               backgroundColor: Colors.white,
+//               backgroundColor: AppColors.white,
 //               onPressed: () {
 //                 if (snapshot.data!.isNotEmpty) {
 //                   context.push('/panier');
@@ -29,7 +29,7 @@ import 'package:immoplus/app/design_system/design_system.dart';
 //                 label: Text(
 //                   '${snapshot.data!.length}',
 //                   style: AppTypography.font(
-//                     color: Colors.white,
+//                     color: AppColors.white,
 //                     fontSize: 12,
 //                   ),
 //                 ),
