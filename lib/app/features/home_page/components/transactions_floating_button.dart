@@ -18,6 +18,7 @@ import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart'
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/animated_photo_stack_icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -269,34 +270,20 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   void _cancelReservation(ReservationModel reservation) {
-    AppDialog.show(
-      title: 'Annuler la réservation',
-      description: 'Voulez-vous vraiment annuler cette réservation ?',
-      primaryButtonText: 'Oui, annuler',
-      secondButtonText: 'Non',
-      onPrimary: () async {
-        try {
-          await getIt<ResidenceRepository>().annulerReservationClient(
-            reservationId: reservation.id,
-            notes: 'Annulé depuis le menu transactions',
-          );
-          ToastUtils.showSuccess(
-            description: 'Réservation annulée avec succès',
-          );
-          ReservationPendingBanner.refresh();
-          if (mounted) {
-            setState(() {
-              _pendingOwnerReservations = _pendingOwnerReservations
-                  .where((r) => r.id != reservation.id)
-                  .toList();
-              _pendingPaymentReservations = _pendingPaymentReservations
-                  .where((r) => r.id != reservation.id)
-                  .toList();
-            });
-            _overlayEntry?.markNeedsBuild();
-          }
-        } catch (e) {
-          ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+    BookingUtils.showCancelReservationDialog(
+      reservationId: reservation.id,
+      notes: 'Annulé depuis le menu transactions',
+      onCancelled: () {
+        if (mounted) {
+          setState(() {
+            _pendingOwnerReservations = _pendingOwnerReservations
+                .where((r) => r.id != reservation.id)
+                .toList();
+            _pendingPaymentReservations = _pendingPaymentReservations
+                .where((r) => r.id != reservation.id)
+                .toList();
+          });
+          _overlayEntry?.markNeedsBuild();
         }
       },
     );
@@ -531,7 +518,7 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
     super.dispose();
   }
 
-  static final TextStyle _labelStyle =AppTypography.font(
+  static final TextStyle _labelStyle = AppTypography.font(
     color: AppColors.white,
     fontSize: 9,
     height: 1.1,
@@ -641,7 +628,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: Text(
               'Mes réservations',
-              style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
+              style:
+                  AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
           SizedBox(height: 4),
@@ -652,7 +640,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
               child: Text(
                 'Retrouvez ici toutes vos réservations et demandes de visite, où que vous soyez.',
-                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextSecondary),
               ),
             )
           else
