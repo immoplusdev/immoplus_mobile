@@ -249,6 +249,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   void _cancelReverseSearch(ReverseSearchItem item) {
+    unawaited(_closeMenu());
     AppDialog.show(
       title: 'Annuler la recherche',
       description: 'Voulez-vous vraiment annuler cette recherche ?',
@@ -260,7 +261,6 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
           ToastUtils.showSuccess(description: 'Recherche annulée');
           if (mounted) {
             setState(() => _activeReverseSearch = null);
-            _overlayEntry?.markNeedsBuild();
           }
         } catch (e) {
           ToastUtils.showError(description: 'Erreur lors de l\'annulation');
@@ -270,8 +270,11 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   void _cancelReservation(ReservationModel reservation) {
+    unawaited(_closeMenu());
     BookingUtils.showCancelReservationDialog(
+      context: context,
       reservationId: reservation.id,
+      reservation: reservation,
       notes: 'Annulé depuis le menu transactions',
       onCancelled: () {
         if (mounted) {
@@ -283,7 +286,6 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                 .where((r) => r.id != reservation.id)
                 .toList();
           });
-          _overlayEntry?.markNeedsBuild();
         }
       },
     );

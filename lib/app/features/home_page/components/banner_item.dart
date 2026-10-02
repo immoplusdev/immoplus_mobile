@@ -138,6 +138,7 @@ class BannerItem extends StatelessWidget {
         final reservationId = metadata['reservation_id']?.toString();
         if (reservationId != null) {
           BookingUtils.showCancelReservationDialog(
+            context: context,
             reservationId: reservationId,
             notes: 'Annulé depuis la bannière promotionnelle',
           );

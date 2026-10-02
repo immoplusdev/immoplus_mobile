@@ -20,8 +20,6 @@ import 'package:immoplus/app/core/network/interceptors/error_interceptor.dart'
     as _i1023;
 import 'package:immoplus/app/core/network/interceptors/request_interceptor.dart'
     as _i358;
-import 'package:immoplus/app/design_system/design_system.dart'
-    as _i415;
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
 import 'package:immoplus/app/core/services/analytics_service.dart' as _i1058;
@@ -61,6 +59,8 @@ import 'package:immoplus/app/data/repositories/suggest_repository.dart'
     as _i743;
 import 'package:immoplus/app/data/repositories/user_preference_repository.dart'
     as _i715;
+import 'package:immoplus/app/design_system/feedback/easy_loading_handler.dart'
+    as _i725;
 import 'package:immoplus/app/features/ai_assistant/services/chat_history_service.dart'
     as _i342;
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
@@ -136,8 +136,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i847.IsarConfig>(() => _i847.IsarConfig());
     gh.lazySingleton<_i358.RequestInterceptor>(
         () => _i358.RequestInterceptor());
-    gh.lazySingleton<_i415.EasyLoadingHandler>(
-        () => _i415.EasyLoadingHandler());
     gh.lazySingleton<_i242.EnvHandler>(() => _i242.EnvHandler());
     gh.lazySingleton<_i1058.AnalyticsService>(() => _i1058.AnalyticsService());
     gh.lazySingleton<_i570.MessagingSocketService>(
@@ -151,6 +149,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
+    gh.lazySingleton<_i725.EasyLoadingHandler>(
+        () => _i725.EasyLoadingHandler());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));

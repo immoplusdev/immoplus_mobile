@@ -312,47 +312,6 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<DemandeVisiteCollection> getVisiteOwner(
-    String? search,
-    String id,
-    int page,
-    int perPage,
-    String? orderBy,
-    String? orderDir,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'_search': search,
-      r'_page': page,
-      r'_per_page': perPage,
-      r'_order_by': orderBy,
-      r'_order_dir': orderDir,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DemandeVisiteCollection>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            'https://api.npoint.io/2d556cc695c18d99dd84',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late DemandeVisiteCollection _value;
-    try {
-      _value = DemandeVisiteCollection.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
   Future<DemandeVisiteCollection> getVisites(
     String? search,
     int page,
