@@ -338,6 +338,14 @@ class Utils {
     return formattedDate;
   }
 
+  static String formatCancelDate({required DateTime dateTime}) {
+    try {
+      return DateFormat("d MMMM HH'h'", 'fr_FR').format(dateTime);
+    } catch (_) {
+      return DateFormat("d MMM HH'h'").format(dateTime);
+    }
+  }
+
   static Color getStatusColor({required String status}) {
     if (status == 'successful') {
       return CupertinoColors.systemGreen;
