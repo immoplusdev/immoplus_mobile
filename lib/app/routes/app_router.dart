@@ -47,6 +47,7 @@ import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
+import 'package:immoplus/app/features/user_preference/pages/user_preference_intermediary_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
@@ -897,6 +898,13 @@ class AppRouter {
         name: UserPreferencePage.name,
         builder: (BuildContext context, GoRouterState state) {
           return const UserPreferencePage();
+        },
+      ),
+      GoRoute(
+        path: UserPreferenceIntermediaryPage.routePath,
+        name: UserPreferenceIntermediaryPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const UserPreferenceIntermediaryPage();
         },
       ),
       GoRoute(

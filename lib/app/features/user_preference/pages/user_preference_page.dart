@@ -7,9 +7,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit.dart';
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit_state.dart';
+import 'package:immoplus/app/features/user_preference/pages/user_preference_intermediary_page.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 class UserPreferencePage extends StatelessWidget {
@@ -33,7 +33,8 @@ class UserPreferencePage extends StatelessWidget {
           child: BlocListener<UserPreferenceCubit, UserPreferenceCubitState>(
             listener: (context, state) {
               state.maybeWhen(
-                success: () => context.goNamed(HomePage.name),
+                success: () =>
+                    context.goNamed(UserPreferenceIntermediaryPage.name),
                 error: (message) => ToastUtils.showError(title: message),
                 orElse: () {},
               );
