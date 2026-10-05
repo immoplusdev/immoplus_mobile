@@ -62,8 +62,7 @@ class _ForYouItemVerticalListState extends State<ForYouItemVerticalList> {
   bool get _isResidence =>
       widget.section.type == HomeFeedSectionType.residenceList;
 
-  bool get _isCheapest =>
-      widget.section.key == "HomeFeedSectionType.cheapestKey";
+  bool get _isCheapest => widget.section.key == HomeFeedSectionType.cheapestKey;
 
   Future<void> _loadNextPage() async {
     if (_isLoadingMore || !_hasMore || widget.section.seeMoreEndpoint == null) {

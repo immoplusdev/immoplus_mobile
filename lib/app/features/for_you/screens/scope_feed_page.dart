@@ -81,18 +81,33 @@ class _ScopeFeedPageState extends State<ScopeFeedPage> {
     return BlocProvider.value(
       value: _cubit,
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.primary,
         appBar: AppBar(
           backgroundColor: AppColors.primary,
           elevation: 0,
-          // toolbarHeight: kToolbarHeight + 20,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: AppColors.white,
-              size: 20,
+          leadingWidth: 60,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Center(
+              child: InkWell(
+                onTap: () => Navigator.maybePop(context),
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: AppColors.black,
+                    size: 20,
+                  ),
+                ),
+              ),
             ),
-            onPressed: () => Navigator.maybePop(context),
           ),
           title: Text(
             widget.displayTitle,
@@ -105,148 +120,175 @@ class _ScopeFeedPageState extends State<ScopeFeedPage> {
           centerTitle: true,
           actions: const [
             Padding(
-              padding: EdgeInsets.only(right: 8),
-              child: NotificationBell(),
+              padding: EdgeInsets.only(right: 16),
+              child: Center(
+                child: NotificationBell(
+                  backgroundColor: AppColors.white,
+                  size: 40,
+                  iconSize: 20,
+                ),
+              ),
             ),
           ],
         ),
-        body: Stack(
-          children: [
-            BlocBuilder<ScopeFeedCubit, ScopeFeedState>(
-              builder: (context, state) {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    await _cubit.fetch();
-                  },
-                  child: CustomScrollView(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics(),
-                    ),
-                    slivers: [
-                      // ── Carte de recherche d'en-tête (flottante) ──
-                      SliverToBoxAdapter(
-                        child: FeedSearchHeaderCard(
-                          scope: widget.scope,
-                          destinationName: state.selectedAddress?.description,
-                          onLocationSelected: _cubit.setAddress,
-                          filters: state.filtersData?.filters ?? [],
-                          selectedFilters: state.selectedFilters,
-                          onFilterChanged: _cubit.setFilter,
-                          selectedDateRange: state.selectedDateRange,
-                          onDateRangeSelected: _cubit.setDateRange,
-                          onSearch: () {
-                            // NB: Au clic sur rechercher ne fait aucune action pour l'instant
-                          },
-                        ),
+        body: Container(
+          margin: const EdgeInsets.only(top: 8),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              BlocBuilder<ScopeFeedCubit, ScopeFeedState>(
+                builder: (context, state) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      await _cubit.fetch();
+                    },
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
                       ),
-
-                      const SliverGap(8),
-
-                      // ── Contenu du flux de sections (Vertical) ──
-                      if (state.status == ScopeFeedStatus.loading &&
-                          state.sections.isEmpty)
+                      slivers: [
+                        // Petit indicateur / poignée grise en haut de la feuille blanche (Figma)
                         SliverToBoxAdapter(
-                          child: _FeedLoadingShimmer(),
-                        )
-                      else if (state.status == ScopeFeedStatus.error &&
-                          state.sections.isEmpty)
-                        SliverToBoxAdapter(
-                          child: _FeedErrorState(
-                            message: state.errorMessage,
-                            onRetry: _cubit.fetch,
+                          child: Center(
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 12, bottom: 8),
+                              width: 44,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFD1D5DB),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
                           ),
-                        )
-                      else if (state.sections.isEmpty)
+                        ),
+
+                        // ── Carte de recherche d'en-tête ──
                         SliverToBoxAdapter(
-                          child: _FeedEmptyState(scope: widget.scope),
-                        )
-                      else
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              if (index >= state.sections.length) {
+                          child: FeedSearchHeaderCard(
+                            scope: widget.scope,
+                            destinationName: state.selectedAddress?.description,
+                            onLocationSelected: _cubit.setAddress,
+                            filters: state.filtersData?.filters ?? [],
+                            selectedFilters: state.selectedFilters,
+                            onFilterChanged: _cubit.setFilter,
+                            onSearch: () {
+                              // NB: Au clic sur rechercher ne fait aucune action pour l'instant
+                            },
+                          ),
+                        ),
+
+                        const SliverGap(8),
+
+                        // ── Contenu du flux de sections (Vertical) ──
+                        if (state.status == ScopeFeedStatus.loading &&
+                            state.sections.isEmpty)
+                          SliverToBoxAdapter(
+                            child: _FeedLoadingShimmer(),
+                          )
+                        else if (state.status == ScopeFeedStatus.error &&
+                            state.sections.isEmpty)
+                          SliverToBoxAdapter(
+                            child: _FeedErrorState(
+                              message: state.errorMessage,
+                              onRetry: _cubit.fetch,
+                            ),
+                          )
+                        else if (state.sections.isEmpty)
+                          SliverToBoxAdapter(
+                            child: _FeedEmptyState(scope: widget.scope),
+                          )
+                        else
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                if (index >= state.sections.length) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Center(
+                                      child: state.isLoadingMore
+                                          ? CircularProgressIndicator(
+                                              color: AppColors.primary,
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ),
+                                  );
+                                }
+
+                                // Détection pagination infinie
+                                if (index == state.sections.length - 2 &&
+                                    state.hasMore &&
+                                    !state.isLoadingMore) {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (mounted) _cubit.loadMore();
+                                  });
+                                }
+
+                                final section = state.sections[index];
                                 return Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Center(
-                                    child: state.isLoadingMore
-                                        ? CircularProgressIndicator(
-                                            color: AppColors.primary,
-                                          )
-                                        : const SizedBox.shrink(),
+                                  padding: const EdgeInsets.only(
+                                    bottom: kHomeSectionSpacing,
+                                  ),
+                                  child: ForYouSectionView.vertical(
+                                    section: section,
                                   ),
                                 );
-                              }
-
-                              // Détection pagination infinie
-                              if (index == state.sections.length - 2 &&
-                                  state.hasMore &&
-                                  !state.isLoadingMore) {
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  if (mounted) _cubit.loadMore();
-                                });
-                              }
-
-                              final section = state.sections[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: kHomeSectionSpacing,
-                                ),
-                                child: ForYouSectionView.vertical(
-                                  section: section,
-                                ),
-                              );
-                            },
-                            childCount:
-                                state.sections.length + (state.hasMore ? 1 : 0),
+                              },
+                              childCount: state.sections.length +
+                                  (state.hasMore ? 1 : 0),
+                            ),
                           ),
-                        ),
 
-                      SliverGap(baseBottom + 40),
-                    ],
-                  ),
-                );
-              },
-            ),
+                        SliverGap(baseBottom + 40),
+                      ],
+                    ),
+                  );
+                },
+              ),
 
-            // Bouton Scroll to top
-            Positioned(
-              right: 20,
-              bottom: baseBottom,
-              child: IgnorePointer(
-                ignoring: !_showScrollToTopButton,
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 180),
-                  opacity: _showScrollToTopButton ? 1 : 0,
-                  child: AnimatedSlide(
+              // Bouton Scroll to top
+              Positioned(
+                right: 20,
+                bottom: baseBottom,
+                child: IgnorePointer(
+                  ignoring: !_showScrollToTopButton,
+                  child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 180),
-                    offset: _showScrollToTopButton
-                        ? Offset.zero
-                        : const Offset(0, 0.2),
-                    child: Material(
-                      color: AppColors.transparent,
-                      child: InkWell(
-                        onTap: _scrollToTop,
-                        borderRadius: BorderRadius.circular(18),
-                        child: Ink(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(18),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.black.withValues(alpha: 0.1),
-                                blurRadius: 16,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.keyboard_arrow_up_rounded,
-                            color: AppColors.white,
-                            size: 28,
+                    opacity: _showScrollToTopButton ? 1 : 0,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 180),
+                      offset: _showScrollToTopButton
+                          ? Offset.zero
+                          : const Offset(0, 0.2),
+                      child: Material(
+                        color: AppColors.transparent,
+                        child: InkWell(
+                          onTap: _scrollToTop,
+                          borderRadius: BorderRadius.circular(18),
+                          child: Ink(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.black.withValues(alpha: 0.1),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.keyboard_arrow_up_rounded,
+                              color: AppColors.white,
+                              size: 28,
+                            ),
                           ),
                         ),
                       ),
@@ -254,8 +296,8 @@ class _ScopeFeedPageState extends State<ScopeFeedPage> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

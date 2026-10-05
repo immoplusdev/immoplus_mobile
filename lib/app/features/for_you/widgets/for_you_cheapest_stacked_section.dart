@@ -126,7 +126,7 @@ class _ForYouCheapestStackedSectionState
     });
   }
 
-  void _onPanEnd(DragEndDetails details) {
+  void _onPanEnd(DragEndDetails details, double cardWidth) {
     if (_animController.isAnimating) return;
     final velocityX = details.velocity.pixelsPerSecond.dx;
     final itemsCount = _items.length;
@@ -136,18 +136,22 @@ class _ForYouCheapestStackedSectionState
       return;
     }
 
-    const swipeThreshold = 80.0;
-    final shouldSwipeRight = _dragOffset.dx > swipeThreshold || velocityX > 400;
+    const swipeThreshold = 60.0;
+    final shouldSwipeRight = _dragOffset.dx > swipeThreshold || velocityX > 350;
     final shouldSwipeLeft =
-        _dragOffset.dx < -swipeThreshold || velocityX < -400;
+        _dragOffset.dx < -swipeThreshold || velocityX < -350;
 
     if (shouldSwipeRight || shouldSwipeLeft) {
-      final targetDx = shouldSwipeRight ? 500.0 : -500.0;
+      final isGoingPrevious = shouldSwipeRight;
+      // En allant en avant : la carte du haut s'échappe vers la gauche (-cardWidth - 60)
+      // En revenant en arrière : la carte précédente entre depuis la gauche jusqu'au centre (cardWidth)
+      final targetDx = isGoingPrevious ? cardWidth : -cardWidth - 60.0;
+
       _slideAnimation = Tween<Offset>(
         begin: _dragOffset,
         end: Offset(targetDx, _dragOffset.dy),
       ).animate(
-        CurvedAnimation(parent: _animController, curve: Curves.easeOut),
+        CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
       )..addListener(() {
           setState(() {
             _dragOffset = _slideAnimation.value;
@@ -156,12 +160,19 @@ class _ForYouCheapestStackedSectionState
 
       _animController.forward(from: 0).then((_) {
         setState(() {
-          _currentIndex = (_currentIndex + 1) % itemsCount;
+          if (isGoingPrevious) {
+            _currentIndex = (_currentIndex - 1 + itemsCount) % itemsCount;
+          } else {
+            _currentIndex = (_currentIndex + 1) % itemsCount;
+          }
           _dragOffset = Offset.zero;
         });
 
-        // Détection de pagination à l'approche de la fin de la pile
-        if (_currentIndex >= _items.length - 2 && _hasMore && !_isLoadingMore) {
+        // Détection de pagination à l'approche de la fin de la pile en avançant
+        if (!isGoingPrevious &&
+            _currentIndex >= _items.length - 2 &&
+            _hasMore &&
+            !_isLoadingMore) {
           _loadNextPage();
         }
       });
@@ -200,27 +211,73 @@ class _ForYouCheapestStackedSectionState
           SizedBox(
             height: 250,
             width: double.infinity,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                // Carte du fond (3ème carte dans la pile)
-                if (cardCount > 2)
-                  _buildStackedCard(
-                    item: _items[(_currentIndex + 2) % cardCount],
-                    depth: 2,
-                  ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final cardWidth = constraints.maxWidth;
+                final isDraggingRight = _dragOffset.dx > 0;
+                final dragRatio =
+                    (cardWidth > 0 ? (_dragOffset.dx.abs() / cardWidth) : 0.0)
+                        .clamp(0.0, 1.0);
 
-                // Carte du milieu (2ème carte dans la pile)
-                if (cardCount > 1)
-                  _buildStackedCard(
-                    item: _items[(_currentIndex + 1) % cardCount],
-                    depth: 1,
-                  ),
+                return GestureDetector(
+                  onPanStart: _onPanStart,
+                  onPanUpdate: _onPanUpdate,
+                  onPanEnd: (details) => _onPanEnd(details, cardWidth),
+                  onTap: () =>
+                      _handleCardTap(_items[_currentIndex % cardCount]),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    children: [
+                      if (!isDraggingRight) ...[
+                        // ── Navigation en avant (Swipe gauche) ──
+                        // 3ème carte dans la pile
+                        if (cardCount > 2)
+                          _buildStackedCard(
+                            item: _items[(_currentIndex + 2) % cardCount],
+                            depth: 2,
+                            dragRatio: dragRatio,
+                          ),
 
-                // Carte principale au premier plan (interactive)
-                _buildTopCard(_items[_currentIndex % cardCount]),
-              ],
+                        // 2ème carte dans la pile
+                        if (cardCount > 1)
+                          _buildStackedCard(
+                            item: _items[(_currentIndex + 1) % cardCount],
+                            depth: 1,
+                            dragRatio: dragRatio,
+                          ),
+
+                        // Carte principale active (qui glisse vers la gauche)
+                        _buildTopCard(_items[_currentIndex % cardCount]),
+                      ] else ...[
+                        // ── Navigation en arrière (Swipe droit) ──
+                        // La pile recule doucement en profondeur
+                        if (cardCount > 2)
+                          _buildStackedCard(
+                            item: _items[(_currentIndex + 1) % cardCount],
+                            depth: 2,
+                            dragRatio: -dragRatio,
+                          ),
+
+                        if (cardCount > 1)
+                          _buildStackedCard(
+                            item: _items[_currentIndex % cardCount],
+                            depth: 1,
+                            dragRatio: -dragRatio,
+                          ),
+
+                        // Carte précédente qui entre fluidement depuis la gauche au-dessus de la pile
+                        _buildIncomingPrevCard(
+                          item: _items[
+                              (_currentIndex - 1 + cardCount) % cardCount],
+                          cardWidth: cardWidth,
+                          dragRatio: dragRatio,
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              },
             ),
           ),
           if (cardCount > 1) ...[
@@ -254,15 +311,14 @@ class _ForYouCheapestStackedSectionState
   Widget _buildStackedCard({
     required HomeFeedListItem item,
     required int depth,
+    required double dragRatio,
   }) {
-    // Calcul de l'effet d'interpolation quand on drag la carte du haut
-    final dragRatio = (_dragOffset.dx.abs() / 200).clamp(0.0, 1.0);
-    final targetDepth = (depth - dragRatio).clamp(0.0, 2.0);
+    // Si dragRatio > 0 (swipe gauche) : la carte monte (targetDepth diminue)
+    // Si dragRatio < 0 (swipe droite) : la carte recule (targetDepth augmente)
+    final targetDepth = (depth - dragRatio).clamp(0.0, 2.5);
 
-    // Positionnement et échelle de la pile
-    final scale = 1.0 - (targetDepth * 0.05);
+    final scale = (1.0 - (targetDepth * 0.05)).clamp(0.85, 1.0);
     final translateY = targetDepth * 10.0;
-    // Rotation légère pour faire dépasser les coins
     final rotationAngle =
         depth == 1 ? (1.5 * math.pi / 180) : (-2.0 * math.pi / 180);
 
@@ -270,7 +326,7 @@ class _ForYouCheapestStackedSectionState
       alignment: Alignment.center,
       transform: (Matrix4.translationValues(0.0, translateY, 0.0)
         ..multiply(Matrix4.diagonal3Values(scale, scale, 1.0))
-        ..rotateZ(rotationAngle * (1 - dragRatio))),
+        ..rotateZ(rotationAngle * (1 - dragRatio.abs()))),
       child: Opacity(
         opacity: (1.0 - (targetDepth * 0.18)).clamp(0.0, 1.0),
         child: _CardContent(
@@ -285,23 +341,41 @@ class _ForYouCheapestStackedSectionState
   Widget _buildTopCard(HomeFeedListItem item) {
     final rotationAngle = (_dragOffset.dx / 300) * (15 * math.pi / 180);
 
-    return GestureDetector(
-      onPanStart: _onPanStart,
-      onPanUpdate: _onPanUpdate,
-      onPanEnd: _onPanEnd,
-      onTap: () => _handleCardTap(item),
-      child: Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.translationValues(
-          _dragOffset.dx,
-          _dragOffset.dy * 0.3,
-          0.0,
-        )..rotateZ(rotationAngle),
-        child: _CardContent(
-          item: item,
-          isResidence: _isResidence,
-          sectionTitle: widget.section.title,
-        ),
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.translationValues(
+        _dragOffset.dx,
+        _dragOffset.dy * 0.3,
+        0.0,
+      )..rotateZ(rotationAngle),
+      child: _CardContent(
+        item: item,
+        isResidence: _isResidence,
+        sectionTitle: widget.section.title,
+      ),
+    );
+  }
+
+  Widget _buildIncomingPrevCard({
+    required HomeFeedListItem item,
+    required double cardWidth,
+    required double dragRatio,
+  }) {
+    // La carte précédente commence à -cardWidth et se déplace vers 0.0 quand _dragOffset.dx atteint cardWidth
+    final dx = _dragOffset.dx - cardWidth;
+    final rotationAngle = (-12 * math.pi / 180) * (1.0 - dragRatio);
+
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.translationValues(
+        dx,
+        _dragOffset.dy * 0.2,
+        0.0,
+      )..rotateZ(rotationAngle),
+      child: _CardContent(
+        item: item,
+        isResidence: _isResidence,
+        sectionTitle: widget.section.title,
       ),
     );
   }

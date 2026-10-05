@@ -8,7 +8,16 @@ import 'package:immoplus/app/features/authentification/authentification_page.dar
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 
 class NotificationBell extends StatelessWidget {
-  const NotificationBell({super.key});
+  final Color? backgroundColor;
+  final double size;
+  final double iconSize;
+
+  const NotificationBell({
+    super.key,
+    this.backgroundColor,
+    this.size = 48.0,
+    this.iconSize = 22.0,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +32,19 @@ class NotificationBell extends StatelessWidget {
         }
       },
       child: Container(
-        width: 48,
-        height: 48,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.blue40,
+          color: backgroundColor ?? AppColors.blue40,
         ),
-        child: Center(child: SvgPicture.asset("assets/svgs/icons/bell.svg")),
+        child: Center(
+          child: SvgPicture.asset(
+            "assets/svgs/icons/bell.svg",
+            width: iconSize,
+            height: iconSize,
+          ),
+        ),
       ),
     );
   }

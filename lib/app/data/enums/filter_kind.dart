@@ -1,7 +1,8 @@
 enum FilterKind {
   select('select'),
   priceRange('price_range'),
-  minCount('min_count');
+  minCount('min_count'),
+  dateRange('date_range');
 
   final String value;
 
@@ -10,6 +11,7 @@ enum FilterKind {
   bool get isSelect => this == FilterKind.select;
   bool get isPriceRange => this == FilterKind.priceRange;
   bool get isMinCount => this == FilterKind.minCount;
+  bool get isDateRange => this == FilterKind.dateRange;
 
   static FilterKind fromValue(String? value) {
     return FilterKind.values.firstWhere(

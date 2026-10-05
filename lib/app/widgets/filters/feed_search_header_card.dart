@@ -5,7 +5,6 @@ import 'package:immoplus/app/data/models/remote/search_filters/search_filters_re
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
-import 'package:immoplus/app/widgets/filters/daterange_filter_picker.dart';
 import 'package:immoplus/app/widgets/filters/destination_search_picker.dart';
 import 'package:immoplus/app/widgets/filters/dynamic_filter_picker.dart';
 
@@ -18,8 +17,6 @@ class FeedSearchHeaderCard extends StatelessWidget {
   final List<SearchFilterItem> filters;
   final Map<String, SearchFilterOption?> selectedFilters;
   final Function(String filterKey, SearchFilterOption? option) onFilterChanged;
-  final DateTimeRange? selectedDateRange;
-  final ValueChanged<DateTimeRange?>? onDateRangeSelected;
   final VoidCallback? onSearch;
 
   const FeedSearchHeaderCard({
@@ -30,8 +27,6 @@ class FeedSearchHeaderCard extends StatelessWidget {
     this.filters = const [],
     required this.selectedFilters,
     required this.onFilterChanged,
-    this.selectedDateRange,
-    this.onDateRangeSelected,
     this.onSearch,
   });
 
@@ -39,106 +34,58 @@ class FeedSearchHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // Fond coloré en haut avec coins arrondis
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 100,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-          ),
+          ],
         ),
-
-        // Carte flottante de recherche
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFFFCFEFF),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.immoBorderDefault),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.withValues(alpha: 0.05),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
-                ),
-              ],
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 1. Destination
+            DestinationSearchPicker(
+              value: destinationName,
+              placeholder: _isStay
+                  ? 'Où voulez-vous séjourner ?'
+                  : 'Commune, quartier ou ville',
+              onLocationSelected: onLocationSelected,
+              onClear: () => onLocationSelected(null),
             ),
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 1. Destination
-                DestinationSearchPicker(
-                  value: destinationName,
-                  placeholder: _isStay
-                      ? 'Où voulez-vous séjourner ?'
-                      : 'Ville, quartier ou commune...',
-                  onLocationSelected: onLocationSelected,
-                  onClear: () => onLocationSelected(null),
-                ),
 
-                const Gap(12),
+            // 2. Filtres dynamiques (gérés à 100% via l'API)
+            if (filters.isNotEmpty) ...[
+              const Gap(12),
+              _buildFiltersLayout(filters),
+            ],
 
-                // 2. Filtres dynamiques / Dates pour séjour
-                if (_isStay && onDateRangeSelected != null) ...[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DaterangeFilterPicker(
-                          selectedRange: selectedDateRange,
-                          onDateRangeSelected: onDateRangeSelected!,
-                        ),
-                      ),
-                      if (filters.isNotEmpty) ...[
-                        const Gap(8),
-                        Expanded(
-                          child: DynamicFilterPicker(
-                            filter: filters.first,
-                            selectedOption: selectedFilters[filters.first.key],
-                            onSelected: (opt) =>
-                                onFilterChanged(filters.first.key, opt),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  if (filters.length > 1) ...[
-                    const Gap(10),
-                    _buildFilterRow(filters.sublist(1)),
-                  ],
-                ] else if (filters.isNotEmpty) ...[
-                  _buildFilterRow(filters),
-                ],
+            const Gap(14),
 
-                const Gap(14),
-
-                // 3. Bouton Chercher
-                CustomButtom(
-                  text: 'Chercher',
-                  onClick: onSearch ?? () {},
-                ),
-              ],
+            // 3. Bouton Chercher
+            CustomButtom(
+              text: 'Chercher',
+              onClick: onSearch ?? () {},
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildFilterRow(List<SearchFilterItem> items) {
+  Widget _buildFiltersLayout(List<SearchFilterItem> items) {
+    if (items.isEmpty) return const SizedBox.shrink();
+
     if (items.length == 1) {
       final f = items[0];
       return DynamicFilterPicker(
@@ -170,35 +117,95 @@ class FeedSearchHeaderCard extends StatelessWidget {
       );
     }
 
-    return Row(
-      children: [
-        Expanded(
-          flex: 4,
-          child: DynamicFilterPicker(
-            filter: items[0],
-            selectedOption: selectedFilters[items[0].key],
-            onSelected: (opt) => onFilterChanged(items[0].key, opt),
+    // Si exactement 3 filtres (ex: Type de bien, Budget, Chambres) : ils rentrent tous sur une seule ligne comme sur Figma
+    if (items.length == 3) {
+      return Row(
+        children: [
+          Expanded(
+            flex: 8,
+            child: DynamicFilterPicker(
+              filter: items[0],
+              selectedOption: selectedFilters[items[0].key],
+              onSelected: (opt) => onFilterChanged(items[0].key, opt),
+            ),
           ),
-        ),
-        const Gap(6),
-        Expanded(
-          flex: 4,
-          child: DynamicFilterPicker(
-            filter: items[1],
-            selectedOption: selectedFilters[items[1].key],
-            onSelected: (opt) => onFilterChanged(items[1].key, opt),
+          const Gap(6),
+          Expanded(
+            flex: 7,
+            child: DynamicFilterPicker(
+              filter: items[1],
+              selectedOption: selectedFilters[items[1].key],
+              onSelected: (opt) => onFilterChanged(items[1].key, opt),
+            ),
           ),
-        ),
-        const Gap(6),
-        Expanded(
-          flex: 3,
-          child: DynamicFilterPicker(
-            filter: items[2],
-            selectedOption: selectedFilters[items[2].key],
-            onSelected: (opt) => onFilterChanged(items[2].key, opt),
+          const Gap(6),
+          Expanded(
+            flex: 6,
+            child: DynamicFilterPicker(
+              filter: items[2],
+              selectedOption: selectedFilters[items[2].key],
+              onSelected: (opt) => onFilterChanged(items[2].key, opt),
+            ),
           ),
-        ),
-      ],
+        ],
+      );
+    }
+
+    // Si plus de 3 filtres : découpage par rangées de 2 avec alignement à gauche pour un élément restant seul
+    final rows = <Widget>[];
+    for (int i = 0; i < items.length; i += 2) {
+      final chunk =
+          items.sublist(i, (i + 2 > items.length) ? items.length : i + 2);
+      if (rows.isNotEmpty) {
+        rows.add(const Gap(10));
+      }
+      if (chunk.length == 1) {
+        final f = chunk[0];
+        rows.add(
+          Row(
+            children: [
+              Expanded(
+                child: DynamicFilterPicker(
+                  filter: f,
+                  selectedOption: selectedFilters[f.key],
+                  onSelected: (opt) => onFilterChanged(f.key, opt),
+                ),
+              ),
+              const Gap(8),
+              const Expanded(
+                child: SizedBox.shrink(),
+              ),
+            ],
+          ),
+        );
+      } else {
+        rows.add(
+          Row(
+            children: [
+              Expanded(
+                child: DynamicFilterPicker(
+                  filter: chunk[0],
+                  selectedOption: selectedFilters[chunk[0].key],
+                  onSelected: (opt) => onFilterChanged(chunk[0].key, opt),
+                ),
+              ),
+              const Gap(8),
+              Expanded(
+                child: DynamicFilterPicker(
+                  filter: chunk[1],
+                  selectedOption: selectedFilters[chunk[1].key],
+                  onSelected: (opt) => onFilterChanged(chunk[1].key, opt),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: rows,
     );
   }
 }

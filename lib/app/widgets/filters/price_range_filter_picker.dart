@@ -167,24 +167,24 @@ class PriceRangeFilterPicker extends StatelessWidget {
               ? AppColors.primary.withValues(alpha: 0.05)
               : AppColors.white,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Iconsax.wallet_3,
-              size: 16,
+              size: 15,
               color: hasSelection
                   ? AppColors.primary
                   : AppColors.immoTextSecondary,
             ),
-            const Gap(6),
+            const Gap(4),
             Flexible(
               child: Text(
                 text,
                 style: AppTypography.font(
-                  fontSize: 13,
+                  fontSize: 12.5,
                   fontWeight: hasSelection ? FontWeight.bold : FontWeight.w500,
                   color: hasSelection ? AppColors.primary : AppColors.black87,
                 ),
