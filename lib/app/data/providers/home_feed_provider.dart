@@ -16,5 +16,47 @@ abstract class HomeFeedProvider {
     @Query("cursor") String? cursor,
     @Query("limit") int? limit,
     @Query("device_id") String? deviceId,
+    @Query("villeId") String? villeId,
+    @Query("sections") String? sections,
+    @Query("items") int? items,
+  });
+
+  /// Trouver un logement : biens et terrains à louer
+  @GET("/me/rent")
+  Future<HomeFeedApiResponse> getRentFeed({
+    @Query("cursor") String? cursor,
+    @Query("limit") int? limit,
+    @Query("lat") double? lat,
+    @Query("lng") double? lng,
+    @Query("villeId") String? villeId,
+    @Query("device_id") String? deviceId,
+    @Query("sections") String? sections,
+    @Query("items") int? items,
+  });
+
+  /// Acheter un bien : biens et terrains à vendre
+  @GET("/me/buy")
+  Future<HomeFeedApiResponse> getBuyFeed({
+    @Query("cursor") String? cursor,
+    @Query("limit") int? limit,
+    @Query("lat") double? lat,
+    @Query("lng") double? lng,
+    @Query("villeId") String? villeId,
+    @Query("device_id") String? deviceId,
+    @Query("sections") String? sections,
+    @Query("items") int? items,
+  });
+
+  /// Trouver un séjour : résidences, disponibilités et nouveautés
+  @GET("/me/stay")
+  Future<HomeFeedApiResponse> getStayFeed({
+    @Query("cursor") String? cursor,
+    @Query("limit") int? limit,
+    @Query("lat") double? lat,
+    @Query("lng") double? lng,
+    @Query("villeId") String? villeId,
+    @Query("device_id") String? deviceId,
+    @Query("sections") String? sections,
+    @Query("items") int? items,
   });
 }

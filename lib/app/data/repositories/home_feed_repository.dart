@@ -15,7 +15,13 @@ class HomeFeedRepository {
 
   HomeFeedRepository(this._dioClient, this._deviceIdService);
 
-  Future<HomeFeedData> getHomeFeed({String? cursor, int limit = 10}) async {
+  Future<HomeFeedData> getHomeFeed({
+    String? cursor,
+    int limit = 10,
+    String? villeId,
+    String? sections,
+    int? items,
+  }) async {
     try {
       final position = await _resolvePosition();
       final deviceId = await _deviceIdService.getDeviceId();
@@ -25,6 +31,9 @@ class HomeFeedRepository {
         cursor: cursor,
         limit: limit,
         deviceId: deviceId,
+        villeId: villeId,
+        sections: sections,
+        items: items,
       );
       return response.data;
     } on DioException catch (dioError) {
@@ -33,6 +42,96 @@ class HomeFeedRepository {
     } catch (error) {
       log('Error when loading /me/home: $error');
       throw Exception('Failed to load home feed: $error');
+    }
+  }
+
+  Future<HomeFeedData> getRentFeed({
+    String? cursor,
+    int limit = 10,
+    String? villeId,
+    String? sections,
+    int? items,
+  }) async {
+    try {
+      final position = await _resolvePosition();
+      final deviceId = await _deviceIdService.getDeviceId();
+      final response = await HomeFeedProvider(_dioClient).getRentFeed(
+        cursor: cursor,
+        limit: limit,
+        lat: position?.$1,
+        lng: position?.$2,
+        villeId: villeId,
+        deviceId: deviceId,
+        sections: sections,
+        items: items,
+      );
+      return response.data;
+    } on DioException catch (dioError) {
+      log('DioError when loading /me/rent: ${dioError.message}');
+      throw Exception('Failed to load rent feed: ${dioError.message}');
+    } catch (error) {
+      log('Error when loading /me/rent: $error');
+      throw Exception('Failed to load rent feed: $error');
+    }
+  }
+
+  Future<HomeFeedData> getBuyFeed({
+    String? cursor,
+    int limit = 10,
+    String? villeId,
+    String? sections,
+    int? items,
+  }) async {
+    try {
+      final position = await _resolvePosition();
+      final deviceId = await _deviceIdService.getDeviceId();
+      final response = await HomeFeedProvider(_dioClient).getBuyFeed(
+        cursor: cursor,
+        limit: limit,
+        lat: position?.$1,
+        lng: position?.$2,
+        villeId: villeId,
+        deviceId: deviceId,
+        sections: sections,
+        items: items,
+      );
+      return response.data;
+    } on DioException catch (dioError) {
+      log('DioError when loading /me/buy: ${dioError.message}');
+      throw Exception('Failed to load buy feed: ${dioError.message}');
+    } catch (error) {
+      log('Error when loading /me/buy: $error');
+      throw Exception('Failed to load buy feed: $error');
+    }
+  }
+
+  Future<HomeFeedData> getStayFeed({
+    String? cursor,
+    int limit = 10,
+    String? villeId,
+    String? sections,
+    int? items,
+  }) async {
+    try {
+      final position = await _resolvePosition();
+      final deviceId = await _deviceIdService.getDeviceId();
+      final response = await HomeFeedProvider(_dioClient).getStayFeed(
+        cursor: cursor,
+        limit: limit,
+        lat: position?.$1,
+        lng: position?.$2,
+        villeId: villeId,
+        deviceId: deviceId,
+        sections: sections,
+        items: items,
+      );
+      return response.data;
+    } on DioException catch (dioError) {
+      log('DioError when loading /me/stay: ${dioError.message}');
+      throw Exception('Failed to load stay feed: ${dioError.message}');
+    } catch (error) {
+      log('Error when loading /me/stay: $error');
+      throw Exception('Failed to load stay feed: $error');
     }
   }
 
