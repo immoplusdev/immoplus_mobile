@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/home_feed_response.dart';
+import 'package:immoplus/app/data/models/remote/search_filters/search_filters_response.dart';
 import 'package:immoplus/app/data/providers/home_feed_provider.dart';
 import 'package:immoplus/app/services/device_id_service.dart';
 import 'package:immoplus/app/services/location_service.dart';
@@ -132,6 +133,21 @@ class HomeFeedRepository {
     } catch (error) {
       log('Error when loading /me/stay: $error');
       throw Exception('Failed to load stay feed: $error');
+    }
+  }
+
+  /// Récupère la structure des filtres pour l'onglet spécifié ('rent', 'buy', 'stay')
+  Future<SearchFiltersData> getSearchFilters({required String scope}) async {
+    try {
+      final response =
+          await HomeFeedProvider(_dioClient).getSearchFilters(scope: scope);
+      return response.data;
+    } on DioException catch (dioError) {
+      log('DioError when loading /me/search/filters ($scope): ${dioError.message}');
+      throw Exception('Failed to load search filters: ${dioError.message}');
+    } catch (error) {
+      log('Error when loading /me/search/filters ($scope): $error');
+      throw Exception('Failed to load search filters: $error');
     }
   }
 

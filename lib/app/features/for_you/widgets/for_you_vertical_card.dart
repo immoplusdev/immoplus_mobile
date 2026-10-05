@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_bien_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_residence_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/property_badge_dto.dart';
@@ -22,6 +24,7 @@ class ForYouVerticalCard extends StatelessWidget {
   final int? price;
   final String? currency;
   final bool isRent;
+  final bool isResidence;
   final String? description;
   final List<String> chips;
   final PropertyBadgeDto? badge;
@@ -36,6 +39,7 @@ class ForYouVerticalCard extends StatelessWidget {
     this.price,
     this.currency,
     this.isRent = false,
+    this.isResidence = false,
     this.description,
     this.chips = const [],
     this.badge,
@@ -54,7 +58,8 @@ class ForYouVerticalCard extends StatelessWidget {
       if (bien.location != null && bien.location!.isNotEmpty) {
         computedChips.add(bien.location!);
       }
-      if (bien.typeBienImmobilier != null && bien.typeBienImmobilier!.isNotEmpty) {
+      if (bien.typeBienImmobilier != null &&
+          bien.typeBienImmobilier!.isNotEmpty) {
         computedChips.add(bien.typeBienImmobilier!);
       }
     }
@@ -98,6 +103,7 @@ class ForYouVerticalCard extends StatelessWidget {
       price: residence.pricePerNight,
       currency: residence.currency ?? 'FCFA',
       isRent: true,
+      isResidence: true,
       description: residence.description,
       chips: computedChips,
       badge: residence.badge,
@@ -109,16 +115,8 @@ class ForYouVerticalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.immoBorderDefault, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Material(
         color: Colors.transparent,
@@ -126,7 +124,11 @@ class ForYouVerticalCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           onTap: onTap ??
               () {
-                context.push('/estate_detail/$id');
+                context.push(
+                  isResidence
+                      ? ResidencePage.route(id)
+                      : EstatePage.route(id),
+                );
               },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +148,8 @@ class ForYouVerticalCard extends StatelessWidget {
                       const Gap(8),
                       _buildPrice(),
                     ],
-                    if (description != null && description!.trim().isNotEmpty) ...[
+                    if (description != null &&
+                        description!.trim().isNotEmpty) ...[
                       const Gap(6),
                       _buildDescription(),
                     ],
@@ -216,54 +219,51 @@ class ForYouVerticalCard extends StatelessWidget {
 
     if (!hasChips && !hasBadge) return const SizedBox.shrink();
 
+    final isVip = badge?.tier.toLowerCase() == 'vip';
+
     return Wrap(
       spacing: 8,
       runSpacing: 6,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        ...chips.map((chipText) => _buildChip(chipText)),
-        if (hasBadge) _buildBadge(badge!),
+        ...chips.map((chipText) => _buildTag(label: chipText)),
+        if (hasBadge)
+          _buildTag(
+            label: badge!.label,
+            backgroundColor: isVip
+                ? const Color(0xFFFFFBEB)
+                : AppColors.primary.withValues(alpha: 0.08),
+            borderColor: isVip ? const Color(0xFFE5A93C) : AppColors.primary,
+            textColor: isVip ? const Color(0xFFD97706) : AppColors.primary,
+            fontWeight: FontWeight.w700,
+          ),
       ],
     );
   }
 
-  Widget _buildChip(String label) {
+  Widget _buildTag({
+    required String label,
+    Color? backgroundColor,
+    Color? borderColor,
+    Color? textColor,
+    FontWeight fontWeight = FontWeight.w500,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.immoBorderDefault, width: 1.0),
+        color: backgroundColor ?? AppColors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: borderColor ?? AppColors.black,
+          width: 1.0,
+        ),
       ),
       child: Text(
         label,
         style: AppTypography.font(
           fontSize: 12,
-          fontWeight: FontWeight.w500,
-          color: AppColors.black87,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBadge(PropertyBadgeDto badgeDto) {
-    final isVip = badgeDto.tier.toLowerCase() == 'vip';
-    final borderColor = isVip ? const Color(0xFFE5A93C) : AppColors.primary;
-    final textColor = isVip ? const Color(0xFFD97706) : AppColors.primary;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: isVip ? const Color(0xFFFFFBEB) : AppColors.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: borderColor, width: 1.0),
-      ),
-      child: Text(
-        badgeDto.label,
-        style: AppTypography.font(
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          color: textColor,
+          fontWeight: fontWeight,
+          color: textColor ?? AppColors.black87,
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/main.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
+import 'package:immoplus/app/data/enums/home_feed_scope.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
@@ -33,6 +34,7 @@ import 'package:immoplus/app/features/messaging/pages/messages_inbox_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/for_you/see_more_page.dart';
+import 'package:immoplus/app/features/for_you/screens/scope_feed_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
@@ -413,6 +415,21 @@ class AppRouter {
             communeId: extra['communeId'] as String?,
             displayText: extra['displayText'] as String,
             bannerImageId: extra['bannerImageId'] as String?,
+          );
+        },
+      ),
+      GoRoute(
+        path: ScopeFeedPage.routePath,
+        name: ScopeFeedPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          final rawScope = extra['scope'];
+          final scope = rawScope is HomeFeedScope
+              ? rawScope
+              : HomeFeedScope.fromValue(rawScope?.toString());
+          return ScopeFeedPage(
+            scope: scope,
+            title: extra['title'] as String? ?? scope.defaultTitle,
           );
         },
       ),

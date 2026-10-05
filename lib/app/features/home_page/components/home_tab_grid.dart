@@ -9,10 +9,10 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
-import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
+import 'package:immoplus/app/data/enums/home_feed_scope.dart';
+import 'package:immoplus/app/features/for_you/screens/scope_feed_page.dart';
 
 /// Grille de 6 cards remplaçant les anciens onglets natifs de l'accueil
 /// (voir new.hoome.feed.md). Chaque card navigue vers une page séparée —
@@ -86,10 +86,10 @@ List<Widget> _buildCards(BuildContext context) {
       borderColor: const Color(0xFFFFEEF6),
       badgeColor: const Color(0xFFFF5C9E),
       onTap: () => context.push(
-        SearchResultPage.routePath,
+        ScopeFeedPage.routePath,
         extra: {
-          'category': HomeTab.residence.category,
-          'displayText': 'Résidences'
+          'scope': HomeFeedScope.stay,
+          'title': HomeFeedScope.stay.defaultTitle,
         },
       ),
     ),
@@ -101,10 +101,10 @@ List<Widget> _buildCards(BuildContext context) {
       borderColor: const Color(0xFFF9DBDD),
       badgeColor: const Color(0xFFE85C6B),
       onTap: () => context.push(
-        SearchResultPage.routePath,
+        ScopeFeedPage.routePath,
         extra: {
-          'category': HomeTab.location.category,
-          'displayText': 'Location'
+          'scope': HomeFeedScope.rent,
+          'title': HomeFeedScope.rent.defaultTitle,
         },
       ),
     ),
@@ -125,8 +125,11 @@ List<Widget> _buildCards(BuildContext context) {
       borderColor: const Color(0xFFFAE5CF),
       badgeColor: const Color(0xFFFF9F43),
       onTap: () => context.push(
-        SearchResultPage.routePath,
-        extra: {'category': HomeTab.bien.category, 'displayText': 'Biens'},
+        ScopeFeedPage.routePath,
+        extra: {
+          'scope': HomeFeedScope.buy,
+          'title': HomeFeedScope.buy.defaultTitle,
+        },
       ),
     ),
     _HomeTabCard(

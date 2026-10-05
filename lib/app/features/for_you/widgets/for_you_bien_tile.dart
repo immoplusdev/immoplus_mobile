@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_bien_item.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
@@ -24,7 +25,7 @@ class ForYouBienTile extends StatelessWidget {
       width: neirResidenceCardWidth,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => context.push('/estate_detail/${bien.bienId}'),
+        onTap: () => context.push(EstatePage.route(bien.bienId)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

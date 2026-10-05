@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/data/models/remote/home_feed/home_feed_list_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/home_feed_section.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/features/for_you/see_more_page.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
+import 'package:immoplus/app/features/for_you/utils/see_more_fetcher.dart';
+import 'package:immoplus/app/features/for_you/widgets/for_you_cheapest_stacked_section.dart';
 import 'package:immoplus/app/features/for_you/widgets/for_you_inline_ad_tile.dart';
 import 'package:immoplus/app/features/for_you/widgets/for_you_vertical_card.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 
 /// Rendu vertical des items d'une section `residence_list`/`bien_list`
-/// (ex: pour l'onglet "Trouver un logement", "Acheter un bien", "Séjour").
-class ForYouItemVerticalList extends StatelessWidget {
+/// avec pagination in-place automatique via `seeMoreEndpoint`.
+class ForYouItemVerticalList extends StatefulWidget {
   final HomeFeedSection section;
   final EdgeInsetsGeometry padding;
   final double itemSpacing;
@@ -21,37 +25,111 @@ class ForYouItemVerticalList extends StatelessWidget {
     this.itemSpacing = 16.0,
   });
 
-  bool get _isResidence => section.type == HomeFeedSectionType.residenceList;
+  @override
+  State<ForYouItemVerticalList> createState() => _ForYouItemVerticalListState();
+}
+
+class _ForYouItemVerticalListState extends State<ForYouItemVerticalList> {
+  late List<HomeFeedListItem> _items;
+  late int _currentPage;
+  late int _limit;
+  late bool _hasMore;
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initData();
+  }
+
+  @override
+  void didUpdateWidget(covariant ForYouItemVerticalList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.section.key != widget.section.key ||
+        oldWidget.section.items.length != widget.section.items.length) {
+      _initData();
+    }
+  }
+
+  void _initData() {
+    _items = List.from(widget.section.listItems);
+    _currentPage = widget.section.page;
+    _limit = widget.section.limit;
+    _hasMore = widget.section.hasSeeMore;
+    _isLoadingMore = false;
+  }
+
+  bool get _isResidence =>
+      widget.section.type == HomeFeedSectionType.residenceList;
+
+  bool get _isCheapest =>
+      widget.section.key == "HomeFeedSectionType.cheapestKey";
+
+  Future<void> _loadNextPage() async {
+    if (_isLoadingMore || !_hasMore || widget.section.seeMoreEndpoint == null) {
+      return;
+    }
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    final nextPage = _currentPage + 1;
+    final result = await SeeMoreFetcher.fetch(
+      seeMoreEndpoint: widget.section.seeMoreEndpoint!,
+      page: nextPage,
+      limit: _limit,
+      isResidence: _isResidence,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoadingMore = false;
+      if (result.items.isNotEmpty) {
+        _items.addAll(result.items);
+        _currentPage = result.currentPage;
+        _hasMore = result.hasNext;
+      } else {
+        _hasMore = false;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final items = section.listItems;
-    if (items.isEmpty) return const SizedBox.shrink();
+    if (_items.isEmpty) return const SizedBox.shrink();
+
+    if (_isCheapest) {
+      return ForYouCheapestStackedSection(
+        section: widget.section,
+        padding: widget.padding,
+      );
+    }
 
     return Padding(
-      padding: padding,
+      padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          HomeSectionTitle(title: section.title),
+          HomeSectionTitle(title: widget.section.title),
           const Gap(14),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
-            itemCount: items.length + (section.hasSeeMore ? 1 : 0),
-            separatorBuilder: (context, index) => Gap(itemSpacing),
+            itemCount: _items.length,
+            separatorBuilder: (context, index) => Gap(widget.itemSpacing),
             itemBuilder: (context, index) {
-              if (index >= items.length) {
-                return _VerticalSeeMoreButton(
-                  title: section.title,
-                  seeMoreEndpoint: section.seeMoreEndpoint,
-                  isResidence: _isResidence,
-                );
+              // Déclenchement automatique de la pagination à l'approche de la fin
+              if (index >= _items.length - 2 && !_isLoadingMore && _hasMore) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _loadNextPage();
+                });
               }
 
-              final entry = items[index];
+              final entry = _items[index];
               if (entry.isAd) {
                 return ForYouInlineAdTile(campaign: entry.ad!);
               }
@@ -60,75 +138,32 @@ class ForYouItemVerticalList extends StatelessWidget {
                 final bien = entry.asBien!;
                 return ForYouVerticalCard.fromBien(
                   bien: bien,
-                  onTap: () => context.push('/estate_detail/${bien.bienId}'),
+                  onTap: () => context.push(EstatePage.route(bien.bienId)),
                 );
               }
 
               final residence = entry.asResidence!;
               return ForYouVerticalCard.fromResidence(
                 residence: residence,
-                onTap: () => context.push('/residence_detail/${residence.residenceId}'),
+                onTap: () =>
+                    context.push(ResidencePage.route(residence.residenceId)),
               );
             },
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _VerticalSeeMoreButton extends StatelessWidget {
-  final String title;
-  final String? seeMoreEndpoint;
-  final bool isResidence;
-
-  const _VerticalSeeMoreButton({
-    required this.title,
-    required this.seeMoreEndpoint,
-    required this.isResidence,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => context.pushNamed(
-        SeeMorePage.routeName,
-        extra: {
-          'title': title,
-          'seeMoreEndpoint': seeMoreEndpoint,
-          'contentType': isResidence
-              ? SeeMoreContentType.residence
-              : SeeMoreContentType.bien,
-        },
-      ),
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColors.immoBgSurfaceMuted.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.immoBorderDefault),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Voir plus de $title',
-              style: AppTypography.font(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.immoTextLabel,
+          if (_isLoadingMore) ...[
+            const Gap(16),
+            Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: AppColors.primary,
+                ),
               ),
             ),
-            const Gap(6),
-            Icon(
-              Icons.arrow_forward_rounded,
-              size: 16,
-              color: AppColors.immoTextLabel,
-            ),
           ],
-        ),
+        ],
       ),
     );
   }
