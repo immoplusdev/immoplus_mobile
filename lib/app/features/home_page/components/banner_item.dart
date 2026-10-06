@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -124,6 +126,8 @@ class BannerItem extends StatelessWidget {
         final reservationId = metadata['reservation_id']?.toString();
         final amount = metadata['montant_paye'];
         if (reservationId != null && amount != null) {
+          // TODO RESERVATION ID DEBUG
+          log(' montant total ${amount.toInt()} reservation $reservationId  ');
           context.pushNamed(
             OperatorsSelectorPage.name,
             extra: PaymentPageAdapter(
@@ -267,7 +271,7 @@ class BannerItem extends StatelessWidget {
               ],
             ),
           ),
-           const Gap(6),
+          const Gap(6),
           if (onDismiss != null)
             GestureDetector(
               onTap: onDismiss,

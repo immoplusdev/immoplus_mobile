@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -232,6 +233,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
 
   void _openPayment(ReservationModel reservation) {
     unawaited(_closeMenu());
+    // TODO RESERVATION ID DEBUG
+    log(' montant total ${reservation.montantTotalReservation.toInt()} reservation ${reservation.id}  ');
     context.pushNamed(
       OperatorsSelectorPage.name,
       extra: PaymentPageAdapter(
@@ -531,7 +534,7 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
     super.dispose();
   }
 
-  static final TextStyle _labelStyle =AppTypography.font(
+  static final TextStyle _labelStyle = AppTypography.font(
     color: AppColors.white,
     fontSize: 9,
     height: 1.1,
@@ -641,7 +644,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: Text(
               'Mes réservations',
-              style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
+              style:
+                  AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
           SizedBox(height: 4),
@@ -652,7 +656,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
               child: Text(
                 'Retrouvez ici toutes vos réservations et demandes de visite, où que vous soyez.',
-                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextSecondary),
               ),
             )
           else
