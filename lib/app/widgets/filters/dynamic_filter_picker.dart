@@ -20,7 +20,7 @@ class DynamicFilterPicker extends StatelessWidget {
     required this.filter,
     this.selectedOption,
     required this.onSelected,
-    this.height = 35.0,
+    this.height = 32.0,
   });
 
   FilterKind get _kind => FilterKind.fromValue(filter.kind);

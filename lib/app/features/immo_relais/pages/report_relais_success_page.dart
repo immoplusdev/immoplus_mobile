@@ -34,7 +34,8 @@ class ReportRelaisSuccessPage extends StatelessWidget {
               ),
               const Gap(12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: AppColors.primaryLite,
                   borderRadius: BorderRadius.circular(20),

@@ -109,7 +109,8 @@ class _EstateCardState extends State<EstateCard> {
                               TextSpan(
                                   text:
                                       "/ ${widget.bienImmobilierModel.typeLocation}",
-                                  style: AppTypography.font(color: AppColors.gray500))
+                                  style: AppTypography.font(
+                                      color: AppColors.gray500))
                             ]))
                           ],
                         ),
@@ -149,7 +150,8 @@ class _EstateCardState extends State<EstateCard> {
                 },
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: value ? AppColors.immoFeedbackError : AppColors.gray300,
+                  backgroundColor:
+                      value ? AppColors.immoFeedbackError : AppColors.gray300,
                   child: Icon(
                     FontAwesomeIcons.solidHeart.data,
                     size: 16,

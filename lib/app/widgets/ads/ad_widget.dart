@@ -86,8 +86,7 @@ class AdWidget extends StatelessWidget {
 Widget buildAdCampaignLayout(AdCampaignModel campaign) {
   switch (AdType.fromString(campaign.type)) {
     case AdType.carousel:
-      final category =
-          AdCampaignCategory.fromString(campaign.campaignCategory);
+      final category = AdCampaignCategory.fromString(campaign.campaignCategory);
       switch (category) {
         case AdCampaignCategory.villeAds:
           return AdCarouselVilleAdsCampaignCategory(campaign: campaign);

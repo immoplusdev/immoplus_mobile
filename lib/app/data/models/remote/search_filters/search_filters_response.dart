@@ -48,7 +48,10 @@ class SearchFilterItem with _$SearchFilterItem {
 class SearchFilterOption with _$SearchFilterOption {
   const factory SearchFilterOption({
     required dynamic value,
-    required String label,
+
+    /// Un libellé absent ne doit pas rendre toute la configuration de
+    /// filtres inutilisable.
+    @JsonKey(defaultValue: '') required String label,
     @Default({}) Map<String, dynamic> params,
   }) = _SearchFilterOption;
 

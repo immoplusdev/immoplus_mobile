@@ -47,7 +47,8 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
             AppDialog.info(
               barrierDismissible: false,
               content: "Votre demande a été envoyée avec succès.",
-              icon: Text("Succès", style: AppTypography.font(color: AppColors.green)),
+              icon: Text("Succès",
+                  style: AppTypography.font(color: AppColors.green)),
               textButton: "Fermer",
               rollback: () {
                 while (context.canPop()) {
@@ -101,8 +102,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     ),
                     SizedBox(height: 32),
 
-                    Divider(
-                        color: AppColors.immoBorderDefault, thickness: 1),
+                    Divider(color: AppColors.immoBorderDefault, thickness: 1),
                     SizedBox(height: 24),
 
                     // Section Document
@@ -190,8 +190,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                           hint: Row(
                             children: [
                               Icon(Iconsax.briefcase,
-                                  color: AppColors.immoTextSecondary,
-                                  size: 18),
+                                  color: AppColors.immoTextSecondary, size: 18),
                               SizedBox(width: 12),
                               Text("Sélectionner un secteur"),
                             ],
@@ -358,8 +357,7 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: AppColors.immoBorderBrandSubtle,
-                          width: 2),
+                          color: AppColors.immoBorderBrandSubtle, width: 2),
                     ),
                   ),
                   Center(

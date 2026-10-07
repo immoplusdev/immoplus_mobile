@@ -196,7 +196,10 @@ class _AiAssistantBottomSheetState extends State<AiAssistantBottomSheet> {
                                   horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [AppColors.indigo, AppColors.pinkAccent],
+                                  colors: [
+                                    AppColors.indigo,
+                                    AppColors.pinkAccent
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),

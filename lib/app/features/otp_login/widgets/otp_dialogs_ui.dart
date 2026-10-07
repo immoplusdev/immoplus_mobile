@@ -194,7 +194,8 @@ Future<String?> showOtpInputDialog(
                     Text(
                       currentError!,
                       textAlign: TextAlign.center,
-                      style: AppTypography.bodySmall.copyWith(color: AppColors.red),
+                      style: AppTypography.bodySmall
+                          .copyWith(color: AppColors.red),
                     ),
                   ],
 

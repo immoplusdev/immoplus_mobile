@@ -34,7 +34,8 @@ class DetailKnowSection extends StatelessWidget {
             onTap: () => _showRulesSheet(context),
           ),
 
-          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
+          Divider(
+              height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Sécurité et logement ──
           _KnowCard(
@@ -47,7 +48,8 @@ class DetailKnowSection extends StatelessWidget {
             ],
           ),
 
-          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
+          Divider(
+              height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Conditions d'annulation ──
           _KnowCard(
@@ -119,7 +121,9 @@ class DetailKnowSection extends StatelessWidget {
               ),
               if (residenceModel.reglesSupplementaires.isNotEmpty) ...[
                 Divider(
-                    height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
+                    height: 32,
+                    thickness: 0.5,
+                    color: AppColors.immoBorderDefault),
                 Text(
                   'Règles supplémentaires',
                   style: AppTypography.font(

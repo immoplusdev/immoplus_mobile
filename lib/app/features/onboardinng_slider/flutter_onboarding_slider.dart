@@ -1,4 +1,5 @@
 library flutter_onboarding_slider;
+
 import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -158,7 +159,8 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
         backgroundColor: widget.pageBackgroundColor ?? null,
         floatingActionButton: widget.hasFloatingButton
             ? BackgroundFinalButton(
-                buttonTextStyle: widget.finishButtonTextStyle ?? AppTypography.font(fontSize: 20, color: AppColors.white),
+                buttonTextStyle: widget.finishButtonTextStyle ??
+                    AppTypography.font(fontSize: 20, color: AppColors.white),
                 skipIcon: widget.skipIcon,
                 addButton: widget.addButton,
                 currentPage: _currentPage,

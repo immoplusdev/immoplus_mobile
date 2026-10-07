@@ -7,15 +7,19 @@ class DateSelectionSheet extends StatefulWidget {
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
 
-  const DateSelectionSheet({super.key, this.initialStartDate, this.initialEndDate});
+  const DateSelectionSheet(
+      {super.key, this.initialStartDate, this.initialEndDate});
 
-  static Future<DateTimeRange?> show(BuildContext context, DateTime? start, DateTime? end) {
+  static Future<DateTimeRange?> show(
+      BuildContext context, DateTime? start, DateTime? end) {
     return showModalBottomSheet<DateTimeRange>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (ctx) => DateSelectionSheet(initialStartDate: start, initialEndDate: end),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (ctx) =>
+          DateSelectionSheet(initialStartDate: start, initialEndDate: end),
     );
   }
 
@@ -43,10 +47,12 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
   Widget build(BuildContext context) {
     String buttonText = "Sélectionner des dates";
 
-    if (_dialogCalendarPickerValue.length > 1 && 
-        _dialogCalendarPickerValue[0] != null && 
+    if (_dialogCalendarPickerValue.length > 1 &&
+        _dialogCalendarPickerValue[0] != null &&
         _dialogCalendarPickerValue[1] != null) {
-      final diff = _dialogCalendarPickerValue[1]!.difference(_dialogCalendarPickerValue[0]!).inDays;
+      final diff = _dialogCalendarPickerValue[1]!
+          .difference(_dialogCalendarPickerValue[0]!)
+          .inDays;
       if (diff > 0) {
         buttonText = "Garder $diff nuits";
       }
@@ -58,7 +64,9 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Quand ?', style: AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold)),
+          Text('Quand ?',
+              style: AppTypography.font(
+                  fontSize: 22, fontWeight: FontWeight.bold)),
           SizedBox(height: 8),
           CalendarDatePicker2(
             config: CalendarDatePicker2Config(
@@ -85,14 +93,15 @@ class _DateSelectionSheetState extends State<DateSelectionSheet> {
               ),
             ),
             value: _dialogCalendarPickerValue,
-            onValueChanged: (dates) => setState(() => _dialogCalendarPickerValue = dates),
+            onValueChanged: (dates) =>
+                setState(() => _dialogCalendarPickerValue = dates),
           ),
           SizedBox(height: 16),
           CustomButtom(
             text: buttonText,
             onClick: () {
-              if (_dialogCalendarPickerValue.length == 2 && 
-                  _dialogCalendarPickerValue[0] != null && 
+              if (_dialogCalendarPickerValue.length == 2 &&
+                  _dialogCalendarPickerValue[0] != null &&
                   _dialogCalendarPickerValue[1] != null) {
                 Navigator.pop(
                   context,

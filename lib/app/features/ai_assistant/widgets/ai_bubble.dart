@@ -341,7 +341,8 @@ class _MarkdownBody extends StatelessWidget {
         ),
         strong: AppTypography.font(fontWeight: FontWeight.w700, color: color),
         em: AppTypography.font(fontStyle: FontStyle.italic, color: color),
-        listBullet: AppTypography.font(fontSize: 15, height: 1.55, color: color),
+        listBullet:
+            AppTypography.font(fontSize: 15, height: 1.55, color: color),
         listIndent: 18,
         blockSpacing: 10,
         a: AppTypography.font(

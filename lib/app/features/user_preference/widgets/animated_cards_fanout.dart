@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:iconsax/iconsax.dart';
 
 /// Description d'un emplacement (slot) dans l'éventail de cartes
 class _CardSlot {
@@ -36,10 +36,37 @@ class _AnimatedCardsFanoutState extends State<AnimatedCardsFanout>
   Timer? _cycleTimer;
   int _step = 0;
 
-  static const List<String> _cardAssets = [
-    'assets/img/card1_intermediate.png',
-    'assets/img/card2_intermediate.png',
-    'assets/img/card3_intermediate.png',
+  static const List<_DiscoveryCardData> _cards = [
+    _DiscoveryCardData(
+      imagePath: 'assets/img/menu_residence.jpg',
+      tag: 'Abidjan',
+      tagIcon: Iconsax.location,
+      title: 'Appartement lumineux',
+      subtitle: 'Cocody, Riviera 3',
+      detail: '2 chambres · 1 salon',
+      action: 'Découvrir',
+      accent: Color(0xFF2F5BFF),
+    ),
+    _DiscoveryCardData(
+      imagePath: 'assets/img/login.jpg',
+      tag: 'Visite',
+      tagIcon: Iconsax.home_1,
+      title: 'Le studio qui vous ressemble',
+      subtitle: 'Cocody, Ambassade',
+      detail: 'Très agréable pour un bon séjour',
+      action: 'Réserver',
+      accent: Color(0xFF2450E8),
+    ),
+    _DiscoveryCardData(
+      imagePath: 'assets/img/terrain.png',
+      tag: 'Terrain',
+      tagIcon: Iconsax.map_1,
+      title: 'Votre prochain projet',
+      subtitle: 'Grand-Bassam',
+      detail: 'Parcelles disponibles',
+      action: 'Explorer',
+      accent: Color(0xFF17A64A),
+    ),
   ];
 
   // Slot 0: Gauche (incliné à gauche, en retrait)
@@ -164,19 +191,15 @@ class _AnimatedCardsFanoutState extends State<AnimatedCardsFanout>
             dy += 8 * (1 - (2 * (t - 0.5)).abs());
           }
 
-          final isFront = (fromSlotIndex == 1 && t < 0.5) ||
-              (fromSlotIndex == 0 && t >= 0.5);
-
           return _CardRenderData(
             cardIndex: cardIndex,
-            assetPath: _cardAssets[cardIndex],
+            card: _cards[cardIndex],
             dx: dx,
             dy: dy,
             angle: angle,
             scale: scale,
             opacity: opacity,
             zIndex: zIndex,
-            isFront: isFront,
           );
         });
 
@@ -197,30 +220,11 @@ class _AnimatedCardsFanoutState extends State<AnimatedCardsFanout>
                     scale: item.scale,
                     child: Opacity(
                       opacity: item.opacity,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.alphaBlack12,
-                              blurRadius: item.isFront ? 20 : 10,
-                              offset: Offset(0, item.isFront ? 10 : 5),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(22),
-                          child: Image.asset(
-                            item.assetPath,
-                            fit: BoxFit.contain,
-                            height: 310,
-                          ),
-                        ),
+                      child: _DiscoveryCard(card: item.card),
                       ),
                     ),
                   ),
-                ),
-              );
+                );
             }).toList(),
           ),
         );
@@ -231,24 +235,208 @@ class _AnimatedCardsFanoutState extends State<AnimatedCardsFanout>
 
 class _CardRenderData {
   final int cardIndex;
-  final String assetPath;
+  final _DiscoveryCardData card;
   final double dx;
   final double dy;
   final double angle;
   final double scale;
   final double opacity;
   final double zIndex;
-  final bool isFront;
 
   const _CardRenderData({
     required this.cardIndex,
-    required this.assetPath,
+    required this.card,
     required this.dx,
     required this.dy,
     required this.angle,
     required this.scale,
     required this.opacity,
     required this.zIndex,
-    required this.isFront,
   });
+}
+
+class _DiscoveryCardData {
+  final String imagePath;
+  final String tag;
+  final IconData tagIcon;
+  final String title;
+  final String subtitle;
+  final String detail;
+  final String action;
+  final Color accent;
+
+  const _DiscoveryCardData({
+    required this.imagePath,
+    required this.tag,
+    required this.tagIcon,
+    required this.title,
+    required this.subtitle,
+    required this.detail,
+    required this.action,
+    required this.accent,
+  });
+}
+
+/// Carte éditoriale sans ombre portée : l'image et les informations sont
+/// composées séparément afin que les trois cartes restent réellement uniques.
+class _DiscoveryCard extends StatelessWidget {
+  final _DiscoveryCardData card;
+
+  const _DiscoveryCard({required this.card});
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Container(
+        width: 202,
+        height: 310,
+        padding: const EdgeInsets.all(5),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(26)),
+        ),
+        child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(21)),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(card.imagePath, fit: BoxFit.cover),
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x00000000),
+                    Color(0x10000000),
+                    Color(0xCC000000),
+                  ],
+                  stops: [0.35, 0.54, 1],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 14,
+              left: 12,
+              child: _Tag(
+                icon: card.tagIcon,
+                label: card.tag,
+                color: card.accent,
+              ),
+            ),
+            Positioned(
+              left: 14,
+              right: 11,
+              bottom: 14,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          card.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            height: 1.1,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          card.subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xFFF5F5F5),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          card.detail,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xFFDADADA),
+                            fontSize: 9,
+                            height: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 7),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: card.accent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Iconsax.calendar_tick,
+                            color: Colors.white, size: 17),
+                        const SizedBox(height: 2),
+                        Text(
+                          card.action,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Tag extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _Tag({required this.icon, required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF1C1C1C),
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      );
 }

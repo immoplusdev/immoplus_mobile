@@ -21,7 +21,8 @@ class ReportRelaisSummaryPage extends StatefulWidget {
   static const String name = 'REPORT_RELAIS_SUMMARY_PAGE';
 
   @override
-  State<ReportRelaisSummaryPage> createState() => _ReportRelaisSummaryPageState();
+  State<ReportRelaisSummaryPage> createState() =>
+      _ReportRelaisSummaryPageState();
 }
 
 class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
@@ -68,7 +69,8 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
       if (mounted) context.pushNamed(ReportRelaisSuccessPage.name);
     } catch (_) {
       if (mounted) {
-        CustomPopup.showErrorToast(text: "Impossible d'envoyer votre demande, réessayez.");
+        CustomPopup.showErrorToast(
+            text: "Impossible d'envoyer votre demande, réessayez.");
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -83,12 +85,16 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Ma demande',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
+          style: AppTypography.font(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black),
         ),
       ),
       body: SafeArea(
@@ -140,7 +146,8 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.green50,
                   borderRadius: BorderRadius.circular(20),
@@ -156,14 +163,16 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
               ),
               Text(
                 'Publication anonyme',
-                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
           ),
           const Gap(16),
           _summaryRow('Quartier', _draft.commune ?? '—'),
           if (_draft.landmarkAddress?.description != null)
-            _summaryRow('Repère ou adresse précise', _draft.landmarkAddress!.description!),
+            _summaryRow('Repère ou adresse précise',
+                _draft.landmarkAddress!.description!),
           _summaryRow(
             'Type',
             '${_draft.propertyType?.label ?? '—'} · ${_draft.rooms} chambre${_draft.rooms > 1 ? 's' : ''}',
@@ -184,13 +193,16 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary)),
+              Text(label,
+                  style: AppTypography.font(
+                      fontSize: 13, color: AppColors.immoTextSecondary)),
               const Gap(12),
               Expanded(
                 child: Text(
                   value,
                   textAlign: TextAlign.end,
-                  style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: AppTypography.font(
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -217,7 +229,8 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
           Expanded(
             child: Text(
               'Votre identité reste privée. Les utilisateurs voient uniquement l\'info de façon anonyme.',
-              style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
+              style: AppTypography.font(
+                  fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
             ),
           ),
         ],
@@ -238,12 +251,14 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
         children: [
           Text(
             'Ce qui se passe ensuite',
-            style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
           ),
           const Gap(12),
           Text(
             'Votre info est envoyée à tous les utilisateurs qui cherchent des appartements à ${_draft.commune ?? ''}',
-            style: AppTypography.font(fontSize: 13, color: AppColors.primary, height: 1.4),
+            style: AppTypography.font(
+                fontSize: 13, color: AppColors.primary, height: 1.4),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -251,7 +266,8 @@ class _ReportRelaisSummaryPageState extends State<ReportRelaisSummaryPage> {
           ),
           Text(
             "Imatch ne montre que l'information sans autre précision",
-            style: AppTypography.font(fontSize: 13, color: AppColors.primary, height: 1.4),
+            style: AppTypography.font(
+                fontSize: 13, color: AppColors.primary, height: 1.4),
           ),
         ],
       ),

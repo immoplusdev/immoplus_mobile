@@ -71,7 +71,8 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
 
   void _continue() {
     if (_draft.propertyType == null) {
-      CustomPopup.showErrorToast(text: 'Veuillez sélectionner un type de logement');
+      CustomPopup.showErrorToast(
+          text: 'Veuillez sélectionner un type de logement');
       return;
     }
     if (_draft.commune == null || _draft.commune!.isEmpty) {
@@ -89,7 +90,8 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -185,7 +187,9 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                   color: isSelected ? AppColors.primaryLite : AppColors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderStrong,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -193,7 +197,8 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                   children: [
                     type.svgIcon != null
                         ? SvgPicture.asset(type.svgIcon!, width: 26, height: 26)
-                        : Icon(type.fallbackIcon, size: 26, color: AppColors.immoTextLabel),
+                        : Icon(type.fallbackIcon,
+                            size: 26, color: AppColors.immoTextLabel),
                     const Gap(8),
                     Text(
                       type.label,
@@ -224,7 +229,9 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
           color: selected != null ? AppColors.primaryLite : AppColors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: selected != null ? AppColors.primary : AppColors.immoBorderStrong,
+            color: selected != null
+                ? AppColors.primary
+                : AppColors.immoBorderStrong,
           ),
         ),
         child: Row(
@@ -239,11 +246,14 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                 style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: selected != null ? AppColors.black : AppColors.immoTextSecondary,
+                  color: selected != null
+                      ? AppColors.black
+                      : AppColors.immoTextSecondary,
                 ),
               ),
             ),
-            Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.immoTextDisabled),
+            Icon(Icons.chevron_right_rounded,
+                size: 20, color: AppColors.immoTextDisabled),
           ],
         ),
       ),
@@ -262,13 +272,13 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
         children: [
           _stepperButton(
             icon: Icons.remove,
-            onTap: _draft.rooms > 0
-                ? () => setState(() => _draft.rooms--)
-                : null,
+            onTap:
+                _draft.rooms > 0 ? () => setState(() => _draft.rooms--) : null,
           ),
           Text(
             _draft.rooms.toString().padLeft(2, '0'),
-            style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           _stepperButton(
             icon: Icons.add,
@@ -311,7 +321,8 @@ class _PhotoSlot extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.file(file!, fit: BoxFit.cover, width: double.infinity, height: 110),
+            child: Image.file(file!,
+                fit: BoxFit.cover, width: double.infinity, height: 110),
           ),
           if (onRemove != null)
             Positioned(
@@ -327,7 +338,8 @@ class _PhotoSlot extends StatelessWidget {
                     color: AppColors.black.withValues(alpha: 0.55),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.close_rounded, size: 14, color: AppColors.white),
+                  child: const Icon(Icons.close_rounded,
+                      size: 14, color: AppColors.white),
                 ),
               ),
             ),
@@ -358,7 +370,8 @@ class _PhotoSlot extends StatelessWidget {
                 Text(
                   'Ajouter des photos',
                   textAlign: TextAlign.center,
-                  style: AppTypography.font(fontSize: 10, color: AppColors.primary),
+                  style: AppTypography.font(
+                      fontSize: 10, color: AppColors.primary),
                 ),
               ],
             ),

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 /// `status` d'un relais — voir `immo-relais-status.enum.ts` côté backend.
 enum ImmoRelaisStatus {
   upcoming('upcoming', 'À venir', Color(0xFFEFF6FF), AppColors.blue550),
-  matching('matching', 'En correspondance', Color(0xFFFFF7E6), Color(0xFFB45309)),
+  matching(
+      'matching', 'En correspondance', Color(0xFFFFF7E6), Color(0xFFB45309)),
   inProgress('in_progress', 'En cours', Color(0xFFEFFCF3), AppColors.green500),
   cancelled('cancelled', 'Annulé', AppColors.gray100, Color(0xFF6B7280));
 
@@ -13,7 +14,8 @@ enum ImmoRelaisStatus {
   final Color backgroundColor;
   final Color textColor;
 
-  const ImmoRelaisStatus(this.value, this.label, this.backgroundColor, this.textColor);
+  const ImmoRelaisStatus(
+      this.value, this.label, this.backgroundColor, this.textColor);
 
   static ImmoRelaisStatus fromString(String? value) {
     return ImmoRelaisStatus.values.firstWhere(

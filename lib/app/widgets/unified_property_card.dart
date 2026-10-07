@@ -301,7 +301,8 @@ class UnifiedPropertyCard extends StatelessWidget {
 
                       // Divider
                       const Gap(8),
-                      Divider(height: 1, color: AppColors.gray500.withOpacity(.4)),
+                      Divider(
+                          height: 1, color: AppColors.gray500.withOpacity(.4)),
                       const Gap(8),
 
                       // Bottom Row: Date / Price

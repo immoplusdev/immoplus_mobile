@@ -136,14 +136,13 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (campaign.content.badge?.isNotEmpty ==
-                                true) ...[
+                            if (campaign.content.badge?.isNotEmpty == true) ...[
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary
-                                      .withValues(alpha: 0.10),
+                                  color:
+                                      AppColors.primary.withValues(alpha: 0.10),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -182,8 +181,8 @@ class _AdVideoWidgetState extends State<AdVideoWidget> {
                       if (campaign.content.ctaLabel?.isNotEmpty == true) ...[
                         const Gap(12),
                         ElevatedButton(
-                          onPressed: () => AdActionHandler.handleAdAction(
-                              context, campaign),
+                          onPressed: () =>
+                              AdActionHandler.handleAdAction(context, campaign),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             shape: RoundedRectangleBorder(

@@ -125,9 +125,7 @@ class ForYouVerticalCard extends StatelessWidget {
           onTap: onTap ??
               () {
                 context.push(
-                  isResidence
-                      ? ResidencePage.route(id)
-                      : EstatePage.route(id),
+                  isResidence ? ResidencePage.route(id) : EstatePage.route(id),
                 );
               },
           child: Column(
@@ -164,9 +162,15 @@ class ForYouVerticalCard extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    final formattedUrl = (imageUrl != null && imageUrl!.isNotEmpty)
-        ? Utils.getImagePath(id: imageUrl!)
-        : '';
+    final sourceUrl = imageUrl?.trim() ?? '';
+    // Le nouvel endpoint peut fournir soit un identifiant de fichier, soit une
+    // URL CDN complète. Ne jamais préfixer une URL déjà résolue.
+    final formattedUrl =
+        sourceUrl.startsWith('http://') || sourceUrl.startsWith('https://')
+            ? sourceUrl
+            : sourceUrl.isNotEmpty
+                ? Utils.getImagePath(id: sourceUrl)
+                : '';
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
@@ -219,25 +223,24 @@ class ForYouVerticalCard extends StatelessWidget {
 
     if (!hasChips && !hasBadge) return const SizedBox.shrink();
 
-    final isVip = badge?.tier.toLowerCase() == 'vip';
+    final visibleChips = chips.take(hasBadge ? 2 : 3).toList(growable: false);
+    final tags = <Widget>[
+      ...visibleChips.map((chipText) => _buildTag(label: chipText)),
+      if (hasBadge)
+        _buildTag(
+          label: badge!.label,
+          backgroundColor: AppColors.transparent,
+          borderColor: const Color(0xFFFFC400),
+          textColor: const Color(0xFFFFC400),
+          fontWeight: FontWeight.w700,
+        ),
+    ];
 
     return Wrap(
-      spacing: 8,
-      runSpacing: 6,
+      spacing: 6,
+      runSpacing: 4,
       crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        ...chips.map((chipText) => _buildTag(label: chipText)),
-        if (hasBadge)
-          _buildTag(
-            label: badge!.label,
-            backgroundColor: isVip
-                ? const Color(0xFFFFFBEB)
-                : AppColors.primary.withValues(alpha: 0.08),
-            borderColor: isVip ? const Color(0xFFE5A93C) : AppColors.primary,
-            textColor: isVip ? const Color(0xFFD97706) : AppColors.primary,
-            fontWeight: FontWeight.w700,
-          ),
-      ],
+      children: tags,
     );
   }
 
@@ -249,7 +252,7 @@ class ForYouVerticalCard extends StatelessWidget {
     FontWeight fontWeight = FontWeight.w500,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
       decoration: BoxDecoration(
         color: backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(8),
@@ -260,8 +263,11 @@ class ForYouVerticalCard extends StatelessWidget {
       ),
       child: Text(
         label,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
         style: AppTypography.font(
-          fontSize: 12,
+          fontSize: 8,
           fontWeight: fontWeight,
           color: textColor ?? AppColors.black87,
         ),

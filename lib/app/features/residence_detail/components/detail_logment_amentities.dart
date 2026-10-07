@@ -98,7 +98,8 @@ class _AmenityItem extends StatelessWidget {
               ),
             )
           else
-            Icon(Iconsax.element_4, size: 22, color: AppColors.immoBrandPrimary),
+            Icon(Iconsax.element_4,
+                size: 22, color: AppColors.immoBrandPrimary),
           SizedBox(width: 12),
           Flexible(
             child: Text(

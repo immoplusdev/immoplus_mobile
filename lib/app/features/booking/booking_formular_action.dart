@@ -291,7 +291,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
+                    border:
+                        Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                   ),
                   child: Column(
                     children: [
@@ -317,7 +318,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                             .textTheme
                                             .bodyMedium
                                             ?.copyWith(
-                                              color: AppColors.immoFeedbackError,
+                                              color:
+                                                  AppColors.immoFeedbackError,
                                             ),
                                       ),
                                     ],
@@ -341,8 +343,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                           calendarType:
                                               CalendarDatePicker2Type.range,
                                           centerAlignModePicker: true,
-                                          customModePickerIcon:
-                                              SizedBox(),
+                                          customModePickerIcon: SizedBox(),
                                           firstDate: DateTime.now(),
                                           selectedDayHighlightColor:
                                               AppColors.primary,
@@ -374,22 +375,24 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                                 ignoring: true,
                                                 child: Container(
                                                   decoration: BoxDecoration(
-                                                    color:
-                                                        AppColors.immoFeedbackErrorSubtle,
+                                                    color: AppColors
+                                                        .immoFeedbackErrorSubtle,
                                                     shape: BoxShape.circle,
                                                   ),
                                                   child: Center(
                                                     child: Text(
                                                       date.day.toString(),
                                                       style: (textStyle ??
-                                                              AppTypography.font())
+                                                              AppTypography
+                                                                  .font())
                                                           .copyWith(
-                                                        color: AppColors.immoFeedbackError,
+                                                        color: AppColors
+                                                            .immoFeedbackError,
                                                         decoration:
                                                             TextDecoration
                                                                 .lineThrough,
-                                                        decorationColor:
-                                                            AppColors.immoFeedbackError,
+                                                        decorationColor: AppColors
+                                                            .immoFeedbackError,
                                                       ),
                                                     ),
                                                   ),
@@ -476,7 +479,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                       ),
 
                       // Arrivée / Départ
-                      Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
+                      Divider(
+                          height: 1,
+                          color: AppColors.immoFeedbackNeutralSubtle),
                       Padding(
                         padding: const EdgeInsets.all(12),
                         child: Row(

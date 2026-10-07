@@ -222,68 +222,69 @@ class _EstateSubCategorySectionsListState
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: _isBackgroundLoading && _displayList.isEmpty
-          ? SliverToBoxAdapter(
-              child: Column(
-                children: List.generate(
-                  3,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Gap(15),
-                        SizedBox(
-                          width: 150,
-                          height: 20,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: AppColors.black12,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4)),
+              ? SliverToBoxAdapter(
+                  child: Column(
+                    children: List.generate(
+                      3,
+                      (index) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Gap(15),
+                            SizedBox(
+                              width: 150,
+                              height: 20,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: AppColors.black12,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                          height: 255,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            separatorBuilder: (context, index) => const Gap(12),
-                            itemBuilder: (context, index) => SizedBox(
-                              width: neirResidenceCardWidth,
-                              child: LoadProductCard(),
+                            const Gap(10),
+                            SizedBox(
+                              height: 255,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 3,
+                                separatorBuilder: (context, index) =>
+                                    const Gap(12),
+                                itemBuilder: (context, index) => SizedBox(
+                                  width: neirResidenceCardWidth,
+                                  child: LoadProductCard(),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final item = listItems[index];
+                      if (item is AdCampaignModel) {
+                        return AdWidget(
+                          placement: AdPlacement.locationList,
+                          index: item.positionIndex,
+                        );
+                      }
+                      final section = item as _EstateSubCategorySectionData;
+                      return BiensHorizontalListBySubCategory(
+                        key: ValueKey(
+                            'estate_subcategory_${section.category.name}'),
+                        title: section.title,
+                        category: section.category,
+                        biens: section.biens,
+                      );
+                    },
+                    childCount: listItems.length,
+                  ),
                 ),
-              ),
-            )
-          : SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final item = listItems[index];
-                  if (item is AdCampaignModel) {
-                    return AdWidget(
-                      placement: AdPlacement.locationList,
-                      index: item.positionIndex,
-                    );
-                  }
-                  final section = item as _EstateSubCategorySectionData;
-                  return BiensHorizontalListBySubCategory(
-                    key:
-                        ValueKey('estate_subcategory_${section.category.name}'),
-                    title: section.title,
-                    category: section.category,
-                    biens: section.biens,
-                  );
-                },
-                childCount: listItems.length,
-              ),
-            ),
         ),
       ],
     );
@@ -329,7 +330,9 @@ class BiensHorizontalListBySubCategory extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color: biens.isNotEmpty ? AppColors.black : AppColors.immoTextDisabled,
+                color: biens.isNotEmpty
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

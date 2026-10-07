@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../../core/config/injection.dart';
 import '../../../data/models/remote/messaging/create_conversation_response.dart';
 import '../../../data/models/remote/residence/residence_model.dart';
@@ -58,7 +59,8 @@ class MessageComposerSheet extends StatefulWidget {
       MessageComposerSheet(
         title: 'Contacter le propriétaire',
         placeholder: 'Posez votre question à l\'hôte…',
-        contextCard: _SimpleContextCard(title: bienTitle, photoUrl: bienPhotoUrl),
+        contextCard:
+            _SimpleContextCard(title: bienTitle, photoUrl: bienPhotoUrl),
         onSubmit: (message) => getIt<MessagingRepository>()
             .createVisiteConversation(
                 demandeVisiteId: demandeVisiteId, message: message),
@@ -78,7 +80,8 @@ class MessageComposerSheet extends StatefulWidget {
       MessageComposerSheet(
         title: title,
         placeholder: 'Écrivez votre message…',
-        contextCard: _SimpleContextCard(title: propertyLabel, subtitle: location),
+        contextCard:
+            _SimpleContextCard(title: propertyLabel, subtitle: location),
         onSubmit: (message) => getIt<MessagingRepository>()
             .createRelaisConversation(relaisId: relaisId, message: message),
       ),
@@ -86,15 +89,15 @@ class MessageComposerSheet extends StatefulWidget {
   }
 
   static Future<void> showForSupport(BuildContext context) {
-    return _show(
-      context,
-      MessageComposerSheet(
-        title: 'Contacter le support',
-        placeholder: 'Décrivez votre problème…',
-        contextCard: null,
-        onSubmit: (message) =>
-            getIt<MessagingRepository>().createSupportConversation(message: message),
+    return showModalBottomSheet<void>(
+      context: context,
+      useSafeArea: true,
+      backgroundColor: AppColors.whiteBackground,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
+      builder: (_) => const _OpenSupportSheet(),
     );
   }
 
@@ -106,7 +109,7 @@ class MessageComposerSheet extends StatefulWidget {
       backgroundColor: AppColors.whiteBackground,
       elevation: 0,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       showDragHandle: true,
       builder: (_) => sheet,
@@ -115,6 +118,106 @@ class MessageComposerSheet extends StatefulWidget {
 
   @override
   State<MessageComposerSheet> createState() => _MessageComposerSheetState();
+}
+
+class _OpenSupportSheet extends StatefulWidget {
+  const _OpenSupportSheet();
+
+  @override
+  State<_OpenSupportSheet> createState() => _OpenSupportSheetState();
+}
+
+class _OpenSupportSheetState extends State<_OpenSupportSheet> {
+  String? _error;
+  bool _isOpening = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _open());
+  }
+
+  Future<void> _open() async {
+    if (mounted)
+      setState(() {
+        _isOpening = true;
+        _error = null;
+      });
+    try {
+      final conversationId =
+          await getIt<MessagingRepository>().openSupportConversation();
+      if (!mounted) return;
+      final router = GoRouter.of(context);
+      Navigator.of(context).pop();
+      router.pushNamed(
+        MessageThreadPage.name,
+        pathParameters: {'conversationId': conversationId},
+      );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isOpening = false;
+        _error = 'Le support est momentanément indisponible.';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 18, 24, 30),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.primaryLite,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(Iconsax.message_question, color: AppColors.primary),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            _isOpening ? 'Ouverture du support…' : 'Connexion impossible',
+            style:
+                AppTypography.font(fontSize: 18, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 8),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            child: _isOpening
+                ? const SizedBox(
+                    key: ValueKey('loading'),
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Column(
+                    key: const ValueKey('error'),
+                    children: [
+                      Text(
+                        _error ?? '',
+                        textAlign: TextAlign.center,
+                        style: AppTypography.font(
+                          fontSize: 13,
+                          color: AppColors.immoTextSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      FilledButton.icon(
+                        onPressed: _open,
+                        icon: const Icon(Iconsax.refresh, size: 18),
+                        label: const Text('Réessayer'),
+                      ),
+                    ],
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _MessageComposerSheetState extends State<MessageComposerSheet> {
@@ -141,8 +244,9 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
     try {
       final response = await widget.onSubmit(message);
       if (!mounted) return;
+      final router = GoRouter.of(context);
       Navigator.of(context).pop();
-      context.pushNamed(
+      router.pushNamed(
         MessageThreadPage.name,
         pathParameters: {'conversationId': response.conversation.id},
       );
@@ -187,7 +291,8 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(20, 8, 20, 20 + bottomInset),
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -195,7 +300,8 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
           children: [
             Text(
               widget.title,
-              style: AppTypography.font(fontSize: 20, fontWeight: FontWeight.bold),
+              style:
+                  AppTypography.font(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             if (widget.contextCard != null) ...[
@@ -204,7 +310,8 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
             ] else ...[
               Text(
                 'Notre équipe vous répond généralement sous quelques heures.',
-                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextSecondary),
               ),
               SizedBox(height: 16),
             ],
@@ -215,11 +322,14 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                 decoration: BoxDecoration(
                   color: AppColors.immoFeedbackError.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.immoFeedbackError.withValues(alpha: 0.3)),
+                  border: Border.all(
+                      color:
+                          AppColors.immoFeedbackError.withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   _moderationBanner!,
-                  style: AppTypography.font(fontSize: 13, color: AppColors.immoFeedbackError),
+                  style: AppTypography.font(
+                      fontSize: 13, color: AppColors.immoFeedbackError),
                 ),
               ),
               SizedBox(height: 12),
@@ -228,6 +338,24 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
               controller: _controller,
               maxLines: 4,
               minLines: 3,
+              maxLength: 2000,
+              buildCounter: (
+                context, {
+                required currentLength,
+                required isFocused,
+                maxLength,
+              }) =>
+                  currentLength > 1800
+                      ? Text(
+                          '$currentLength/$maxLength',
+                          style: AppTypography.font(
+                            fontSize: 10,
+                            color: currentLength >= 2000
+                                ? AppColors.immoFeedbackError
+                                : AppColors.immoTextSecondary,
+                          ),
+                        )
+                      : null,
               enabled: !_isSending,
               textCapitalization: TextCapitalization.sentences,
               onChanged: (value) {
@@ -238,7 +366,8 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
               },
               decoration: InputDecoration(
                 hintText: widget.placeholder,
-                hintStyle: AppTypography.font(color: AppColors.immoTextDisabled),
+                hintStyle:
+                    AppTypography.font(color: AppColors.immoTextDisabled),
                 filled: true,
                 fillColor: AppColors.immoBgSurfaceMuted,
                 contentPadding: const EdgeInsets.all(14),
@@ -266,7 +395,9 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
                   foregroundColor: AppColors.primary,
                   disabledForegroundColor: AppColors.immoTextDisabled,
                   side: BorderSide(
-                    color: _canSend ? AppColors.primary : AppColors.immoBorderStrong,
+                    color: _canSend
+                        ? AppColors.primary
+                        : AppColors.immoBorderStrong,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(60),
@@ -299,11 +430,13 @@ class _ResidenceContextCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final coverImageId = residence.images.isNotEmpty ? residence.images.first : null;
+    final coverImageId =
+        residence.images.isNotEmpty ? residence.images.first : null;
     return _SimpleContextCard(
       title: residence.nom,
       subtitle: residence.ville.isNotEmpty ? residence.ville : null,
-      photoUrl: coverImageId != null ? Utils.getImagePath(id: coverImageId) : null,
+      photoUrl:
+          coverImageId != null ? Utils.getImagePath(id: coverImageId) : null,
     );
   }
 }
@@ -327,7 +460,8 @@ class _SimpleContextCard extends StatelessWidget {
                 ? CachedNetworkImage(imageUrl: photoUrl!, fit: BoxFit.cover)
                 : Container(
                     color: AppColors.immoBgSurfaceMuted,
-                    child: Icon(Icons.home_outlined, color: AppColors.immoTextDisabled),
+                    child:
+                        Icon(Iconsax.home_1, color: AppColors.immoTextDisabled),
                   ),
           ),
         ),
@@ -340,11 +474,13 @@ class _SimpleContextCard extends StatelessWidget {
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.w600),
+                style: AppTypography.font(
+                    fontSize: 14, fontWeight: FontWeight.w600),
               ),
               if (subtitle != null && subtitle!.isNotEmpty)
                 Text(subtitle!,
-                    style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary)),
+                    style: AppTypography.font(
+                        fontSize: 12, color: AppColors.immoTextSecondary)),
             ],
           ),
         ),

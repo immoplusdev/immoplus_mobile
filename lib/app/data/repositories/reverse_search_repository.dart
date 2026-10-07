@@ -128,7 +128,6 @@ class ReverseSearchRepository {
     }
   }
 
-
   Future<bool> isModuleActive() async {
     try {
       final response = await _dioClient.get('/reverse-searches/module-status');

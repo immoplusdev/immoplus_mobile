@@ -37,7 +37,8 @@ class _LocationResidencesPageState extends State<LocationResidencesPage>
 
   @override
   void onConnectionRestored() {
-    if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
       _pagingController.error = 'temporary_error_to_force_refresh';
       _pagingController.refresh();
     }

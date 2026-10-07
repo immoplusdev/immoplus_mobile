@@ -18,7 +18,8 @@ class ResolvedAdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: ValueKey('resolved_ad_detector_${campaign.id}_${campaign.placement}'),
+      key:
+          ValueKey('resolved_ad_detector_${campaign.id}_${campaign.placement}'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction > 0.5) {
           context.read<AdsCubit>().trackImpression(

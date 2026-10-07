@@ -19,7 +19,7 @@ class DestinationSearchPicker extends StatelessWidget {
     this.placeholder = 'Destination',
     required this.onLocationSelected,
     this.onClear,
-    this.height = 41.0,
+    this.height = 38.0,
   });
 
   Future<void> _openLocationSearch(BuildContext context) async {
@@ -60,13 +60,13 @@ class DestinationSearchPicker extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           children: [
-            Icon(Iconsax.location, color: AppColors.primary, size: 20),
-            const Gap(10),
+            Icon(Iconsax.location, color: AppColors.primary, size: 17),
+            const Gap(8),
             Expanded(
               child: Text(
                 hasValue ? value! : placeholder,
                 style: AppTypography.font(
-                  fontSize: 14,
+                  fontSize: 11,
                   fontWeight: hasValue ? FontWeight.w600 : FontWeight.normal,
                   color:
                       hasValue ? AppColors.black : AppColors.immoTextDisabled,
@@ -79,8 +79,8 @@ class DestinationSearchPicker extends StatelessWidget {
                 onTap: onClear ?? () => onLocationSelected(null),
                 child: Icon(
                   Icons.close,
-                  color: AppColors.immoTextSecondary,
-                  size: 18,
+                  color: AppColors.primary,
+                  size: 15,
                 ),
               ),
           ],

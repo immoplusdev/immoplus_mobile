@@ -101,7 +101,7 @@ class CarouselDemoPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 24),
-            
+
             // Titre de section
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -113,9 +113,9 @@ class CarouselDemoPage extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             SizedBox(height: 16),
-            
+
             // Carrousel simple avec ListView
             PromoCarousel(
               items: promoItems,
@@ -123,9 +123,9 @@ class CarouselDemoPage extends StatelessWidget {
               cardHeight: 325,
               spacing: 16,
             ),
-            
+
             SizedBox(height: 40),
-            
+
             // Titre de section
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -137,18 +137,18 @@ class CarouselDemoPage extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             SizedBox(height: 16),
-            
+
             // Carrousel avec PageView et indicateurs
             PromoCarouselWithIndicators(
               items: promoItems,
               cardHeight: 325,
               indicatorActiveColor: kPrimaryColor,
             ),
-            
+
             SizedBox(height: 40),
-            
+
             // Titre de section
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -160,16 +160,17 @@ class CarouselDemoPage extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             SizedBox(height: 16),
-            
+
             // Carte individuelle
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: PromoCarouselCard(
                 data: PromoCardData(
                   title: 'Carte personnalisée',
-                  description: 'Vous pouvez utiliser la carte seule avec vos propres couleurs.',
+                  description:
+                      'Vous pouvez utiliser la carte seule avec vos propres couleurs.',
                   linkText: 'Action',
                   backgroundColor: AppComplementaryColors.coral,
                   onLinkTap: () {},
@@ -178,7 +179,7 @@ class CarouselDemoPage extends StatelessWidget {
                 height: 280,
               ),
             ),
-            
+
             SizedBox(height: 40),
           ],
         ),

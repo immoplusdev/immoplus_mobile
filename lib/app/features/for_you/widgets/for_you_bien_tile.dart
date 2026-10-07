@@ -47,7 +47,8 @@ class ForYouBienTile extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    final imageUrl = bien.imageUrl != null ? Utils.getImagePath(id: bien.imageUrl!) : '';
+    final imageUrl =
+        bien.imageUrl != null ? Utils.getImagePath(id: bien.imageUrl!) : '';
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
@@ -63,7 +64,8 @@ class ForYouBienTile extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         color: AppColors.immoBorderDefault,
         child: Center(
-          child: FaIcon(FontAwesomeIcons.images, size: 60, color: AppColors.immoTextDisabled),
+          child: FaIcon(FontAwesomeIcons.images,
+              size: 60, color: AppColors.immoTextDisabled),
         ),
       ),
     );
@@ -88,7 +90,8 @@ class ForYouBienTile extends StatelessWidget {
           const Gap(3),
           Text(
             bien.location!,
-            style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 13),
+            style: AppTypography.font(
+                color: AppColors.immoTextSecondary, fontSize: 13),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -99,7 +102,8 @@ class ForYouBienTile extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '${CurrencyFormatter().format(bien.price.toString())} ${bien.currency ?? "Fcfa"}',
+                  text:
+                      '${CurrencyFormatter().format(bien.price.toString())} ${bien.currency ?? "Fcfa"}',
                   style: AppTypography.font(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,

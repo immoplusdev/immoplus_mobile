@@ -116,8 +116,8 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
       backgroundColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side:
-            BorderSide(color: isSelected ? AppColors.black : AppColors.immoBorderStrong),
+        side: BorderSide(
+            color: isSelected ? AppColors.black : AppColors.immoBorderStrong),
       ),
       onSelected: (_) {
         setState(() {
@@ -143,7 +143,8 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
         children: [
           Text(
             'Quel budget pour les nuits ?',
-            style: AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 24),
 
@@ -173,8 +174,8 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                     filled: false,
                     fillColor: AppColors.transparent,
                     labelText: 'Budget min (F)',
-                    labelStyle:
-                        AppTypography.font(color: AppColors.primary, fontSize: 13),
+                    labelStyle: AppTypography.font(
+                        color: AppColors.primary, fontSize: 13),
                     hintText: 'ex: 30000',
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 14),
@@ -206,8 +207,8 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                     filled: false,
                     fillColor: AppColors.transparent,
                     labelText: 'Budget max (F)',
-                    labelStyle:
-                        AppTypography.font(color: AppColors.primary, fontSize: 13),
+                    labelStyle: AppTypography.font(
+                        color: AppColors.primary, fontSize: 13),
                     hintText: 'ex: 150000',
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 14),
@@ -283,13 +284,13 @@ class _BudgetSelectionSheetState extends State<BudgetSelectionSheet> {
                   children: [
                     Text(
                       '0 F',
-                      style:
-                          AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 12),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 12),
                     ),
                     Text(
                       '200 000 F+',
-                      style:
-                          AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 12),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 12),
                     ),
                   ],
                 ),

@@ -341,7 +341,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                 children: [
                   Text(
                     "Voyageurs & Chambres",
-                    style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: AppTypography.font(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const Gap(20),
                   _buildCounterRow("Lits", _lits, (val) {
@@ -373,7 +374,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label,
-            style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.w500)),
+            style:
+                AppTypography.font(fontSize: 16, fontWeight: FontWeight.w500)),
         Row(
           children: [
             IconButton(
@@ -382,8 +384,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
             ),
             const Gap(10),
             Text("$value",
-                style:
-                    AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold)),
+                style: AppTypography.font(
+                    fontSize: 18, fontWeight: FontWeight.bold)),
             const Gap(10),
             IconButton(
               icon: Icon(Icons.add_circle_outline, size: 28),
@@ -532,7 +534,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                               height: 41,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(32),
-                                border: Border.all(color: AppColors.immoBorderStrong),
+                                border: Border.all(
+                                    color: AppColors.immoBorderStrong),
                               ),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -568,7 +571,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                         _selectedLng = null;
                                       }),
                                       child: Icon(Icons.close,
-                                          color: AppColors.immoTextSecondary, size: 18),
+                                          color: AppColors.immoTextSecondary,
+                                          size: 18),
                                     ),
                                 ],
                               ),
@@ -590,8 +594,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                     height: 35,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(32),
-                                      border:
-                                          Border.all(color: AppColors.immoBorderStrong),
+                                      border: Border.all(
+                                          color: AppColors.immoBorderStrong),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
@@ -626,8 +630,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                     height: 35,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(32),
-                                      border:
-                                          Border.all(color: AppColors.immoBorderStrong),
+                                      border: Border.all(
+                                          color: AppColors.immoBorderStrong),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 6),
@@ -664,8 +668,8 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                                     height: 35,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(32),
-                                      border:
-                                          Border.all(color: AppColors.immoBorderStrong),
+                                      border: Border.all(
+                                          color: AppColors.immoBorderStrong),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 6),
@@ -959,12 +963,12 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                   ),
                   const Gap(3),
                   Text(dates,
-                      style:
-                          AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 11),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 11),
                       overflow: TextOverflow.ellipsis),
                   Text("$lits Lit(s), $adults Ad.",
-                      style:
-                          AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 11)),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 11)),
                 ],
               ),
             ),

@@ -201,7 +201,9 @@ class _AlertHub extends StatelessWidget {
                   child: Text(
                     "Publiez une demande et recevez des propositions des professionnels selon vos critères.",
                     style: AppTypography.font(
-                        fontSize: 12, color: AppColors.immoTextLabel, height: 1.4),
+                        fontSize: 12,
+                        color: AppColors.immoTextLabel,
+                        height: 1.4),
                   ),
                 ),
               ],
@@ -255,8 +257,8 @@ class _AlertHubCard extends StatelessWidget {
             SizedBox(height: 4),
             Text(
               item.subtitle,
-              style:
-                  AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

@@ -103,7 +103,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.immoBorderStrong, width: 2),
+                      border: Border.all(
+                          color: AppColors.immoBorderStrong, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -115,7 +116,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.immoBrandSecondary, width: 2),
+                      border: Border.all(
+                          color: AppColors.immoBrandSecondary, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),

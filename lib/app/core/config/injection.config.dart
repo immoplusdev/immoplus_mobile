@@ -149,11 +149,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i944.AuthRedirectService());
     gh.lazySingleton<_i997.ReverseSearchSocketService>(
         () => _i997.ReverseSearchSocketService());
+    gh.lazySingleton<_i725.EasyLoadingHandler>(
+        () => _i725.EasyLoadingHandler());
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
-    gh.lazySingleton<_i725.EasyLoadingHandler>(
-        () => _i725.EasyLoadingHandler());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));

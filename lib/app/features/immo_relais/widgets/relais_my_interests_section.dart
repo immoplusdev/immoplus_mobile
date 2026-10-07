@@ -31,7 +31,8 @@ class RelaisMyInterestsSection extends StatefulWidget {
   const RelaisMyInterestsSection({super.key});
 
   @override
-  State<RelaisMyInterestsSection> createState() => _RelaisMyInterestsSectionState();
+  State<RelaisMyInterestsSection> createState() =>
+      _RelaisMyInterestsSectionState();
 }
 
 class _RelaisMyInterestsSectionState extends State<RelaisMyInterestsSection>
@@ -140,8 +141,11 @@ class _MyInterestCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              relais != null ? relaisPropertyTypeLabel(relais.propertyType) : 'Logement',
-              style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
+              relais != null
+                  ? relaisPropertyTypeLabel(relais.propertyType)
+                  : 'Logement',
+              style:
+                  AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -149,7 +153,8 @@ class _MyInterestCard extends StatelessWidget {
               const Gap(2),
               Text(
                 relais.location,
-                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -158,7 +163,8 @@ class _MyInterestCard extends StatelessWidget {
               const Gap(8),
               Text(
                 interest.message!,
-                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextLabel),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -167,7 +173,10 @@ class _MyInterestCard extends StatelessWidget {
               const Gap(8),
               Text(
                 'Visite le ${DateFormat('d MMM à HH:mm', 'fr_FR').format(interest.meetingDate!)}',
-                style: AppTypography.font(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+                style: AppTypography.font(
+                    fontSize: 12,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600),
               ),
             ],
             if (_canContact && relais != null) ...[
@@ -186,9 +195,12 @@ class _MyInterestCard extends StatelessWidget {
                     foregroundColor: AppColors.primary,
                     side: BorderSide(color: AppColors.primary),
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                   ),
-                  child: Text('Contacter', style: AppTypography.font(fontSize: 12, fontWeight: FontWeight.w600)),
+                  child: Text('Contacter',
+                      style: AppTypography.font(
+                          fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],

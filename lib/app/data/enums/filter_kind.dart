@@ -14,6 +14,8 @@ enum FilterKind {
   bool get isDateRange => this == FilterKind.dateRange;
 
   static FilterKind fromValue(String? value) {
+    if (value?.toLowerCase() == 'count') return FilterKind.minCount;
+
     return FilterKind.values.firstWhere(
       (e) => e.value.toLowerCase() == value?.toLowerCase(),
       orElse: () => FilterKind.select,

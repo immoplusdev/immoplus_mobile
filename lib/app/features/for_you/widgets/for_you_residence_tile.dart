@@ -48,8 +48,9 @@ class ForYouResidenceTile extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    final imageUrl =
-        residence.imageUrl != null ? Utils.getImagePath(id: residence.imageUrl!) : '';
+    final imageUrl = residence.imageUrl != null
+        ? Utils.getImagePath(id: residence.imageUrl!)
+        : '';
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
@@ -65,7 +66,8 @@ class ForYouResidenceTile extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         color: AppColors.immoBorderDefault,
         child: Center(
-          child: FaIcon(FontAwesomeIcons.images, size: 60, color: AppColors.immoTextDisabled),
+          child: FaIcon(FontAwesomeIcons.images,
+              size: 60, color: AppColors.immoTextDisabled),
         ),
       ),
     );
@@ -90,7 +92,8 @@ class ForYouResidenceTile extends StatelessWidget {
           const Gap(3),
           Text(
             residence.location!,
-            style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 13),
+            style: AppTypography.font(
+                color: AppColors.immoTextSecondary, fontSize: 13),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

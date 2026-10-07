@@ -25,8 +25,7 @@ class InternationalPhoneInput extends StatefulWidget {
   });
 
   @override
-  InternationalPhoneInputState createState() =>
-      InternationalPhoneInputState();
+  InternationalPhoneInputState createState() => InternationalPhoneInputState();
 }
 
 class InternationalPhoneInputState extends State<InternationalPhoneInput> {

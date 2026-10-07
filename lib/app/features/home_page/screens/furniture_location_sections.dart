@@ -264,8 +264,9 @@ class FurnituresHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color:
-                    furnitures.isNotEmpty ? AppColors.black : AppColors.immoTextDisabled,
+                color: furnitures.isNotEmpty
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

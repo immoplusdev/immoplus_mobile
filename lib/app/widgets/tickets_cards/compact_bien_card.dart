@@ -46,9 +46,8 @@ class CompactBienCard extends StatelessWidget {
   }
 
   Widget _buildBackgroundImage() {
-    final imageUrl = bien.images.isNotEmpty
-        ? Utils.getImagePath(id: bien.images.first)
-        : '';
+    final imageUrl =
+        bien.images.isNotEmpty ? Utils.getImagePath(id: bien.images.first) : '';
 
     return CachedNetworkImage(
       imageUrl: imageUrl,
@@ -76,9 +75,8 @@ class CompactBienCard extends StatelessWidget {
   }
 
   Widget _buildBienInfo(BuildContext context) {
-    final location = bien.communeModel?.name ??
-        bien.villeModel?.name ??
-        bien.adresse;
+    final location =
+        bien.communeModel?.name ?? bien.villeModel?.name ?? bien.adresse;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +105,8 @@ class CompactBienCard extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '${CurrencyFormatter().format(bien.prix.toString())} Fcfa',
+                text:
+                    '${CurrencyFormatter().format(bien.prix.toString())} Fcfa',
                 style: AppTypography.button.copyWith(
                   fontWeight: FontWeight.w900,
                   color: AppColors.black,

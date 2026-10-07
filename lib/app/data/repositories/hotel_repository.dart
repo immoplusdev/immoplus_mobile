@@ -46,7 +46,8 @@ class HotelRepository {
       );
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load hotel module status: ${dioError.message}');
+      throw Exception(
+          'Failed to load hotel module status: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to load hotel module status: $error');

@@ -99,6 +99,45 @@ class NewMessageEvent {
       );
 }
 
+/// Mise à jour partielle d'un message : le serveur peut notamment retirer une
+/// action quand une proposition expire. Les champs absents ne sont pas écrasés.
+class MessageUpdatedEvent {
+  const MessageUpdatedEvent({
+    required this.conversationId,
+    required this.messageId,
+    this.actions,
+    this.suggestedReplies,
+    this.payloadPatch,
+  });
+
+  final String conversationId;
+  final String messageId;
+  final List<MessagingAction>? actions;
+  final List<String>? suggestedReplies;
+  final Map<String, dynamic>? payloadPatch;
+
+  factory MessageUpdatedEvent.fromJson(Map<String, dynamic> json) =>
+      MessageUpdatedEvent(
+        conversationId: json['conversationId']?.toString() ?? '',
+        messageId: json['messageId']?.toString() ?? '',
+        actions: json['actions'] is List
+            ? (json['actions'] as List)
+                .whereType<Map>()
+                .map((item) =>
+                    MessagingAction.fromJson(Map<String, dynamic>.from(item)))
+                .toList(growable: false)
+            : null,
+        suggestedReplies: json['suggestedReplies'] is List
+            ? (json['suggestedReplies'] as List)
+                .map((item) => item.toString())
+                .toList(growable: false)
+            : null,
+        payloadPatch: json['payloadPatch'] is Map
+            ? Map<String, dynamic>.from(json['payloadPatch'] as Map)
+            : null,
+      );
+}
+
 class MessagingNotificationEvent {
   final String conversationId;
   final String? messageId;
@@ -120,6 +159,17 @@ class MessagingNotificationEvent {
       residenceId: data['residenceId']?.toString(),
     );
   }
+}
+
+class ConversationUpdatedEvent {
+  const ConversationUpdatedEvent({required this.conversationId});
+
+  final String conversationId;
+
+  factory ConversationUpdatedEvent.fromJson(Map<String, dynamic> json) =>
+      ConversationUpdatedEvent(
+        conversationId: json['conversationId']?.toString() ?? '',
+      );
 }
 
 /// Erreur d'ACK `send_message`. `code` n'est présent que pour un rejet de
@@ -168,7 +218,8 @@ class SendMessageAckResult {
           ? MessageModel.fromJson(Map<String, dynamic>.from(json['message']))
           : null,
       error: !ok && json['error'] is Map
-          ? SendMessageAckError.fromJson(Map<String, dynamic>.from(json['error']))
+          ? SendMessageAckError.fromJson(
+              Map<String, dynamic>.from(json['error']))
           : null,
       clientTempId: json['clientTempId']?.toString(),
     );
@@ -181,6 +232,16 @@ class MessagingSocketService {
 
   final _messageNewController = StreamController<NewMessageEvent>.broadcast();
   Stream<NewMessageEvent> get onMessageNew => _messageNewController.stream;
+
+  final _messageUpdatedController =
+      StreamController<MessageUpdatedEvent>.broadcast();
+  Stream<MessageUpdatedEvent> get onMessageUpdated =>
+      _messageUpdatedController.stream;
+
+  final _conversationUpdatedController =
+      StreamController<ConversationUpdatedEvent>.broadcast();
+  Stream<ConversationUpdatedEvent> get onConversationUpdated =>
+      _conversationUpdatedController.stream;
 
   final _typingController = StreamController<TypingEvent>.broadcast();
   Stream<TypingEvent> get onTyping => _typingController.stream;
@@ -195,6 +256,10 @@ class MessagingSocketService {
       StreamController<MessagingNotificationEvent>.broadcast();
   Stream<MessagingNotificationEvent> get onNotificationNew =>
       _notificationController.stream;
+
+  final _clientGuidanceUpdatedController = StreamController<void>.broadcast();
+  Stream<void> get onClientGuidanceUpdated =>
+      _clientGuidanceUpdatedController.stream;
 
   /// Émis à chaque (re)connexion du socket, pas seulement la première — une
   /// room `conversation:{id}` est attachée au socket.id, donc une reconnexion
@@ -248,6 +313,30 @@ class MessagingSocketService {
       }
     });
 
+    _socket!.on('message_updated', (data) {
+      if (data is Map<String, dynamic>) {
+        try {
+          _messageUpdatedController.add(MessageUpdatedEvent.fromJson(data));
+        } catch (e) {
+          dev.log('Erreur parsing message_updated: $e',
+              name: 'MessagingSocket');
+        }
+      }
+    });
+
+    _socket!.on('conversation_updated', (data) {
+      if (data is Map<String, dynamic>) {
+        try {
+          _conversationUpdatedController.add(
+            ConversationUpdatedEvent.fromJson(data),
+          );
+        } catch (e) {
+          dev.log('Erreur parsing conversation_updated: $e',
+              name: 'MessagingSocket');
+        }
+      }
+    });
+
     _socket!.on('typing', (data) {
       if (data is Map<String, dynamic>) {
         try {
@@ -290,6 +379,10 @@ class MessagingSocketService {
       }
     });
 
+    _socket!.on('client_guidance_updated', (_) {
+      _clientGuidanceUpdatedController.add(null);
+    });
+
     _socket!.connect();
   }
 
@@ -306,9 +399,9 @@ class MessagingSocketService {
     final socket = _socket;
     if (socket == null || !socket.connected) return null;
     try {
-      final ack = await socket
-          .emitWithAckAsync('join_conversation', {'conversationId': conversationId})
-          .timeout(const Duration(seconds: 8));
+      final ack = await socket.emitWithAckAsync('join_conversation', {
+        'conversationId': conversationId
+      }).timeout(const Duration(seconds: 8));
       if (ack is Map && ack['ok'] == true && ack['peer'] is Map) {
         return PeerPresence.fromJson(Map<String, dynamic>.from(ack['peer']));
       }
@@ -331,15 +424,25 @@ class MessagingSocketService {
   void emitTyping(String conversationId, bool isTyping) {
     final socket = _socket;
     if (socket == null || !socket.connected) return;
-    socket.emit('typing', {'conversationId': conversationId, 'isTyping': isTyping});
+    socket.emit(
+        'typing', {'conversationId': conversationId, 'isTyping': isTyping});
+  }
+
+  void emitMarkRead(String conversationId) {
+    final socket = _socket;
+    if (socket == null || !socket.connected) return;
+    socket.emit('mark_read', {'conversationId': conversationId});
   }
 
   /// Envoi optimiste via socket. Lève une [TimeoutException] si aucun ACK
   /// n'arrive — l'appelant doit alors basculer sur le fallback HTTP.
   Future<SendMessageAckResult> sendMessage({
     required String conversationId,
-    required String content,
+    String? content,
     required String clientTempId,
+    String? type,
+    Map<String, dynamic>? payload,
+    String? replyToId,
   }) async {
     final socket = _socket;
     if (socket == null || !socket.connected) {
@@ -347,8 +450,11 @@ class MessagingSocketService {
     }
     final ack = await socket.emitWithAckAsync('send_message', {
       'conversationId': conversationId,
-      'content': content,
+      if (content != null) 'content': content,
       'clientTempId': clientTempId,
+      if (type != null) 'type': type,
+      if (payload != null) 'payload': payload,
+      if (replyToId != null) 'replyToId': replyToId,
     }).timeout(const Duration(seconds: 8));
     return SendMessageAckResult.fromJson(Map<String, dynamic>.from(ack as Map));
   }

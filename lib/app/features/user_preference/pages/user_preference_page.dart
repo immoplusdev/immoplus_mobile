@@ -240,7 +240,8 @@ class _PreferenceChip extends StatelessWidget {
             Text(
               label,
               style: AppTypography.bodyMedium.copyWith(
-                color: isSelected ? AppColors.white : AppColors.immoTextSecondary,
+                color:
+                    isSelected ? AppColors.white : AppColors.immoTextSecondary,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),

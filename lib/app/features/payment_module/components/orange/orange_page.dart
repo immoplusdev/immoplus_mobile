@@ -71,8 +71,7 @@ class _OrangePageState extends State<OrangePage> {
                   OrangePhoneNumberPage(controller: _controller),
                 OrangePaymentStep.otpValidator =>
                   OrangeOptValidatorPage(controller: _controller),
-                OrangePaymentStep.validator =>
-                  OrangeValidatorPage(
+                OrangePaymentStep.validator => OrangeValidatorPage(
                     controller: _controller,
                     paymentIntentModel: _controller.paymentIntentData!,
                   ),

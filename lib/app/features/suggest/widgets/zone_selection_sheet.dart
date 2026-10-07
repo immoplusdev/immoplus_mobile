@@ -38,14 +38,10 @@ const List<SelectedZone> kPopularZones = [
   SelectedZone(
       id: '2', nom: 'Palmeraie, Abidjan', lat: 5.3702344, lng: -3.9551871),
   SelectedZone(
-      id: '5',
-      nom: 'Yopougon, Abidjan',
-      lat: 5.317660999999,
-      lng: -4.0899911),
+      id: '5', nom: 'Yopougon, Abidjan', lat: 5.317660999999, lng: -4.0899911),
   SelectedZone(
       id: '6', nom: 'Grand-Bassam, Abidjan', lat: 5.2103072, lng: -3.7549648),
-  SelectedZone(
-      id: '7', nom: 'Assinie, Comoé', lat: 5.1398055, lng: -3.3237824),
+  SelectedZone(id: '7', nom: 'Assinie, Comoé', lat: 5.1398055, lng: -3.3237824),
 ];
 
 class ZoneSelectionSheet extends StatefulWidget {
@@ -303,8 +299,8 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
             children: [
               Expanded(
                 child: Text('Où ?',
-                    style:
-                        AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold)),
+                    style: AppTypography.font(
+                        fontSize: 22, fontWeight: FontWeight.bold)),
               ),
               if (_tempSelected.length > 1)
                 Container(
@@ -335,9 +331,10 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
               hintText: 'Rechercher une adresse...',
-              hintStyle: AppTypography.font(color: AppColors.immoTextDisabled, fontSize: 15),
-              prefixIcon:
-                  Icon(Icons.search, color: AppColors.immoTextSecondary, size: 20),
+              hintStyle: AppTypography.font(
+                  color: AppColors.immoTextDisabled, fontSize: 15),
+              prefixIcon: Icon(Icons.search,
+                  color: AppColors.immoTextSecondary, size: 20),
               suffixIcon: _searchController.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(Icons.clear,
@@ -469,7 +466,8 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                 showCheckmark: false,
                 visualDensity: VisualDensity.compact,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 labelStyle: AppTypography.font(
                   color: isSelected ? AppColors.white : AppColors.immoTextLabel,
                   fontSize: 13,
@@ -478,7 +476,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: BorderSide(
-                    color: isSelected ? AppColors.black : AppColors.immoBorderStrong,
+                    color: isSelected
+                        ? AppColors.black
+                        : AppColors.immoBorderStrong,
                     width: 1.0,
                   ),
                 ),
@@ -505,24 +505,23 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                 return Chip(
                   visualDensity: VisualDensity.compact,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   label: Text(
                     z.nom,
                     style: AppTypography.font(
                         fontSize: 12, color: AppColors.primary),
                   ),
-                  deleteIcon: Icon(Icons.close,
-                      size: 13, color: AppColors.primary),
+                  deleteIcon:
+                      Icon(Icons.close, size: 13, color: AppColors.primary),
                   onDeleted: () {
                     setState(() => _tempSelected.remove(z));
                   },
-                  backgroundColor:
-                      AppColors.primary.withValues(alpha: 0.08),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                        color:
-                            AppColors.primary.withValues(alpha: 0.2)),
+                        color: AppColors.primary.withValues(alpha: 0.2)),
                   ),
                 );
               }).toList(),

@@ -356,7 +356,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: const Color(0xFFF9FAFB),
-                  border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
+                  border:
+                      Border.all(color: AppColors.immoFeedbackNeutralSubtle),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(11),

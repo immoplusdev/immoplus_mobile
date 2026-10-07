@@ -16,7 +16,6 @@ class DemandeProParticulierMeResponse with _$DemandeProParticulierMeResponse {
     required bool hasPrevious,
   }) = _DemandeProParticulierMeResponse;
 
-  factory DemandeProParticulierMeResponse.fromJson(
-          Map<String, dynamic> json) =>
+  factory DemandeProParticulierMeResponse.fromJson(Map<String, dynamic> json) =>
       _$DemandeProParticulierMeResponseFromJson(json);
 }

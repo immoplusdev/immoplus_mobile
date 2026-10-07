@@ -221,7 +221,8 @@ class ResidenceRepository {
 
   Future<Map<String, dynamic>> generateQrCheckin({required String id}) async {
     try {
-      final response = await ReservationProvider(dioClient).generateQrCheckin(id);
+      final response =
+          await ReservationProvider(dioClient).generateQrCheckin(id);
       return response.data as Map<String, dynamic>;
     } on DioException catch (dioError) {
       log('DioError (generer-qr-checkin): ${dioError.message}');

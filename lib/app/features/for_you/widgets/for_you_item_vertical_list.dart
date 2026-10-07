@@ -6,7 +6,6 @@ import 'package:immoplus/app/data/models/remote/home_feed/home_feed_section.dart
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/for_you/utils/see_more_fetcher.dart';
-import 'package:immoplus/app/features/for_you/widgets/for_you_cheapest_stacked_section.dart';
 import 'package:immoplus/app/features/for_you/widgets/for_you_inline_ad_tile.dart';
 import 'package:immoplus/app/features/for_you/widgets/for_you_vertical_card.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
@@ -62,8 +61,6 @@ class _ForYouItemVerticalListState extends State<ForYouItemVerticalList> {
   bool get _isResidence =>
       widget.section.type == HomeFeedSectionType.residenceList;
 
-  bool get _isCheapest => widget.section.key == HomeFeedSectionType.cheapestKey;
-
   Future<void> _loadNextPage() async {
     if (_isLoadingMore || !_hasMore || widget.section.seeMoreEndpoint == null) {
       return;
@@ -98,13 +95,6 @@ class _ForYouItemVerticalListState extends State<ForYouItemVerticalList> {
   @override
   Widget build(BuildContext context) {
     if (_items.isEmpty) return const SizedBox.shrink();
-
-    if (_isCheapest) {
-      return ForYouCheapestStackedSection(
-        section: widget.section,
-        padding: widget.padding,
-      );
-    }
 
     return Padding(
       padding: widget.padding,

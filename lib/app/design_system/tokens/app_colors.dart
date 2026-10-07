@@ -421,15 +421,18 @@ class AppColors {
 
   // ── Status & Feedback (`immo-feedback`) ──
   static Color get immoFeedbackSuccess => current.immoFeedbackSuccess;
-  static Color get immoFeedbackSuccessSubtle => current.immoFeedbackSuccessSubtle;
+  static Color get immoFeedbackSuccessSubtle =>
+      current.immoFeedbackSuccessSubtle;
   static Color get immoFeedbackError => current.immoFeedbackError;
   static Color get immoFeedbackErrorSubtle => current.immoFeedbackErrorSubtle;
   static Color get immoFeedbackWarning => current.immoFeedbackWarning;
-  static Color get immoFeedbackWarningSubtle => current.immoFeedbackWarningSubtle;
+  static Color get immoFeedbackWarningSubtle =>
+      current.immoFeedbackWarningSubtle;
   static Color get immoFeedbackInfo => current.immoFeedbackInfo;
   static Color get immoFeedbackInfoSubtle => current.immoFeedbackInfoSubtle;
   static Color get immoFeedbackNeutral => current.immoFeedbackNeutral;
-  static Color get immoFeedbackNeutralSubtle => current.immoFeedbackNeutralSubtle;
+  static Color get immoFeedbackNeutralSubtle =>
+      current.immoFeedbackNeutralSubtle;
   static Color get immoFeedbackScore => current.immoFeedbackScore;
 
   // ── Icons (`immo-icon`) ──
@@ -440,10 +443,12 @@ class AppColors {
 
   // ── Controls & Modules (`immo-control`, `immo-module`, `immo-becomepro`) ──
   static Color get immoControlCheckbox => current.immoControlCheckbox;
-  static Color get immoModuleFurnitureSubtle => current.immoModuleFurnitureSubtle;
+  static Color get immoModuleFurnitureSubtle =>
+      current.immoModuleFurnitureSubtle;
   static Color get immoBecomeProPrimary => current.immoBecomeProPrimary;
   static Color get immoBecomeProGradientTop => current.immoBecomeProGradientTop;
-  static Color get immoBecomeProGradientBottom => current.immoBecomeProGradientBottom;
+  static Color get immoBecomeProGradientBottom =>
+      current.immoBecomeProGradientBottom;
 
   // =========================================================================
   // 2. COULEURS PRIMITIVES FIGMA (`Collection immo-primitives`)

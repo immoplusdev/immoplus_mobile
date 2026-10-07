@@ -29,7 +29,10 @@ class BecomeProIntroPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.immoBecomeProGradientTop, AppColors.immoBecomeProGradientBottom],
+                colors: [
+                  AppColors.immoBecomeProGradientTop,
+                  AppColors.immoBecomeProGradientBottom
+                ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),

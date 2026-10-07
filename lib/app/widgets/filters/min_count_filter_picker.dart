@@ -163,7 +163,8 @@ class MinCountFilterPicker extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: hasSelection ? AppColors.primary : AppColors.immoBorderStrong,
+            color:
+                hasSelection ? AppColors.primary : AppColors.immoBorderStrong,
             width: hasSelection ? 1.2 : 1.0,
           ),
           color: hasSelection
@@ -177,15 +178,15 @@ class MinCountFilterPicker extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 15,
-              color: hasSelection ? AppColors.primary : AppColors.immoTextSecondary,
+              size: 13,
+              color: AppColors.primary,
             ),
             const Gap(4),
             Flexible(
               child: Text(
                 text,
                 style: AppTypography.font(
-                  fontSize: 12.5,
+                  fontSize: 10,
                   fontWeight: hasSelection ? FontWeight.bold : FontWeight.w500,
                   color: hasSelection ? AppColors.primary : AppColors.black87,
                 ),

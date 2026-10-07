@@ -91,9 +91,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             onClick: _openOtpDialog,
             isLoading: false,
             clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
-            color: isPhoneNumberValid
-                ? AppColors.primary
-                : AppColors.blueGrey,
+            color: isPhoneNumberValid ? AppColors.primary : AppColors.blueGrey,
           ),
         ),
       ],

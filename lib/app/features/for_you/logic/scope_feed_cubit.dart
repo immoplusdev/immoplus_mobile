@@ -2,13 +2,17 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/enums/home_feed_scope.dart';
-import 'package:immoplus/app/data/models/remote/home_feed/home_feed_response.dart';
+import 'package:immoplus/app/data/models/remote/search_filters/scope_search_response.dart';
 import 'package:immoplus/app/data/models/remote/search_filters/search_filters_response.dart';
 import 'package:immoplus/app/data/repositories/home_feed_repository.dart';
 import 'package:immoplus/app/features/for_you/logic/scope_feed_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:injectable/injectable.dart';
 
+/// Cubit unifié pour les onglets « Trouver un logement », « Acheter un bien »,
+/// « Trouver un séjour ».
+///
+/// Les résultats sont paginés par curseur selon le contrat du feed.
 @injectable
 class ScopeFeedCubit extends Cubit<ScopeFeedState> {
   final HomeFeedRepository _repository;
@@ -25,25 +29,46 @@ class ScopeFeedCubit extends Cubit<ScopeFeedState> {
     }
   }
 
+  /// Charge les filtres propres à l'onglet, puis son premier lot de résultats.
   Future<void> fetch() async {
-    emit(state.copyWith(status: ScopeFeedStatus.loading));
+    emit(state.copyWith(
+      status: ScopeFeedStatus.loading,
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      totalCount: 0,
+    ));
     try {
-      // 1. Chargement des filtres depuis /me/search/filters
       SearchFiltersData? filtersData = state.filtersData;
       try {
-        filtersData = await _repository.getSearchFilters(scope: state.scope.value);
-      } catch (e) {
-        log('ScopeFeedCubit (${state.scope.value}): Error fetching search filters: $e');
+        filtersData = await _repository.getSearchFilters(
+          scope: state.scope.value,
+        );
+      } catch (error) {
+        // Les résultats restent utilisables si la configuration publique des
+        // filtres est momentanément indisponible.
+        log('ScopeFeedCubit (${state.scope.value}): filtres indisponibles: $error');
       }
 
-      // 2. Chargement du flux de sections adapté au scope
-      final HomeFeedData feedData = await _fetchFeedData(scope: state.scope);
+      final response = await _repository.searchScope(
+        scope: state.scope,
+        limit: 20,
+        selectedFilters: state.selectedFilters,
+        lat: state.selectedAddress?.latitude,
+        lng: state.selectedAddress?.longitude,
+        checkIn:
+            state.isStay ? _formatDate(state.selectedDateRange?.start) : null,
+        checkOut:
+            state.isStay ? _formatDate(state.selectedDateRange?.end) : null,
+        guests: state.guests,
+      );
 
       emit(state.copyWith(
         status: ScopeFeedStatus.success,
-        sections: feedData.sections,
-        hasMore: feedData.hasMore,
-        nextCursor: feedData.nextCursor,
+        items: response.data,
+        nextCursor: response.nextCursor,
+        hasMore: response.hasMore,
+        totalCount: response.totalCount,
         filtersData: filtersData,
       ));
     } catch (e) {
@@ -55,48 +80,100 @@ class ScopeFeedCubit extends Cubit<ScopeFeedState> {
     }
   }
 
-  Future<void> loadMore() async {
-    if (!state.hasMore || state.isLoadingMore) return;
-
-    emit(state.copyWith(isLoadingMore: true));
+  /// ONG.MD §4 — Recherche filtrée :
+  /// Au clic sur « Chercher » ou au changement de filtre, ré-appeler l'endpoint
+  /// avec les paramètres choisis. Réinitialise le curseur.
+  Future<void> search() async {
+    emit(state.copyWith(
+      status: ScopeFeedStatus.loading,
+      items: [],
+      nextCursor: null,
+      hasMore: false,
+      totalCount: 0,
+    ));
     try {
-      final feedData = await _fetchFeedData(
+      final response = await _repository.searchScope(
         scope: state.scope,
-        cursor: state.nextCursor,
+        limit: 20,
+        selectedFilters: state.selectedFilters,
+        lat: state.selectedAddress?.latitude,
+        lng: state.selectedAddress?.longitude,
+        checkIn:
+            state.isStay ? _formatDate(state.selectedDateRange?.start) : null,
+        checkOut:
+            state.isStay ? _formatDate(state.selectedDateRange?.end) : null,
+        guests: state.guests,
       );
 
       emit(state.copyWith(
-        sections: [...state.sections, ...feedData.sections],
-        hasMore: feedData.hasMore,
-        nextCursor: feedData.nextCursor,
+        status: ScopeFeedStatus.success,
+        items: response.data,
+        nextCursor: response.nextCursor,
+        hasMore: response.hasMore,
+        totalCount: response.totalCount,
+      ));
+    } catch (e) {
+      log('ScopeFeedCubit (${state.scope.value}): Error searching: $e');
+      emit(state.copyWith(
+        status: ScopeFeedStatus.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  /// Charge la page suivante lorsque le curseur est disponible.
+  Future<void> loadMore() async {
+    if (!state.hasMore || state.isLoadingMore || state.nextCursor == null)
+      return;
+
+    emit(state.copyWith(isLoadingMore: true));
+    try {
+      final response = await _repository.searchScope(
+        scope: state.scope,
+        cursor: state.nextCursor,
+        limit: 20,
+        selectedFilters: state.selectedFilters,
+        lat: state.selectedAddress?.latitude,
+        lng: state.selectedAddress?.longitude,
+        checkIn:
+            state.isStay ? _formatDate(state.selectedDateRange?.start) : null,
+        checkOut:
+            state.isStay ? _formatDate(state.selectedDateRange?.end) : null,
+        guests: state.guests,
+      );
+
+      emit(state.copyWith(
+        items: _mergeById(state.items, response.data),
+        nextCursor: response.nextCursor,
+        hasMore: response.hasMore,
+        totalCount: response.totalCount,
         isLoadingMore: false,
       ));
     } catch (e) {
-      log('ScopeFeedCubit (${state.scope.value}): Error loading more sections: $e');
+      log('ScopeFeedCubit (${state.scope.value}): Error loading more: $e');
       emit(state.copyWith(isLoadingMore: false));
     }
   }
 
-  Future<HomeFeedData> _fetchFeedData({
-    required HomeFeedScope scope,
-    String? cursor,
-  }) async {
-    switch (scope) {
-      case HomeFeedScope.stay:
-        return _repository.getStayFeed(cursor: cursor);
-      case HomeFeedScope.buy:
-        return _repository.getBuyFeed(cursor: cursor);
-      case HomeFeedScope.rent:
-        return _repository.getRentFeed(cursor: cursor);
+  List<ScopeSearchItem> _mergeById(
+    List<ScopeSearchItem> existing,
+    List<ScopeSearchItem> incoming,
+  ) {
+    final byId = <String, ScopeSearchItem>{
+      for (final item in existing) item.bienId: item,
+    };
+    for (final item in incoming) {
+      if (item.bienId.isNotEmpty) byId[item.bienId] = item;
     }
+    return byId.values.toList(growable: false);
   }
 
-  void setAddress(Address? address) {
-    emit(state.copyWith(selectedAddress: address));
-  }
-
+  /// ONG.MD §3 — Sélection d'un filtre :
+  /// Extraire l'objet `params` de l'option choisie. Ce params sera fusionné
+  /// automatiquement dans la requête au prochain appel `search()` ou `fetch()`.
   void setFilter(String filterKey, SearchFilterOption? option) {
-    final updated = Map<String, SearchFilterOption?>.from(state.selectedFilters);
+    final updated =
+        Map<String, SearchFilterOption?>.from(state.selectedFilters);
     if (option == null) {
       updated.remove(filterKey);
     } else {
@@ -105,7 +182,21 @@ class ScopeFeedCubit extends Cubit<ScopeFeedState> {
     emit(state.copyWith(selectedFilters: updated));
   }
 
+  void setAddress(Address? address) {
+    emit(state.copyWith(selectedAddress: address));
+  }
+
   void setDateRange(DateTimeRange? range) {
     emit(state.copyWith(selectedDateRange: range));
+  }
+
+  void setGuests(int? guests) {
+    emit(state.copyWith(guests: guests));
+  }
+
+  /// Format `YYYY-MM-DD` attendu par le backend pour check_in / check_out.
+  String? _formatDate(DateTime? date) {
+    if (date == null) return null;
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 }

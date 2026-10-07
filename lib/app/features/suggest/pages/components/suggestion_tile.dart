@@ -57,8 +57,7 @@ class SuggestionTile extends StatelessWidget {
                 child: Image.network(
                   Utils.getImagePath(id: suggestion.miniatureUrl!),
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      SizedBox(),
+                  errorBuilder: (context, error, stackTrace) => SizedBox(),
                 ),
               ),
             ),

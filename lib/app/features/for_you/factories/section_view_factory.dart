@@ -29,11 +29,16 @@ abstract class SectionViewFactory {
   /// Factory Personnalisée : permet d'injecter des constructeurs spécifiques
   /// par type de section pour une flexibilité maximale.
   const factory SectionViewFactory.custom({
-    Widget Function(BuildContext context, HomeFeedSection section)? residenceListBuilder,
-    Widget Function(BuildContext context, HomeFeedSection section)? bienListBuilder,
-    Widget Function(BuildContext context, HomeFeedSection section)? bienGroupsBuilder,
-    Widget Function(BuildContext context, HomeFeedSection section)? adBannerBuilder,
-    Widget Function(BuildContext context, HomeFeedSection section)? pollBannerBuilder,
+    Widget Function(BuildContext context, HomeFeedSection section)?
+        residenceListBuilder,
+    Widget Function(BuildContext context, HomeFeedSection section)?
+        bienListBuilder,
+    Widget Function(BuildContext context, HomeFeedSection section)?
+        bienGroupsBuilder,
+    Widget Function(BuildContext context, HomeFeedSection section)?
+        adBannerBuilder,
+    Widget Function(BuildContext context, HomeFeedSection section)?
+        pollBannerBuilder,
   }) = CustomSectionViewFactory;
 }
 
@@ -101,11 +106,16 @@ class VerticalListSectionViewFactory extends SectionViewFactory {
 
 /// Implémentation Personnalisée avec builders configurables par type de section
 class CustomSectionViewFactory extends SectionViewFactory {
-  final Widget Function(BuildContext context, HomeFeedSection section)? residenceListBuilder;
-  final Widget Function(BuildContext context, HomeFeedSection section)? bienListBuilder;
-  final Widget Function(BuildContext context, HomeFeedSection section)? bienGroupsBuilder;
-  final Widget Function(BuildContext context, HomeFeedSection section)? adBannerBuilder;
-  final Widget Function(BuildContext context, HomeFeedSection section)? pollBannerBuilder;
+  final Widget Function(BuildContext context, HomeFeedSection section)?
+      residenceListBuilder;
+  final Widget Function(BuildContext context, HomeFeedSection section)?
+      bienListBuilder;
+  final Widget Function(BuildContext context, HomeFeedSection section)?
+      bienGroupsBuilder;
+  final Widget Function(BuildContext context, HomeFeedSection section)?
+      adBannerBuilder;
+  final Widget Function(BuildContext context, HomeFeedSection section)?
+      pollBannerBuilder;
 
   const CustomSectionViewFactory({
     this.residenceListBuilder,
@@ -119,19 +129,22 @@ class CustomSectionViewFactory extends SectionViewFactory {
   Widget buildSection(BuildContext context, HomeFeedSection section) {
     switch (section.type) {
       case HomeFeedSectionType.residenceList:
-        if (residenceListBuilder != null) return residenceListBuilder!(context, section);
+        if (residenceListBuilder != null)
+          return residenceListBuilder!(context, section);
         return ForYouItemCarousel(section: section);
       case HomeFeedSectionType.bienList:
         if (bienListBuilder != null) return bienListBuilder!(context, section);
         return ForYouItemCarousel(section: section);
       case HomeFeedSectionType.bienGroupsByLocation:
-        if (bienGroupsBuilder != null) return bienGroupsBuilder!(context, section);
+        if (bienGroupsBuilder != null)
+          return bienGroupsBuilder!(context, section);
         return ForYouBienGroupsSection(section: section);
       case HomeFeedSectionType.adBanner:
         if (adBannerBuilder != null) return adBannerBuilder!(context, section);
         return ForYouAdBanner(section: section);
       case HomeFeedSectionType.pollBanner:
-        if (pollBannerBuilder != null) return pollBannerBuilder!(context, section);
+        if (pollBannerBuilder != null)
+          return pollBannerBuilder!(context, section);
         if (section.poll == null) return const SizedBox.shrink();
         return PollBannerCard(
           key: ValueKey(section.poll!.pollId),

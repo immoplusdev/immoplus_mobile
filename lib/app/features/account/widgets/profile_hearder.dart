@@ -119,7 +119,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                         email,
                         style: AppTypography.font(
                           fontSize: 12,
-                          color: AppColors.immoTextPrimary.withValues(alpha: 0.5),
+                          color:
+                              AppColors.immoTextPrimary.withValues(alpha: 0.5),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

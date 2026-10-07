@@ -14,5 +14,6 @@ class RatingRequest with _$RatingRequest {
     required List<String> propertyTags,
   }) = _RatingRequest;
 
-  factory RatingRequest.fromJson(Map<String, dynamic> json) => _$RatingRequestFromJson(json);
+  factory RatingRequest.fromJson(Map<String, dynamic> json) =>
+      _$RatingRequestFromJson(json);
 }

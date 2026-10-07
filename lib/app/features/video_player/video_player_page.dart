@@ -171,7 +171,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   Text(
                     errorMessage,
                     textAlign: TextAlign.center,
-                    style: AppTypography.font(color: AppColors.immoTextSecondary),
+                    style:
+                        AppTypography.font(color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),

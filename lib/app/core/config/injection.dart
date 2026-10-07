@@ -56,7 +56,9 @@ Future<void> configureDependencies() async {
 
   // 5. Initialize EasyLoading
   try {
-    await getIt<EasyLoadingHandler>().init().timeout(const Duration(seconds: 5));
+    await getIt<EasyLoadingHandler>()
+        .init()
+        .timeout(const Duration(seconds: 5));
     talker.info('EasyLoadingHandler.init() done');
   } catch (e, stack) {
     talker.error('EasyLoadingHandler.init() failed: $e', e, stack);
@@ -65,7 +67,9 @@ Future<void> configureDependencies() async {
   // 6. Initialize OneSignal in background (after Firebase)
   Future(() async {
     try {
-      await getIt<NotificationService>().initConfig().timeout(const Duration(seconds: 10));
+      await getIt<NotificationService>()
+          .initConfig()
+          .timeout(const Duration(seconds: 10));
       talker.info('NotificationService.setupNotificationListener() done');
       getIt<NotificationService>().setupNotificationListener();
     } catch (e, stack) {
@@ -76,7 +80,9 @@ Future<void> configureDependencies() async {
   // 7. Initialize RemoteConfig in background
   Future(() async {
     try {
-      await getIt<RemoteConfigService>().initialize().timeout(const Duration(seconds: 10));
+      await getIt<RemoteConfigService>()
+          .initialize()
+          .timeout(const Duration(seconds: 10));
       talker.info('RemoteConfigService.initialize() done');
     } catch (e, stack) {
       talker.error('RemoteConfigService.initialize() failed: $e', e, stack);

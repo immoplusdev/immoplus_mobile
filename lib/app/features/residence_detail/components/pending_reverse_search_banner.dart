@@ -70,7 +70,8 @@ class PendingReverseSearchBanner extends StatelessWidget {
                           expired
                               ? 'Expiré'
                               : 'Expire dans ${formatCountdown(remaining)} · touchez pour payer',
-                          style: AppTypography.font(fontSize: 11, color: _amber),
+                          style:
+                              AppTypography.font(fontSize: 11, color: _amber),
                         ),
                       ),
                   ],
@@ -88,7 +89,8 @@ class PendingReverseSearchBanner extends StatelessWidget {
                 ),
                 child: Text(
                   'Annuler',
-                  style: AppTypography.font(fontWeight: FontWeight.w700, fontSize: 12),
+                  style: AppTypography.font(
+                      fontWeight: FontWeight.w700, fontSize: 12),
                 ),
               ),
             ],

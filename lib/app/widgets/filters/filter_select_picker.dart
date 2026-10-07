@@ -22,6 +22,11 @@ class FilterSelectPicker extends StatelessWidget {
     this.height = 35.0,
   });
 
+  String _optionLabel(SearchFilterOption option) {
+    final label = option.label.trim();
+    return label.isNotEmpty ? label : option.value.toString();
+  }
+
   void _showOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -86,7 +91,7 @@ class FilterSelectPicker extends StatelessWidget {
                             final isSelected =
                                 currentSelected?.value == option.value;
                             return _buildChoiceChip(
-                              label: option.label,
+                              label: _optionLabel(option),
                               isSelected: isSelected,
                               onTap: () {
                                 setModalState(() => currentSelected = option);
@@ -148,7 +153,7 @@ class FilterSelectPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasSelection = selectedOption != null;
-    final text = hasSelection ? selectedOption!.label : filter.label;
+    final text = hasSelection ? _optionLabel(selectedOption!) : filter.label;
 
     return InkWell(
       onTap: () => _showOptionsModal(context),
@@ -158,7 +163,8 @@ class FilterSelectPicker extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: hasSelection ? AppColors.primary : AppColors.immoBorderStrong,
+            color:
+                hasSelection ? AppColors.primary : AppColors.immoBorderStrong,
             width: hasSelection ? 1.2 : 1.0,
           ),
           color: hasSelection
@@ -172,16 +178,15 @@ class FilterSelectPicker extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 15,
-              color:
-                  hasSelection ? AppColors.primary : AppColors.immoTextSecondary,
+              size: 13,
+              color: AppColors.primary,
             ),
             const Gap(4),
             Flexible(
               child: Text(
                 text,
                 style: AppTypography.font(
-                  fontSize: 12.5,
+                  fontSize: 10,
                   fontWeight: hasSelection ? FontWeight.bold : FontWeight.w500,
                   color: hasSelection ? AppColors.primary : AppColors.black87,
                 ),
@@ -191,9 +196,8 @@ class FilterSelectPicker extends StatelessWidget {
             const Gap(2),
             Icon(
               Icons.keyboard_arrow_down_rounded,
-              size: 14,
-              color:
-                  hasSelection ? AppColors.primary : AppColors.immoTextSecondary,
+              size: 12,
+              color: AppColors.primary,
             ),
           ],
         ),

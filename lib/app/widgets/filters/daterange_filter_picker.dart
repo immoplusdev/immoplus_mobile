@@ -103,13 +103,13 @@ class DaterangeFilterPicker extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           children: [
-            Icon(Iconsax.calendar_1, size: 18, color: AppColors.primary),
-            const Gap(8),
+            Icon(Iconsax.calendar_1, size: 15, color: AppColors.primary),
+            const Gap(6),
             Expanded(
               child: Text(
                 text,
                 style: AppTypography.font(
-                  fontSize: 13,
+                  fontSize: 10,
                   fontWeight: hasRange ? FontWeight.bold : FontWeight.normal,
                   color:
                       hasRange ? AppColors.black : AppColors.immoTextSecondary,
@@ -122,8 +122,8 @@ class DaterangeFilterPicker extends StatelessWidget {
                 onTap: () => onDateRangeSelected(null),
                 child: Icon(
                   Icons.close,
-                  color: AppColors.immoTextSecondary,
-                  size: 16,
+                  color: AppColors.primary,
+                  size: 14,
                 ),
               ),
           ],

@@ -9,6 +9,7 @@ import 'package:immoplus/app/features/authentification/authentification_page.dar
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/visits/visit_formular_action.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
+import 'package:immoplus/app/features/messaging/widgets/host_contact_prompt.dart';
 
 class EstateBottomBar extends StatelessWidget {
   EstateBottomBar({super.key, required this.bienImmobilier});
@@ -17,23 +18,23 @@ class EstateBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20)
-          .copyWith(bottom: 20, top: 10),
-      height: 80,
-      child: ElevatedButton(
-          onPressed: () {
-            if (sessionManager.currentUser == null) {
-              getIt<AuthRedirectService>().set((
-                popUntilRouteName: EstatePage.name,
-                callback: () => _proceed(context),
-              ));
-              context.pushNamed(AuthenticationPage.name);
-            } else {
-              _proceed(context);
-            }
-          },
-          child: Text(bienImmobilier.aLouer ? 'VISITER' : 'CONTACTER')),
+    return SafeArea(
+      top: false,
+      child: HostContactPrompt(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+        label: bienImmobilier.aLouer ? 'VISITER' : 'CONTACTER',
+        onPressed: () {
+          if (sessionManager.currentUser == null) {
+            getIt<AuthRedirectService>().set((
+              popUntilRouteName: EstatePage.name,
+              callback: () => _proceed(context),
+            ));
+            context.pushNamed(AuthenticationPage.name);
+          } else {
+            _proceed(context);
+          }
+        },
+      ),
     );
   }
 

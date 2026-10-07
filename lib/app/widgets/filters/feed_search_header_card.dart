@@ -8,8 +8,7 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/filters/destination_search_picker.dart';
 import 'package:immoplus/app/widgets/filters/dynamic_filter_picker.dart';
 
-/// Carte de recherche flottante en en-tête inspirée de la page Hôtel,
-/// construite dynamiquement à partir des filtres de `GET /me/search/filters`.
+/// Carte de recherche flottante en en-tête pour les filtres du flux vertical.
 class FeedSearchHeaderCard extends StatelessWidget {
   final HomeFeedScope scope;
   final String? destinationName;
@@ -35,7 +34,7 @@ class FeedSearchHeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -49,7 +48,7 @@ class FeedSearchHeaderCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -64,17 +63,25 @@ class FeedSearchHeaderCard extends StatelessWidget {
               onClear: () => onLocationSelected(null),
             ),
 
-            // 2. Filtres dynamiques (gérés à 100% via l'API)
+            // 2. Filtres applicables à la même route que le flux.
             if (filters.isNotEmpty) ...[
-              const Gap(12),
+              const Gap(10),
               _buildFiltersLayout(filters),
             ],
 
-            const Gap(14),
+            const Gap(12),
 
             // 3. Bouton Chercher
             CustomButtom(
-              text: 'Chercher',
+              buttonHeight: 44,
+              child: Text(
+                'Chercher',
+                style: AppTypography.font(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.white,
+                ),
+              ),
               onClick: onSearch ?? () {},
             ),
           ],
@@ -103,6 +110,7 @@ class FeedSearchHeaderCard extends StatelessWidget {
               filter: items[0],
               selectedOption: selectedFilters[items[0].key],
               onSelected: (opt) => onFilterChanged(items[0].key, opt),
+              height: 32,
             ),
           ),
           const Gap(8),
@@ -111,42 +119,46 @@ class FeedSearchHeaderCard extends StatelessWidget {
               filter: items[1],
               selectedOption: selectedFilters[items[1].key],
               onSelected: (opt) => onFilterChanged(items[1].key, opt),
+              height: 32,
             ),
           ),
         ],
       );
     }
 
-    // Si exactement 3 filtres (ex: Type de bien, Budget, Chambres) : ils rentrent tous sur une seule ligne comme sur Figma
+    // Quatre filtres principaux : une ligne compacte, dans l'ordre de l'API.
+    if (items.length == 4) {
+      return Row(
+        children: [
+          for (var index = 0; index < items.length; index++) ...[
+            if (index > 0) const Gap(4),
+            Expanded(
+              child: DynamicFilterPicker(
+                filter: items[index],
+                selectedOption: selectedFilters[items[index].key],
+                onSelected: (opt) => onFilterChanged(items[index].key, opt),
+              ),
+            ),
+          ],
+        ],
+      );
+    }
+
+    // Trois filtres gardent la même largeur et la même hauteur sur une ligne.
     if (items.length == 3) {
       return Row(
         children: [
-          Expanded(
-            flex: 8,
-            child: DynamicFilterPicker(
-              filter: items[0],
-              selectedOption: selectedFilters[items[0].key],
-              onSelected: (opt) => onFilterChanged(items[0].key, opt),
+          for (var index = 0; index < items.length; index++) ...[
+            if (index > 0) const Gap(6),
+            Expanded(
+              child: DynamicFilterPicker(
+                filter: items[index],
+                selectedOption: selectedFilters[items[index].key],
+                onSelected: (opt) => onFilterChanged(items[index].key, opt),
+                height: 32,
+              ),
             ),
-          ),
-          const Gap(6),
-          Expanded(
-            flex: 7,
-            child: DynamicFilterPicker(
-              filter: items[1],
-              selectedOption: selectedFilters[items[1].key],
-              onSelected: (opt) => onFilterChanged(items[1].key, opt),
-            ),
-          ),
-          const Gap(6),
-          Expanded(
-            flex: 6,
-            child: DynamicFilterPicker(
-              filter: items[2],
-              selectedOption: selectedFilters[items[2].key],
-              onSelected: (opt) => onFilterChanged(items[2].key, opt),
-            ),
-          ),
+          ],
         ],
       );
     }

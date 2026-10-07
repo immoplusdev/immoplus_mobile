@@ -45,6 +45,7 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
   RelaisPropertyType? _propertyType;
   String? _commune;
   late int _rooms;
+
   /// Chaque slot : `String` (id d'une photo déjà en ligne), `File` (photo
   /// locale nouvellement choisie pour remplacer ce slot), ou `null` (vide).
   late List<dynamic> _photoSlots;
@@ -64,7 +65,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         .firstOrNull;
     _commune = relais.location;
     _rooms = relais.rooms;
-    _photoSlots = List<dynamic>.generate(3, (i) => i < relais.photos.length ? relais.photos[i] : null);
+    _photoSlots = List<dynamic>.generate(
+        3, (i) => i < relais.photos.length ? relais.photos[i] : null);
     _landmarkController.text = relais.landmark ?? '';
     _reporterRelation = RelaisReporterRelation.values
         .where((r) => r.value == relais.reporterRelation)
@@ -82,7 +84,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
 
   Future<void> _loadCommunes() async {
     try {
-      final response = await _configRepository.getCommunes(page: 1, perPage: 20);
+      final response =
+          await _configRepository.getCommunes(page: 1, perPage: 20);
       if (mounted) setState(() => _communes = response.data);
     } catch (_) {
       // Les chips restent vides : le champ repère/quartier texte suffit.
@@ -102,7 +105,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
 
   Future<void> _save() async {
     if (_propertyType == null) {
-      CustomPopup.showErrorToast(text: 'Veuillez sélectionner un type de logement');
+      CustomPopup.showErrorToast(
+          text: 'Veuillez sélectionner un type de logement');
       return;
     }
     if (_commune == null || _commune!.isEmpty) {
@@ -128,20 +132,24 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         RelaisUpdateRequest(
           propertyType: _propertyType!.backendSlug,
           location: _commune,
-          landmark: _landmarkController.text.trim().isEmpty ? null : _landmarkController.text.trim(),
+          landmark: _landmarkController.text.trim().isEmpty
+              ? null
+              : _landmarkController.text.trim(),
           rooms: _rooms,
           photos: photoIds,
           availabilityPreset: _availabilityPreset?.value,
           reporterRelation: _reporterRelation?.value,
-          reporterRelationDetails:
-              _detailsController.text.trim().isEmpty ? null : _detailsController.text.trim(),
+          reporterRelationDetails: _detailsController.text.trim().isEmpty
+              ? null
+              : _detailsController.text.trim(),
         ),
       );
 
       if (mounted) context.pop(true);
     } catch (_) {
       if (mounted) {
-        CustomPopup.showErrorToast(text: "Impossible d'enregistrer les modifications");
+        CustomPopup.showErrorToast(
+            text: "Impossible d'enregistrer les modifications");
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -156,12 +164,16 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Modifier ma demande',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
+          style: AppTypography.font(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black),
         ),
       ),
       body: SafeArea(
@@ -184,7 +196,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               const Gap(24),
               _sectionLabel('Repère ou adresse précise :'),
               const Gap(12),
-              _buildTextField(_landmarkController, 'Ex: Non loin de la pharmacie'),
+              _buildTextField(
+                  _landmarkController, 'Ex: Non loin de la pharmacie'),
               const Gap(24),
               _sectionLabel('Nombre de chambres :'),
               const Gap(12),
@@ -199,7 +212,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               _buildRelationOptions(),
               if (_reporterRelation == RelaisReporterRelation.other) ...[
                 const Gap(12),
-                _buildTextField(_detailsController, 'Précisez votre lien avec ce logement'),
+                _buildTextField(
+                    _detailsController, 'Précisez votre lien avec ce logement'),
               ],
               const Gap(32),
               CustomLoadingButtom(
@@ -218,7 +232,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
+      style: AppTypography.font(
+          fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
     );
   }
 
@@ -228,7 +243,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
       style: AppTypography.font(fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
+        hintStyle:
+            AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
         filled: true,
         fillColor: AppColors.white,
         border: OutlineInputBorder(
@@ -264,13 +280,18 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                   height: 110,
                   alignment: Alignment.center,
                   child: slot == null
-                      ? Icon(Iconsax.gallery_add, size: 22, color: AppColors.primary)
+                      ? Icon(Iconsax.gallery_add,
+                          size: 22, color: AppColors.primary)
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: slot is File
-                              ? Image.file(slot, fit: BoxFit.cover, width: double.infinity, height: 110)
+                              ? Image.file(slot,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: 110)
                               : CachedNetworkImage(
-                                  imageUrl: Utils.getImagePath(id: slot as String),
+                                  imageUrl:
+                                      Utils.getImagePath(id: slot as String),
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: 110,
@@ -291,7 +312,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         final isSelected = _propertyType?.backendSlug == type.backendSlug;
         return Expanded(
           child: Padding(
-            padding: EdgeInsets.only(right: type == relaisPropertyTypes.last ? 0 : 8),
+            padding: EdgeInsets.only(
+                right: type == relaisPropertyTypes.last ? 0 : 8),
             child: GestureDetector(
               onTap: () => setState(() => _propertyType = type),
               child: Container(
@@ -300,7 +322,9 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                   color: isSelected ? AppColors.primaryLite : AppColors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderStrong,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -308,7 +332,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                   children: [
                     type.svgIcon != null
                         ? SvgPicture.asset(type.svgIcon!, width: 26, height: 26)
-                        : Icon(type.fallbackIcon, size: 26, color: AppColors.immoTextLabel),
+                        : Icon(type.fallbackIcon,
+                            size: 26, color: AppColors.immoTextLabel),
                     const Gap(8),
                     Text(
                       type.label,
@@ -332,7 +357,10 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
     if (_isLoadingCommunes) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
-        child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+        child: SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(strokeWidth: 2)),
       );
     }
     return Wrap(
@@ -347,7 +375,10 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
             decoration: BoxDecoration(
               color: isSelected ? AppColors.primary : AppColors.white,
               borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
+              border: Border.all(
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.immoBorderStrong),
             ),
             child: Text(
               commune.name,
@@ -373,10 +404,12 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _stepperButton(icon: Icons.add, onTap: () => setState(() => _rooms++)),
+          _stepperButton(
+              icon: Icons.add, onTap: () => setState(() => _rooms++)),
           Text(
             _rooms.toString().padLeft(2, '0'),
-            style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           _stepperButton(
             icon: Icons.remove,
@@ -395,7 +428,8 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
         width: 36,
         height: 36,
         alignment: Alignment.center,
-        decoration: BoxDecoration(color: AppColors.primaryLite, shape: BoxShape.circle),
+        decoration:
+            BoxDecoration(color: AppColors.primaryLite, shape: BoxShape.circle),
         child: Icon(icon, size: 18, color: AppColors.primary),
       ),
     );
@@ -416,7 +450,10 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
+                border: Border.all(
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderStrong),
               ),
               child: Text(
                 preset.label,
@@ -447,18 +484,23 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.immoBorderStrong,
                   width: isSelected ? 1.5 : 1,
                 ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(relation.label, style: AppTypography.font(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text(relation.label,
+                      style: AppTypography.font(
+                          fontWeight: FontWeight.bold, fontSize: 15)),
                   const Gap(2),
                   Text(
                     relation.description,
-                    style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                    style: AppTypography.font(
+                        fontSize: 12, color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),

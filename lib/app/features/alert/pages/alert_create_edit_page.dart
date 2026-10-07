@@ -227,8 +227,9 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                 color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                    color:
-                        isSelected ? AppColors.primary : AppColors.immoBorderDefault),
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderDefault),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -241,7 +242,9 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   Text(
                     type.label,
                     style: AppTypography.captionMedium.copyWith(
-                      color: isSelected ? AppColors.white : AppColors.immoTextSecondary,
+                      color: isSelected
+                          ? AppColors.white
+                          : AppColors.immoTextSecondary,
                     ),
                   ),
                 ],
@@ -267,15 +270,18 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                 color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    color:
-                        isSelected ? AppColors.primary : AppColors.immoBorderDefault),
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderDefault),
               ),
               child: Center(
                 child: Text(
                   type.label,
                   style: AppTypography.button.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.white : AppColors.immoTextSecondary,
+                    color: isSelected
+                        ? AppColors.white
+                        : AppColors.immoTextSecondary,
                   ),
                 ),
               ),
@@ -311,7 +317,8 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                 ),
               ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.immoTextSecondary),
+            Icon(Icons.arrow_forward_ios,
+                size: 16, color: AppColors.immoTextSecondary),
           ],
         ),
       ),
@@ -333,7 +340,9 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               color: isSelected ? AppColors.primary : AppColors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.immoBorderStrong),
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.immoBorderStrong),
             ),
             child: Center(
               child: Text(
@@ -371,7 +380,8 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   'Minimum', '${format.format(_budgetRange.start)} fcfa'),
             ),
             const Gap(16),
-            Text('—', style: AppTypography.font(color: AppColors.immoTextSecondary)),
+            Text('—',
+                style: AppTypography.font(color: AppColors.immoTextSecondary)),
             const Gap(16),
             Expanded(
               child: _buildBudgetValue(
@@ -410,8 +420,8 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       maxLines: 4,
       decoration: InputDecoration(
         hintText: 'Ex : Un grand jardin avec piscine',
-        hintStyle:
-            AppTypography.bodyMedium.copyWith(color: AppColors.immoTextDisabled),
+        hintStyle: AppTypography.bodyMedium
+            .copyWith(color: AppColors.immoTextDisabled),
         filled: true,
         fillColor: AppColors.white,
         border: OutlineInputBorder(

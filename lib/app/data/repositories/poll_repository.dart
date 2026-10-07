@@ -17,7 +17,8 @@ class PollRepository {
 
   Future<PollModel> getPoll(String pollId) async {
     final deviceId = await _deviceIdService.getDeviceId();
-    final response = await PollProvider(_dio).getPoll(pollId, deviceId: deviceId);
+    final response =
+        await PollProvider(_dio).getPoll(pollId, deviceId: deviceId);
     return response.data;
   }
 
@@ -30,7 +31,8 @@ class PollRepository {
   /// `optionId` (camelCase, pas `option_id`), et `deviceId` uniquement pour
   /// un vote anonyme — ignoré (et donc omis ici) si connecté, `userId` ne
   /// se met jamais dans le body (il vient du JWT côté serveur).
-  Future<PollModel> vote({required String pollId, required String optionId}) async {
+  Future<PollModel> vote(
+      {required String pollId, required String optionId}) async {
     final userId = _sessionManager.currentUser?.userId;
     try {
       await PollProvider(_dio).vote(pollId, {
@@ -48,7 +50,8 @@ class PollRepository {
 
   /// Change un vote existant vers [optionId] (`PATCH`) — reclic sur une
   /// option différente de celle déjà votée.
-  Future<PollModel> changeVote({required String pollId, required String optionId}) async {
+  Future<PollModel> changeVote(
+      {required String pollId, required String optionId}) async {
     try {
       await PollProvider(_dio).changeVote(pollId, {'optionId': optionId});
     } on DioException catch (e) {

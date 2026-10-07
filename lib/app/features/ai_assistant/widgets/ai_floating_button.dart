@@ -75,7 +75,7 @@ class AiFloatingButton extends StatefulWidget {
   State<AiFloatingButton> createState() => _AiFloatingButtonState();
 }
 
-final TextStyle _pillTextStyle =AppTypography.font(
+final TextStyle _pillTextStyle = AppTypography.font(
   fontSize: 16,
   fontWeight: FontWeight.w900,
   // letterSpacing: 0.3,

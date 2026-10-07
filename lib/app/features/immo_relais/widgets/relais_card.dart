@@ -21,7 +21,8 @@ class RelaisCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
-        final result = await context.pushNamed(RelaisDetailPage.name, extra: relais);
+        final result =
+            await context.pushNamed(RelaisDetailPage.name, extra: relais);
         if (result == true) onChanged?.call();
       },
       child: Container(
@@ -43,12 +44,14 @@ class RelaisCard extends StatelessWidget {
                     children: [
                       Text(
                         '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.rooms} chambre${relais.rooms > 1 ? 's' : ''}',
-                        style: AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: AppTypography.font(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       const Gap(2),
                       Text(
                         relais.landmark ?? relais.location,
-                        style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                        style: AppTypography.font(
+                            fontSize: 12, color: AppColors.immoTextSecondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -57,7 +60,8 @@ class RelaisCard extends StatelessWidget {
                 ),
                 const Gap(8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: status.backgroundColor,
                     borderRadius: BorderRadius.circular(12),
@@ -77,13 +81,15 @@ class RelaisCard extends StatelessWidget {
               const Gap(12),
               Text(
                 'Disponible à partir du ${DateFormat('dd MMMM yyyy', 'fr_FR').format(relais.availabilityDate!)}',
-                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
             if (relais.interestedCount > 0) ...[
               const Gap(12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: const Color(0xFFEFF6FF),
                   borderRadius: BorderRadius.circular(8),

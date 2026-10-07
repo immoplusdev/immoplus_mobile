@@ -313,7 +313,9 @@ class PropertyImage extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl!,
                       fit: BoxFit.cover,
-                      memCacheWidth: (width * MediaQuery.devicePixelRatioOf(context)).toInt(),
+                      memCacheWidth:
+                          (width * MediaQuery.devicePixelRatioOf(context))
+                              .toInt(),
                       placeholder: (_, __) =>
                           Container(color: AppColors.immoBorderDefault),
                       errorWidget: (context, url, error) => _buildPlaceholder(),
@@ -338,7 +340,8 @@ class PropertyImage extends StatelessWidget {
       height: 180,
       color: AppColors.immoBorderDefault,
       child: Center(
-        child: Icon(Iconsax.building, color: AppColors.immoTextSecondary, size: 32),
+        child: Icon(Iconsax.building,
+            color: AppColors.immoTextSecondary, size: 32),
       ),
     );
   }
@@ -350,7 +353,8 @@ class _ImagePlaceholder extends StatelessWidget {
     return Container(
       color: AppColors.immoBorderDefault,
       child: Center(
-        child: Icon(Iconsax.building, color: AppColors.immoTextSecondary, size: 32),
+        child: Icon(Iconsax.building,
+            color: AppColors.immoTextSecondary, size: 32),
       ),
     );
   }

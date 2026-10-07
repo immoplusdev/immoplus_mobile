@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'immo-plus.firebasestorage.app',
     iosBundleId: 'com.immoplus.ci',
   );
-
 }

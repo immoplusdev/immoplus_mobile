@@ -37,6 +37,9 @@ class ReservationCancelReasonBottomSheet extends StatefulWidget {
   }) {
     return showModalBottomSheet<void>(
       context: context,
+      // La feuille doit être présentée au-dessus de la barre de navigation
+      // persistante du HomePageWrapper.
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: AppColors.white,
       useSafeArea: true,
@@ -165,7 +168,10 @@ class _ReservationCancelReasonBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final mediaQuery = MediaQuery.of(context);
+    final bottomInset = mediaQuery.viewInsets.bottom > mediaQuery.viewPadding.bottom
+        ? mediaQuery.viewInsets.bottom
+        : mediaQuery.viewPadding.bottom;
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
@@ -173,7 +179,7 @@ class _ReservationCancelReasonBottomSheetState
       alignment: Alignment.topCenter,
       child: Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.92,
+          maxHeight: mediaQuery.size.height * 0.92,
         ),
         padding: EdgeInsets.fromLTRB(20, 16, 20, 20 + bottomInset),
         child: AnimatedSwitcher(

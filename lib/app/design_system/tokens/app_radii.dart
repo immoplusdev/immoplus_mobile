@@ -24,9 +24,12 @@ class AppRadii {
   static const BorderRadius rounded20 = BorderRadius.all(Radius.circular(r20));
   static const BorderRadius rounded24 = BorderRadius.all(Radius.circular(r24));
   static const BorderRadius rounded30 = BorderRadius.all(Radius.circular(r30));
-  static const BorderRadius roundedFull = BorderRadius.all(Radius.circular(rFull));
+  static const BorderRadius roundedFull =
+      BorderRadius.all(Radius.circular(rFull));
 
   // ── BottomSheets / Modales ──
-  static const BorderRadius topSheet = BorderRadius.vertical(top: Radius.circular(r24));
-  static const BorderRadius topSheetLarge = BorderRadius.vertical(top: Radius.circular(r30));
+  static const BorderRadius topSheet =
+      BorderRadius.vertical(top: Radius.circular(r24));
+  static const BorderRadius topSheetLarge =
+      BorderRadius.vertical(top: Radius.circular(r30));
 }

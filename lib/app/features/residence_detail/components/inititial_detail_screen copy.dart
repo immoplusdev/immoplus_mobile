@@ -35,7 +35,8 @@ class InitialDetailLogmentScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Aucun produit',
-                    style: AppTypography.font(color: CupertinoColors.systemFill),
+                    style:
+                        AppTypography.font(color: CupertinoColors.systemFill),
                   ),
                   SizedBox(
                     height: 10,

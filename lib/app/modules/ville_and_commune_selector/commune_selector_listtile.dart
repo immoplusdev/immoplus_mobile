@@ -25,8 +25,9 @@ class _CommuneSelectorListtileState extends State<CommuneSelectorListtile> {
           : CupertinoColors.tertiarySystemFill,
       leading: FaIcon(
         FontAwesomeIcons.treeCity,
-        color:
-            (communeModel != null) ? AppColors.primary : AppColors.immoTextDisabled,
+        color: (communeModel != null)
+            ? AppColors.primary
+            : AppColors.immoTextDisabled,
       ),
       title: Text(
         (communeModel != null) ? communeModel!.name : "Selectioner une commune",

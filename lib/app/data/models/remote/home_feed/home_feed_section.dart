@@ -18,8 +18,15 @@ abstract class HomeFeedSectionType {
   /// § "top_rated").
   static const topRatedKey = 'top_rated';
 
-  /// `section.key` de la section "Les moins chères"
-  static const cheapestKey = 'cheapest_rent';
+  /// `section.key` des sections "Les moins chères" des trois parcours.
+  static const cheapestStayKey = 'cheapest_stay';
+  static const cheapestRentKey = 'cheapest_rent';
+  static const cheapestBuyKey = 'cheapest_buy';
+  static const cheapestKeys = {
+    cheapestStayKey,
+    cheapestRentKey,
+    cheapestBuyKey,
+  };
 }
 
 /// Une entrée de `sections[]` dans la réponse de `GET /me/home`. La forme

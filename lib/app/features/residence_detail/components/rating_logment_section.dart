@@ -56,7 +56,8 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return const _ReviewsSkeleton();
-    if (_reviews.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+    if (_reviews.isEmpty)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     return SliverToBoxAdapter(
       child: Column(
@@ -87,8 +88,10 @@ class _RatingLogmentSectionState extends State<RatingLogmentSection> {
               scrollDirection: Axis.horizontal,
               itemCount: _reviews.length,
               separatorBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                child: VerticalDivider(color: AppColors.immoBorderDefault, width: 1),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                child: VerticalDivider(
+                    color: AppColors.immoBorderDefault, width: 1),
               ),
               itemBuilder: (context, index) {
                 final screenWidth = MediaQuery.sizeOf(context).width;
@@ -157,15 +160,18 @@ class _ReviewsSkeleton extends StatelessWidget {
               SizedBox(height: 16),
               Row(
                 children: [
-                  const CircleAvatar(radius: 24, backgroundColor: AppColors.white),
+                  const CircleAvatar(
+                      radius: 24, backgroundColor: AppColors.white),
                   SizedBox(width: 12),
                   Container(width: 120, height: 16, color: AppColors.white),
                 ],
               ),
               SizedBox(height: 12),
-              Container(width: double.infinity, height: 12, color: AppColors.white),
+              Container(
+                  width: double.infinity, height: 12, color: AppColors.white),
               SizedBox(height: 8),
-              Container(width: double.infinity, height: 12, color: AppColors.white),
+              Container(
+                  width: double.infinity, height: 12, color: AppColors.white),
               SizedBox(height: 8),
               Container(width: 180, height: 12, color: AppColors.white),
             ],

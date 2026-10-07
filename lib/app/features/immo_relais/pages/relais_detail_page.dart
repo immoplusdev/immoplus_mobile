@@ -42,7 +42,8 @@ class RelaisDetailArgs {
 class RelaisDetailPage extends StatefulWidget {
   final RelaisModel relais;
   final bool isOwner;
-  const RelaisDetailPage({super.key, required this.relais, this.isOwner = true});
+  const RelaisDetailPage(
+      {super.key, required this.relais, this.isOwner = true});
   static const String name = 'RELAIS_DETAIL_PAGE';
 
   @override
@@ -64,7 +65,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
 
   Future<void> _loadDetail() async {
     try {
-      final response = await getIt<RelaisRepository>().getRelaisById(_relais.id);
+      final response =
+          await getIt<RelaisRepository>().getRelaisById(_relais.id);
       if (mounted) setState(() => _relais = response.data);
     } catch (_) {
       // On garde l'item de liste déjà affiché si le rechargement échoue.
@@ -74,14 +76,16 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   }
 
   Future<void> _editRelais() async {
-    final updated = await context.pushNamed(EditRelaisPage.name, extra: _relais);
+    final updated =
+        await context.pushNamed(EditRelaisPage.name, extra: _relais);
     if (updated == true) _loadDetail();
   }
 
   void _confirmCancel() {
     AppDialog.show(
       title: 'Annuler cette demande ?',
-      description: 'Cette action est définitive, vous ne pourrez pas la republier telle quelle.',
+      description:
+          'Cette action est définitive, vous ne pourrez pas la republier telle quelle.',
       primaryButtonText: 'Oui, annuler',
       secondButtonText: 'Non, garder',
       onPrimary: () async {
@@ -89,7 +93,9 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           await getIt<RelaisRepository>().cancelRelais(_relais.id);
           if (mounted) context.pop(true);
         } catch (_) {
-          if (mounted) CustomPopup.showErrorToast(text: "Impossible d'annuler cette demande");
+          if (mounted)
+            CustomPopup.showErrorToast(
+                text: "Impossible d'annuler cette demande");
         }
       },
     );
@@ -109,7 +115,10 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
         ),
         title: Text(
           'Ma demande',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
+          style: AppTypography.font(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black),
         ),
         actions: [
           if (_isLoading)
@@ -139,7 +148,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
                     color: AppColors.primaryLite,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(Iconsax.home_2, color: AppColors.primary, size: 28),
+                  child:
+                      Icon(Iconsax.home_2, color: AppColors.primary, size: 28),
                 ),
                 const Gap(14),
                 Expanded(
@@ -148,18 +158,21 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
                     children: [
                       Text(
                         '${relaisPropertyTypeLabel(_relais.propertyType)} · ${_relais.rooms} chambre${_relais.rooms > 1 ? 's' : ''}',
-                        style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: AppTypography.font(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       if (_relais.createdAt != null)
                         Text(
                           'Publié le ${DateFormat('d MMM yyyy', 'fr_FR').format(_relais.createdAt!)}',
-                          style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+                          style: AppTypography.font(
+                              fontSize: 13, color: AppColors.immoTextSecondary),
                         ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: status.backgroundColor,
                     borderRadius: BorderRadius.circular(20),
@@ -189,7 +202,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               const Gap(12),
               _buildInfoCard(
                 Iconsax.calendar,
-                DateFormat('d MMMM yyyy', 'fr_FR').format(_relais.availabilityDate!),
+                DateFormat('d MMMM yyyy', 'fr_FR')
+                    .format(_relais.availabilityDate!),
               ),
             ],
             if (_relais.reporterRelation != null) ...[
@@ -218,7 +232,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               CustomLoadingButtom(
                 text: 'Je suis intéressé',
                 isLoading: false,
-                onClick: () => showExpressRelaisInterestSheet(context, relaisId: _relais.id),
+                onClick: () => showExpressRelaisInterestSheet(context,
+                    relaisId: _relais.id),
               ),
             ],
             const Gap(24),
@@ -238,7 +253,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
+      style: AppTypography.font(
+          fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
     );
   }
 
@@ -260,7 +276,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               width: 90,
               height: 90,
               color: AppColors.immoBorderDefault,
-              child: Icon(Icons.image_not_supported_outlined, color: AppColors.immoTextSecondary),
+              child: Icon(Icons.image_not_supported_outlined,
+                  color: AppColors.immoTextSecondary),
             ),
           ),
         ),
@@ -287,13 +304,15 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               children: [
                 Text(
                   _relais.location,
-                  style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600),
+                  style: AppTypography.font(
+                      fontSize: 15, fontWeight: FontWeight.w600),
                 ),
                 if (_relais.landmark != null) ...[
                   const Gap(2),
                   Text(
                     _relais.landmark!,
-                    style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+                    style: AppTypography.font(
+                        fontSize: 13, color: AppColors.immoTextSecondary),
                   ),
                 ],
               ],
@@ -319,7 +338,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           Expanded(
             child: Text(
               text,
-              style: AppTypography.font(fontSize: 14, color: const Color(0xFF1F2937)),
+              style: AppTypography.font(
+                  fontSize: 14, color: const Color(0xFF1F2937)),
             ),
           ),
         ],
@@ -334,7 +354,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           child: _buildStatCard(
             '${_relais.interestedCount}',
             _relais.interestedCount > 1 ? 'Intéressés' : 'Intéressé',
-            onTap: () => context.pushNamed(RelaisInterestsPage.name, extra: _relais.id),
+            onTap: () =>
+                context.pushNamed(RelaisInterestsPage.name, extra: _relais.id),
           ),
         ),
         const Gap(12),
@@ -342,7 +363,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           child: _buildStatCard(
             '${_relais.potentialMatches}',
             'Correspondances',
-            onTap: () => context.pushNamed(RelaisMatchesPage.name, extra: _relais.id),
+            onTap: () =>
+                context.pushNamed(RelaisMatchesPage.name, extra: _relais.id),
           ),
         ),
       ],
@@ -358,11 +380,15 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               side: BorderSide(color: AppColors.immoBorderStrong),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
               'Modifier',
-              style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.black),
+              style: AppTypography.font(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.black),
             ),
           ),
         ),
@@ -373,11 +399,15 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               side: BorderSide(color: AppColors.red),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
               'Annuler',
-              style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.red),
+              style: AppTypography.font(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.red),
             ),
           ),
         ),
@@ -399,12 +429,14 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           children: [
             Text(
               value,
-              style: AppTypography.font(fontSize: 20, fontWeight: FontWeight.bold),
+              style:
+                  AppTypography.font(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const Gap(2),
             Text(
               label,
-              style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
             ),
           ],
         ),

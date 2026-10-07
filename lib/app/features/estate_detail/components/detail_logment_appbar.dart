@@ -112,4 +112,3 @@ class _DetailEstateAppBarState extends State<DetailEstateAppBar> {
     );
   }
 }
-

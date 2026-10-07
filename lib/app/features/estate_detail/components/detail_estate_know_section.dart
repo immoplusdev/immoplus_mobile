@@ -29,7 +29,8 @@ class DetailEstateKnowSection extends StatelessWidget {
             ],
           ),
 
-          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
+          Divider(
+              height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Informations légales ──
           const _KnowCard(
@@ -41,7 +42,8 @@ class DetailEstateKnowSection extends StatelessWidget {
             ],
           ),
 
-          Divider(height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
+          Divider(
+              height: 32, thickness: 0.5, color: AppColors.immoBorderDefault),
 
           // ── Contact agent ──
           // const _KnowCard(

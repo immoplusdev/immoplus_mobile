@@ -208,77 +208,83 @@ class _ForYouCheapestStackedSectionState
         children: [
           HomeSectionTitle(title: widget.section.title),
           const Gap(14),
-          SizedBox(
-            height: 250,
-            width: double.infinity,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final cardWidth = constraints.maxWidth;
-                final isDraggingRight = _dragOffset.dx > 0;
-                final dragRatio =
-                    (cardWidth > 0 ? (_dragOffset.dx.abs() / cardWidth) : 0.0)
+          LayoutBuilder(
+            builder: (context, outerConstraints) {
+              final cardHeight = outerConstraints.maxWidth * 220.9 / 355.6;
+              return SizedBox(
+                height: cardHeight + 20,
+                width: double.infinity,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final cardWidth = constraints.maxWidth;
+                    final isDraggingRight = _dragOffset.dx > 0;
+                    final dragRatio = (cardWidth > 0
+                            ? (_dragOffset.dx.abs() / cardWidth)
+                            : 0.0)
                         .clamp(0.0, 1.0);
 
-                return GestureDetector(
-                  onPanStart: _onPanStart,
-                  onPanUpdate: _onPanUpdate,
-                  onPanEnd: (details) => _onPanEnd(details, cardWidth),
-                  onTap: () =>
-                      _handleCardTap(_items[_currentIndex % cardCount]),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.center,
-                    children: [
-                      if (!isDraggingRight) ...[
-                        // ── Navigation en avant (Swipe gauche) ──
-                        // 3ème carte dans la pile
-                        if (cardCount > 2)
-                          _buildStackedCard(
-                            item: _items[(_currentIndex + 2) % cardCount],
-                            depth: 2,
-                            dragRatio: dragRatio,
-                          ),
+                    return GestureDetector(
+                      onPanStart: _onPanStart,
+                      onPanUpdate: _onPanUpdate,
+                      onPanEnd: (details) => _onPanEnd(details, cardWidth),
+                      onTap: () =>
+                          _handleCardTap(_items[_currentIndex % cardCount]),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.center,
+                        children: [
+                          if (!isDraggingRight) ...[
+                            // ── Navigation en avant (Swipe gauche) ──
+                            // 3ème carte dans la pile
+                            if (cardCount > 2)
+                              _buildStackedCard(
+                                item: _items[(_currentIndex + 2) % cardCount],
+                                depth: 2,
+                                dragRatio: dragRatio,
+                              ),
 
-                        // 2ème carte dans la pile
-                        if (cardCount > 1)
-                          _buildStackedCard(
-                            item: _items[(_currentIndex + 1) % cardCount],
-                            depth: 1,
-                            dragRatio: dragRatio,
-                          ),
+                            // 2ème carte dans la pile
+                            if (cardCount > 1)
+                              _buildStackedCard(
+                                item: _items[(_currentIndex + 1) % cardCount],
+                                depth: 1,
+                                dragRatio: dragRatio,
+                              ),
 
-                        // Carte principale active (qui glisse vers la gauche)
-                        _buildTopCard(_items[_currentIndex % cardCount]),
-                      ] else ...[
-                        // ── Navigation en arrière (Swipe droit) ──
-                        // La pile recule doucement en profondeur
-                        if (cardCount > 2)
-                          _buildStackedCard(
-                            item: _items[(_currentIndex + 1) % cardCount],
-                            depth: 2,
-                            dragRatio: -dragRatio,
-                          ),
+                            // Carte principale active (qui glisse vers la gauche)
+                            _buildTopCard(_items[_currentIndex % cardCount]),
+                          ] else ...[
+                            // ── Navigation en arrière (Swipe droit) ──
+                            // La pile recule doucement en profondeur
+                            if (cardCount > 2)
+                              _buildStackedCard(
+                                item: _items[(_currentIndex + 1) % cardCount],
+                                depth: 2,
+                                dragRatio: -dragRatio,
+                              ),
 
-                        if (cardCount > 1)
-                          _buildStackedCard(
-                            item: _items[_currentIndex % cardCount],
-                            depth: 1,
-                            dragRatio: -dragRatio,
-                          ),
+                            if (cardCount > 1)
+                              _buildStackedCard(
+                                item: _items[_currentIndex % cardCount],
+                                depth: 1,
+                                dragRatio: -dragRatio,
+                              ),
 
-                        // Carte précédente qui entre fluidement depuis la gauche au-dessus de la pile
-                        _buildIncomingPrevCard(
-                          item: _items[
-                              (_currentIndex - 1 + cardCount) % cardCount],
-                          cardWidth: cardWidth,
-                          dragRatio: dragRatio,
-                        ),
-                      ],
-                    ],
-                  ),
-                );
-              },
-            ),
+                            // Carte précédente qui entre fluidement depuis la gauche au-dessus de la pile
+                            _buildIncomingPrevCard(
+                              item: _items[
+                                  (_currentIndex - 1 + cardCount) % cardCount],
+                              cardWidth: cardWidth,
+                              dragRatio: dragRatio,
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           ),
           if (cardCount > 1) ...[
             const Gap(12),
@@ -427,37 +433,51 @@ class _CardContent extends StatelessWidget {
         ? Utils.getImagePath(id: _imageUrl!)
         : '';
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.14),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // 1. Image de fond
-            if (formattedUrl.isNotEmpty)
-              CachedNetworkImage(
-                imageUrl: formattedUrl,
-                fit: BoxFit.cover,
-                memCacheWidth: 800,
-                fadeInDuration: Duration.zero,
-                fadeOutDuration: Duration.zero,
-                placeholder: (context, url) => Shimmer.fromColors(
-                  baseColor: AppColors.immoBorderStrong,
-                  highlightColor: AppColors.immoBgSurfaceMuted,
-                  period: const Duration(milliseconds: 500),
-                  child: Container(color: AppColors.white),
-                ),
-                errorWidget: (context, url, error) => Container(
+    return AspectRatio(
+      aspectRatio: 355.6 / 220.9,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.14),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // 1. Image de fond
+              if (formattedUrl.isNotEmpty)
+                CachedNetworkImage(
+                  imageUrl: formattedUrl,
+                  fit: BoxFit.cover,
+                  memCacheWidth: 800,
+                  fadeInDuration: Duration.zero,
+                  fadeOutDuration: Duration.zero,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: AppColors.immoBorderStrong,
+                    highlightColor: AppColors.immoBgSurfaceMuted,
+                    period: const Duration(milliseconds: 500),
+                    child: Container(color: AppColors.white),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: const Color(0xFF2C3444),
+                    child: Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.images,
+                        size: 40,
+                        color: AppColors.white.withValues(alpha: 0.3),
+                      ),
+                    ),
+                  ),
+                )
+              else
+                Container(
                   color: const Color(0xFF2C3444),
                   child: Center(
                     child: FaIcon(
@@ -467,98 +487,87 @@ class _CardContent extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
-            else
+
+              // 2. Dégradé sombre pour la lisibilité
               Container(
-                color: const Color(0xFF2C3444),
-                child: Center(
-                  child: FaIcon(
-                    FontAwesomeIcons.images,
-                    size: 40,
-                    color: AppColors.white.withValues(alpha: 0.3),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.1),
+                      Colors.black.withValues(alpha: 0.78),
+                    ],
+                    stops: const [0.3, 0.6, 1.0],
                   ),
                 ),
               ),
 
-            // 2. Dégradé sombre pour la lisibilité
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.1),
-                    Colors.black.withValues(alpha: 0.78),
-                  ],
-                  stops: const [0.3, 0.6, 1.0],
-                ),
-              ),
-            ),
-
-            // 3. Contenu texte et badge orange
-            Positioned(
-              left: 18,
-              right: 18,
-              bottom: 18,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Badge orange "Les moins chères"
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF79E38),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      sectionTitle.isNotEmpty
-                          ? sectionTitle
-                          : 'Les moins cheres',
-                      style: AppTypography.font(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.white,
+              // 3. Contenu texte et badge orange
+              Positioned(
+                left: 18,
+                right: 18,
+                bottom: 18,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Badge orange "Les moins chères"
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF79E38),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        sectionTitle.isNotEmpty
+                            ? sectionTitle
+                            : 'Les moins cheres',
+                        style: AppTypography.font(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(8),
+                    const Gap(8),
 
-                  // Titre
-                  Text(
-                    _name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.font(
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                    ),
-                  ),
-
-                  // Description
-                  if (_description != null &&
-                      _description!.trim().isNotEmpty) ...[
-                    const Gap(4),
+                    // Titre
                     Text(
-                      _description!,
+                      _name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.font(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.white.withValues(alpha: 0.9),
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
                       ),
                     ),
+
+                    // Description
+                    if (_description != null &&
+                        _description!.trim().isNotEmpty) ...[
+                      const Gap(4),
+                      Text(
+                        _description!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.font(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.white.withValues(alpha: 0.9),
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

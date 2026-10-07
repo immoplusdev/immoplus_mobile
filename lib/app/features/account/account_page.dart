@@ -559,8 +559,8 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildTermsTile(dynamic shape) {
     return SettingsTile(
       shape: shape,
-      leading: _iconLeading(Icon(CupertinoIcons.text_alignleft,
-          size: 20, color: _kIconColor)),
+      leading: _iconLeading(
+          Icon(CupertinoIcons.text_alignleft, size: 20, color: _kIconColor)),
       title: 'Termes et conditions',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,

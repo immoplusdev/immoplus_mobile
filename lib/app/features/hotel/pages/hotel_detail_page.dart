@@ -518,8 +518,8 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: AppColors.immoBorderStrong, width: 0.8),
+                      border: Border.all(
+                          color: AppColors.immoBorderStrong, width: 0.8),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -571,8 +571,8 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
         const Gap(8),
         Flexible(
           child: Text(text,
-              style:
-                  AppTypography.font(fontSize: 14, overflow: TextOverflow.fade)),
+              style: AppTypography.font(
+                  fontSize: 14, overflow: TextOverflow.fade)),
         ),
       ],
     );
@@ -594,7 +594,9 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
               const Gap(4),
               Text(subtitle,
                   style: AppTypography.font(
-                      color: AppColors.immoTextLabel, fontSize: 13, height: 1.4)),
+                      color: AppColors.immoTextLabel,
+                      fontSize: 13,
+                      height: 1.4)),
             ],
           ),
         ),

@@ -66,8 +66,8 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon:
-                    const Icon(Icons.arrow_back, color: AppColors.black, size: 20),
+                icon: const Icon(Icons.arrow_back,
+                    color: AppColors.black, size: 20),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -110,7 +110,8 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                           Text(
                             "${estimation.roomTypeName} • ${estimation.adults} adulte${estimation.adults > 1 ? 's' : ''}",
                             style: AppTypography.font(
-                                color: AppColors.immoTextSecondary, fontSize: 13),
+                                color: AppColors.immoTextSecondary,
+                                fontSize: 13),
                           ),
                         ],
                       ),
@@ -161,7 +162,8 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                         color: AppColors.immoBrandPrimary.withOpacity(0.06),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                            color: AppColors.immoBrandPrimary.withOpacity(0.15)),
+                            color:
+                                AppColors.immoBrandPrimary.withOpacity(0.15)),
                       ),
                       padding: const EdgeInsets.all(20),
                       child: Column(
@@ -218,7 +220,8 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                           ),
                           const Gap(16),
                           Divider(
-                              color: AppColors.immoBrandPrimary.withOpacity(0.15),
+                              color:
+                                  AppColors.immoBrandPrimary.withOpacity(0.15),
                               height: 1,
                               thickness: 0.5),
                           const Gap(16),
@@ -325,7 +328,8 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                                 builder: (context) => HotelPaymentSelectorPage(
                                   hotelId: hotel.hotelId,
                                   paymentPageAdapter: PaymentPageAdapter(
-                                    collection: ProductType.hotel_reservation.name,
+                                    collection:
+                                        ProductType.hotel_reservation.name,
                                     itemId: response.reservationId,
                                     amount: response.acompte!.montant,
                                     extra: {'hotelId': hotel.hotelId},
@@ -362,9 +366,11 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label,
-            style: AppTypography.font(color: AppColors.immoTextLabel, fontSize: 14)),
+            style: AppTypography.font(
+                color: AppColors.immoTextLabel, fontSize: 14)),
         Text(amount,
-            style: AppTypography.font(fontWeight: FontWeight.w600, fontSize: 14)),
+            style:
+                AppTypography.font(fontWeight: FontWeight.w600, fontSize: 14)),
       ],
     );
   }

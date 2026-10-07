@@ -53,10 +53,8 @@ abstract class MessagingProvider {
     @Path('conversationId') String conversationId,
   );
 
-  /// Toujours les `limit` derniers messages (plus récent en premier) : le
-  /// backend n'a pas de paramètre de curseur — `getMessages` ne peut donc
-  /// charger que ce lot, jamais "plus ancien" (confirmé côté code backend :
-  /// seul `limit` est lu par ce endpoint).
+  /// Charge le premier lot. La pagination `before` est gérée dans le
+  /// repository pour rester compatible avec le client Retrofit généré.
   @GET('/conversations/{conversationId}/messages')
   Future<List<MessageModel>> getMessages(
     @Path('conversationId') String conversationId, {

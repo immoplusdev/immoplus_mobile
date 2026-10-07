@@ -222,7 +222,8 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                   : Container(
                       color: AppColors.immoBorderDefault,
                       child: Center(
-                        child: Icon(Icons.hotel, size: 64, color: AppColors.immoTextSecondary),
+                        child: Icon(Icons.hotel,
+                            size: 64, color: AppColors.immoTextSecondary),
                       ),
                     ),
             ),
@@ -483,8 +484,8 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: AppColors.immoBorderStrong, width: 0.8),
+                      border: Border.all(
+                          color: AppColors.immoBorderStrong, width: 0.8),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(

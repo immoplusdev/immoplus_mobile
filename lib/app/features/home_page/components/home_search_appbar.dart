@@ -385,8 +385,9 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               child: Text(
                 item.label,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color:
-                          isSelected ? AppColors.white : const Color(0xff333333),
+                      color: isSelected
+                          ? AppColors.white
+                          : const Color(0xff333333),
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.w500,
                       fontSize: 12,

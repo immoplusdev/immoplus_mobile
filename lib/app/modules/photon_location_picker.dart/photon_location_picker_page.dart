@@ -155,33 +155,31 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                 ),
               ),
             ),
-            ...results
-                .map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: ListTile(
-                      tileColor: AppColors.white,
-                      onTap: () {
-                        inspect(e.geoJson);
-                        widget.onSeleted!(e);
-                      },
-                      leading: const CircleAvatar(
-                          backgroundColor: AppColors.transparent,
-                          child: Icon(
-                            CupertinoIcons.location_solid,
-                            size: 30,
-                            color: AppColors.blue,
-                          )),
-                      title: (e.properties!.city == null)
-                          ? Text(e.properties!.name ?? 'name')
-                          : Text(e.properties!.city ?? 'name'),
-                      subtitle: (e.properties!.city != null)
-                          ? Text(e.properties!.name ?? 'name')
-                          : null,
-                    ),
-                  ),
-                )
-                ,
+            ...results.map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: ListTile(
+                  tileColor: AppColors.white,
+                  onTap: () {
+                    inspect(e.geoJson);
+                    widget.onSeleted!(e);
+                  },
+                  leading: const CircleAvatar(
+                      backgroundColor: AppColors.transparent,
+                      child: Icon(
+                        CupertinoIcons.location_solid,
+                        size: 30,
+                        color: AppColors.blue,
+                      )),
+                  title: (e.properties!.city == null)
+                      ? Text(e.properties!.name ?? 'name')
+                      : Text(e.properties!.city ?? 'name'),
+                  subtitle: (e.properties!.city != null)
+                      ? Text(e.properties!.name ?? 'name')
+                      : null,
+                ),
+              ),
+            ),
           ]),
         ),
       ),

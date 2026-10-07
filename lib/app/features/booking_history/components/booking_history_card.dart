@@ -148,7 +148,9 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
 
                   Divider(
-                      height: 1, thickness: 0.5, color: AppColors.immoBgSurfaceMuted),
+                      height: 1,
+                      thickness: 0.5,
+                      color: AppColors.immoBgSurfaceMuted),
 
                   // ── Dates ──
                   Padding(
@@ -183,7 +185,9 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
 
                   Divider(
-                      height: 1, thickness: 0.5, color: AppColors.immoBgSurfaceMuted),
+                      height: 1,
+                      thickness: 0.5,
+                      color: AppColors.immoBgSurfaceMuted),
 
                   // ── Nuits + montant ──
                   Padding(
@@ -202,7 +206,8 @@ class BookingHistoryCard extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
-                                  ?.copyWith(color: AppColors.immoTextSecondary),
+                                  ?.copyWith(
+                                      color: AppColors.immoTextSecondary),
                             ),
                           ],
                         ),
@@ -227,11 +232,13 @@ class BookingHistoryCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.immoFeedbackScore, // Orange/Gold for rating
+                      color:
+                          AppColors.immoFeedbackScore, // Orange/Gold for rating
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.immoFeedbackScore.withValues(alpha: 0.3),
+                          color: AppColors.immoFeedbackScore
+                              .withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
