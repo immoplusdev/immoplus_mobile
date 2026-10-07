@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LoadProductCard extends StatelessWidget {
   LoadProductCard({super.key});
 
   final _deco = BoxDecoration(
-    color: Colors.yellow,
+    color: AppColors.gold400,
     borderRadius: BorderRadius.circular(15),
   );
 
@@ -20,8 +21,8 @@ class LoadProductCard extends StatelessWidget {
     final priceWidth = (availableWidth * 0.28).clamp(70.0, 100.0);
 
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
+      baseColor: AppColors.gray300,
+      highlightColor: AppColors.gray100,
       period: const Duration(milliseconds: 500),
       child: Container(
         margin: const EdgeInsets.only(bottom: 15),
@@ -32,7 +33,7 @@ class LoadProductCard extends StatelessWidget {
               decoration: _deco,
               height: imageHeight,
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: 15),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,7 +58,7 @@ class LoadProductCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Flexible(
                   child: Align(
                     alignment: Alignment.topRight,

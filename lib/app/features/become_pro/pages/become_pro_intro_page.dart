@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/become_pro/pages/become_pro_form_page.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/gen/assets.gen.dart';
@@ -14,13 +13,13 @@ class BecomeProIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.gradientBottom,
+      backgroundColor: AppColors.immoBecomeProGradientBottom,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => context.pop(),
         ),
       ),
@@ -30,7 +29,10 @@ class BecomeProIntroPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.gradientTop, AppColors.gradientBottom],
+                colors: [
+                  AppColors.immoBecomeProGradientTop,
+                  AppColors.immoBecomeProGradientBottom
+                ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -52,8 +54,8 @@ class BecomeProIntroPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.3)
+                          AppColors.transparent,
+                          AppColors.black.withValues(alpha: 0.3)
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -72,43 +74,37 @@ class BecomeProIntroPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 48),
+                  SizedBox(height: 48),
 
                   // Title
                   Center(
                     child: Text(
                       "Passez en compte\nprofessionnel",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        height: 1.2,
+                      style: AppTypography.h1.copyWith(
+                        color: AppColors.white,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
 
                   // Subtitle
                   Center(
                     child: Text(
                       "Publiez vos biens, gérez vos annonces et atteignez\nplus de clients avec Immo Plus.",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white.withOpacity(0.9),
-                        height: 1.4,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.white.withOpacity(0.9),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40),
 
                   // Badges
                   _buildFeatureBadge("Publier des appartements et terrains"),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   _buildFeatureBadge("Gérer vos demandes facilement"),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   _buildFeatureBadge("Toucher plus de clients"),
 
                   const Spacer(),
@@ -119,7 +115,7 @@ class BecomeProIntroPage extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 32.0),
                     child: CustomButtom(
                       text: "Devenir Pro",
-                      // color: AppColors.darkBluePrimary,
+                      // color: AppColors.immoBecomeProPrimary,
                       borderRadius: BorderRadius.circular(28),
                       onClick: () {
                         context.replaceNamed(BecomeProFormPage.name);
@@ -139,15 +135,13 @@ class BecomeProIntroPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
+        color: AppColors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Text(
         text,
-        style: GoogleFonts.plusJakartaSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: Colors.white,
+        style: AppTypography.labelMedium.copyWith(
+          color: AppColors.white,
         ),
       ),
     );

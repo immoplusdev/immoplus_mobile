@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -56,18 +57,18 @@ class _PropertyTypeDropdownState extends State<PropertyTypeDropdown> {
           filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: AppColors.white.withValues(alpha: 0.08),
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
                 left: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
                 right: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.white.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -111,8 +112,8 @@ class _PropertyTypeOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.white.withValues(alpha: 0.12)
-              : Colors.transparent,
+              ? AppColors.white.withValues(alpha: 0.12)
+              : AppColors.transparent,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -123,16 +124,16 @@ class _PropertyTypeOption extends StatelessWidget {
                 child: Container(
                   width: 4,
                   height: 4,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
                     shape: BoxShape.circle,
                   ),
                 ),
               ),
             Text(
               type.label,
-              style: TextStyle(
-                color: Colors.white,
+              style: AppTypography.font(
+                color: AppColors.white,
                 fontSize: 14,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),

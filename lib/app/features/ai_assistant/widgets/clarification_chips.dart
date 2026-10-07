@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
@@ -96,7 +97,7 @@ class _ClarificationBlockState extends State<ClarificationBlock>
                         if (totalSteps > 1) ...[
                           _ProgressIndicator(
                               done: doneSteps, total: totalSteps),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12),
                         ],
                         if (understood.isNotEmpty) ...[
                           const _SectionLabel(
@@ -104,7 +105,7 @@ class _ClarificationBlockState extends State<ClarificationBlock>
                             label: 'Compris',
                             color: ChatTokens.success500,
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10),
                           Wrap(
                             spacing: 6,
                             runSpacing: 6,
@@ -113,13 +114,13 @@ class _ClarificationBlockState extends State<ClarificationBlock>
                                 .toList(),
                           ),
                           if (options.isNotEmpty) ...[
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12),
                             const Divider(
                               height: 1,
                               thickness: 0.5,
                               color: ChatTokens.divider,
                             ),
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12),
                           ],
                         ],
                         if (options.isNotEmpty)
@@ -235,7 +236,7 @@ class _ProgressIndicator extends StatelessWidget {
     return Row(
       children: [
         for (var i = 0; i < total; i++) ...[
-          if (i > 0) const SizedBox(width: 4),
+          if (i > 0) SizedBox(width: 4),
           AnimatedContainer(
             duration: const Duration(milliseconds: 350),
             curve: Curves.easeOut,
@@ -247,10 +248,10 @@ class _ProgressIndicator extends StatelessWidget {
             ),
           ),
         ],
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Text(
           '$done/$total critères',
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: ChatTokens.neutral400,
@@ -278,10 +279,10 @@ class _SectionLabel extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 14, color: color),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           label,
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 12,
             fontWeight: FontWeight.w600,
             color: color,
@@ -307,7 +308,7 @@ class _ReadOnlyChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 13,
           fontWeight: FontWeight.w500,
           color: ChatTokens.readOnlyChipText,
@@ -327,7 +328,7 @@ class ChoiceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
@@ -341,7 +342,7 @@ class ChoiceChip extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Text(
               label,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: ChatTokens.brand500,

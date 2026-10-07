@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:gap/gap.dart';
@@ -17,7 +18,7 @@
 // class _SimilarLogmentSectionState extends State<SimilarLogmentSection> {
 //   BoxDecoration loadCardDecoration = BoxDecoration(
 //     borderRadius: BorderRadius.circular(15),
-//     color: Colors.red,
+//     color: AppColors.red,
 //   );
 //   List<ResidenceModel> datas = [];
 //   bool _isLoading = true;
@@ -45,7 +46,7 @@
 //             child: Shimmer.fromColors(
 //               period: Duration(milliseconds: 800),
 //               baseColor: CupertinoColors.tertiarySystemFill,
-//               highlightColor: Colors.grey.shade100,
+//               highlightColor: AppColors.immoBgSurfaceMuted,
 //               child: ListView.builder(
 //                 itemCount: 5,
 //                 scrollDirection: Axis.horizontal,

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,7 +30,7 @@ class NamePasswordRegistration extends StatelessWidget {
       child: ClipRRect(
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.transparent,
+            color: AppColors.transparent,
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 18),

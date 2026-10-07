@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,19 +12,19 @@
 //     shape: const RoundedRectangleBorder(
 //         borderRadius: BorderRadius.only(
 //             topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-//     backgroundColor: Colors.white,
+//     backgroundColor: AppColors.white,
 //     context: context,
 //     builder: (BuildContext context) {
 //       return Container(
 //         padding: const EdgeInsets.only(top: 1),
-//         decoration: const BoxDecoration(
+//         decoration: BoxDecoration(
 //             borderRadius: BorderRadius.only(
 //                 topLeft: Radius.circular(30), topRight: Radius.circular(30))),
 //         height: MediaQuery.of(context).size.height - 250,
 //         child: Scaffold(
-//           backgroundColor: Colors.transparent,
+//           backgroundColor: AppColors.transparent,
 //           appBar: AppBar(
-//             backgroundColor: Colors.transparent,
+//             backgroundColor: AppColors.transparent,
 //             automaticallyImplyLeading: false,
 //             actions: [
 //               IconButton(
@@ -43,7 +44,7 @@
 //             builder: (context, state) {
 //               return (state is AccounReadyState)
 //                   ? Container(
-//                       //color: Colors.amber,
+//                       //color: AppColors.amber,
 //                       width: double.infinity,
 //                       height: 300,
 //                       child: Column(
@@ -57,20 +58,20 @@
 //                             size: 100,
 //                             color: (state.status)
 //                                 ? Color.fromARGB(255, 81, 150, 92)
-//                                 : Colors.redAccent,
+//                                 : AppColors.redAccent,
 //                           ),
 //                           Text(
 //                             (state.status)
 //                                 ? "Opperation réussit"
 //                                 : "Opperation échoué",
-//                             style: TextStyle(
+//                             style: AppTypography.font(
 //                               fontSize: 20,
 //                               color: (state.status)
 //                                   ? Color.fromARGB(255, 81, 150, 92)
-//                                   : Colors.redAccent,
+//                                   : AppColors.redAccent,
 //                             ),
 //                           ),
-//                           const SizedBox(
+//                           SizedBox(
 //                             height: 20,
 //                           ),
 //                           (state.status)
@@ -93,7 +94,7 @@
 //                     )
 //                   : (state is AccountPendingState)
 //                       ? Container(
-//                           //color: Colors.red,
+//                           //color: AppColors.red,
 //                           //width: double.infinity,
 //                           height: 300,
 //                           child: Center(

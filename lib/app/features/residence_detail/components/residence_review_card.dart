@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -54,7 +55,7 @@ class ResidenceReviewCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor: Colors.grey.shade200,
+                backgroundColor: AppColors.immoBorderDefault,
                 backgroundImage: review.reviewerAvatarId?.isNotEmpty == true
                     ? CachedNetworkImageProvider(
                         Utils.getImagePath(id: review.reviewerAvatarId!),
@@ -66,41 +67,43 @@ class ResidenceReviewCard extends StatelessWidget {
                         review.reviewerName.isNotEmpty
                             ? review.reviewerName[0].toUpperCase()
                             : '?',
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Text(
                 review.reviewerName,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               _Stars(rating: review.propertyRating),
               if (ratedAt != null) ...[
-                const Text(' · ', style: TextStyle(color: Colors.grey)),
+                Text(' · ',
+                    style:
+                        AppTypography.font(color: AppColors.immoTextSecondary)),
                 Text(
                   timeago.format(ratedAt, locale: _kFrenchLocale),
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
-                    color: Colors.grey.shade700,
+                    color: AppColors.immoTextLabel,
                   ),
                 ),
               ],
             ],
           ),
           if (feedback != null && feedback.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _ExpandableFeedback(text: feedback),
           ],
         ],
@@ -121,7 +124,7 @@ class _Stars extends StatelessWidget {
         return Icon(
           i < rating ? Icons.star_rounded : Icons.star_border_rounded,
           size: 16,
-          color: const Color(0xFF222222),
+          color: AppColors.immoTextPrimary,
         );
       }),
     );
@@ -141,10 +144,10 @@ class _ExpandableFeedbackState extends State<_ExpandableFeedback> {
 
   @override
   Widget build(BuildContext context) {
-    final style = TextStyle(
+    final style = AppTypography.font(
       fontSize: 15,
       fontWeight: FontWeight.w400,
-      color: Colors.grey.shade800,
+      color: AppColors.immoTextLabel,
       height: 1.5,
     );
 
@@ -175,15 +178,15 @@ class _ExpandableFeedbackState extends State<_ExpandableFeedback> {
           },
         ),
         if (_hasOverflow) ...[
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           GestureDetector(
             onTap: () => _showFullFeedback(context),
-            child: const Text(
+            child: Text(
               'Afficher plus',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
                 decoration: TextDecoration.underline,
               ),
             ),
@@ -199,7 +202,7 @@ class _ExpandableFeedbackState extends State<_ExpandableFeedback> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -213,9 +216,9 @@ class _ExpandableFeedbackState extends State<_ExpandableFeedback> {
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
           child: Text(
             widget.text.capitalizeFirst(),
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 15,
-              color: Colors.grey.shade800,
+              color: AppColors.immoTextLabel,
               height: 1.6,
             ),
           ),

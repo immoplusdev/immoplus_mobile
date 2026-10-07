@@ -6,7 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/appli/widgets/date_creation_widget.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus/app/features/visits/visit_pending_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -39,8 +39,8 @@ class VisitHistoryCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Colors.white,
-            border: Border.all(color: const Color(0xFFF2F4F7)),
+            color: AppColors.white,
+            border: Border.all(color: AppColors.immoBorderDefault),
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -55,8 +55,8 @@ class VisitHistoryCard extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: isExpress
-                          ? const Color(0xFFFEF3F2)
-                          : const Color(0xFFF4F3FF),
+                          ? AppColors.immoFeedbackErrorSubtle
+                          : AppColors.immoBrandPrimarySubtle,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -66,20 +66,20 @@ class VisitHistoryCard extends StatelessWidget {
                           isExpress ? Iconsax.flash_1 : Iconsax.calendar_1,
                           size: 14,
                           color: isExpress
-                              ? const Color(0xFFF04438)
-                              : const Color(0xFF7A5AF8),
+                              ? AppColors.immoFeedbackError
+                              : AppColors.purple7A5AF8,
                         ),
                         const Gap(4),
                         Text(
                           demandeVisiteModel.typeDemandeVisite
                               .toString()
                               .toUpperCase(),
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: isExpress
-                                ? const Color(0xFFF04438)
-                                : const Color(0xFF7A5AF8),
+                                ? AppColors.immoFeedbackError
+                                : AppColors.purple7A5AF8,
                           ),
                         ),
                       ],
@@ -114,7 +114,7 @@ class VisitHistoryCard extends StatelessWidget {
                     Icon(
                       Iconsax.location,
                       size: 14,
-                      color: const Color(0xFF667085),
+                      color: AppColors.immoTextSecondary,
                     ),
                     const Gap(4),
                     Expanded(
@@ -123,7 +123,7 @@ class VisitHistoryCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),
@@ -132,7 +132,10 @@ class VisitHistoryCard extends StatelessWidget {
               ],
 
               const Gap(12),
-              Divider(thickness: 0.5, color: Colors.grey.shade200, height: 1),
+              Divider(
+                  thickness: 0.5,
+                  color: AppColors.immoBorderDefault,
+                  height: 1),
               const Gap(12),
 
               // Date de visite ou message "pas de date"
@@ -141,15 +144,15 @@ class VisitHistoryCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFFAEB),
+                    color: AppColors.orange50,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Iconsax.calendar_remove,
                         size: 16,
-                        color: Color(0xFFF79009),
+                        color: AppColors.immoFeedbackWarning,
                       ),
                       const Gap(8),
                       Expanded(
@@ -157,7 +160,7 @@ class VisitHistoryCard extends StatelessWidget {
                           "Aucune date de visite planifiée",
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFFB54708),
+                                    color: AppColors.amber800,
                                     fontWeight: FontWeight.w500,
                                   ),
                         ),
@@ -186,7 +189,7 @@ class VisitHistoryCard extends StatelessWidget {
                             Utils.formatDatOnly(
                                 dateTime: demandeVisiteModel
                                     .datesDemandeVisite.first.date!),
-                            style: TextStyle(
+                            style: AppTypography.font(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.primary,
@@ -214,7 +217,7 @@ class VisitHistoryCard extends StatelessWidget {
                             Utils.formatTimeOnly(
                                 dateTime: demandeVisiteModel
                                     .datesDemandeVisite.first.date!),
-                            style: TextStyle(
+                            style: AppTypography.font(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.primary,

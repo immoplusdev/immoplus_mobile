@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class CustomMarker extends StatelessWidget {
   // Declare a global key and get it through Constructor
@@ -24,21 +25,22 @@ class CustomMarker extends StatelessWidget {
           Container(
             width: 80,
             height: 80,
-            decoration: const BoxDecoration(
-              color: Colors.amber,
+            decoration: BoxDecoration(
+              color: AppColors.immoFeedbackWarning,
               shape: BoxShape.circle,
             ),
-            child: const Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.accessibility,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 35,
                 ),
                 Text(
                   'Widget',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style:
+                      AppTypography.font(color: AppColors.white, fontSize: 12),
                 ),
               ],
             ),
@@ -54,7 +56,7 @@ class _TrianglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.amber
+      ..color = AppColors.immoFeedbackWarning
       ..style = PaintingStyle.fill;
 
     final path = Path();

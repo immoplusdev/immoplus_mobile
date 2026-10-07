@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class CustomEmptyState extends StatelessWidget {
@@ -31,7 +30,7 @@ class CustomEmptyState extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         decoration: BoxDecoration(
-          color: const Color(0xFFE8EEFF),
+          color: AppColors.blue75,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -40,8 +39,8 @@ class CustomEmptyState extends StatelessWidget {
             Container(
               width: 50,
               height: 50,
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: AppColors.white,
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: AppColors.primary),
@@ -50,39 +49,36 @@ class CustomEmptyState extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: GoogleFonts.dmSans(
-                fontSize: 18,
+              style: AppTypography.h4.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.immoTextPrimary,
               ),
             ),
             const Gap(8),
             Text(
               description,
               textAlign: TextAlign.center,
-              style: GoogleFonts.dmSans(
-                fontSize: 13,
-                color: Colors.grey,
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.immoTextSecondary,
               ),
             ),
             const Gap(24),
             SizedBox(
-              width: 220,
               child: CustomButtom(
                 text: buttonText,
                 color: AppColors.primary,
                 onClick: onButtonPressed,
                 child: buttonIcon != null
                     ? Row(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           buttonIcon!,
                           const Gap(8),
                           Text(
                             buttonText,
-                            style: GoogleFonts.dmSans(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
+                            style: AppTypography.button.copyWith(
+                              color: AppColors.white,
                             ),
                           ),
                         ],

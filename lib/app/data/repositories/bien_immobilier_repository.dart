@@ -108,31 +108,6 @@ class BienImmobilierRepository {
     }
   }
 
-  Future<DemandeVisiteCollection> getVisitesOwner({
-    required String id,
-    required int page,
-    required int perPage,
-    String? orderBy,
-    String? orderDir,
-    String? search,
-  }) async {
-    //dioClient.options.queryParameters['meta'] = '*';
-    try {
-      final response = await BienImmobilierProvider(dioClient)
-          .getVisiteOwner(search, id, page, perPage, orderBy, orderDir);
-      inspect(response);
-      return response;
-    } on DioException catch (dioError) {
-      // Gérer les exceptions Dio ici
-      log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
-    } catch (error) {
-      // Gérer d'autres types d'exceptions ici
-      log('Error: $error');
-      throw Exception('Failed to load users: $error');
-    }
-  }
-
   Future<DemandeVisiteCollection> getVisites({
     required int page,
     required int perPage,

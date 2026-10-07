@@ -18,7 +18,7 @@ import 'package:immoplus/app/features/booking/widgets/logment_info.dart';
 import 'package:immoplus/app/features/rating/widgets/rating_bottom_sheet.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'dart:async';
@@ -37,7 +37,9 @@ class BookingDetailPage extends StatefulWidget {
   static String route({required String id, String? action}) {
     return '/reservation/$id${action != null ? '?action=$action' : ''}';
   }
-  static String paymentRoute(String idProduct) => '/payment/reservations/$idProduct';
+
+  static String paymentRoute(String idProduct) =>
+      '/payment/reservations/$idProduct';
 
   final String id;
   final bool autoShowRating;
@@ -143,19 +145,19 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           final res = state.reservationResponse.data;
           final paid = hasPaid(state.reservationResponse);
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Iconsax.arrow_left, color: Colors.black),
+                icon: const Icon(Iconsax.arrow_left, color: AppColors.black),
                 onPressed: () =>
                     context.canPop() ? context.pop() : context.go('/'),
               ),
-              title: const Text('Détails réservation'),
+              title: Text('Détails réservation'),
               titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
               centerTitle: false,
             ),
@@ -215,7 +217,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
-                                        ?.copyWith(color: Colors.grey[500]),
+                                        ?.copyWith(
+                                            color: AppColors.immoTextSecondary),
                                   ),
                                   Text(
                                     '${res.datesReservation.length} '
@@ -236,7 +239,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF1CA53F),
+                                  color: AppColors.immoFeedbackSuccess,
                                 ),
                           ),
                         ],
@@ -250,7 +253,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     children: [
                       Row(
                         children: [
-                          _IconBox(icon: Iconsax.tag, color: Colors.purple),
+                          _IconBox(icon: Iconsax.tag, color: AppColors.purple),
                           const Gap(12),
                           Expanded(
                             child: Column(
@@ -261,7 +264,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
-                                      ?.copyWith(color: Colors.grey[500]),
+                                      ?.copyWith(
+                                          color: AppColors.immoTextSecondary),
                                 ),
                                 SelectableText(
                                   res.id,
@@ -269,7 +273,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                        color: Colors.purple,
+                                        color: AppColors.purple,
                                         fontFamily: 'monospace',
                                       ),
                                 ),
@@ -314,7 +318,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: Colors.grey[500]),
+                                          ?.copyWith(
+                                              color:
+                                                  AppColors.immoTextSecondary),
                                     ),
                                     Text(
                                       res.codeReservation,
@@ -352,7 +358,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           child: Row(
                             children: [
                               _IconBox(
-                                  icon: Iconsax.user, color: Colors.orange),
+                                  icon: Iconsax.user, color: AppColors.orange),
                               const Gap(12),
                               Expanded(
                                 child: Column(
@@ -363,7 +369,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: Colors.grey[500]),
+                                          ?.copyWith(
+                                              color:
+                                                  AppColors.immoTextSecondary),
                                     ),
                                     Text(
                                       res.proprietaire.phoneNumber
@@ -429,7 +437,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       _ActionRow(
                         icon: Iconsax.headphone,
                         label: 'Support client',
-                        iconColor: Colors.deepPurple,
+                        iconColor: AppColors.deepPurple,
                         onTap: () => ContactUtils.showContact(id: widget.id),
                       ),
                     ],
@@ -464,12 +472,12 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
                         ),
                         style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFF1CA53F),
+                          backgroundColor: AppColors.immoFeedbackSuccess,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          textStyle: const TextStyle(
+                          textStyle: AppTypography.font(
                             fontWeight: FontWeight.w700,
                             fontSize: 15,
                           ),
@@ -493,14 +501,14 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                               }
                             },
                             icon: const Icon(Iconsax.star, size: 18),
-                            label: const Text('Évaluer mon séjour'),
+                            label: Text('Évaluer mon séjour'),
                             style: FilledButton.styleFrom(
-                              backgroundColor: const Color(0xFF2548E5),
+                              backgroundColor: AppColors.primary,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
-                              textStyle: const TextStyle(
+                              textStyle: AppTypography.font(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 15,
                               ),
@@ -512,8 +520,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             res.ratingStatus == RatingStatus.expired)
                         ? SafeArea(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                               child: FilledButton.icon(
                                 onPressed: null,
                                 icon: Icon(
@@ -529,15 +536,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 ),
                                 style: FilledButton.styleFrom(
                                   disabledBackgroundColor:
-                                      Colors.grey.shade300,
+                                      AppColors.immoBorderStrong,
                                   disabledForegroundColor:
-                                      Colors.grey.shade600,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 14),
+                                      AppColors.immoTextSecondary,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(14),
                                   ),
-                                  textStyle: const TextStyle(
+                                  textStyle: AppTypography.font(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 15,
                                   ),
@@ -555,7 +562,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               backgroundColor: AppColors.scafold,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Iconsax.arrow_left, color: Colors.black),
+                icon: const Icon(Iconsax.arrow_left, color: AppColors.black),
                 onPressed: () =>
                     context.canPop() ? context.pop() : context.go('/'),
               ),
@@ -568,7 +575,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Iconsax.info_circle,
-                        size: 72, color: Colors.grey[400]),
+                        size: 72, color: AppColors.immoTextDisabled),
                     const Gap(16),
                     Text(
                       "Impossible de charger cette réservation.",
@@ -576,7 +583,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
-                          ?.copyWith(color: Colors.grey[600]),
+                          ?.copyWith(color: AppColors.immoTextSecondary),
                     ),
                     const Gap(24),
                     FilledButton.icon(
@@ -584,7 +591,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           .read<BookingCubit>()
                           .getBooking(id: widget.id),
                       icon: const Icon(Iconsax.refresh, size: 16),
-                      label: const Text('Réessayer'),
+                      label: Text('Réessayer'),
                     ),
                   ],
                 ),
@@ -606,7 +613,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           children: [
             Row(
               children: [
-                _IconBox(icon: Iconsax.scan_barcode, color: Colors.blue),
+                _IconBox(icon: Iconsax.scan_barcode, color: AppColors.blue),
                 const Gap(12),
                 Expanded(
                   child: Text(
@@ -614,14 +621,14 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: Colors.grey[500]),
+                        ?.copyWith(color: AppColors.immoTextSecondary),
                   ),
                 ),
               ],
             ),
             const Gap(16),
             if (_isLoadingQr && _qrPayload == null)
-              const SizedBox(
+              SizedBox(
                 height: 200,
                 child: Center(child: CircularProgressIndicator()),
               )
@@ -634,14 +641,14 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     children: [
                       Text(
                         _qrError!,
-                        style: const TextStyle(color: Colors.red),
+                        style: AppTypography.font(color: AppColors.red),
                         textAlign: TextAlign.center,
                       ),
                       const Gap(8),
                       TextButton.icon(
                         onPressed: _loadQrCheckin,
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Réessayer'),
+                        label: Text('Réessayer'),
                       ),
                     ],
                   ),
@@ -654,12 +661,12 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey[200]!),
+                      border: Border.all(color: AppColors.immoBorderDefault!),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
+                          color: AppColors.black.withOpacity(0.03),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -677,10 +684,10 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       width: 204,
                       height: 204,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
+                        color: AppColors.white.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: CircularProgressIndicator(),
                       ),
                     ),
@@ -690,7 +697,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 10,
                     height: 10,
                     child: CircularProgressIndicator(strokeWidth: 2),
@@ -701,7 +708,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(color: Colors.grey[500]),
+                        ?.copyWith(color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),
@@ -724,9 +731,9 @@ class _SectionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEEEEE)),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -780,12 +787,12 @@ class _StatusRow extends StatelessWidget {
     if (status == PaymentStatus.paye.name ||
         status == 'accepte' ||
         status == 'confirme') {
-      return const Color(0xFF1CA53F);
+      return AppColors.immoFeedbackSuccess;
     }
     if (status == 'refuse' || status == 'annule') {
-      return Colors.red;
+      return AppColors.red;
     }
-    return Colors.orange;
+    return AppColors.orange;
   }
 
   String _text() => Utils.getServiceStatus(status);
@@ -800,7 +807,7 @@ class _StatusRow extends StatelessWidget {
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[700],
+                  color: AppColors.immoTextLabel,
                 ),
           ),
         ),
@@ -812,7 +819,7 @@ class _StatusRow extends StatelessWidget {
           ),
           child: Text(
             _text(),
-            style: TextStyle(
+            style: AppTypography.font(
               color: _color(),
               fontWeight: FontWeight.w600,
               fontSize: 12,
@@ -855,7 +862,8 @@ class _ActionRow extends StatelessWidget {
                   ),
             ),
           ),
-          Icon(Iconsax.arrow_right_3, size: 16, color: Colors.grey[400]),
+          Icon(Iconsax.arrow_right_3,
+              size: 16, color: AppColors.immoTextDisabled),
         ],
       ),
     );
@@ -883,14 +891,14 @@ class _DatesCard extends StatelessWidget {
       endDate: reservationModel.datesReservation.last.date!,
     );
     final statusColor = bookingStatus == BookingStatus.ongoing
-        ? const Color(0xFF1CA53F)
+        ? AppColors.immoFeedbackSuccess
         : AppColors.primary;
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEEEEEE)),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         children: [
@@ -915,7 +923,7 @@ class _DatesCard extends StatelessWidget {
                 const Gap(6),
                 Text(
                   statusText,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     color: statusColor,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
@@ -936,13 +944,13 @@ class _DatesCard extends StatelessWidget {
                     date: fmt.format(checkin),
                     hour: reservationModel.residence.heureEntree,
                     icon: Iconsax.login,
-                    color: const Color(0xFF1CA53F),
+                    color: AppColors.immoFeedbackSuccess,
                   ),
                 ),
                 Container(
                   width: 1,
                   height: 50,
-                  color: Colors.grey.shade200,
+                  color: AppColors.immoBorderDefault,
                   margin: const EdgeInsets.symmetric(horizontal: 12),
                 ),
                 Expanded(
@@ -951,7 +959,7 @@ class _DatesCard extends StatelessWidget {
                     date: fmt.format(checkout),
                     hour: reservationModel.residence.heureDepart,
                     icon: Iconsax.logout,
-                    color: Colors.redAccent,
+                    color: AppColors.redAccent,
                   ),
                 ),
               ],
@@ -988,7 +996,7 @@ class _DateCell extends StatelessWidget {
             const Gap(4),
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.font(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   color: color,
@@ -1012,7 +1020,7 @@ class _DateCell extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
-                ?.copyWith(color: Colors.grey[500]),
+                ?.copyWith(color: AppColors.immoTextSecondary),
           ),
         ],
       ],

@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:immoplus/app/data/models/remote/home_feed/property_badge_dto.dart';
+
 part 'for_you_residence_item.freezed.dart';
 part 'for_you_residence_item.g.dart';
 
@@ -22,6 +24,9 @@ class ForYouResidenceItem with _$ForYouResidenceItem {
     int? remainingCount,
     DateTime? createdAt,
     int? daysOld,
+    String? description,
+    @Default(<String>[]) List<String> chips,
+    PropertyBadgeDto? badge,
   }) = _ForYouResidenceItem;
 
   factory ForYouResidenceItem.fromJson(Map<String, dynamic> json) =>

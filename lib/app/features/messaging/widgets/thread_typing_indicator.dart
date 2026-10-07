@@ -1,5 +1,5 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Indicateur de frappe du fil (spec §5.6) : bulle à 3 points animés côté
 /// pro, dans une zone `Semantics(liveRegion: true)` pour l'accessibilité.
@@ -37,25 +37,26 @@ class _ThreadTypingIndicatorState extends State<ThreadTypingIndicator>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: AppColors.immoBgSurfaceMuted,
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _Dot(controller: _controller, delay: 0.0),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   _Dot(controller: _controller, delay: 0.2),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   _Dot(controller: _controller, delay: 0.4),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Flexible(
               child: Text(
                 widget.label,
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -83,8 +84,8 @@ class _Dot extends StatelessWidget {
           child: Container(
             width: 6,
             height: 6,
-            decoration: const BoxDecoration(
-              color: Colors.grey,
+            decoration: BoxDecoration(
+              color: AppColors.immoTextSecondary,
               shape: BoxShape.circle,
             ),
           ),

@@ -11,7 +11,7 @@ import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
 import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart';
 import 'package:immoplus/app/features/suggest/logic/suggest_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggestion_tile.dart';
 import 'package:immoplus/app/features/suggest/pages/components/suggest_search_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -331,10 +331,11 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                     ),
                     success: (suggestions) {
                       if (suggestions.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Text(
                             'Aucune suggestion trouvée',
-                            style: TextStyle(color: Colors.grey),
+                            style: AppTypography.font(
+                                color: AppColors.immoTextSecondary),
                           ),
                         );
                       }
@@ -392,14 +393,15 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Row(
               children: [
-                Icon(Icons.history, color: Colors.grey.shade500, size: 18),
-                const SizedBox(width: 8), // Rule 4: 8px base unit
+                Icon(Icons.history,
+                    color: AppColors.immoTextSecondary, size: 18),
+                SizedBox(width: 8), // Rule 4: 8px base unit
                 Text(
                   'Recherches récentes',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade600,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
               ],
@@ -429,23 +431,24 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                   children: [
                     Text(
                       _showAllHistory ? 'Voir moins' : 'Voir plus',
-                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 14),
                     ),
                     const Gap(6),
                     Icon(
                       _showAllHistory
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
-                      color: Colors.grey,
+                      color: AppColors.immoTextSecondary,
                       size: 16,
                     ),
                   ],
                 ),
               ),
             ),
-          const SizedBox(height: 16), // Rule 4: 16px = 2×8
-          const Divider(height: 1, color: Color(0xFFEEEEEE)),
-          const SizedBox(height: 16), // Rule 4: 16px = 2×8
+          SizedBox(height: 16), // Rule 4: 16px = 2×8
+          const Divider(height: 1, color: AppColors.greyMaterial200),
+          SizedBox(height: 16), // Rule 4: 16px = 2×8
         ],
         // Rule 6: mode-aware section header for recommendations
         // The label and icon change to reflect the active "Tu cherches" mode
@@ -454,14 +457,14 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
           child: Row(
             children: [
               Icon(Icons.search, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8), // Rule 4: 8px base unit
-              const Expanded(
+              SizedBox(width: 8), // Rule 4: 8px base unit
+              Expanded(
                 child: Text(
                   'Tu pourrais aimer',
-                  style: TextStyle(
+                  style: AppTypography.font(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+                      color: AppColors.black87),
                 ),
               ),
               InkWell(
@@ -473,11 +476,13 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.refresh, color: Colors.grey, size: 16),
+                    Icon(Icons.refresh,
+                        color: AppColors.immoTextSecondary, size: 16),
                     const Gap(4),
-                    const Text(
+                    Text(
                       'Actualiser',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 14),
                     ),
                   ],
                 ),
@@ -485,20 +490,20 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
             ],
           ),
         ),
-        const SizedBox(height: 16), // Rule 4: 16px = 2×8
+        SizedBox(height: 16), // Rule 4: 16px = 2×8
         if (_isLoadingRecommendations)
-          const Center(
+          Center(
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: CircularProgressIndicator(),
             ),
           )
         else if (_recommendedItems.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(
               'Aucune recommandation trouvée',
-              style: TextStyle(color: Colors.grey),
+              style: AppTypography.font(color: AppColors.immoTextSecondary),
             ),
           )
         else

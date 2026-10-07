@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:intl/intl.dart';
 
 class AlertDetailPage extends StatefulWidget {
@@ -50,17 +47,18 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     final propertyType = _alert.criteria.propertyTypeObj;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         actions: [
           if (_isLoading)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(right: 16),
               child: Center(
                 child: SizedBox(
@@ -103,7 +101,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: AppColors.blue50,
             borderRadius: BorderRadius.circular(12),
           ),
           child: alert.criteria.propertyTypeObj != null
@@ -123,7 +121,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             children: [
               Text(
                 alert.title ?? 'Demande sans titre',
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF1F2937),
                 ),
@@ -131,9 +129,8 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               if (alert.createdAt != null)
                 Text(
                   'Envoyée le ${DateFormat('d MMM yyyy', 'fr_FR').format(alert.createdAt!)}',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 14,
-                    color: Colors.grey.shade500,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
             ],
@@ -153,8 +150,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       ),
       child: Text(
         status.label,
-        style: GoogleFonts.dmSans(
-          fontSize: 12,
+        style: AppTypography.captionSemiBold.copyWith(
           fontWeight: FontWeight.bold,
           color: status.textColor,
         ),
@@ -193,23 +189,21 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.immoBorderDefault),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
           Text(
             label,
-            style: GoogleFonts.dmSans(
-              fontSize: 12,
-              color: Colors.grey.shade400,
+            style: AppTypography.caption.copyWith(
+              color: AppColors.immoTextDisabled,
             ),
           ),
           const Gap(4),
           Text(
             value,
-            style: GoogleFonts.dmSans(
-              fontSize: 14,
+            style: AppTypography.bodyMediumSemiBold.copyWith(
               fontWeight: FontWeight.bold,
               color: const Color(0xFF374151),
             ),
@@ -226,10 +220,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Votre budget :',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(12),
@@ -237,9 +230,11 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           children: [
             Expanded(
                 child: _buildBudgetField('Minimum', alert.criteria.priceMin)),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text('—', style: TextStyle(color: Colors.grey)),
+              child: Text('—',
+                  style:
+                      AppTypography.font(color: AppColors.immoTextSecondary)),
             ),
             Expanded(
                 child: _buildBudgetField('Maximum', alert.criteria.priceMax)),
@@ -254,7 +249,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -262,24 +257,22 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         children: [
           Text(
             label,
-            style:
-                GoogleFonts.dmSans(fontSize: 10, color: Colors.grey.shade500),
+            style: AppTypography.micro
+                .copyWith(fontSize: 10, color: AppColors.immoTextSecondary),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 amount != null ? formatter.format(amount) : '0',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLargeSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 'fcfa',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  color: Colors.grey.shade500,
+                style: AppTypography.caption.copyWith(
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
             ],
@@ -295,10 +288,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Localisation:',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(12),
@@ -315,8 +307,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
               Expanded(
                 child: Text(
                   alert.criteria.location ?? 'N/A',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 16,
+                  style: AppTypography.bodyLargeSemiBold.copyWith(
                     color: const Color(0xFF1F2937),
                     fontWeight: FontWeight.w500,
                   ),
@@ -335,10 +326,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Précisions supplémentaires :',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(12),
@@ -346,13 +336,12 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.immoBorderDefault),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             alert.descriptionClient ?? 'Aucune précision supplémentaire.',
-            style: GoogleFonts.dmSans(
-              fontSize: 14,
+            style: AppTypography.bodyMedium.copyWith(
               color: const Color(0xFF4B5563),
             ),
           ),
@@ -367,10 +356,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       children: [
         Text(
           'Suivi de la demande :',
-          style: GoogleFonts.dmSans(
-            fontSize: 16,
+          style: AppTypography.bodyLargeSemiBold.copyWith(
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(20),
@@ -421,13 +409,13 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                     ? const Color(0xFFFBBF24)
                     : (isCompleted
                         ? const Color(0xFF10B981).withOpacity(0.2)
-                        : Colors.white),
+                        : AppColors.white),
                 border: Border.all(
                   color: isHighlighted
                       ? const Color(0xFFFBBF24)
                       : (isCompleted
                           ? const Color(0xFF10B981)
-                          : Colors.grey.shade300),
+                          : AppColors.immoBorderStrong),
                   width: 2,
                 ),
               ),
@@ -438,9 +426,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                           child: Container(
                             width: 10,
                             height: 10,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                         )
@@ -452,7 +440,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                 height: 40,
                 color: isCompleted
                     ? const Color(0xFF10B981)
-                    : Colors.grey.shade200,
+                    : AppColors.immoBorderDefault,
               ),
           ],
         ),
@@ -463,22 +451,21 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             children: [
               Text(
                 title,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color:
-                      isActive ? const Color(0xFF1F2937) : Colors.grey.shade400,
+                  color: isActive ? const Color(0xFF1F2937) : AppColors.gray400,
                 ),
               ),
               Text(
                 subtitle,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodySmall.copyWith(
                   fontSize: 13,
                   color: isHighlighted
-                      ? const Color(0xFFD97706)
+                      ? AppColors.warningDark
                       : (isActive
-                          ? Colors.grey.shade500
-                          : Colors.grey.shade400),
+                          ? AppColors.immoTextSecondary
+                          : AppColors.immoTextDisabled),
                 ),
               ),
             ],
@@ -502,17 +489,16 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             },
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: BorderSide(color: Colors.grey.shade300),
+              side: BorderSide(color: AppColors.immoBorderStrong),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: Text(
               'Modifier',
-              style: GoogleFonts.dmSans(
-                fontSize: 16,
+              style: AppTypography.button.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ),
@@ -523,17 +509,16 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             onPressed: () => _showDeleteConfirmation(context),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: const BorderSide(color: Colors.red),
+              side: const BorderSide(color: AppColors.red),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: Text(
               'Annuler',
-              style: GoogleFonts.dmSans(
-                fontSize: 16,
+              style: AppTypography.button.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.red,
+                color: AppColors.red,
               ),
             ),
           ),

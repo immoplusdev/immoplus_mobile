@@ -1,5 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'property_type.dart';
 
 part 'alert_model.freezed.dart';
@@ -16,13 +17,13 @@ enum AlertTransactionType {
 }
 
 enum AlertStatus {
-  pending('pending', 'En attente', Color(0xFFFEF3C7), Color(0xFFD97706)),
-  hasProposals('has_proposals', 'Proposition reçue', Color(0xFFE0F2FE),
-      Color(0xff2744de)),
-  closed('closed', 'Clôturée', Color(0xFFE5E7EB), Color(0xFF4B5563)),
-  active('active', 'Active', Color(0xFFDCFCE7), Color(0xFF166534)),
-  paused('paused', 'En pause', Color(0xFFF3F4F6), Color(0xFF374151)),
-  deleted('deleted', 'Supprimée', Color(0xFFFEE2E2), Color(0xFF991B1B));
+  pending('pending', 'En attente', AppColors.orange50, AppColors.amber800),
+  hasProposals('has_proposals', 'Proposition reçue', AppColors.blue75,
+      AppColors.blue500),
+  closed('closed', 'Clôturée', AppColors.gray200, AppColors.slate800),
+  active('active', 'Active', AppColors.green50, AppColors.emerald700),
+  paused('paused', 'En pause', AppColors.gray100, AppColors.gray900),
+  deleted('deleted', 'Supprimée', AppColors.red100, AppColors.red600);
 
   final String value;
   final String label;

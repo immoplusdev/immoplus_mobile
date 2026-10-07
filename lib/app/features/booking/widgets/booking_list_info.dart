@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class BookingListInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8).copyWith(bottom: 10),
       child: ListTile(
-        tileColor: Colors.white,
+        tileColor: AppColors.white,
         title: Text(title),
         trailing: Text(
           info,

@@ -19,7 +19,7 @@ class ButtonTest extends GetView<LocationController> {
           //     latitude: element["lat"] ?? 0, longitude: element["lng"] ?? 0);
         });
       },
-      child: const Text("TEST"),
+      child: Text("TEST"),
     );
   }
 }

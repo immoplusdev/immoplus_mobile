@@ -9,7 +9,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -56,7 +56,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
               CardImageCarousel(images: widget.residence.images),
               Gap(10),
               Container(
-                //color: Colors.grey,
+                //color: AppColors.immoTextSecondary,
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,7 +93,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
-                                      .copyWith(color: Colors.grey.shade600),
+                                      .copyWith(color: AppColors.gray500),
                                 ),
                               ),
                             ],
@@ -118,7 +118,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                                   .textTheme
                                   .bodySmall!
                                   .copyWith(
-                                    color: Colors.grey.shade800,
+                                    color: AppColors.gray900,
                                     fontWeight: FontWeight.bold,
                                   ),
                             )
@@ -139,7 +139,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                   ],
                 ),
               ),
-               Gap(10),
+              Gap(10),
             ],
           ),
         ),
@@ -181,11 +181,12 @@ class ResidenceFavoriteButton extends StatelessWidget {
       onTap: onTap,
       child: CircleAvatar(
         radius: 14,
-        backgroundColor: isFavorite ? Colors.red : Colors.grey.shade300,
+        backgroundColor:
+            isFavorite ? AppColors.immoFeedbackError : AppColors.gray300,
         child: Icon(
           FontAwesomeIcons.solidHeart.data,
           size: 16,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

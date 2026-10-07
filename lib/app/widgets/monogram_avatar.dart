@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:immoplus/app/extensions/monogram_extension.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Rôle utilisateur pour le style de l'avatar.
 enum UserRole {
@@ -37,14 +37,14 @@ class MonogramAvatar extends StatelessWidget {
 
   /// Palette inspirée iOS (dégradés premium).
   static const List<List<Color>> _premiumPalettes = [
-    [Color(0xFFB1B6BE), Color(0xFF9096A0)], // Gris
-    [Color(0xFFFF89A3), Color(0xFFFF6B8B)], // Rose
-    [Color(0xFFFF7161), Color(0xFFFF523D)], // Rouge
-    [Color(0xFFFFBA53), Color(0xFFFFA023)], // Orange
-    [Color(0xFFFFD15C), Color(0xFFFFBE28)], // Jaune
-    [Color(0xFF80E08E), Color(0xFF5BCB6B)], // Vert
-    [Color(0xFF7DD2FF), Color(0xFF55B9FF)], // Bleu
-    [Color(0xFFB69BFF), Color(0xFF9872FF)], // Violet
+    [AppColors.avatarGreyLight, AppColors.avatarGreyDark], // Gris
+    [AppColors.avatarPinkLight, AppColors.avatarPinkDark], // Rose
+    [AppColors.avatarRedLight, AppColors.avatarRedDark], // Rouge
+    [AppColors.avatarOrangeLight, AppColors.avatarOrangeDark], // Orange
+    [AppColors.avatarYellowLight, AppColors.avatarYellowDark], // Jaune
+    [AppColors.avatarGreenLight, AppColors.avatarGreenDark], // Vert
+    [AppColors.avatarBlueLight, AppColors.avatarBlueDark], // Bleu
+    [AppColors.avatarPurpleLight, AppColors.avatarPurpleDark], // Violet
   ];
 
   @override
@@ -125,7 +125,8 @@ class MonogramAvatar extends StatelessWidget {
     List<BoxShadow>? shadows;
 
     if (role == UserRole.newUser) {
-      border = Border.all(color: Colors.grey.withValues(alpha: 0.3), width: 2);
+      border =
+          Border.all(color: AppColors.gray500.withValues(alpha: 0.3), width: 2);
     } else if (role == UserRole.powerUser) {
       shadows = [
         BoxShadow(
@@ -152,8 +153,8 @@ class MonogramAvatar extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
-          style: TextStyle(
-            color: Colors.white,
+          style: AppTypography.font(
+            color: AppColors.white,
             fontSize: effectiveFontSize,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.2,
@@ -183,14 +184,14 @@ class SkeuomorphicAvatar extends StatelessWidget {
   final ImageProvider? imageProvider;
 
   static const List<Color> _baseColors = [
-    Color(0xFFB1B6BE), // Gris
-    Color(0xFFFF89A3), // Rose
-    Color(0xFFFF7161), // Rouge
-    Color(0xFFFFBA53), // Orange
-    Color(0xFFFFD15C), // Jaune
-    Color(0xFF80E08E), // Vert
-    Color(0xFF7DD2FF), // Bleu
-    Color(0xFFB69BFF), // Violet
+    AppColors.avatarGreyLight, // Gris
+    AppColors.avatarPinkLight, // Rose
+    AppColors.avatarRedLight, // Rouge
+    AppColors.avatarOrangeLight, // Orange
+    AppColors.avatarYellowLight, // Jaune
+    AppColors.avatarGreenLight, // Vert
+    AppColors.avatarBlueLight, // Bleu
+    AppColors.avatarPurpleLight, // Violet
   ];
 
   @override
@@ -249,20 +250,20 @@ class SkeuomorphicAvatar extends StatelessWidget {
           center: const Alignment(0.0, -0.2),
           radius: 1.0,
           colors: [
-            Color.lerp(baseColor, Colors.white, 0.15)!,
-            Color.lerp(baseColor, Colors.black, 0.05)!,
+            Color.lerp(baseColor, AppColors.white, 0.15)!,
+            Color.lerp(baseColor, AppColors.black, 0.05)!,
           ],
           stops: const [0.0, 1.0],
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: AppColors.black.withValues(alpha: 0.12),
             blurRadius: 10,
             spreadRadius: 2,
             offset: const Offset(0, 3),
           ),
           BoxShadow(
-            color: Colors.white.withValues(alpha: 0.2),
+            color: AppColors.white.withValues(alpha: 0.2),
             blurRadius: 4,
             spreadRadius: -1,
             offset: const Offset(0, -1),
@@ -277,16 +278,16 @@ class SkeuomorphicAvatar extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.white.withValues(alpha: 0.15),
-                Colors.transparent,
+                AppColors.white.withValues(alpha: 0.15),
+                AppColors.transparent,
               ],
             ),
           ),
           child: Center(
             child: Text(
               initials,
-              style: TextStyle(
-                color: const Color(0xFFFBFBFB),
+              style: AppTypography.font(
+                color: AppColors.immoBgSurfaceMuted,
                 fontSize: effectiveFontSize,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.2,

@@ -8,6 +8,7 @@ import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -93,15 +94,15 @@ class SessionManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('recent_hotel_searches');
-    } catch (e) {
-      print('Error clearing hotel searches on logout: $e');
+    } catch (e, stack) {
+      talker.error('Error clearing hotel searches on logout: $e', e, stack);
     }
     AppRouter.router.go('/');
     // AppRouter.router.goNamed(SplashScreen.name);
   }
 
   Future<UserModelSchema?> getCurrentUser() async {
-    print('Get User ${currentUser?.firstName}');
+    talker.debug('Get User ${currentUser?.firstName}');
     if (currentUser == null) {
       final user =
           await isarConfig.instance.userModelSchemas.where().findFirst();

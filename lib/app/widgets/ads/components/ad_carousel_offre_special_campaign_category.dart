@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
 import 'package:immoplus/app/widgets/image_collage.dart';
@@ -33,10 +33,8 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(
                   badge!,
-                  style: GoogleFonts.dmSans(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF0F1E36),
+                  style: AppTypography.h2.copyWith(
+                    color: AppColors.immoTextPrimary,
                     letterSpacing: -0.4,
                   ),
                 ),
@@ -60,7 +58,7 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                       borderRadius: 16,
                       spacing: 4,
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14),
 
                     // Détails à droite
                     Expanded(
@@ -76,23 +74,20 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                                 if (title?.isNotEmpty == true)
                                   Text(
                                     title!,
-                                    style: GoogleFonts.dmSans(
-                                      fontSize: 16,
+                                    style: AppTypography.titleSmall.copyWith(
                                       fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF111111),
+                                      color: AppColors.immoTextPrimary,
                                       letterSpacing: -0.2,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 if (subtitle?.isNotEmpty == true) ...[
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     subtitle!,
-                                    style: GoogleFonts.dmSans(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF8E8E93),
+                                    style: AppTypography.bodySmall.copyWith(
+                                      color: AppColors.immoTextSecondary,
                                     ),
                                     maxLines: 4,
                                     overflow: TextOverflow.ellipsis,
@@ -111,14 +106,13 @@ class AdCarouselOffreSpecialCampaignCategory extends StatelessWidget {
                                     vertical: 8,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.black,
+                                    color: AppColors.black,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
                                     ctaLabel!,
-                                    style: GoogleFonts.dmSans(
-                                      color: Colors.white,
-                                      fontSize: 12,
+                                    style: AppTypography.labelMedium.copyWith(
+                                      color: AppColors.white,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),

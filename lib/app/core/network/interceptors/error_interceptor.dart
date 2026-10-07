@@ -1,18 +1,14 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/logger/immo_logger.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/auth_service.dart';
 import 'package:immoplus/app/data/enums/api_error_code.dart';
 import 'package:immoplus/app/data/error/api_error_response.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/routes/app_router.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../services/navigation_service.dart';
 
 const _silentErrorCodes = {
   ApiErrorCode.jwtTokenExpired,
@@ -116,14 +112,9 @@ class ErrorInterceptor extends Interceptor {
 
   /// Affiche le toast d'erreur approprié
   void _showErrorToast(ApiErrorResponse? apiErrorResponse, Response? response) {
-    final context = NavigationService.navigatorKey.currentContext;
+    final context = AppRouter.context;
     final message = apiErrorResponse?.message ?? _manageResponse(response);
     if (context == null) {
-      Fluttertoast.showToast(
-        msg: message,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
       return;
     }
 

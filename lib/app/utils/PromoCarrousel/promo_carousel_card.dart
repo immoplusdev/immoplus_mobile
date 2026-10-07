@@ -1,37 +1,38 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 /// Couleur principale de l'application
-const Color kPrimaryColor = Color(0xff2744de);
+const Color kPrimaryColor = AppColors.blue500;
 
 /// Couleurs complémentaires dérivées
 class AppComplementaryColors {
   // Orange complémentaire (opposé au bleu sur le cercle chromatique)
   static const Color orange = Color(0xffDE5827);
-  
+
   // Variantes de l'orange
   static const Color orangeLight = Color(0xffE87A52);
   static const Color orangeDark = Color(0xffC44A1D);
-  
+
   // Couleur corail/saumon (plus douce)
   static const Color coral = Color(0xffDE7B44);
-  
+
   // Jaune-orange (analogue complémentaire)
   static const Color amber = Color(0xffDEA227);
-  
+
   // Rouge-orange (comme dans l'image)
   static const Color redOrange = Color(0xffE23C2C);
   // Variantes plus claires
-  static const Color primary50 = Color(0xffEEF1FC);   // Très clair (backgrounds)
-  static const Color primary100 = Color(0xffC5CFF5);  // Clair
-  static const Color primary200 = Color(0xff9BADEF);  // 
-  static const Color primary300 = Color(0xff6B85E6);  // 
-  static const Color primary400 = Color(0xff4A64E2);  // Légèrement plus clair
-  
+  static const Color primary50 = AppColors.blue50; // Très clair (backgrounds)
+  static const Color primary100 = Color(0xffC5CFF5); // Clair
+  static const Color primary200 = Color(0xff9BADEF); //
+  static const Color primary300 = Color(0xff6B85E6); //
+  static const Color primary400 = Color(0xff4A64E2); // Légèrement plus clair
+
   // Variantes plus foncées
-  static const Color primary600 = Color(0xff1E35B8);  // Plus foncé
-  static const Color primary700 = Color(0xff182A92);  // Foncé
-  static const Color primary800 = Color(0xff121F6C);  // Très foncé
-  static const Color primary900 = Color(0xff0C1446);  // Extra foncé
+  static const Color primary600 = Color(0xff1E35B8); // Plus foncé
+  static const Color primary700 = Color(0xff182A92); // Foncé
+  static const Color primary800 = Color(0xff121F6C); // Très foncé
+  static const Color primary900 = Color(0xff0C1446); // Extra foncé
 }
 
 /// Modèle de données pour une carte du carrousel
@@ -113,37 +114,34 @@ class PromoCarouselCard extends StatelessWidget {
                 children: [
                   Text(
                     data.title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: AppTypography.font(
+                      color: AppColors.white,
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                     ),
                   ),
-
-                  const SizedBox(height: 16),
-
+                  SizedBox(height: 16),
                   Expanded(
                     child: Text(
                       data.description,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                      style: AppTypography.font(
+                        color: AppColors.white.withOpacity(0.9),
                         fontSize: 16,
                         height: 1.5,
                       ),
                     ),
                   ),
-
                   GestureDetector(
                     onTap: data.onLinkTap,
                     child: Text(
                       data.linkText,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: AppTypography.font(
+                        color: AppColors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         decoration: TextDecoration.underline,
-                        decorationColor: Colors.white,
+                        decorationColor: AppColors.white,
                         decorationThickness: 2,
                       ),
                     ),
@@ -152,7 +150,6 @@ class PromoCarouselCard extends StatelessWidget {
               ),
             ),
           ),
-
           if (data.imagePath != null)
             Positioned(
               bottom: 16,
@@ -242,7 +239,7 @@ class PromoCarouselWithIndicators extends StatefulWidget {
     this.cardPadding = const EdgeInsets.symmetric(horizontal: 16),
     this.cardColors,
     this.indicatorActiveColor = kPrimaryColor,
-    this.indicatorInactiveColor = const Color(0xFFE0E0E0),
+    this.indicatorInactiveColor = AppColors.gray200,
   });
 
   @override
@@ -300,9 +297,9 @@ class _PromoCarouselWithIndicatorsState
             },
           ),
         ),
-        
-        const SizedBox(height: 16),
-        
+
+        SizedBox(height: 16),
+
         // Indicateurs
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

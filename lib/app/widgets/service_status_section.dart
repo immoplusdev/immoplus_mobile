@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/status_chip.dart';
 
@@ -9,16 +10,16 @@ class ServiceStatusSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
-      tileColor: Colors.white,
+      tileColor: AppColors.white,
       trailing: CircleAvatar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         child: Utils.getServiceStatusIcon(status),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Statut du service :",
           ),
           StatusChip(

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 // part of homePage;
 
 // class RecentVew extends StatelessWidget {
@@ -14,7 +15,7 @@
 //           child: (state is DoneState<RecentViewServiceState>)
 //               ? (state.finishData.data.isNotEmpty)
 //                   ? Container(
-//                       //color: Colors.yellow,
+//                       //color: AppColors.yellow,
 //                       height: 200,
 //                       width: double.infinity,
 //                       child: Column(

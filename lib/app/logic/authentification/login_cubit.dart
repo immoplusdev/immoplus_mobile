@@ -29,7 +29,7 @@ import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/screens/splash_screen.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';

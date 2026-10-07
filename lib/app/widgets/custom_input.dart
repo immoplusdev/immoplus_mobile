@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:pinput/pinput.dart';
 
 class CustomPinput extends StatelessWidget {
@@ -44,17 +45,17 @@ class CustomPinput extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: width,
       height: height,
-      textStyle: TextStyle(
+      textStyle: AppTypography.font(
         fontSize: fontSize,
-        color: Colors.black,
+        color: AppColors.black,
         fontWeight: FontWeight.w600,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
+        color: backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: hasError
-              ? (errorBorderColor ?? Colors.red)
+              ? (errorBorderColor ?? AppColors.immoFeedbackError)
               : (borderColor ?? theme.colorScheme.primary.withOpacity(.5)),
         ),
       ),
@@ -64,7 +65,7 @@ class CustomPinput extends StatelessWidget {
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(
           color: hasError
-              ? (errorBorderColor ?? Colors.red)
+              ? (errorBorderColor ?? AppColors.immoFeedbackError)
               : (focusedBorderColor ?? theme.colorScheme.primary),
           width: 1,
         ),
@@ -74,7 +75,7 @@ class CustomPinput extends StatelessWidget {
     final errorPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
         border: Border.all(
-          color: errorBorderColor ?? Colors.red,
+          color: errorBorderColor ?? AppColors.immoFeedbackError,
           width: 1,
         ),
       ),
@@ -115,13 +116,13 @@ class CustomPinput extends StatelessWidget {
           ),
         ),
         if (hasError) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               errorText!,
-              style: TextStyle(
-                color: errorBorderColor ?? Colors.red,
+              style: AppTypography.font(
+                color: errorBorderColor ?? AppColors.immoFeedbackError,
                 fontSize: 12,
               ),
             ),

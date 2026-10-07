@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
+import 'package:immoplus/main.dart';
 
 class SelectedZone {
   final String id;
@@ -37,14 +38,10 @@ const List<SelectedZone> kPopularZones = [
   SelectedZone(
       id: '2', nom: 'Palmeraie, Abidjan', lat: 5.3702344, lng: -3.9551871),
   SelectedZone(
-      id: '5',
-      nom: 'Yopougon, Abidjan',
-      lat: 5.317660999999,
-      lng: -4.0899911),
+      id: '5', nom: 'Yopougon, Abidjan', lat: 5.317660999999, lng: -4.0899911),
   SelectedZone(
       id: '6', nom: 'Grand-Bassam, Abidjan', lat: 5.2103072, lng: -3.7549648),
-  SelectedZone(
-      id: '7', nom: 'Assinie, Comoé', lat: 5.1398055, lng: -3.3237824),
+  SelectedZone(id: '7', nom: 'Assinie, Comoé', lat: 5.1398055, lng: -3.3237824),
 ];
 
 class ZoneSelectionSheet extends StatefulWidget {
@@ -134,11 +131,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
   bool _tryAddZone(SelectedZone zone) {
     if (_tempSelected.contains(zone)) return true;
     if (_tempSelected.length >= 3) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('3 zones maximum sélectionnables.'),
-          duration: Duration(seconds: 2),
-        ),
+      ToastUtils.showWarning(
+        title: "Limite atteinte",
+        description: "3 zones maximum sélectionnables.",
       );
       return false;
     }
@@ -249,7 +244,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
         if (address.isNotEmpty && address != 'Partager ma position') {
           locationName = address;
         }
-      } catch (_) {}
+      } catch (e, st) {
+        talker.debug('Failed to get formatted address: $e', e, st);
+      }
 
       if (mounted) {
         final zone = SelectedZone(
@@ -266,9 +263,9 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Impossible d\'obtenir votre position.')),
+        ToastUtils.showError(
+          title: "Position",
+          description: "Impossible d'obtenir votre position.",
         );
         setState(() => _isGettingLocation = false);
       }
@@ -291,7 +288,7 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
               height: 4,
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.immoBorderStrong,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -300,10 +297,10 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
           // Title with selection count
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text('Où ?',
-                    style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    style: AppTypography.font(
+                        fontSize: 22, fontWeight: FontWeight.bold)),
               ),
               if (_tempSelected.length > 1)
                 Container(
@@ -315,7 +312,7 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                   ),
                   child: Text(
                     '+${_tempSelected.length - 1}',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
@@ -325,7 +322,7 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
             ],
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Search bar
           TextField(
@@ -334,13 +331,14 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
               hintText: 'Rechercher une adresse...',
-              hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 15),
-              prefixIcon:
-                  Icon(Icons.search, color: Colors.grey.shade500, size: 20),
+              hintStyle: AppTypography.font(
+                  color: AppColors.immoTextDisabled, fontSize: 15),
+              prefixIcon: Icon(Icons.search,
+                  color: AppColors.immoTextSecondary, size: 20),
               suffixIcon: _searchController.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(Icons.clear,
-                          color: Colors.grey.shade500, size: 18),
+                          color: AppColors.immoTextSecondary, size: 18),
                       onPressed: () {
                         _searchController.clear();
                         setState(() => _predictions.clear());
@@ -352,16 +350,16 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.immoBorderStrong),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
-                borderSide: BorderSide(color: Colors.grey.shade400),
+                borderSide: BorderSide(color: AppColors.immoTextDisabled),
               ),
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
 
           // Share position button
           InkWell(
@@ -390,10 +388,10 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                         : Icon(Icons.my_location,
                             color: AppColors.primary, size: 18),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Text(
                     'Partager votre position',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: AppColors.primary,
@@ -406,7 +404,7 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
 
           // Google autocomplete results
           if (_isSearching)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Center(
                 child: SizedBox(
@@ -428,10 +426,10 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                   return ListTile(
                     dense: true,
                     leading: Icon(Icons.location_on_outlined,
-                        color: Colors.grey.shade500, size: 20),
+                        color: AppColors.immoTextSecondary, size: 20),
                     title: Text(
                       prediction['description'] ?? '',
-                      style: const TextStyle(fontSize: 14),
+                      style: AppTypography.font(fontSize: 14),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -443,18 +441,18 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
             const Divider(height: 1),
           ],
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Quick-select zone chips
-          const Text(
+          Text(
             'Zones populaires',
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Colors.black54,
+              color: AppColors.black54,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Wrap(
             spacing: 6,
             runSpacing: 6,
@@ -463,21 +461,24 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
               return ChoiceChip(
                 label: Text(z.nom),
                 selected: isSelected,
-                selectedColor: Colors.black,
-                backgroundColor: Colors.white,
+                selectedColor: AppColors.black,
+                backgroundColor: AppColors.white,
                 showCheckmark: false,
                 visualDensity: VisualDensity.compact,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                labelStyle: TextStyle(
-                  color: isSelected ? Colors.white : Colors.grey.shade800,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                labelStyle: AppTypography.font(
+                  color: isSelected ? AppColors.white : AppColors.immoTextLabel,
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: BorderSide(
-                    color: isSelected ? Colors.black : Colors.grey.shade300,
+                    color: isSelected
+                        ? AppColors.black
+                        : AppColors.immoBorderStrong,
                     width: 1.0,
                   ),
                 ),
@@ -496,7 +497,7 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
 
           // Selected zones display
           if (_tempSelected.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -504,31 +505,30 @@ class _ZoneSelectionSheetState extends State<ZoneSelectionSheet> {
                 return Chip(
                   visualDensity: VisualDensity.compact,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   label: Text(
                     z.nom,
-                    style: TextStyle(
+                    style: AppTypography.font(
                         fontSize: 12, color: AppColors.primary),
                   ),
-                  deleteIcon: Icon(Icons.close,
-                      size: 13, color: AppColors.primary),
+                  deleteIcon:
+                      Icon(Icons.close, size: 13, color: AppColors.primary),
                   onDeleted: () {
                     setState(() => _tempSelected.remove(z));
                   },
-                  backgroundColor:
-                      AppColors.primary.withValues(alpha: 0.08),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                        color:
-                            AppColors.primary.withValues(alpha: 0.2)),
+                        color: AppColors.primary.withValues(alpha: 0.2)),
                   ),
                 );
               }).toList(),
             ),
           ],
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           CustomButtom(
             text: _tempSelected.isEmpty
                 ? 'Sélectionnez une zone'

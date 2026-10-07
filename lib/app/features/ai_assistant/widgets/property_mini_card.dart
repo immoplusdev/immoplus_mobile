@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,7 @@ class PropertyMiniCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap == null
             ? null
@@ -42,10 +43,10 @@ class PropertyMiniCard extends StatelessWidget {
             child: Row(
               children: [
                 _Thumbnail(url: property.imageUrl),
-                const SizedBox(width: ChatTokens.s12),
+                SizedBox(width: ChatTokens.s12),
                 Expanded(child: _Info(property: property)),
                 if (showScore && property.scorePercent != null) ...[
-                  const SizedBox(width: ChatTokens.s8),
+                  SizedBox(width: ChatTokens.s8),
                   ScoreBadge(value: property.scorePercent!),
                 ],
               ],
@@ -128,7 +129,7 @@ class _Info extends StatelessWidget {
           property.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: ChatTokens.neutral900,
@@ -136,12 +137,12 @@ class _Info extends StatelessWidget {
           ),
         ),
         if (meta.isNotEmpty) ...[
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Text(
             meta,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 12,
               fontWeight: FontWeight.w400,
               color: ChatTokens.neutral400,
@@ -150,10 +151,10 @@ class _Info extends StatelessWidget {
           ),
         ],
         if (property.price != null) ...[
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             formatPriceLong(property.price!),
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: ChatTokens.brand500,
@@ -182,7 +183,7 @@ class ScoreBadge extends StatelessWidget {
       ),
       child: Text(
         '$value%',
-        style: TextStyle(
+        style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.w700,
           color: fg,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class InternationalPhoneInput extends StatefulWidget {
@@ -25,8 +25,7 @@ class InternationalPhoneInput extends StatefulWidget {
   });
 
   @override
-  InternationalPhoneInputState createState() =>
-      InternationalPhoneInputState();
+  InternationalPhoneInputState createState() => InternationalPhoneInputState();
 }
 
 class InternationalPhoneInputState extends State<InternationalPhoneInput> {
@@ -116,10 +115,10 @@ class InternationalPhoneInputState extends State<InternationalPhoneInput> {
             builder: (context, _) {
               if (_controller.text.isEmpty) return const SizedBox.shrink();
               return IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Iconsax.close_circle,
                   size: 20,
-                  color: Colors.grey,
+                  color: AppColors.gray500,
                 ),
                 onPressed: () {
                   _controller.clear();
@@ -132,20 +131,20 @@ class InternationalPhoneInputState extends State<InternationalPhoneInput> {
             },
           ),
           filled: true,
-          fillColor: Colors.transparent,
+          fillColor: AppColors.transparent,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: const BorderSide(color: Color(0x1C000000)),
+            borderSide: BorderSide(color: AppColors.immoBorderDefault),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
-            borderSide: const BorderSide(color: Color(0x1C000000)),
+            borderSide: BorderSide(color: AppColors.immoBorderDefault),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),
             borderSide: BorderSide(color: AppColors.primaryLite, width: 2),
           ),
-          errorStyle: const TextStyle(color: Colors.redAccent),
+          errorStyle: AppTypography.font(color: AppColors.red600),
           contentPadding: const EdgeInsets.symmetric(vertical: 20),
           hintText: "Numéro de téléphone",
         ),

@@ -20,10 +20,9 @@ import 'package:immoplus/app/features/residence_detail/components/pending_revers
 import 'package:immoplus/app/features/residence_detail/components/reverse_search_pay_bar.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/main.dart';
 
 /// ─────────────────────────────────────────────────────────────────────────────
 /// CONTENEUR PRINCIPAL : Affiche la barre appropriée selon le mode
@@ -96,14 +95,18 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
           unawaited(_refreshActiveReverseSearch());
         }
       });
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to init reverse search socket listener: $e');
+    }
   }
 
   Future<void> _refreshActiveReverseSearch() async {
     try {
       final active = await getIt<ReverseSearchRepository>().getActiveSearch();
       if (mounted) setState(() => _activeReverseSearch = active);
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to refresh active reverse search: $e');
+    }
   }
 
   /// Déclenché quand le compte à rebours du bandeau atteint zéro : passé les
@@ -257,10 +260,10 @@ class StandardBookingBottomBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         border: Border(
           top: BorderSide(
-            color: Colors.grey.shade100,
+            color: AppColors.immoBgSurfaceMuted,
             width: 1,
           ),
         ),
@@ -285,31 +288,31 @@ class StandardBookingBottomBar extends StatelessWidget {
                       TextSpan(
                         text: CurrencyFormatter()
                             .format(residenceModel.prixReservation.toString()),
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: ' F',
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   'par nuitée',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade500,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
               ],
@@ -323,19 +326,19 @@ class StandardBookingBottomBar extends StatelessWidget {
               onPressed: () => _handleStandardBooking(context, sessionManager),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.white,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(60),
                 ),
-                textStyle: const TextStyle(
+                textStyle: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
               ),
-              child: const Text('Réserver'),
+              child: Text('Réserver'),
             ),
           ),
         ],

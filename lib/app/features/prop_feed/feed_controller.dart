@@ -447,7 +447,9 @@ class VideoFeedController extends GetxController {
       _controllers.remove(index);
       try {
         controller.dispose();
-      } catch (_) {}
+      } catch (err) {
+        talker.debug('Error disposing failed player controller: $err');
+      }
       if (!completer.isCompleted) completer.complete();
     } finally {
       _initializingIndexes.remove(index);

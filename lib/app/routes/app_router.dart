@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/main.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
+import 'package:immoplus/app/data/enums/home_feed_scope.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
@@ -32,6 +34,7 @@ import 'package:immoplus/app/features/messaging/pages/messages_inbox_page.dart';
 import 'package:immoplus/app/features/estate_detail/estate_user_page.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
 import 'package:immoplus/app/features/for_you/see_more_page.dart';
+import 'package:immoplus/app/features/for_you/screens/scope_feed_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/home_page/screens/near_residences_page.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
@@ -46,6 +49,7 @@ import 'package:immoplus/app/features/map_view/map_viewer.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
+import 'package:immoplus/app/features/user_preference/pages/user_preference_intermediary_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
@@ -118,6 +122,11 @@ class AppRouter {
   static bool showOnboarding = false;
   static final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>();
+
+  /// Accès global et statique au BuildContext racine via GoRouter
+  static BuildContext? get context =>
+      router.routerDelegate.navigatorKey.currentContext;
+
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
@@ -125,9 +134,7 @@ class AppRouter {
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
     ],
     redirect: (context, state) async {
-      print('🔍 GoRouter redirect - Location: ${state.uri}'); // ← DEBUG
-      print('🔍 GoRouter redirect - Path: ${state.uri.path}');
-      print('🔍 GoRouter redirect - Params: ${state.uri.queryParameters}');
+      talker.debug('GoRouter redirect - Location: ${state.uri}');
 
       if (showOnboarding) return '/onboarding';
 
@@ -143,8 +150,8 @@ class AppRouter {
 
       if (path == PendingPaymentReservationsPage.routePath()) {
         if (sessionManager.currentUser == null) {
-          print(
-              '🔒 User not authenticated, redirecting from pending-payment-reservations to homePage');
+          talker.info(
+              'User not authenticated, redirecting from pending-payment-reservations to homePage');
           return state.namedLocation(HomePage.name);
         }
       }
@@ -413,6 +420,21 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: ScopeFeedPage.routePath,
+        name: ScopeFeedPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          final rawScope = extra['scope'];
+          final scope = rawScope is HomeFeedScope
+              ? rawScope
+              : HomeFeedScope.fromValue(rawScope?.toString());
+          return ScopeFeedPage(
+            scope: scope,
+            title: extra['title'] as String? ?? scope.defaultTitle,
+          );
+        },
+      ),
+      GoRoute(
         path: '/otp-confirm',
         name: OtpPage.name,
         builder: (context, state) => OtpPage(
@@ -536,7 +558,9 @@ class AppRouter {
             if (videoId != null && videoId.isNotEmpty) {
               return '/vivre/$videoId';
             }
-          } catch (_) {}
+          } catch (e, stack) {
+            talker.warning('Failed to resolve short code /v/$code', e, stack);
+          }
           return '/vivre';
         },
       ),
@@ -782,7 +806,7 @@ class AppRouter {
           },
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Réservation'),
+              title: Text('Réservation'),
               leading: IconButton(
                 onPressed: () {
                   context.goNamed(SplashScreen.name);
@@ -800,7 +824,7 @@ class AppRouter {
         path: '/payment/demandes_visites/:idProduct',
         builder: (context, state) => Scaffold(
           appBar: AppBar(
-            title: const Text('Demande de visite'),
+            title: Text('Demande de visite'),
             leading: IconButton(
               onPressed: () {
                 context.goNamed(SplashScreen.name);
@@ -891,6 +915,13 @@ class AppRouter {
         name: UserPreferencePage.name,
         builder: (BuildContext context, GoRouterState state) {
           return const UserPreferencePage();
+        },
+      ),
+      GoRoute(
+        path: UserPreferenceIntermediaryPage.routePath,
+        name: UserPreferenceIntermediaryPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const UserPreferenceIntermediaryPage();
         },
       ),
       GoRoute(

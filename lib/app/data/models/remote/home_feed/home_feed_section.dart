@@ -17,6 +17,16 @@ abstract class HomeFeedSectionType {
   /// `residence_list` avec un gabarit dédié (voir HOME FEED AGREGATOR.MD
   /// § "top_rated").
   static const topRatedKey = 'top_rated';
+
+  /// `section.key` des sections "Les moins chères" des trois parcours.
+  static const cheapestStayKey = 'cheapest_stay';
+  static const cheapestRentKey = 'cheapest_rent';
+  static const cheapestBuyKey = 'cheapest_buy';
+  static const cheapestKeys = {
+    cheapestStayKey,
+    cheapestRentKey,
+    cheapestBuyKey,
+  };
 }
 
 /// Une entrée de `sections[]` dans la réponse de `GET /me/home`. La forme
@@ -88,6 +98,5 @@ class HomeFeedSection with _$HomeFeedSection {
   }
 
   /// "Voir plus" pertinent seulement s'il reste des items non chargés.
-  bool get hasSeeMore =>
-      seeMoreEndpoint != null && totalCount > (page * limit);
+  bool get hasSeeMore => seeMoreEndpoint != null && totalCount > (page * limit);
 }

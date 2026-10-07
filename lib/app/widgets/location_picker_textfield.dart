@@ -20,7 +20,7 @@
 //         textEditingController: textEditingController,
 //         googleAPIKey: Constantes.mapToken,
 //         boxDecoration: BoxDecoration(
-//             color: Colors.transparent, borderRadius: BorderRadius.circular(10)),
+//             color: AppColors.transparent, borderRadius: BorderRadius.circular(10)),
 //         inputDecoration: InputDecoration(
 //           contentPadding: EdgeInsets.zero,
 //           prefixIcon: prefixIcon,

@@ -20,8 +20,6 @@ import 'package:immoplus/app/core/network/interceptors/error_interceptor.dart'
     as _i1023;
 import 'package:immoplus/app/core/network/interceptors/request_interceptor.dart'
     as _i358;
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart'
-    as _i415;
 import 'package:immoplus/app/core/network/utils/env_handler.dart' as _i242;
 import 'package:immoplus/app/core/network/utils/session_manager.dart' as _i22;
 import 'package:immoplus/app/core/services/analytics_service.dart' as _i1058;
@@ -39,6 +37,7 @@ import 'package:immoplus/app/core/services/push/push_provider.dart' as _i511;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/core/services/reverse_search_socket_service.dart'
     as _i997;
+import 'package:immoplus/app/data/enums/home_feed_scope.dart' as _i366;
 import 'package:immoplus/app/data/repositories/ad_repository.dart' as _i206;
 import 'package:immoplus/app/data/repositories/alert_repository.dart' as _i443;
 import 'package:immoplus/app/data/repositories/banner_repository.dart' as _i39;
@@ -66,6 +65,8 @@ import 'package:immoplus/app/data/repositories/suggest_repository.dart'
     as _i743;
 import 'package:immoplus/app/data/repositories/user_preference_repository.dart'
     as _i715;
+import 'package:immoplus/app/design_system/feedback/easy_loading_handler.dart'
+    as _i725;
 import 'package:immoplus/app/features/ai_assistant/services/chat_history_service.dart'
     as _i342;
 import 'package:immoplus/app/features/booking/logic/booking_cubit.dart'
@@ -81,6 +82,8 @@ import 'package:immoplus/app/features/for_me/logic/favories_utils.dart'
     as _i374;
 import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart'
     as _i943;
+import 'package:immoplus/app/features/for_you/logic/scope_feed_cubit.dart'
+    as _i717;
 import 'package:immoplus/app/features/furniture_detail/cubit/furniture_cubit.dart'
     as _i123;
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart' as _i368;
@@ -141,23 +144,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i847.IsarConfig>(() => _i847.IsarConfig());
     gh.lazySingleton<_i358.RequestInterceptor>(
         () => _i358.RequestInterceptor());
-    gh.lazySingleton<_i415.EasyLoadingHandler>(
-        () => _i415.EasyLoadingHandler());
     gh.lazySingleton<_i242.EnvHandler>(() => _i242.EnvHandler());
     gh.lazySingleton<_i1058.AnalyticsService>(() => _i1058.AnalyticsService());
     gh.lazySingleton<_i570.MessagingSocketService>(
         () => _i570.MessagingSocketService());
     gh.lazySingleton<_i57.RemoteConfigService>(
         () => _i57.RemoteConfigService());
+    gh.lazySingleton<_i95.PushInstallationService>(
+        () => _i95.PushInstallationService());
     gh.lazySingleton<_i944.AuthRedirectService>(
         () => _i944.AuthRedirectService());
     gh.lazySingleton<_i997.ReverseSearchSocketService>(
         () => _i997.ReverseSearchSocketService());
+    gh.lazySingleton<_i725.EasyLoadingHandler>(
+        () => _i725.EasyLoadingHandler());
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
-    gh.lazySingleton<_i95.PushInstallationService>(
-        () => _i95.PushInstallationService());
     gh.lazySingleton<_i511.PushProvider>(() => _i693.FirebasePushProvider());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
@@ -296,6 +299,14 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i880.ReverseSearchRepository>(),
           gh<_i997.ReverseSearchSocketService>(),
           gh<_i22.SessionManager>(),
+        ));
+    gh.factoryParam<_i717.ScopeFeedCubit, _i366.HomeFeedScope, dynamic>((
+      scope,
+      _,
+    ) =>
+        _i717.ScopeFeedCubit(
+          gh<_i922.HomeFeedRepository>(),
+          scope: scope,
         ));
     gh.lazySingleton<_i943.ForYouCubit>(
         () => _i943.ForYouCubit(gh<_i922.HomeFeedRepository>()));

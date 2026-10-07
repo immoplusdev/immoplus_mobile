@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class EmptyStateCard extends StatelessWidget {
   const EmptyStateCard({
@@ -127,11 +127,11 @@ class _EmptyStateCardModalState extends State<_EmptyStateCardModal> {
             onTap: () => Navigator.pop(context),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.35),
+                color: AppColors.black.withValues(alpha: 0.35),
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(6),
-              child: const Icon(Icons.close, color: Colors.white, size: 18),
+              child: const Icon(Icons.close, color: AppColors.white, size: 18),
             ),
           ),
         ),
@@ -160,7 +160,7 @@ class _EmptyStateCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: AppColors.white),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -180,32 +180,32 @@ class _EmptyStateCardContent extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.customBlue,
+                    color: AppColors.immoBrandPrimary,
                     height: 1.2,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
                   subtitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: AppColors.gray700,
                     height: 1.4,
                   ),
                 ),
                 if (buttonText != null) ...[
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: onButtonPressed,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.customBlue,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.immoBrandPrimary,
+                        foregroundColor: AppColors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
                           vertical: 16,
@@ -217,7 +217,7 @@ class _EmptyStateCardContent extends StatelessWidget {
                       ),
                       child: Text(
                         buttonText!,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

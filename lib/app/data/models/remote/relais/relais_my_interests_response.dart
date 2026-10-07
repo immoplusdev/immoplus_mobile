@@ -36,5 +36,6 @@ class MyRelaisInterestModel with _$MyRelaisInterestModel {
   factory MyRelaisInterestModel.fromJson(Map<String, dynamic> json) =>
       _$MyRelaisInterestModelFromJson(json);
 
-  RelaisInterestStatus get statusEnum => RelaisInterestStatus.fromString(status);
+  RelaisInterestStatus get statusEnum =>
+      RelaisInterestStatus.fromString(status);
 }

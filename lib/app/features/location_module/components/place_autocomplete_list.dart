@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,7 @@ class PlaceAutocompleteList extends GetView<LocationController> {
               item: controller.placeAutocompleteList[index]),
           separatorBuilder: (context, index) => Divider(
             height: 1,
-            color: Colors.blueGrey.withOpacity(0.1),
+            color: AppColors.blueGrey.withOpacity(0.1),
           ),
           itemCount: controller.placeAutocompleteList.length,
         ));

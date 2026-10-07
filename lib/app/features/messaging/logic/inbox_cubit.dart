@@ -55,7 +55,8 @@ class InboxCubit extends Cubit<InboxState> {
       final conversations = await _repository.getConversations(type: type);
       final stillCurrent = state;
       if (stillCurrent is InboxLoaded && stillCurrent.activeType == type) {
-        emit(stillCurrent.copyWith(conversations: conversations, isSwitchingTab: false));
+        emit(stillCurrent.copyWith(
+            conversations: conversations, isSwitchingTab: false));
       }
     } catch (e) {
       final stillCurrent = state;
@@ -71,7 +72,8 @@ class InboxCubit extends Cubit<InboxState> {
       emit(current.copyWith(isRefreshing: true));
     }
     try {
-      final activeType = current is InboxLoaded ? current.activeType : _rememberedType;
+      final activeType =
+          current is InboxLoaded ? current.activeType : _rememberedType;
       final results = await Future.wait([
         _repository.getConversations(type: activeType),
         _repository.getConversationCounts(),
@@ -114,7 +116,8 @@ class InboxCubit extends Cubit<InboxState> {
         final bDate = b.lastMessageAt ?? b.createdAt ?? DateTime(1970);
         return bDate.compareTo(aDate);
       });
-    emit(InboxState.loaded(conversations: sorted, activeType: activeType, counts: counts));
+    emit(InboxState.loaded(
+        conversations: sorted, activeType: activeType, counts: counts));
     Constantes.unreadMessagesCount.value =
         counts.fold<int>(0, (t, c) => t + c.unread);
   }

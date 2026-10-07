@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:gap/gap.dart';
@@ -87,13 +88,13 @@ class _ForceUpdateRequiredPageState extends State<ForceUpdateRequiredPage>
                           Gap(30),
                           Text(
                             "Mise à jour obligatoire",
-                            style: TextStyle(
+                            style: AppTypography.font(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                           Text(
                             "Veuillez mettre à jour votre application pour continuer, elle contient des améliorations importantes.",
-                            style: TextStyle(
+                            style: AppTypography.font(
                                 fontSize: 16, fontWeight: FontWeight.w400),
                             textAlign: TextAlign.center,
                           ),
@@ -127,13 +128,13 @@ class _ForceUpdateRequiredPageState extends State<ForceUpdateRequiredPage>
                 gravity: 0.1,
                 particleDrag: 0.05,
                 colors: const [
-                  Colors.red,
-                  Colors.blue,
-                  Colors.green,
-                  Colors.yellow,
-                  Colors.pink,
-                  Colors.orange,
-                  Colors.purple,
+                  AppColors.red,
+                  AppColors.blue,
+                  AppColors.green,
+                  AppColors.yellow,
+                  AppColors.pink,
+                  AppColors.orange,
+                  AppColors.purple,
                 ],
               ),
             ),
@@ -151,10 +152,10 @@ class _ForceUpdateRequiredPageState extends State<ForceUpdateRequiredPage>
                 gravity: 0.1,
                 particleDrag: 0.05,
                 colors: const [
-                  Colors.pink,
-                  Colors.orange,
-                  Colors.purple,
-                  Colors.cyan,
+                  AppColors.pink,
+                  AppColors.orange,
+                  AppColors.purple,
+                  AppColors.cyan,
                 ],
               ),
             ),

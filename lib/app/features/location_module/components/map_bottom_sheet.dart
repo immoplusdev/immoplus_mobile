@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/location_module/components/error_indicator.dart';
 import 'package:immoplus/app/features/location_module/location_controller.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 
 class MapBottomSheet extends GetView<LocationController> {
@@ -14,8 +14,8 @@ class MapBottomSheet extends GetView<LocationController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -29,7 +29,7 @@ class MapBottomSheet extends GetView<LocationController> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: AppColors.immoBorderStrong,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -53,13 +53,13 @@ class MapBottomSheet extends GetView<LocationController> {
                     color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Text(
+                SizedBox(width: 12),
+                Text(
                   'Votre adresse',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF222222),
+                    color: AppColors.immoTextPrimary,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -72,8 +72,8 @@ class MapBottomSheet extends GetView<LocationController> {
 
           // ── Error ──
           controller.obx(
-            (state) => const SizedBox(),
-            onLoading: const SizedBox(),
+            (state) => SizedBox(),
+            onLoading: SizedBox(),
             onError: (error) => ErrorIndicator(description: error),
           ),
 
@@ -102,39 +102,39 @@ class MapBottomSheet extends GetView<LocationController> {
                               Text(
                                 controller.cameraAddress.value.description ??
                                     '',
-                                style: const TextStyle(
+                                style: AppTypography.font(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   height: 1.3,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 2),
-                              const Text(
+                              SizedBox(height: 2),
+                              Text(
                                 'Sélectionner cette adresse',
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.white70,
+                                  color: AppColors.white70,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Container(
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: AppColors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
                             Iconsax.arrow_right_3,
                             size: 18,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ],
@@ -148,11 +148,11 @@ class MapBottomSheet extends GetView<LocationController> {
                   color: AppColors.primary.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Center(
-                  child: CupertinoActivityIndicator(color: Colors.white),
+                child: Center(
+                  child: CupertinoActivityIndicator(color: AppColors.white),
                 ),
               ),
-              onError: (_) => const SizedBox(),
+              onError: (_) => SizedBox(),
             ),
           ),
         ],

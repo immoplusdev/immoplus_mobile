@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/features/booking/widgets/booking_list_info.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class BookingEarningDetailPage extends StatefulWidget {
@@ -34,12 +34,12 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
             info: 'Residence les rose',
           ),
           ListTile(
-            tileColor: Colors.white,
+            tileColor: AppColors.white,
             title: Text('ID réservation'),
             titleTextStyle: Theme.of(context)
                 .textTheme
                 .titleSmall!
-                .copyWith(color: Colors.grey),
+                .copyWith(color: AppColors.immoTextSecondary),
             subtitleTextStyle: Theme.of(context).textTheme.bodyLarge!,
             subtitle:
                 SelectableText('praizoeuroieazhfoiehafherfhrzeugfzuregbvztr'),
@@ -79,7 +79,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
                         itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: ListTile(
-                            tileColor: Colors.white,
+                            tileColor: AppColors.white,
                             title: Text('La résidence est indisponible'),
                             trailing: Checkbox(
                               value: true,
@@ -100,7 +100,7 @@ class _BookingEarningDetailPageState extends State<BookingEarningDetailPage> {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 "Retirer l'argent",
               ),
             ),

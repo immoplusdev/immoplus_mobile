@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/video_player/video_player_page.dart';
@@ -20,7 +21,7 @@ class FurnitureDetailVideo extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: AppColors.black,
             borderRadius: BorderRadius.circular(20),
           ),
           child: VideoPlayerPage(videoID: furnitureModel.video),

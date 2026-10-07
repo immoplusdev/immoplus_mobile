@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
@@ -47,7 +48,7 @@ class _UrgencyBadgeWithDelayState extends State<UrgencyBadgeWithDelay> {
       case UrgencyBadgeType.likes:
         return const Color(0xFFF97316); // Orange
       case UrgencyBadgeType.reservations:
-        return const Color(0xFF22C55E); // Vert
+        return AppColors.immoFeedbackSuccess; // Vert
       case UrgencyBadgeType.satisfaction:
         return const Color(0xFF3B82F6); // Bleu
     }
@@ -142,13 +143,13 @@ class _UrgencyBadgeWithDelayState extends State<UrgencyBadgeWithDelay> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 18),
-          const SizedBox(width: 8),
+          Icon(icon, color: AppColors.white, size: 18),
+          SizedBox(width: 8),
           Flexible(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Colors.white,
+              style: AppTypography.font(
+                color: AppColors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),

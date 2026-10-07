@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_request.dart';
 import 'package:immoplus/app/data/models/remote/alert/property_type.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:intl/intl.dart';
@@ -153,15 +152,13 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         backgroundColor: AppColors.whiteBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           _isEditMode ? 'Modifier ma demande' : 'Nouvelle demande',
-          style: GoogleFonts.dmSans(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+          style: AppTypography.h3.copyWith(
+            color: AppColors.black,
           ),
         ),
         centerTitle: true,
@@ -206,10 +203,8 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: Colors.grey.shade600,
+      style: AppTypography.bodyMediumMedium.copyWith(
+        color: AppColors.immoTextSecondary,
       ),
     );
   }
@@ -229,11 +224,12 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               height: 90,
               margin: const EdgeInsets.only(right: 12),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                    color:
-                        isSelected ? AppColors.primary : Colors.grey.shade200),
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderDefault),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -245,10 +241,10 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   const Gap(8),
                   Text(
                     type.label,
-                    style: GoogleFonts.dmSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : Colors.grey.shade600,
+                    style: AppTypography.captionMedium.copyWith(
+                      color: isSelected
+                          ? AppColors.white
+                          : AppColors.immoTextSecondary,
                     ),
                   ),
                 ],
@@ -271,18 +267,21 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
               margin: const EdgeInsets.symmetric(horizontal: 4),
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    color:
-                        isSelected ? AppColors.primary : Colors.grey.shade200),
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderDefault),
               ),
               child: Center(
                 child: Text(
                   type.label,
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.button.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.white : Colors.grey.shade600,
+                    color: isSelected
+                        ? AppColors.white
+                        : AppColors.immoTextSecondary,
                   ),
                 ),
               ),
@@ -299,27 +298,27 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.immoBorderDefault),
         ),
         child: Row(
           children: [
-            const Icon(Icons.location_on, color: Color(0xFF3B82F6), size: 20),
+            Icon(Icons.location_on, color: Color(0xFF3B82F6), size: 20),
             const Gap(12),
             Expanded(
               child: Text(
                 _selectedAddress?.description ??
                     'Sélectionner une localisation',
-                style: GoogleFonts.dmSans(
-                  fontSize: 14,
+                style: AppTypography.bodyMedium.copyWith(
                   color: _selectedAddress != null
-                      ? Colors.black
-                      : Colors.grey.shade400,
+                      ? AppColors.black
+                      : AppColors.immoTextDisabled,
                 ),
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            Icon(Icons.arrow_forward_ios,
+                size: 16, color: AppColors.immoTextSecondary),
           ],
         ),
       ),
@@ -338,18 +337,19 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
             width: 60,
             height: 45,
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : Colors.white,
+              color: isSelected ? AppColors.primary : AppColors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                  color: isSelected ? AppColors.primary : Colors.grey.shade300),
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.immoBorderStrong),
             ),
             child: Center(
               child: Text(
                 rooms == 5 ? '5+' : rooms.toString(),
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLargeSemiBold.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.white : const Color(0xFF1E40AF),
+                  color: isSelected ? AppColors.white : const Color(0xFF1E40AF),
                 ),
               ),
             ),
@@ -370,7 +370,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
           max: 50000000,
           divisions: 100,
           activeColor: AppColors.primary,
-          inactiveColor: Colors.grey.shade200,
+          inactiveColor: AppColors.immoBorderDefault,
           onChanged: (values) => setState(() => _budgetRange = values),
         ),
         Row(
@@ -380,7 +380,8 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
                   'Minimum', '${format.format(_budgetRange.start)} fcfa'),
             ),
             const Gap(16),
-            const Text('—', style: TextStyle(color: Colors.grey)),
+            Text('—',
+                style: AppTypography.font(color: AppColors.immoTextSecondary)),
             const Gap(16),
             Expanded(
               child: _buildBudgetValue(
@@ -396,17 +397,18 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
-              style: GoogleFonts.dmSans(fontSize: 10, color: Colors.grey)),
+              style: AppTypography.micro
+                  .copyWith(fontSize: 10, color: AppColors.immoTextSecondary)),
           Text(value,
-              style: GoogleFonts.dmSans(
-                  fontSize: 14, fontWeight: FontWeight.bold)),
+              style: AppTypography.bodyMediumSemiBold
+                  .copyWith(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -418,17 +420,17 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
       maxLines: 4,
       decoration: InputDecoration(
         hintText: 'Ex : Un grand jardin avec piscine',
-        hintStyle:
-            GoogleFonts.dmSans(fontSize: 14, color: Colors.grey.shade400),
+        hintStyle: AppTypography.bodyMedium
+            .copyWith(color: AppColors.immoTextDisabled),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: AppColors.immoBorderDefault),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.grey.shade200),
+          borderSide: BorderSide(color: AppColors.immoBorderDefault),
         ),
       ),
     );

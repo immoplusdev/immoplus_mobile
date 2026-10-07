@@ -8,8 +8,8 @@ class UpdateUserDto with _$UpdateUserDto {
   const factory UpdateUserDto({
     @Default('') String firstName,
     @Default('') String lastName,
-    String? avatar,
-    @Default('') String email,
+    @JsonKey(includeIfNull: false) String? avatar,
+    @JsonKey(includeIfNull: false) String? email,
     @Default('') String phoneNumber,
   }) = _UpdateUserDto;
 

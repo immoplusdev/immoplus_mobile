@@ -14,7 +14,8 @@ import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/main.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 
 class FilterPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  final List<DateTime?> markedDates = [];
+  List<DateTime> markedDates = [];
   Address? currentAddress;
 
   @override
@@ -41,7 +42,9 @@ class _FilterPageState extends State<FilterPage> {
       try {
         markedDates.add(DateTime.parse(FilterHandler.startDate!));
         markedDates.add(DateTime.parse(FilterHandler.endDate!));
-      } catch (e) {}
+      } catch (e, st) {
+        talker.debug('Failed to parse filter dates: $e', e, st);
+      }
     }
     super.initState();
   }
@@ -97,9 +100,9 @@ class _FilterPageState extends State<FilterPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: const Color(0xFFF2F4F7)),
+                      border: Border.all(color: AppColors.immoBorderDefault),
                     ),
                     child: Row(
                       children: [
@@ -128,14 +131,14 @@ class _FilterPageState extends State<FilterPage> {
                                           ? FontWeight.w400
                                           : FontWeight.w600,
                                       color: currentAddress == null
-                                          ? const Color(0xFF98A2B3)
-                                          : const Color(0xFF344054),
+                                          ? AppColors.immoTextDisabled
+                                          : AppColors.immoTextLabel,
                                     ),
                           ),
                         ),
                         Icon(
                           Iconsax.arrow_down_1,
-                          color: const Color(0xFF98A2B3),
+                          color: AppColors.immoTextDisabled,
                           size: 20,
                         ),
                       ],
@@ -160,9 +163,9 @@ class _FilterPageState extends State<FilterPage> {
               sliver: SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFF2F4F7)),
+                    border: Border.all(color: AppColors.immoBorderDefault),
                   ),
                   child: CalendarDatePicker2(
                     config: CalendarDatePicker2Config(
@@ -176,7 +179,7 @@ class _FilterPageState extends State<FilterPage> {
                       firstDayOfWeek: 1,
                       calendarType: CalendarDatePicker2Type.range,
                       centerAlignModePicker: true,
-                      customModePickerIcon: const SizedBox(),
+                      customModePickerIcon: SizedBox(),
                       firstDate: DateTime.now(),
                       selectedDayHighlightColor: AppColors.primary,
                       selectedRangeHighlightColor:
@@ -214,8 +217,8 @@ class _FilterPageState extends State<FilterPage> {
               .copyWith(bottom: 16, top: 12),
           decoration: BoxDecoration(
             color: AppColors.whiteBackground,
-            border: const Border(
-              top: BorderSide(color: Color(0xFFF2F4F7)),
+            border: Border(
+              top: BorderSide(color: AppColors.immoBorderDefault),
             ),
           ),
           child: SafeArea(
@@ -246,17 +249,17 @@ class _FilterPageState extends State<FilterPage> {
                       context.read<FilterCubit>().refresh(FilterHandler());
                       context.pop();
                     },
-                    icon: const Icon(Iconsax.filter, size: 18),
-                    label: const Text('Appliquer le filtre'),
+                    icon: Icon(Iconsax.filter, size: 18),
+                    label: Text('Appliquer le filtre'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      textStyle: const TextStyle(
+                      textStyle: AppTypography.font(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
@@ -279,14 +282,14 @@ class _FilterPageState extends State<FilterPage> {
                       context.pop();
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFFF04438),
+                      foregroundColor: AppColors.immoFeedbackError,
                       padding: const EdgeInsets.symmetric(vertical: 12),
-                      textStyle: const TextStyle(
+                      textStyle: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    child: const Text('Annuler les filtres'),
+                    child: Text('Annuler les filtres'),
                   ),
                 ),
               ],
@@ -302,7 +305,7 @@ class _FilterPageState extends State<FilterPage> {
       text,
       style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF344054),
+            color: AppColors.immoTextLabel,
           ),
     );
   }

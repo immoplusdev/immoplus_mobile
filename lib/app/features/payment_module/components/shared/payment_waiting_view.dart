@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
@@ -45,9 +45,9 @@ class PaymentWaitingView extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 CupertinoIcons.chevron_back,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               onPressed: onBack,
             ),
@@ -106,26 +106,26 @@ class PaymentWaitingView extends StatelessWidget {
                     ),
                     tileColor: AppColors.primary,
                     leading: actionIcon ??
-                        const Icon(
+                        Icon(
                           Icons.phone_android,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                     title: Text(actionButtonText!),
                     titleTextStyle:
                         Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontWeight: FontWeight.w600,
                             ),
-                    trailing: const Icon(
+                    trailing: Icon(
                       CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   )
                 : CustomButtom(
                     elevation: 2,
-                    color: Colors.white,
+                    color: AppColors.white,
                     text: actionButtonText!,
-                    textColor: Colors.black,
+                    textColor: AppColors.black,
                     onClick: onActionTap!,
                   ),
           ),
@@ -143,9 +143,9 @@ class PaymentWaitingView extends StatelessWidget {
                 "Une fois le paiement validé, veuillez patienter quelques instants. "
                     "Vous serez notifié du statut de votre paiement, puis celui de votre demande par ImmoPlus.",
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
-              color: Color(0xFF64748B),
+              color: AppColors.immoTextSecondary,
               height: 1.3,
             ),
           ),

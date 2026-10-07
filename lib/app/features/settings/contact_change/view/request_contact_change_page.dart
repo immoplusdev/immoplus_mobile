@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
@@ -58,17 +58,17 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: AppColors.black),
             onPressed: () => context.pop(),
           ),
           title: Text(
             _title,
-            style: GoogleFonts.dmSans(
+            style: AppTypography.h4.copyWith(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF0D0D0D),
@@ -84,18 +84,17 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   widget.type == ContactChangeType.phone
                       ? 'Entrez votre nouveau numéro de téléphone. Un code de vérification vous sera envoyé.'
                       : 'Entrez votre nouvelle adresse email. Un code de vérification vous sera envoyé.',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 14,
-                    color: const Color(0xFF64748B),
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.slate500,
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 28),
+                SizedBox(height: 28),
                 if (widget.type == ContactChangeType.phone)
                   InternationalPhoneInput(
                     onValidPhoneNumber: (phone) {
@@ -110,7 +109,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                     decoration: InputDecoration(
                       hintText: 'Nouvelle adresse email',
                       filled: true,
-                      fillColor: const Color(0xFFECECEC),
+                      fillColor: AppColors.immoBorderDefault,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(28),
                         borderSide: BorderSide.none,
@@ -135,8 +134,8 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                         }
                         if (widget.type == ContactChangeType.phone &&
                             (_phoneNumber == null || _phoneNumber!.isEmpty)) {
-                          EasyLoading.showError(
-                              'Veuillez entrer un numéro valide');
+                          ToastUtils.showError(
+                              description: 'Veuillez entrer un numéro valide');
                           return;
                         }
                         context.read<ContactChangeCubit>().requestChange(
@@ -150,7 +149,7 @@ class _RequestContactChangePageState extends State<RequestContactChangePage> {
                     );
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
               ],
             ),
           ),

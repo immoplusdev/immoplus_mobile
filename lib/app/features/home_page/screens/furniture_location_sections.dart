@@ -8,7 +8,7 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/data/repositories/furniture_repository.dart';
 import 'package:immoplus/app/features/home_page/logic/home_page_state.dart';
 import 'package:immoplus/app/features/home_page/screens/location_furnitures_page.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_furniture_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
@@ -173,12 +173,12 @@ class _FurnitureLocationSectionsListState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Gap(15),
-                        const SizedBox(
+                        SizedBox(
                           width: 150,
                           height: 20,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Colors.black12,
+                              color: AppColors.black12,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(4)),
                             ),
@@ -264,8 +264,9 @@ class FurnituresHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color:
-                    furnitures.isNotEmpty ? Colors.black : Colors.grey.shade400,
+                color: furnitures.isNotEmpty
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:immoplus/app/features/prop_feed/video_repository.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 /// Affiche la miniature d'une vidéo du feed dans une carte de carrousel.
@@ -60,7 +61,7 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: SizedBox(
           width: 30,
           height: 30,
@@ -73,7 +74,7 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
       if (widget.buildErrorWidget != null) {
         return widget.buildErrorWidget!(_loadThumbnail);
       }
-      return const Center(child: Icon(Icons.error));
+      return Center(child: Icon(Icons.error));
     }
 
     return GestureDetector(
@@ -85,15 +86,15 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
             imageUrl: _thumbnailUrl!,
             fit: BoxFit.cover,
             placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(color: Colors.white),
+              baseColor: AppColors.gray300,
+              highlightColor: AppColors.gray100,
+              child: Container(color: AppColors.white),
             ),
             errorWidget: (context, url, error) {
               if (widget.buildErrorWidget != null) {
                 return widget.buildErrorWidget!(_loadThumbnail);
               }
-              return const Center(child: Icon(Icons.error));
+              return Center(child: Icon(Icons.error));
             },
           ),
           // Signale que la carte est cliquable pour lancer la vidéo dans
@@ -104,12 +105,12 @@ class _AdVideoCoverWidgetState extends State<AdVideoCoverWidget> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.35),
+                  color: AppColors.black.withValues(alpha: 0.35),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Iconsax.play,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 18,
                 ),
               ),

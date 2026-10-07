@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:intl/intl.dart';
 
@@ -18,9 +18,9 @@ class PlaningBookingCardDetail extends StatelessWidget {
         "${formatDate.format(Utils.toDateTime(reservationModel.dateFin))} avant ${reservationModel.residence.heureDepart} ";
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: AppColors.immoTextSecondary),
       ),
       height: 70,
       child: Row(
@@ -29,26 +29,28 @@ class PlaningBookingCardDetail extends StatelessWidget {
           Flexible(
             child: ListTile(
               dense: true,
-              title: const Text('ARRIVÉE'),
+              title: Text('ARRIVÉE'),
               contentPadding: EdgeInsets.zero.copyWith(left: 3),
-              titleTextStyle: GoogleFonts.inter(
+              titleTextStyle: AppTypography.labelMedium.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               subtitle: AutoSizeText(dateHeureDebut),
             ),
           ),
-          const VerticalDivider(
+          VerticalDivider(
             thickness: 1,
-            color: Colors.grey,
+            color: AppColors.immoTextSecondary,
           ),
           Flexible(
             child: ListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              title: const Text('DÉPART'),
-              titleTextStyle: GoogleFonts.inter(
-                  fontWeight: FontWeight.bold, color: Colors.black),
+              title: Text('DÉPART'),
+              titleTextStyle: AppTypography.labelMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.black,
+              ),
               subtitle: (reservationModel.datesReservation.isNotEmpty)
                   ? AutoSizeText(
                       dateHeureFin,

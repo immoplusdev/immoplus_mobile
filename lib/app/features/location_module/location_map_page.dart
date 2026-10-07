@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -18,10 +19,10 @@ class LocationMapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         iconTheme: const IconThemeData(shadows: [
           Shadow(
-            color: Colors.black,
+            color: AppColors.black,
             offset: Offset(0, 2),
             blurRadius: 4,
           )
@@ -53,14 +54,14 @@ class LocationMapPage extends StatelessWidget {
               children: [
                 AppBar(
                   elevation: 0,
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: AppColors.transparent,
                   leading: IconButton(
                     onPressed: () => context.pop(),
                     icon: const CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColors.white,
                       child: Icon(
                         Icons.arrow_back,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                     ),
                   ),

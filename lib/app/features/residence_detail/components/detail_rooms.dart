@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class DetailLogmentRooms extends StatelessWidget {
   const DetailLogmentRooms({super.key, required this.logmentModel});
@@ -76,21 +76,21 @@ class _RoomItem extends StatelessWidget {
         Icon(
           _icon,
           size: 20,
-          color: Color(0xff2744de),
+          color: AppColors.immoBrandPrimary,
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           '$count',
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 15,
             fontWeight: FontWeight.w600,
             color: Color(0xFF3D4A5C),
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           name,
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Color(0xFF3D4A5C),

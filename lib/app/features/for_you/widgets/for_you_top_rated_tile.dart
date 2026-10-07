@@ -1,8 +1,8 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_residence_item.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
@@ -23,21 +23,17 @@ class ForYouTopRatedTile extends StatelessWidget {
   static const double height = 286;
   static const double _radius = 20;
 
-  /// Marge verticale à réserver AUTOUR de cette carte (ex: la hauteur de
-  /// la ligne du carousel qui l'affiche) pour que le débordement de la
-  /// pile d'avatars (positionnée hors de la carte, en bas-droite) ne soit
-  /// pas rogné par le viewport de la `ListView` horizontale.
-  static const double overflowAllowance = 30;
-
   @override
   Widget build(BuildContext context) {
-    final imageUrl =
-        residence.imageUrl != null ? Utils.getImagePath(id: residence.imageUrl!) : '';
+    final imageUrl = residence.imageUrl != null
+        ? Utils.getImagePath(id: residence.imageUrl!)
+        : '';
     final reviewersTotal = _ReviewerAvatarStack._totalFor(residence);
     final hasAvatars = reviewersTotal > 0;
     // Réserve la place de la pile d'avatars (positionnée à part, en dehors
     // du `ClipRRect`) pour que le texte ne passe pas dessous.
-    final infoRightInset = hasAvatars ? 16 + _ReviewerAvatarStack.widthFor(residence) + 8 : 16.0;
+    final infoRightInset =
+        hasAvatars ? 16 + _ReviewerAvatarStack.widthFor(residence) + 8 : 16.0;
 
     return SizedBox(
       width: width,
@@ -60,16 +56,16 @@ class ForYouTopRatedTile extends StatelessWidget {
                     fadeInDuration: Duration.zero,
                     fadeOutDuration: Duration.zero,
                     placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
+                      baseColor: AppColors.immoBorderStrong,
+                      highlightColor: AppColors.immoBgSurfaceMuted,
                       period: const Duration(milliseconds: 500),
-                      child: Container(color: Colors.white),
+                      child: Container(color: AppColors.white),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      color: Colors.grey.shade200,
+                      color: AppColors.immoBorderDefault,
                       child: Center(
-                        child:
-                            FaIcon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
+                        child: FaIcon(FontAwesomeIcons.images,
+                            size: 60, color: AppColors.immoTextDisabled),
                       ),
                     ),
                   ),
@@ -78,7 +74,10 @@ class ForYouTopRatedTile extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.75)],
+                        colors: [
+                          AppColors.transparent,
+                          AppColors.black.withValues(alpha: 0.75)
+                        ],
                         stops: const [0.4, 1.0],
                       ),
                     ),
@@ -124,28 +123,28 @@ class _Info extends StatelessWidget {
       children: [
         Text(
           residence.name,
-          style: GoogleFonts.plusJakartaSans(
+          style: AppTypography.font(
             fontWeight: FontWeight.w400,
             fontSize: 16,
-            color: Colors.white,
+            color: AppColors.white,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         if (residence.location != null) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Iconsax.location, size: 12, color: Colors.white),
-              const SizedBox(width: 4),
+              const Icon(Iconsax.location, size: 12, color: AppColors.white),
+              SizedBox(width: 4),
               Flexible(
                 child: Text(
                   residence.location!,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: AppTypography.font(
                     fontWeight: FontWeight.w700,
                     fontSize: 12,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -155,13 +154,13 @@ class _Info extends StatelessWidget {
           ),
         ],
         if (residence.totalReviews != null) ...[
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           Text(
             '${residence.totalReviews} avis',
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w500,
               fontSize: 9,
-              color: Colors.white.withValues(alpha: 0.85),
+              color: AppColors.white.withValues(alpha: 0.85),
             ),
           ),
         ],
@@ -189,7 +188,7 @@ class _ReviewerAvatarStack extends StatelessWidget {
   /// gauche) au plus foncé (la bulle "+N", tout à droite) — dégradé,
   /// pas une couleur unique par avatar.
   static const Color _lightest = Color(0xFFAEB8FF);
-  static const Color _darkest = Color(0xFF2744DE);
+  static const Color _darkest = AppColors.blue500;
 
   static List<ForYouReviewerAvatar> _displayAvatars(
       List<ForYouReviewerAvatar> avatars, int total) {
@@ -203,7 +202,8 @@ class _ReviewerAvatarStack extends StatelessWidget {
   static int _itemCount(ForYouResidenceItem residence) {
     final total = _totalFor(residence);
     final displayAvatars = _displayAvatars(residence.reviewerAvatars, total);
-    return displayAvatars.length + (_remaining(displayAvatars, total) > 0 ? 1 : 0);
+    return displayAvatars.length +
+        (_remaining(displayAvatars, total) > 0 ? 1 : 0);
   }
 
   /// Nombre total de reviewers, tous champs backend confondus (compat avec
@@ -278,10 +278,10 @@ class _ReviewerAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _letter,
-        style: GoogleFonts.plusJakartaSans(
+        style: AppTypography.font(
           fontWeight: FontWeight.w500,
           fontSize: 20,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );
@@ -289,7 +289,7 @@ class _ReviewerAvatar extends StatelessWidget {
     return Container(
       width: _ReviewerAvatarStack._size,
       height: _ReviewerAvatarStack._size,
-      decoration: const BoxDecoration(shape: BoxShape.circle),
+      decoration: BoxDecoration(shape: BoxShape.circle),
       clipBehavior: Clip.antiAlias,
       child: hasImage
           ? CachedNetworkImage(
@@ -319,10 +319,10 @@ class _RemainingBubble extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         '+$count',
-        style: GoogleFonts.plusJakartaSans(
+        style: AppTypography.font(
           fontWeight: FontWeight.w700,
           fontSize: 13,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

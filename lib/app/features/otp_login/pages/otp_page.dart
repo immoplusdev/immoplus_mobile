@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
@@ -14,7 +14,6 @@ import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_input.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
@@ -83,7 +82,7 @@ class _OtpPageState extends State<OtpPage> {
 
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
         CustomPopup.toast(
-          color: Colors.green,
+          color: AppColors.green,
           toastPosition: EasyLoadingToastPosition.bottom,
           text: "Code renvoyé avec succès",
         );
@@ -95,7 +94,7 @@ class _OtpPageState extends State<OtpPage> {
     } catch (e) {
       if (!mounted) return;
       CustomPopup.toast(
-        color: Colors.red,
+        color: AppColors.red,
         toastPosition: EasyLoadingToastPosition.bottom,
         text: "Envoi de OTP code échoué, veuillez réessayer",
       );
@@ -193,11 +192,11 @@ class _OtpPageState extends State<OtpPage> {
                 onPressed: _isResending ? null : _showResendChannelChoice,
                 child: Text(
                   _isResending ? 'Envoi en cours...' : 'Renvoyer',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 16,
                     decoration: TextDecoration.underline,
                     color: _isResending
-                        ? Colors.grey
+                        ? AppColors.immoTextSecondary
                         : const Color.fromRGBO(62, 116, 165, 1),
                   ),
                 ),

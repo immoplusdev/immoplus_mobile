@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
@@ -82,12 +82,14 @@ class _SearchResultPageState extends State<SearchResultPage>
   @override
   void onConnectionRestored() {
     if (widget.category == 'residence') {
-      if (_residencePagingController.itemList == null || _residencePagingController.itemList!.isEmpty) {
+      if (_residencePagingController.itemList == null ||
+          _residencePagingController.itemList!.isEmpty) {
         _residencePagingController.error = 'temporary_error_to_force_refresh';
         _residencePagingController.refresh();
       }
     } else {
-      if (_estatePagingController.itemList == null || _estatePagingController.itemList!.isEmpty) {
+      if (_estatePagingController.itemList == null ||
+          _estatePagingController.itemList!.isEmpty) {
         _estatePagingController.error = 'temporary_error_to_force_refresh';
         _estatePagingController.refresh();
       }
@@ -140,7 +142,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         _residencePagingController.appendPage(response.data ?? [], nextPageKey);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      _residencePagingController.error = error;
+      showConnectionErrorDialog(error);
     }
   }
 
@@ -188,7 +191,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         _estatePagingController.appendPage(response.data ?? [], nextPageKey);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      _estatePagingController.error = error;
+      showConnectionErrorDialog(error);
     }
   }
 
@@ -205,7 +209,7 @@ class _SearchResultPageState extends State<SearchResultPage>
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: _estateSubCategories.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) => SizedBox(width: 8),
         itemBuilder: (context, index) {
           final item = _estateSubCategories[index];
           final isSelected = item == _selectedSubCategory;
@@ -215,13 +219,13 @@ class _SearchResultPageState extends State<SearchResultPage>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : const Color(0xffEDF1F7),
+                color: isSelected ? AppColors.blue500 : const Color(0xffEDF1F7),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Text(
                 item.label,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : const Color(0xff333333),
+                style: AppTypography.font(
+                  color: isSelected ? AppColors.white : const Color(0xff333333),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   fontSize: 12,
                 ),
@@ -246,10 +250,11 @@ class _SearchResultPageState extends State<SearchResultPage>
               firstPageProgressIndicatorBuilder: (context) => Column(
                 children: List.generate(5, (index) => LoadProductCard()),
               ),
-              noItemsFoundIndicatorBuilder: (context) => const Center(
+              noItemsFoundIndicatorBuilder: (context) => Center(
                 child: Text(
                   'Aucun résultat trouvé pour votre recherche.',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: AppTypography.font(
+                      color: AppColors.immoTextSecondary, fontSize: 16),
                 ),
               ),
               itemBuilder: (context, item, index) => Padding(
@@ -264,10 +269,11 @@ class _SearchResultPageState extends State<SearchResultPage>
               firstPageProgressIndicatorBuilder: (context) => Column(
                 children: List.generate(5, (index) => LoadProductCard()),
               ),
-              noItemsFoundIndicatorBuilder: (context) => const Center(
+              noItemsFoundIndicatorBuilder: (context) => Center(
                 child: Text(
                   'Aucun résultat trouvé pour votre recherche.',
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: AppTypography.font(
+                      color: AppColors.immoTextSecondary, fontSize: 16),
                 ),
               ),
               itemBuilder: (context, item, index) => Padding(
@@ -325,7 +331,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                 ),
               ),
             if (showEstateSubTabs) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               _buildEstateSubCategoryTabs(),
             ],
             Expanded(

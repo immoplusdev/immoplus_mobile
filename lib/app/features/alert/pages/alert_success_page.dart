@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 class AlertSuccessPage extends StatelessWidget {
@@ -11,7 +11,7 @@ class AlertSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -24,21 +24,16 @@ class AlertSuccessPage extends StatelessWidget {
               Text(
                 'Votre demande a été envoyée avec succès',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  height: 1.2,
+                style: AppTypography.h2.copyWith(
+                  color: AppColors.black,
                 ),
               ),
               const Gap(16),
               Text(
                 'Nous vous proposerons des biens correspondant à vos critères dans les plus brefs délais.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
-                  fontSize: 14,
-                  color: Colors.grey.shade500,
-                  height: 1.5,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
               const Spacer(),
@@ -59,14 +54,14 @@ class AlertSuccessPage extends StatelessWidget {
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: Colors.green.shade100.withValues(alpha: 0.5),
+            color: AppColors.green50.withValues(alpha: 0.5),
             shape: BoxShape.circle,
           ),
         ),
         Icon(
           Icons.verified,
           size: 140,
-          color: Colors.green.shade400,
+          color: AppColors.green500,
         ),
       ],
     );

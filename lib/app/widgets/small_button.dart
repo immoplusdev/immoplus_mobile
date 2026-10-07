@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class SmallButton extends StatelessWidget {
   final String text;
@@ -18,7 +18,7 @@ class SmallButton extends StatelessWidget {
         child: Center(
             child: Text(
           text,
-          style: const TextStyle(color: Colors.white),
+          style: AppTypography.font(color: AppColors.white),
         )),
       ),
     );

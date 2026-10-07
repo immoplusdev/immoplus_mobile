@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -11,16 +11,12 @@ class SectionTitle extends StatelessWidget {
     return Text(
       title,
       style: useCalSans
-          ? GoogleFonts.getFont(
-              'Cal Sans',
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF1a1a2e),
+          ? AppTypography.h3.copyWith(
+              color: AppColors.navy900,
             )
-          : Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+          : AppTypography.h4.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
     );
   }
 }

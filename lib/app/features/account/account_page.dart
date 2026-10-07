@@ -4,16 +4,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/demande_pro_particulier_status.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/features/account/pages/change_credentials_page.dart';
 import 'package:immoplus/app/features/account/pages/edit_account.dart';
 import 'package:immoplus/app/features/account/widgets/delete_account_dialog.dart';
@@ -31,18 +29,17 @@ import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Design tokens — minimalist luxury, 2026
-const Color _kIconBg = Color(0xFFF2F2F2);
-const Color _kIconColor = Color(0xFF374151);
-const Color _kLabelColor = Color(0xFF0D0D0D);
-const Color _kSectionColor = Color(0xFF64748B);
-const Color _kTrailingColor = Color(0xFF374151);
-const Color _kBrandMuted = Color(0xFF9CA3AF); // muted light grey
-const Color _kSocialIcon = Color(0xFF6B7280); // monochromatic grey
+final Color _kIconBg = AppColors.immoBgSurfaceMuted;
+final Color _kIconColor = AppColors.immoTextPrimary;
+final Color _kLabelColor = AppColors.immoTextPrimary;
+final Color _kSectionColor = AppColors.immoTextSecondary;
+final Color _kTrailingColor = AppColors.immoTextPrimary;
+final Color _kBrandMuted = AppColors.immoTextDisabled; // muted light grey
+final Color _kSocialIcon = AppColors.immoTextSecondary; // monochromatic grey
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -171,13 +168,12 @@ class _AccountPageState extends State<AccountPage> {
                 delegate: SliverChildListDelegate([
                   SettingsTile(
                     shape: SettingsTile.shapeFirst,
-                    leading: _iconLeading(const Icon(CupertinoIcons.person,
+                    leading: _iconLeading(Icon(CupertinoIcons.person,
                         size: 20, color: _kIconColor)),
                     title: "Se Connecter / S`Inscrire",
                     titleColor: _kLabelColor,
                     trailingColor: _kTrailingColor,
-                    titleStyle: GoogleFonts.dmSans(
-                      fontSize: 16,
+                    titleStyle: AppTypography.bodyLarge.copyWith(
                       fontWeight: FontWeight.w500,
                       color: _kLabelColor,
                       height: 1.25,
@@ -263,7 +259,7 @@ class _AccountPageState extends State<AccountPage> {
       child: Center(
         child: Text(
           '@Afriq\'Solus',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.bodySmall.copyWith(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: _kBrandMuted,
@@ -282,12 +278,12 @@ class _AccountPageState extends State<AccountPage> {
         children: [
           _socialIcon(FontAwesomeIcons.instagram,
               () => _openUrl('https://www.instagram.com/immoplus_lapp')),
-          const SizedBox(width: 28),
+          SizedBox(width: 28),
           _socialIcon(FontAwesomeIcons.tiktok,
               () => _openUrl('https://www.tiktok.com/@immoplus_lapp')),
-          // const SizedBox(width: 28),
+          // SizedBox(width: 28),
           // _socialIcon(FontAwesomeIcons.linkedin, () => _openUrl('https://www.linkedin.com/company/immo-plus-l-app')),
-          const SizedBox(width: 28),
+          SizedBox(width: 28),
           _socialIcon(
               FontAwesomeIcons.facebook,
               () => _openUrl(
@@ -299,7 +295,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _socialIcon(FaIconData icon, VoidCallback onTap) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
@@ -324,7 +320,7 @@ class _AccountPageState extends State<AccountPage> {
         padding: const EdgeInsets.only(left: 20, bottom: 10),
         child: Text(
           title,
-          style: GoogleFonts.dmSans(
+          style: AppTypography.microBold.copyWith(
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: _kSectionColor,
@@ -345,8 +341,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Informations personnelles',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -365,8 +360,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Permissions',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -388,8 +382,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Notification',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -403,8 +396,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Historiques des réservations',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -418,8 +410,7 @@ class _AccountPageState extends State<AccountPage> {
         //   title: 'Mes demandes',
         //   titleColor: _kLabelColor,
         //   trailingColor: _kTrailingColor,
-        //   titleStyle: GoogleFonts.dmSans(
-        //     fontSize: 16,
+        //   titleStyle: AppTypography.bodyLarge.copyWith(
         //     fontWeight: FontWeight.w500,
         //     color: _kLabelColor,
         //     height: 1.25,
@@ -428,13 +419,12 @@ class _AccountPageState extends State<AccountPage> {
         // ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(
-              FaIcon(FontAwesomeIcons.creditCard, size: 18, color: _kIconColor)),
+          leading: _iconLeading(FaIcon(FontAwesomeIcons.creditCard,
+              size: 18, color: _kIconColor)),
           title: 'Réservations à payer',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -448,8 +438,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Historiques des visites',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -458,13 +447,12 @@ class _AccountPageState extends State<AccountPage> {
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(FaIcon(FontAwesomeIcons.star,
-              size: 18, color: _kIconColor)),
+          leading: _iconLeading(
+              FaIcon(FontAwesomeIcons.star, size: 18, color: _kIconColor)),
           title: 'Historique des notes',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -473,13 +461,12 @@ class _AccountPageState extends State<AccountPage> {
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(
-              FaIcon(FontAwesomeIcons.moneyBills, size: 18, color: _kIconColor)),
+          leading: _iconLeading(FaIcon(FontAwesomeIcons.moneyBills,
+              size: 18, color: _kIconColor)),
           title: 'Paiements',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -488,13 +475,12 @@ class _AccountPageState extends State<AccountPage> {
         ),
         SettingsTile(
           shape: SettingsTile.shapeLast,
-          leading: _iconLeading(
-              FaIcon(FontAwesomeIcons.commentDots, size: 18, color: _kIconColor)),
+          leading: _iconLeading(FaIcon(FontAwesomeIcons.commentDots,
+              size: 18, color: _kIconColor)),
           title: 'Contacter le support',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -516,8 +502,7 @@ class _AccountPageState extends State<AccountPage> {
           title: 'Déconnexion',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
-          titleStyle: GoogleFonts.dmSans(
-            fontSize: 16,
+          titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
@@ -532,7 +517,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildDeleteAccountAction(BuildContext context) {
     return SliverToBoxAdapter(
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: () => showDeleteAccountDialog(context),
           borderRadius: BorderRadius.circular(12),
@@ -541,10 +526,10 @@ class _AccountPageState extends State<AccountPage> {
             child: Center(
               child: Text(
                 'Supprimer mon compte',
-                style: GoogleFonts.dmSans(
+                style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: Colors.red,
+                  color: AppColors.red,
                 ),
               ),
             ),
@@ -562,8 +547,7 @@ class _AccountPageState extends State<AccountPage> {
       title: 'Modifier mes identifiants de connexion',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,
-      titleStyle: GoogleFonts.dmSans(
-        fontSize: 16,
+      titleStyle: AppTypography.bodyLarge.copyWith(
         fontWeight: FontWeight.w500,
         color: _kLabelColor,
         height: 1.25,
@@ -575,13 +559,12 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildTermsTile(dynamic shape) {
     return SettingsTile(
       shape: shape,
-      leading: _iconLeading(const Icon(CupertinoIcons.text_alignleft,
-          size: 20, color: _kIconColor)),
+      leading: _iconLeading(
+          Icon(CupertinoIcons.text_alignleft, size: 20, color: _kIconColor)),
       title: 'Termes et conditions',
       titleColor: _kLabelColor,
       trailingColor: _kTrailingColor,
-      titleStyle: GoogleFonts.dmSans(
-        fontSize: 16,
+      titleStyle: AppTypography.bodyLarge.copyWith(
         fontWeight: FontWeight.w500,
         color: _kLabelColor,
         height: 1.25,
@@ -599,12 +582,11 @@ class _AccountPageState extends State<AccountPage> {
           SettingsTile(
             shape: shape,
             leading: _iconLeading(
-                const Icon(Iconsax.crown_14, size: 20, color: _kIconColor)),
+                Icon(Iconsax.crown_14, size: 20, color: _kIconColor)),
             title: isLoggedIn ? 'Devenir Pro' : 'Publier un bien',
             titleColor: _kLabelColor,
             trailingColor: _kTrailingColor,
-            titleStyle: GoogleFonts.dmSans(
-              fontSize: 16,
+            titleStyle: AppTypography.bodyLarge.copyWith(
               fontWeight: FontWeight.w500,
               color: _kLabelColor,
               height: 1.25,
@@ -619,17 +601,17 @@ class _AccountPageState extends State<AccountPage> {
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Immo+ Pro",
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: AppTypography.font(
+                      color: AppColors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 10,
                       letterSpacing: 1,
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 FaIcon(
                   FontAwesomeIcons.chevronRight,
                   size: 14,

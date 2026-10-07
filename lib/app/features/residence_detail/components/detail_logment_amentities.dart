@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
@@ -40,9 +41,9 @@ class DetailLogmentAmentities extends StatelessWidget {
                         ),
                       )
                     else
-                      const Expanded(child: SizedBox()),
+                      Expanded(child: SizedBox()),
 
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
 
                     // Right item
                     if (rightIdx < displayCount)
@@ -53,7 +54,7 @@ class DetailLogmentAmentities extends StatelessWidget {
                         ),
                       )
                     else
-                      const Expanded(child: SizedBox()),
+                      Expanded(child: SizedBox()),
                   ],
                 ),
               ),
@@ -84,7 +85,7 @@ class _AmenityItem extends StatelessWidget {
             Icon(
               iconsaxIcon,
               size: 22,
-              color: Color(0xff2744de),
+              color: AppColors.immoBrandPrimary,
             )
           else if (svgPath != null)
             SvgPicture.asset(
@@ -92,17 +93,18 @@ class _AmenityItem extends StatelessWidget {
               height: 22,
               width: 22,
               colorFilter: ColorFilter.mode(
-                Color(0xff2744de),
+                AppColors.immoBrandPrimary,
                 BlendMode.srcIn,
               ),
             )
           else
-            Icon(Iconsax.element_4, size: 22, color: Color(0xff2744de)),
-          const SizedBox(width: 12),
+            Icon(Iconsax.element_4,
+                size: 22, color: AppColors.immoBrandPrimary),
+          SizedBox(width: 12),
           Flexible(
             child: Text(
               text,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF3A3A3A),

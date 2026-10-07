@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -82,12 +85,12 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   bool _hasPurchaseLogged = false;
 
   // ── Couleurs ────────────────────────────────────────────────────────────────
-  static const Color _primaryBlue = Color(0xFF2744DE);
-  static const Color _successGreen = Color(0xFF22C55E);
+  static const Color _primaryBlue = AppColors.blue500;
+  static const Color _successGreen = AppColors.green500;
   static const Color _warningOrange = Color(0xFFF68A3A);
   static const Color _errorRed = Color(0xFFE63946);
-  static const Color _bgColor = Color(0xFFFFFFFF);
-  static const Color _textPrimary = Color(0xFF1A1A1A);
+  static const Color _bgColor = AppColors.white;
+  static const Color _textPrimary = AppColors.gray900;
   static const Color _textSecondary = Color(0xFF666666);
 
   @override
@@ -323,14 +326,14 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Demande de réservation',
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: _textPrimary,
@@ -343,7 +346,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
       ),
       body: Stack(
         children: [
-          Container(color: Colors.white),
+          Container(color: AppColors.white),
 
           // ── Lottie ──────────────────────────────────────────────────────────
           Positioned(
@@ -375,7 +378,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                       const BorderRadius.vertical(top: Radius.circular(24)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
+                      color: AppColors.black.withValues(alpha: 0.08),
                       blurRadius: 24,
                       offset: const Offset(0, -4),
                     ),
@@ -386,33 +389,33 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       Container(
                         width: 36,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.12),
+                          color: AppColors.black.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
                       Text(
                         widget.ownerName,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           color: _textPrimary,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Iconsax.verify, color: _primaryBlue, size: 16),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                           Text(
                             'Hôte vérifié',
-                            style: TextStyle(
+                            style: AppTypography.font(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: _primaryBlue,
@@ -420,7 +423,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // ── Badge statut ──────────────────────────────────────
                       Padding(
@@ -430,7 +433,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                           child: _buildStatusBadge(),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // ── Info contextuelle (remplace le timer) ─────────────
                       if (!_isTerminal) ...[
@@ -438,16 +441,16 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: _buildContextCard(),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
                       ] else
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
 
                       // ── Boutons ───────────────────────────────────────────
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 350),
                         child: _buildActions(),
                       ),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28),
                     ],
                   ),
                 ),
@@ -469,7 +472,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           child: Text(
             _waitingOwnerMessages[_messageIndex % _waitingOwnerMessages.length],
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: _textSecondary,
@@ -487,7 +490,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           bg: const Color(0xFFEBFFF3),
           border: const Color(0xFF86EFAC),
           iconColor: _successGreen,
-          textColor: const Color(0xFF166534),
+          textColor: AppColors.successDark,
         );
 
       case ReservationBannerState.endedRefused:
@@ -557,23 +560,23 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
             padding: const EdgeInsets.only(top: 2),
             child: Icon(icon, color: iconColor, size: 20),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: textColor,
                   ),
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3),
                 Text(
                   sublabel,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 11,
                     color: textColor.withOpacity(0.75),
                     height: 1.4,
@@ -623,23 +626,23 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
               ),
               child: Icon(cardIcon, color: cardColor, size: 20),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     cardTitle,
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: cardColor,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3),
                   Text(
                     cardSubtitle,
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 11,
                       color: cardColor.withOpacity(0.7),
                       height: 1.4,
@@ -674,6 +677,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
               label: 'Effectuer le paiement',
               color: _successGreen,
               onPressed: () async {
+                // TODO RESERVATION ID DEBUG
+                log(" montant total ${_montantTotal.toInt()} reservation ${widget.reservationId}");
                 await context.pushNamed(
                   OperatorsSelectorPage.name,
                   extra: PaymentPageAdapter(
@@ -687,7 +692,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
                 }
               },
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _textBtn(
               label: 'Sauvegarder et Quitter',
               onPressed: _navigateBackToHome,
@@ -727,7 +732,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: color,
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.white,
             padding: const EdgeInsets.symmetric(vertical: 14),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -737,9 +742,9 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(label,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                       fontSize: 15, fontWeight: FontWeight.w600)),
             ],
           ),
@@ -762,7 +767,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             foregroundColor: _primaryBlue,
             padding: const EdgeInsets.symmetric(vertical: 14),
             side: const BorderSide(color: _primaryBlue, width: 1.5),
@@ -774,9 +779,9 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(label,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                       fontSize: 15, fontWeight: FontWeight.w600)),
             ],
           ),
@@ -801,7 +806,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
               padding: const EdgeInsets.symmetric(vertical: 12)),
           child: Text(
             label,
-            style: const TextStyle(
+            style: AppTypography.font(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: _textSecondary),

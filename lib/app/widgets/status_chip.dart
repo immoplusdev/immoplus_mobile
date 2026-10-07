@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
@@ -16,7 +17,7 @@ class StatusChip extends StatelessWidget {
       backgroundColor: Utils.getServiceStatusColor(status).withOpacity(0.2),
       label: Text(
         Utils.getServiceStatus(status),
-        style: TextStyle(
+        style: AppTypography.font(
           color: Utils.getServiceStatusColor(status),
         ),
       ),

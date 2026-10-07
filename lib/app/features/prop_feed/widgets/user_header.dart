@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 /// En-tête utilisateur : légende avec hashtags.
@@ -21,7 +22,7 @@ class UserHeader extends StatelessWidget {
     }
     return Container(
       padding: const EdgeInsets.all(_padding),
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,8 +38,8 @@ class UserHeader extends StatelessWidget {
       spans.add(
         TextSpan(
           text: caption,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.95),
+          style: AppTypography.font(
+            color: AppColors.white.withValues(alpha: 0.95),
             fontSize: _captionFontSize,
             height: 1.35,
           ),
@@ -47,14 +48,14 @@ class UserHeader extends StatelessWidget {
     }
 
     if (hashtags.isNotEmpty) {
-      if (spans.isNotEmpty) spans.add(const TextSpan(text: ' '));
+      if (spans.isNotEmpty) spans.add(TextSpan(text: ' '));
       final hashtagText =
           hashtags.map((h) => h.startsWith('#') ? h : '#$h').join(' ');
       spans.add(
         TextSpan(
           text: hashtagText,
-          style: const TextStyle(
-            color: Colors.white,
+          style: AppTypography.font(
+            color: AppColors.white,
             fontSize: _captionFontSize,
             fontWeight: FontWeight.bold,
             height: 1.35,

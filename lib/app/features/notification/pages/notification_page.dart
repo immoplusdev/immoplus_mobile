@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/repositories/notification_repository.dart';
@@ -13,7 +13,6 @@ import 'package:immoplus/app/features/notification/cubit/notification_cubit.dart
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/pages/notification_detail_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_tile.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
@@ -128,12 +127,12 @@ class _NotificationsPageState extends State<NotificationsPage>
       child: Builder(
         builder: (context) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               elevation: 0,
               centerTitle: false,
-              title: const Text('Notifications'),
+              title: Text('Notifications'),
               actions: [
                 if (_hasUnread)
                   TextButton(
@@ -143,9 +142,8 @@ class _NotificationsPageState extends State<NotificationsPage>
                     },
                     child: Text(
                       'Tout lire',
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.button.copyWith(
                         color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -196,20 +194,19 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Container(
                               padding: const EdgeInsets.all(24),
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade50,
+                                color: AppColors.immoBgSurfaceMuted,
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
                                 Iconsax.notification,
                                 size: 64,
-                                color: Colors.grey.shade300,
+                                color: AppColors.immoBorderStrong,
                               ),
                             ),
                             const Gap(24),
                             Text(
                               'Aucune notification',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 18,
+                              style: AppTypography.h4.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF4B5563),
                               ),
@@ -218,9 +215,8 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Text(
                               'Vous n\'avez pas encore reçu de notifications.',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.dmSans(
-                                fontSize: 14,
-                                color: Colors.grey.shade500,
+                              style: AppTypography.bodyMedium.copyWith(
+                                color: AppColors.immoTextSecondary,
                               ),
                             ),
                           ],
@@ -234,12 +230,11 @@ class _NotificationsPageState extends State<NotificationsPage>
                           children: [
                             const Gap(80),
                             Icon(Iconsax.warning_2,
-                                size: 48, color: Colors.red.shade300),
+                                size: 48, color: AppColors.red500),
                             const Gap(16),
                             Text(
                               'Oups! Une erreur est survenue',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 16,
+                              style: AppTypography.titleSmall.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -247,22 +242,22 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Text(
                               _pagingController.error?.toString() ?? '',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.dmSans(color: Colors.grey),
+                              style: AppTypography.bodyMedium
+                                  .copyWith(color: AppColors.immoTextSecondary),
                             ),
                             const Gap(24),
                             ElevatedButton(
                               onPressed: _refresh,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
+                                foregroundColor: AppColors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               child: Text(
                                 'Réessayer',
-                                style: GoogleFonts.dmSans(
-                                    fontWeight: FontWeight.w600),
+                                style: AppTypography.button,
                               ),
                             ),
                           ],

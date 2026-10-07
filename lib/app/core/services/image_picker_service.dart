@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/core/logger/immo_logger.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 // Note: Assurez-vous que CompressFileUtils est bien accessible dans votre projet
 // import 'package:immoplus/app/utils/compress_file_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -155,7 +155,7 @@ class ImagePickerService {
           barrierDismissible: true,
           content:
               "Vous devez autoriser l'accès à votre caméra avant de continuer",
-          icon: const Text("Permission non accordée"),
+          icon: Text("Permission non accordée"),
           textButton: "Paramètre",
           rollback: () {
             openAppSettings();
@@ -166,7 +166,7 @@ class ImagePickerService {
           barrierDismissible: true,
           content:
               "Vous devez autoriser l'accès à votre librairie photo avant de continuer",
-          icon: const Text("Permission non accordée"),
+          icon: Text("Permission non accordée"),
           textButton: "Paramètre",
           rollback: () {
             openAppSettings();
@@ -176,7 +176,7 @@ class ImagePickerService {
         AppDialog.info(
           barrierDismissible: true,
           content: e.message ?? "Un problème est survenue",
-          icon: const Text("Impossible"),
+          icon: Text("Impossible"),
           textButton: "Compris !",
         );
       }

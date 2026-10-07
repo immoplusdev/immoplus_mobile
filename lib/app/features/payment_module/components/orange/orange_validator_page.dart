@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _OrangeValidatorPageState extends State<OrangeValidatorPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
+      return Center(
         child: Text('Erreur: Données de paiement manquantes'),
       );
     }
@@ -96,7 +97,7 @@ class _OrangeValidatorPageState extends State<OrangeValidatorPage> {
 
     return PaymentWaitingView(
       onBack: () => widget.controller.goToPhoneNumber(),
-      loaderColor: Colors.orange,
+      loaderColor: AppColors.orange,
     );
   }
 }

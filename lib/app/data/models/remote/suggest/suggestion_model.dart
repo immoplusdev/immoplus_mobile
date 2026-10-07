@@ -22,14 +22,14 @@ enum SuggestionType {
   unknown;
 
   IconData get icon => switch (this) {
-    SuggestionType.ville => Iconsax.map,
-    SuggestionType.commune => Iconsax.location,
-    SuggestionType.residence => Iconsax.home_1,
-    SuggestionType.bien => Iconsax.building,
-    SuggestionType.query => Iconsax.search_normal_1,
-    SuggestionType.price => Iconsax.wallet_3,
-    _ => Iconsax.search_normal,
-  };
+        SuggestionType.ville => Iconsax.map,
+        SuggestionType.commune => Iconsax.location,
+        SuggestionType.residence => Iconsax.home_1,
+        SuggestionType.bien => Iconsax.building,
+        SuggestionType.query => Iconsax.search_normal_1,
+        SuggestionType.price => Iconsax.wallet_3,
+        _ => Iconsax.search_normal,
+      };
 }
 
 @freezed

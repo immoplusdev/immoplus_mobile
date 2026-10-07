@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
@@ -37,13 +38,13 @@ class FurnitureDetailAmenities extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.immoBorderStrong),
       ),
       child: Text(
         label,
-        style: const TextStyle(fontWeight: FontWeight.w500),
+        style: AppTypography.font(fontWeight: FontWeight.w500),
       ),
     );
   }

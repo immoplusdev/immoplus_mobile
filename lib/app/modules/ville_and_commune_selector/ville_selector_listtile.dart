@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 import 'package:immoplus/app/modules/ville_and_commune_selector/ville_selector_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class VilleSelectorListtile extends StatefulWidget {
   const VilleSelectorListtile({super.key, required this.onSelect});
@@ -24,7 +24,9 @@ class _VilleSelectorListtileState extends State<VilleSelectorListtile> {
           : CupertinoColors.tertiarySystemFill,
       leading: FaIcon(
         FontAwesomeIcons.treeCity,
-        color: (villeModel != null) ? AppColors.primary : Colors.grey.shade400,
+        color: (villeModel != null)
+            ? AppColors.primary
+            : AppColors.immoTextDisabled,
       ),
       title: Text(
         (villeModel != null) ? villeModel!.name : "Selectioner une ville",

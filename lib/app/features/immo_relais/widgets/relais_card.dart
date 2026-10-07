@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Carte résumé d'un relais existant, dans la liste `GET /relais` de
 /// l'onglet "Je déménage". Tap → `RelaisDetailPage` (`GET /relais/:id`).
@@ -22,13 +21,14 @@ class RelaisCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
-        final result = await context.pushNamed(RelaisDetailPage.name, extra: relais);
+        final result =
+            await context.pushNamed(RelaisDetailPage.name, extra: relais);
         if (result == true) onChanged?.call();
       },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.primary, width: .2),
         ),
@@ -44,12 +44,14 @@ class RelaisCard extends StatelessWidget {
                     children: [
                       Text(
                         '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.rooms} chambre${relais.rooms > 1 ? 's' : ''}',
-                        style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: AppTypography.font(
+                            fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       const Gap(2),
                       Text(
                         relais.landmark ?? relais.location,
-                        style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                        style: AppTypography.font(
+                            fontSize: 12, color: AppColors.immoTextSecondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -58,14 +60,15 @@ class RelaisCard extends StatelessWidget {
                 ),
                 const Gap(8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: status.backgroundColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     status.label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: status.textColor,
@@ -78,20 +81,22 @@ class RelaisCard extends StatelessWidget {
               const Gap(12),
               Text(
                 'Disponible à partir du ${DateFormat('dd MMMM yyyy', 'fr_FR').format(relais.availabilityDate!)}',
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
             if (relais.interestedCount > 0) ...[
               const Gap(12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: const Color(0xFFEFF6FF),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   '${relais.interestedCount} personne${relais.interestedCount > 1 ? 's' : ''} intéressée${relais.interestedCount > 1 ? 's' : ''}',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,

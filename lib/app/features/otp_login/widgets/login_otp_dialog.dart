@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
@@ -9,7 +9,6 @@ import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -25,7 +24,7 @@ Future<void> showLoginOtpDialog({
   final loginCubit = context.read<LoginCubit>();
   return showDialog<void>(
     context: context,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (dialogContext) => BlocProvider.value(
       value: loginCubit,
       child: _LoginOtpFlowDialog(phoneNumber: phoneNumber),
@@ -96,9 +95,10 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
       if (!mounted) return;
 
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
-        _showSnack(
-          'Un nouveau code a été envoyé par ${_isWhatsapp == true ? 'WhatsApp' : 'SMS'}.',
-          Colors.green,
+        ToastUtils.showSuccess(
+          title: "Code renvoyé",
+          description:
+              'Un nouveau code a été envoyé par ${_isWhatsapp == true ? 'WhatsApp' : 'SMS'}.',
         );
       }
     } catch (e) {
@@ -106,12 +106,6 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
     } finally {
       if (mounted) setState(() => _isSendingChannel = false);
     }
-  }
-
-  void _showSnack(String text, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(text), backgroundColor: color),
-    );
   }
 
   void _submitOtp(String code) {
@@ -145,7 +139,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         }
       },
       child: Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -161,10 +155,10 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(
+                    child: Icon(
                       Iconsax.close_circle,
                       size: 22,
-                      color: Colors.grey,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                 ),
@@ -189,22 +183,17 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         Text(
           'Recevoir le code par',
           textAlign: TextAlign.center,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 18,
+          style: AppTypography.h4.copyWith(
             fontWeight: FontWeight.w700,
             color: AppColors.primary,
-            height: 1.3,
           ),
         ),
         const Gap(12),
         Text(
           'Choisissez comment vous souhaitez recevoir votre code de vérification.',
           textAlign: TextAlign.center,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: const Color(0xFF64748B),
-            height: 1.5,
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.immoTextSecondary,
           ),
         ),
         const Gap(24),
@@ -227,9 +216,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
             ),
             child: Text(
               'SMS',
-              style: GoogleFonts.plusJakartaSans(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+              style: AppTypography.button.copyWith(
                 color: AppColors.primary,
               ),
             ),
@@ -282,7 +269,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         ),
         if (_isSubmittingOtp) ...[
           const Gap(20),
-          const Center(
+          Center(
             child: SizedBox(
               width: 22,
               height: 22,
@@ -294,7 +281,7 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         Center(
           child: TextButton(
             onPressed: (_isSendingChannel || _isSubmittingOtp) ? null : _resend,
-            child: const Text('Renvoyer le code'),
+            child: Text('Renvoyer le code'),
           ),
         ),
       ],

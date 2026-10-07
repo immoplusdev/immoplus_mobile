@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:immoplus/app/modules/photon_location_picker.dart/photon_location_picker_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class PhotonPickerLocationListTile extends StatefulWidget {
   const PhotonPickerLocationListTile({

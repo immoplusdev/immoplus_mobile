@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/immo_relais_status.dart';
@@ -9,7 +8,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 /// Un onglet pilule — "Toutes" (pas de filtre) + un par statut.
@@ -21,7 +20,8 @@ class _StatusTab {
 
 final List<_StatusTab> _statusTabs = [
   const _StatusTab('Toutes', null),
-  for (final status in ImmoRelaisStatus.values) _StatusTab(status.label, status),
+  for (final status in ImmoRelaisStatus.values)
+    _StatusTab(status.label, status),
 ];
 
 /// Sous-onglet "Pour moi" — mes relais publiés (`GET /relais`), filtrés par
@@ -94,13 +94,14 @@ class _RelaisMySectionState extends State<RelaisMySection>
         TabBar(
           controller: _tabController,
           isScrollable: true,
-          indicatorColor: Colors.transparent,
-          dividerColor: Colors.transparent,
+          indicatorColor: AppColors.transparent,
+          dividerColor: AppColors.transparent,
           labelPadding: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           tabAlignment: TabAlignment.start,
           tabs: _statusTabs
-              .map((tab) => Tab(height: 34, child: _buildTabItem(tab.label, tab.status)))
+              .map((tab) =>
+                  Tab(height: 34, child: _buildTabItem(tab.label, tab.status)))
               .toList(),
         ),
         const Gap(12),
@@ -115,18 +116,18 @@ class _RelaisMySectionState extends State<RelaisMySection>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary : Colors.white,
+        color: isSelected ? AppColors.primary : AppColors.white,
         borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isSelected ? AppColors.primary : Colors.blue.shade100,
+          color: isSelected ? AppColors.primary : AppColors.blue100,
         ),
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmSans(
+        style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.w500,
-          color: isSelected ? Colors.white : AppColors.primary,
+          color: isSelected ? AppColors.white : AppColors.primary,
         ),
       ),
     );
@@ -140,7 +141,9 @@ class _RelaisMySectionState extends State<RelaisMySection>
     final selectedStatus = _statusTabs[_tabController.index].status;
     final filtered = selectedStatus == null
         ? _relais
-        : _relais.where((relais) => relais.statusEnum == selectedStatus).toList();
+        : _relais
+            .where((relais) => relais.statusEnum == selectedStatus)
+            .toList();
 
     if (filtered.isEmpty) {
       return CustomEmptyState(
@@ -149,7 +152,7 @@ class _RelaisMySectionState extends State<RelaisMySection>
         description:
             'Publiez votre recherche. Propriétaires et Imatch travaillent pour vous.',
         buttonText: 'Faire une demande',
-        buttonIcon: const Icon(Icons.add, color: Colors.white, size: 20),
+        buttonIcon: const Icon(Icons.add, color: AppColors.white, size: 20),
         onButtonPressed: _createNewRequest,
       );
     }
@@ -160,7 +163,8 @@ class _RelaisMySectionState extends State<RelaisMySection>
         padding: const EdgeInsets.all(16),
         itemCount: filtered.length,
         separatorBuilder: (context, index) => const Gap(16),
-        itemBuilder: (context, index) => RelaisCard(relais: filtered[index], onChanged: _fetchRelais),
+        itemBuilder: (context, index) =>
+            RelaisCard(relais: filtered[index], onChanged: _fetchRelais),
       ),
     );
   }

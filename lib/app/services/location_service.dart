@@ -217,11 +217,11 @@ class LocationService {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text('Annuler'),
           ),
           TextButton(
             onPressed: openAppSettings,
-            child: const Text('Paramètres'),
+            child: Text('Paramètres'),
           ),
         ],
       ),

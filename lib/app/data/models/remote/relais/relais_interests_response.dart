@@ -37,6 +37,7 @@ class RelaisInterestModel with _$RelaisInterestModel {
   const factory RelaisInterestModel({
     required String id,
     String? clientName,
+
     /// Dernière alerte ACTIVE du client — pas forcément l'alerte à
     /// l'origine du match avec ce relais (note explicite du backend).
     String? demandId,
@@ -48,5 +49,6 @@ class RelaisInterestModel with _$RelaisInterestModel {
   factory RelaisInterestModel.fromJson(Map<String, dynamic> json) =>
       _$RelaisInterestModelFromJson(json);
 
-  RelaisInterestStatus get statusEnum => RelaisInterestStatus.fromString(status);
+  RelaisInterestStatus get statusEnum =>
+      RelaisInterestStatus.fromString(status);
 }

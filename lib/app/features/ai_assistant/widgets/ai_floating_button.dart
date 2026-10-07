@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 // import 'package:animated_text_kit/animated_text_kit.dart';
@@ -74,7 +75,7 @@ class AiFloatingButton extends StatefulWidget {
   State<AiFloatingButton> createState() => _AiFloatingButtonState();
 }
 
-const TextStyle _pillTextStyle = TextStyle(
+final TextStyle _pillTextStyle = AppTypography.font(
   fontSize: 16,
   fontWeight: FontWeight.w900,
   // letterSpacing: 0.3,
@@ -126,7 +127,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       useSafeArea: true,
       builder: (_) => FractionallySizedBox(
         heightFactor: 1.0,
@@ -191,13 +192,13 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                 borderRadius: BorderRadius.circular(60),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.12),
+                    color: AppColors.black.withOpacity(0.12),
                     blurRadius: 24,
                     spreadRadius: 1,
                     offset: const Offset(0, 10),
                   ),
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: AppColors.black.withOpacity(0.06),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -213,7 +214,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.white.withOpacity(0.95),
+                            AppColors.white.withOpacity(0.95),
                             const Color(0xFFF5F3EF).withOpacity(0.85),
                             const Color(0xFFE8E4DC).withOpacity(0.75),
                           ],
@@ -221,7 +222,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                         ),
                         borderRadius: BorderRadius.circular(60),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.9),
+                          color: AppColors.white.withOpacity(0.9),
                           width: 1,
                         ),
                       ),
@@ -245,7 +246,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                                     child: Container(
                                       width: 32,
                                       height: 32,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         gradient: LinearGradient(
                                           begin: Alignment.topCenter,
@@ -276,8 +277,8 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
                                     colors: [
-                                      Colors.white.withOpacity(0.95),
-                                      Colors.white.withOpacity(0),
+                                      AppColors.white.withOpacity(0.95),
+                                      AppColors.white.withOpacity(0),
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(60),
@@ -301,7 +302,7 @@ class _AiFloatingButtonState extends State<AiFloatingButton>
                                     width: 24,
                                     height: 24,
                                   ),
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8),
                                   BlocBuilder<HomePageCubit, HomePageState>(
                                     buildWhen: (p, n) =>
                                         p.indexPage != n.indexPage,

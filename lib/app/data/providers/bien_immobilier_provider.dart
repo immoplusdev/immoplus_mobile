@@ -86,16 +86,6 @@ abstract class BienImmobilierProvider {
   Future<DemandeVisitResponse> createVisite(
       @Body() DemandeVisitRequestBody body);
 
-  @GET("https://api.npoint.io/2d556cc695c18d99dd84")
-  //@GET("/demandes-visites/data/bien-immobilier/owner/{id}")
-  Future<DemandeVisiteCollection> getVisiteOwner(
-      @Query("_search") String? search,
-      @Path() String id,
-      @Query("_page") int page,
-      @Query("_per_page") int perPage,
-      @Query("_order_by") String? orderBy,
-      @Query("_order_dir") String? orderDir);
-
   @GET("/demandes-visites")
   Future<DemandeVisiteCollection> getVisites(
       @Query("_search") String? search,

@@ -20,7 +20,7 @@ import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/data/repositories/messaging_repository.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
@@ -286,7 +286,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   Widget _buildFallbackBar(BuildContext context, PageState state) {
     return Container(
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey.shade200)),
+        border: Border(top: BorderSide(color: AppColors.immoBorderDefault)),
       ),
       child: ClipRRect(
         child: SizedBox(
@@ -296,7 +296,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor:
-                state == PageState.vivre ? Colors.black : Colors.white,
+                state == PageState.vivre ? AppColors.black : AppColors.white,
             currentIndex: _indexForState(state),
             onTap: (value) => _onItemTapped(index: value, pageState: state),
             selectedFontSize: 12,
@@ -304,8 +304,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
             showSelectedLabels: true,
             showUnselectedLabels: true,
             selectedItemColor: AppColors.primary,
-            unselectedItemColor:
-                state == PageState.vivre ? Colors.white : Colors.grey,
+            unselectedItemColor: state == PageState.vivre
+                ? AppColors.white
+                : AppColors.immoTextSecondary,
             items: [
               _buildNavItem(
                 icon: Iconsax.home,
@@ -350,7 +351,8 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     String? svgAsset,
     Widget? badgeWidget,
   }) {
-    final inactiveColor = immoMode ? Colors.white : Colors.grey.shade600;
+    final inactiveColor =
+        immoMode ? AppColors.white : AppColors.immoTextSecondary;
 
     Widget buildIcon({required bool active}) {
       Widget base;

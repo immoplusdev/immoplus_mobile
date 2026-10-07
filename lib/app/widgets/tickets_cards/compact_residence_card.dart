@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -116,20 +116,20 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.gray300,
+        highlightColor: AppColors.gray100,
         period: const Duration(milliseconds: 500),
         child: Container(
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
       errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
+        color: AppColors.gray200,
         child: Center(
           child: Icon(
             FontAwesomeIcons.images.data,
             size: 60,
-            color: Colors.grey.shade400,
+            color: AppColors.gray400,
           ),
         ),
       ),
@@ -144,9 +144,9 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.transparent,
-            Colors.black.withOpacity(0.3),
-            Colors.black.withOpacity(0.7),
+            AppColors.transparent,
+            AppColors.black.withOpacity(0.3),
+            AppColors.black.withOpacity(0.7),
           ],
           stops: const [0.3, 0.6, 1.0],
         ),
@@ -165,10 +165,9 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         if (widget.showName)
           Text(
             widget.residence.nom.capitalizeFirst(),
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.button.copyWith(
               fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: Colors.black87,
+              color: AppColors.gray950,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -179,9 +178,8 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           const Gap(3),
           Text(
             "${widget.residence.adresse}${widget.residence.communeModel?.name != null ? ', ${widget.residence.communeModel!.name}' : ''}",
-            style: GoogleFonts.plusJakartaSans(
-              color: Colors.grey.shade600,
-              fontSize: 13,
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.gray500,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -194,9 +192,8 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         if (widget.residence.hasReduction)
           Text(
             '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
-            style: GoogleFonts.plusJakartaSans(
-              color: Colors.grey.shade500,
-              fontSize: 12,
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.gray1000,
               decoration: TextDecoration.lineThrough,
             ),
           ),
@@ -206,20 +203,17 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
               TextSpan(
                 text:
                     '${CurrencyFormatter().format((widget.residence.hasReduction ? widget.residence.prixReduit : widget.residence.prixReservation).toString())} Fcfa',
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.button.copyWith(
                   fontWeight: FontWeight.w900,
-                  fontSize: 15,
                   color: widget.residence.hasReduction
-                      ? Colors.redAccent
-                      : Colors.black,
+                      ? AppColors.red600
+                      : AppColors.black,
                 ),
               ),
               TextSpan(
                 text: '/nuit',
-                style: GoogleFonts.plusJakartaSans(
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w200,
-                  fontSize: 12,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.gray500,
                 ),
               ),
             ],

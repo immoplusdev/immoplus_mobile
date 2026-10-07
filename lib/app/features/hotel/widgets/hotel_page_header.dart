@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// En-tête commun (bouton retour + titre "Hôtel" centré) affiché sur le
 /// bandeau bleu de la page Hôtel, que ce soit à l'état skeleton, "coming
@@ -19,8 +19,8 @@ class HotelPageHeader extends StatelessWidget {
           children: [
             Text(
               "Hôtel",
-              style: GoogleFonts.dmSans(
-                color: Colors.white,
+              style: AppTypography.h4.copyWith(
+                color: AppColors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -38,11 +38,11 @@ class HotelPageHeader extends StatelessWidget {
                 child: Container(
                   width: 44,
                   height: 44,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
-                  child: const Icon(Icons.arrow_back, color: Colors.black),
+                  child: const Icon(Icons.arrow_back, color: AppColors.black),
                 ),
               ),
             ),

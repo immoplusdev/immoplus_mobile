@@ -1,4 +1,5 @@
-// import 'package:flutter/cupertino.dart';
+// import 'package:immoplus/app/design_system/tokens/app_colors.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:go_router/go_router.dart';
@@ -80,8 +81,8 @@
 //       child: Scaffold(
 //         appBar: AppBar(
 //           automaticallyImplyLeading: false,
-//           title: const Text('Modifier mes informations'),
-//           //backgroundColor: Colors.red,
+//           title: Text('Modifier mes informations'),
+//           //backgroundColor: AppColors.red,
 //           //backgroundColor: Theme.of(context).colorScheme.primaryVariant,
 
 //           elevation: 0,
@@ -109,7 +110,7 @@
 //                 child: Column(
 //                   crossAxisAlignment: CrossAxisAlignment.center,
 //                   children: [
-//                     const SizedBox(
+//                     SizedBox(
 //                       height: 25,
 //                     ),
 //                     CustomTextField(
@@ -213,7 +214,7 @@
 //                           FormUtils.fieldValidator(value: value),
 //                     ),
 
-//                     const SizedBox(
+//                     SizedBox(
 //                       height: 300,
 //                     ),
 //                   ],

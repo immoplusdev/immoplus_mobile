@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -37,7 +37,8 @@ class _LocationResidencesPageState extends State<LocationResidencesPage>
 
   @override
   void onConnectionRestored() {
-    if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
       _pagingController.error = 'temporary_error_to_force_refresh';
       _pagingController.refresh();
     }
@@ -93,14 +94,14 @@ class _LocationResidencesPageState extends State<LocationResidencesPage>
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black87),
           onPressed: () => context.pop(),
         ),
         title: Text(
           widget.title,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.black87,
               ),
         ),
       ),
@@ -145,7 +146,7 @@ class _LocationResidencesPageState extends State<LocationResidencesPage>
                           Icon(
                             Icons.location_off_outlined,
                             size: 80,
-                            color: Colors.grey.shade300,
+                            color: AppColors.immoBorderStrong,
                           ),
                           const Gap(20),
                           Text(
@@ -167,7 +168,7 @@ class _LocationResidencesPageState extends State<LocationResidencesPage>
                       child: Text(
                         'Vous avez vu toutes les résidences',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey.shade600,
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),

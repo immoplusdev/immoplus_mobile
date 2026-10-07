@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_received_interests_section.dart';
 
@@ -11,8 +12,8 @@ class RelaisReceivedInterestsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Reçues'), centerTitle: true),
+      backgroundColor: AppColors.white,
+      appBar: AppBar(title: Text('Reçues'), centerTitle: true),
       body: const RelaisReceivedInterestsSection(),
     );
   }

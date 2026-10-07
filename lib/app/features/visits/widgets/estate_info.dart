@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
@@ -20,10 +21,11 @@ class EstateInfo extends StatelessWidget {
           text: TextSpan(children: [
         TextSpan(
             text: Utils.formatCurrency(bienImmobilierModel.prix),
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w700)),
+            style: AppTypography.font(
+                color: AppColors.black, fontWeight: FontWeight.w700)),
         TextSpan(
-            text: ' Par mois', style: TextStyle(color: Colors.grey.shade600))
+            text: ' Par mois',
+            style: AppTypography.font(color: AppColors.immoTextSecondary))
       ])),
     );
   }

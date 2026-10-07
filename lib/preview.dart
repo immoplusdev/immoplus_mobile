@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/property_card.dart';
 
 void main() {
@@ -29,14 +29,14 @@ class _PreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F4FF),
+      backgroundColor: AppColors.blue40,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'PropertyCard — Preview',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: AppTypography.font(fontSize: 16, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Color(0xFF1A1A2E),
+        backgroundColor: AppColors.white,
+        foregroundColor: AppColors.navy900,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -76,10 +76,10 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         text,
-        style: TextStyle(
+        style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: Colors.grey.shade500,
+          color: AppColors.gray1000,
           letterSpacing: 0.5,
         ),
       ),

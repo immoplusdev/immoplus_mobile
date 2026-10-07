@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_itent_data.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/lottie_assets.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
@@ -49,14 +49,14 @@ class StripeResultPage extends StatelessWidget {
                   'Paiement confirmé',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1CA53F),
+                        color: AppColors.immoFeedbackSuccess,
                       ),
                 ),
                 Gap(vGap * 0.2),
                 Text(
                   'Transaction traitée avec succès',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[500],
+                        color: AppColors.gray1000,
                       ),
                 ),
                 Gap(vGap),
@@ -64,11 +64,11 @@ class StripeResultPage extends StatelessWidget {
                 // ── Carte reçu ──
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
+                        color: AppColors.black.withValues(alpha: 0.06),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -82,8 +82,8 @@ class StripeResultPage extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color:
-                              const Color(0xFF1CA53F).withValues(alpha: 0.08),
+                          color: AppColors.immoFeedbackSuccess
+                              .withValues(alpha: 0.08),
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(18)),
                         ),
@@ -94,7 +94,7 @@ class StripeResultPage extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
-                                  ?.copyWith(color: Colors.grey[500]),
+                                  ?.copyWith(color: AppColors.gray1000),
                             ),
                             const Gap(2),
                             Text(
@@ -104,7 +104,7 @@ class StripeResultPage extends StatelessWidget {
                                   .headlineSmall
                                   ?.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    color: const Color(0xFF1CA53F),
+                                    color: AppColors.immoFeedbackSuccess,
                                   ),
                             ),
                           ],
@@ -122,7 +122,7 @@ class StripeResultPage extends StatelessWidget {
                               icon: Iconsax.card,
                               label: 'Moyen de paiement',
                               value: 'Carte · Stripe',
-                              iconColor: const Color(0xFF635BFF),
+                              iconColor: AppColors.stripePurple,
                             ),
                             const Gap(8),
                             _ReceiptRow(
@@ -138,7 +138,7 @@ class StripeResultPage extends StatelessWidget {
                                 icon: Iconsax.tag,
                                 label: 'Référence',
                                 value: shortTx,
-                                iconColor: Colors.grey,
+                                iconColor: AppColors.gray500,
                                 valueMono: true,
                               ),
                             ],
@@ -147,8 +147,8 @@ class StripeResultPage extends StatelessWidget {
                               icon: Iconsax.tick_circle,
                               label: 'Statut',
                               value: 'Approuvé',
-                              iconColor: const Color(0xFF1CA53F),
-                              valueColor: const Color(0xFF1CA53F),
+                              iconColor: AppColors.immoFeedbackSuccess,
+                              valueColor: AppColors.immoFeedbackSuccess,
                             ),
                           ],
                         ),
@@ -165,14 +165,14 @@ class StripeResultPage extends StatelessWidget {
                   child: FilledButton.icon(
                     onPressed: () => context.go('/booking-history'),
                     icon: const Icon(Iconsax.receipt_item, size: 16),
-                    label: const Text('Voir mes réservations'),
+                    label: Text('Voir mes réservations'),
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      textStyle: const TextStyle(
+                      textStyle: AppTypography.font(
                           fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
@@ -183,13 +183,13 @@ class StripeResultPage extends StatelessWidget {
                   child: OutlinedButton.icon(
                     onPressed: () => context.go('/'),
                     icon: const Icon(Iconsax.home, size: 16),
-                    label: const Text('Retour à l\'accueil'),
+                    label: Text('Retour à l\'accueil'),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      textStyle: const TextStyle(
+                      textStyle: AppTypography.font(
                           fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
@@ -241,7 +241,7 @@ class _ReceiptRow extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[500],
+                      color: AppColors.gray1000,
                       fontSize: 10,
                     ),
               ),
@@ -249,7 +249,7 @@ class _ReceiptRow extends StatelessWidget {
                 value,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: valueColor ?? Colors.black87,
+                      color: valueColor ?? AppColors.gray950,
                       fontFamily: valueMono ? 'monospace' : null,
                       fontSize: valueMono ? 11 : 13,
                     ),
@@ -279,7 +279,7 @@ class _DashedDivider extends StatelessWidget {
                   (_) => Container(
                     width: 5,
                     height: 1,
-                    color: Colors.grey.shade200,
+                    color: AppColors.gray200,
                   ),
                 ),
               );

@@ -11,7 +11,7 @@ import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 import '../../utils/payment_data.dart';
 import '../../utils/payment_utils.dart';
@@ -47,7 +47,7 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
+      return Center(
         child: Text('Erreur: Données de paiement manquantes'),
       );
     }
@@ -74,7 +74,7 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
               trailing: IconButton(
                 icon: const Icon(
                   CupertinoIcons.clear_circled_solid,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 onPressed: () {
                   AppDialog.confirm(
@@ -89,17 +89,17 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
               ),
             ),
             ListTile(
-              tileColor: Colors.white,
+              tileColor: AppColors.white,
               leading: Icon(
                 FontAwesomeIcons.moneyBill.data,
-                color: Colors.green,
+                color: AppColors.green,
               ),
               title: Text(Utils.formatCurrency(paymentData.amount)),
               titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),
             CustomTextField(
-              fillColor: Colors.white,
+              fillColor: AppColors.white,
               autofocus: true,
               controller: _formController.phoneNumber,
               textInputType: TextInputType.number,

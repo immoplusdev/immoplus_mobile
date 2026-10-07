@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:intl/intl.dart';
@@ -52,18 +52,18 @@ class BookingHistoryCard extends StatelessWidget {
 
     final bookingStatus = BookingUtils.getBookingStatus(checkin, checkout);
     final isOngoing = bookingStatus == BookingStatus.ongoing;
-    final statusColor = isOngoing ? const Color(0xFF1CA53F) : Colors.blueGrey;
+    final statusColor = isOngoing ? AppColors.green500 : AppColors.blueGrey;
     final statusLabel =
         BookingUtils.getStatusText(startDate: checkin, endDate: checkout);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 12),
       child: Material(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         elevation: 0,
-        shadowColor: Colors.black.withValues(alpha: 0.06),
+        shadowColor: AppColors.black.withValues(alpha: 0.06),
         child: InkWell(
           onTap: clickable
               ? () async {
@@ -142,13 +142,15 @@ class BookingHistoryCard extends StatelessWidget {
                         ),
                         const Gap(4),
                         Icon(Iconsax.arrow_right_3,
-                            size: 16, color: Colors.grey[400]),
+                            size: 16, color: AppColors.immoTextDisabled),
                       ],
                     ),
                   ),
 
                   Divider(
-                      height: 1, thickness: 0.5, color: Colors.grey.shade100),
+                      height: 1,
+                      thickness: 0.5,
+                      color: AppColors.immoBgSurfaceMuted),
 
                   // ── Dates ──
                   Padding(
@@ -161,13 +163,13 @@ class BookingHistoryCard extends StatelessWidget {
                             label: 'ARRIVÉE',
                             date: fmt.format(checkin),
                             icon: Iconsax.login,
-                            color: const Color(0xFF1CA53F),
+                            color: AppColors.immoFeedbackSuccess,
                           ),
                         ),
                         Container(
                           width: 1,
                           height: 36,
-                          color: Colors.grey.shade200,
+                          color: AppColors.immoBorderDefault,
                           margin: const EdgeInsets.symmetric(horizontal: 8),
                         ),
                         Expanded(
@@ -175,7 +177,7 @@ class BookingHistoryCard extends StatelessWidget {
                             label: 'DÉPART',
                             date: fmt.format(checkout),
                             icon: Iconsax.logout,
-                            color: Colors.redAccent,
+                            color: AppColors.redAccent,
                           ),
                         ),
                       ],
@@ -183,7 +185,9 @@ class BookingHistoryCard extends StatelessWidget {
                   ),
 
                   Divider(
-                      height: 1, thickness: 0.5, color: Colors.grey.shade100),
+                      height: 1,
+                      thickness: 0.5,
+                      color: AppColors.immoBgSurfaceMuted),
 
                   // ── Nuits + montant ──
                   Padding(
@@ -195,14 +199,15 @@ class BookingHistoryCard extends StatelessWidget {
                         Row(
                           children: [
                             Icon(Iconsax.moon,
-                                size: 14, color: Colors.grey[500]),
+                                size: 14, color: AppColors.immoTextSecondary),
                             const Gap(4),
                             Text(
                               '$nights ${nights > 1 ? 'jours' : 'jour'}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
-                                  ?.copyWith(color: Colors.grey[600]),
+                                  ?.copyWith(
+                                      color: AppColors.immoTextSecondary),
                             ),
                           ],
                         ),
@@ -227,25 +232,27 @@ class BookingHistoryCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFF9800), // Orange/Gold for rating
+                      color:
+                          AppColors.immoFeedbackScore, // Orange/Gold for rating
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFF9800).withValues(alpha: 0.3),
+                          color: AppColors.immoFeedbackScore
+                              .withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Iconsax.star1, size: 12, color: Colors.white),
+                        Icon(Iconsax.star1, size: 12, color: AppColors.white),
                         Gap(4),
                         Text(
                           'À évaluer',
-                          style: TextStyle(
-                            color: Colors.white,
+                          style: AppTypography.font(
+                            color: AppColors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -262,7 +269,7 @@ class BookingHistoryCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: AppColors.immoBorderStrong,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -271,13 +278,13 @@ class BookingHistoryCard extends StatelessWidget {
                         Icon(
                           _isRated ? Iconsax.star1 : Iconsax.clock,
                           size: 12,
-                          color: Colors.grey.shade600,
+                          color: AppColors.immoTextSecondary,
                         ),
                         const Gap(4),
                         Text(
                           _isRated ? 'Déjà noté' : 'Notation expirée',
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
+                          style: AppTypography.font(
+                            color: AppColors.immoTextSecondary,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -322,7 +329,7 @@ class _Badge extends StatelessWidget {
           ],
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: color,
@@ -357,7 +364,7 @@ class _DateCell extends StatelessWidget {
             const Gap(3),
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 color: color,
@@ -371,7 +378,7 @@ class _DateCell extends StatelessWidget {
           date,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: AppColors.black87,
               ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

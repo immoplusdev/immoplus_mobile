@@ -19,7 +19,7 @@ import 'package:immoplus/app/features/map_view/logics/map_marker_widget.dart';
 import 'package:immoplus/app/features/map_view/logics/map_viwer_cubit_state.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/services/share_service.dart';
@@ -239,7 +239,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
             imageUrl: Utils.getImagePath(id: bien.images.first),
             price: "${CurrencyFormatter().format(bien.prix.toString())} F",
             bgColor: AppColors.white,
-            textColor: Colors.black);
+            textColor: AppColors.black);
 
         return Marker(
           icon: icon,

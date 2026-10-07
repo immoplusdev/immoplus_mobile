@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -42,8 +43,8 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
       snap: false,
       floating: false,
       expandedHeight: 300,
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.transparent,
+      backgroundColor: AppColors.white,
+      surfaceTintColor: AppColors.transparent,
       elevation: 0,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -85,7 +86,7 @@ class _DetailLogmentAppBarState extends State<DetailLogmentAppBar> {
             valueListenable: _liked,
             builder: (context, liked, _) => CircleButton(
               icon: liked ? Iconsax.heart5 : Iconsax.heart,
-              iconColor: liked ? Colors.red : null,
+              iconColor: liked ? AppColors.red : null,
               onTap: () {
                 if (!_liked.value) {
                   favoriesUtils.addResidenceToFavorites(widget.logmentModel);

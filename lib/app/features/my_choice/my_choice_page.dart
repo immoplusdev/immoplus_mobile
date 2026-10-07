@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_module_status_response.dart';
@@ -14,7 +14,6 @@ import 'package:immoplus/app/features/immo_relais/pages/relais_my_interests_page
 import 'package:immoplus/app/features/immo_relais/pages/relais_my_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_received_interests_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class MyChoicePage extends StatefulWidget {
   const MyChoicePage({super.key});
@@ -47,21 +46,21 @@ class _MyChoicePageState extends State<MyChoicePage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              title: const Text('Imatch'),
+              title: Text('Imatch'),
               centerTitle: true,
             ),
             body: SafeArea(
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: AppColors.immoBorderDefault,
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
@@ -128,14 +127,14 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
             backgroundColor: AppColors.primary,
             shape: const CircleBorder(),
             elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
+            child: const Icon(Icons.add, color: AppColors.white, size: 32),
           ),
         1 => FloatingActionButton(
             onPressed: _createNewAlert,
             backgroundColor: AppColors.primary,
             shape: const CircleBorder(),
             elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
+            child: const Icon(Icons.add, color: AppColors.white, size: 32),
           ),
         _ => null,
       };
@@ -146,7 +145,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
             backgroundColor: AppColors.primary,
             shape: const CircleBorder(),
             elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 32),
+            child: const Icon(Icons.add, color: AppColors.white, size: 32),
           ),
         _ => null,
       };
@@ -156,50 +155,48 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text('Imatch'),
+        title: Text('Imatch'),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: AppColors.immoBorderDefault,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
-                    color: const Color(0xFF2548E5), // Blue from screenshots
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey[500],
-                  labelStyle: GoogleFonts.dmSans(
-                    fontSize: 13,
+                  labelColor: AppColors.white,
+                  unselectedLabelColor: AppColors.immoTextSecondary,
+                  labelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
-                  unselectedLabelStyle: GoogleFonts.dmSans(
-                    fontSize: 13,
+                  unselectedLabelStyle: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
-                  dividerColor: Colors.transparent,
+                  dividerColor: AppColors.transparent,
                   tabs: [
-                    if (widget.isRelaisActive) const Tab(text: 'Je déménage'),
-                    const Tab(text: 'J’emménage'),
-                    const Tab(text: 'Mes favoris'),
+                    if (widget.isRelaisActive) Tab(text: 'Je déménage'),
+                    Tab(text: 'J’emménage'),
+                    Tab(text: 'Mes favoris'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -239,7 +236,7 @@ final List<_MovingHubItem> _movingHubItems = [
     title: 'Pour moi',
     subtitle: 'Mes demandes publiées',
     icon: Iconsax.truck_fast,
-    color: const Color(0xFF2548E5),
+    color: AppColors.blue550,
     onTap: (context) => context.pushNamed(RelaisMyPage.name),
   ),
   _MovingHubItem(
@@ -290,27 +287,27 @@ class _MovingHub extends StatelessWidget {
             itemBuilder: (context, index) =>
                 _MovingHubCard(item: _movingHubItems[index]),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: const Color(0xFFFFF7E6),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                  color: const Color(0xFFF59E0B).withValues(alpha: 0.25)),
+                  color: AppColors.immoFeedbackWarning.withValues(alpha: 0.25)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Iconsax.lamp_charge,
-                    color: Color(0xFFF59E0B), size: 18),
-                const SizedBox(width: 10),
+                Icon(Iconsax.lamp_charge,
+                    color: AppColors.immoFeedbackWarning, size: 18),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     "Vous déménagez ? On vous aide à trouver vite votre nouveau logement, avec des bonus à la clé.",
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 12,
-                      color: Colors.grey.shade700,
+                      color: AppColors.immoTextLabel,
                       height: 1.4,
                     ),
                   ),
@@ -318,7 +315,7 @@ class _MovingHub extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
       ),
     );
@@ -337,9 +334,9 @@ class _MovingHubCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: AppColors.immoBorderDefault),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,13 +355,13 @@ class _MovingHubCard extends StatelessWidget {
             Text(
               item.title,
               style:
-                  GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+                  AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               item.subtitle,
-              style:
-                  GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

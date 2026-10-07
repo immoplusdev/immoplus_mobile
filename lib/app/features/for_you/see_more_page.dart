@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_collection.dart';
 import 'package:immoplus/app/data/models/remote/residence/residences_collection.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -95,14 +95,14 @@ class _SeeMorePageState extends State<SeeMorePage> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black87),
           onPressed: () => context.pop(),
         ),
         title: Text(
           widget.title,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.black87,
               ),
         ),
       ),
@@ -128,7 +128,8 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   newPageProgressIndicatorBuilder: (context) => Padding(
                     padding: const EdgeInsets.all(20),
                     child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary),
                     ),
                   ),
                   noItemsFoundIndicatorBuilder: (context) => Center(

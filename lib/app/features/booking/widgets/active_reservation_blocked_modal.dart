@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Modal affiché quand l'utilisateur tente une nouvelle réservation
 /// alors qu'il en a déjà une active (en attente propriétaire ou paiement).
@@ -61,7 +61,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: AppColors.white,
       child: Stack(
         children: [
           Column(
@@ -69,7 +69,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
             children: [
               // ── Animation Lottie ──────────────────────────────────────────
               Container(
-                color: const Color(0xFFF0F4FF),
+                color: AppColors.previewBackground,
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 28),
                 child: Lottie.asset(
@@ -87,24 +87,24 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                     Text(
                       'Réservation en cours',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.customBlue,
+                        color: AppColors.immoBrandPrimary,
                         height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Text(
                       message,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
-                        color: Colors.grey[700],
+                        color: AppColors.immoTextLabel,
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28),
 
                     // ── Bouton principal ──────────────────────────────────
                     SizedBox(
@@ -112,17 +112,17 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: onViewReservation,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.customBlue,
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppColors.immoBrandPrimary,
+                          foregroundColor: AppColors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
+                        child: Text(
                           'Voir ma réservation',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -130,7 +130,7 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
 
                     // ── Bouton secondaire ─────────────────────────────────
                     SizedBox(
@@ -138,12 +138,12 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                       child: TextButton(
                         onPressed: onDismiss,
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.grey[600],
+                          foregroundColor: AppColors.immoTextSecondary,
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Plus tard',
-                          style: TextStyle(fontSize: 15),
+                          style: AppTypography.font(fontSize: 15),
                         ),
                       ),
                     ),
@@ -161,11 +161,12 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
               onTap: onDismiss,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.25),
+                  color: AppColors.black.withValues(alpha: 0.25),
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(6),
-                child: const Icon(Icons.close, color: Colors.white, size: 18),
+                child:
+                    const Icon(Icons.close, color: AppColors.white, size: 18),
               ),
             ),
           ),

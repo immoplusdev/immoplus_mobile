@@ -7,6 +7,7 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
+import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
 
 import 'client_reservation_overlay_widget.dart';
@@ -57,7 +58,9 @@ class ClientReservationOverlayService {
         );
         return;
       }
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to get reservations en attente paiement: $e');
+    }
 
     dismissOverlay();
   }

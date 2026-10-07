@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
@@ -18,7 +19,7 @@ class EmptyElementsIndicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const RippleAnimation(
-            color: Colors.blue,
+            color: AppColors.blue,
             delay: Duration(milliseconds: 300),
             repeat: true,
             minRadius: 50,
@@ -26,31 +27,31 @@ class EmptyElementsIndicator extends StatelessWidget {
             duration: Duration(seconds: 3),
             child: CircleAvatar(
               radius: 40,
-              backgroundColor: Colors.blue,
+              backgroundColor: AppColors.blue,
               child: Icon(
                 Icons.error_outline,
                 size: 40,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: 40),
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
               children: [
                 TextSpan(
                   text: '$titlePrefix ',
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: AppTypography.font(
+                    color: AppColors.black,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextSpan(
                   text: titleSufix,
-                  style: const TextStyle(
-                    color: Colors.blue,
+                  style: AppTypography.font(
+                    color: AppColors.blue,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -58,12 +59,12 @@ class EmptyElementsIndicator extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             subTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey[600],
+            style: AppTypography.font(
+              color: AppColors.immoTextSecondary,
               fontSize: 16,
             ),
           ),

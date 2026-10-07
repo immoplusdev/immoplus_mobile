@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class HeaderContainer extends StatelessWidget {
   final IconData iconData;
@@ -17,14 +17,14 @@ class HeaderContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBackgroundColor,
+        color: AppColors.immoTextPrimary,
       ),
       child: Column(
         children: [
           Icon(
             iconData,
             size: 80,
-            color: AppColors.lightBlue,
+            color: AppColors.immoBrandSecondary,
           ),
           const Gap(30),
           Text(
@@ -42,7 +42,7 @@ class HeaderContainer extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!
-                .copyWith(color: Colors.grey.shade300),
+                .copyWith(color: AppColors.immoBorderStrong),
           ),
         ],
       ),

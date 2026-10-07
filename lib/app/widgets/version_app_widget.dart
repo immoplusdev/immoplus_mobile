@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/services/app_version_service.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/bottom_immoplus.dart';
 
 class VersionAppWidget extends StatelessWidget {
@@ -18,8 +19,8 @@ class VersionAppWidget extends StatelessWidget {
                 child: Text(
                   '${snapshot.data}',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey,
+                  style: AppTypography.font(
+                    color: AppColors.gray500,
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.w400,
                     fontSize: 12,
@@ -30,7 +31,7 @@ class VersionAppWidget extends StatelessWidget {
             ],
           );
         }
-        return const SizedBox();
+        return SizedBox();
       },
     );
   }

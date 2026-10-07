@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/models/remote/messaging/conversation_type_count.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Rangée d'onglets "pills" (spec §4.1) : Toutes / Réservation / Visite /
 /// Déménagement / Support, calquée sur le pattern déjà utilisé pour les
@@ -42,12 +40,12 @@ class InboxTabs extends StatelessWidget {
     ];
 
     return SizedBox(
-      height: 48,
+      height: 50,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         itemCount: items.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => SizedBox(width: 8),
         itemBuilder: (context, index) {
           final (type, label) = items[index];
           final isSelected = type == activeType;
@@ -55,12 +53,12 @@ class InboxTabs extends StatelessWidget {
           return GestureDetector(
             onTap: () => onSelect(type),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
+                color: isSelected ? AppColors.primary : AppColors.white,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : Colors.blue.shade100,
+                  color: isSelected ? AppColors.primary : AppColors.blue100,
                 ),
               ),
               child: Row(
@@ -68,26 +66,28 @@ class InboxTabs extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: GoogleFonts.dmSans(
-                      fontSize: 14,
+                    style: AppTypography.font(
+                      fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : AppColors.primary,
+                      color: isSelected ? AppColors.white : AppColors.primary,
                     ),
                   ),
                   if (unread > 0) ...[
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 1),
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.white : AppColors.primary,
+                        color: isSelected ? AppColors.white : AppColors.primary,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         unread > 99 ? '99+' : '$unread',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.font(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? AppColors.primary : Colors.white,
+                          color:
+                              isSelected ? AppColors.primary : AppColors.white,
                         ),
                       ),
                     ),

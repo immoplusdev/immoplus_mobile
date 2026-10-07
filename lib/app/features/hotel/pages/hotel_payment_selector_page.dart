@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/payment/operator_model.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
-import 'package:immoplus/app/core/network/utils/easy_loading_handler.dart';
 
 class HotelPaymentSelectorPage extends StatefulWidget {
   const HotelPaymentSelectorPage({
@@ -77,12 +75,12 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
       backgroundColor: AppColors.scafold,
       appBar: AppBar(
         backgroundColor: AppColors.scafold,
-        title: const Text('Moyen de paiement'),
+        title: Text('Moyen de paiement'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(color: AppColors.black),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _errorMsg.isNotEmpty
               ? Center(child: Text("Erreur: $_errorMsg"))
               : CustomScrollView(
@@ -97,7 +95,7 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          tileColor: Colors.white,
+                          tileColor: AppColors.white,
                           title: Text(
                             '${widget.paymentPageAdapter.amount} FCFA',
                             style: Theme.of(context)
@@ -151,19 +149,15 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
                               leading: CircleAvatar(
                                 foregroundImage: NetworkImage(operator.logo),
                               ),
-                              tileColor: Colors.white,
+                              tileColor: AppColors.white,
                               title: Text(operator.name),
-                              titleTextStyle: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Colors.black,
+                              titleTextStyle: AppTypography.h4.copyWith(
+                                color: AppColors.black,
                               ),
                               subtitle: Text(
                                 "Frais : ${operator.fee} %",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12,
-                                  color: Colors.black,
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: AppColors.black,
                                 ),
                               ),
                               trailing: const Icon(Icons.arrow_forward_ios),

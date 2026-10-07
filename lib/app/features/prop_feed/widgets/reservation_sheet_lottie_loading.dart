@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -52,10 +53,10 @@ class ReservationSheetLottieLoading extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 border: Border(
                   top: BorderSide(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: AppColors.black.withValues(alpha: 0.1),
                     width: 0.5,
                   ),
                 ),
@@ -68,18 +69,18 @@ class ReservationSheetLottieLoading extends StatelessWidget {
               //       width: 100,
               //       height: 40,
               //       decoration: BoxDecoration(
-              //         color: Colors.grey[200],
+              //         color: AppColors.immoBorderDefault,
               //         borderRadius: BorderRadius.circular(24),
               //       ),
               //     ),
-              //     const SizedBox(width: 12),
+              //     SizedBox(width: 12),
 
               //     // Placeholder pour bouton
               //     Expanded(
               //       child: Container(
               //         height: 48,
               //         decoration: BoxDecoration(
-              //           color: Colors.grey[200],
+              //           color: AppColors.immoBorderDefault,
               //           borderRadius: BorderRadius.circular(20),
               //         ),
               //       ),

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -70,7 +71,7 @@ class AiBubble extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               AiAvatar(error: _isError),
-              const SizedBox(width: ChatTokens.s10),
+              SizedBox(width: ChatTokens.s10),
               Flexible(
                 child: _Content(
                   message: message,
@@ -113,7 +114,7 @@ class AiAvatar extends StatelessWidget {
             width: 0.5,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Icon(Iconsax.warning_2, color: ChatTokens.danger500, size: 18),
         ),
       );
@@ -171,11 +172,11 @@ class _Content extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(bottom: 4),
           child: Text(
             'Immo AI',
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: ChatTokens.neutral400,
@@ -188,11 +189,11 @@ class _Content extends StatelessWidget {
         else if (text.isNotEmpty)
           _MarkdownBody(text: text, isError: isError),
         if (isStreaming && text.isNotEmpty) ...[
-          const SizedBox(height: 2),
+          SizedBox(height: 2),
           const StreamingCursor(),
         ],
         if (richBlock != null) ...[
-          const SizedBox(height: ChatTokens.s12),
+          SizedBox(height: ChatTokens.s12),
           richBlock,
         ],
         if (actionBlock != null) actionBlock,
@@ -332,23 +333,24 @@ class _MarkdownBody extends StatelessWidget {
       data: text,
       selectable: true,
       styleSheet: MarkdownStyleSheet(
-        p: TextStyle(
+        p: AppTypography.font(
           fontSize: 15,
           height: 1.55,
           color: color,
           letterSpacing: -0.1,
         ),
-        strong: TextStyle(fontWeight: FontWeight.w700, color: color),
-        em: TextStyle(fontStyle: FontStyle.italic, color: color),
-        listBullet: TextStyle(fontSize: 15, height: 1.55, color: color),
+        strong: AppTypography.font(fontWeight: FontWeight.w700, color: color),
+        em: AppTypography.font(fontStyle: FontStyle.italic, color: color),
+        listBullet:
+            AppTypography.font(fontSize: 15, height: 1.55, color: color),
         listIndent: 18,
         blockSpacing: 10,
-        a: const TextStyle(
+        a: AppTypography.font(
           color: ChatTokens.brand500,
           decoration: TextDecoration.underline,
           decorationThickness: 1.2,
         ),
-        code: const TextStyle(
+        code: AppTypography.font(
           fontSize: 13,
           backgroundColor: ChatTokens.neutral100,
           color: ChatTokens.neutral900,
@@ -359,25 +361,25 @@ class _MarkdownBody extends StatelessWidget {
           borderRadius: BorderRadius.circular(ChatTokens.cardRadius),
         ),
         codeblockPadding: const EdgeInsets.all(ChatTokens.s12),
-        blockquoteDecoration: const BoxDecoration(
+        blockquoteDecoration: BoxDecoration(
           border: Border(
             left: BorderSide(color: ChatTokens.borderStandard, width: 2),
           ),
         ),
         blockquotePadding: const EdgeInsets.only(left: ChatTokens.s12),
-        h1: const TextStyle(
+        h1: AppTypography.font(
           fontSize: 17,
           fontWeight: FontWeight.w700,
           color: ChatTokens.neutral900,
           letterSpacing: -0.3,
         ),
-        h2: const TextStyle(
+        h2: AppTypography.font(
           fontSize: 16,
           fontWeight: FontWeight.w700,
           color: ChatTokens.neutral900,
           letterSpacing: -0.2,
         ),
-        h3: const TextStyle(
+        h3: AppTypography.font(
           fontSize: 15,
           fontWeight: FontWeight.w700,
           color: ChatTokens.neutral900,
@@ -517,7 +519,7 @@ class _PropertyCardsCarouselState extends State<_PropertyCardsCarousel> {
             },
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         _DotsIndicator(count: cards.length, current: _index),
       ],
     );
@@ -592,7 +594,7 @@ class _NewAlertChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();
@@ -605,11 +607,11 @@ class _NewAlertChip extends StatelessWidget {
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: ChatTokens.brandBorder20, width: 0.5),
           ),
-          child: const Padding(
+          child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Text(
               'Créer une nouvelle alerte',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: ChatTokens.brand500,
@@ -638,7 +640,7 @@ class _Box extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(radius),
       ),
     );
@@ -678,7 +680,7 @@ class _SkeletonCard extends StatelessWidget {
                 SizedBox(width: 8),
                 _Box(width: 80, height: 12, radius: 4),
               ]),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
@@ -767,7 +769,7 @@ class _AlertCardSkeleton extends StatelessWidget {
               ],
               const Divider(
                   height: 1, thickness: 0.5, color: ChatTokens.divider),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(children: [
                   _Box(width: 120, height: 12, radius: 4),
@@ -801,7 +803,7 @@ class _ChipsSkeleton extends StatelessWidget {
         child: Shimmer.fromColors(
           baseColor: _shimmerBase,
           highlightColor: _shimmerHighlight,
-          child: const Wrap(
+          child: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
@@ -831,7 +833,7 @@ class _PropertyCardsSkeleton extends StatelessWidget {
         child: Container(
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
           ),
         ),

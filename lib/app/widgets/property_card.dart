@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/monogram_avatar.dart';
 
 /// Bouton "Book Now" réutilisable.
@@ -38,10 +38,10 @@ class BookNowButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: AppColors.white,
               letterSpacing: 0.3,
             ),
           ),
@@ -139,7 +139,7 @@ class PropertyCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -154,7 +154,7 @@ class PropertyCard extends StatelessWidget {
           //       height: imageHeight,
           //       // rating: rating,
           //     ),
-          //     const SizedBox(width: 12),
+          //     SizedBox(width: 12),
           //     Expanded(
           //       child: _PropertyInfo(
           //         title: title,
@@ -168,10 +168,10 @@ class PropertyCard extends StatelessWidget {
           //     ),
           //   ],
           // ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
-          // const Divider(height: 1, thickness: 1, color: Color(0xFFF2F2F2)),
-          // const SizedBox(height: 12),
+          // const Divider(height: 1, thickness: 1, color: AppColors.gray100),
+          // SizedBox(height: 12),
           // _ActionRow(
           //   actions: effectiveActions,
           //   activeIndex: activeActionIndex,
@@ -313,12 +313,14 @@ class PropertyImage extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: imageUrl!,
                       fit: BoxFit.cover,
-                      memCacheWidth: (width * MediaQuery.devicePixelRatioOf(context)).toInt(),
+                      memCacheWidth:
+                          (width * MediaQuery.devicePixelRatioOf(context))
+                              .toInt(),
                       placeholder: (_, __) =>
-                          Container(color: const Color(0xFFEEEEEE)),
-                      errorWidget: (_, __, ___) => _ImagePlaceholder(),
+                          Container(color: AppColors.immoBorderDefault),
+                      errorWidget: (context, url, error) => _buildPlaceholder(),
                     )
-                  : _ImagePlaceholder(),
+                  : _buildPlaceholder(),
             ),
           ),
           if (rating != null)
@@ -331,15 +333,28 @@ class PropertyImage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      width: double.infinity,
+      height: 180,
+      color: AppColors.immoBorderDefault,
+      child: Center(
+        child: Icon(Iconsax.building,
+            color: AppColors.immoTextSecondary, size: 32),
+      ),
+    );
+  }
 }
 
 class _ImagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFEEEEEE),
-      child: const Center(
-        child: Icon(Iconsax.building, color: Color(0xFFBBBBBB), size: 32),
+      color: AppColors.immoBorderDefault,
+      child: Center(
+        child: Icon(Iconsax.building,
+            color: AppColors.immoTextSecondary, size: 32),
       ),
     );
   }
@@ -355,18 +370,18 @@ class _RatingBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.60),
+        color: AppColors.black.withValues(alpha: 0.60),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.bolt, color: Color(0xFFFFD700), size: 13),
-          const SizedBox(width: 2),
+          Icon(Icons.bolt, color: AppColors.gold600, size: 13),
+          SizedBox(width: 2),
           Text(
             rating.toStringAsFixed(1),
-            style: const TextStyle(
-              color: Colors.white,
+            style: AppTypography.font(
+              color: AppColors.white,
               fontSize: 11,
               fontWeight: FontWeight.w700,
             ),
@@ -407,23 +422,23 @@ class PropertyInfo extends StatelessWidget {
         //   size: 28,
         //   imageUrl: avatarUrl,
         // ),
-        // const SizedBox(width: 12),
+        // SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title.capitalizeWords(),
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A1A2E),
+                  color: AppColors.navy900,
                   height: 1.2,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               if (location != null && location!.isNotEmpty)
                 LocationRow(location: location!),
             ],
@@ -467,9 +482,9 @@ class PieceData {
 
 /// Couleurs par type de commodité.
 const _commoditeColors = {
-  'wifi': Color(0xFFFF5733),
-  'ac': Color(0xFF33FFBD),
-  'parking': Color(0xFFFFBD33),
+  'wifi': AppColors.amenityWifi,
+  'ac': AppColors.amenityAc,
+  'parking': AppColors.amenityParking,
 };
 
 /// Icônes Iconsax par type de commodité.
@@ -487,10 +502,10 @@ IconData _commoditeIcon(String iconKey) {
 }
 
 /// Couleurs par type de pièce.
-const _pieceColors = {
-  'chambre': Color(0xFF2744DE),
-  'salon': Color(0xFFB833FF),
-  'cuisine': Color(0xFFFF3385),
+final _pieceColors = {
+  'chambre': AppColors.immoBrandPrimary,
+  'salon': AppColors.amenitySalon,
+  'cuisine': AppColors.amenityCuisine,
 };
 
 /// Icônes Iconsax par type de pièce.
@@ -574,10 +589,10 @@ class _CommoditeChip extends StatelessWidget {
         SizedBox(width: pillStyle ? 6 : 3),
         Text(
           label,
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: fontSize,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF1A1A2E),
+            color: AppColors.navy900,
           ),
         ),
       ],
@@ -699,10 +714,10 @@ class _PieceCard extends StatelessWidget {
           SizedBox(height: fontSize * 0.5),
           Text(
             label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: fontSize,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1A2E),
+              color: AppColors.navy900,
             ),
           ),
         ],
@@ -720,12 +735,12 @@ class LocationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Iconsax.location, size: 13, color: Colors.grey.shade500),
-        const SizedBox(width: 4),
+        Icon(Iconsax.location, size: 13, color: AppColors.gray1000),
+        SizedBox(width: 4),
         Expanded(
           child: Text(
             location,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            style: AppTypography.font(fontSize: 12, color: AppColors.gray500),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -754,13 +769,13 @@ class VerifiedBadge extends StatelessWidget {
       children: [
         // Text(
         //   label,
-        //   style: const TextStyle(
+        //   style: AppTypography.font(
         //     fontSize: 12,
-        //     color: Colors.black,
+        //     color: AppColors.black,
         //     fontWeight: FontWeight.normal,
         //   ),
         // ),
-        // const SizedBox(width: 4),
+        // SizedBox(width: 4),
         Icon(Iconsax.verify, color: AppColors.primary, size: iconSize),
       ],
     );
@@ -807,7 +822,7 @@ class PropertyPrice extends StatelessWidget {
 
     final bg = backgroundColor ?? AppColors.primaryLite;
     final accent = accentColor ?? AppColors.primary;
-    final fg = textColor ?? const Color(0xFF1A1A2E);
+    final fg = textColor ?? AppColors.navy900;
 
     return Container(
       padding: padding,
@@ -840,7 +855,7 @@ class PropertyPrice extends StatelessWidget {
           ],
           Text(
             displayPrice,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: priceFontSize,
               fontWeight: FontWeight.w800,
               color: accent,
@@ -850,7 +865,7 @@ class PropertyPrice extends StatelessWidget {
           if (period.isNotEmpty) ...[
             Text(
               ' / ',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: priceFontSize - 1,
                 fontWeight: FontWeight.w500,
                 color: fg.withValues(alpha: 0.5),
@@ -858,7 +873,7 @@ class PropertyPrice extends StatelessWidget {
             ),
             Text(
               period,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: priceFontSize - 2,
                 fontWeight: FontWeight.w500,
                 color: fg.withValues(alpha: 0.65),
@@ -890,13 +905,13 @@ class PropertyPrice extends StatelessWidget {
 //             width: 46,
 //             height: 46,
 //             decoration: BoxDecoration(
-//               color: isActive ? AppColors.primary : const Color(0xFFF4F4F4),
+//               color: isActive ? AppColors.blue500 : const Color(0xFFF4F4F4),
 //               shape: BoxShape.circle,
 //             ),
 //             child: Icon(
 //               action.icon,
 //               size: 20,
-//               color: isActive ? Colors.white : Colors.grey.shade600,
+//               color: isActive ? AppColors.white : AppColors.immoTextSecondary,
 //             ),
 //           ),
 //         );

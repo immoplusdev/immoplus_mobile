@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../models/chat_message.dart';
@@ -87,7 +88,7 @@ class _UserBubbleState extends State<UserBubble>
                         horizontal: 14,
                         vertical: 10,
                       ),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: ChatTokens.neutral900,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
@@ -98,7 +99,7 @@ class _UserBubbleState extends State<UserBubble>
                       ),
                       child: Text(
                         widget.message.text,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           color: ChatTokens.neutral0,
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -117,7 +118,7 @@ class _UserBubbleState extends State<UserBubble>
                     padding: const EdgeInsets.only(top: 4, right: 4),
                     child: Text(
                       _timeLabel,
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
                         color: ChatTokens.neutral400,

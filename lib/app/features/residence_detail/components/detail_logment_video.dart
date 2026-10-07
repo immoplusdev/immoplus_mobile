@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/features/video_player/video_player_page.dart';
@@ -19,22 +20,22 @@ class DetailLogmentVideo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Visite vidéo',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.3,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Container(
-                  color: Colors.black,
+                  color: AppColors.black,
                   child: VideoPlayerPage(videoID: videoId),
                 ),
               ),

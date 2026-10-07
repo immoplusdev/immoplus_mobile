@@ -6,13 +6,12 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
 import 'package:immoplus/app/features/home_page/screens/history_page_state.dart';
 import 'package:immoplus/app/logic/bloc/navigation_cubit.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
@@ -186,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                           ? Offset.zero
                           : const Offset(0, 0.2),
                       child: Material(
-                        color: Colors.transparent,
+                        color: AppColors.transparent,
                         child: InkWell(
                           onTap: _scrollToTop,
                           borderRadius: BorderRadius.circular(18),
@@ -198,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(18),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
+                                  color: AppColors.black.withValues(alpha: 0.1),
                                   blurRadius: 16,
                                   offset: const Offset(0, 6),
                                 ),
@@ -206,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: const Icon(
                               Icons.keyboard_arrow_up_rounded,
-                              color: Colors.white,
+                              color: AppColors.white,
                               size: 28,
                             ),
                           ),

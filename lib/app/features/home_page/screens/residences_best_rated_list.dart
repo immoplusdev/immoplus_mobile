@@ -16,14 +16,12 @@ import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/home_page/screens/best_rated_residences_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 class BestRatedResidencesConstants {
@@ -156,8 +154,8 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: _bestRatedResidences.isNotEmpty
-                    ? Colors.black
-                    : Colors.grey.shade400,
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -234,10 +232,10 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
       margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: AppColors.immoBorderDefault,
           width: 1,
         ),
       ),
@@ -248,14 +246,14 @@ class _ResidencesBestRatedListState extends State<ResidencesBestRatedList>
             Icon(
               Icons.star_border_outlined,
               size: 48,
-              color: Colors.grey.shade400,
+              color: AppColors.immoTextDisabled,
             ),
             const Gap(12),
             Text(
               'Aucune résidence disponible',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade700,
+                    color: AppColors.immoTextLabel,
                   ),
             ),
           ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/reverse_search/reverse_search_model.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
 
 /// Carte "Libre tout de suite" épinglée pour la résidence sélectionnée en
@@ -68,12 +68,12 @@ class PendingSelectionCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(Iconsax.location,
-                            size: 12, color: Colors.white),
-                        const SizedBox(width: 4),
+                            size: 12, color: AppColors.white),
+                        SizedBox(width: 4),
                         Text(
                           expired ? 'Expiré' : formatCountdown(remaining),
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: AppTypography.font(
+                            color: AppColors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                           ),
@@ -93,19 +93,20 @@ class PendingSelectionCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onContinuePayment,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.green1CA53F,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.immoFeedbackSuccess,
+                foregroundColor: AppColors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 shape: const StadiumBorder(),
                 elevation: 0,
-                shadowColor: Colors.transparent,
+                shadowColor: AppColors.transparent,
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text(
+              child: Text(
                 'Payer',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                style: AppTypography.font(
+                    fontWeight: FontWeight.w600, fontSize: 12),
               ),
             ),
           ),
@@ -123,13 +124,13 @@ class _ConfirmAPayerBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.green1CA53F,
+        color: AppColors.immoFeedbackSuccess,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Text(
+      child: Text(
         'Confirmer à payer',
-        style: TextStyle(
-          color: Colors.white,
+        style: AppTypography.font(
+          color: AppColors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),

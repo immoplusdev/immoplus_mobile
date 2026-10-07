@@ -74,7 +74,7 @@ class _ResidencesUserPageState extends State<ResidencesUserPage> {
           SliverAppBar(
             floating: true,
             snap: true,
-            title: const Text('Résidences de l\'utilisateur'),
+            title: Text('Résidences de l\'utilisateur'),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(60),
               child: Padding(

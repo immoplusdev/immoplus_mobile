@@ -1,9 +1,9 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_residence_item.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
@@ -48,8 +48,9 @@ class ForYouResidenceTile extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    final imageUrl =
-        residence.imageUrl != null ? Utils.getImagePath(id: residence.imageUrl!) : '';
+    final imageUrl = residence.imageUrl != null
+        ? Utils.getImagePath(id: residence.imageUrl!)
+        : '';
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
@@ -57,15 +58,16 @@ class ForYouResidenceTile extends StatelessWidget {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.immoBorderStrong,
+        highlightColor: AppColors.immoBgSurfaceMuted,
         period: const Duration(milliseconds: 500),
-        child: Container(color: Colors.white),
+        child: Container(color: AppColors.white),
       ),
       errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
+        color: AppColors.immoBorderDefault,
         child: Center(
-          child: FaIcon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
+          child: FaIcon(FontAwesomeIcons.images,
+              size: 60, color: AppColors.immoTextDisabled),
         ),
       ),
     );
@@ -78,10 +80,10 @@ class ForYouResidenceTile extends StatelessWidget {
       children: [
         Text(
           residence.name,
-          style: GoogleFonts.plusJakartaSans(
+          style: AppTypography.font(
             fontWeight: FontWeight.bold,
             fontSize: 15,
-            color: Colors.black87,
+            color: AppColors.black87,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -90,7 +92,8 @@ class ForYouResidenceTile extends StatelessWidget {
           const Gap(3),
           Text(
             residence.location!,
-            style: GoogleFonts.plusJakartaSans(color: Colors.grey.shade600, fontSize: 13),
+            style: AppTypography.font(
+                color: AppColors.immoTextSecondary, fontSize: 13),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -103,16 +106,16 @@ class ForYouResidenceTile extends StatelessWidget {
                 TextSpan(
                   text:
                       '${CurrencyFormatter().format(residence.pricePerNight.toString())} ${residence.currency ?? "Fcfa"}',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: AppTypography.font(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
                 ),
                 TextSpan(
                   text: '/nuit',
-                  style: GoogleFonts.plusJakartaSans(
-                    color: Colors.grey.shade600,
+                  style: AppTypography.font(
+                    color: AppColors.immoTextSecondary,
                     fontWeight: FontWeight.w200,
                     fontSize: 12,
                   ),

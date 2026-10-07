@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:iconsax/iconsax.dart';
 import '../../../core/config/injection.dart';
 import '../../../data/enums/relais_property_type.dart';
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/repositories/bien_immobilier_repository.dart';
 import '../../../data/repositories/relais_repository.dart';
 import '../../../data/repositories/residence_repository.dart';
-import '../../../utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import '../../../utils/utils.dart';
 import '../utils/messaging_time_format.dart';
 
@@ -61,7 +60,9 @@ class _ConversationTileState extends State<ConversationTile> {
                   ? Utils.getImagePath(id: bien!.images.first)
                   : null;
               return _TileInfo(
-                title: bien?.nom.isNotEmpty ?? false ? bien!.nom : 'Bien immobilier',
+                title: bien?.nom.isNotEmpty ?? false
+                    ? bien!.nom
+                    : 'Bien immobilier',
                 photoUrl: photoUrl,
               );
             } catch (_) {
@@ -75,7 +76,8 @@ class _ConversationTileState extends State<ConversationTile> {
           'residence:$id',
           () async {
             try {
-              final response = await getIt<ResidenceRepository>().getResidence(id);
+              final response =
+                  await getIt<ResidenceRepository>().getResidence(id);
               final residence = response.data;
               return _TileInfo(
                 title: residence.nom.isNotEmpty ? residence.nom : 'Résidence',
@@ -94,10 +96,12 @@ class _ConversationTileState extends State<ConversationTile> {
           'relais:$id',
           () async {
             try {
-              final response = await getIt<RelaisRepository>().getRelaisById(id);
+              final response =
+                  await getIt<RelaisRepository>().getRelaisById(id);
               final relais = response.data;
               return _TileInfo(
-                title: '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.location}',
+                title:
+                    '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.location}',
                 photoUrl: relais.photos.isNotEmpty
                     ? Utils.getImagePath(id: relais.photos.first)
                     : null,
@@ -113,11 +117,24 @@ class _ConversationTileState extends State<ConversationTile> {
   IconData get _fallbackIcon {
     switch (widget.conversation.typeEnum) {
       case ConversationType.support:
-        return Icons.support_agent_outlined;
+        return Iconsax.message_question;
       case ConversationType.visite:
       case ConversationType.reservation:
       case ConversationType.relais:
-        return Icons.home_outlined;
+        return Iconsax.home_1;
+    }
+  }
+
+  String get _typeLabel {
+    switch (widget.conversation.typeEnum) {
+      case ConversationType.reservation:
+        return 'Réservation';
+      case ConversationType.visite:
+        return 'Visite';
+      case ConversationType.relais:
+        return 'Déménagement';
+      case ConversationType.support:
+        return 'Support';
     }
   }
 
@@ -126,125 +143,148 @@ class _ConversationTileState extends State<ConversationTile> {
     final conversation = widget.conversation;
     final isUnread = conversation.unreadCountClient > 0;
 
-    return InkWell(
-      onTap: widget.onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: isUnread
-              ? AppColors.primary.withValues(alpha: 0.03)
-              : Colors.transparent,
-          border: Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
-        ),
-        child: FutureBuilder<_TileInfo>(
-          future: _infoFuture(),
-          builder: (context, snapshot) {
-            final info = snapshot.data;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: SizedBox(
-                    width: 52,
-                    height: 52,
-                    child: (info?.photoUrl?.isNotEmpty ?? false)
-                        ? CachedNetworkImage(
-                            imageUrl: info!.photoUrl!,
-                            fit: BoxFit.cover,
-                            errorWidget: (_, __, ___) => _fallbackThumb(),
-                          )
-                        : _fallbackThumb(),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              info?.title ?? '…',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 15,
-                                fontWeight: isUnread ? FontWeight.bold : FontWeight.w600,
-                                color: const Color(0xFF1F2937),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            formatLastMessageRelative(conversation.lastMessageAt),
-                            style: GoogleFonts.dmSans(
-                                fontSize: 11, color: Colors.grey.shade500),
-                          ),
-                        ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
+      child: Material(
+        color: isUnread
+            ? AppColors.primary.withValues(alpha: 0.045)
+            : AppColors.white,
+        borderRadius: BorderRadius.circular(18),
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: FutureBuilder<_TileInfo>(
+              future: _infoFuture(),
+              builder: (context, snapshot) {
+                final info = snapshot.data;
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                        width: 52,
+                        height: 52,
+                        child: (info?.photoUrl?.isNotEmpty ?? false)
+                            ? CachedNetworkImage(
+                                imageUrl: info!.photoUrl!,
+                                fit: BoxFit.cover,
+                                errorWidget: (_, __, ___) => _fallbackThumb(),
+                              )
+                            : _fallbackThumb(),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Text(
-                              conversation.lastMessagePreview ?? '',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 13,
-                                color: isUnread
-                                    ? const Color(0xFF1F2937)
-                                    : Colors.grey.shade500,
-                                fontWeight:
-                                    isUnread ? FontWeight.w600 : FontWeight.normal,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  info?.title ?? '…',
+                                  style: AppTypography.font(
+                                    fontSize: 15,
+                                    fontWeight: isUnread
+                                        ? FontWeight.bold
+                                        : FontWeight.w600,
+                                    color: const Color(0xFF1F2937),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              SizedBox(width: 8),
+                              Text(
+                                formatLastMessageRelative(
+                                    conversation.lastMessageAt),
+                                style: AppTypography.font(
+                                    fontSize: 11,
+                                    color: AppColors.immoTextSecondary),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            _typeLabel,
+                            style: AppTypography.font(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
                             ),
                           ),
-                          if (isUnread) ...[
-                            const SizedBox(width: 8),
+                          SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  conversation.lastMessagePreview ?? '',
+                                  style: AppTypography.font(
+                                    fontSize: 13,
+                                    color: isUnread
+                                        ? const Color(0xFF1F2937)
+                                        : AppColors.immoTextSecondary,
+                                    fontWeight: isUnread
+                                        ? FontWeight.w600
+                                        : FontWeight.normal,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (isUnread) ...[
+                                SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 7, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    conversation.unreadCountClient > 99
+                                        ? '99+'
+                                        : '${conversation.unreadCountClient}',
+                                    style: AppTypography.font(
+                                        fontSize: 11,
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (conversation.statusEnum ==
+                              ConversationStatus.blocked) ...[
+                            SizedBox(height: 4),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 7, vertical: 2),
+                                  horizontal: 8, vertical: 2),
                               decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.immoBorderDefault,
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Text(
-                                conversation.unreadCountClient > 99
-                                    ? '99+'
-                                    : '${conversation.unreadCountClient}',
-                                style: GoogleFonts.dmSans(
-                                    fontSize: 11,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              child: Text('Bloqué',
+                                  style: AppTypography.font(
+                                      fontSize: 10,
+                                      color: AppColors.immoTextSecondary)),
                             ),
                           ],
                         ],
                       ),
-                      if (conversation.statusEnum == ConversationStatus.blocked) ...[
-                        const SizedBox(height: 4),
-                        Container(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text('Bloqué',
-                              style: GoogleFonts.dmSans(
-                                  fontSize: 10, color: Colors.grey.shade600)),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -252,8 +292,8 @@ class _ConversationTileState extends State<ConversationTile> {
 
   Widget _fallbackThumb() {
     return Container(
-      color: Colors.grey.shade100,
-      child: Icon(_fallbackIcon, color: Colors.grey.shade400),
+      color: AppColors.immoBgSurfaceMuted,
+      child: Icon(_fallbackIcon, color: AppColors.immoTextDisabled),
     );
   }
 }

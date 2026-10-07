@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 const _buttonHeight = 50.0;
 
@@ -33,12 +32,12 @@ class CustomLoadingButtom extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             elevation: 0,
-            disabledBackgroundColor: Colors.blue.shade100,
+            disabledBackgroundColor: AppColors.immoBgAppTinted,
             backgroundColor: (clickable)
                 ? (color == null)
                     ? AppColors.primary
                     : color
-                : Colors.grey[400],
+                : AppColors.gray400,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radiusButton)),
           ),
@@ -50,7 +49,7 @@ class CustomLoadingButtom extends StatelessWidget {
               : Text(
                   text,
                   style: context.textTheme.titleLarge!.copyWith(
-                      color: textColor ?? Colors.white,
+                      color: textColor ?? AppColors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 16),
                 ),

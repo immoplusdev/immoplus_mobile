@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 class LogmentInfo extends StatelessWidget {
@@ -14,9 +14,9 @@ class LogmentInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
       ),
       child: Row(
         children: [
@@ -70,7 +70,7 @@ class LogmentInfo extends StatelessWidget {
                     Text(
                       ' / nuit',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: const Color(0xFF667085),
+                            color: AppColors.immoTextSecondary,
                           ),
                     ),
                   ],

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,30 +14,30 @@ class SearchInput extends GetView<LocationController> {
       borderRadius: BorderRadius.circular(14),
       child: Container(
         height: 48,
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         child: TextField(
           controller: controller.searchController,
           autofocus: true,
           onChanged: (value) => controller.subject.add(value),
           cursorColor: const Color(0xFF3B82F6),
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 15,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF222222),
+            color: AppColors.immoTextPrimary,
           ),
           decoration: InputDecoration(
             hintText: 'Saisissez une adresse...',
-            hintStyle: TextStyle(
+            hintStyle: AppTypography.font(
               fontSize: 15,
               fontWeight: FontWeight.w400,
-              color: Colors.grey.shade400,
+              color: AppColors.immoTextDisabled,
             ),
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: 14, right: 10),
               child: Icon(
                 Iconsax.search_normal_1,
                 size: 20,
-                color: Colors.grey.shade500,
+                color: AppColors.immoTextSecondary,
               ),
             ),
             prefixIconConstraints:

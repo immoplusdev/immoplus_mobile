@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 
@@ -16,12 +17,12 @@ class DetailLogmentTitle2 extends StatelessWidget {
         ),
         child: Text(
           title,
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 16,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.3,
             height: 1.2,
-            color: Color(0xFF222222),
+            color: AppColors.immoTextPrimary,
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_marketplace_section.dart';
 
@@ -11,8 +12,8 @@ class RelaisMarketplacePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Autour de moi'), centerTitle: true),
+      backgroundColor: AppColors.white,
+      appBar: AppBar(title: Text('Autour de moi'), centerTitle: true),
       body: const RelaisMarketplaceSection(),
     );
   }

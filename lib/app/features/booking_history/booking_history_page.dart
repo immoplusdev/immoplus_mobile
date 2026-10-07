@@ -10,7 +10,7 @@ import 'package:immoplus/app/data/models/remote/reservations/reservation_model.d
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/booking/booking_detail_page.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_history_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
@@ -95,9 +95,9 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Historique De Réservations'),
+        title: Text('Historique De Réservations'),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),
@@ -148,7 +148,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const Gap(20),
-                    const Text(
+                    Text(
                       "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
                       textAlign: TextAlign.center,
                     ),

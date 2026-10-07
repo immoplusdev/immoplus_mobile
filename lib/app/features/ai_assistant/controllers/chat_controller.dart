@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:immoplus/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/chat_message.dart';
@@ -200,7 +201,8 @@ class ChatController extends ChangeNotifier {
           }
         }
       }
-    } catch (_) {
+    } catch (e, stack) {
+      talker.error('Failed to load chat history: $e', e, stack);
       _messages.clear();
       _currentSessionId = null;
     } finally {

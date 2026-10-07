@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class CustomTextField extends StatefulWidget {
-  CustomTextField({
+  const CustomTextField({
     super.key,
     this.labelText,
     this.sufixIcon,
@@ -33,13 +34,14 @@ class CustomTextField extends StatefulWidget {
     this.bottomPadding,
     this.isDense = false,
   });
+
   final String? labelText;
   final Widget? sufixIcon;
   final Widget? prefixIcon;
   final Function()? onTap;
   final Function(String?)? onSaved;
   final Function(String)? onFieldSubmitted;
-  TextEditingController? controller = TextEditingController(text: '');
+  final TextEditingController? controller;
   final FocusNode? focusNode;
   final int minLines;
   final int? maxLines;
@@ -60,30 +62,48 @@ class CustomTextField extends StatefulWidget {
   final bool readOnly;
   final double? bottomPadding;
   final bool isDense;
+
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
   late final FocusNode _textFieldFocus;
+  TextEditingController? _internalController;
+
+  TextEditingController get _effectiveController =>
+      widget.controller ?? (_internalController ??= TextEditingController());
+
   @override
   void initState() {
-    _textFieldFocus = widget.focusNode ?? FocusNode();
-    _textFieldFocus.addListener(() {
-      if (_textFieldFocus.hasFocus) {
-        setState(() {});
-      } else {
-        setState(() {});
-      }
-    });
     super.initState();
+    _textFieldFocus = widget.focusNode ?? FocusNode();
+    _textFieldFocus.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void didUpdateWidget(CustomTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller &&
+        widget.controller != null) {
+      _internalController?.dispose();
+      _internalController = null;
+    }
   }
 
   @override
   void dispose() {
+    _textFieldFocus.removeListener(_onFocusChange);
     if (widget.focusNode == null) {
       _textFieldFocus.dispose();
     }
+    _internalController?.dispose();
     super.dispose();
   }
 
@@ -96,9 +116,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         readOnly: widget.readOnly,
         enabled: widget.isEnabled,
         style: (widget.fontSize != null)
-            ? TextStyle(fontSize: widget.fontSize)
+            ? AppTypography.font(fontSize: widget.fontSize)
             : null,
-        // enableInteractiveSelection: !widget.readOnly,
         autofocus: widget.autofocus ?? false,
         onChanged: widget.onChanged,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -106,7 +125,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         obscureText: widget.obscureText,
         minLines: widget.minLines,
         maxLines: widget.maxLines,
-        controller: widget.controller,
+        controller: _effectiveController,
         textInputAction: widget.textInputAction,
         onTap: widget.onTap,
         onSaved: widget.onSaved,
@@ -119,27 +138,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusNode: _textFieldFocus,
         decoration: InputDecoration(
           isDense: widget.isDense,
-          errorStyle: const TextStyle(color: Colors.redAccent),
+          errorStyle: AppTypography.font(color: AppColors.red600),
           contentPadding:
               widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 20),
-          // prefixIconColor: _iconColor,
-          // suffixIconColor: _iconColor,
-
           prefixText: widget.prefixText,
-          //labelText: labelText!,
           prefixIcon: widget.prefixIcon,
-
-          //iconColor: Colors.black,
           hintText: widget.labelText,
-          hintStyle: TextStyle(
-            color: Colors.grey,
-            //fontWeight: FontWeight.bold,
+          hintStyle: AppTypography.font(
+            color: AppColors.gray500,
             fontSize: widget.fontSize ?? 15,
           ),
           filled: true,
           fillColor: widget.fillColor,
-
-          //focusColor: Colors.white,
           suffixIcon: widget.sufixIcon,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusButton),

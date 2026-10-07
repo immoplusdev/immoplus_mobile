@@ -8,7 +8,7 @@ class GeneralConditionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       // appBar: AppBar(
-      //     // title: const Text('Conditions Générales d’utilisation'),
+      //     // title: Text('Conditions Générales d’utilisation'),
       //     ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 8),

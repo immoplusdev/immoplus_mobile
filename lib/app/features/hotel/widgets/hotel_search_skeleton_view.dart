@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_page_header.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_shimmer_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Skeleton affiché pendant la vérification du statut d'activation du
 /// module Hôtel (GET /pms/hotels/module-status), à la place d'un simple
@@ -14,7 +14,7 @@ class HotelSearchSkeletonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
           Container(
@@ -51,14 +51,14 @@ class HotelSearchSkeletonView extends StatelessWidget {
     double? width,
   }) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
+      baseColor: AppColors.immoBorderStrong,
+      highlightColor: AppColors.immoBgSurfaceMuted,
       period: const Duration(milliseconds: 1000),
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(radius),
         ),
       ),

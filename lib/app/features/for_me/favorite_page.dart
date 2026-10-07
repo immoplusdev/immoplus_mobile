@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/features/for_me/components/empty_indicator.dart';
 import 'package:immoplus/app/features/for_me/components/favorite_card.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:isar_community/isar.dart';
 
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 
 // White Luxury — fond blanc, pas de noir
-const Color _kBg = Color(0xFFFFFFFF);
-const Color _kGold = Color(0xFFC9A84C);
-const Color _kTextPrimary = Color(0xFF0A1128);
-const Color _kTextSecondary = Color(0xFF6B7280);
-const Color _kSeparator = Color(0xFFE5E7EB);
+final Color _kBg = AppColors.white;
+final Color _kGold = AppColors.gold600;
+final Color _kTextPrimary = AppColors.immoTextPrimary;
+final Color _kTextSecondary = AppColors.immoTextSecondary;
+final Color _kSeparator = AppColors.immoBorderDefault;
 
 class FavoritePage extends StatefulWidget {
   final bool embedded;
@@ -61,7 +59,7 @@ class _FavoritePageState extends State<FavoritePage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             backgroundColor: _kBg,
-            body: const Center(
+            body: Center(
               child: CircularProgressIndicator(color: _kGold),
             ),
           );
@@ -90,11 +88,8 @@ class _FavoritePageState extends State<FavoritePage> {
                   centerTitle: false,
                   title: Text(
                     'Favoris',
-                    style: GoogleFonts.dmSans(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
+                    style: AppTypography.h1.copyWith(
                       color: _kTextPrimary,
-                      letterSpacing: -0.5,
                     ),
                   ),
                   leading: _isSelectionMode
@@ -122,14 +117,14 @@ class _FavoritePageState extends State<FavoritePage> {
                             }
                           });
                         },
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete_outline),
                         onPressed: _selectedItems.isEmpty
                             ? null
                             : () => _showDeleteDialog(favorites),
-                        color: Colors.red,
+                        color: AppColors.red,
                       ),
                     ] else
                       IconButton(
@@ -156,14 +151,14 @@ class _FavoritePageState extends State<FavoritePage> {
                       ? null
                       : Container(
                           decoration: BoxDecoration(
-                            color: Colors.red.shade800,
+                            color: AppColors.red600,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
                           child: Icon(
                             FontAwesomeIcons.trashCan.data,
-                            color: Colors.white,
+                            color: AppColors.white,
                             size: 22,
                           ),
                         ),
@@ -235,14 +230,14 @@ class _FavoritePageState extends State<FavoritePage> {
       height: 32,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: selected ? Colors.red : Colors.transparent,
+        color: selected ? AppColors.red : AppColors.transparent,
         border: Border.all(
-          color: selected ? Colors.red : _kSeparator,
+          color: selected ? AppColors.red : _kSeparator,
           width: 2,
         ),
       ),
       child: selected
-          ? const Icon(Icons.check, size: 18, color: Colors.white)
+          ? const Icon(Icons.check, size: 18, color: AppColors.white)
           : null,
     );
   }

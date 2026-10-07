@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -60,7 +61,7 @@ class _ChatResponseActionsState extends State<ChatResponseActions> {
                     .toList(),
               ),
             if (widget.actions.isNotEmpty && widget.quickReplies.isNotEmpty)
-              const SizedBox(height: ChatTokens.s10),
+              SizedBox(height: ChatTokens.s10),
             if (widget.quickReplies.isNotEmpty)
               Wrap(
                 spacing: 8,
@@ -99,7 +100,7 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = _colorsFor(action);
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap == null
             ? null
@@ -117,7 +118,7 @@ class _ActionButton extends StatelessWidget {
           ),
           child: Text(
             action.label,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: colors.foreground,
@@ -164,7 +165,7 @@ class _QuickReplyChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap == null
             ? null
@@ -182,7 +183,7 @@ class _QuickReplyChip extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: ChatTokens.neutral700,

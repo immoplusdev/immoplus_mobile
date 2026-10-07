@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,11 +18,10 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/utils/booking_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/animated_photo_stack_icon.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -234,6 +234,8 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
 
   void _openPayment(ReservationModel reservation) {
     unawaited(_closeMenu());
+    // TODO RESERVATION ID DEBUG
+    log(' montant total ${reservation.montantTotalReservation.toInt()} reservation ${reservation.id}  ');
     context.pushNamed(
       OperatorsSelectorPage.name,
       extra: PaymentPageAdapter(
@@ -250,6 +252,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   void _cancelReverseSearch(ReverseSearchItem item) {
+    unawaited(_closeMenu());
     AppDialog.show(
       title: 'Annuler la recherche',
       description: 'Voulez-vous vraiment annuler cette recherche ?',
@@ -261,7 +264,6 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
           ToastUtils.showSuccess(description: 'Recherche annulée');
           if (mounted) {
             setState(() => _activeReverseSearch = null);
-            _overlayEntry?.markNeedsBuild();
           }
         } catch (e) {
           ToastUtils.showError(description: 'Erreur lors de l\'annulation');
@@ -271,34 +273,22 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   void _cancelReservation(ReservationModel reservation) {
-    AppDialog.show(
-      title: 'Annuler la réservation',
-      description: 'Voulez-vous vraiment annuler cette réservation ?',
-      primaryButtonText: 'Oui, annuler',
-      secondButtonText: 'Non',
-      onPrimary: () async {
-        try {
-          await getIt<ResidenceRepository>().annulerReservationClient(
-            reservationId: reservation.id,
-            notes: 'Annulé depuis le menu transactions',
-          );
-          ToastUtils.showSuccess(
-            description: 'Réservation annulée avec succès',
-          );
-          ReservationPendingBanner.refresh();
-          if (mounted) {
-            setState(() {
-              _pendingOwnerReservations = _pendingOwnerReservations
-                  .where((r) => r.id != reservation.id)
-                  .toList();
-              _pendingPaymentReservations = _pendingPaymentReservations
-                  .where((r) => r.id != reservation.id)
-                  .toList();
-            });
-            _overlayEntry?.markNeedsBuild();
-          }
-        } catch (e) {
-          ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+    unawaited(_closeMenu());
+    BookingUtils.showCancelReservationDialog(
+      context: context,
+      reservationId: reservation.id,
+      reservation: reservation,
+      notes: 'Annulé depuis le menu transactions',
+      onCancelled: () {
+        if (mounted) {
+          setState(() {
+            _pendingOwnerReservations = _pendingOwnerReservations
+                .where((r) => r.id != reservation.id)
+                .toList();
+            _pendingPaymentReservations = _pendingPaymentReservations
+                .where((r) => r.id != reservation.id)
+                .toList();
+          });
         }
       },
     );
@@ -327,7 +317,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                     scale: _animation,
                     alignment: Alignment.bottomRight,
                     child: Material(
-                      color: Colors.transparent,
+                      color: AppColors.transparent,
                       child: _TransactionsMenuPanel(
                         isLoading: _isLoading,
                         pendingOwnerReservations: _pendingOwnerReservations,
@@ -355,7 +345,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
     if (!_isLoggedIn) return const SizedBox.shrink();
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: _toggleMenu,
         borderRadius: BorderRadius.circular(18),
@@ -363,11 +353,11 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: AppColors.black.withValues(alpha: 0.1),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
@@ -403,15 +393,15 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
                     constraints:
                         const BoxConstraints(minWidth: 18, minHeight: 18),
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: AppColors.red,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: AppColors.white, width: 2),
                     ),
                     child: Text(
                       _pendingCount > 99 ? '99+' : '$_pendingCount',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: AppTypography.font(
+                        color: AppColors.white,
                         fontSize: 9,
                         fontWeight: FontWeight.bold,
                       ),
@@ -448,7 +438,7 @@ class _PendingPaymentBadge extends StatefulWidget {
   /// inversée verrouillée : le badge affiche alors son compte à rebours.
   final DateTime? reverseSearchExpireAt;
 
-  static const Color _amber = Color(0xFFF79009);
+  static const Color _amber = AppColors.orange500;
 
   @override
   State<_PendingPaymentBadge> createState() => _PendingPaymentBadgeState();
@@ -533,8 +523,8 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
     super.dispose();
   }
 
-  static const TextStyle _labelStyle = TextStyle(
-    color: Colors.white,
+  static final TextStyle _labelStyle = AppTypography.font(
+    color: AppColors.white,
     fontSize: 9,
     height: 1.1,
     fontWeight: FontWeight.w700,
@@ -574,7 +564,7 @@ class _PendingPaymentBadgeState extends State<_PendingPaymentBadge>
           decoration: BoxDecoration(
             color: _PendingPaymentBadge._amber,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white, width: 2),
+            border: Border.all(color: AppColors.white, width: 2),
             boxShadow: [
               BoxShadow(
                 color: _PendingPaymentBadge._amber.withValues(alpha: 0.35),
@@ -625,11 +615,11 @@ class _TransactionsMenuPanel extends StatelessWidget {
       constraints: const BoxConstraints(maxHeight: 320),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: AppColors.black.withValues(alpha: 0.12),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -639,22 +629,24 @@ class _TransactionsMenuPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
             child: Text(
               'Mes réservations',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              style:
+                  AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           if (isLoading)
             const _TransactionsMenuSkeleton()
           else if (_hasNothing)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
               child: Text(
                 'Retrouvez ici toutes vos réservations et demandes de visite, où que vous soyez.',
-                style: TextStyle(fontSize: 13, color: Color(0xFF667085)),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextSecondary),
               ),
             )
           else
@@ -668,7 +660,7 @@ class _TransactionsMenuPanel extends StatelessWidget {
                       _TransactionCard(
                         key: ValueKey('owner_${reservation.id}'),
                         icon: Iconsax.clock,
-                        iconColor: const Color(0xFF2744DE),
+                        iconColor: AppColors.immoBrandPrimary,
                         iconBg: const Color(0xFFF8F6FF),
                         title: 'Réservation en attente',
                         subtitle: reservation.residence.nom.isNotEmpty
@@ -681,8 +673,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
                       _TransactionCard(
                         key: ValueKey('payment_${reservation.id}'),
                         icon: Iconsax.wallet_2,
-                        iconColor: const Color(0xFFB54708),
-                        iconBg: const Color(0xFFFFFAEB),
+                        iconColor: AppColors.amber800,
+                        iconBg: AppColors.orange50,
                         title: 'Réservation à payer',
                         subtitle: Utils.formatCurrency(
                             reservation.montantTotalReservation),
@@ -699,11 +691,11 @@ class _TransactionsMenuPanel extends StatelessWidget {
                             : Iconsax.search_normal_1,
                         iconColor: activeReverseSearch!
                                 .statusEnum.isSelectionEnAttentePaiement
-                            ? const Color(0xFFB54708)
-                            : const Color(0xFF2744DE),
+                            ? AppColors.amber800
+                            : AppColors.immoBrandPrimary,
                         iconBg: activeReverseSearch!
                                 .statusEnum.isSelectionEnAttentePaiement
-                            ? const Color(0xFFFFFAEB)
+                            ? AppColors.orange50
                             : const Color(0xFFF8F6FF),
                         title: activeReverseSearch!
                                 .statusEnum.isSelectionEnAttentePaiement
@@ -737,9 +729,9 @@ class _TransactionsMenuSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: const Column(
+      baseColor: AppColors.immoBorderStrong,
+      highlightColor: AppColors.immoBgSurfaceMuted,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _SkeletonRow(),
@@ -763,11 +755,11 @@ class _SkeletonRow extends StatelessWidget {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -776,16 +768,16 @@ class _SkeletonRow extends StatelessWidget {
                   height: 10,
                   width: 130,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 Container(
                   height: 8,
                   width: 90,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -841,27 +833,27 @@ class _TransactionCard extends StatelessWidget {
                     ),
                     child: Icon(icon, color: iconColor, size: 18),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF1A1A1A),
+                            color: AppColors.immoTextPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           subtitle,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
-                            color: Color(0xFF667085),
+                            color: AppColors.immoTextSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -892,21 +884,21 @@ class _CloseCircleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onPressed,
         customBorder: const CircleBorder(),
         child: Container(
           width: 20,
           height: 20,
-          decoration: const BoxDecoration(
-            color: Color(0xFFF2F4F7),
+          decoration: BoxDecoration(
+            color: AppColors.immoFeedbackNeutralSubtle,
             shape: BoxShape.circle,
           ),
-          child: const Icon(
+          child: Icon(
             Icons.close_rounded,
             size: 13,
-            color: Color(0xFF667085),
+            color: AppColors.immoTextSecondary,
           ),
         ),
       ),

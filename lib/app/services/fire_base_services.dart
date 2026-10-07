@@ -7,7 +7,7 @@
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:immoplus/app/routes/app_router.dart';
-// import 'package:immoplus/app/utils/app_colors.dart';
+// import 'package:immoplus/app/design_system/design_system.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 // class FireBaseServices {
@@ -33,8 +33,8 @@
 //           context: context,
 //           builder: (BuildContext context) {
 //             return AlertDialog(
-//               title: const Text("Autorisation définitivement refusée"),
-//               content: const Text(
+//               title: Text("Autorisation définitivement refusée"),
+//               content: Text(
 //                   "L'autorisation de notification est définitivement refusée. Veuillez accorder l'autorisation dans les paramètres de l'application pour utiliser cette fonctionnalité."),
 //               actions: <Widget>[
 //                 TextButton(
@@ -124,7 +124,7 @@
 //           ),
 //           // ending: Icon(
 //           //   Icons.arrow_right_alt,
-//           //   color: Colors.red,
+//           //   color: AppColors.red,
 //           // ),
 //           description: message.notification!.body,
 //           onTap: () {

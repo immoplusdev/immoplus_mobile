@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:intl/intl.dart';
 
@@ -64,16 +64,16 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
             'Fourchette de prix',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF344054),
+                  color: AppColors.immoTextLabel,
                 ),
           ),
           const Gap(12),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFF2F4F7)),
+              border: Border.all(color: AppColors.immoBorderDefault),
             ),
             child: Column(
               children: [
@@ -108,7 +108,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                     Container(
                       width: 24,
                       height: 1,
-                      color: const Color(0xFFD0D5DD),
+                      color: AppColors.immoBorderStrong,
                     ),
                     const Gap(12),
                     Expanded(
@@ -143,7 +143,7 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                 SliderTheme(
                   data: SliderThemeData(
                     activeTrackColor: AppColors.primary,
-                    inactiveTrackColor: const Color(0xFFF2F4F7),
+                    inactiveTrackColor: AppColors.immoBorderDefault,
                     thumbColor: AppColors.primary,
                     overlayColor: AppColors.primary.withValues(alpha: 0.1),
                     rangeThumbShape: const RoundRangeSliderThumbShape(
@@ -197,19 +197,19 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFB),
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.immoBorderDefault),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF667085),
+              color: AppColors.immoTextSecondary,
             ),
           ),
           Row(
@@ -221,19 +221,19 @@ class _FilterRangePriceState extends State<FilterRangePrice> {
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF344054),
+                        color: AppColors.immoTextLabel,
                       ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.zero,
                     // Ajoutez ces deux lignes :
                     filled: true,
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.transparent,
                     suffixText: ' F',
-                    suffixStyle: TextStyle(
+                    suffixStyle: AppTypography.font(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF667085),
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                   onChanged: onChanged,

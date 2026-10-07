@@ -20,7 +20,7 @@ import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_bien_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 class NearEstatesConstants {
@@ -235,8 +235,8 @@ class _EstatesNearListState extends State<EstatesNearList> {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: _nearEstates.isNotEmpty
-                    ? Colors.black
-                    : Colors.grey.shade400,
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -309,10 +309,10 @@ class _EstatesNearListState extends State<EstatesNearList> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.orange.shade50,
+        color: AppColors.orange50,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.orange.shade200,
+          color: AppColors.orange500,
           width: 1,
         ),
       ),
@@ -320,7 +320,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
         children: [
           Icon(
             Icons.location_off_outlined,
-            color: Colors.orange.shade700,
+            color: AppColors.amber800,
             size: 28,
           ),
           const Gap(12),
@@ -328,7 +328,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
             child: Text(
               _errorMessage ?? NearEstatesConstants.locationErrorMessage,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.orange.shade900,
+                    color: AppColors.amber800,
                   ),
             ),
           ),
@@ -336,7 +336,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
           IconButton(
             icon: Icon(
               Icons.close,
-              color: Colors.orange.shade700,
+              color: AppColors.amber800,
               size: 20,
             ),
             onPressed: _dismissLocationError,
@@ -358,14 +358,14 @@ class _EstatesNearListState extends State<EstatesNearList> {
             'Erreur de chargement',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.red.shade700,
+                  color: AppColors.red600,
                 ),
           ),
           const Gap(6),
           Text(
             _errorMessage ?? 'Une erreur est survenue',
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.red.shade600,
+                  color: AppColors.red600,
                 ),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -376,7 +376,7 @@ class _EstatesNearListState extends State<EstatesNearList> {
             onPressed: _loadNearEstates,
             child: Text(
               'Réessayer',
-              style: TextStyle(color: Colors.red.shade700),
+              style: AppTypography.font(color: AppColors.red600),
             ),
           ),
         ],

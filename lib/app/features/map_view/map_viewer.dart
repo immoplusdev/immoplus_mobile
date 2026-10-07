@@ -17,7 +17,7 @@ import 'package:immoplus/app/services/location_service.dart';
 import 'package:immoplus/app/widgets/map/location_permission_banner.dart';
 import 'package:immoplus/app/features/map_view/widgets/map_search_text_field.dart';
 import 'package:immoplus/app/features/map_view/map_constantes.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class MapViewer extends StatefulWidget {
   const MapViewer({super.key});
@@ -297,7 +297,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
               child: GestureDetector(
                 onTap: _collapseSearch,
                 child: Container(
-                  color: Colors.black.withValues(alpha: 0.4),
+                  color: AppColors.black.withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -326,7 +326,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                   icon: Icons.arrow_back_ios_new_rounded,
                   onTap: () => context.pop(),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: _searchExpanded
                       ? _buildExpandedSearch()
@@ -370,18 +370,18 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.refresh_rounded,
-                              size: 16, color: Colors.white),
+                              size: 16, color: AppColors.white),
                           SizedBox(width: 8),
                           Text(
                             'Voir les biens ici',
-                            style: TextStyle(
+                            style: AppTypography.font(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                         ],
@@ -406,13 +406,13 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                     onTap: () =>
                         mapController?.animateCamera(CameraUpdate.zoomIn()),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _buildMapButton(
                     icon: Icons.remove_rounded,
                     onTap: () =>
                         mapController?.animateCamera(CameraUpdate.zoomOut()),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _buildMapButton(
                     icon: Icons.my_location_rounded,
                     onTap: () async => _initUserPosition(),
@@ -457,11 +457,11 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: AppColors.black.withValues(alpha: 0.1),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -482,11 +482,11 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
+              color: AppColors.black.withValues(alpha: 0.12),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -494,14 +494,14 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
         ),
         child: Row(
           children: [
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             Icon(Icons.search_rounded, size: 20, color: AppColors.primary),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Text(
               'Rechercher un lieu...',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 14,
-                color: Colors.grey.shade500,
+                color: AppColors.immoTextSecondary,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -543,14 +543,14 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
         height: cardHeight + bottomPad,
         padding: EdgeInsets.only(bottom: bottomPad),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.black.withValues(alpha: 0.08),
               blurRadius: 16,
               offset: const Offset(0, -4),
             ),
@@ -579,7 +579,7 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                     label: 'Temps estimé',
                     animProgress: _countUpAnimation.value,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
                       context.read<MapViwerCubit>().clearRoute();
@@ -589,11 +589,11 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
+                        color: AppColors.immoBgSurfaceMuted,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(Icons.close_rounded,
-                          size: 16, color: Colors.grey.shade500),
+                          size: 16, color: AppColors.immoTextSecondary),
                     ),
                   ),
                 ],
@@ -621,9 +621,9 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 18, color: Colors.white),
+          child: Icon(icon, size: 18, color: AppColors.white),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -632,18 +632,18 @@ class _MapViewerState extends State<MapViewer> with TickerProviderStateMixin {
               opacity: animProgress,
               child: Text(
                 value,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1A1A),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
             ),
             Text(
               label,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 11,
-                color: Color(0xFF999999),
+                color: AppColors.immoFeedbackNeutral,
               ),
             ),
           ],

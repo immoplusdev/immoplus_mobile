@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/relais_interest_status.dart';
@@ -10,7 +9,7 @@ import 'package:immoplus/app/data/models/remote/relais/relais_received_interests
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_status_section.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 
 const List<RelaisInterestStatus> _statusOrder = [
@@ -31,10 +30,12 @@ class RelaisReceivedInterestsSection extends StatefulWidget {
   const RelaisReceivedInterestsSection({super.key});
 
   @override
-  State<RelaisReceivedInterestsSection> createState() => _RelaisReceivedInterestsSectionState();
+  State<RelaisReceivedInterestsSection> createState() =>
+      _RelaisReceivedInterestsSectionState();
 }
 
-class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterestsSection>
+class _RelaisReceivedInterestsSectionState
+    extends State<RelaisReceivedInterestsSection>
     with AutomaticKeepAliveClientMixin {
   final _relaisRepository = getIt<RelaisRepository>();
   List<ReceivedRelaisInterestModel> _interests = [];
@@ -61,7 +62,8 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
     }
   }
 
-  Future<void> _respond(ReceivedRelaisInterestModel interest, {required bool accept}) async {
+  Future<void> _respond(ReceivedRelaisInterestModel interest,
+      {required bool accept}) async {
     DateTime? meetingDate;
     if (accept) {
       meetingDate = await _pickMeetingDate();
@@ -78,7 +80,8 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
       );
       _fetch();
     } catch (_) {
-      if (mounted) CustomPopup.showErrorToast(text: "Impossible d'envoyer votre réponse");
+      if (mounted)
+        CustomPopup.showErrorToast(text: "Impossible d'envoyer votre réponse");
     }
   }
 
@@ -90,7 +93,8 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
       lastDate: DateTime.now().add(const Duration(days: 90)),
     );
     if (date == null || !mounted) return null;
-    final time = await showTimePicker(context: context, initialTime: const TimeOfDay(hour: 10, minute: 0));
+    final time = await showTimePicker(
+        context: context, initialTime: const TimeOfDay(hour: 10, minute: 0));
     if (time == null) return date;
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
@@ -108,7 +112,7 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
           child: Text(
             "Aucune demande reçue pour le moment.",
             textAlign: TextAlign.center,
-            style: GoogleFonts.dmSans(color: Colors.grey.shade500),
+            style: AppTypography.font(color: AppColors.immoTextSecondary),
           ),
         ),
       );
@@ -152,7 +156,10 @@ class _ReceivedInterestCard extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback onDecline;
 
-  const _ReceivedInterestCard({required this.interest, required this.onAccept, required this.onDecline});
+  const _ReceivedInterestCard(
+      {required this.interest,
+      required this.onAccept,
+      required this.onDecline});
 
   bool get _canContact =>
       interest.statusEnum == RelaisInterestStatus.inProgress ||
@@ -166,7 +173,7 @@ class _ReceivedInterestCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.primary, width: .2),
       ),
@@ -175,7 +182,8 @@ class _ReceivedInterestCard extends StatelessWidget {
         children: [
           Text(
             interest.clientName ?? 'Utilisateur',
-            style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -183,7 +191,8 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(4),
             Text(
               '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.location}',
-              style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -192,7 +201,8 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               interest.message!,
-              style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
+              style: AppTypography.font(
+                  fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
@@ -201,7 +211,10 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               'Visite prévue le ${DateFormat('d MMM yyyy à HH:mm', 'fr_FR').format(interest.meetingDate!)}',
-              style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+              style: AppTypography.font(
+                  fontSize: 12,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600),
             ),
           ],
           if (isPending) ...[
@@ -212,11 +225,14 @@ class _ReceivedInterestCard extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: onDecline,
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.red),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      side: const BorderSide(color: AppColors.red),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text('Décliner', style: GoogleFonts.dmSans(color: Colors.red, fontWeight: FontWeight.w600)),
+                    child: Text('Décliner',
+                        style: AppTypography.font(
+                            color: AppColors.red, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const Gap(12),
@@ -226,11 +242,14 @@ class _ReceivedInterestCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text('Planifier',
-                        style: GoogleFonts.dmSans(color: Colors.white, fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(
+                            color: AppColors.white,
+                            fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],
@@ -252,9 +271,11 @@ class _ReceivedInterestCard extends StatelessWidget {
                   foregroundColor: AppColors.primary,
                   side: BorderSide(color: AppColors.primary),
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
-                child: Text('Contacter', style: GoogleFonts.dmSans(fontWeight: FontWeight.w600)),
+                child: Text('Contacter',
+                    style: AppTypography.font(fontWeight: FontWeight.w600)),
               ),
             ),
           ],

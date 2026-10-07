@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:iconsax/iconsax.dart';
 import '../../../data/models/remote/messaging/report_reason.dart';
-import '../../../utils/app_colors.dart';
-import '../../../utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Bottom sheet de signalement (spec §7.1).
 class ReportConversationSheet extends StatefulWidget {
-  const ReportConversationSheet({super.key, required this.onSubmit});
+  const ReportConversationSheet({
+    super.key,
+    required this.onSubmit,
+    this.title = 'Signaler cette conversation',
+  });
 
   /// Retourne `true` si le signalement a été envoyé avec succès.
-  final Future<bool> Function({required String reason, String? details}) onSubmit;
+  final Future<bool> Function({required String reason, String? details})
+      onSubmit;
+  final String title;
 
   static Future<void> show(
     BuildContext context, {
     required Future<bool> Function({required String reason, String? details})
         onSubmit,
+    String title = 'Signaler cette conversation',
   }) {
     return showModalBottomSheet<void>(
       context: context,
@@ -24,15 +29,19 @@ class ReportConversationSheet extends StatefulWidget {
       backgroundColor: AppColors.whiteBackground,
       elevation: 0,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       showDragHandle: true,
-      builder: (_) => ReportConversationSheet(onSubmit: onSubmit),
+      builder: (_) => ReportConversationSheet(
+        onSubmit: onSubmit,
+        title: title,
+      ),
     );
   }
 
   @override
-  State<ReportConversationSheet> createState() => _ReportConversationSheetState();
+  State<ReportConversationSheet> createState() =>
+      _ReportConversationSheetState();
 }
 
 class _ReportConversationSheetState extends State<ReportConversationSheet> {
@@ -63,7 +72,8 @@ class _ReportConversationSheetState extends State<ReportConversationSheet> {
       if (mounted) Navigator.of(context).pop();
     } else {
       setState(() => _isSubmitting = false);
-      ToastUtils.showError(description: "Le signalement n'a pas pu être envoyé.");
+      ToastUtils.showError(
+          description: "Le signalement n'a pas pu être envoyé.");
     }
   }
 
@@ -72,15 +82,32 @@ class _ReportConversationSheetState extends State<ReportConversationSheet> {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return Container(
       padding: EdgeInsets.fromLTRB(20, 8, 20, 20 + bottomInset),
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Signaler cette conversation',
-                style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
+            Row(children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.immoFeedbackError.withValues(alpha: .1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child:
+                    Icon(Iconsax.warning_2, color: AppColors.immoFeedbackError),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(widget.title,
+                    style: AppTypography.font(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+            ]),
+            SizedBox(height: 16),
             ...ReportReason.values.map((reason) {
               final isSelected = _selected == reason;
               return RadioListTile<ReportReason>(
@@ -91,43 +118,49 @@ class _ReportConversationSheetState extends State<ReportConversationSheet> {
                 contentPadding: EdgeInsets.zero,
                 title: Text(
                   reason.label,
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 14,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
               );
             }),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text('Détails (facultatif)',
-                style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700)),
-            const SizedBox(height: 8),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextLabel)),
+            SizedBox(height: 8),
             TextField(
               controller: _detailsController,
               maxLines: 3,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.grey.shade50,
+                fillColor: AppColors.immoBgSurfaceMuted,
                 contentPadding: const EdgeInsets.all(12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
+                  borderSide: BorderSide(color: AppColors.immoBorderDefault),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               height: 50,
               child: OutlinedButton(
-                onPressed: (_selected != null && !_isSubmitting) ? _submit : null,
+                onPressed:
+                    (_selected != null && !_isSubmitting) ? _submit : null,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.primary,
-                  disabledForegroundColor: Colors.grey.shade400,
+                  disabledForegroundColor: AppColors.immoTextDisabled,
                   side: BorderSide(
-                    color: _selected != null ? AppColors.primary : Colors.grey.shade300,
+                    color: _selected != null
+                        ? AppColors.primary
+                        : AppColors.immoBorderStrong,
                   ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(60)),
                 ),
                 child: _isSubmitting
                     ? SizedBox(
@@ -136,7 +169,7 @@ class _ReportConversationSheetState extends State<ReportConversationSheet> {
                         child: CircularProgressIndicator(
                             strokeWidth: 2, color: AppColors.primary))
                     : Text('Envoyer le signalement',
-                        style: GoogleFonts.dmSans(fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(fontWeight: FontWeight.w600)),
               ),
             ),
           ],

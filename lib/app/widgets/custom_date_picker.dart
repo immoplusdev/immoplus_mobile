@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 
 import 'custom_text_field.dart';
@@ -65,8 +66,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               data: theme.copyWith(
                 colorScheme: theme.colorScheme.copyWith(
                   // Change the primary color
-                  onPrimary: Colors.black, // Change the text color on primary
-                  onSurface: Colors.black, // Change the text color on surface
+                  onPrimary:
+                      AppColors.black, // Change the text color on primary
+                  onSurface:
+                      AppColors.black, // Change the text color on surface
                 ),
               ),
               child: child!,
@@ -86,10 +89,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   colorScheme: theme.colorScheme.copyWith(
                     surface: Theme.of(context).colorScheme.onPrimary,
                     // Change the primary color
-                    // surface: Colors.white,
-                    // background: Colors.white,
-                    // onPrimary: Colors.black, // Change the text color on primary
-                    // onSurface: Colors.black, // Change the text color on surface
+                    // surface: AppColors.white,
+                    // background: AppColors.white,
+                    // onPrimary: AppColors.black, // Change the text color on primary
+                    // onSurface: AppColors.black, // Change the text color on surface
                   ),
                 ),
                 child: child!,
@@ -98,7 +101,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           );
 
           if (pickedTime != null) {
-            print(pickedTime.hour);
             DateTime dateTime = DateTime(pickedDate.year, pickedDate.month,
                 pickedDate.day, pickedTime.hour, pickedTime.minute);
 

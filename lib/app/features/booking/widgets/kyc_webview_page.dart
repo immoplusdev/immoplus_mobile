@@ -90,7 +90,7 @@ class _KycWebViewPageState extends State<KycWebViewPage> {
             },
           ),
           if (_isLoading)
-            const Center(
+            Center(
               child: CircularProgressIndicator(),
             ),
         ],

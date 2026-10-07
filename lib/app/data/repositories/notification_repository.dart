@@ -1,10 +1,8 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
-import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/providers/notification_provider.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
 import 'package:immoplus/app/features/notification/model/notifications_response.dart';
 import 'package:injectable/injectable.dart';
@@ -31,7 +29,7 @@ class NotificationRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load notifications: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
@@ -145,4 +143,3 @@ class NotificationRepository {
     }
   }
 }
-

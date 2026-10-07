@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class ReviewListTile extends StatelessWidget {
   const ReviewListTile(
@@ -11,10 +12,10 @@ class ReviewListTile extends StatelessWidget {
     return ListTile(
       leading: Text(
         title,
-        style: TextStyle(color: Colors.grey[600]),
+        style: AppTypography.font(color: AppColors.gray500),
       ),
       trailing: Text(trailing,
-          style: TextStyle(
+          style: AppTypography.font(
             fontWeight: FontWeight.bold,
           )),
     );

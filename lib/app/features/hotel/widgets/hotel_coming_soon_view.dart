@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_page_header.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 /// Affiché à la place du flux normal de la page Hôtel tant que le module
 /// est désactivé côté plateforme (GET /pms/hotels/module-status → active: false).
@@ -13,7 +12,7 @@ class HotelComingSoonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           Container(
@@ -41,7 +40,7 @@ class HotelComingSoonView extends StatelessWidget {
                             width: 96,
                             height: 96,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.white,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
@@ -63,10 +62,8 @@ class HotelComingSoonView extends StatelessWidget {
                           Text(
                             "Bientôt disponible",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.dmSans(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                            style: AppTypography.h3.copyWith(
+                              color: AppColors.black,
                             ),
                           ),
                           const Gap(12),
@@ -74,9 +71,8 @@ class HotelComingSoonView extends StatelessWidget {
                             "Hôtel arrive très prochainement. "
                             "Revenez bientôt pour réserver votre chambre !",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.dmSans(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
+                            style: AppTypography.bodyMedium.copyWith(
+                              color: AppColors.immoTextSecondary,
                               height: 1.5,
                             ),
                           ),

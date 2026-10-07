@@ -1,18 +1,18 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/data/enums/home_tab.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
 import 'package:immoplus/app/features/my_choice/my_choice_page.dart';
-import 'package:immoplus/app/features/suggest/pages/search_result_page.dart';
+import 'package:immoplus/app/data/enums/home_feed_scope.dart';
+import 'package:immoplus/app/features/for_you/screens/scope_feed_page.dart';
 
 /// Grille de 6 cards remplaçant les anciens onglets natifs de l'accueil
 /// (voir new.hoome.feed.md). Chaque card navigue vers une page séparée —
@@ -33,7 +33,7 @@ class HomeTabGrid extends StatelessWidget {
     return Column(
       children: [
         const HomeTabGridRowOne(),
-        const SizedBox(height: rowGap),
+        SizedBox(height: rowGap),
         const HomeTabGridRowTwo(),
       ],
     );
@@ -86,10 +86,10 @@ List<Widget> _buildCards(BuildContext context) {
       borderColor: const Color(0xFFFFEEF6),
       badgeColor: const Color(0xFFFF5C9E),
       onTap: () => context.push(
-        SearchResultPage.routePath,
+        ScopeFeedPage.routePath,
         extra: {
-          'category': HomeTab.residence.category,
-          'displayText': 'Résidences'
+          'scope': HomeFeedScope.stay,
+          'title': HomeFeedScope.stay.defaultTitle,
         },
       ),
     ),
@@ -101,10 +101,10 @@ List<Widget> _buildCards(BuildContext context) {
       borderColor: const Color(0xFFF9DBDD),
       badgeColor: const Color(0xFFE85C6B),
       onTap: () => context.push(
-        SearchResultPage.routePath,
+        ScopeFeedPage.routePath,
         extra: {
-          'category': HomeTab.location.category,
-          'displayText': 'Location'
+          'scope': HomeFeedScope.rent,
+          'title': HomeFeedScope.rent.defaultTitle,
         },
       ),
     ),
@@ -125,8 +125,11 @@ List<Widget> _buildCards(BuildContext context) {
       borderColor: const Color(0xFFFAE5CF),
       badgeColor: const Color(0xFFFF9F43),
       onTap: () => context.push(
-        SearchResultPage.routePath,
-        extra: {'category': HomeTab.bien.category, 'displayText': 'Biens'},
+        ScopeFeedPage.routePath,
+        extra: {
+          'scope': HomeFeedScope.buy,
+          'title': HomeFeedScope.buy.defaultTitle,
+        },
       ),
     ),
     _HomeTabCard(
@@ -196,7 +199,7 @@ class _HomeTabCard extends StatelessWidget {
         height: _height,
         padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 17),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           border: Border.all(color: borderColor, width: 1),
           borderRadius: BorderRadius.circular(13),
           boxShadow: const [
@@ -225,7 +228,7 @@ class _HomeTabCard extends StatelessWidget {
                       height: _imageSize,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
-                          const ColoredBox(color: Colors.transparent),
+                          const ColoredBox(color: AppColors.transparent),
                     ),
                   ),
                   Positioned(
@@ -257,14 +260,14 @@ class _HomeTabCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 labelLine1,
                 maxLines: 1,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 10,
                   height: 1.1,
                   color: const Color(0xFF9CA3AF),
@@ -277,11 +280,11 @@ class _HomeTabCard extends StatelessWidget {
                 labelLine2,
                 maxLines: 1,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 11,
                   height: 1.1,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: AppColors.black87,
                 ),
               ),
             ),

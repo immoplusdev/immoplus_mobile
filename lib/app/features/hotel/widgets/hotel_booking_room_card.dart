@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
 class HotelBookingRoomCard extends StatelessWidget {
@@ -36,10 +36,12 @@ class HotelBookingRoomCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary.withOpacity(0.05) : Colors.white,
+          color: isSelected
+              ? AppColors.primary.withOpacity(0.05)
+              : AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.grey.shade200,
+            color: isSelected ? AppColors.primary : AppColors.immoBorderDefault,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -53,19 +55,25 @@ class HotelBookingRoomCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Container(
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white : const Color(0xFFF2F2F2),
+                  color: isSelected
+                      ? AppColors.white
+                      : AppColors.immoBgSurfaceMuted,
                   borderRadius: BorderRadius.circular(20),
                   border: isSelected
-                      ? Border.all(color: AppColors.primary.withOpacity(0.15), width: 1)
+                      ? Border.all(
+                          color: AppColors.primary.withOpacity(0.15), width: 1)
                       : null,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Text(
                   shortCode,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.primary : const Color(0xFF666666),
+                    color: isSelected
+                        ? AppColors.blue500
+                        : const Color(0xFF666666),
                   ),
                 ),
               ),
@@ -74,7 +82,7 @@ class HotelBookingRoomCard extends StatelessWidget {
             // Room Name
             Text(
               room.nom,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
                 color: Color(0xFF111111),
@@ -87,21 +95,22 @@ class HotelBookingRoomCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 children: [
                   TextSpan(
-                    text: CurrencyFormatter().format(room.prixAPartirDe.toString()),
+                    text: CurrencyFormatter()
+                        .format(room.prixAPartirDe.toString()),
                   ),
-                  const TextSpan(
+                  TextSpan(
                     text: ' /nuit',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 11,
                       fontWeight: FontWeight.normal,
-                      color: Colors.grey,
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
                 ],
@@ -110,8 +119,9 @@ class HotelBookingRoomCard extends StatelessWidget {
             // Availability count
             Text(
               "${room.nombreChambres} dispo.",
-              style: TextStyle(
-                color: isSelected ? const Color(0xFF2E7D32) : Colors.green.shade600,
+              style: AppTypography.font(
+                color:
+                    isSelected ? const Color(0xFF2E7D32) : AppColors.green500,
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
               ),

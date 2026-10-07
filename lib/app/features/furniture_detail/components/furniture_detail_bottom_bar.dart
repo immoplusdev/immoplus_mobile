@@ -9,8 +9,7 @@ import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 class FurnitureDetailBottomBar extends StatelessWidget {
@@ -36,7 +35,7 @@ class FurnitureDetailBottomBar extends StatelessWidget {
             _proceed(context);
           }
         },
-        child: const Text('CONTACTER'),
+        child: Text('CONTACTER'),
       ),
     );
   }
@@ -74,22 +73,22 @@ class FurnitureDetailBottomBar extends StatelessWidget {
               elevation: 2,
               borderRadius: BorderRadius.circular(20),
               child: ListTile(
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
                 leading: CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.white,
                   child: Icon(
                     FontAwesomeIcons.whatsapp.data,
-                    color: Colors.green,
+                    color: AppColors.green,
                   ),
                 ),
-                title: const Text('Contacter sur WhatsApp'),
+                title: Text('Contacter sur WhatsApp'),
                 titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                 trailing: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,
-                  color: Colors.green,
+                  color: AppColors.green,
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -106,19 +105,19 @@ class FurnitureDetailBottomBar extends StatelessWidget {
               elevation: 2,
               borderRadius: BorderRadius.circular(20),
               child: ListTile(
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
                 leading: Icon(
                   FontAwesomeIcons.headset.data,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
-                title: const Text('Contacter par appel'),
+                title: Text('Contacter par appel'),
                 titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                 trailing: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 onTap: () {
                   Navigator.pop(context);

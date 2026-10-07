@@ -27,7 +27,8 @@ class _EstateUserPageState extends State<EstateUserPage>
 
   @override
   void onConnectionRestored() {
-    if (pagingController.itemList == null || pagingController.itemList!.isEmpty) {
+    if (pagingController.itemList == null ||
+        pagingController.itemList!.isEmpty) {
       pagingController.error = 'temporary_error_to_force_refresh';
       pagingController.refresh();
     }
@@ -87,7 +88,7 @@ class _EstateUserPageState extends State<EstateUserPage>
           SliverAppBar(
             floating: true,
             snap: true,
-            title: const Text('Biens de l\'utilisateur'),
+            title: Text('Biens de l\'utilisateur'),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(60),
               child: Padding(

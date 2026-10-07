@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader_controller.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 import 'package:shimmer/shimmer.dart';
@@ -45,7 +45,7 @@ class _FileUploaderState extends State<FileUploader> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              tileColor: Colors.white,
+              tileColor: AppColors.white,
               onTap: () {
                 ImagePicker()
                     .pickImage(source: ImageSource.camera, imageQuality: 40)
@@ -56,11 +56,11 @@ class _FileUploaderState extends State<FileUploader> {
                 );
               },
               leading: const FaIcon(FontAwesomeIcons.camera),
-              title: const Text("À partir de la caméra"),
+              title: Text("À partir de la caméra"),
             ),
             const Divider(),
             ListTile(
-              tileColor: Colors.white,
+              tileColor: AppColors.white,
               onTap: () {
                 ImagePicker()
                     .pickImage(source: ImageSource.gallery, imageQuality: 40)
@@ -71,7 +71,7 @@ class _FileUploaderState extends State<FileUploader> {
                 );
               },
               leading: const FaIcon(FontAwesomeIcons.folder),
-              title: const Text("À partir de la gallérie"),
+              title: Text("À partir de la gallérie"),
             ),
             const Gap(30),
           ],
@@ -82,11 +82,13 @@ class _FileUploaderState extends State<FileUploader> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-                spreadRadius: 3, blurRadius: 8, color: Colors.grey.shade300)
+                spreadRadius: 3,
+                blurRadius: 8,
+                color: AppColors.immoBorderStrong)
           ]),
       padding: const EdgeInsets.all(5),
       child: Column(
@@ -119,12 +121,12 @@ class _FileUploaderState extends State<FileUploader> {
                   ? Shimmer.fromColors(
                       period: const Duration(milliseconds: 800),
                       baseColor: CupertinoColors.tertiarySystemFill,
-                      highlightColor: Colors.grey.shade100,
+                      highlightColor: AppColors.immoBgSurfaceMuted,
                       child: Container(
                         width: widget.width ?? 180,
                         height: widget.height ?? 180,
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: AppColors.red,
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
@@ -133,7 +135,7 @@ class _FileUploaderState extends State<FileUploader> {
                       width: widget.width ?? 180,
                       height: widget.height ?? 180,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
+                        color: AppColors.immoBorderDefault,
                         borderRadius: BorderRadius.circular(15),
                         image: (widget.fileUploaderController.filePath == null)
                             ? null
@@ -154,13 +156,13 @@ class _FileUploaderState extends State<FileUploader> {
 
                                 placeholder: (context, url) =>
                                     Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade400,
+                                  baseColor: AppColors.immoBorderStrong,
+                                  highlightColor: AppColors.immoTextDisabled,
                                   period: const Duration(milliseconds: 500),
                                   child: Container(
                                     width: double.infinity,
                                     height: double.infinity,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                   ),
                                 ),
                                 errorWidget: (context, url, error) =>
@@ -175,7 +177,7 @@ class _FileUploaderState extends State<FileUploader> {
                                     widget.iconPlaceholder ??
                                         FontAwesomeIcons.camera.data,
                                     size: 50,
-                                    color: Colors.grey.shade500,
+                                    color: AppColors.immoTextSecondary,
                                   ),
                                 )
                               : null,

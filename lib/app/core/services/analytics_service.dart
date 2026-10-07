@@ -97,6 +97,24 @@ class AnalyticsService {
     await _analytics.logEvent(name: 'near_residences_viewed');
   }
 
+  Future<void> logChatGuidanceEvent({
+    required String eventName,
+    required String ruleId,
+    required String intent,
+    required String conversationType,
+    String? reservationStatus,
+  }) async {
+    await _analytics.logEvent(
+      name: eventName,
+      parameters: {
+        'rule_id': ruleId,
+        'intent': intent,
+        'conversation_type': conversationType,
+        if (reservationStatus != null) 'reservation_status': reservationStatus,
+      },
+    );
+  }
+
   // ── Consultation de fiches ──────────────────────────────────────────────
   Future<void> logViewResidence({
     required String itemId,
