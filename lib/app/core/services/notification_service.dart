@@ -35,6 +35,9 @@ class NotificationService {
   final PushInstallationService pushInstallationService;
 
   bool _listenersConfigured = false;
+  bool _isSubscribing = false;
+  String? _lastRegisteredToken;
+  String? _lastRegisteredUserId;
 
   NotificationService(
     this.pushProvider,
@@ -203,6 +206,12 @@ class NotificationService {
 
   /// Enregistre / actualise l'appareil auprès du backend (`PUT /me/push-installations/:id`)
   Future<void> suscribeCurrentUser({String? token}) async {
+    if (_isSubscribing) {
+      log('🔔 Push registration already in progress, skipping duplicate call',
+          name: 'NOTIFICATION_SERVICE');
+      return;
+    }
+    _isSubscribing = true;
     try {
       final user = sessionManager.currentUser;
       if (user == null ||
@@ -216,6 +225,13 @@ class NotificationService {
       final pushToken = token ?? await pushProvider.getToken();
       if (pushToken == null || pushToken.isEmpty) {
         log('⚠️ Push token is null or empty', name: 'NOTIFICATION_SERVICE');
+        return;
+      }
+
+      final userId = user.userId;
+      if (_lastRegisteredToken == pushToken && _lastRegisteredUserId == userId) {
+        log('🔔 Push registration skipped: token and user already registered',
+            name: 'NOTIFICATION_SERVICE');
         return;
       }
 
@@ -240,15 +256,22 @@ class NotificationService {
         body: body,
       );
 
+      _lastRegisteredToken = pushToken;
+      _lastRegisteredUserId = userId;
+
       log('✅ Push installation successfully registered',
           name: 'NOTIFICATION_SERVICE');
     } catch (e) {
       log('⚠️ Error in suscribeCurrentUser: $e', name: 'NOTIFICATION_SERVICE');
+    } finally {
+      _isSubscribing = false;
     }
   }
 
   /// Détache l'appareil du compte lors de la déconnexion (`DELETE /me/push-installations/:id`)
   Future<void> unsubcribeCurrentUser() async {
+    _lastRegisteredToken = null;
+    _lastRegisteredUserId = null;
     try {
       final user = sessionManager.currentUser;
       if (user != null &&

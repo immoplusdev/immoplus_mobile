@@ -67,7 +67,9 @@ class SessionManager {
     }
   });
 
-  Future<void> saveUser(UserModelSchema user) async {
+  bool _isLoggingOut = false;
+
+  Future<void> saveUser(UserModelSchema user, {bool registerPush = true}) async {
     await isarConfig.instance.writeTxn(() async {
       await isarConfig.instance.userModelSchemas.put(user);
     });
@@ -78,27 +80,35 @@ class SessionManager {
     // Connecté dès la session ouverte (pas seulement à l'ouverture d'un fil)
     // pour que le badge non-lu de l'onglet Messages reste à jour partout.
     getIt<MessagingSocketService>().connect(user.accessToken);
-    // Enregistre l'appareil auprès de FCM
-    getIt<NotificationService>().suscribeCurrentUser();
+    // Enregistre l'appareil auprès de FCM si demandé
+    if (registerPush) {
+      getIt<NotificationService>().suscribeCurrentUser();
+    }
   }
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
-    getIt<AnalyticsService>().clearUserIdentity();
+    if (_isLoggingOut) return;
+    _isLoggingOut = true;
     try {
-      await getIt<NotificationService>().unsubcribeCurrentUser();
-    } catch (e) {
-      print('Error unsubscribing push installation on logout: $e');
+      getIt<AnalyticsService>().clearUserIdentity();
+      try {
+        await getIt<NotificationService>().unsubcribeCurrentUser();
+      } catch (e) {
+        print('Error unsubscribing push installation on logout: $e');
+      }
+      await clearSession();
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('recent_hotel_searches');
+      } catch (e, stack) {
+        talker.error('Error clearing hotel searches on logout: $e', e, stack);
+      }
+      AppRouter.router.go('/');
+      // AppRouter.router.goNamed(SplashScreen.name);
+    } finally {
+      _isLoggingOut = false;
     }
-    await clearSession();
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('recent_hotel_searches');
-    } catch (e, stack) {
-      talker.error('Error clearing hotel searches on logout: $e', e, stack);
-    }
-    AppRouter.router.go('/');
-    // AppRouter.router.goNamed(SplashScreen.name);
   }
 
   Future<UserModelSchema?> getCurrentUser() async {
