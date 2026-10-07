@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -675,6 +677,8 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
               label: 'Effectuer le paiement',
               color: _successGreen,
               onPressed: () async {
+                // TODO RESERVATION ID DEBUG
+                log(" montant total ${_montantTotal.toInt()} reservation ${widget.reservationId}");
                 await context.pushNamed(
                   OperatorsSelectorPage.name,
                   extra: PaymentPageAdapter(

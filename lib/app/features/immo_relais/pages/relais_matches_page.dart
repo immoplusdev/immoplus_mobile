@@ -33,7 +33,8 @@ class _RelaisMatchesPageState extends State<RelaisMatchesPage> {
   Future<void> _fetch() async {
     setState(() => _isLoading = true);
     try {
-      final response = await _relaisRepository.getRelaisMatches(widget.relaisId);
+      final response =
+          await _relaisRepository.getRelaisMatches(widget.relaisId);
       if (mounted) setState(() => _matches = response.data.matches);
     } catch (_) {
       // Liste vide en cas d'erreur réseau.
@@ -50,12 +51,16 @@ class _RelaisMatchesPageState extends State<RelaisMatchesPage> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Demandeurs correspondants',
-          style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.black),
+          style: AppTypography.font(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black),
         ),
       ),
       body: SafeArea(
@@ -65,7 +70,8 @@ class _RelaisMatchesPageState extends State<RelaisMatchesPage> {
                 ? Center(
                     child: Text(
                       'Aucune correspondance pour le moment.',
-                      style: AppTypography.font(color: AppColors.immoTextSecondary),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary),
                     ),
                   )
                 : RefreshIndicator(
@@ -74,7 +80,8 @@ class _RelaisMatchesPageState extends State<RelaisMatchesPage> {
                       padding: const EdgeInsets.all(16),
                       itemCount: _matches.length,
                       separatorBuilder: (context, index) => const Gap(16),
-                      itemBuilder: (context, index) => _MatchCard(match: _matches[index]),
+                      itemBuilder: (context, index) =>
+                          _MatchCard(match: _matches[index]),
                     ),
                   ),
       ),
@@ -106,19 +113,24 @@ class _MatchCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   match.title ?? match.userName ?? 'Recherche',
-                  style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: AppTypography.font(
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
               if (match.matchScore != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFEFFCF3),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '${match.matchScore!.round()}%',
-                    style: AppTypography.font(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.green500),
+                    style: AppTypography.font(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.green500),
                   ),
                 ),
             ],
@@ -127,7 +139,8 @@ class _MatchCard extends StatelessWidget {
             const Gap(4),
             Text(
               match.userName!,
-              style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
             ),
           ],
           if (criteria?.location != null || criteria?.priceMin != null) ...[
@@ -152,8 +165,12 @@ class _MatchCard extends StatelessWidget {
   Widget _tag(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: AppColors.immoBgSurfaceMuted, borderRadius: BorderRadius.circular(20)),
-      child: Text(text, style: AppTypography.font(fontSize: 12, color: AppColors.immoTextLabel)),
+      decoration: BoxDecoration(
+          color: AppColors.immoBgSurfaceMuted,
+          borderRadius: BorderRadius.circular(20)),
+      child: Text(text,
+          style:
+              AppTypography.font(fontSize: 12, color: AppColors.immoTextLabel)),
     );
   }
 }

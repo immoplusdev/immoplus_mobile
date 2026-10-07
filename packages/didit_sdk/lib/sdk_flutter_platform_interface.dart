@@ -31,6 +31,7 @@ abstract class SdkFlutterPlatform extends PlatformInterface {
     Map<String, dynamic>? config,
   ) {
     throw UnimplementedError(
-        'startVerificationWithWorkflow() has not been implemented.');
+      'startVerificationWithWorkflow() has not been implemented.',
+    );
   }
 }

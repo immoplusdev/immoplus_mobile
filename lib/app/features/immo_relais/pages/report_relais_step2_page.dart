@@ -45,7 +45,8 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
       return;
     }
     if (_draft.reporterRelation == null) {
-      CustomPopup.showErrorToast(text: 'Veuillez préciser votre lien avec ce logement');
+      CustomPopup.showErrorToast(
+          text: 'Veuillez préciser votre lien avec ce logement');
       return;
     }
     if (!_confirmed) {
@@ -53,8 +54,9 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
           text: 'Veuillez confirmer que ce logement ne vous appartient pas');
       return;
     }
-    _draft.reporterRelationDetails =
-        _detailsController.text.trim().isEmpty ? null : _detailsController.text.trim();
+    _draft.reporterRelationDetails = _detailsController.text.trim().isEmpty
+        ? null
+        : _detailsController.text.trim();
     context.pushNamed(ReportRelaisSummaryPage.name, extra: _draft);
   }
 
@@ -66,7 +68,8 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -100,7 +103,8 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
                   maxLines: 2,
                   decoration: InputDecoration(
                     hintText: 'Précisez votre lien avec ce logement',
-                    hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
+                    hintStyle: AppTypography.font(
+                        fontSize: 13, color: AppColors.immoTextDisabled),
                     filled: true,
                     fillColor: AppColors.white,
                     border: OutlineInputBorder(
@@ -184,7 +188,8 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             color: isSelected ? AppColors.primary : AppColors.white,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
-              color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
+              color:
+                  isSelected ? AppColors.primary : AppColors.immoBorderStrong,
             ),
           ),
           child: Text(
@@ -212,7 +217,8 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isSelected ? AppColors.primary : AppColors.immoBorderStrong,
+              color:
+                  isSelected ? AppColors.primary : AppColors.immoBorderStrong,
               width: isSelected ? 1.5 : 1,
             ),
           ),
@@ -221,12 +227,14 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
             children: [
               Text(
                 relation.label,
-                style: AppTypography.font(fontWeight: FontWeight.bold, fontSize: 15),
+                style: AppTypography.font(
+                    fontWeight: FontWeight.bold, fontSize: 15),
               ),
               const Gap(2),
               Text(
                 relation.description,
-                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
           ),
@@ -251,7 +259,8 @@ class _ReportRelaisStep2PageState extends State<ReportRelaisStep2Page> {
               padding: const EdgeInsets.only(top: 12),
               child: Text(
                 "Je confirme que ce logement ne m'appartient pas et que je signale simplement sa disponibilité, à titre d'information.",
-                style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
               ),
             ),
           ),

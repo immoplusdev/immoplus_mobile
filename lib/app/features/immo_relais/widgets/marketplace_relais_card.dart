@@ -20,7 +20,9 @@ class MarketplaceRelaisCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = relais.photos.isNotEmpty ? Utils.getImagePath(id: relais.photos.first) : '';
+    final imageUrl = relais.photos.isNotEmpty
+        ? Utils.getImagePath(id: relais.photos.first)
+        : '';
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
@@ -44,12 +46,14 @@ class MarketplaceRelaisCard extends StatelessWidget {
                   ? Container(
                       color: AppColors.immoBgSurfaceMuted,
                       alignment: Alignment.center,
-                      child: Icon(Icons.home_outlined, color: AppColors.immoTextDisabled, size: 32),
+                      child: Icon(Icons.home_outlined,
+                          color: AppColors.immoTextDisabled, size: 32),
                     )
                   : CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Container(color: AppColors.immoBgSurfaceMuted),
+                      errorWidget: (context, url, error) =>
+                          Container(color: AppColors.immoBgSurfaceMuted),
                     ),
             ),
             Padding(
@@ -59,14 +63,16 @@ class MarketplaceRelaisCard extends StatelessWidget {
                 children: [
                   Text(
                     '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.rooms} ch.',
-                    style: AppTypography.font(fontSize: 13, fontWeight: FontWeight.bold),
+                    style: AppTypography.font(
+                        fontSize: 13, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Gap(2),
                   Text(
                     relais.location,
-                    style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                    style: AppTypography.font(
+                        fontSize: 12, color: AppColors.immoTextSecondary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -74,23 +80,29 @@ class MarketplaceRelaisCard extends StatelessWidget {
                     const Gap(4),
                     Text(
                       '${relais.interestedCount} intéressé${relais.interestedCount > 1 ? 's' : ''}',
-                      style: AppTypography.font(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w600),
+                      style: AppTypography.font(
+                          fontSize: 11,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                   const Gap(8),
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: () => showExpressRelaisInterestSheet(context, relaisId: relais.id),
+                      onPressed: () => showExpressRelaisInterestSheet(context,
+                          relaisId: relais.id),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primary,
                         side: BorderSide(color: AppColors.primary),
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
                       ),
                       child: Text(
                         'Je suis intéressé',
-                        style: AppTypography.font(fontSize: 12, fontWeight: FontWeight.w600),
+                        style: AppTypography.font(
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

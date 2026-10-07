@@ -334,7 +334,8 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                         return Center(
                           child: Text(
                             'Aucune suggestion trouvée',
-                            style: AppTypography.font(color: AppColors.immoTextSecondary),
+                            style: AppTypography.font(
+                                color: AppColors.immoTextSecondary),
                           ),
                         );
                       }
@@ -392,7 +393,8 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Row(
               children: [
-                Icon(Icons.history, color: AppColors.immoTextSecondary, size: 18),
+                Icon(Icons.history,
+                    color: AppColors.immoTextSecondary, size: 18),
                 SizedBox(width: 8), // Rule 4: 8px base unit
                 Text(
                   'Recherches récentes',
@@ -429,7 +431,8 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                   children: [
                     Text(
                       _showAllHistory ? 'Voir moins' : 'Voir plus',
-                      style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 14),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 14),
                     ),
                     const Gap(6),
                     Icon(
@@ -473,11 +476,13 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.refresh, color: AppColors.immoTextSecondary, size: 16),
+                    Icon(Icons.refresh,
+                        color: AppColors.immoTextSecondary, size: 16),
                     const Gap(4),
                     Text(
                       'Actualiser',
-                      style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 14),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextSecondary, fontSize: 14),
                     ),
                   ],
                 ),

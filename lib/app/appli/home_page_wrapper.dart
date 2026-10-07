@@ -304,8 +304,9 @@ class _HomePageWrapperState extends State<HomePageWrapper>
             showSelectedLabels: true,
             showUnselectedLabels: true,
             selectedItemColor: AppColors.primary,
-            unselectedItemColor:
-                state == PageState.vivre ? AppColors.white : AppColors.immoTextSecondary,
+            unselectedItemColor: state == PageState.vivre
+                ? AppColors.white
+                : AppColors.immoTextSecondary,
             items: [
               _buildNavItem(
                 icon: Iconsax.home,
@@ -350,7 +351,8 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     String? svgAsset,
     Widget? badgeWidget,
   }) {
-    final inactiveColor = immoMode ? AppColors.white : AppColors.immoTextSecondary;
+    final inactiveColor =
+        immoMode ? AppColors.white : AppColors.immoTextSecondary;
 
     Widget buildIcon({required bool active}) {
       Widget base;

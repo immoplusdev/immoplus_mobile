@@ -55,7 +55,8 @@ class EasyLoadingHandler {
   // ── Alias de compatibilité ascendante ──
 
   /// Alias pour [show].
-  static void showLoadingToast({String? text, Color? color, bool? dismissOnTap}) {
+  static void showLoadingToast(
+      {String? text, Color? color, bool? dismissOnTap}) {
     show(text: text ?? "Envoi...", dismissOnTap: dismissOnTap ?? false);
   }
 

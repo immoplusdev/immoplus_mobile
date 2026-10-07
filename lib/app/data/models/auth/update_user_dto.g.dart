@@ -15,20 +15,11 @@ _$UpdateUserDtoImpl _$$UpdateUserDtoImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String? ?? '',
     );
 
-Map<String, dynamic> _$$UpdateUserDtoImplToJson(_$UpdateUserDtoImpl instance) {
-  final val = <String, dynamic>{
-    'firstName': instance.firstName,
-    'lastName': instance.lastName,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null && (value is! String || value.isNotEmpty)) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('avatar', instance.avatar);
-  writeNotNull('email', instance.email);
-  val['phoneNumber'] = instance.phoneNumber;
-  return val;
-}
+Map<String, dynamic> _$$UpdateUserDtoImplToJson(_$UpdateUserDtoImpl instance) =>
+    <String, dynamic>{
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      if (instance.avatar case final value?) 'avatar': value,
+      if (instance.email case final value?) 'email': value,
+      'phoneNumber': instance.phoneNumber,
+    };

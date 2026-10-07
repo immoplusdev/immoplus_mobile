@@ -46,7 +46,8 @@ class AppFeedback {
   }
 
   /// Affiche une notification d'information transitoire (Figma Toast)
-  static void showInfo(String title, {String? description, Duration? duration}) {
+  static void showInfo(String title,
+      {String? description, Duration? duration}) {
     ToastUtils.showInfo(
       title: title,
       description: description,
@@ -55,7 +56,8 @@ class AppFeedback {
   }
 
   /// Affiche une notification d'avertissement transitoire (Figma Toast)
-  static void showWarning(String title, {String? description, Duration? duration}) {
+  static void showWarning(String title,
+      {String? description, Duration? duration}) {
     ToastUtils.showWarning(
       title: title,
       description: description,

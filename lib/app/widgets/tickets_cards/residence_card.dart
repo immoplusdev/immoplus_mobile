@@ -139,7 +139,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                   ],
                 ),
               ),
-               Gap(10),
+              Gap(10),
             ],
           ),
         ),
@@ -181,7 +181,8 @@ class ResidenceFavoriteButton extends StatelessWidget {
       onTap: onTap,
       child: CircleAvatar(
         radius: 14,
-        backgroundColor: isFavorite ? AppColors.immoFeedbackError : AppColors.gray300,
+        backgroundColor:
+            isFavorite ? AppColors.immoFeedbackError : AppColors.gray300,
         child: Icon(
           FontAwesomeIcons.solidHeart.data,
           size: 16,

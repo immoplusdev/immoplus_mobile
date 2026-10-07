@@ -11,7 +11,8 @@ class BottomImmoPlus extends StatelessWidget {
         child: Center(
           child: Text(
             "©Afriq'Solus",
-            style: AppTypography.font(color: Color.fromARGB(255, 182, 181, 181)),
+            style:
+                AppTypography.font(color: Color.fromARGB(255, 182, 181, 181)),
           ),
         ));
   }

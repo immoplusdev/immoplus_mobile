@@ -84,7 +84,8 @@ class _PropertyTabBarState extends State<PropertyTabBar>
           controller: _controller,
           tabs: widget.tabs
               .map((t) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: widget.tabSpacing / 2),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: widget.tabSpacing / 2),
                     child: Tab(text: t.label),
                   ))
               .toList(),

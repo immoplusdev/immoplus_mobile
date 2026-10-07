@@ -27,7 +27,8 @@ class NotificationTile extends StatelessWidget {
         color: AppColors.red500,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 24),
-        child: const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
+        child:
+            const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
       ),
       onDismissed: (_) => onDelete?.call(),
       child: InkWell(

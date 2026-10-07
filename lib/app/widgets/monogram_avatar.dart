@@ -125,7 +125,8 @@ class MonogramAvatar extends StatelessWidget {
     List<BoxShadow>? shadows;
 
     if (role == UserRole.newUser) {
-      border = Border.all(color: AppColors.gray500.withValues(alpha: 0.3), width: 2);
+      border =
+          Border.all(color: AppColors.gray500.withValues(alpha: 0.3), width: 2);
     } else if (role == UserRole.powerUser) {
       shadows = [
         BoxShadow(

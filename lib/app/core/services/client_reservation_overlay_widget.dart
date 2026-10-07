@@ -116,7 +116,8 @@ class _ClientReservationOverlayWidgetState
                 children: [
                   Icon(
                     isWaitingPayment ? Icons.check_circle : Icons.notifications,
-                    color: isWaitingPayment ? AppColors.green : AppColors.primary,
+                    color:
+                        isWaitingPayment ? AppColors.green : AppColors.primary,
                     size: 20,
                   ),
                   SizedBox(width: 8),
@@ -133,7 +134,8 @@ class _ClientReservationOverlayWidgetState
                   ),
                   GestureDetector(
                     onTap: widget.onDismiss,
-                    child: Icon(Icons.close, size: 20, color: AppColors.immoTextSecondary),
+                    child: Icon(Icons.close,
+                        size: 20, color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),
@@ -155,20 +157,23 @@ class _ClientReservationOverlayWidgetState
                               width: 50,
                               height: 50,
                               color: AppColors.immoBorderDefault,
-                              child: Icon(Icons.home, color: AppColors.immoTextSecondary),
+                              child: Icon(Icons.home,
+                                  color: AppColors.immoTextSecondary),
                             ),
                             errorWidget: (_, __, ___) => Container(
                               width: 50,
                               height: 50,
                               color: AppColors.immoBorderDefault,
-                              child: Icon(Icons.home, color: AppColors.immoTextSecondary),
+                              child: Icon(Icons.home,
+                                  color: AppColors.immoTextSecondary),
                             ),
                           )
                         : Container(
                             width: 50,
                             height: 50,
                             color: AppColors.immoBorderDefault,
-                            child: Icon(Icons.home, color: AppColors.immoTextSecondary),
+                            child: Icon(Icons.home,
+                                color: AppColors.immoTextSecondary),
                           ),
                   ),
                   SizedBox(width: 12),

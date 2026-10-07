@@ -105,7 +105,8 @@ class PendingSelectionCard extends StatelessWidget {
               ),
               child: Text(
                 'Payer',
-                style: AppTypography.font(fontWeight: FontWeight.w600, fontSize: 12),
+                style: AppTypography.font(
+                    fontWeight: FontWeight.w600, fontSize: 12),
               ),
             ),
           ),

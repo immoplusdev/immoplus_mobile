@@ -247,7 +247,8 @@ class AuthRepository {
     }
   }
 
-  Future<HttpResponse> sendRegistrationOTP({required SendEmailOtpBody body}) async {
+  Future<HttpResponse> sendRegistrationOTP(
+      {required SendEmailOtpBody body}) async {
     try {
       final response = await AuthProvider(dioClient).sendRegistrationOTP(body);
       inspect(response);

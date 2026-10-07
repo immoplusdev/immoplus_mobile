@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../../core/config/injection.dart';
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../widgets/custom_empty_state.dart';
@@ -57,7 +58,8 @@ class _MessagesInboxView extends StatelessWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text('Messages',
-            style: AppTypography.font(fontWeight: FontWeight.bold, color: AppColors.black)),
+            style: AppTypography.font(
+                fontWeight: FontWeight.bold, color: AppColors.black)),
         backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: false,
@@ -70,15 +72,25 @@ class _MessagesInboxView extends StatelessWidget {
               itemCount: 6,
               itemBuilder: (_, __) => const _ConversationSkeleton(),
             ),
-            loaded: (conversations, activeType, counts, isRefreshing, isSwitchingTab) {
+            loaded: (conversations, activeType, counts, isRefreshing,
+                isSwitchingTab) {
+              final unreadCount =
+                  counts.fold<int>(0, (total, count) => total + count.unread);
+              final conversationCount =
+                  counts.fold<int>(0, (total, count) => total + count.total);
               return Column(
                 children: [
+                  _InboxOverview(
+                    unreadCount: unreadCount,
+                    conversationCount: conversationCount,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4, bottom: 4),
+                    padding: const EdgeInsets.only(top: 2, bottom: 8),
                     child: InboxTabs(
                       activeType: activeType,
                       counts: counts,
-                      onSelect: (type) => context.read<InboxCubit>().selectTab(type),
+                      onSelect: (type) =>
+                          context.read<InboxCubit>().selectTab(type),
                     ),
                   ),
                   Expanded(
@@ -86,30 +98,35 @@ class _MessagesInboxView extends StatelessWidget {
                         ? ListView.builder(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: 4,
-                            itemBuilder: (_, __) => const _ConversationSkeleton(),
+                            itemBuilder: (_, __) =>
+                                const _ConversationSkeleton(),
                           )
                         : conversations.isEmpty
                             ? SingleChildScrollView(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 child: CustomEmptyState(
-                                  icon: Icons.chat_bubble_outline,
+                                  icon: Iconsax.messages_3,
                                   title: _emptyTitle(activeType),
                                   description: _emptyDescription(activeType),
                                   buttonText: 'Explorer les résidences',
-                                  onButtonPressed: () => context.go('/homePage'),
+                                  onButtonPressed: () =>
+                                      context.go('/homePage'),
                                 ),
                               )
                             : RefreshIndicator(
-                                onRefresh: () => context.read<InboxCubit>().refresh(),
+                                onRefresh: () =>
+                                    context.read<InboxCubit>().refresh(),
                                 child: ListView.builder(
-                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   itemCount: conversations.length,
                                   itemBuilder: (context, index) {
                                     final conversation = conversations[index];
                                     return ConversationTile(
                                       conversation: conversation,
                                       onTap: () async {
-                                        final inboxCubit = context.read<InboxCubit>();
+                                        final inboxCubit =
+                                            context.read<InboxCubit>();
                                         // Le fil peut avoir changé (lu, bloqué...)
                                         // pendant qu'il était ouvert : on ne le
                                         // sait qu'au retour, pas d'event dédié
@@ -136,7 +153,8 @@ class _MessagesInboxView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.wifi_off, size: 40, color: AppColors.immoTextDisabled),
+                    Icon(Iconsax.warning_2,
+                        size: 40, color: AppColors.immoTextDisabled),
                     SizedBox(height: 12),
                     Text(message, textAlign: TextAlign.center),
                     SizedBox(height: 16),
@@ -154,6 +172,66 @@ class _MessagesInboxView extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _InboxOverview extends StatelessWidget {
+  const _InboxOverview({
+    required this.unreadCount,
+    required this.conversationCount,
+  });
+
+  final int unreadCount;
+  final int conversationCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = unreadCount == 0
+        ? '$conversationCount conversation${conversationCount > 1 ? 's' : ''}'
+        : '$unreadCount message${unreadCount > 1 ? 's' : ''} non lu${unreadCount > 1 ? 's' : ''}';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+      child: Row(
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: AppColors.primaryLite,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(Iconsax.messages_3, color: AppColors.primary, size: 19),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label,
+              style: AppTypography.font(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.immoTextSecondary,
+              ),
+            ),
+          ),
+          if (unreadCount > 0)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                unreadCount > 99 ? '99+' : '$unreadCount',
+                style: AppTypography.font(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

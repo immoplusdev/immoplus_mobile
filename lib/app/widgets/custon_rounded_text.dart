@@ -55,7 +55,8 @@ class _CustomRoundedTextFieldState extends State<CustomRoundedTextField> {
   @override
   void didUpdateWidget(CustomRoundedTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller && widget.controller != null) {
+    if (oldWidget.controller != widget.controller &&
+        widget.controller != null) {
       _internalController?.dispose();
       _internalController = null;
     }
@@ -132,8 +133,8 @@ class _CustomRoundedTextFieldState extends State<CustomRoundedTextField> {
                 hintText: widget.labelText ?? '',
                 filled: true,
                 fillColor: AppColors.white,
-                labelStyle:
-                    AppTypography.font(color: Theme.of(context).colorScheme.onSurface),
+                labelStyle: AppTypography.font(
+                    color: Theme.of(context).colorScheme.onSurface),
                 focusColor: Theme.of(context).colorScheme.onSurface,
                 suffixIcon: widget.sufixIcon,
                 border: OutlineInputBorder(
@@ -209,7 +210,8 @@ class _CustomRoundedTextFieldTTState extends State<CustomRoundedTextFieldTT> {
   @override
   void didUpdateWidget(CustomRoundedTextFieldTT oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller && widget.controller != null) {
+    if (oldWidget.controller != widget.controller &&
+        widget.controller != null) {
       _internalController?.dispose();
       _internalController = null;
     }
@@ -266,8 +268,8 @@ class _CustomRoundedTextFieldTTState extends State<CustomRoundedTextFieldTT> {
               hintText: widget.labelText ?? '',
               filled: true,
               fillColor: AppColors.white,
-              labelStyle:
-                  AppTypography.font(color: Theme.of(context).colorScheme.onSurface),
+              labelStyle: AppTypography.font(
+                  color: Theme.of(context).colorScheme.onSurface),
               focusColor: Theme.of(context).colorScheme.onSurface,
               suffixIcon: widget.sufixIcon,
               border: InputBorder.none,

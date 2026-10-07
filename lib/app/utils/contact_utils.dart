@@ -17,8 +17,11 @@ class ContactUtils {
         backgroundColor: AppColors.whiteBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         builder: (context) {
-          final phone = getIt<SessionManager>().configModel?.data?.contactPhoneNumber ?? '';
-          final email = getIt<SessionManager>().configModel?.data?.contactEmail ?? '';
+          final phone =
+              getIt<SessionManager>().configModel?.data?.contactPhoneNumber ??
+                  '';
+          final email =
+              getIt<SessionManager>().configModel?.data?.contactEmail ?? '';
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 40),
             child: Column(
@@ -45,7 +48,8 @@ class ContactUtils {
                       color: AppColors.whatsAppGreen.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(Iconsax.message, size: 18, color: AppColors.whatsAppGreen),
+                    child: Icon(Iconsax.message,
+                        size: 18, color: AppColors.whatsAppGreen),
                   ),
                   title: "WhatsApp",
                   subtitle: "Écrivez-nous sur WhatsApp",
@@ -62,7 +66,8 @@ class ContactUtils {
                       color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(Iconsax.call, size: 18, color: AppColors.primary),
+                    child:
+                        Icon(Iconsax.call, size: 18, color: AppColors.primary),
                   ),
                   title: "Appel téléphonique",
                   subtitle: "Appeler notre service client",
@@ -141,7 +146,8 @@ class ContactUtils {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: AppColors.immoBorderStrong, size: 20),
+              Icon(Icons.chevron_right_rounded,
+                  color: AppColors.immoBorderStrong, size: 20),
             ],
           ),
         ),

@@ -48,7 +48,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Si on n'est plus sur "/", c'est qu'un deep link a pris le contrôle
     if (currentPath != '/') {
-      talker.info('Deep link detected ($currentPath), skipping splash navigation');
+      talker.info(
+          'Deep link detected ($currentPath), skipping splash navigation');
       return; // ← NE PAS NAVIGUER
     }
 

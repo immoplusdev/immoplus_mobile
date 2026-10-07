@@ -57,7 +57,8 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: AppColors.immoBrandAccent),
+                          shape: BoxShape.circle,
+                          color: AppColors.immoBrandAccent),
                       child: Icon(
                         Icons.arrow_back_ios_rounded,
                         color: AppColors.white,

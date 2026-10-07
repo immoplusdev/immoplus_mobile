@@ -89,7 +89,9 @@ class ResidenceReviewCard extends StatelessWidget {
             children: [
               _Stars(rating: review.propertyRating),
               if (ratedAt != null) ...[
-                Text(' · ', style: AppTypography.font(color: AppColors.immoTextSecondary)),
+                Text(' · ',
+                    style:
+                        AppTypography.font(color: AppColors.immoTextSecondary)),
                 Text(
                   timeago.format(ratedAt, locale: _kFrenchLocale),
                   style: AppTypography.font(

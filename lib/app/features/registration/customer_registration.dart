@@ -167,7 +167,8 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
         ),
         child: Row(
           children: [
-            Icon(CupertinoIcons.calendar, color: AppColors.immoTextSecondary, size: 20),
+            Icon(CupertinoIcons.calendar,
+                color: AppColors.immoTextSecondary, size: 20),
             const Gap(12),
             Text(
               hasValue
@@ -311,7 +312,8 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 18),
                             enabledBorder: _fieldBorder(
-                                color: _prenomError != null ? AppColors.red : null,
+                                color:
+                                    _prenomError != null ? AppColors.red : null,
                                 width: _prenomError != null ? 1.3 : 1,
                                 radius: 16),
                             focusedBorder: _fieldBorder(
@@ -337,8 +339,8 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                         padding: const EdgeInsets.only(left: 4),
                         child: Text(
                           _nomError ?? _prenomError ?? _birthDateError ?? '',
-                          style:
-                              AppTypography.font(color: AppColors.red, fontSize: 12),
+                          style: AppTypography.font(
+                              color: AppColors.red, fontSize: 12),
                         ),
                       ),
                     ],

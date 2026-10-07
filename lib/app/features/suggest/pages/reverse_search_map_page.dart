@@ -215,10 +215,12 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
     return Row(
       children: [
         Text('$libres Libres',
-            style: AppTypography.font(fontWeight: FontWeight.bold, fontSize: 13)),
+            style:
+                AppTypography.font(fontWeight: FontWeight.bold, fontSize: 13)),
         SizedBox(width: 8),
         Text('$enAttente En attente',
-            style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 13)),
+            style: AppTypography.font(
+                color: AppColors.immoTextSecondary, fontSize: 13)),
       ],
     );
   }
@@ -505,8 +507,7 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                               Text(
                                                 '--:--',
                                                 style: AppTypography.font(
-                                                    color:
-                                                        AppColors.amber800,
+                                                    color: AppColors.amber800,
                                                     fontSize: 36,
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -556,8 +557,10 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                                 remaining),
                                                         style: AppTypography.font(
                                                             color: expired
-                                                                ? AppColors.red600
-                                                                : AppColors.amber800,
+                                                                ? AppColors
+                                                                    .red600
+                                                                : AppColors
+                                                                    .amber800,
                                                             fontSize: expired
                                                                 ? 24
                                                                 : 36,
@@ -580,11 +583,13 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                           LinearProgressIndicator(
                                                         value: progress,
                                                         minHeight: 6,
-                                                        backgroundColor: AppColors.gray200,
+                                                        backgroundColor:
+                                                            AppColors.gray200,
                                                         valueColor:
                                                             AlwaysStoppedAnimation<
                                                                     Color>(
-                                                                AppColors.amber800),
+                                                                AppColors
+                                                                    .amber800),
                                                       ),
                                                     ),
                                                   ],
@@ -643,10 +648,12 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                           Alignment.center,
                                                       child: Text(
                                                         'Carte',
-                                                        style: AppTypography.font(
+                                                        style:
+                                                            AppTypography.font(
                                                           color: !show
                                                               ? AppColors.white
-                                                              : AppColors.black87,
+                                                              : AppColors
+                                                                  .black87,
                                                           fontWeight: !show
                                                               ? FontWeight.bold
                                                               : FontWeight
@@ -688,10 +695,12 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                                           Alignment.center,
                                                       child: Text(
                                                         'Liste',
-                                                        style: AppTypography.font(
+                                                        style:
+                                                            AppTypography.font(
                                                           color: show
                                                               ? AppColors.white
-                                                              : AppColors.black87,
+                                                              : AppColors
+                                                                  .black87,
                                                           fontWeight: show
                                                               ? FontWeight.bold
                                                               : FontWeight
@@ -718,7 +727,8 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
                                           decoration: BoxDecoration(
                                             color: AppColors.white,
                                             border: Border.all(
-                                                color: AppColors.immoBorderStrong),
+                                                color:
+                                                    AppColors.immoBorderStrong),
                                             borderRadius:
                                                 BorderRadius.circular(22),
                                           ),

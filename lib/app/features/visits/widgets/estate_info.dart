@@ -24,7 +24,8 @@ class EstateInfo extends StatelessWidget {
             style: AppTypography.font(
                 color: AppColors.black, fontWeight: FontWeight.w700)),
         TextSpan(
-            text: ' Par mois', style: AppTypography.font(color: AppColors.immoTextSecondary))
+            text: ' Par mois',
+            style: AppTypography.font(color: AppColors.immoTextSecondary))
       ])),
     );
   }

@@ -450,8 +450,9 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color:
-                    residences.isNotEmpty ? AppColors.black : AppColors.immoTextDisabled,
+                color: residences.isNotEmpty
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

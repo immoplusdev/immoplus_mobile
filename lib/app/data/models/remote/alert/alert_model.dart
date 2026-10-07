@@ -17,13 +17,11 @@ enum AlertTransactionType {
 }
 
 enum AlertStatus {
-  pending('pending', 'En attente', AppColors.orange50,
-      AppColors.amber800),
+  pending('pending', 'En attente', AppColors.orange50, AppColors.amber800),
   hasProposals('has_proposals', 'Proposition reçue', AppColors.blue75,
       AppColors.blue500),
   closed('closed', 'Clôturée', AppColors.gray200, AppColors.slate800),
-  active(
-      'active', 'Active', AppColors.green50, AppColors.emerald700),
+  active('active', 'Active', AppColors.green50, AppColors.emerald700),
   paused('paused', 'En pause', AppColors.gray100, AppColors.gray900),
   deleted('deleted', 'Supprimée', AppColors.red100, AppColors.red600);
 

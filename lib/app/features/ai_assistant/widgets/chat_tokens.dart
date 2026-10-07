@@ -10,8 +10,10 @@ class ChatTokens {
   static const Color brand500 = AppColors.blue500;
   static const Color brand600 = Color(0xFF1E38C4); // pressed / hover
   static const Color brandSurface = AppColors.blue50; // ~rgba(39,68,222,0.08)
-  static Color brandBorder20 = AppColors.immoBrandPrimary.withValues(alpha: 0.20);
-  static Color brandBorder15 = AppColors.immoBrandPrimary.withValues(alpha: 0.15);
+  static Color brandBorder20 =
+      AppColors.immoBrandPrimary.withValues(alpha: 0.20);
+  static Color brandBorder15 =
+      AppColors.immoBrandPrimary.withValues(alpha: 0.15);
 
   // Neutres
   static const Color neutral0 = AppColors.white;

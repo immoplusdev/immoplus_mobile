@@ -168,7 +168,8 @@ class _FurnitureCardState extends State<FurnitureCard> {
               },
               child: CircleAvatar(
                 radius: 14,
-                backgroundColor: value ? AppColors.immoFeedbackError : AppColors.gray300,
+                backgroundColor:
+                    value ? AppColors.immoFeedbackError : AppColors.gray300,
                 child: Icon(
                   FontAwesomeIcons.solidHeart.data,
                   size: 16,

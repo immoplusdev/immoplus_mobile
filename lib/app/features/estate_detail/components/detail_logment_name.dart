@@ -68,7 +68,8 @@ class DetailEstateName extends StatelessWidget {
                   SizedBox(width: 4),
                   Text(
                     '•',
-                    style: AppTypography.font(fontSize: 14, color: AppColors.immoTextDisabled),
+                    style: AppTypography.font(
+                        fontSize: 14, color: AppColors.immoTextDisabled),
                   ),
                   SizedBox(width: 4),
                 ],

@@ -14,7 +14,7 @@ import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class RatingHistoryPage extends StatefulWidget {
   const RatingHistoryPage({super.key});
-  
+
   static String name = 'RATING_HISTORY';
   static String routePath() => '/rating-history';
 
@@ -22,13 +22,16 @@ class RatingHistoryPage extends StatefulWidget {
   State<RatingHistoryPage> createState() => _RatingHistoryPageState();
 }
 
-class _RatingHistoryPageState extends State<RatingHistoryPage> with ConnectivityMixin {
-  final PagingController<int, RatingModel> _pagingController = PagingController(firstPageKey: 1);
+class _RatingHistoryPageState extends State<RatingHistoryPage>
+    with ConnectivityMixin {
+  final PagingController<int, RatingModel> _pagingController =
+      PagingController(firstPageKey: 1);
   final RatingRepository ratingRepository = getIt<RatingRepository>();
 
   @override
   void onConnectionRestored() {
-    if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
       _pagingController.error = 'temporary_error_to_force_refresh';
       _pagingController.refresh();
     }
@@ -77,7 +80,8 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),
-          onPressed: () => context.canPop() ? context.pop() : context.go('/account'),
+          onPressed: () =>
+              context.canPop() ? context.pop() : context.go('/account'),
         ),
         centerTitle: true,
       ),

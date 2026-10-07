@@ -338,7 +338,7 @@ class _HeroTitleState extends State<_HeroTitle>
     TweenSequenceItem(tween: ConstantTween(0.0), weight: 56),
   ]).animate(_wave);
 
-  static final TextStyle _style =AppTypography.font(
+  static final TextStyle _style = AppTypography.font(
     fontSize: 28,
     fontWeight: FontWeight.w600,
     letterSpacing: -0.4,

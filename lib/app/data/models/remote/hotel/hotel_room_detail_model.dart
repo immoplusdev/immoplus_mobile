@@ -19,7 +19,8 @@ class HotelRoomDetailModel with _$HotelRoomDetailModel {
     @Default(1) int sejourMin,
     int? sejourMax,
     @Default(RoomBreakfast()) RoomBreakfast petitDejeuner,
-    @Default(RoomCancellationPolicy()) RoomCancellationPolicy politiqueAnnulation,
+    @Default(RoomCancellationPolicy())
+    RoomCancellationPolicy politiqueAnnulation,
   }) = _HotelRoomDetailModel;
 
   factory HotelRoomDetailModel.fromJson(Map<String, dynamic> json) =>

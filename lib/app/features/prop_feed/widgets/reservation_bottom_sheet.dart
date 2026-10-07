@@ -271,7 +271,8 @@ class ReservationBottomSheet extends StatelessWidget {
                       SizedBox(height: 6),
                       Text(
                         'Vérifiez votre connexion et réessayez.',
-                        style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+                        style: AppTypography.font(
+                            fontSize: 13, color: AppColors.immoTextSecondary),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 20),
@@ -557,7 +558,8 @@ class ReservationBottomSheet extends StatelessWidget {
                 color: AppColors.white,
                 border: Border(
                   top: BorderSide(
-                      color: AppColors.black.withValues(alpha: 0.1), width: 0.5),
+                      color: AppColors.black.withValues(alpha: 0.1),
+                      width: 0.5),
                 ),
               ),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),

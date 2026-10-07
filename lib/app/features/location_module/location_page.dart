@@ -88,7 +88,10 @@ class _LocationPageState extends State<LocationPage> {
                 ),
               ),
 
-              Divider(height: 1, thickness: 0.5, color: AppColors.immoBorderDefault),
+              Divider(
+                  height: 1,
+                  thickness: 0.5,
+                  color: AppColors.immoBorderDefault),
 
               // ── Search + Map button ──
               Padding(
@@ -116,7 +119,9 @@ class _LocationPageState extends State<LocationPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Divider(
-                    height: 1, thickness: 0.5, color: AppColors.immoBgSurfaceMuted),
+                    height: 1,
+                    thickness: 0.5,
+                    color: AppColors.immoBgSurfaceMuted),
               ),
 
               // ── Section label ──

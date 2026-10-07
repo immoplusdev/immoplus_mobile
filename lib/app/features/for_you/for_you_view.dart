@@ -34,10 +34,12 @@ class _ForYouViewState extends State<ForYouView> {
           initial: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
           loading: () => SliverToBoxAdapter(child: _LoadingShimmer()),
           error: (message) => SliverToBoxAdapter(
-            child: _ErrorState(onRetry: () => context.read<ForYouCubit>().fetch()),
+            child:
+                _ErrorState(onRetry: () => context.read<ForYouCubit>().fetch()),
           ),
           success: (sections, hasMore, nextCursor, isLoadingMore) {
-            if (sections.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+            if (sections.isEmpty)
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -46,14 +48,18 @@ class _ForYouViewState extends State<ForYouView> {
                       padding: const EdgeInsets.all(20),
                       child: Center(
                         child: isLoadingMore
-                            ? CircularProgressIndicator(color: AppColors.primary)
+                            ? CircularProgressIndicator(
+                                color: AppColors.primary)
                             : const SizedBox.shrink(),
                       ),
                     );
                   }
-                  if (index == sections.length - 2 && hasMore && !isLoadingMore) {
+                  if (index == sections.length - 2 &&
+                      hasMore &&
+                      !isLoadingMore) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (context.mounted) context.read<ForYouCubit>().loadMore();
+                      if (context.mounted)
+                        context.read<ForYouCubit>().loadMore();
                     });
                   }
                   return Padding(
@@ -88,8 +94,8 @@ class _LoadingShimmer extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: 3,
                 separatorBuilder: (context, index) => const Gap(12),
-                itemBuilder: (context, index) =>
-                    SizedBox(width: neirResidenceCardWidth, child: LoadProductCard()),
+                itemBuilder: (context, index) => SizedBox(
+                    width: neirResidenceCardWidth, child: LoadProductCard()),
               ),
             ),
           ),

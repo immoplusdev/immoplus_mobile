@@ -30,7 +30,8 @@ class _BestRatedResidencesPageState extends State<BestRatedResidencesPage>
 
   @override
   void onConnectionRestored() {
-    if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
       _pagingController.error = 'temporary_error_to_force_refresh';
       _pagingController.refresh();
     }

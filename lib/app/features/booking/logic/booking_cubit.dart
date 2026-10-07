@@ -133,7 +133,10 @@ class BookingCubit extends Cubit<BookingRequestState> {
         existing =
             await residenceRepository.getReservation(id: e.reservationId);
       } catch (err, stack) {
-        talker.error('Failed to pre-fetch blocked reservation ${e.reservationId}', err, stack);
+        talker.error(
+            'Failed to pre-fetch blocked reservation ${e.reservationId}',
+            err,
+            stack);
       }
 
       if (!context.mounted) return;

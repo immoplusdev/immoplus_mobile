@@ -242,7 +242,8 @@ class _NotificationsPageState extends State<NotificationsPage>
                             Text(
                               _pagingController.error?.toString() ?? '',
                               textAlign: TextAlign.center,
-                              style: AppTypography.bodyMedium.copyWith(color: AppColors.immoTextSecondary),
+                              style: AppTypography.bodyMedium
+                                  .copyWith(color: AppColors.immoTextSecondary),
                             ),
                             const Gap(24),
                             ElevatedButton(

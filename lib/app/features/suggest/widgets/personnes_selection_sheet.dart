@@ -39,7 +39,8 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Combien de voyageurs ?',
-              style: AppTypography.font(fontSize: 22, fontWeight: FontWeight.bold)),
+              style: AppTypography.font(
+                  fontSize: 22, fontWeight: FontWeight.bold)),
           SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,8 +85,9 @@ class _PersonnesSelectionSheetState extends State<PersonnesSelectionSheet> {
                   child: Center(
                     child: Text(n == 8 ? '8+' : '$n',
                         style: AppTypography.font(
-                            color:
-                                isSelected ? AppColors.white : Color(0xff797979),
+                            color: isSelected
+                                ? AppColors.white
+                                : Color(0xff797979),
                             fontSize: 18,
                             fontWeight: FontWeight.w600)),
                   ),

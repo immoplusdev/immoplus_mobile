@@ -34,12 +34,14 @@ Future<void> showExpressRelaisInterestSheet(
         children: [
           Text(
             'Exprimer votre intérêt',
-            style: AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const Gap(4),
           Text(
             "L'occupant sera notifié et pourra vous proposer une visite.",
-            style: AppTypography.font(fontSize: 13, color: AppColors.immoTextSecondary),
+            style: AppTypography.font(
+                fontSize: 13, color: AppColors.immoTextSecondary),
           ),
           const Gap(16),
           TextField(
@@ -48,7 +50,8 @@ Future<void> showExpressRelaisInterestSheet(
             maxLength: 2000,
             decoration: InputDecoration(
               hintText: 'Un message pour l\'occupant (optionnel)',
-              hintStyle: AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
+              hintStyle: AppTypography.font(
+                  fontSize: 13, color: AppColors.immoTextDisabled),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: AppColors.immoBorderStrong),
@@ -61,17 +64,20 @@ Future<void> showExpressRelaisInterestSheet(
             child: ElevatedButton(
               onPressed: () async {
                 Navigator.of(sheetContext).pop();
-                await _expressInterest(context, relaisId, messageController.text.trim(), onSuccess);
+                await _expressInterest(context, relaisId,
+                    messageController.text.trim(), onSuccess);
               },
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
               ),
               child: Text(
                 'Envoyer',
-                style: AppTypography.font(color: AppColors.white, fontWeight: FontWeight.bold),
+                style: AppTypography.font(
+                    color: AppColors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),

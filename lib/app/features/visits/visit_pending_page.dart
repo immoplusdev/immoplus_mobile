@@ -12,6 +12,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_mo
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
+import 'package:immoplus/app/features/messaging/widgets/host_contact_prompt.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
@@ -305,8 +306,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         horizontal: 24),
                                     child: _buildVisitDateSection(),
                                   ),
-                                if (_visitData != null)
-                                  SizedBox(height: 12),
+                                if (_visitData != null) SizedBox(height: 12),
 
                                 // ── Actions (itinéraire, propriétaire, service client)
                                 Padding(
@@ -322,8 +322,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         horizontal: 24),
                                     child: _buildStatusSection(),
                                   ),
-                                if (_visitData != null)
-                                  SizedBox(height: 12),
+                                if (_visitData != null) SizedBox(height: 12),
 
                                 // ── Identifiant de la demande ───────────────────────
                                 if (_visitData != null)
@@ -332,8 +331,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         horizontal: 24),
                                     child: _buildIdSection(),
                                   ),
-                                if (_visitData != null)
-                                  SizedBox(height: 12),
+                                if (_visitData != null) SizedBox(height: 12),
                                 SizedBox(height: 24),
                               ],
                             ),
@@ -350,7 +348,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                   width: 36,
                                   height: 4,
                                   decoration: BoxDecoration(
-                                    color: AppColors.black.withValues(alpha: 0.12),
+                                    color:
+                                        AppColors.black.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(2),
                                   ),
                                 ),
@@ -392,8 +391,9 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           Icon(
             _isExpress ? Iconsax.flash_1 : Iconsax.calendar_1,
             size: 14,
-            color:
-                _isExpress ? AppColors.immoFeedbackError : AppColors.purple7A5AF8,
+            color: _isExpress
+                ? AppColors.immoFeedbackError
+                : AppColors.purple7A5AF8,
           ),
           SizedBox(width: 6),
           Text(
@@ -766,8 +766,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               SizedBox(width: 8),
               Text(
                 widget.fromHistory ? 'Retour' : 'Sauvegarder et Quitter',
-                style:
-                    AppTypography.font(fontSize: 15, fontWeight: FontWeight.w600),
+                style: AppTypography.font(
+                    fontSize: 15, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -804,7 +804,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               children: [
                 Text(
                   'Identifiant',
-                  style: AppTypography.font(fontSize: 11, color: _textSecondary),
+                  style:
+                      AppTypography.font(fontSize: 11, color: _textSecondary),
                 ),
                 SizedBox(height: 2),
                 Text(
@@ -875,7 +876,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   children: [
                     Text(
                       'Statut du service',
-                      style: AppTypography.font(fontSize: 11, color: _textSecondary),
+                      style: AppTypography.font(
+                          fontSize: 11, color: _textSecondary),
                     ),
                     SizedBox(height: 2),
                     Text(
@@ -894,7 +896,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
+            child:
+                Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
           ),
           // Statut de paiement
           Row(
@@ -923,7 +926,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   children: [
                     Text(
                       'Statut de paiement',
-                      style: AppTypography.font(fontSize: 11, color: _textSecondary),
+                      style: AppTypography.font(
+                          fontSize: 11, color: _textSecondary),
                     ),
                     SizedBox(height: 2),
                     Text(
@@ -987,7 +991,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             child: Icon(
               Iconsax.calendar_1,
               size: 18,
-              color: hasDate ? AppColors.primary : AppColors.immoFeedbackWarning,
+              color:
+                  hasDate ? AppColors.primary : AppColors.immoFeedbackWarning,
             ),
           ),
           SizedBox(width: 12),
@@ -997,7 +1002,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               children: [
                 Text(
                   'Jour de visite',
-                  style: AppTypography.font(fontSize: 11, color: _textSecondary),
+                  style:
+                      AppTypography.font(fontSize: 11, color: _textSecondary),
                 ),
                 SizedBox(height: 2),
                 Text(
@@ -1009,8 +1015,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color:
-                        hasDate ? AppColors.primary : AppColors.amber800,
+                    color: hasDate ? AppColors.primary : AppColors.amber800,
                   ),
                 ),
               ],
@@ -1037,11 +1042,10 @@ class _VisitPendingPageState extends State<VisitPendingPage>
         // Contacter le propriétaire (messagerie in-app, spec §2.2)
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: _buildActionTile(
-            icon: Iconsax.message,
-            title: 'Contacter le propriétaire',
-            subtitle: 'Poser une question sur cette visite',
-            onTap: () => MessageComposerSheet.showForVisite(
+          child: HostContactPrompt(
+            padding: EdgeInsets.zero,
+            label: 'Envoyer un message au propriétaire',
+            onPressed: () => MessageComposerSheet.showForVisite(
               context,
               demandeVisiteId: widget.visitId,
               bienTitle: widget.bienImmo.nom.isNotEmpty

@@ -276,8 +276,9 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                           ? displayFormat.format(_checkInDate!)
                           : "Sélectionner la date d'arrivée",
                       style: AppTypography.font(
-                        color:
-                            _checkInDate != null ? AppColors.black : AppColors.immoTextSecondary,
+                        color: _checkInDate != null
+                            ? AppColors.black
+                            : AppColors.immoTextSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -309,8 +310,9 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                           ? displayFormat.format(_checkOutDate!)
                           : "Sélectionner la date de départ",
                       style: AppTypography.font(
-                        color:
-                            _checkOutDate != null ? AppColors.black : AppColors.immoTextSecondary,
+                        color: _checkOutDate != null
+                            ? AppColors.black
+                            : AppColors.immoTextSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -348,7 +350,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                       ),
                       Text(
                         "calculé auto.",
-                        style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 12),
+                        style: AppTypography.font(
+                            color: AppColors.immoTextSecondary, fontSize: 12),
                       ),
                     ],
                   ),

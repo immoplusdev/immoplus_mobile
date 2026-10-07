@@ -105,7 +105,8 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
               backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(CupertinoIcons.arrow_left, color: AppColors.black),
+                icon: const Icon(CupertinoIcons.arrow_left,
+                    color: AppColors.black),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -536,7 +537,8 @@ class _SupportContactLink extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.support_agent_outlined, size: 18, color: AppColors.blue500),
+            const Icon(Icons.support_agent_outlined,
+                size: 18, color: AppColors.blue500),
             SizedBox(width: 6),
             Text(
               "Besoin d'aide ? Contactez le support",

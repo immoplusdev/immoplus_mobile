@@ -83,7 +83,8 @@ class ThemeConfig {
               AppTypography.bodyMedium.copyWith(color: CupertinoColors.white),
           prefixStyle: AppTypography.bodyMedium
               .copyWith(color: CupertinoColors.systemGrey3),
-          hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.white70),
+          hintStyle:
+              AppTypography.bodyMedium.copyWith(color: AppColors.white70),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,

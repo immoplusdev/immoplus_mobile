@@ -244,8 +244,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
                             decoration: BoxDecoration(
                               color: AppColors.immoBgSurfaceMuted,
                               borderRadius: BorderRadius.circular(12),
-                              border:
-                                  Border.all(color: AppColors.immoBorderDefault),
+                              border: Border.all(
+                                  color: AppColors.immoBorderDefault),
                             ),
                             child: Row(
                               children: [
@@ -308,13 +308,15 @@ class _EditAccountPageState extends State<EditAccountPage> {
                               isPhoneNumberValid) {
                             FocusScope.of(context).unfocus();
 
-                            final emailValue = _formController.email?.text.trim();
+                            final emailValue =
+                                _formController.email?.text.trim();
                             final body = UpdateUserDto(
                               firstName: _formController.firstName!.text,
                               lastName: _formController.lastName!.text,
-                              email: (emailValue != null && emailValue.isNotEmpty)
-                                  ? emailValue
-                                  : null,
+                              email:
+                                  (emailValue != null && emailValue.isNotEmpty)
+                                      ? emailValue
+                                      : null,
                               avatar:
                                   avatar ?? sessionManager.currentUser!.avatar,
                               phoneNumber: phoneNumber,

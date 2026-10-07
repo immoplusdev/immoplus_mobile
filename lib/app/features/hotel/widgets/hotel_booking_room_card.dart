@@ -36,7 +36,9 @@ class HotelBookingRoomCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary.withOpacity(0.05) : AppColors.white,
+          color: isSelected
+              ? AppColors.primary.withOpacity(0.05)
+              : AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.immoBorderDefault,
@@ -53,19 +55,25 @@ class HotelBookingRoomCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Container(
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.white : AppColors.immoBgSurfaceMuted,
+                  color: isSelected
+                      ? AppColors.white
+                      : AppColors.immoBgSurfaceMuted,
                   borderRadius: BorderRadius.circular(20),
                   border: isSelected
-                      ? Border.all(color: AppColors.primary.withOpacity(0.15), width: 1)
+                      ? Border.all(
+                          color: AppColors.primary.withOpacity(0.15), width: 1)
                       : null,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Text(
                   shortCode,
                   style: AppTypography.font(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? AppColors.blue500 : const Color(0xFF666666),
+                    color: isSelected
+                        ? AppColors.blue500
+                        : const Color(0xFF666666),
                   ),
                 ),
               ),
@@ -94,7 +102,8 @@ class HotelBookingRoomCard extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: CurrencyFormatter().format(room.prixAPartirDe.toString()),
+                    text: CurrencyFormatter()
+                        .format(room.prixAPartirDe.toString()),
                   ),
                   TextSpan(
                     text: ' /nuit',
@@ -111,7 +120,8 @@ class HotelBookingRoomCard extends StatelessWidget {
             Text(
               "${room.nombreChambres} dispo.",
               style: AppTypography.font(
-                color: isSelected ? const Color(0xFF2E7D32) : AppColors.green500,
+                color:
+                    isSelected ? const Color(0xFF2E7D32) : AppColors.green500,
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
               ),

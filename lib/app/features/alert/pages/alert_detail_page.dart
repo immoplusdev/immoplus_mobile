@@ -52,7 +52,8 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         actions: [
@@ -231,7 +232,9 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                 child: _buildBudgetField('Minimum', alert.criteria.priceMin)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text('—', style: AppTypography.font(color: AppColors.immoTextSecondary)),
+              child: Text('—',
+                  style:
+                      AppTypography.font(color: AppColors.immoTextSecondary)),
             ),
             Expanded(
                 child: _buildBudgetField('Maximum', alert.criteria.priceMax)),
@@ -451,8 +454,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
                 style: AppTypography.bodyMediumSemiBold.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color:
-                      isActive ? const Color(0xFF1F2937) : AppColors.gray400,
+                  color: isActive ? const Color(0xFF1F2937) : AppColors.gray400,
                 ),
               ),
               Text(

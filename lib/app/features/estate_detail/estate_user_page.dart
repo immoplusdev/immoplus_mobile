@@ -27,7 +27,8 @@ class _EstateUserPageState extends State<EstateUserPage>
 
   @override
   void onConnectionRestored() {
-    if (pagingController.itemList == null || pagingController.itemList!.isEmpty) {
+    if (pagingController.itemList == null ||
+        pagingController.itemList!.isEmpty) {
       pagingController.error = 'temporary_error_to_force_refresh';
       pagingController.refresh();
     }

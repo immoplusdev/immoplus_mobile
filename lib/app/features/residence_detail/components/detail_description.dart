@@ -74,7 +74,8 @@ class _DetailDescriptionState extends State<DetailDescription> {
         final isOverflowing = textPainter.didExceedMaxLines;
         final truncatedText = truncateTextToLines(
           text: widget.markdownText,
-          style: AppTypography.font(fontSize: 16, color: AppColors.immoTextSecondary),
+          style: AppTypography.font(
+              fontSize: 16, color: AppColors.immoTextSecondary),
           maxWidth: constraints.maxWidth,
           maxLines: 4,
         );

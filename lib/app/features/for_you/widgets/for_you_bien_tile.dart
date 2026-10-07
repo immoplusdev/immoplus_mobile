@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_bien_item.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
@@ -24,7 +25,7 @@ class ForYouBienTile extends StatelessWidget {
       width: neirResidenceCardWidth,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => context.push('/estate_detail/${bien.bienId}'),
+        onTap: () => context.push(EstatePage.route(bien.bienId)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -46,7 +47,8 @@ class ForYouBienTile extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    final imageUrl = bien.imageUrl != null ? Utils.getImagePath(id: bien.imageUrl!) : '';
+    final imageUrl =
+        bien.imageUrl != null ? Utils.getImagePath(id: bien.imageUrl!) : '';
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
@@ -62,7 +64,8 @@ class ForYouBienTile extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         color: AppColors.immoBorderDefault,
         child: Center(
-          child: FaIcon(FontAwesomeIcons.images, size: 60, color: AppColors.immoTextDisabled),
+          child: FaIcon(FontAwesomeIcons.images,
+              size: 60, color: AppColors.immoTextDisabled),
         ),
       ),
     );
@@ -87,7 +90,8 @@ class ForYouBienTile extends StatelessWidget {
           const Gap(3),
           Text(
             bien.location!,
-            style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 13),
+            style: AppTypography.font(
+                color: AppColors.immoTextSecondary, fontSize: 13),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -98,7 +102,8 @@ class ForYouBienTile extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '${CurrencyFormatter().format(bien.price.toString())} ${bien.currency ?? "Fcfa"}',
+                  text:
+                      '${CurrencyFormatter().format(bien.price.toString())} ${bien.currency ?? "Fcfa"}',
                   style: AppTypography.font(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,

@@ -37,7 +37,9 @@ class BookingDetailPage extends StatefulWidget {
   static String route({required String id, String? action}) {
     return '/reservation/$id${action != null ? '?action=$action' : ''}';
   }
-  static String paymentRoute(String idProduct) => '/payment/reservations/$idProduct';
+
+  static String paymentRoute(String idProduct) =>
+      '/payment/reservations/$idProduct';
 
   final String id;
   final bool autoShowRating;
@@ -215,7 +217,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
-                                        ?.copyWith(color: AppColors.immoTextSecondary),
+                                        ?.copyWith(
+                                            color: AppColors.immoTextSecondary),
                                   ),
                                   Text(
                                     '${res.datesReservation.length} '
@@ -261,7 +264,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
-                                      ?.copyWith(color: AppColors.immoTextSecondary),
+                                      ?.copyWith(
+                                          color: AppColors.immoTextSecondary),
                                 ),
                                 SelectableText(
                                   res.id,
@@ -314,7 +318,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: AppColors.immoTextSecondary),
+                                          ?.copyWith(
+                                              color:
+                                                  AppColors.immoTextSecondary),
                                     ),
                                     Text(
                                       res.codeReservation,
@@ -363,7 +369,9 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: AppColors.immoTextSecondary),
+                                          ?.copyWith(
+                                              color:
+                                                  AppColors.immoTextSecondary),
                                     ),
                                     Text(
                                       res.proprietaire.phoneNumber
@@ -512,8 +520,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             res.ratingStatus == RatingStatus.expired)
                         ? SafeArea(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                               child: FilledButton.icon(
                                 onPressed: null,
                                 icon: Icon(
@@ -532,8 +539,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                       AppColors.immoBorderStrong,
                                   disabledForegroundColor:
                                       AppColors.immoTextSecondary,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 14),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(14),
                                   ),
@@ -855,7 +862,8 @@ class _ActionRow extends StatelessWidget {
                   ),
             ),
           ),
-          Icon(Iconsax.arrow_right_3, size: 16, color: AppColors.immoTextDisabled),
+          Icon(Iconsax.arrow_right_3,
+              size: 16, color: AppColors.immoTextDisabled),
         ],
       ),
     );

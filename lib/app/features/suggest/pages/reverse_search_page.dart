@@ -202,7 +202,8 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                           '[ReverseSearch] listener searching: isMapPushed=$_isMapPushed lastRequest=${_lastRequest != null}');
                       if (!_isMapPushed && _lastRequest != null) {
                         _isMapPushed = true;
-                        debugPrint('[ReverseSearch] pushing ReverseSearchMapPage');
+                        debugPrint(
+                            '[ReverseSearch] pushing ReverseSearchMapPage');
                         context.pushNamed(
                           ReverseSearchMapPage.routeName,
                           extra: {
@@ -239,8 +240,8 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                         child: showSkeleton
                             ? const ReverseSearchFormSkeleton()
                             : state.maybeWhen(
-                                loading: () => Center(
-                                    child: CircularProgressIndicator()),
+                                loading: () =>
+                                    Center(child: CircularProgressIndicator()),
                                 orElse: () => _buildForm(),
                               ),
                       ),
@@ -277,8 +278,8 @@ class _ReverseSearchPageState extends State<ReverseSearchPage> {
                   children: [
                     Text(
                       'Que cherchez- vous ?',
-                      style:
-                          AppTypography.font(color: AppColors.immoTextDisabled, fontSize: 15),
+                      style: AppTypography.font(
+                          color: AppColors.immoTextDisabled, fontSize: 15),
                     ),
                     SizedBox(height: 16),
 

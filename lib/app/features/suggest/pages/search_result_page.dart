@@ -253,7 +253,8 @@ class _SearchResultPageState extends State<SearchResultPage>
               noItemsFoundIndicatorBuilder: (context) => Center(
                 child: Text(
                   'Aucun résultat trouvé pour votre recherche.',
-                  style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 16),
+                  style: AppTypography.font(
+                      color: AppColors.immoTextSecondary, fontSize: 16),
                 ),
               ),
               itemBuilder: (context, item, index) => Padding(
@@ -271,7 +272,8 @@ class _SearchResultPageState extends State<SearchResultPage>
               noItemsFoundIndicatorBuilder: (context) => Center(
                 child: Text(
                   'Aucun résultat trouvé pour votre recherche.',
-                  style: AppTypography.font(color: AppColors.immoTextSecondary, fontSize: 16),
+                  style: AppTypography.font(
+                      color: AppColors.immoTextSecondary, fontSize: 16),
                 ),
               ),
               itemBuilder: (context, item, index) => Padding(

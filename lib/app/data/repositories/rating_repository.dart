@@ -21,9 +21,11 @@ class RatingRepository {
     }
   }
 
-  Future<RatingHistoryResponse> getRatingHistory({int? page, int? perPage}) async {
+  Future<RatingHistoryResponse> getRatingHistory(
+      {int? page, int? perPage}) async {
     try {
-      return await RatingProvider(_dio).getRatingHistory(page: page, perPage: perPage);
+      return await RatingProvider(_dio)
+          .getRatingHistory(page: page, perPage: perPage);
     } on DioException catch (e) {
       log('DioError (getRatingHistory): ${e.message}');
       throw Exception('Failed to get rating history: ${e.message}');

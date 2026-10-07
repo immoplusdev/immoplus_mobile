@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -5,8 +7,6 @@ import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
@@ -14,6 +14,7 @@ import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/features/alert/pages/alert_list_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/features/home_page/screens/reduction_residences_page.dart';
+import 'package:immoplus/app/utils/booking_utils.dart';
 
 /// Icônes disponibles pour les bannières, définies côté dashboard
 enum BannerIconType {
@@ -124,6 +125,8 @@ class BannerItem extends StatelessWidget {
         final reservationId = metadata['reservation_id']?.toString();
         final amount = metadata['montant_paye'];
         if (reservationId != null && amount != null) {
+          // TODO RESERVATION ID DEBUG
+          log(' montant total ${amount.toInt()} reservation $reservationId  ');
           context.pushNamed(
             OperatorsSelectorPage.name,
             extra: PaymentPageAdapter(
@@ -138,7 +141,11 @@ class BannerItem extends StatelessWidget {
       case BannerAction.annulerReservation:
         final reservationId = metadata['reservation_id']?.toString();
         if (reservationId != null) {
-          _showCancelConfirmation(context, reservationId);
+          BookingUtils.showCancelReservationDialog(
+            context: context,
+            reservationId: reservationId,
+            notes: 'Annulé depuis la bannière promotionnelle',
+          );
         }
         break;
       case BannerAction.payerExpress:
@@ -177,30 +184,6 @@ class BannerItem extends StatelessWidget {
       default:
         break;
     }
-  }
-
-  void _showCancelConfirmation(BuildContext context, String reservationId) {
-    AppDialog.show(
-      title: 'Annuler la réservation',
-      description: 'Voulez-vous vraiment annuler cette réservation ?',
-      primaryButtonText: 'Oui, annuler',
-      secondButtonText: 'Non',
-      onPrimary: () async {
-        try {
-          await getIt<ResidenceRepository>().annulerReservationClient(
-            reservationId: reservationId,
-            notes: 'Annulé depuis la bannière promotionnelle',
-          );
-          ToastUtils.showSuccess(
-            description: 'Réservation annulée avec succès',
-          );
-        } catch (e) {
-          ToastUtils.showError(
-            description: 'Erreur lors de l\'annulation',
-          );
-        }
-      },
-    );
   }
 
   @override
@@ -267,7 +250,7 @@ class BannerItem extends StatelessWidget {
               ],
             ),
           ),
-           const Gap(6),
+          const Gap(6),
           if (onDismiss != null)
             GestureDetector(
               onTap: onDismiss,

@@ -20,7 +20,8 @@ class _StatusTab {
 
 final List<_StatusTab> _statusTabs = [
   const _StatusTab('Toutes', null),
-  for (final status in ImmoRelaisStatus.values) _StatusTab(status.label, status),
+  for (final status in ImmoRelaisStatus.values)
+    _StatusTab(status.label, status),
 ];
 
 /// Sous-onglet "Pour moi" — mes relais publiés (`GET /relais`), filtrés par
@@ -99,7 +100,8 @@ class _RelaisMySectionState extends State<RelaisMySection>
           padding: const EdgeInsets.symmetric(horizontal: 12),
           tabAlignment: TabAlignment.start,
           tabs: _statusTabs
-              .map((tab) => Tab(height: 34, child: _buildTabItem(tab.label, tab.status)))
+              .map((tab) =>
+                  Tab(height: 34, child: _buildTabItem(tab.label, tab.status)))
               .toList(),
         ),
         const Gap(12),
@@ -139,7 +141,9 @@ class _RelaisMySectionState extends State<RelaisMySection>
     final selectedStatus = _statusTabs[_tabController.index].status;
     final filtered = selectedStatus == null
         ? _relais
-        : _relais.where((relais) => relais.statusEnum == selectedStatus).toList();
+        : _relais
+            .where((relais) => relais.statusEnum == selectedStatus)
+            .toList();
 
     if (filtered.isEmpty) {
       return CustomEmptyState(
@@ -159,7 +163,8 @@ class _RelaisMySectionState extends State<RelaisMySection>
         padding: const EdgeInsets.all(16),
         itemCount: filtered.length,
         separatorBuilder: (context, index) => const Gap(16),
-        itemBuilder: (context, index) => RelaisCard(relais: filtered[index], onChanged: _fetchRelais),
+        itemBuilder: (context, index) =>
+            RelaisCard(relais: filtered[index], onChanged: _fetchRelais),
       ),
     );
   }

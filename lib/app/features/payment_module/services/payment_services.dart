@@ -29,9 +29,10 @@ class PaymentServices {
 
       if (collection == ProductType.hotel_reservation.name) {
         final reservationId = itemID;
-        final hotelId = (extra != null && extra is Map && extra['hotelId'] != null) 
-            ? extra['hotelId'] 
-            : '';
+        final hotelId =
+            (extra != null && extra is Map && extra['hotelId'] != null)
+                ? extra['hotelId']
+                : '';
 
         final hotelRequest = HotelPaymentRequest(
           paymentMethod: OrderPaymentController.selectedOperator.value,

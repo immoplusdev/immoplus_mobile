@@ -46,14 +46,15 @@ class HotelDetailHeader extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          
+
           // Location (For Hotel)
           if (location != null && location!.isNotEmpty) ...[
             const Gap(6),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on_outlined, size: 16, color: AppColors.red),
+                const Icon(Icons.location_on_outlined,
+                    size: 16, color: AppColors.red),
                 const Gap(4),
                 Flexible(
                   child: Text(
@@ -95,8 +96,10 @@ class HotelDetailHeader extends StatelessWidget {
           // Let's implement it based on what is available:
           // Room has price, Hotel doesn't.
           // If it has price, we'll put description here, then price.
-          
-          if (price != null && description != null && description!.isNotEmpty) ...[
+
+          if (price != null &&
+              description != null &&
+              description!.isNotEmpty) ...[
             const Gap(16),
             Text(
               description!,
@@ -145,13 +148,15 @@ class HotelDetailHeader extends StatelessWidget {
                       return Icon(
                         Icons.star,
                         size: 14,
-                        color: index < rating.floor() ? AppColors.amber : AppColors.immoBorderDefault,
+                        color: index < rating.floor()
+                            ? AppColors.amber
+                            : AppColors.immoBorderDefault,
                       );
                     }),
                   ),
                 ],
               ),
-              
+
               // Divider
               Container(
                 height: 40,
@@ -159,7 +164,7 @@ class HotelDetailHeader extends StatelessWidget {
                 color: AppColors.immoBorderStrong,
                 margin: const EdgeInsets.symmetric(horizontal: 24),
               ),
-              
+
               // Comments column
               Column(
                 children: [
@@ -185,7 +190,9 @@ class HotelDetailHeader extends StatelessWidget {
           ),
 
           // Description (For Hotel - at the bottom)
-          if (price == null && description != null && description!.isNotEmpty) ...[
+          if (price == null &&
+              description != null &&
+              description!.isNotEmpty) ...[
             const Gap(20),
             Text(
               description!,

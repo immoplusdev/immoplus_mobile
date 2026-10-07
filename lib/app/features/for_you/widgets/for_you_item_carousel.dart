@@ -34,9 +34,8 @@ class ForYouItemCarousel extends StatelessWidget {
     // "Les plus aimées" a de la marge en plus : la pile d'avatars déborde
     // volontairement hors de la carte (coin bas-droite) et ne doit pas être
     // rognée par le viewport de la ListView.
-    final cardHeight = _isTopRated
-        ? ForYouTopRatedTile.height + ForYouTopRatedTile.overflowAllowance
-        : compactResidenceCardHeight;
+    final cardHeight =
+        _isTopRated ? ForYouTopRatedTile.height : compactResidenceCardHeight;
     final cardGap = _isTopRated ? 12.0 : 18.0;
 
     return Column(
@@ -47,7 +46,7 @@ class ForYouItemCarousel extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: HomeSectionTitle(title: section.title),
         ),
-        const Gap(12),
+        const Gap(10),
         SizedBox(
           height: cardHeight,
           child: ListView.separated(

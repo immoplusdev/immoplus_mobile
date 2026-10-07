@@ -210,24 +210,24 @@ List<double> listToDouble(dynamic value) {
   return [];
 }
 
-const double compactResidenceCardHeight = 265.0;
+const double compactResidenceCardHeight = 258.0;
 
 /// Espace vertical entre deux sections normales de la page d'accueil
 /// (sans pub entre elles).
-const double kHomeSectionSpacing = 28.0;
+const double kHomeSectionSpacing = 16.0;
 
 /// Espace vertical (au-dessus ET en dessous) autour d'une pub sur la
 /// page d'accueil.
-const double kHomeSectionSpacingPub = 48.0;
+const double kHomeSectionSpacingPub = 28.0;
 
 /// Espace vertical (au-dessus ET en dessous) autour d'une pub de type
 /// carrousel (photos éparpillées) — plus compact que les autres pubs car
 /// le carrousel a déjà son propre padding visuel intégré.
-const double kHomeSectionPubCarrousel = 24.0;
+const double kHomeSectionPubCarrousel = 16.0;
 
 /// Espace vertical (au-dessus ET en dessous) autour d'une pub de type
 /// carrousel vidéo — même logique que kHomeSectionPubCarrousel.
-const double kHomeSectionPubCarrouselVideo = 24.0;
+const double kHomeSectionPubCarrouselVideo = 16.0;
 const maxPriceLimit = 3000000;
 const minPriceLimit = 100;
 

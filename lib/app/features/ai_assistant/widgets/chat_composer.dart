@@ -236,7 +236,8 @@ class _PrimaryButtonState extends State<_PrimaryButton> {
             color: widget.background,
             shape: BoxShape.circle,
           ),
-          child: Icon(widget.icon, size: widget.iconSize, color: AppColors.white),
+          child:
+              Icon(widget.icon, size: widget.iconSize, color: AppColors.white),
         ),
       ),
     );

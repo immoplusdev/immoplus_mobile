@@ -360,8 +360,8 @@ class _MovingHubCard extends StatelessWidget {
             SizedBox(height: 4),
             Text(
               item.subtitle,
-              style:
-                  AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

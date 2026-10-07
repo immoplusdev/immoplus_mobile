@@ -59,17 +59,21 @@ class _PollBannerCardState extends State<PollBannerCard> {
     if (_isSubmitting || _isClosed) return;
 
     if (!_poll.userHasVoted) {
-      await _run(optionId: optionId, call: () => getIt<PollRepository>().vote(
-            pollId: _poll.pollId,
-            optionId: optionId,
-          ));
+      await _run(
+          optionId: optionId,
+          call: () => getIt<PollRepository>().vote(
+                pollId: _poll.pollId,
+                optionId: optionId,
+              ));
     } else if (optionId == _myVoteOptionId) {
       await _handleCancel();
     } else {
-      await _run(optionId: optionId, call: () => getIt<PollRepository>().changeVote(
-            pollId: _poll.pollId,
-            optionId: optionId,
-          ));
+      await _run(
+          optionId: optionId,
+          call: () => getIt<PollRepository>().changeVote(
+                pollId: _poll.pollId,
+                optionId: optionId,
+              ));
     }
   }
 
@@ -255,7 +259,8 @@ class _PollOptionBar extends StatelessWidget {
                       child: Container(
                         height: _height,
                         width: constraints.maxWidth * pct,
-                        color: _PollColors.fillBase.withValues(alpha: fillAlpha),
+                        color:
+                            _PollColors.fillBase.withValues(alpha: fillAlpha),
                       ),
                     );
                   },

@@ -82,8 +82,8 @@ class StripeResultPage extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color:
-                              AppColors.immoFeedbackSuccess.withValues(alpha: 0.08),
+                          color: AppColors.immoFeedbackSuccess
+                              .withValues(alpha: 0.08),
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(18)),
                         ),

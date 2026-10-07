@@ -30,10 +30,12 @@ class RelaisReceivedInterestsSection extends StatefulWidget {
   const RelaisReceivedInterestsSection({super.key});
 
   @override
-  State<RelaisReceivedInterestsSection> createState() => _RelaisReceivedInterestsSectionState();
+  State<RelaisReceivedInterestsSection> createState() =>
+      _RelaisReceivedInterestsSectionState();
 }
 
-class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterestsSection>
+class _RelaisReceivedInterestsSectionState
+    extends State<RelaisReceivedInterestsSection>
     with AutomaticKeepAliveClientMixin {
   final _relaisRepository = getIt<RelaisRepository>();
   List<ReceivedRelaisInterestModel> _interests = [];
@@ -60,7 +62,8 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
     }
   }
 
-  Future<void> _respond(ReceivedRelaisInterestModel interest, {required bool accept}) async {
+  Future<void> _respond(ReceivedRelaisInterestModel interest,
+      {required bool accept}) async {
     DateTime? meetingDate;
     if (accept) {
       meetingDate = await _pickMeetingDate();
@@ -77,7 +80,8 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
       );
       _fetch();
     } catch (_) {
-      if (mounted) CustomPopup.showErrorToast(text: "Impossible d'envoyer votre réponse");
+      if (mounted)
+        CustomPopup.showErrorToast(text: "Impossible d'envoyer votre réponse");
     }
   }
 
@@ -89,7 +93,8 @@ class _RelaisReceivedInterestsSectionState extends State<RelaisReceivedInterests
       lastDate: DateTime.now().add(const Duration(days: 90)),
     );
     if (date == null || !mounted) return null;
-    final time = await showTimePicker(context: context, initialTime: const TimeOfDay(hour: 10, minute: 0));
+    final time = await showTimePicker(
+        context: context, initialTime: const TimeOfDay(hour: 10, minute: 0));
     if (time == null) return date;
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
@@ -151,7 +156,10 @@ class _ReceivedInterestCard extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback onDecline;
 
-  const _ReceivedInterestCard({required this.interest, required this.onAccept, required this.onDecline});
+  const _ReceivedInterestCard(
+      {required this.interest,
+      required this.onAccept,
+      required this.onDecline});
 
   bool get _canContact =>
       interest.statusEnum == RelaisInterestStatus.inProgress ||
@@ -174,7 +182,8 @@ class _ReceivedInterestCard extends StatelessWidget {
         children: [
           Text(
             interest.clientName ?? 'Utilisateur',
-            style: AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 15, fontWeight: FontWeight.bold),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -182,7 +191,8 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(4),
             Text(
               '${relaisPropertyTypeLabel(relais.propertyType)} · ${relais.location}',
-              style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -191,7 +201,8 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               interest.message!,
-              style: AppTypography.font(fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
+              style: AppTypography.font(
+                  fontSize: 13, color: AppColors.immoTextLabel, height: 1.4),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
@@ -200,7 +211,10 @@ class _ReceivedInterestCard extends StatelessWidget {
             const Gap(8),
             Text(
               'Visite prévue le ${DateFormat('d MMM yyyy à HH:mm', 'fr_FR').format(interest.meetingDate!)}',
-              style: AppTypography.font(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+              style: AppTypography.font(
+                  fontSize: 12,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600),
             ),
           ],
           if (isPending) ...[
@@ -212,10 +226,13 @@ class _ReceivedInterestCard extends StatelessWidget {
                     onPressed: onDecline,
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.red),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: Text('Décliner', style: AppTypography.font(color: AppColors.red, fontWeight: FontWeight.w600)),
+                    child: Text('Décliner',
+                        style: AppTypography.font(
+                            color: AppColors.red, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const Gap(12),
@@ -225,11 +242,14 @@ class _ReceivedInterestCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text('Planifier',
-                        style: AppTypography.font(color: AppColors.white, fontWeight: FontWeight.w600)),
+                        style: AppTypography.font(
+                            color: AppColors.white,
+                            fontWeight: FontWeight.w600)),
                   ),
                 ),
               ],
@@ -251,9 +271,11 @@ class _ReceivedInterestCard extends StatelessWidget {
                   foregroundColor: AppColors.primary,
                   side: BorderSide(color: AppColors.primary),
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
-                child: Text('Contacter', style: AppTypography.font(fontWeight: FontWeight.w600)),
+                child: Text('Contacter',
+                    style: AppTypography.font(fontWeight: FontWeight.w600)),
               ),
             ),
           ],

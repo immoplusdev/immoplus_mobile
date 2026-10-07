@@ -90,7 +90,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void didUpdateWidget(CustomTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller && widget.controller != null) {
+    if (oldWidget.controller != widget.controller &&
+        widget.controller != null) {
       _internalController?.dispose();
       _internalController = null;
     }

@@ -226,8 +226,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
-                        color:
-                            isSelected ? AppColors.primary : AppColors.white,
+                        color: isSelected ? AppColors.primary : AppColors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: isSelected
@@ -266,7 +265,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 decoration: InputDecoration(
                   fillColor: AppColors.transparent,
                   hintText: 'Découvrez votre expérience...',
-                  hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.gray400),
+                  hintStyle: AppTypography.bodyMedium
+                      .copyWith(color: AppColors.gray400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: AppColors.gray200),

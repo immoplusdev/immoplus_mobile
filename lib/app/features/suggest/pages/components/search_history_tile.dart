@@ -22,7 +22,8 @@ class SearchHistoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16),
         child: Row(
           children: [
-            Icon(Icons.access_time_filled, color: AppColors.immoTextSecondary, size: 18),
+            Icon(Icons.access_time_filled,
+                color: AppColors.immoTextSecondary, size: 18),
             const Gap(12),
             Expanded(
               child: Text(
@@ -37,7 +38,8 @@ class SearchHistoryTile extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.close, color: AppColors.immoTextSecondary, size: 18),
+              icon: Icon(Icons.close,
+                  color: AppColors.immoTextSecondary, size: 18),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: onRemove,

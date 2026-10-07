@@ -86,7 +86,8 @@ class InboxTabs extends StatelessWidget {
                         style: AppTypography.font(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? AppColors.primary : AppColors.white,
+                          color:
+                              isSelected ? AppColors.primary : AppColors.white,
                         ),
                       ),
                     ),

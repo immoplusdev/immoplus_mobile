@@ -95,7 +95,8 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
               backgroundColor: AppColors.white,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(CupertinoIcons.arrow_left, color: AppColors.black),
+                icon: const Icon(CupertinoIcons.arrow_left,
+                    color: AppColors.black),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -165,7 +166,8 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                 _ExpandableDescription(description: data.description),
 
                 const SliverToBoxAdapter(
-                  child: AdWidget(placement: AdPlacement.propertyDetailsDescription),
+                  child: AdWidget(
+                      placement: AdPlacement.propertyDetailsDescription),
                 ),
 
                 const _SliverDivider(),

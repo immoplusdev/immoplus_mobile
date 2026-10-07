@@ -32,7 +32,9 @@ class ForYouInlineAdTile extends StatelessWidget {
       key: ValueKey('inline_ad_detector_${campaign.id}_${campaign.placement}'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction > 0.5) {
-          context.read<AdsCubit>().trackImpression(campaign.id, campaign.placement);
+          context
+              .read<AdsCubit>()
+              .trackImpression(campaign.id, campaign.placement);
         }
       },
       child: AdTap(
@@ -57,7 +59,10 @@ class ForYouInlineAdTile extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [AppColors.transparent, AppColors.black.withValues(alpha: 0.55)],
+                        colors: [
+                          AppColors.transparent,
+                          AppColors.black.withValues(alpha: 0.55)
+                        ],
                         stops: const [0.4, 1.0],
                       ),
                     ),

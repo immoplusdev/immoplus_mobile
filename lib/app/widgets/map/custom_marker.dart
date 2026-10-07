@@ -39,7 +39,8 @@ class CustomMarker extends StatelessWidget {
                 ),
                 Text(
                   'Widget',
-                  style: AppTypography.font(color: AppColors.white, fontSize: 12),
+                  style:
+                      AppTypography.font(color: AppColors.white, fontSize: 12),
                 ),
               ],
             ),

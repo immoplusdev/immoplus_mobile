@@ -86,7 +86,9 @@ class _FileUploaderState extends State<FileUploader> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-                spreadRadius: 3, blurRadius: 8, color: AppColors.immoBorderStrong)
+                spreadRadius: 3,
+                blurRadius: 8,
+                color: AppColors.immoBorderStrong)
           ]),
       padding: const EdgeInsets.all(5),
       child: Column(

@@ -128,7 +128,8 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   newPageProgressIndicatorBuilder: (context) => Padding(
                     padding: const EdgeInsets.all(20),
                     child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary),
                     ),
                   ),
                   noItemsFoundIndicatorBuilder: (context) => Center(

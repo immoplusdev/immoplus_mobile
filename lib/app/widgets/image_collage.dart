@@ -38,7 +38,8 @@ class ImageCollage extends StatelessWidget {
     this.spacing = 2,
     this.onTap,
   }) : assert(
-          (images != null && items == null) || (items != null && images == null),
+          (images != null && items == null) ||
+              (items != null && images == null),
           'Provide either images or items, but not both.',
         );
 
@@ -118,7 +119,8 @@ class ImageCollage extends StatelessWidget {
               flex: 11,
               child: Row(
                 children: [
-                  Expanded(flex: 35, child: _buildItemWidget(effectiveItems[2])),
+                  Expanded(
+                      flex: 35, child: _buildItemWidget(effectiveItems[2])),
                   Gap(spacing),
                   Expanded(
                     flex: 65,

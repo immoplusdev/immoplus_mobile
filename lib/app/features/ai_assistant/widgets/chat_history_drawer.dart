@@ -225,7 +225,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
             Text(
               'Tes échanges avec Immo AI\napparaîtront ici.',
               textAlign: TextAlign.center,
-              style: AppTypography.font(fontSize: 13, color: ChatTokens.neutral400),
+              style: AppTypography.font(
+                  fontSize: 13, color: ChatTokens.neutral400),
             ),
           ],
         ),

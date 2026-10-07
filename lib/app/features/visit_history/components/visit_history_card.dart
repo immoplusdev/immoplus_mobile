@@ -132,7 +132,10 @@ class VisitHistoryCard extends StatelessWidget {
               ],
 
               const Gap(12),
-              Divider(thickness: 0.5, color: AppColors.immoBorderDefault, height: 1),
+              Divider(
+                  thickness: 0.5,
+                  color: AppColors.immoBorderDefault,
+                  height: 1),
               const Gap(12),
 
               // Date de visite ou message "pas de date"

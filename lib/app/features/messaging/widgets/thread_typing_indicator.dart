@@ -1,5 +1,6 @@
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
+
 /// Indicateur de frappe du fil (spec §5.6) : bulle à 3 points animés côté
 /// pro, dans une zone `Semantics(liveRegion: true)` pour l'accessibilité.
 class ThreadTypingIndicator extends StatefulWidget {
@@ -54,7 +55,8 @@ class _ThreadTypingIndicatorState extends State<ThreadTypingIndicator>
             Flexible(
               child: Text(
                 widget.label,
-                style: AppTypography.font(fontSize: 12, color: AppColors.immoTextSecondary),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

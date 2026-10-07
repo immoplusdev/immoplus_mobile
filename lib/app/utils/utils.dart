@@ -87,6 +87,7 @@ class Utils {
 
     return false;
   }
+
   static String formatDatOnly({required DateTime dateTime}) {
     String formattedDate = DateFormat("dd MMMM yyy").format(dateTime);
     return formattedDate;
@@ -239,25 +240,32 @@ class Utils {
   static Widget getServiceStatusIcon(String status) {
     switch (status) {
       case 'en_cours_validation_user':
-        return const FaIcon(FontAwesomeIcons.hourglass, color: AppColors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass,
+            color: AppColors.orange);
       case 'en_cours_validation_admin':
-        return const FaIcon(FontAwesomeIcons.hourglass, color: AppColors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass,
+            color: AppColors.orange);
       case 'successful':
-        return const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck,
+            color: AppColors.green);
       case 'valide':
-        return const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck,
+            color: AppColors.green);
       case 'failed':
         return const FaIcon(FontAwesomeIcons.circleXmark, color: AppColors.red);
       case 'rejete':
         return const FaIcon(FontAwesomeIcons.circleXmark, color: AppColors.red);
       case 'paye':
-        return const FaIcon(FontAwesomeIcons.circleCheck, color: AppColors.green);
+        return const FaIcon(FontAwesomeIcons.circleCheck,
+            color: AppColors.green);
       case 'en_attente_validation':
-        return const FaIcon(FontAwesomeIcons.hourglass, color: AppColors.orange);
+        return const FaIcon(FontAwesomeIcons.hourglass,
+            color: AppColors.orange);
       case 'non_paye':
         return const FaIcon(FontAwesomeIcons.circleXmark, color: AppColors.red);
       default:
-        return FaIcon(FontAwesomeIcons.hourglass, color: AppColors.immoTextSecondary);
+        return FaIcon(FontAwesomeIcons.hourglass,
+            color: AppColors.immoTextSecondary);
     }
   }
 
@@ -336,6 +344,14 @@ class Utils {
     String formattedDate =
         DateFormat("dd MMMM yyy  à HH'h':mm").format(dateTime);
     return formattedDate;
+  }
+
+  static String formatCancelDate({required DateTime dateTime}) {
+    try {
+      return DateFormat("d MMMM HH'h'", 'fr_FR').format(dateTime);
+    } catch (_) {
+      return DateFormat("d MMM HH'h'").format(dateTime);
+    }
   }
 
   static Color getStatusColor({required String status}) {

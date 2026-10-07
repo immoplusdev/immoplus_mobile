@@ -241,7 +241,8 @@ class _PhotoFan extends StatelessWidget {
             ),
             errorWidget: (_, __, ___) => Container(
               color: AppColors.immoBorderDefault,
-              child: Icon(Icons.broken_image, color: AppColors.immoTextSecondary),
+              child:
+                  Icon(Icons.broken_image, color: AppColors.immoTextSecondary),
             ),
           ),
         ),
@@ -269,7 +270,9 @@ class _WatchVideosPill extends StatelessWidget {
           Text(
             'Voir les vidéos',
             style: AppTypography.font(
-                fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.white),
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: AppColors.white),
           ),
         ],
       ),

@@ -12,6 +12,7 @@ import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
+import 'package:immoplus/app/features/messaging/widgets/host_contact_prompt.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
@@ -111,7 +112,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
+                          border: Border.all(
+                              color: AppColors.immoFeedbackNeutralSubtle),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +176,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                              color: AppColors.immoTextSecondary,
+                                              color:
+                                                  AppColors.immoTextSecondary,
                                             ),
                                       ),
                                       const Gap(2),
@@ -233,13 +236,16 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
+                          border: Border.all(
+                              color: AppColors.immoFeedbackNeutralSubtle),
                         ),
                         child: Column(
                           children: [
                             ServiceStatusSection(
                                 status: data.statusDemandeVisite ?? ''),
-                            Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
+                            Divider(
+                                height: 1,
+                                color: AppColors.immoFeedbackNeutralSubtle),
                             PaymentStatusSection(demandeVisitModel: data),
                           ],
                         ),
@@ -257,7 +263,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
+                          border: Border.all(
+                              color: AppColors.immoFeedbackNeutralSubtle),
                         ),
                         child: Row(
                           children: [
@@ -336,23 +343,20 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
 
                   // Contacter le propriétaire (messagerie in-app, spec §2.2)
                   SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildActionTile(
+                    child: HostContactPrompt(
+                      label: 'Envoyer un message au propriétaire',
+                      onPressed: () => MessageComposerSheet.showForVisite(
                         context,
-                        icon: Iconsax.message,
-                        title: 'Contacter le propriétaire',
-                        subtitle: 'Poser une question sur cette visite',
-                        onTap: () => MessageComposerSheet.showForVisite(
-                          context,
-                          demandeVisiteId: data.id,
-                          bienTitle: (data.bienImmobilier?.nom.isNotEmpty ?? false)
-                              ? data.bienImmobilier!.nom
-                              : 'Bien immobilier',
-                          bienPhotoUrl: (data.bienImmobilier?.images.isNotEmpty ?? false)
-                              ? Utils.getImagePath(id: data.bienImmobilier!.images.first)
-                              : null,
-                        ),
+                        demandeVisiteId: data.id,
+                        bienTitle:
+                            (data.bienImmobilier?.nom.isNotEmpty ?? false)
+                                ? data.bienImmobilier!.nom
+                                : 'Bien immobilier',
+                        bienPhotoUrl:
+                            (data.bienImmobilier?.images.isNotEmpty ?? false)
+                                ? Utils.getImagePath(
+                                    id: data.bienImmobilier!.images.first)
+                                : null,
                       ),
                     ),
                   ),
@@ -424,7 +428,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                     decoration: BoxDecoration(
                       color: AppColors.whiteBackground,
                       border: Border(
-                        top: BorderSide(color: AppColors.immoFeedbackNeutralSubtle),
+                        top: BorderSide(
+                            color: AppColors.immoFeedbackNeutralSubtle),
                       ),
                     ),
                     child: SafeArea(

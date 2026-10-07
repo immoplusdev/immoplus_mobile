@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart' hide Headers;
-import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/remote/reservations/failure_reasons/motif_echec_reponse_model.dart';
+import '../models/remote/reservations/failure_reasons/motifs_echec_response.dart';
 import '../models/remote/reservations/reservation_request_body.dart';
 import '../models/remote/reservations/reservation_response.dart';
 import '../models/remote/reservations/reservations_collection.dart';
@@ -52,4 +53,19 @@ abstract class ReservationProvider {
 
   @POST("/reservations/{id}/action/generer-qr-checkin")
   Future<HttpResponse> generateQrCheckin(@Path() String id);
+
+  /// 1. Liste des motifs d'échec proposés selon le statut et l'acteur
+  @GET("/reservations/{id}/motifs-echec")
+  Future<MotifsEchecResponse> getMotifsEchec(@Path() String id);
+
+  /// 2. Soumettre le motif d'échec
+  @POST("/reservations/{id}/motifs-echec")
+  Future<MotifEchecReponseModel> submitMotifEchec(
+    @Path() String id,
+    @Body() Map<String, dynamic> body,
+  );
+
+  /// 3. Consulter la réponse au motif d'échec déjà renseigné
+  @GET("/reservations/{id}/motifs-echec/reponse")
+  Future<MotifEchecReponseModel> getMotifEchecReponse(@Path() String id);
 }

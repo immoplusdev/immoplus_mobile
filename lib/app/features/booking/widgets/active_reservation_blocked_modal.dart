@@ -165,7 +165,8 @@ class _ActiveReservationBlockedContent extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(6),
-                child: const Icon(Icons.close, color: AppColors.white, size: 18),
+                child:
+                    const Icon(Icons.close, color: AppColors.white, size: 18),
               ),
             ),
           ),

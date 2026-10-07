@@ -4,7 +4,6 @@ extension StringExtension on String {
     if (isEmpty) return this;
     return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
-  
 
   /// Capitalise la première lettre de chaque mot
   String capitalizeWords() {
@@ -23,10 +22,10 @@ extension StringExtension on String {
   }
 
   // Capitalise la première lettre de la phrase
-  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
 
-
-    String toTitleCase() {
+  String toTitleCase() {
     if (this.isEmpty) return "";
     return this.split(' ').map((word) {
       if (word.isEmpty) return "";
@@ -34,4 +33,3 @@ extension StringExtension on String {
     }).join(' ');
   }
 }
-

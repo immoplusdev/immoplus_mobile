@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -93,7 +95,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
             ),
 
             const Gap(12),
-            Divider(thickness: 0.5, color: AppColors.immoBorderDefault, height: 1),
+            Divider(
+                thickness: 0.5, color: AppColors.immoBorderDefault, height: 1),
             const Gap(12),
 
             // Dates arrivée / départ
@@ -134,6 +137,8 @@ class PendingPaymentReservationCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
+                  // TODO RESERVATION ID DEBUG
+                  log(' montant total ${reservationModel.montantTotalReservation} reservation ${reservationModel.id}  ');
                   context.pushNamed(
                     OperatorsSelectorPage.name,
                     extra: PaymentPageAdapter(

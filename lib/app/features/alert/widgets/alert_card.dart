@@ -61,7 +61,8 @@ class AlertCard extends StatelessWidget {
                       if (alert.createdAt != null)
                         Text(
                           'Envoyée le ${DateFormat('dd MMMM yyyy', 'fr_FR').format(alert.createdAt!)}',
-                          style: AppTypography.caption.copyWith(color: AppColors.immoTextSecondary),
+                          style: AppTypography.caption
+                              .copyWith(color: AppColors.immoTextSecondary),
                         ),
                     ],
                   ),

@@ -23,21 +23,17 @@ class ForYouTopRatedTile extends StatelessWidget {
   static const double height = 286;
   static const double _radius = 20;
 
-  /// Marge verticale à réserver AUTOUR de cette carte (ex: la hauteur de
-  /// la ligne du carousel qui l'affiche) pour que le débordement de la
-  /// pile d'avatars (positionnée hors de la carte, en bas-droite) ne soit
-  /// pas rogné par le viewport de la `ListView` horizontale.
-  static const double overflowAllowance = 30;
-
   @override
   Widget build(BuildContext context) {
-    final imageUrl =
-        residence.imageUrl != null ? Utils.getImagePath(id: residence.imageUrl!) : '';
+    final imageUrl = residence.imageUrl != null
+        ? Utils.getImagePath(id: residence.imageUrl!)
+        : '';
     final reviewersTotal = _ReviewerAvatarStack._totalFor(residence);
     final hasAvatars = reviewersTotal > 0;
     // Réserve la place de la pile d'avatars (positionnée à part, en dehors
     // du `ClipRRect`) pour que le texte ne passe pas dessous.
-    final infoRightInset = hasAvatars ? 16 + _ReviewerAvatarStack.widthFor(residence) + 8 : 16.0;
+    final infoRightInset =
+        hasAvatars ? 16 + _ReviewerAvatarStack.widthFor(residence) + 8 : 16.0;
 
     return SizedBox(
       width: width,
@@ -68,8 +64,8 @@ class ForYouTopRatedTile extends StatelessWidget {
                     errorWidget: (context, url, error) => Container(
                       color: AppColors.immoBorderDefault,
                       child: Center(
-                        child:
-                            FaIcon(FontAwesomeIcons.images, size: 60, color: AppColors.immoTextDisabled),
+                        child: FaIcon(FontAwesomeIcons.images,
+                            size: 60, color: AppColors.immoTextDisabled),
                       ),
                     ),
                   ),
@@ -78,7 +74,10 @@ class ForYouTopRatedTile extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [AppColors.transparent, AppColors.black.withValues(alpha: 0.75)],
+                        colors: [
+                          AppColors.transparent,
+                          AppColors.black.withValues(alpha: 0.75)
+                        ],
                         stops: const [0.4, 1.0],
                       ),
                     ),
@@ -203,7 +202,8 @@ class _ReviewerAvatarStack extends StatelessWidget {
   static int _itemCount(ForYouResidenceItem residence) {
     final total = _totalFor(residence);
     final displayAvatars = _displayAvatars(residence.reviewerAvatars, total);
-    return displayAvatars.length + (_remaining(displayAvatars, total) > 0 ? 1 : 0);
+    return displayAvatars.length +
+        (_remaining(displayAvatars, total) > 0 ? 1 : 0);
   }
 
   /// Nombre total de reviewers, tous champs backend confondus (compat avec

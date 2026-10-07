@@ -22,7 +22,8 @@ class SVGMap {
     'tv': './assets/svgs/icons/tv.svg',
     'volume_off': './assets/svgs/icons/volume_off.svg',
     'terrain': './assets/svgs/icons/terrain.svg',
-    'smile-circle-svgrepo-com': './assets/svgs/icons/smile-circle-svgrepo-com.svg',
+    'smile-circle-svgrepo-com':
+        './assets/svgs/icons/smile-circle-svgrepo-com.svg',
     'visua': './assets/svgs/icons/visua.svg',
     'wifi': './assets/svgs/icons/wifi.svg',
     'resi': './assets/svgs/icons/resi.svg',
@@ -42,7 +43,7 @@ class SVGMap {
     'local_laundry': './assets/svgs/icons/local_laundry.svg',
     'dry_cleaning': './assets/svgs/icons/dry_cleaning.svg',
   };
-    static const Map<String, IconData> iconsaxMap = {
+  static const Map<String, IconData> iconsaxMap = {
     'wifi': Iconsax.wifi,
     'tv': Iconsax.monitor,
     'directions_car': Iconsax.car,
