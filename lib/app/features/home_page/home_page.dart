@@ -56,8 +56,6 @@ class _HomePageState extends State<HomePage> {
       HistoryPageState.refrechAll();
     }();
     _scrollController = ScrollController()..addListener(_handleScrollChanged);
-    final notificationService = getIt<NotificationService>();
-    notificationService.setupNotificationListener();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);

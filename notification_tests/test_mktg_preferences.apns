@@ -6,13 +6,10 @@
       "body": "Définissez vos préférences pour recevoir des recommandations sur mesure."
     },
     "sound": "default",
-    "badge": 1
+    "badge": 1,
+    "mutable-content": 1
   },
-  "custom": {
-    "i": "d413346e-b3f9-42b7-8ccb-a91cb2edee70",
-    "a": {
-      "type": "marketing",
-      "code": "CLI-ONB-02"
-    }
-  }
+  "gcm.message_id": "1234567893",
+  "type": "marketing",
+  "code": "CLI-ONB-02"
 }

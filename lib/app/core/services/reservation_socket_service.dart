@@ -14,7 +14,7 @@ import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.
 ///
 /// Le client n'émet jamais rien sur ce socket : il écoute uniquement
 /// `reservation:status_updated` et déclenche un refresh via les notifiers
-/// déjà utilisés pour les push OneSignal (`ReservationPendingBanner`).
+/// déjà utilisés pour les push FCM (`ReservationPendingBanner`).
 class ReservationSocketService {
   ReservationSocketService._();
 

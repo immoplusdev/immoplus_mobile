@@ -1,4 +1,5 @@
 import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -6,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/appli/my_app.dart';
 import 'package:immoplus/app/core/config/injection.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:immoplus/app/core/services/push/firebase_push_provider.dart';
 import 'package:talker/talker.dart';
 
 final talker = Talker();
@@ -33,6 +34,7 @@ class _DeepLinkEater extends WidgetsBindingObserver {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
   WidgetsBinding.instance.addObserver(_DeepLinkEater());
   // dotenv est chargé dans configureDependencies() → Stripe s'init après
@@ -47,6 +49,6 @@ void main() async {
     GoogleFonts.dmSans(),
   ]);
   GoRouter.optionURLReflectsImperativeAPIs = true;
-  OneSignal.initialize("3dcf3bc5-e4c7-4328-9d30-0f33cdedb1f0");
   return runApp(const MyApp());
 }
+

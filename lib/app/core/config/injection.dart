@@ -61,7 +61,7 @@ Future<void> configureDependencies() async {
     print('⚠️ EasyLoadingHandler.init() failed: $e');
   }
 
-  // 6. Initialize OneSignal in background (after Firebase)
+  // 6. Initialize Firebase Messaging in background (after Firebase)
   Future(() async {
     try {
       await getIt<NotificationService>().initConfig().timeout(const Duration(seconds: 10));

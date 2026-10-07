@@ -2,6 +2,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/services/messaging_socket_service.dart';
+import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/reservation_socket_service.dart';
 import 'package:immoplus/app/data/models/local/user_preference_schema.dart';
 import 'package:immoplus/app/data/models/remote/configs/config_model.dart';
@@ -9,7 +10,6 @@ import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../data/models/local/onboarding_schema.dart';
@@ -77,11 +77,18 @@ class SessionManager {
     // Connecté dès la session ouverte (pas seulement à l'ouverture d'un fil)
     // pour que le badge non-lu de l'onglet Messages reste à jour partout.
     getIt<MessagingSocketService>().connect(user.accessToken);
+    // Enregistre l'appareil auprès de FCM
+    getIt<NotificationService>().suscribeCurrentUser();
   }
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
     getIt<AnalyticsService>().clearUserIdentity();
+    try {
+      await getIt<NotificationService>().unsubcribeCurrentUser();
+    } catch (e) {
+      print('Error unsubscribing push installation on logout: $e');
+    }
     await clearSession();
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -89,7 +96,6 @@ class SessionManager {
     } catch (e) {
       print('Error clearing hotel searches on logout: $e');
     }
-    OneSignal.logout();
     AppRouter.router.go('/');
     // AppRouter.router.goNamed(SplashScreen.name);
   }
@@ -105,6 +111,8 @@ class SessionManager {
         // le socket réservations sans attendre une action de login explicite.
         ReservationSocketService.connect(user.accessToken);
         getIt<MessagingSocketService>().connect(user.accessToken);
+        // Enregistre / actualise l'appareil auprès de FCM
+        getIt<NotificationService>().suscribeCurrentUser();
       }
     }
 
@@ -112,8 +120,12 @@ class SessionManager {
         (currentUser!.accessToken == null ||
             currentUser!.accessToken!.isEmpty)) {
       getIt<AnalyticsService>().clearUserIdentity();
+      try {
+        await getIt<NotificationService>().unsubcribeCurrentUser();
+      } catch (e) {
+        print('Error unsubscribing push installation: $e');
+      }
       await clearSession();
-      OneSignal.logout();
       return null;
     }
 

@@ -33,7 +33,6 @@ import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:injectable/injectable.dart';
-// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -106,7 +105,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
           ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
       );
-      //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
       analyticsService.logLogin(method: 'email');
@@ -164,7 +162,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
           ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
       );
-      // OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
       analyticsService.logLogin(method: 'otp');
@@ -205,7 +202,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..pieceIdentite = response.data.additionalData.pieceIdentiteId
           ..emailEntreprise = response.data.additionalData.emailEntreprise,
       );
-      // OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
 
       emit(const LoginCubitState.success());
@@ -222,7 +218,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
     try {
       HttpResponse response = await AuthRepository().updatePassword(body: body);
 
-      // OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       if (response.response.statusCode! >= 200 &&
           response.response.statusCode! < 300) {
