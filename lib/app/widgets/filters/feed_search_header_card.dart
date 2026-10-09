@@ -74,6 +74,8 @@ class FeedSearchHeaderCard extends StatelessWidget {
             // 3. Bouton Chercher
             CustomButtom(
               buttonHeight: 44,
+              padding: EdgeInsets.zero,
+              onClick: onSearch ?? () {},
               child: Text(
                 'Chercher',
                 style: AppTypography.font(
@@ -82,7 +84,6 @@ class FeedSearchHeaderCard extends StatelessWidget {
                   color: AppColors.white,
                 ),
               ),
-              onClick: onSearch ?? () {},
             ),
           ],
         ),
