@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
-import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/app/core/services/version_update_service.dart';
 import 'package:immoplus/app/features/home_page/logic/home_cubit.dart';
@@ -56,8 +55,6 @@ class _HomePageState extends State<HomePage> {
       HistoryPageState.refrechAll();
     }();
     _scrollController = ScrollController()..addListener(_handleScrollChanged);
-    final notificationService = getIt<NotificationService>();
-    notificationService.setupNotificationListener();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);

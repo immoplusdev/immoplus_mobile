@@ -15,6 +15,13 @@ const _silentErrorCodes = {
   ApiErrorCode.socialAccountNotFound,
 };
 
+const _silentRequestPaths = [
+  '/user-preferences/me',
+  '/banners',
+  '/alerts/badge-count',
+  '/me/push-installations',
+];
+
 @lazySingleton
 class ErrorInterceptor extends Interceptor {
   SessionManager sessionManager;
@@ -32,21 +39,14 @@ class ErrorInterceptor extends Interceptor {
       final handled = await _handleTokenExpired(err, handler);
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
-    final isUserPrefPUT = err.requestOptions.method == 'PUT' &&
-        err.requestOptions.path.contains('/user-preferences/me');
 
-    final isBannerGet = err.requestOptions.method == 'GET' &&
-        err.requestOptions.path.contains('/banners');
+    final isSilentPath = _silentRequestPaths
+        .any((path) => err.requestOptions.path.contains(path));
 
-    final isBadgeCountGet = err.requestOptions.method == 'GET' &&
-        err.requestOptions.path.contains('/alerts/badge-count');
-
-    // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
+    // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh, social account not found et requêtes silencieuses)
     if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode) &&
         !_isActiveReservationBlock(err.response) &&
-        !isUserPrefPUT &&
-        !isBannerGet &&
-        !isBadgeCountGet) {
+        !isSilentPath) {
       _showErrorToast(apiErrorResponse, err.response);
     }
 

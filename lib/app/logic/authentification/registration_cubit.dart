@@ -74,7 +74,6 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
           ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
       );
-      //OneSignal.login(response.data.user.id ?? 'user');
       await sessionManager.getCurrentUser();
       notificationService.suscribeCurrentUser();
       final provider = customerRegistrationBody.provider ?? 'email';

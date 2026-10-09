@@ -18,7 +18,8 @@ class CustomButtom extends StatelessWidget {
       this.elevation,
       this.isLoading = false,
       this.borderRadius,
-      this.buttonHeight});
+      this.buttonHeight,
+      this.padding});
   final String? text;
   final Widget? child;
   final void Function()? onClick;
@@ -30,15 +31,16 @@ class CustomButtom extends StatelessWidget {
   final bool isLoading;
   final double? buttonHeight;
   final BorderRadius? borderRadius;
+  final EdgeInsetsGeometry? padding;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
         height: buttonHeight ?? _buttonHeight,
-        //padding: EdgeInsets.only(left: 30, right: 30),
         width: double.infinity,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
+            padding: padding,
             elevation: elevation ?? 0,
             backgroundColor: (clickable)
                 ? (color == null)

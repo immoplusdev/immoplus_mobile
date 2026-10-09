@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
-import 'package:immoplus/app/data/enums/order_dir.dart';
 import 'package:immoplus/app/data/providers/notification_provider.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
@@ -111,6 +109,37 @@ class NotificationRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to get unread count: $error');
+    }
+  }
+
+  Future<HttpResponse?> registerPushInstallation({
+    required String installationId,
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final response = await NotificationProvider(dioClient)
+          .registerPushInstallation(installationId, body);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError registering push installation: ${dioError.message}');
+      return null;
+    } catch (error) {
+      log('Error registering push installation: $error');
+      return null;
+    }
+  }
+
+  Future<HttpResponse?> deletePushInstallation(String installationId) async {
+    try {
+      final response = await NotificationProvider(dioClient)
+          .deletePushInstallation(installationId);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError deleting push installation: ${dioError.message}');
+      return null;
+    } catch (error) {
+      log('Error deleting push installation: $error');
+      return null;
     }
   }
 }

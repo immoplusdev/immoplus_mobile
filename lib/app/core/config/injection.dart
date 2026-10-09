@@ -64,7 +64,7 @@ Future<void> configureDependencies() async {
     talker.error('EasyLoadingHandler.init() failed: $e', e, stack);
   }
 
-  // 6. Initialize OneSignal in background (after Firebase)
+  // 6. Initialize Firebase Messaging in background (after Firebase)
   Future(() async {
     try {
       await getIt<NotificationService>()
