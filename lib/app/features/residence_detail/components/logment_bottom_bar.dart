@@ -88,6 +88,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
   }
 
   void _initSocketListener() {
+    if (_sessionManager.currentUser == null) return;
     try {
       final socketService = getIt<ReverseSearchSocketService>();
       _socketStatusSub = socketService.onStatus.listen((status) {
@@ -101,6 +102,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
   }
 
   Future<void> _refreshActiveReverseSearch() async {
+    if (_sessionManager.currentUser == null) return;
     try {
       final active = await getIt<ReverseSearchRepository>().getActiveSearch();
       if (mounted) setState(() => _activeReverseSearch = active);

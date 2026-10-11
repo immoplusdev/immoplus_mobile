@@ -11,7 +11,6 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/authentification/loading_page.dart';
-import 'package:immoplus/app/features/estate_detail/components/detail_estate_highlights.dart';
 import 'package:immoplus/app/features/estate_detail/components/detail_estate_know_section.dart';
 import 'package:immoplus/app/features/estate_detail/components/detail_rooms.dart';
 import 'package:immoplus/app/features/estate_detail/components/estate_bottom_bar.dart';
@@ -224,7 +223,7 @@ class _EstatePageState extends State<EstatePage> with ConnectivityMixin {
                 ),
 
                 // ── Bottom spacing for bottom bar ──
-                const SliverGap(120),
+                const SliverGap(160),
               ],
             ),
             bottomNavigationBar: EstateBottomBar(bienImmobilier: data),

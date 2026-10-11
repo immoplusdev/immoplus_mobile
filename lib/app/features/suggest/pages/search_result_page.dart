@@ -59,6 +59,14 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   late final TextEditingController _searchController;
 
+  static const List<Map<String, String>> _categories = [
+    {'id': 'residence', 'label': 'Résidences'},
+    {'id': 'location', 'label': 'Location'},
+    {'id': 'bien', 'label': 'Vente'},
+  ];
+
+  late String _selectedCategory;
+
   /// Sous-filtre par type de bien — uniquement pour la catégorie "bien"
   /// (achat), état local à cette page (pas l'ancien `FilterHandler` global
   /// lié à la home, pour ne pas coupler les deux écrans).
@@ -74,14 +82,14 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   HomeTab get _homeTab {
     return HomeTab.values.firstWhere(
-      (t) => t.category == widget.category,
-      orElse: () => HomeTab.forYou,
+      (t) => t.category == _selectedCategory,
+      orElse: () => HomeTab.residence,
     );
   }
 
   @override
   void onConnectionRestored() {
-    if (widget.category == 'residence') {
+    if (_selectedCategory == 'residence') {
       if (_residencePagingController.itemList == null ||
           _residencePagingController.itemList!.isEmpty) {
         _residencePagingController.error = 'temporary_error_to_force_refresh';
@@ -101,11 +109,15 @@ class _SearchResultPageState extends State<SearchResultPage>
     super.initState();
     setupConnectivityListener();
     _searchController = TextEditingController(text: widget.displayText);
-    if (widget.category == 'residence') {
-      _residencePagingController.addPageRequestListener(_fetchResidences);
+
+    if (widget.category == 'location' || widget.category == 'bien') {
+      _selectedCategory = widget.category;
     } else {
-      _estatePagingController.addPageRequestListener(_fetchEstates);
+      _selectedCategory = 'residence';
     }
+
+    _residencePagingController.addPageRequestListener(_fetchResidences);
+    _estatePagingController.addPageRequestListener(_fetchEstates);
   }
 
   @override
@@ -163,9 +175,9 @@ class _SearchResultPageState extends State<SearchResultPage>
         '{"_field": "statusValidation", "_op": "eq", "_val": "valide"}',
       ];
 
-      if (widget.category == 'location') {
+      if (_selectedCategory == 'location') {
         allFilters.add('{"_field": "aLouer", "_op": "eq", "_val": true}');
-      } else if (widget.category == 'bien') {
+      } else if (_selectedCategory == 'bien') {
         allFilters.add('{"_field": "aLouer", "_op": "eq", "_val": false}');
         if (_selectedSubCategory != EstateSubCategory.all &&
             _selectedSubCategory.value != null) {
@@ -196,10 +208,60 @@ class _SearchResultPageState extends State<SearchResultPage>
     }
   }
 
+  void _onCategoryTabSelected(String category) {
+    if (_selectedCategory == category) return;
+    setState(() {
+      _selectedCategory = category;
+      _selectedSubCategory = EstateSubCategory.all;
+    });
+    if (category == 'residence') {
+      _residencePagingController.refresh();
+    } else {
+      _estatePagingController.refresh();
+    }
+  }
+
   void _onSubCategoryTap(EstateSubCategory category) {
     if (category == _selectedSubCategory) return;
     setState(() => _selectedSubCategory = category);
     _estatePagingController.refresh();
+  }
+
+  Widget _buildCategoryTabs() {
+    return Container(
+      height: 38,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        itemCount: _categories.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final cat = _categories[index];
+          final isSelected = cat['id'] == _selectedCategory;
+          return GestureDetector(
+            onTap: () => _onCategoryTabSelected(cat['id']!),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primary : const Color(0xffF2F4F8),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                cat['label']!,
+                style: AppTypography.font(
+                  color: isSelected ? AppColors.white : const Color(0xff333333),
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildEstateSubCategoryTabs() {
@@ -239,12 +301,13 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   @override
   Widget build(BuildContext context) {
-    final isResidence = widget.category == 'residence';
+    final isResidence = _selectedCategory == 'residence';
     final showBanner = widget.bannerImageId?.isNotEmpty == true;
-    final showEstateSubTabs = widget.category == 'bien';
+    final showEstateSubTabs = _selectedCategory == 'bien';
 
     final resultsList = isResidence
         ? PagedListView<int, ResidenceModel>(
+            key: const ValueKey('residence_list'),
             pagingController: _residencePagingController,
             builderDelegate: PagedChildBuilderDelegate<ResidenceModel>(
               firstPageProgressIndicatorBuilder: (context) => Column(
@@ -264,6 +327,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             ),
           )
         : PagedListView<int, BienImmobilierModel>(
+            key: ValueKey('estate_list_$_selectedCategory'),
             pagingController: _estatePagingController,
             builderDelegate: PagedChildBuilderDelegate<BienImmobilierModel>(
               firstPageProgressIndicatorBuilder: (context) => Column(
@@ -330,9 +394,11 @@ class _SearchResultPageState extends State<SearchResultPage>
                   ),
                 ),
               ),
+            if (!showBanner) _buildCategoryTabs(),
             if (showEstateSubTabs) ...[
-              SizedBox(height: 8),
+              const SizedBox(height: 4),
               _buildEstateSubCategoryTabs(),
+              const SizedBox(height: 4),
             ],
             Expanded(
               child: Padding(

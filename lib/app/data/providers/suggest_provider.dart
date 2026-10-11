@@ -15,7 +15,6 @@ abstract class SuggestProvider {
     @Query("limit") int? limit,
     @Query("lat") double? lat,
     @Query("lng") double? lng,
-    @Query("category") String? category,
   });
 
   @POST("/suggest/click")

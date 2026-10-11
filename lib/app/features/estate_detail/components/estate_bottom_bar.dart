@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -9,6 +8,7 @@ import 'package:immoplus/app/features/authentification/authentification_page.dar
 import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/visits/visit_formular_action.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/messaging/widgets/host_contact_prompt.dart';
 
 class EstateBottomBar extends StatelessWidget {
@@ -18,22 +18,33 @@ class EstateBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: HostContactPrompt(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
-        label: bienImmobilier.aLouer ? 'VISITER' : 'CONTACTER',
-        onPressed: () {
-          if (sessionManager.currentUser == null) {
-            getIt<AuthRedirectService>().set((
-              popUntilRouteName: EstatePage.name,
-              callback: () => _proceed(context),
-            ));
-            context.pushNamed(AuthenticationPage.name);
-          } else {
-            _proceed(context);
-          }
-        },
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        border: Border(
+          top: BorderSide(
+            color: AppColors.immoBgSurfaceMuted,
+            width: 1,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: HostContactPrompt(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+          label: bienImmobilier.aLouer ? 'VISITER' : 'CONTACTER',
+          onPressed: () {
+            if (sessionManager.currentUser == null) {
+              getIt<AuthRedirectService>().set((
+                popUntilRouteName: EstatePage.name,
+                callback: () => _proceed(context),
+              ));
+              context.pushNamed(AuthenticationPage.name);
+            } else {
+              _proceed(context);
+            }
+          },
+        ),
       ),
     );
   }

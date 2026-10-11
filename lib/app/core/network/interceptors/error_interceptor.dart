@@ -20,6 +20,7 @@ const _silentRequestPaths = [
   '/banners',
   '/alerts/badge-count',
   '/me/push-installations',
+  '/reverse-searches',
 ];
 
 @lazySingleton
