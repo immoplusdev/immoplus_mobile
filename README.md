@@ -19,6 +19,34 @@ samples, guidance on mobile development, and a full API reference.
 `flutter pub run build_runner build --delete-conflicting-outputs`
 `flutter pub run build_runner watch --delete-conflicting-outputs`
 
+## Build Android (AppBundle .aab)
+
+### Environnement Développement (DEV)
+```bash
+flutter build appbundle --release --dart-define=FLAVOR=dev
+```
+*Avec FVM :*
+```bash
+fvm flutter build appbundle --release --dart-define=FLAVOR=dev
+```
+
+### Environnement Production (PROD)
+```bash
+flutter build appbundle --release --dart-define=FLAVOR=prod
+```
+*Avec FVM :*
+```bash
+fvm flutter build appbundle --release --dart-define=FLAVOR=prod
+```
+
+> **Notes :**
+> - **Emplacement du fichier généré :** `build/app/outputs/bundle/release/app-release.aab`
+> - **Numéro de build personnalisé :** Vous pouvez préciser le nom et le numéro de version avec les arguments `--build-name` et `--build-number` :
+>   ```bash
+>   flutter build appbundle --release --dart-define=FLAVOR=prod --build-name=1.0.0 --build-number=1
+>   ```
+> - **Signature :** Assurez-vous que le fichier `android/key.properties` est présent et configuré pour signer l'AppBundle en mode release.
+
 ## Règles de Développement & Bonnes Pratiques
 ### Routage / Navigation
 * **Pas de chemins codés en dur dans les pages :** Évitez d'écrire des chemins bruts directement lors de la navigation (ex. `context.push('/hotels/${hotel.id}/booking?roomId=${room.id}')`).
