@@ -15,7 +15,6 @@ class SuggestRepository {
     int? limit,
     double? lat,
     double? lng,
-    String? category,
   }) async {
     try {
       final response = await SuggestProvider(dioClient).getSuggestions(
@@ -23,7 +22,6 @@ class SuggestRepository {
         limit: limit,
         lat: lat,
         lng: lng,
-        category: category,
       );
       return response;
     } on DioException catch (e) {

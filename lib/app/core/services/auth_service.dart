@@ -55,8 +55,8 @@ class AuthService {
         ..avatar = currentUser.avatar
         ..role = currentUser.role;
 
-      // Sauvegarder en session
-      await sessionManager.saveUser(updatedUser);
+      // Sauvegarder en session sans ré-enregistrer les push
+      await sessionManager.saveUser(updatedUser, registerPush: false);
 
       log('Token refresh réussi', name: 'AUTH_SERVICE');
       return true;

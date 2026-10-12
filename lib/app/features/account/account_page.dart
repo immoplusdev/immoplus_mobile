@@ -100,7 +100,14 @@ class _AccountPageState extends State<AccountPage> {
       description: "Voulez-vous vraiment vous déconnecter ?",
       primaryButtonText: "Se déconnecter",
       secondButtonText: "Annuler",
-      onPrimary: sessionManager.logout,
+      onPrimary: () async {
+        EasyLoadingHandler.showLoadingToast(text: "Déconnexion en cours...");
+        try {
+          await sessionManager.logout();
+        } finally {
+          EasyLoadingHandler.hideLoadingToast();
+        }
+      },
     );
   }
 
@@ -195,7 +202,7 @@ class _AccountPageState extends State<AccountPage> {
               const SliverToBoxAdapter(
                 child: AdWidget(placement: AdPlacement.accountBottom),
               ),
-              const SliverGap(32),
+              SliverGap(25 + MediaQuery.paddingOf(context).bottom),
             ],
           ),
         ),
@@ -246,7 +253,7 @@ class _AccountPageState extends State<AccountPage> {
             const SliverToBoxAdapter(
               child: AdWidget(placement: AdPlacement.accountBottom),
             ),
-            const SliverGap(32),
+            SliverGap(25 + MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),

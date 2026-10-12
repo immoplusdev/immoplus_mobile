@@ -29,6 +29,11 @@ import 'package:immoplus/app/core/services/client_reservation_overlay_service.da
 import 'package:immoplus/app/core/services/messaging_socket_service.dart'
     as _i570;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
+import 'package:immoplus/app/core/services/push/firebase_push_provider.dart'
+    as _i693;
+import 'package:immoplus/app/core/services/push/push_installation_service.dart'
+    as _i95;
+import 'package:immoplus/app/core/services/push/push_provider.dart' as _i511;
 import 'package:immoplus/app/core/services/remote_config_service.dart' as _i57;
 import 'package:immoplus/app/core/services/reverse_search_socket_service.dart'
     as _i997;
@@ -145,6 +150,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i570.MessagingSocketService());
     gh.lazySingleton<_i57.RemoteConfigService>(
         () => _i57.RemoteConfigService());
+    gh.lazySingleton<_i95.PushInstallationService>(
+        () => _i95.PushInstallationService());
     gh.lazySingleton<_i944.AuthRedirectService>(
         () => _i944.AuthRedirectService());
     gh.lazySingleton<_i997.ReverseSearchSocketService>(
@@ -154,6 +161,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
+    gh.lazySingleton<_i511.PushProvider>(() => _i693.FirebasePushProvider());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
@@ -199,10 +207,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i488.EstateCubit(gh<_i398.BienImmobilierRepository>()));
     gh.factory<_i527.PendingPaymentReservationsCubit>(() =>
         _i527.PendingPaymentReservationsCubit(gh<_i143.ResidenceRepository>()));
-    gh.lazySingleton<_i640.NotificationService>(() => _i640.NotificationService(
-          gh<_i22.SessionManager>(),
-          gh<_i443.AlertRepository>(),
-        ));
     gh.factory<_i430.NotificationCubit>(
         () => _i430.NotificationCubit(gh<_i371.NotificationRepository>()));
     gh.factory<_i169.InboxCubit>(() => _i169.InboxCubit(
@@ -261,6 +265,14 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i143.ResidenceRepository>(),
               gh<_i22.SessionManager>(),
             ));
+    gh.lazySingleton<_i640.NotificationService>(() => _i640.NotificationService(
+          gh<_i511.PushProvider>(),
+          gh<_i22.SessionManager>(),
+          gh<_i443.AlertRepository>(),
+          gh<_i371.NotificationRepository>(),
+          gh<_i1058.AnalyticsService>(),
+          gh<_i95.PushInstallationService>(),
+        ));
     gh.factory<_i85.ResidenceCubit>(
         () => _i85.ResidenceCubit(gh<_i143.ResidenceRepository>()));
     gh.factory<_i57.UserPreferenceCubit>(() => _i57.UserPreferenceCubit(

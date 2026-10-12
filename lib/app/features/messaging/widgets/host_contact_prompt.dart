@@ -18,6 +18,7 @@ class HostContactPrompt extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
