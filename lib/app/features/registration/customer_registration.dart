@@ -13,7 +13,7 @@ import 'package:immoplus/app/features/account/widgets/general_condition_page.dar
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
 import 'package:immoplus/app/modules/files_uploader.dart/file_uploader_controller.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
@@ -114,7 +114,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
       builder: (ctx) {
         return Container(
           height: 260,
-          color: Colors.white,
+          color: AppColors.white,
           child: Column(
             children: [
               Row(
@@ -128,7 +128,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                       });
                       Navigator.of(ctx).pop();
                     },
-                    child: const Text('OK'),
+                    child: Text('OK'),
                   ),
                 ],
               ),
@@ -158,24 +158,25 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           borderRadius: BorderRadius.circular(radiusButton),
           border: Border.all(
-            color: _birthDateError != null ? Colors.red : _fieldBorderColor,
+            color: _birthDateError != null ? AppColors.red : _fieldBorderColor,
             width: _birthDateError != null ? 1.3 : 1,
           ),
         ),
         child: Row(
           children: [
-            const Icon(CupertinoIcons.calendar, color: Colors.grey, size: 20),
+            Icon(CupertinoIcons.calendar,
+                color: AppColors.immoTextSecondary, size: 20),
             const Gap(12),
             Text(
               hasValue
                   ? DateFormat('MMMM yyyy', 'fr_FR').format(_birthDate!)
                   : 'Date de naissance',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 15,
-                color: hasValue ? Colors.black : Colors.grey,
+                color: hasValue ? AppColors.black : AppColors.immoTextSecondary,
               ),
             ),
           ],
@@ -187,9 +188,9 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leadingWidth: 64,
         leading: Padding(
@@ -203,9 +204,9 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                 shape: BoxShape.circle,
                 color: AppColors.primary,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_back_ios_rounded,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 16,
               ),
             ),
@@ -265,7 +266,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     // CustomTextField(
                     //   isEnabled: isEmailEmpty,
                     //   controller: _formController.email,
-                    //   prefixIcon: const Icon(CupertinoIcons.mail),
+                    //   prefixIcon: Icon(CupertinoIcons.mail),
                     //   labelText: 'Email',
                     //   textInputType: TextInputType.emailAddress,
                     //   validator: (String? value) =>
@@ -281,17 +282,17 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             labelText: "Nom",
                             autofocus: true,
                             fontSize: 15,
-                            fillColor: Colors.transparent,
+                            fillColor: AppColors.transparent,
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 18),
                             enabledBorder: _fieldBorder(
-                                color: _nomError != null ? Colors.red : null,
+                                color: _nomError != null ? AppColors.red : null,
                                 width: _nomError != null ? 1.3 : 1,
                                 radius: 16),
                             focusedBorder: _fieldBorder(
                                 color: _nomError != null
-                                    ? Colors.red
-                                    : AppColors.blue65BAF0,
+                                    ? AppColors.red
+                                    : AppColors.immoBrandAccent,
                                 width: 1.5,
                                 radius: 16),
                             onChanged: (_) {
@@ -307,17 +308,18 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                             controller: _formController.lastName,
                             labelText: "Prénom",
                             fontSize: 15,
-                            fillColor: Colors.transparent,
+                            fillColor: AppColors.transparent,
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 18),
                             enabledBorder: _fieldBorder(
-                                color: _prenomError != null ? Colors.red : null,
+                                color:
+                                    _prenomError != null ? AppColors.red : null,
                                 width: _prenomError != null ? 1.3 : 1,
                                 radius: 16),
                             focusedBorder: _fieldBorder(
                                 color: _prenomError != null
-                                    ? Colors.red
-                                    : AppColors.blue65BAF0,
+                                    ? AppColors.red
+                                    : AppColors.immoBrandAccent,
                                 width: 1.5,
                                 radius: 16),
                             onChanged: (_) {
@@ -337,8 +339,8 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                         padding: const EdgeInsets.only(left: 4),
                         child: Text(
                           _nomError ?? _prenomError ?? _birthDateError ?? '',
-                          style:
-                              const TextStyle(color: Colors.red, fontSize: 12),
+                          style: AppTypography.font(
+                              color: AppColors.red, fontSize: 12),
                         ),
                       ),
                     ],
@@ -347,7 +349,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     //   valueListenable: _passwordNotifier,
                     //   builder: (BuildContext context, bool value, child) {
                     //     return CustomTextField(
-                    //       prefixIcon: const Icon(CupertinoIcons.lock),
+                    //       prefixIcon: Icon(CupertinoIcons.lock),
                     //       textInputType: TextInputType.visiblePassword,
                     //       textInputAction: TextInputAction.next,
                     //       controller: _formController.password,
@@ -377,7 +379,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                     //     return CustomTextField(
                     //       textInputAction: TextInputAction.done,
                     //       textInputType: TextInputType.visiblePassword,
-                    //       prefixIcon: const Icon(CupertinoIcons.lock),
+                    //       prefixIcon: Icon(CupertinoIcons.lock),
                     //       controller: _formController.passwordConfirm,
                     //       obscureText: !value,
                     //       sufixIcon: IconButton(
@@ -432,11 +434,11 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                               size: 24,
                               color: value
                                   ? Theme.of(context).colorScheme.primary
-                                  : Colors.grey,
+                                  : AppColors.immoTextSecondary,
                             ),
                           ),
                           const Gap(8),
-                          const Text("j'approuve les"),
+                          Text("j'approuve les"),
                           TextButton(
                               onPressed: () {
                                 showModalBottomSheet(
@@ -454,7 +456,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                               },
                               child: Text(
                                 'Termes & conditions',
-                                style: TextStyle(
+                                style: AppTypography.font(
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               )),

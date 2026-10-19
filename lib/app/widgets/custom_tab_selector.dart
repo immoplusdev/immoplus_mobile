@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class CustomTabSelector extends StatelessWidget {
   final int selectedIndex;
@@ -21,11 +21,11 @@ class CustomTabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = selectedColor ?? AppColors.blue65BAF0;
+    final color = selectedColor ?? AppColors.immoBrandAccent;
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.ECECEC,
+        color: backgroundColor ?? AppColors.immoBorderDefault,
         borderRadius: BorderRadius.circular(30),
       ),
       padding: const EdgeInsets.all(4),
@@ -40,7 +40,7 @@ class CustomTabSelector extends StatelessWidget {
                 curve: Curves.easeInOut,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: selectedIndex == index ? color : Colors.transparent,
+                  color: selectedIndex == index ? color : AppColors.transparent,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Center(
@@ -48,8 +48,8 @@ class CustomTabSelector extends StatelessWidget {
                     duration: const Duration(milliseconds: 300),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedIndex == index
-                              ? Colors.white
-                              : unselectedColor ?? Colors.black,
+                              ? AppColors.white
+                              : unselectedColor ?? AppColors.black,
                           fontWeight: selectedIndex == index
                               ? FontWeight.bold
                               : FontWeight.normal,

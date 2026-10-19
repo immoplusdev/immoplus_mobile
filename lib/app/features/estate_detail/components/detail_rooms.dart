@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -21,7 +22,7 @@ class DetailEstateRooms extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: appPadding),
           physics: const BouncingScrollPhysics(),
           itemCount: validPieces.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 14),
+          separatorBuilder: (_, __) => SizedBox(width: 14),
           itemBuilder: (context, index) {
             final piece = validPieces[index];
             return _RoomCard(name: piece.nom, count: piece.nombre);
@@ -75,9 +76,9 @@ class _RoomCard extends StatelessWidget {
       width: 165,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200, width: 1.2),
+        border: Border.all(color: AppColors.immoBorderDefault, width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,30 +86,30 @@ class _RoomCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: AppColors.immoBgSurfaceMuted,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(_icon, size: 24, color: Colors.grey.shade800),
+            child: Icon(_icon, size: 24, color: AppColors.immoTextLabel),
           ),
           const Spacer(),
           Text(
             name,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF222222),
+              color: AppColors.immoTextPrimary,
               height: 1.2,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 3),
+          SizedBox(height: 3),
           Text(
             _subtitle,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 13,
               fontWeight: FontWeight.w400,
-              color: Colors.grey.shade500,
+              color: AppColors.immoTextSecondary,
             ),
           ),
         ],

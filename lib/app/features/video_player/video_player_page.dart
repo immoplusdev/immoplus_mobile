@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -138,10 +139,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           materialProgressColors: ChewieProgressColors(
             playedColor: Theme.of(context).primaryColor,
             handleColor: Theme.of(context).primaryColor,
-            // backgroundColor: Colors.red,
-            bufferedColor: Colors.lightGreen,
+            // backgroundColor: AppColors.red,
+            bufferedColor: AppColors.lightGreen,
           ),
-          placeholder: const Center(
+          placeholder: Center(
             child: Icon(
               Icons.play_circle_outline,
               size: 80,
@@ -154,23 +155,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 children: [
                   Icon(
                     Icons.error,
-                    color: Colors.red,
+                    color: AppColors.red,
                     size: 60,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Text(
                     'Erreur de lecture vidéo',
-                    style: TextStyle(
-                      color: Colors.red,
+                    style: AppTypography.font(
+                      color: AppColors.red,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     errorMessage,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[600]),
+                    style:
+                        AppTypography.font(color: AppColors.immoTextSecondary),
                   ),
                 ],
               ),
@@ -269,12 +271,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.4),
+                  color: AppColors.black.withValues(alpha: 0.4),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   _isMuted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 18,
                 ),
               ),
@@ -318,35 +320,35 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           Icon(
             Icons.videocam_off,
             size: 60,
-            color: Colors.grey.shade400,
+            color: AppColors.immoTextDisabled,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             'Impossible de lire la vidéo',
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           if (_errorMessage != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 12,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: _initializeAndPlayVideo,
             icon: const Icon(Icons.refresh),
-            label: const Text('Réessayer'),
+            label: Text('Réessayer'),
           ),
         ],
       ),
@@ -374,8 +376,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           SizedBox(height: 18),
           Text(
             'Chargement de la vidéo...',
-            style: TextStyle(
-              color: Colors.white,
+            style: AppTypography.font(
+              color: AppColors.white,
               fontSize: 12,
             ),
           ),

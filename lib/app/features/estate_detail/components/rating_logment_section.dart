@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class RatingEstateSection extends StatelessWidget {
   const RatingEstateSection({super.key, required this.bienImmobilier});
@@ -10,10 +11,10 @@ class RatingEstateSection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Note et avis'),
+        Text('Note et avis'),
         RatingBar.builder(
           initialRating: 3,
-          unratedColor: Colors.grey,
+          unratedColor: AppColors.gray500,
           minRating: 2,
           maxRating: 5,
           itemSize: 15,
@@ -21,14 +22,12 @@ class RatingEstateSection extends StatelessWidget {
           allowHalfRating: true,
           itemCount: 5,
           tapOnlyMode: true,
-          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
             Icons.star,
-            color: Colors.amber,
+            color: AppColors.immoFeedbackWarning,
           ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
+          onRatingUpdate: (rating) {},
         )
       ],
     );

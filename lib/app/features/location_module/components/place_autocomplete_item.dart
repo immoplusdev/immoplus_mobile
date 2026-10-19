@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,7 +20,7 @@ class PlaceAutocompleteItem extends GetView<LocationController> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => controller.onAutocompleteItemClick(item),
-      splashColor: Colors.grey.shade100,
+      splashColor: AppColors.immoBgSurfaceMuted,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
@@ -29,17 +30,17 @@ class PlaceAutocompleteItem extends GetView<LocationController> {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: AppColors.immoBgSurfaceMuted,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 Iconsax.location,
                 size: 20,
-                color: Colors.grey.shade600,
+                color: AppColors.immoTextSecondary,
               ),
             ),
 
-            const SizedBox(width: 14),
+            SizedBox(width: 14),
 
             // ── Texts ──
             Expanded(
@@ -48,23 +49,23 @@ class PlaceAutocompleteItem extends GetView<LocationController> {
                 children: [
                   Text(
                     _mainText,
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF222222),
+                      color: AppColors.immoTextPrimary,
                       height: 1.3,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (_subText.isNotEmpty) ...[
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       _subText,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Colors.grey.shade500,
+                        color: AppColors.immoTextSecondary,
                         height: 1.3,
                       ),
                       maxLines: 1,
@@ -76,11 +77,11 @@ class PlaceAutocompleteItem extends GetView<LocationController> {
             ),
 
             // ── Trailing arrow ──
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Icon(
               Iconsax.arrow_right_3,
               size: 16,
-              color: Colors.grey.shade300,
+              color: AppColors.immoBorderStrong,
             ),
           ],
         ),

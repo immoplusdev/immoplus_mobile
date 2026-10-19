@@ -26,7 +26,7 @@ import 'package:immoplus/app/services/share_service.dart';
 import 'package:immoplus/app/widgets/custom_empty_state.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 
 class HotelRoomDetailPage extends StatefulWidget {
@@ -73,7 +73,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         extendBodyBehindAppBar: true,
         body: BlocBuilder<HotelCubit, HotelState>(
           builder: (context, hotelState) {
@@ -138,7 +138,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 }
 
                 if (hotel == null || room == null) {
-                  return const Center(child: Text("Données introuvables"));
+                  return Center(child: Text("Données introuvables"));
                 }
 
                 return _buildContent(context, hotel!, room!);
@@ -156,7 +156,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
         room.images.where((img) => img.trim().isNotEmpty).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
@@ -167,8 +167,8 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 300,
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.transparent,
+            backgroundColor: AppColors.white,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -208,7 +208,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                   valueListenable: _liked,
                   builder: (context, liked, _) => CircleButton(
                     icon: liked ? Iconsax.heart5 : Iconsax.heart,
-                    iconColor: liked ? Colors.red : null,
+                    iconColor: liked ? AppColors.red : null,
                     onTap: () => _liked.value = !liked,
                   ),
                 ),
@@ -220,9 +220,10 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                       images: carouselImages,
                     )
                   : Container(
-                      color: Colors.grey.shade200,
-                      child: const Center(
-                        child: Icon(Icons.hotel, size: 64, color: Colors.grey),
+                      color: AppColors.immoBorderDefault,
+                      child: Center(
+                        child: Icon(Icons.hotel,
+                            size: 64, color: AppColors.immoTextSecondary),
                       ),
                     ),
             ),
@@ -230,8 +231,8 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
               preferredSize: const Size.fromHeight(20),
               child: Container(
                 height: 30,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
               ),
@@ -301,23 +302,23 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 Gap(8),
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       "Moyens de paiement :",
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                     ),
                     const Spacer(),
                     Row(
                       children: [
                         _buildPaymentBadge("Wave"),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         _buildPaymentBadge("OM"),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         _buildPaymentBadge("Carte"),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         _buildPaymentBadge("Cash"),
                       ],
                     ),
@@ -415,8 +416,8 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
       bottomNavigationBar: Container(
         height: 130,
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Colors.grey.shade100)),
+          color: AppColors.white,
+          border: Border(top: BorderSide(color: AppColors.immoBgSurfaceMuted)),
         ),
         padding: EdgeInsets.only(
           left: appPadding,
@@ -433,33 +434,33 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontSize: 16,
-                        color: Colors.black,
+                        color: AppColors.black,
                         fontWeight: FontWeight.bold,
                       ),
                       children: [
-                        const TextSpan(
+                        TextSpan(
                           text: 'A partir de ',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                         TextSpan(
                           text:
                               '${NumberFormat('#,###', 'fr_FR').format(room.tarification.prixParNuit).replaceAll(RegExp(r'\s+'), '.').replaceAll('\u00a0', '.')} FCFA',
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Builder(
                     builder: (context) {
                       final tomorrow =
@@ -470,28 +471,28 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                           "${tomorrow.day} – ${monthFormat.format(checkOut)} • 3 nuits";
                       return Text(
                         dateRangeStr,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
-                          color: Colors.black.withOpacity(0.55),
+                          color: AppColors.black.withOpacity(0.55),
                         ),
                       );
                     },
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Colors.grey.shade300, width: 0.8),
+                      border: Border.all(
+                          color: AppColors.immoBorderStrong, width: 0.8),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Annulation gratuite',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 10,
-                        color: Color(0xFF222222),
+                        color: AppColors.immoTextPrimary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -499,7 +500,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                 ],
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             SizedBox(
               width: 150,
               child: CustomButtom(
@@ -511,12 +512,12 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
                     queryParameters: {'roomId': widget.roomTypeId},
                   );
                 },
-                child: const Text(
+                child: Text(
                   "Réserver",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -537,7 +538,7 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(fontSize: 14),
+            style: AppTypography.font(fontSize: 14),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -552,21 +553,21 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.black.withOpacity(0.65),
+            color: AppColors.black.withOpacity(0.65),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         Expanded(
           child: Text(
             value,
             textAlign: TextAlign.end,
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 14,
               fontWeight: isBoldValue ? FontWeight.bold : FontWeight.w500,
-              color: isBoldValue ? Colors.black : Colors.red.shade700,
+              color: isBoldValue ? AppColors.black : AppColors.red600,
             ),
           ),
         ),
@@ -579,26 +580,26 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, size: 24, color: AppColors.primary),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 description,
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black.withOpacity(0.55),
+                  color: AppColors.black.withOpacity(0.55),
                   height: 1.4,
                 ),
               ),
@@ -612,16 +613,16 @@ class _HotelRoomDetailPageState extends State<HotelRoomDetailPage> {
   Widget _buildPaymentBadge(String name) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300, width: 0.8),
+        border: Border.all(color: AppColors.immoBorderStrong, width: 0.8),
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       child: Text(
         name,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.bold,
-          color: Colors.black54,
+          color: AppColors.black54,
         ),
       ),
     );
@@ -641,7 +642,7 @@ class _SliverDivider extends StatelessWidget {
         child: Divider(
           height: 1,
           thickness: 0.5,
-          color: Colors.grey.shade200,
+          color: AppColors.immoBorderDefault,
         ),
       ),
     );
@@ -666,10 +667,10 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
         builder: (context, constraints) {
           final textSpan = TextSpan(
             text: widget.description.capitalizeWords(),
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 15,
               fontWeight: FontWeight.w400,
-              color: Colors.black.withOpacity(0.90),
+              color: AppColors.black.withOpacity(0.90),
               height: 1.55,
             ),
           );
@@ -690,16 +691,16 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                   widget.description.capitalizeWords(),
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black.withOpacity(0.90),
+                    color: AppColors.black.withOpacity(0.90),
                     height: 1.55,
                   ),
                 ),
               ),
               if (_hasOverflow) ...[
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: appPadding),
                   child: GestureDetector(
@@ -707,19 +708,19 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
+                        Text(
                           'Lire la suite',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xff2744de),
+                            color: AppColors.immoBrandPrimary,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Icon(
                           Icons.chevron_right,
                           size: 15,
-                          color: const Color(0xff2744de).withOpacity(0.80),
+                          color: AppColors.immoBrandPrimary.withOpacity(0.80),
                         ),
                       ],
                     ),
@@ -739,7 +740,7 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
       isScrollControlled: true,
       useSafeArea: true,
       showDragHandle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -754,21 +755,21 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Description',
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF222222),
+                  color: AppColors.immoTextPrimary,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 widget.description.capitalizeWords(),
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
-                  color: Colors.black.withOpacity(0.90),
+                  color: AppColors.black.withOpacity(0.90),
                   height: 1.55,
                 ),
               ),

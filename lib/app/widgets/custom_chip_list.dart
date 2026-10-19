@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 typedef OnToggle = void Function(int index);
 
@@ -15,13 +16,13 @@ class CustomChipList extends StatefulWidget {
     Key? key,
     required this.listOfChipNames,
     required this.listOfChipIndicesCurrentlySeclected,
-    this.activeTextColorList = const [Colors.white],
-    this.inactiveTextColorList = const [Colors.blue],
-    this.activeBgColorList = const [Colors.blue],
-    this.inactiveBgColorList = const [Colors.white],
+    this.activeTextColorList = const [AppColors.white],
+    List<Color>? inactiveTextColorList,
+    List<Color>? activeBgColorList,
+    this.inactiveBgColorList = const [AppColors.white],
     this.style,
-    this.inactiveBorderColorList = const [Colors.white],
-    this.activeBorderColorList = const [Colors.white],
+    this.inactiveBorderColorList = const [AppColors.white],
+    this.activeBorderColorList = const [AppColors.white],
     this.borderRadiiList = const [15],
     this.supportsMultiSelect = false,
     this.extraOnToggle,
@@ -41,7 +42,10 @@ class CustomChipList extends StatefulWidget {
     this.checkmarkColor,
     this.showCheckmark = true,
     this.listOfAvatar = const [],
-  }) : super(key: key);
+  })  : inactiveTextColorList =
+            inactiveTextColorList ?? [AppColors.immoBrandPrimary],
+        activeBgColorList = activeBgColorList ?? [AppColors.immoBrandPrimary],
+        super(key: key);
 
   /// In case you chain some *more* logic to this widget's
   /// onTap event (maybe trigger updation of other UI components).
@@ -68,7 +72,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.white].
+  /// Defults to [AppColors.white].
   List<Color> inactiveBgColorList;
 
   /// The background color of an active [ChoiceChip].
@@ -80,7 +84,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.blue].
+  /// Defults to [AppColors.blue].
   List<Color> activeBgColorList;
 
   /// The text color of an active [ChoiceChip].
@@ -92,7 +96,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.white].
+  /// Defults to [AppColors.white].
   List<Color> activeTextColorList;
 
   /// The text color of an inactive [ChoiceChip].
@@ -104,7 +108,7 @@ class CustomChipList extends StatefulWidget {
   /// If you want to use a single color
   /// for all chips, then set only one color here.
   ///
-  /// Defults to [Colors.blue].
+  /// Defults to [AppColors.blue].
   List<Color> inactiveTextColorList;
 
   /// Initial `index` that must be selected.
@@ -217,7 +221,7 @@ class CustomChipList extends StatefulWidget {
   /// for all chips, whilst they're inactive,
   /// then set only one color here.
   ///
-  /// Defaults to [Colors.white].
+  /// Defaults to [AppColors.white].
   List<Color> inactiveBorderColorList;
 
   /// If you want to customize the
@@ -228,7 +232,7 @@ class CustomChipList extends StatefulWidget {
   /// for all chips, whilst they're active,
   /// then set only one color here.
   ///
-  /// Defaults to [Colors.white].
+  /// Defaults to [AppColors.white].
   List<Color> activeBorderColorList;
 
   /// Use this to alter the padding of
@@ -463,7 +467,7 @@ class _CustomChipListState extends State<CustomChipList> {
                         ? widget.style!.copyWith(
                             color: _textColorizer(index),
                           )
-                        : const TextStyle().copyWith(
+                        : AppTypography.font().copyWith(
                             color: _textColorizer(index),
                           ),
                   ),
@@ -523,7 +527,7 @@ class _CustomChipListState extends State<CustomChipList> {
                                   ? widget.style!.copyWith(
                                       color: _textColorizer(index),
                                     )
-                                  : const TextStyle().copyWith(
+                                  : AppTypography.font().copyWith(
                                       color: _textColorizer(index),
                                     ),
                             ),
@@ -582,7 +586,7 @@ class _CustomChipListState extends State<CustomChipList> {
                                   ? widget.style!.copyWith(
                                       color: _textColorizer(index),
                                     )
-                                  : const TextStyle().copyWith(
+                                  : AppTypography.font().copyWith(
                                       color: _textColorizer(index),
                                     ),
                             ),

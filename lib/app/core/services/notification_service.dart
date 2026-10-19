@@ -1,154 +1,192 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/services/analytics_service.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:immoplus/app/core/enums/push_notification_type.dart';
+import 'dart:io';
+
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/data/enums/account_source.dart';
+import 'package:immoplus/app/core/enums/push_notification_type.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/push/push_message.dart';
+import 'package:immoplus/app/core/services/push/push_provider.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
+import 'package:immoplus/app/data/repositories/notification_repository.dart';
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart';
 import 'package:immoplus/app/extensions/go_router_extensions.dart';
-
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
+import 'package:immoplus/app/core/services/app_version_service.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/services/navigation_service.dart';
-import 'package:immoplus/firebase_options.dart';
+import 'package:immoplus/app/core/services/navigation_service.dart';
+import 'package:immoplus/app/core/services/push/push_installation_service.dart';
 import 'package:injectable/injectable.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+/// Service d'orchestration métier des notifications de haut niveau.
+/// Découplé du fournisseur push sous-jacent via le contrat [PushProvider].
 @lazySingleton
 class NotificationService {
-  SessionManager sessionManager;
-  AlertRepository alertRepository;
+  final PushProvider pushProvider;
+  final SessionManager sessionManager;
+  final AlertRepository alertRepository;
+  final NotificationRepository notificationRepository;
+  final AnalyticsService analyticsService;
+  final PushInstallationService pushInstallationService;
 
-  NotificationService(this.sessionManager, this.alertRepository);
+  bool _listenersConfigured = false;
+  bool _isSubscribing = false;
+  String? _lastRegisteredToken;
+  String? _lastRegisteredUserId;
 
-  initConfig() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    //Remove this method to stop OneSignal Debugging
-    if (kDebugMode) {
-      OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    }
-    OneSignal.initialize(dotenv.env['ONE_SIGNAL_KEY'] ?? '');
-    // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.Notifications.requestPermission(true);
+  NotificationService(
+    this.pushProvider,
+    this.sessionManager,
+    this.alertRepository,
+    this.notificationRepository,
+    this.analyticsService,
+    this.pushInstallationService,
+  );
+
+  /// Renvoie l'identifiant unique d'installation persisté (UUID v4)
+  Future<String> getPushInstallationId() =>
+      pushInstallationService.getInstallationId();
+
+  /// Initialise la configuration du fournisseur push
+  Future<void> initConfig() async {
+    await pushProvider.initialize();
+
+    // Écoute du renouvellement de token
+    pushProvider.onTokenRefresh.listen((newToken) {
+      log('🔔 Push token refreshed: $newToken', name: 'NOTIFICATION_SERVICE');
+      suscribeCurrentUser(token: newToken);
+    });
+
+    // Enregistre l'appareil si l'utilisateur est déjà connecté
+    await suscribeCurrentUser();
   }
 
+  /// Configure les écouteurs de notifications (Foreground, Background click, Terminated click)
   void setupNotificationListener() {
-    /// Notification reçue quand l'app est ouverte
-    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-      final data = event.notification.additionalData;
-      getIt<AnalyticsService>().logNotificationReceived(
-        notificationType: (data?['type'] as String?) ?? 'unknown',
-        notificationId: event.notification.notificationId,
+    if (_listenersConfigured) {
+      log('🔔 Notification listeners already configured, skipping duplicate setup',
+          name: 'NOTIFICATION_SERVICE');
+      return;
+    }
+    _listenersConfigured = true;
+
+    // 1. Notification reçue en premier plan
+    pushProvider.onForegroundMessage.listen((PushMessage message) {
+      final data = message.data;
+      final typeString = data['type']?.toString();
+      final type = PushNotificationType.fromString(typeString);
+
+      log('🔔 Push received in foreground: ${message.messageId}, type: $typeString',
+          name: 'NOTIFICATION_SERVICE');
+
+      analyticsService.logNotificationReceived(
+        notificationType: typeString ?? 'unknown',
+        notificationId: message.messageId,
       );
 
-      if (data != null) {
-        final typeString = data['type'] as String?;
-        final type = PushNotificationType.fromString(typeString);
-
-        if (type == PushNotificationType.reservationAccepted) {
-          log('🔔 Reservation accepted → update UI instantly + refresh',
-              name: 'NOTIFICATION');
-          ReservationPendingBanner.onPushReceived();
-        }
-
-        if (type == PushNotificationType.reservationRefused) {
-          log('🔔 Reservation refused → update UI instantly + refresh',
-              name: 'NOTIFICATION');
-          ReservationPendingBanner.onPushReceived();
-        }
-
-        if (type == PushNotificationType.newProposal ||
-            type == PushNotificationType.alert) {
-          log('🔔 New proposal/alert → refresh badge count',
-              name: 'NOTIFICATION');
-          alertRepository.getImatchBadgeCount().then((count) {
-            Constantes.imatchBadgeCount.value = count;
-          });
-        }
+      // Mises à jour d'état in-app instantanées
+      if (type == PushNotificationType.reservationAccepted ||
+          type == PushNotificationType.reservationRefused) {
+        log('🔔 Reservation updated → refresh UI',
+            name: 'NOTIFICATION_SERVICE');
+        ReservationPendingBanner.onPushReceived();
       }
 
-      /// important : afficher quand même la notif
-      event.preventDefault();
-      event.notification.display();
+      if (type == PushNotificationType.newProposal ||
+          type == PushNotificationType.alert) {
+        log('🔔 New proposal/alert → refresh badge count',
+            name: 'NOTIFICATION_SERVICE');
+        alertRepository.getImatchBadgeCount().then((count) {
+          Constantes.imatchBadgeCount.value = count;
+        });
+      }
     });
 
-    /// Notification cliquée
-    OneSignal.Notifications.addClickListener((event) {
-      final data = event.notification.additionalData;
-      getIt<AnalyticsService>().logNotificationTapped(
-        notificationType: (data?['type'] as String?) ?? 'unknown',
-        notificationId: event.notification.notificationId,
+    // 2. Notification cliquée depuis l'arrière-plan
+    pushProvider.onNotificationOpenedApp.listen((PushMessage message) {
+      log('🔔 Push clicked from background: ${message.messageId}',
+          name: 'NOTIFICATION_SERVICE');
+      analyticsService.logNotificationTapped(
+        notificationType: message.data['type']?.toString() ?? 'unknown',
+        notificationId: message.messageId,
       );
-      if (data != null) {
-        final typeString = data['type'] as String?;
-        final id = data['id']?.toString() ??
-            data['alertId']?.toString() ??
-            data['reservationId']?.toString() ??
-            data['conversationId']?.toString();
+      handleNotificationData(message.data);
+    });
 
-        final type = PushNotificationType.fromString(typeString);
-
-        if (sessionManager.currentUser == null) {
-          log('🔔 Notification received but no user logged in',
-              name: 'NOTIFICATION');
-          return;
-        }
-
-        if (type != null) {
-          if (PaiementStatusPage.isActive ||
-              AppRouter.router.currentLocation
-                  .contains(PaiementStatusPage.name)) {
-            log('🔔 Notification $type ignorée : flow de paiement déjà actif',
-                name: 'NOTIFICATION');
-            return;
-          }
-
-          // Nécessite de recharger la recherche complète (zones,
-          // propositions...) avant de naviguer : pas un simple path GoRouter
-          // comme les autres types.
-          const reverseSearchTypes = {
-            PushNotificationType.reverseSearchPropositionDisponible,
-            PushNotificationType.reverseSearchExpiree,
-            PushNotificationType.reverseSearchSelectionExpiree,
-            PushNotificationType.reverseSearchExpirationImminente,
-          };
-          if (reverseSearchTypes.contains(type)) {
-            if (id != null && id.isNotEmpty) {
-              unawaited(_openReverseSearchFromNotification(id));
-            }
-            return;
-          }
-
-          final code = data['code']?.toString();
-          final referenceId = data['referenceId']?.toString();
-          final route = type.getRoute(id, code: code, referenceId: referenceId);
-
-          if (route != null) {
-            log('🔔 Navigation: ${AppRouter.router.currentLocation} → $route',
-                name: 'NOTIFICATION');
-            AppRouter.router.pushIfDifferent(route);
-          } else {
-            log('⚠️ Pas de route pour type: $typeString', name: 'NOTIFICATION');
-          }
-        }
+    // 3. Notification ayant ouvert l'application à froid (Terminated)
+    pushProvider.getInitialMessage().then((PushMessage? message) {
+      if (message != null) {
+        log('🔔 Initial push message from terminated state: ${message.messageId}',
+            name: 'NOTIFICATION_SERVICE');
+        analyticsService.logNotificationTapped(
+          notificationType: message.data['type']?.toString() ?? 'unknown',
+          notificationId: message.messageId,
+        );
+        handleNotificationData(message.data);
       }
     });
   }
 
-  /// Ouvre la recherche inversée sur sa carte de résultats depuis une
-  /// notification qui la concerne (proposition disponible, expiration,
-  /// expiration imminente, sélection expirée...) — recharge l'item complet
-  /// (zones, propositions...) car `ReverseSearchNavigation.resume` ne peut
-  /// pas se contenter du seul id.
+  /// Traitement du routage et des actions suite au clic sur une notification
+  void handleNotificationData(Map<String, dynamic> data) {
+    log("handleNotificationData data: $data");
+    final typeString = data['type']?.toString();
+    final id = data['id']?.toString() ??
+        data['alertId']?.toString() ??
+        data['reservationId']?.toString() ??
+        data['conversationId']?.toString();
+
+    final type = PushNotificationType.fromString(typeString);
+
+    if (sessionManager.currentUser == null) {
+      log('🔔 Notification received but no user logged in',
+          name: 'NOTIFICATION_SERVICE');
+      return;
+    }
+
+    if (type != null) {
+      if (PaiementStatusPage.isActive ||
+          AppRouter.router.currentLocation.contains(PaiementStatusPage.name)) {
+        log('🔔 Notification $type ignorée : flow de paiement déjà actif',
+            name: 'NOTIFICATION_SERVICE');
+        return;
+      }
+
+      const reverseSearchTypes = {
+        PushNotificationType.reverseSearchPropositionDisponible,
+        PushNotificationType.reverseSearchExpiree,
+        PushNotificationType.reverseSearchSelectionExpiree,
+        PushNotificationType.reverseSearchExpirationImminente,
+      };
+
+      if (reverseSearchTypes.contains(type)) {
+        if (id != null && id.isNotEmpty) {
+          unawaited(_openReverseSearchFromNotification(id));
+        }
+        return;
+      }
+
+      final code = data['code']?.toString();
+      final referenceId = data['referenceId']?.toString();
+      final route = type.getRoute(id, code: code, referenceId: referenceId);
+
+      if (route != null) {
+        log('🔔 Navigation: ${AppRouter.router.currentLocation} → $route',
+            name: 'NOTIFICATION_SERVICE');
+        AppRouter.router.pushIfDifferent(route);
+      } else {
+        log('⚠️ Pas de route pour type: $typeString',
+            name: 'NOTIFICATION_SERVICE');
+      }
+    }
+  }
+
+  /// Ouvre la recherche inversée sur sa carte de résultats depuis une notification
   Future<void> _openReverseSearchFromNotification(String searchId) async {
     try {
       final item =
@@ -156,30 +194,103 @@ class NotificationService {
       final context = NavigationService.navigatorKey.currentContext;
       if (item == null || context == null || !context.mounted) {
         log('⚠️ Recherche $searchId introuvable ou contexte indisponible',
-            name: 'NOTIFICATION');
+            name: 'NOTIFICATION_SERVICE');
         return;
       }
       ReverseSearchNavigation.resume(context, item);
     } catch (e) {
       log('⚠️ Erreur ouverture recherche inversée depuis notification: $e',
-          name: 'NOTIFICATION');
+          name: 'NOTIFICATION_SERVICE');
     }
   }
 
-  suscribeCurrentUser() async {
+  /// Enregistre / actualise l'appareil auprès du backend (`PUT /me/push-installations/:id`)
+  Future<void> suscribeCurrentUser({String? token}) async {
+    if (_isSubscribing) {
+      log('🔔 Push registration already in progress, skipping duplicate call',
+          name: 'NOTIFICATION_SERVICE');
+      return;
+    }
+    _isSubscribing = true;
     try {
-      if (sessionManager.currentUser != null) {
-        await OneSignal.login(sessionManager.currentUser!.userId ?? '');
+      final user = sessionManager.currentUser;
+      if (user == null ||
+          user.accessToken == null ||
+          user.accessToken!.isEmpty) {
+        log('🔔 Push registration skipped: no user or access token',
+            name: 'NOTIFICATION_SERVICE');
+        return;
+      }
 
-        if (kDebugMode) {
-          log(sessionManager.currentUser!.userId.toString(),
-              name: 'SUSCRIPTION SUCCESS');
-        }
-      } else {
-        log('SUBSCRIPTION FAILD NO USER');
+      final pushToken = token ?? await pushProvider.getToken();
+      if (pushToken == null || pushToken.isEmpty) {
+        log('⚠️ Push token is null or empty', name: 'NOTIFICATION_SERVICE');
+        return;
+      }
+
+      final userId = user.userId;
+      if (_lastRegisteredToken == pushToken && _lastRegisteredUserId == userId) {
+        log('🔔 Push registration skipped: token and user already registered',
+            name: 'NOTIFICATION_SERVICE');
+        return;
+      }
+
+      final installationId = await getPushInstallationId();
+      final appVersion = await AppVersionService.getFullVersion();
+      final platform = PushPlatform.current.value;
+      final locale = Platform.localeName.replaceAll('_', '-');
+
+      final body = <String, dynamic>{
+        'app': PushApp.client.value,
+        'platform': platform,
+        'token': pushToken,
+        'appVersion': appVersion,
+        'locale': locale,
+      };
+
+      log('Registering push installation: $installationId (platform: $platform, version: $appVersion)',
+          name: 'NOTIFICATION_SERVICE');
+
+      await notificationRepository.registerPushInstallation(
+        installationId: installationId,
+        body: body,
+      );
+
+      _lastRegisteredToken = pushToken;
+      _lastRegisteredUserId = userId;
+
+      log('✅ Push installation successfully registered',
+          name: 'NOTIFICATION_SERVICE');
+    } catch (e) {
+      log('⚠️ Error in suscribeCurrentUser: $e', name: 'NOTIFICATION_SERVICE');
+    } finally {
+      _isSubscribing = false;
+    }
+  }
+
+  /// Détache l'appareil du compte lors de la déconnexion (`DELETE /me/push-installations/:id`)
+  Future<void> unsubcribeCurrentUser() async {
+    _lastRegisteredToken = null;
+    _lastRegisteredUserId = null;
+    try {
+      final user = sessionManager.currentUser;
+      if (user != null &&
+          user.accessToken != null &&
+          user.accessToken!.isNotEmpty) {
+        final installationId = await getPushInstallationId();
+        log('Deleting push installation: $installationId',
+            name: 'NOTIFICATION_SERVICE');
+        await notificationRepository.deletePushInstallation(installationId);
+      }
+      try {
+        await pushProvider.deleteToken();
+        log('✅ Push token deleted', name: 'NOTIFICATION_SERVICE');
+      } catch (e) {
+        log('⚠️ Error deleting push token: $e', name: 'NOTIFICATION_SERVICE');
       }
     } catch (e) {
-      log('SUBSCRIPTION  ${e.toString()}');
+      log('⚠️ Error in unsubcribeCurrentUser: $e',
+          name: 'NOTIFICATION_SERVICE');
     }
   }
 }

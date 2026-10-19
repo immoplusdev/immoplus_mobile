@@ -11,7 +11,7 @@ import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/app/data/models/remote/kyc/kyc_session_model.dart';
 import 'package:immoplus/app/data/models/remote/kyc/kyc_session_create_model.dart';
 import 'package:immoplus/app/features/booking/widgets/kyc_webview_page.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 class KycVerificationModal extends StatefulWidget {
@@ -53,7 +53,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //   showCupertinoModalPopup(
   //     context: context,
   //     builder: (context) => CupertinoActionSheet(
-  //       title: const Text("Sélectionner une photo"),
+  //       title: Text("Sélectionner une photo"),
   //       actions: [
   //         CupertinoActionSheetAction(
   //           onPressed: () async {
@@ -72,7 +72,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //               });
   //             }
   //           },
-  //           child: const Text("Prendre une photo"),
+  //           child: Text("Prendre une photo"),
   //         ),
   //         CupertinoActionSheetAction(
   //           onPressed: () async {
@@ -91,13 +91,13 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //               });
   //             }
   //           },
-  //           child: const Text("Choisir depuis la galerie"),
+  //           child: Text("Choisir depuis la galerie"),
   //         ),
   //       ],
   //       cancelButton: CupertinoActionSheetAction(
   //         isDefaultAction: true,
   //         onPressed: () => Navigator.pop(context),
-  //         child: const Text("Annuler"),
+  //         child: Text("Annuler"),
   //       ),
   //     ),
   //   );
@@ -288,18 +288,18 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: AppColors.black.withOpacity(0.15),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),
           ],
         ),
         child: Material(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           child: Stack(
             children: [
               Padding(
@@ -311,10 +311,10 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                     children: [
                       const Gap(10),
                       // Title
-                      const Text(
+                      Text(
                         "Vérifier votre identité",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                           color: Color(0xFF1D2939),
@@ -322,12 +322,12 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                       ),
                       const Gap(8),
                       // Subtitle
-                      const Text(
+                      Text(
                         "Veuillez renseigner vos informations afin de vérifier votre identité.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 14,
-                          color: Color(0xFF667085),
+                          color: AppColors.immoTextSecondary,
                           height: 1.4,
                         ),
                       ),
@@ -346,7 +346,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                       //       value: _selectedDocumentType,
                       //       isExpanded: true,
                       //       icon: const Icon(Iconsax.arrow_down_1,
-                      //           color: Color(0xFF667085)),
+                      //           color: AppColors.immoTextSecondary),
                       //       items: const [
                       //         DropdownMenuItem(
                       //           value: 'national_id',
@@ -399,21 +399,21 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                         onClick: _startDiditVerification,
                         isLoading: _isLoading,
                         clickable: !_isLoading,
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Iconsax.security_safe,
                               size: 18,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                             Gap(8),
                             Text(
                               "Vérification automatisée",
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           ],
@@ -436,14 +436,14 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
                   },
                   child: Container(
                     padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFF0000),
+                    decoration: BoxDecoration(
+                      color: AppColors.immoFeedbackError,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.close,
                       size: 16,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -463,7 +463,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //     child: Container(
   //       height: 140,
   //       decoration: BoxDecoration(
-  //         color: Colors.white,
+  //         color: AppColors.white,
   //         borderRadius: BorderRadius.circular(16),
   //         border: Border.all(color: const Color(0xFF2172CB), width: 1.5),
   //       ),
@@ -484,14 +484,14 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //                       onTap: () => _removeImage(isFront),
   //                       child: Container(
   //                         padding: const EdgeInsets.all(4),
-  //                         decoration: const BoxDecoration(
-  //                           color: Colors.black54,
+  //                         decoration: BoxDecoration(
+  //                           color: AppColors.black54,
   //                           shape: BoxShape.circle,
   //                         ),
   //                         child: const Icon(
   //                           Icons.delete,
   //                           size: 14,
-  //                           color: Colors.white,
+  //                           color: AppColors.white,
   //                         ),
   //                       ),
   //                     ),
@@ -522,7 +522,7 @@ class _KycVerificationModalState extends State<KycVerificationModal> {
   //                                 ? "Téléverser votre pièce\nd'identité (recto)"
   //                                 : "Téléverser votre pièce\nd'identité (verso)"),
   //                         textAlign: TextAlign.center,
-  //                         style: const TextStyle(
+  //                         style: AppTypography.font(
   //                           fontSize: 10,
   //                           fontWeight: FontWeight.w600,
   //                           color: Color(0xFF2172CB),

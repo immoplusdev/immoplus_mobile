@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -8,9 +8,9 @@ import 'package:immoplus/app/data/models/remote/reservations/reservation_model.d
 import 'package:immoplus/app/data/models/remote/rating/rating_request.dart';
 import 'package:immoplus/app/features/rating/logic/rating_cubit.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/utils/utils.dart';
+import 'package:immoplus/main.dart';
 
 class RatingBottomSheet extends StatefulWidget {
   final ReservationModel reservation;
@@ -22,7 +22,7 @@ class RatingBottomSheet extends StatefulWidget {
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -115,10 +115,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
             children: [
               Text(
                 'Évaluer votre séjour',
-                style: GoogleFonts.dmSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                style: AppTypography.h2.copyWith(
+                  color: AppColors.black,
                 ),
               ),
               const Gap(8),
@@ -127,10 +125,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                   Expanded(
                     child: Text(
                       widget.reservation.residence.nom,
-                      style: GoogleFonts.dmSans(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey.shade600,
+                      style: AppTypography.titleSmall.copyWith(
+                        color: AppColors.gray500,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -140,10 +136,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     const Gap(8),
                     Text(
                       dateLabel,
-                      style: GoogleFonts.dmSans(
-                        fontSize: 16,
+                      style: AppTypography.titleSmall.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade500,
+                        color: AppColors.gray1000,
                       ),
                     ),
                   ],
@@ -154,10 +149,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               // Note de la résidence
               Text(
                 'Note de la résidence',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(8),
@@ -168,9 +162,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 allowHalfRating: false,
                 itemCount: 5,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
+                itemBuilder: (context, _) => Icon(
                   Icons.star_rounded,
-                  color: Color(0xffFFBB00),
+                  color: AppColors.immoFeedbackWarning,
                 ),
                 onRatingUpdate: (rating) {
                   setState(() => _propertyRating = rating.toInt());
@@ -181,10 +175,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               // Note de l'accueil
               Text(
                 'Note de l\'accueil',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(8),
@@ -195,9 +188,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 allowHalfRating: false,
                 itemCount: 5,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
+                itemBuilder: (context, _) => Icon(
                   Icons.star_rounded,
-                  color: Color(0xffFFBB00),
+                  color: AppColors.immoFeedbackWarning,
                 ),
                 onRatingUpdate: (rating) {
                   setState(() => _hostRating = rating.toInt());
@@ -208,10 +201,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               // Tags
               Text(
                 'Qu\'avez-vous apprécié ?',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(12),
@@ -234,21 +226,19 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
-                        color:
-                            isSelected ? const Color(0xFF2548E5) : Colors.white,
+                        color: isSelected ? AppColors.primary : AppColors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: isSelected
-                              ? const Color(0xFF2548E5)
-                              : Colors.grey.shade300,
+                              ? AppColors.primary
+                              : AppColors.gray300,
                         ),
                       ),
                       child: Text(
                         tag,
-                        style: GoogleFonts.dmSans(
-                          fontSize: 14,
+                        style: AppTypography.bodyMedium.copyWith(
                           color:
-                              isSelected ? Colors.white : Colors.grey.shade700,
+                              isSelected ? AppColors.white : AppColors.gray700,
                           fontWeight:
                               isSelected ? FontWeight.w600 : FontWeight.w500,
                         ),
@@ -262,10 +252,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               // Feedback
               Text(
                 'Votre commentaire ( optionnel )',
-                style: GoogleFonts.dmSans(
-                  fontSize: 16,
+                style: AppTypography.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade800,
+                  color: AppColors.gray900,
                 ),
               ),
               const Gap(12),
@@ -274,20 +263,21 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 maxLines: 4,
                 maxLength: 500,
                 decoration: InputDecoration(
-                  fillColor: Colors.transparent,
+                  fillColor: AppColors.transparent,
                   hintText: 'Découvrez votre expérience...',
-                  hintStyle: GoogleFonts.dmSans(color: Colors.grey.shade400),
+                  hintStyle: AppTypography.bodyMedium
+                      .copyWith(color: AppColors.gray400),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade200),
+                    borderSide: BorderSide(color: AppColors.gray200),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade200),
+                    borderSide: BorderSide(color: AppColors.gray200),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF2548E5)),
+                    borderSide: BorderSide(color: AppColors.primary),
                   ),
                   contentPadding: const EdgeInsets.all(16),
                 ),
@@ -306,7 +296,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     child: CustomLoadingButtom(
                       text: 'Envoyer mon avis',
                       isLoading: isLoading,
-                      color: const Color(0xFF2548E5),
+                      color: AppColors.primary,
                       onClick: _submit,
                     ),
                   );

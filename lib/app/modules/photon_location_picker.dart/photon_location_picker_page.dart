@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:immoplus/app/modules/photon_location_picker.dart/photon_model.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:shimmer/shimmer.dart';
 
@@ -81,7 +81,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             width: double.infinity,
-            //color: Colors.red,
+            //color: AppColors.red,
             child: CupertinoSearchTextField(
               autofocus: true,
               onChanged: (value) {
@@ -105,13 +105,13 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                 (index) => Shimmer.fromColors(
                       period: Duration(milliseconds: 800),
                       baseColor: CupertinoColors.tertiarySystemFill,
-                      highlightColor: Colors.grey.shade100,
+                      highlightColor: AppColors.immoBgSurfaceMuted,
                       child: ListTile(
                         leading: CircleAvatar(),
                         title: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
+                            color: AppColors.immoTextSecondary,
                           ),
                           width: 200,
                           height: 20,
@@ -120,7 +120,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                           margin: EdgeInsets.only(top: 5, right: 20),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
+                            color: AppColors.immoTextSecondary,
                           ),
                           width: 100,
                           height: 20,
@@ -135,7 +135,7 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10)
                     .copyWith(bottom: 15),
                 child: ListTile(
-                  tileColor: Colors.white,
+                  tileColor: AppColors.white,
                   onTap: () async {
                     isloading = true;
                     final a = await LocationService().getCurrentGeoJson();
@@ -149,39 +149,37 @@ class _PhotonLocationPickerPageState extends State<PhotonLocationPickerPage> {
                       const Icon(CupertinoIcons.chevron_right_circle_fill),
                   leading: const Icon(
                     CupertinoIcons.location_fill,
-                    color: Colors.blue,
+                    color: AppColors.blue,
                   ),
-                  title: const Text('Prendre ma position actuelle'),
+                  title: Text('Prendre ma position actuelle'),
                 ),
               ),
             ),
-            ...results
-                .map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: ListTile(
-                      tileColor: Colors.white,
-                      onTap: () {
-                        inspect(e.geoJson);
-                        widget.onSeleted!(e);
-                      },
-                      leading: const CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          child: Icon(
-                            CupertinoIcons.location_solid,
-                            size: 30,
-                            color: Colors.blue,
-                          )),
-                      title: (e.properties!.city == null)
-                          ? Text(e.properties!.name ?? 'name')
-                          : Text(e.properties!.city ?? 'name'),
-                      subtitle: (e.properties!.city != null)
-                          ? Text(e.properties!.name ?? 'name')
-                          : null,
-                    ),
-                  ),
-                )
-                ,
+            ...results.map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: ListTile(
+                  tileColor: AppColors.white,
+                  onTap: () {
+                    inspect(e.geoJson);
+                    widget.onSeleted!(e);
+                  },
+                  leading: const CircleAvatar(
+                      backgroundColor: AppColors.transparent,
+                      child: Icon(
+                        CupertinoIcons.location_solid,
+                        size: 30,
+                        color: AppColors.blue,
+                      )),
+                  title: (e.properties!.city == null)
+                      ? Text(e.properties!.name ?? 'name')
+                      : Text(e.properties!.city ?? 'name'),
+                  subtitle: (e.properties!.city != null)
+                      ? Text(e.properties!.name ?? 'name')
+                      : null,
+                ),
+              ),
+            ),
           ]),
         ),
       ),

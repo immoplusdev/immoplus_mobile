@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class CollageItem {
   final String image;
@@ -37,7 +38,8 @@ class ImageCollage extends StatelessWidget {
     this.spacing = 2,
     this.onTap,
   }) : assert(
-          (images != null && items == null) || (items != null && images == null),
+          (images != null && items == null) ||
+              (items != null && images == null),
           'Provide either images or items, but not both.',
         );
 
@@ -117,7 +119,8 @@ class ImageCollage extends StatelessWidget {
               flex: 11,
               child: Row(
                 children: [
-                  Expanded(flex: 35, child: _buildItemWidget(effectiveItems[2])),
+                  Expanded(
+                      flex: 35, child: _buildItemWidget(effectiveItems[2])),
                   Gap(spacing),
                   Expanded(
                     flex: 65,
@@ -127,12 +130,12 @@ class ImageCollage extends StatelessWidget {
                         _buildItemWidget(effectiveItems[3]),
                         if (effectiveItems.length > 4)
                           Container(
-                            color: Colors.black.withValues(alpha: 0.4),
+                            color: AppColors.black.withValues(alpha: 0.4),
                             child: Center(
                               child: Text(
                                 '+${effectiveItems.length - 4}',
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: AppTypography.font(
+                                  color: AppColors.white,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -175,8 +178,8 @@ class ImageCollage extends StatelessWidget {
   Widget _buildImageWidget(CollageItem item) {
     if (item.image.isEmpty) {
       return Container(
-        color: Colors.grey.shade100,
-        child: const Icon(Icons.image_outlined, color: Colors.grey, size: 20),
+        color: AppColors.gray100,
+        child: Icon(Icons.image_outlined, color: AppColors.gray500, size: 20),
       );
     }
 
@@ -186,8 +189,8 @@ class ImageCollage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       placeholder: (context, url) => Container(
-        color: Colors.grey.shade100,
-        child: const Center(
+        color: AppColors.gray100,
+        child: Center(
           child: SizedBox(
             width: 16,
             height: 16,
@@ -196,10 +199,10 @@ class ImageCollage extends StatelessWidget {
         ),
       ),
       errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
-        child: const Icon(
+        color: AppColors.gray200,
+        child: Icon(
           Icons.broken_image_outlined,
-          color: Colors.grey,
+          color: AppColors.gray500,
           size: 16,
         ),
       ),

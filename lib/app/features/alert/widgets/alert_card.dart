@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_model.dart';
 import 'package:immoplus/app/data/models/remote/alert/property_type.dart';
 import 'package:immoplus/app/features/alert/pages/alert_propositions_page.dart';
 import 'package:immoplus/app/features/alert/pages/alert_create_edit_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/features/alert/pages/alert_detail_page.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +36,7 @@ class AlertCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.primary, width: .2),
         ),
@@ -54,7 +53,7 @@ class AlertCard extends StatelessWidget {
                     children: [
                       Text(
                         '${(alert.criteria.propertyTypeObj?.label ?? '').capitalize()} · ${alert.criteria.location ?? 'Abidjan'}',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.bodySmallSemiBold.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
@@ -62,8 +61,8 @@ class AlertCard extends StatelessWidget {
                       if (alert.createdAt != null)
                         Text(
                           'Envoyée le ${DateFormat('dd MMMM yyyy', 'fr_FR').format(alert.createdAt!)}',
-                          style: GoogleFonts.dmSans(
-                              fontSize: 12, color: Colors.grey),
+                          style: AppTypography.caption
+                              .copyWith(color: AppColors.immoTextSecondary),
                         ),
                     ],
                   ),
@@ -77,7 +76,7 @@ class AlertCard extends StatelessWidget {
                   ),
                   child: Text(
                     status.label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.micro.copyWith(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: status.textColor,
@@ -111,9 +110,8 @@ class AlertCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${alert.unreadMatchCount} ${(alert.unreadMatchCount ?? 0) > 1 ? 'nouvelles propositions disponibles' : 'nouvelle proposition disponible'}',
-                        style: GoogleFonts.dmSans(
+                        style: AppTypography.bodySmallSemiBold.copyWith(
                           fontSize: 13,
-                          fontWeight: FontWeight.w600,
                           color: AppColors.primary,
                         ),
                       ),
@@ -135,7 +133,7 @@ class AlertCard extends StatelessWidget {
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(
@@ -144,7 +142,7 @@ class AlertCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text('Consulté',
-                            style: GoogleFonts.dmSans(
+                            style: AppTypography.button.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 13)),
                         const Gap(8),
                         const Icon(Icons.arrow_forward_ios, size: 12),
@@ -156,14 +154,14 @@ class AlertCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
+                      color: AppColors.immoBorderDefault,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       'Archivée',
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.button.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500,
+                        color: AppColors.immoTextSecondary,
                         fontSize: 13,
                       ),
                     ),
@@ -185,9 +183,9 @@ class AlertCard extends StatelessWidget {
                       onRefresh?.call();
                     },
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.white,
                       side: BorderSide.none,
-                      backgroundColor: Colors.grey.shade400,
+                      backgroundColor: AppColors.immoTextDisabled,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(
@@ -196,7 +194,7 @@ class AlertCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text('Voir détails',
-                            style: GoogleFonts.dmSans(
+                            style: AppTypography.button.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 13)),
                         const Gap(8),
                         const Icon(Icons.arrow_forward_ios, size: 12),
@@ -224,12 +222,12 @@ class AlertCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         text,
-        style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade700),
+        style: AppTypography.caption.copyWith(color: AppColors.immoTextLabel),
       ),
     );
   }

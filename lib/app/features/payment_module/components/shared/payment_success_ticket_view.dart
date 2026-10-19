@@ -18,8 +18,7 @@ import 'package:immoplus/app/features/payment_module/components/shared/ticket_cl
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/features/suggest/logic/reverse_search_navigation.dart';
 import 'package:immoplus/app/routes/app_router.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/circle_button.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
@@ -125,7 +124,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                 },
                 color: AppColors.primary,
                 textColor: AppColors.primary,
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.white,
                 buttonHeight: 52,
                 borderRadius: BorderRadius.circular(30),
               ),
@@ -140,7 +139,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     ? () {}
                     : () => _onViewReservation(),
                 color: AppColors.primary,
-                textColor: Colors.white,
+                textColor: AppColors.white,
                 buttonHeight: 52,
                 borderRadius: BorderRadius.circular(30),
               ),
@@ -156,7 +155,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       child: SvgPicture.asset(
                           "assets/svgs/icons/save_payment.svg"),
                     ),
-                    backgroundColor: const Color(0xFFEFF4FF),
+                    backgroundColor: AppColors.blue40,
                     onTap: _isExporting
                         ? () {}
                         : () => _downloadScreenshot(displayPaymentId),
@@ -167,7 +166,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                       child: SvgPicture.asset(
                           "assets/svgs/icons/share_payment.svg"),
                     ),
-                    backgroundColor: const Color(0xFFEFF4FF),
+                    backgroundColor: AppColors.blue40,
                     onTap: _isExporting
                         ? () {}
                         : () => _shareScreenshot(
@@ -264,7 +263,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
         text: shareText,
       );
     } catch (e) {
-      EasyLoading.showError("Impossible de partager le reçu");
+      ToastUtils.showError(description: "Impossible de partager le reçu");
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
@@ -280,7 +279,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
       final image = await boundary.toImage(pixelRatio: 3.0);
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       return byteData?.buffer.asUint8List();
-    } catch (_) {
+    } catch (e) {
       return null;
     }
   }
@@ -292,21 +291,25 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
 
       final bytes = await _capturePng();
       if (bytes == null) {
-        EasyLoading.showError("Impossible de capturer le reçu");
+        EasyLoading.dismiss();
+        ToastUtils.showError(description: "Impossible de capturer le reçu");
         return;
       }
 
       final fileName = "recu_paiement_$paymentId";
       await Gal.putImageBytes(bytes, name: fileName);
-      EasyLoading.showSuccess("Reçu enregistré dans la galerie !");
+      EasyLoading.dismiss();
+      ToastUtils.showSuccess(description: "Reçu enregistré dans la galerie !");
     } on GalException catch (e) {
+      EasyLoading.dismiss();
       if (e.type == GalExceptionType.accessDenied) {
-        EasyLoading.showError("Accès à la galerie refusé");
+        ToastUtils.showError(description: "Accès à la galerie refusé");
       } else {
-        EasyLoading.showError("Erreur lors de l'enregistrement");
+        ToastUtils.showError(description: "Erreur lors de l'enregistrement");
       }
     } catch (e) {
-      EasyLoading.showError("Erreur lors du téléchargement");
+      EasyLoading.dismiss();
+      ToastUtils.showError(description: "Erreur lors du téléchargement");
     } finally {
       if (mounted) {
         setState(() => _isExporting = false);
@@ -335,7 +338,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
   }) {
     return TicketCardBackground(
       punchOffsetY: 118.0,
-      borderColor: const Color(0xFFD6E2FB),
+      borderColor: AppColors.immoBorderBrandSubtle,
       borderWidth: 1.2,
       scallopCount: 7,
       scallopDepth: 9.0,
@@ -347,24 +350,24 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
             padding: const EdgeInsets.fromLTRB(24, 26, 24, 16),
             child: Column(
               children: [
-                const Text(
+                Text(
                   "Merci!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
-                    color: Colors.black,
+                    color: AppColors.black,
                     letterSpacing: -0.3,
                   ),
                 ),
                 const Gap(6),
-                const Text(
+                Text(
                   "Votre paiement a été traité\navec succès.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF8A94A6),
+                    color: AppColors.immoTextSecondary,
                     height: 1.35,
                   ),
                 ),
@@ -376,7 +379,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: _buildDottedLine(
-                color: const Color(0xFFCBD5E1),
+                color: AppColors.slate300,
                 dashWidth: 6,
                 dashSpace: 5,
                 horizontalPadding: 35),
@@ -399,7 +402,7 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                           Clipboard.setData(
                             ClipboardData(text: displayPaymentId),
                           );
-                          EasyLoading.showSuccess("ID copié !");
+                          ToastUtils.showSuccess(description: "ID copié !");
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,29 +410,29 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text(
+                                Text(
                                   "Payement ID",
-                                  style: TextStyle(
+                                  style: AppTypography.font(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF8A94A6),
+                                    color: AppColors.immoTextSecondary,
                                   ),
                                 ),
                                 const Gap(4),
-                                const Icon(
+                                Icon(
                                   CupertinoIcons.doc_on_doc,
                                   size: 13,
-                                  color: Color(0xFF8A94A6),
+                                  color: AppColors.immoTextSecondary,
                                 ),
                               ],
                             ),
                             const Gap(4),
                             Text(
                               displayPaymentId,
-                              style: const TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.black,
+                                color: AppColors.black,
                               ),
                             ),
                           ],
@@ -440,21 +443,21 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text(
+                        Text(
                           "Montant",
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF8A94A6),
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
                         const Gap(4),
                         Text(
                           formattedAmount,
-                          style: const TextStyle(
+                          style: AppTypography.font(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -470,21 +473,21 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Date & heure",
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF8A94A6),
+                          color: AppColors.immoTextSecondary,
                         ),
                       ),
                       const Gap(4),
                       Text(
                         formattedDate,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       ),
                     ],
@@ -507,15 +510,15 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                     children: [
                       CircleAvatar(
                         radius: 18,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.white,
                         foregroundImage: operatorLogo.isNotEmpty
                             ? NetworkImage(operatorLogo)
                             : null,
                         child: operatorLogo.isEmpty
-                            ? const Icon(
+                            ? Icon(
                                 CupertinoIcons.creditcard_fill,
                                 size: 18,
-                                color: Color(0xFF2B52F5),
+                                color: AppColors.blue2B52F5,
                               )
                             : null,
                       ),
@@ -528,19 +531,19 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
                               displayName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                                color: AppColors.black87,
                               ),
                             ),
                             const Gap(2),
                             Text(
                               displayMasked,
-                              style: const TextStyle(
+                              style: AppTypography.font(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: Color(0xFF64748B),
+                                color: AppColors.immoTextSecondary,
                               ),
                             ),
                           ],
@@ -555,20 +558,20 @@ class _PaymentSuccessTicketViewState extends State<PaymentSuccessTicketView>
 
           // ── POINTILLÉS INFÉRIEURS ──
           _buildDottedLine(
-            color: const Color(0xFFE2E8F0),
+            color: AppColors.slate300,
             dashWidth: 20,
             dashSpace: 5,
           ),
 
           // ── SIGNATURE / WATERMARK ──
-          const Padding(
+          Padding(
             padding: EdgeInsets.fromLTRB(20, 16, 20, 36),
             child: Text(
               "@afriqsolus",
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF94A3B8),
+                color: AppColors.immoTextDisabled,
               ),
             ),
           ),

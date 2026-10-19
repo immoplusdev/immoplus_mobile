@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 import 'package:immoplus/app/data/repositories/config_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -52,7 +52,7 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: const Text('Sélectionner une ville'),
+            title: Text('Sélectionner une ville'),
             backgroundColor: AppColors.scafold,
             centerTitle: true,
           ),
@@ -74,10 +74,10 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
                     (index) => Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
+                        baseColor: AppColors.immoBorderStrong,
+                        highlightColor: AppColors.immoBgSurfaceMuted,
                         child: const CupertinoListTile(
-                          backgroundColor: Colors.red,
+                          backgroundColor: AppColors.red,
                           title: Text("•••••••••••••••••••"),
                         ),
                       ),

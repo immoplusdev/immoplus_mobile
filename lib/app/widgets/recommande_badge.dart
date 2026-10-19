@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class RecommandeBadge extends StatelessWidget {
   const RecommandeBadge({super.key});
@@ -9,18 +10,18 @@ class RecommandeBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A47DF),
+        color: AppColors.immoBrandPrimary,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.star, color: Color(0xFFFFD700), size: 12),
+          Icon(Icons.star, color: AppColors.gold400, size: 12),
           Gap(4),
           Text(
             'Recommandé',
-            style: TextStyle(
-              color: Colors.white,
+            style: AppTypography.font(
+              color: AppColors.white,
               fontSize: 11,
               fontWeight: FontWeight.w600,
             ),
@@ -39,13 +40,13 @@ class FreeReverseBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF06F26),
+        color: AppColors.immoFeedbackWarning,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         'Libre',
-        style: TextStyle(
-          color: Colors.white,
+        style: AppTypography.font(
+          color: AppColors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),

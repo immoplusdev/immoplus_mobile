@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundController extends StatelessWidget {
@@ -59,8 +60,8 @@ class BackgroundController extends StatelessWidget {
       width: isActive ? 28.0 : 8.0,
       decoration: BoxDecoration(
         color: isActive
-            ? controllerColor ?? Colors.white
-            : (controllerColor ?? Colors.white).withOpacity(0.5),
+            ? controllerColor ?? AppColors.white
+            : (controllerColor ?? AppColors.white).withOpacity(0.5),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );

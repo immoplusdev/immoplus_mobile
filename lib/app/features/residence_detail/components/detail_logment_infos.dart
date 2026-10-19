@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class DetailLogmentInfos extends StatelessWidget {
   const DetailLogmentInfos({super.key, required this.reservation});
@@ -25,7 +25,7 @@ class DetailLogmentInfos extends StatelessWidget {
               Flexible(
                 child: AutoSizeText(
                   reservation.adresse,
-                  style: TextStyle(color: AppColors.primary),
+                  style: AppTypography.font(color: AppColors.primary),
                 ),
               ),
             ],

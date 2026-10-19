@@ -7,7 +7,7 @@ import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/residence_detail/components/mosaic_logment_images.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/components/detail_flexible_carousel.dart';
 
 class FurnitureDetailAppBar extends StatefulWidget {
@@ -57,8 +57,8 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
           ),
           icon: Container(
               width: 30,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white),
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
               child: Center(
                   child: Icon(
                 CupertinoIcons.chevron_back,
@@ -85,11 +85,12 @@ class _FurnitureDetailAppBarState extends State<FurnitureDetailAppBar> {
               },
               child: CircleAvatar(
                 radius: 15,
-                backgroundColor: value ? Colors.red : Colors.grey.shade300,
+                backgroundColor:
+                    value ? AppColors.red : AppColors.immoBorderStrong,
                 child: Icon(
                   FontAwesomeIcons.solidHeart.data,
                   size: 16,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),

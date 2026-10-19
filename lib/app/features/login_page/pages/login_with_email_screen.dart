@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/data/models/auth/login_body_model.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit.dart';
 import 'package:immoplus/app/logic/authentification/login_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
@@ -71,7 +70,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
               ),
               validator: (value) => FormUtils.emailValidator(email: value),
             ),
-            const SizedBox(
+            SizedBox(
               height: 10,
             ),
             ValueListenableBuilder<bool>(
@@ -107,7 +106,9 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                     },
                     child: Text(
                       'Mot de passe oublié',
-                      style: GoogleFonts.inter(color: AppColors.primary),
+                      style: AppTypography.bodySmallSemiBold.copyWith(
+                        color: AppColors.primary,
+                      ),
                     )),
               ],
             ),
@@ -138,7 +139,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
               },
             ),
             const Gap(10),
-            const Row(
+            Row(
               children: [
                 Flexible(
                   child: SizedBox(

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
@@ -39,8 +40,8 @@ class DetailEstateAmentities extends StatelessWidget {
                         ),
                       )
                     else
-                      const Expanded(child: SizedBox()),
-                    const SizedBox(width: 12),
+                      Expanded(child: SizedBox()),
+                    SizedBox(width: 12),
                     if (rightIdx < displayCount)
                       Expanded(
                         child: _AmenityItem(
@@ -49,7 +50,7 @@ class DetailEstateAmentities extends StatelessWidget {
                         ),
                       )
                     else
-                      const Expanded(child: SizedBox()),
+                      Expanded(child: SizedBox()),
                   ],
                 ),
               ),
@@ -77,24 +78,24 @@ class _AmenityItem extends StatelessWidget {
       child: Row(
         children: [
           if (iconsaxIcon != null)
-            Icon(iconsaxIcon, size: 22, color: Colors.grey.shade700)
+            Icon(iconsaxIcon, size: 22, color: AppColors.immoTextLabel)
           else if (svgPath != null)
             SvgPicture.asset(
               svgPath,
               height: 22,
               width: 22,
               colorFilter: ColorFilter.mode(
-                Colors.grey.shade700,
+                AppColors.immoTextLabel,
                 BlendMode.srcIn,
               ),
             )
           else
-            Icon(Iconsax.element_4, size: 22, color: Colors.grey.shade700),
-          const SizedBox(width: 12),
+            Icon(Iconsax.element_4, size: 22, color: AppColors.immoTextLabel),
+          SizedBox(width: 12),
           Flexible(
             child: Text(
               text,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: Color(0xFF3A3A3A),

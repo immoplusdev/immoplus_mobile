@@ -6,7 +6,7 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/features/for_you/logic/for_you_cubit.dart';
 import 'package:immoplus/app/features/for_you/logic/for_you_state.dart';
 import 'package:immoplus/app/features/for_you/widgets/for_you_section_view.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 
 /// Corps de l'onglet "Pour vous" — flux mixte agrégé via `GET /me/home`
@@ -34,10 +34,12 @@ class _ForYouViewState extends State<ForYouView> {
           initial: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
           loading: () => SliverToBoxAdapter(child: _LoadingShimmer()),
           error: (message) => SliverToBoxAdapter(
-            child: _ErrorState(onRetry: () => context.read<ForYouCubit>().fetch()),
+            child:
+                _ErrorState(onRetry: () => context.read<ForYouCubit>().fetch()),
           ),
           success: (sections, hasMore, nextCursor, isLoadingMore) {
-            if (sections.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+            if (sections.isEmpty)
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -46,14 +48,18 @@ class _ForYouViewState extends State<ForYouView> {
                       padding: const EdgeInsets.all(20),
                       child: Center(
                         child: isLoadingMore
-                            ? CircularProgressIndicator(color: AppColors.primary)
+                            ? CircularProgressIndicator(
+                                color: AppColors.primary)
                             : const SizedBox.shrink(),
                       ),
                     );
                   }
-                  if (index == sections.length - 2 && hasMore && !isLoadingMore) {
+                  if (index == sections.length - 2 &&
+                      hasMore &&
+                      !isLoadingMore) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (context.mounted) context.read<ForYouCubit>().loadMore();
+                      if (context.mounted)
+                        context.read<ForYouCubit>().loadMore();
                     });
                   }
                   return Padding(
@@ -88,8 +94,8 @@ class _LoadingShimmer extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: 3,
                 separatorBuilder: (context, index) => const Gap(12),
-                itemBuilder: (context, index) =>
-                    SizedBox(width: neirResidenceCardWidth, child: LoadProductCard()),
+                itemBuilder: (context, index) => SizedBox(
+                    width: neirResidenceCardWidth, child: LoadProductCard()),
               ),
             ),
           ),
@@ -118,7 +124,7 @@ class _ErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const Gap(12),
-            TextButton(onPressed: onRetry, child: const Text('Réessayer')),
+            TextButton(onPressed: onRetry, child: Text('Réessayer')),
           ],
         ),
       ),

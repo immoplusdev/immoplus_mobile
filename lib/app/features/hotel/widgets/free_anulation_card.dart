@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class FreeAnulationCard extends StatelessWidget {
@@ -15,7 +16,7 @@ class FreeAnulationCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Text(
         "Annulation gratuite",
-        style: TextStyle(
+        style: AppTypography.font(
           color: color ?? Color(0xffFFD609),
           fontSize: 9,
           fontWeight: FontWeight.bold,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 
 class RecommendationForYouTile extends StatelessWidget {
@@ -37,8 +37,8 @@ class RecommendationForYouTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasImage = images.isNotEmpty;
-    final dotColor = hasImage ? Colors.grey.shade400 : AppColors.primary;
-    final textColor = hasImage ? Colors.black87 : AppColors.primary;
+    final dotColor = hasImage ? AppColors.immoTextDisabled : AppColors.primary;
+    final textColor = hasImage ? AppColors.black87 : AppColors.primary;
 
     return InkWell(
       onTap: onTap,
@@ -58,7 +58,7 @@ class RecommendationForYouTile extends StatelessWidget {
             Expanded(
               child: Text(
                 name,
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                   color: textColor,
@@ -79,14 +79,14 @@ class RecommendationForYouTile extends StatelessWidget {
                   errorWidget: (context, url, error) => Container(
                     width: 40,
                     height: 40,
-                    color: Colors.grey.shade200,
-                    child: const Icon(Icons.image_not_supported,
-                        size: 20, color: Colors.grey),
+                    color: AppColors.immoBorderDefault,
+                    child: Icon(Icons.image_not_supported,
+                        size: 20, color: AppColors.immoTextSecondary),
                   ),
                 ),
               )
             else
-              Icon(Icons.search, color: Colors.grey.shade300, size: 24),
+              Icon(Icons.search, color: AppColors.immoBorderStrong, size: 24),
           ],
         ),
       ),

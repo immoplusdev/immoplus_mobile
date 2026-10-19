@@ -16,5 +16,6 @@ class RatingHistoryResponse with _$RatingHistoryResponse {
     @Default(false) bool hasNext,
   }) = _RatingHistoryResponse;
 
-  factory RatingHistoryResponse.fromJson(Map<String, dynamic> json) => _$RatingHistoryResponseFromJson(json);
+  factory RatingHistoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$RatingHistoryResponseFromJson(json);
 }

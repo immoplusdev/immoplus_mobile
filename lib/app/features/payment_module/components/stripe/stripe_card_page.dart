@@ -12,8 +12,8 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/payment_module/components/stripe/stripe_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
 import 'package:immoplus/app/routes/app_router.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
@@ -90,8 +90,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
     final paymentData = PaymentData.of(context);
 
     if (paymentData == null) {
-      return const Center(
-          child: Text('Erreur: Données de paiement manquantes'));
+      return Center(child: Text('Erreur: Données de paiement manquantes'));
     }
 
     return Container(
@@ -102,7 +101,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               foregroundImage: NetworkImage(
                 OrderPaymentController.selectedOperator.logo,
               ),
@@ -114,7 +113,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
             trailing: IconButton(
               icon: const Icon(
                 CupertinoIcons.clear_circled_solid,
-                color: Colors.black,
+                color: AppColors.black,
               ),
               onPressed: () {
                 AppDialog.confirm(
@@ -129,9 +128,9 @@ class _StripeCardPageState extends State<StripeCardPage> {
             ),
           ),
           ListTile(
-            tileColor: Colors.white,
-            leading:
-                const FaIcon(FontAwesomeIcons.moneyBill, color: Colors.green),
+            tileColor: AppColors.white,
+            leading: const FaIcon(FontAwesomeIcons.moneyBill,
+                color: AppColors.green),
             title: Text(Utils.formatCurrency(paymentData.amount)),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
           ),
@@ -143,7 +142,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
               Icon(
                 FontAwesomeIcons.creditCard.data,
                 size: 13,
-                color: Color(0xFF635BFF),
+                color: AppColors.stripePurple,
               ),
               const Gap(8),
               Text(
@@ -151,7 +150,7 @@ class _StripeCardPageState extends State<StripeCardPage> {
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(color: Colors.grey[600]),
+                    ?.copyWith(color: AppColors.immoTextSecondary),
               ),
             ],
           ),
@@ -160,15 +159,15 @@ class _StripeCardPageState extends State<StripeCardPage> {
             isLoading: _isLoading,
             clickable: !_isLoading,
             onClick: () => _onPay(paymentData),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FaIcon(FontAwesomeIcons.lock, size: 13, color: Colors.white),
+                FaIcon(FontAwesomeIcons.lock, size: 13, color: AppColors.white),
                 Gap(8),
                 Text(
                   "Payer par carte",
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: AppTypography.font(
+                    color: AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

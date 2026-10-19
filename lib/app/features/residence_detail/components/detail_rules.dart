@@ -25,7 +25,7 @@ class DetailLogmentRules extends StatelessWidget {
         ),
         Visibility(
           visible: !logmentModel.animauxAutorises,
-          child: const ListTile(
+          child: ListTile(
             horizontalTitleGap: 0,
             leading: Icon(Icons.pets),
             title: Text("Animaux interdit"),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:toastification/toastification.dart';
 
 enum FigmaToastType {
@@ -11,9 +11,9 @@ enum FigmaToastType {
   Color get color {
     switch (this) {
       case FigmaToastType.error:
-        return AppColors.redFF0000;
+        return AppColors.immoFeedbackError;
       case FigmaToastType.success:
-        return AppColors.green1CA53F;
+        return AppColors.immoFeedbackSuccess;
       case FigmaToastType.info:
         return AppColors.primary;
       case FigmaToastType.warning:
@@ -23,9 +23,8 @@ enum FigmaToastType {
 }
 
 class _Constants {
-  static const Color borderColor = Color(0xFFE0E0E0);
-  static const Color warningColor = Color(0xFFF57C00);
-  static const Color descriptionColor = Color(0xFF9E9E9E);
+  static Color get borderColor => AppColors.immoBorderDefault;
+  static Color get warningColor => AppColors.immoFeedbackWarning;
 
   static const double horizontalMargin = 12;
   static const double verticalMargin = 6;
@@ -74,12 +73,12 @@ class FigmaToast extends StatelessWidget {
           vertical: _Constants.verticalPadding,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(_Constants.borderRadius),
           border: Border.all(color: _Constants.borderColor),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: _Constants.shadowAlpha),
+              color: AppColors.black.withValues(alpha: _Constants.shadowAlpha),
               blurRadius: _Constants.shadowBlur,
               offset: const Offset(0, _Constants.shadowOffsetY),
             ),
@@ -92,17 +91,17 @@ class FigmaToast extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: AppTypography.font(
                       color: color,
                       fontWeight: FontWeight.bold,
                       fontSize: _Constants.titleFontSize,
                     ),
                   ),
-                  const SizedBox(height: _Constants.descriptionSpacing),
+                  SizedBox(height: _Constants.descriptionSpacing),
                   Text(
                     description!,
-                    style: TextStyle(
-                        color: color.withOpacity(.8),
+                    style: AppTypography.font(
+                        color: color.withValues(alpha: 0.8),
                         fontSize: _Constants.descriptionFontSize,
                         fontWeight: FontWeight.w200),
                   ),
@@ -113,14 +112,14 @@ class FigmaToast extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         color: color,
                         fontWeight: FontWeight.bold,
                         fontSize: _Constants.titleFontSize,
                       ),
                     ),
                   ),
-                  const SizedBox(width: _Constants.iconSpacing),
+                  SizedBox(width: _Constants.iconSpacing),
                   Icon(
                     Icons.error_outline_rounded,
                     color: color,

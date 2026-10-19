@@ -1,8 +1,10 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:immoplus/main.dart';
 import 'package:widget_to_marker/widget_to_marker.dart';
 
 class _Constants {
@@ -45,10 +47,12 @@ class MapMarkerWidget {
           .getSingleFile(imageUrl)
           .timeout(_Constants.requestTimeout);
       imageBytes = await file.readAsBytes();
-    } catch (_) {}
+    } catch (e) {
+      talker.debug('Failed to cache marker image ($imageUrl): $e');
+    }
 
     final descriptor = await _MarkerWidget(
-      imageBytes: null,
+      imageBytes: imageBytes,
       price: price,
       bgColor: bgColor,
       textColor: textColor,
@@ -89,7 +93,7 @@ class _MarkerWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(_Constants.borderRadius),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
+                color: AppColors.black.withValues(alpha: 0.12),
                 blurRadius: 8,
                 spreadRadius: 0,
                 offset: const Offset(0, 2),
@@ -120,7 +124,7 @@ class _MarkerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: textColor ?? Colors.white,
+          color: textColor ?? AppColors.white,
           width: _Constants.imageBorderWidth,
         ),
       ),
@@ -128,10 +132,10 @@ class _MarkerWidget extends StatelessWidget {
         child: imageBytes != null
             ? Image.memory(imageBytes!, fit: BoxFit.cover)
             : Container(
-                color: Colors.white24,
+                color: AppColors.white24,
                 child: Icon(
                   Icons.home_rounded,
-                  color: textColor ?? Colors.white,
+                  color: textColor ?? AppColors.white,
                   size: _Constants.iconSize,
                 ),
               ),
@@ -142,8 +146,8 @@ class _MarkerWidget extends StatelessWidget {
   Widget _buildPrice() {
     return Text(
       price,
-      style: TextStyle(
-        color: textColor ?? Colors.white,
+      style: AppTypography.font(
+        color: textColor ?? AppColors.white,
         fontWeight: FontWeight.w700,
         fontSize: _Constants.fontSize,
       ),

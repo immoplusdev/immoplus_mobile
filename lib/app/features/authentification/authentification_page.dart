@@ -7,7 +7,7 @@ import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/features/registration/register_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/config_env.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/gen/assets.gen.dart';
@@ -47,7 +47,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           leading: context.canPop()
               ? UnconstrainedBox(
                   child: GestureDetector(
@@ -57,7 +57,8 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                     child: Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: AppColors.blue65BAF0),
+                          shape: BoxShape.circle,
+                          color: AppColors.immoBrandAccent),
                       child: Icon(
                         Icons.arrow_back_ios_rounded,
                         color: AppColors.white,
@@ -76,10 +77,10 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: const [
-                    Color(0xFFFFFFFF),
-                    Color(0xFFFFFEFE),
-                    Color(0xFF64DCFD),
-                    Color(0xFF156CE4),
+                    AppColors.white,
+                    AppColors.authGradientWhite,
+                    AppColors.authGradientTop,
+                    AppColors.authGradientBottom,
                   ],
                   stops: const [0.0, 0.3, 0.7, 1.0],
                 ),
@@ -105,7 +106,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                     Gap(15),
                     Text("Commencez à visiter, louer, acheter, réserver",
                         // textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                           color: AppColors.white,
@@ -117,7 +118,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                         context.pushNamed(LoginPage.name,
                             extra: widget.redirectData);
                       },
-                      color: AppColors.customBlue,
+                      color: AppColors.immoBrandPrimary,
                       borderRadius: BorderRadius.circular(radiusButton),
                     ),
                     Gap(6),
@@ -138,7 +139,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                             children: [
                               TextSpan(
                                 text: "Inscrivez-vous",
-                                style: TextStyle(
+                                style: AppTypography.font(
                                   decoration: TextDecoration.underline,
                                 ),
                               )
@@ -149,7 +150,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                                 ?.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
-                                    color: Colors.black),
+                                    color: AppColors.black),
                           ),
                         ),
                       ),
@@ -168,7 +169,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   Widget _infoTile({required String label}) {
     return Text(
       label,
-      style: TextStyle(
+      style: AppTypography.font(
         color: AppColors.black,
         fontSize: 40,
         fontWeight: FontWeight.w600,

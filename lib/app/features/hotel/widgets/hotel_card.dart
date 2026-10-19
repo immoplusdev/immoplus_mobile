@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
 import 'package:immoplus/app/features/hotel/widgets/free_anulation_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
@@ -60,9 +60,9 @@ class HotelCard extends StatelessWidget {
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
                       errorWidget: (_, __, ___) =>
-                          Container(color: Colors.grey.shade200),
+                          Container(color: AppColors.immoBorderDefault),
                     )
-                  : Container(color: Colors.grey.shade200),
+                  : Container(color: AppColors.immoBorderDefault),
 
               // Float overlay panel at the bottom (mockup inspired)
               Positioned(
@@ -82,8 +82,8 @@ class HotelCard extends StatelessWidget {
                         children: [
                           Text(
                             hotel.name,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: AppTypography.font(
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -97,8 +97,8 @@ class HotelCard extends StatelessWidget {
                               FreeAnulationCard(),
                               Text(
                                 "${formatPrice(price)} F/nuit",
-                                style: TextStyle(
-                                  color: AppColors.D5D5D5,
+                                style: AppTypography.font(
+                                  color: AppColors.immoBorderStrong,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 11,
                                 ),

@@ -6,7 +6,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotels_collection.dart';
 import 'package:immoplus/app/data/repositories/hotel_repository.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
@@ -103,12 +103,12 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                 child: Container(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   child: const Icon(Icons.arrow_back,
-                      color: Colors.black, size: 20),
+                      color: AppColors.black, size: 20),
                 ),
               ),
             ),
@@ -126,8 +126,8 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                       widget.destination.isEmpty
                           ? 'Tous les hôtels'
                           : widget.destination,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: AppTypography.font(
+                        color: AppColors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
@@ -137,21 +137,21 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                     Row(
                       children: [
                         const Icon(Iconsax.calendar_1,
-                            size: 14, color: Colors.white70),
+                            size: 14, color: AppColors.white70),
                         const Gap(4),
                         Text(
                           datesText,
-                          style: const TextStyle(
-                              color: Colors.white70, fontSize: 13),
+                          style: AppTypography.font(
+                              color: AppColors.white70, fontSize: 13),
                         ),
                         const Gap(12),
                         const Icon(Iconsax.user,
-                            size: 14, color: Colors.white70),
+                            size: 14, color: AppColors.white70),
                         const Gap(4),
                         Text(
                           '${widget.adults} Ad. • ${widget.lits} Lit(s)',
-                          style: const TextStyle(
-                              color: Colors.white70, fontSize: 13),
+                          style: AppTypography.font(
+                              color: AppColors.white70, fontSize: 13),
                         ),
                       ],
                     ),
@@ -176,21 +176,21 @@ class _HotelSearchResultPageState extends State<HotelSearchResultPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Iconsax.building,
-                            size: 64, color: Colors.grey.shade300),
+                            size: 64, color: AppColors.immoBorderStrong),
                         const Gap(16),
                         Text(
                           'Aucun hôtel trouvé',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600,
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
                         const Gap(8),
                         Text(
                           'Essayez de modifier votre recherche.',
-                          style: TextStyle(
-                              color: Colors.grey.shade500, fontSize: 14),
+                          style: AppTypography.font(
+                              color: AppColors.immoTextSecondary, fontSize: 14),
                         ),
                       ],
                     ),

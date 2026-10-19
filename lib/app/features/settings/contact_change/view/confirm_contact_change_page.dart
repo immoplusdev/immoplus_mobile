@@ -3,12 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/enums/contact_change_type.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_cubit.dart';
 import 'package:immoplus/app/features/settings/contact_change/cubit/contact_change_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 
@@ -43,13 +41,13 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
     final defaultTheme = PinTheme(
       width: 52,
       height: 56,
-      textStyle: GoogleFonts.dmSans(
+      textStyle: AppTypography.h3.copyWith(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: const Color(0xFF0D0D0D),
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFFECECEC),
+        color: AppColors.immoBorderDefault,
         borderRadius: BorderRadius.circular(12),
       ),
     );
@@ -75,17 +73,17 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: AppColors.black),
             onPressed: () => context.pop(),
           ),
           title: Text(
             'Vérification',
-            style: GoogleFonts.dmSans(
+            style: AppTypography.h4.copyWith(
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF0D0D0D),
@@ -99,27 +97,26 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'Entrez le code de vérification',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.h3.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: const Color(0xFF0D0D0D),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 'Un code a été envoyé à votre $label.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
-                  fontSize: 14,
-                  color: const Color(0xFF64748B),
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.slate500,
                   height: 1.5,
                 ),
               ),
-              const SizedBox(height: 36),
+              SizedBox(height: 36),
               Pinput(
                 controller: _pinController,
                 length: 6,
@@ -127,7 +124,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                 defaultPinTheme: defaultTheme,
                 focusedPinTheme: defaultTheme.copyWith(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: AppColors.primary, width: 2),
                   ),
@@ -154,7 +151,7 @@ class _ConfirmContactChangePageState extends State<ConfirmContactChangePage> {
                   );
                 },
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
             ],
           ),
         ),

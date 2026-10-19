@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:immoplus/app/utils/utils.dart';
 
 class RetryInterceptor extends Interceptor {
   final Dio dio;
@@ -31,6 +32,12 @@ class RetryInterceptor extends Interceptor {
     final shouldRetry = isConnectionError || (isTimeout && isGetRequest);
 
     if (shouldRetry) {
+      final hasConnection = await Utils.hasInternetConnection();
+      if (!hasConnection) {
+        // Aucun réseau actif sur l'appareil : inutile d'attendre et de retenter en boucle
+        return super.onError(err, handler);
+      }
+
       // Track the retry attempts in the extra field of RequestOptions
       int retries = requestOptions.extra['retries'] ?? 0;
 

@@ -200,7 +200,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     : const Text(
                         'Start Verification',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
               ),
               const SizedBox(height: 24),
@@ -255,7 +257,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     : const Text(
                         'Start with Workflow',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
               ),
               const SizedBox(height: 24),
@@ -298,12 +302,15 @@ class _VerificationScreenState extends State<VerificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _resultRow('Type', 'completed'),
-            _resultRow('Status', session.status.name,
-                color: session.status == VerificationStatus.approved
-                    ? const Color(0xFF059669)
-                    : session.status == VerificationStatus.declined
-                        ? const Color(0xFFDC2626)
-                        : null),
+            _resultRow(
+              'Status',
+              session.status.name,
+              color: session.status == VerificationStatus.approved
+                  ? const Color(0xFF059669)
+                  : session.status == VerificationStatus.declined
+                  ? const Color(0xFFDC2626)
+                  : null,
+            ),
             _resultRow('Session', session.sessionId),
           ],
         );

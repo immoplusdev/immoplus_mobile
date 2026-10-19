@@ -9,7 +9,7 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_mo
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_loading_card.dart';
 import 'package:immoplus/app/features/visit_history/components/visit_history_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
@@ -80,9 +80,9 @@ class _VisitHistoryPageState extends State<VisitHistoryPage>
       backgroundColor: AppColors.whiteBackground,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Historiques Des Visites'),
+        title: Text('Historiques Des Visites'),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),
@@ -143,7 +143,7 @@ class _VisitHistoryPageState extends State<VisitHistoryPage>
                         "Vos demandes de visite apparaîtront ici. Explorez nos résidences et planifiez votre première visite !",
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: const Color(0xFF667085),
+                              color: AppColors.immoTextSecondary,
                               height: 1.5,
                             ),
                       ),

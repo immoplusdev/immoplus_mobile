@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Écran d'accueil du chat — Immo AI Empty State 2026.
 ///
@@ -32,7 +32,7 @@ class EmptyChatState extends StatefulWidget {
 }
 
 class _EmptyChatStateState extends State<EmptyChatState> {
-  static const Color _ink = Color(0xFF1A1A1A);
+  static const Color _ink = AppColors.gray900;
   static const Color _placeholder = Color(0xFFBBBBBB);
   static const Color _composerBorder = Color(0xFFF0F0F0);
 
@@ -118,9 +118,9 @@ class _EmptyChatStateState extends State<EmptyChatState> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const _Logo(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             _HeroTitle(text: _greeting),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             // ─── Cards de suggestions (avant le composer) ───
             AnimatedOpacity(
               opacity: _cardsVisible ? 1.0 : 0.0,
@@ -134,7 +134,7 @@ class _EmptyChatStateState extends State<EmptyChatState> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             // ─── Composer (champ texte) en bas après les suggestions ───
             _HeroComposer(
               controller: _controller,
@@ -209,13 +209,13 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
+              color: AppColors.black.withValues(alpha: 0.12),
               blurRadius: 28,
               spreadRadius: 1,
               offset: const Offset(0, 12),
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: AppColors.black.withValues(alpha: 0.06),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -231,14 +231,14 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withValues(alpha: 0.95),
+                    AppColors.white.withValues(alpha: 0.95),
                     const Color(0xFFF5F3EF).withValues(alpha: 0.85),
                     const Color(0xFFE8E4DC).withValues(alpha: 0.75),
                   ],
                   stops: const [0.0, 0.55, 1.0],
                 ),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: AppColors.white.withValues(alpha: 0.9),
                   width: 1,
                 ),
               ),
@@ -261,7 +261,7 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                             child: Container(
                               width: 56,
                               height: 56,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: LinearGradient(
                                   begin: Alignment.topCenter,
@@ -289,8 +289,8 @@ class _LogoState extends State<_Logo> with SingleTickerProviderStateMixin {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.white.withValues(alpha: 0.95),
-                              Colors.white.withValues(alpha: 0),
+                              AppColors.white.withValues(alpha: 0.95),
+                              AppColors.white.withValues(alpha: 0),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(60),
@@ -338,7 +338,7 @@ class _HeroTitleState extends State<_HeroTitle>
     TweenSequenceItem(tween: ConstantTween(0.0), weight: 56),
   ]).animate(_wave);
 
-  static const TextStyle _style = TextStyle(
+  static final TextStyle _style = AppTypography.font(
     fontSize: 28,
     fontWeight: FontWeight.w600,
     letterSpacing: -0.4,
@@ -377,7 +377,7 @@ class _HeroTitleState extends State<_HeroTitle>
           ),
         ),
         if (emoji.isNotEmpty) ...[
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           AnimatedBuilder(
             animation: _angle,
             builder: (context, child) => Transform.rotate(
@@ -418,7 +418,7 @@ class _HeroComposer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hintStyle = TextStyle(
+    final hintStyle = AppTypography.font(
       fontSize: 14,
       fontWeight: FontWeight.w400,
       color: placeholder,
@@ -429,14 +429,14 @@ class _HeroComposer extends StatelessWidget {
       height: 54,
       padding: const EdgeInsets.fromLTRB(20, 0, 8, 0),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: borderColor, width: 0.8),
       ),
       child: Row(
         children: [
           Icon(Iconsax.message_edit, size: 18, color: placeholder),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Stack(
               alignment: Alignment.centerLeft,
@@ -464,17 +464,17 @@ class _HeroComposer extends StatelessWidget {
                   cursorWidth: 1.6,
                   textInputAction: TextInputAction.send,
                   onSubmitted: onSubmit,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: ink,
                     height: 1.3,
                   ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     isDense: true,
                     isCollapsed: true,
                     filled: true,
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.transparent,
                     contentPadding: EdgeInsets.symmetric(vertical: 18),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -484,7 +484,7 @@ class _HeroComposer extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           ListenableBuilder(
             listenable: controller,
             builder: (_, __) => _SendButton(
@@ -539,7 +539,7 @@ class _SendButtonState extends State<_SendButton> {
             child: const Icon(
               Iconsax.arrow_up_3,
               size: 18,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ),
@@ -569,7 +569,7 @@ class _SuggestionsGrid extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: cards.length,
-        separatorBuilder: (_, __) => const SizedBox(width: gap),
+        separatorBuilder: (_, __) => SizedBox(width: gap),
         itemBuilder: (context, i) {
           final c = cards[i];
           return SizedBox(
@@ -591,13 +591,13 @@ class _SuggestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Ink(
           decoration: BoxDecoration(
-            color: Colors.transparent,
+            color: AppColors.transparent,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: AppColors.primary.withValues(alpha: 0.25),
@@ -615,7 +615,7 @@ class _SuggestionCard extends StatelessWidget {
                   card.label,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: _EmptyChatStateState._ink,

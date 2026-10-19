@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_request.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_response.dart';
@@ -32,7 +32,7 @@ class AlertRepository {
       log('DioError (getAlerts): ${dioError.message}');
       throw Exception('Failed to load alerts: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to load alerts: $e');
     } catch (error, s) {
       log('Error: $error $s');
@@ -48,7 +48,7 @@ class AlertRepository {
       log('DioError (getAlertById): ${dioError.message}');
       throw Exception('Failed to load alert detail: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to load alert detail: $e');
     } catch (error) {
       log('Error: $error');
@@ -64,7 +64,7 @@ class AlertRepository {
       log('DioError (createAlert): ${dioError.message}');
       throw Exception('Failed to create alert: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to create alert: $e');
     } catch (error, s) {
       log('Error: $error $s');
@@ -80,7 +80,7 @@ class AlertRepository {
       log('DioError (updateAlert): ${dioError.message}');
       throw Exception('Failed to update alert: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to update alert: $e');
     } catch (error) {
       log('Error: $error');
@@ -96,7 +96,7 @@ class AlertRepository {
       log('DioError (deleteAlert): ${dioError.message}');
       throw Exception('Failed to delete alert: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to delete alert: $e');
     } catch (error) {
       log('Error: $error');
@@ -112,7 +112,7 @@ class AlertRepository {
       log('DioError (markAsViewed): ${dioError.message}');
       throw Exception('Failed to mark alert as viewed: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to mark alert as viewed: $e');
     } catch (error) {
       log('Error: $error');
@@ -145,7 +145,7 @@ class AlertRepository {
       log('DioError (getAlertMatches): ${dioError.message}');
       throw Exception('Failed to load alert matches: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      EasyLoading.showError(e.toString());
+      AppFeedback.showError(e.toString());
       throw Exception('Failed to load alert matches: $e');
     } catch (error) {
       log('Error: $error');

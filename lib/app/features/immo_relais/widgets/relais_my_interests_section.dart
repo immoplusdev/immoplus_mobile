@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/relais_interest_status.dart';
@@ -11,7 +10,7 @@ import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_detail_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_status_section.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Ordre d'affichage — en attente/en cours d'abord (ça bouge encore),
 /// décliné/terminé en dernier.
@@ -32,7 +31,8 @@ class RelaisMyInterestsSection extends StatefulWidget {
   const RelaisMyInterestsSection({super.key});
 
   @override
-  State<RelaisMyInterestsSection> createState() => _RelaisMyInterestsSectionState();
+  State<RelaisMyInterestsSection> createState() =>
+      _RelaisMyInterestsSectionState();
 }
 
 class _RelaisMyInterestsSectionState extends State<RelaisMyInterestsSection>
@@ -75,7 +75,7 @@ class _RelaisMyInterestsSectionState extends State<RelaisMyInterestsSection>
           child: Text(
             "Vous n'avez encore exprimé aucun intérêt.\nParcourez \"Autour de moi\" pour découvrir des logements.",
             textAlign: TextAlign.center,
-            style: GoogleFonts.dmSans(color: Colors.grey.shade500),
+            style: AppTypography.font(color: AppColors.immoTextSecondary),
           ),
         ),
       );
@@ -133,7 +133,7 @@ class _MyInterestCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.primary, width: .2),
         ),
@@ -141,8 +141,11 @@ class _MyInterestCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              relais != null ? relaisPropertyTypeLabel(relais.propertyType) : 'Logement',
-              style: GoogleFonts.dmSans(fontSize: 14, fontWeight: FontWeight.bold),
+              relais != null
+                  ? relaisPropertyTypeLabel(relais.propertyType)
+                  : 'Logement',
+              style:
+                  AppTypography.font(fontSize: 14, fontWeight: FontWeight.bold),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -150,7 +153,8 @@ class _MyInterestCard extends StatelessWidget {
               const Gap(2),
               Text(
                 relais.location,
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade600),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -159,7 +163,8 @@ class _MyInterestCard extends StatelessWidget {
               const Gap(8),
               Text(
                 interest.message!,
-                style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade700),
+                style: AppTypography.font(
+                    fontSize: 13, color: AppColors.immoTextLabel),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -168,7 +173,10 @@ class _MyInterestCard extends StatelessWidget {
               const Gap(8),
               Text(
                 'Visite le ${DateFormat('d MMM à HH:mm', 'fr_FR').format(interest.meetingDate!)}',
-                style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+                style: AppTypography.font(
+                    fontSize: 12,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600),
               ),
             ],
             if (_canContact && relais != null) ...[
@@ -187,9 +195,12 @@ class _MyInterestCard extends StatelessWidget {
                     foregroundColor: AppColors.primary,
                     side: BorderSide(color: AppColors.primary),
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                   ),
-                  child: Text('Contacter', style: GoogleFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w600)),
+                  child: Text('Contacter',
+                      style: AppTypography.font(
+                          fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],

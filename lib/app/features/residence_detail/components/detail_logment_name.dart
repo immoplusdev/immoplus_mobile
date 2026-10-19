@@ -3,7 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class DetailLogmentName extends StatelessWidget {
   const DetailLogmentName({super.key, required this.residenceModel});
@@ -26,7 +26,7 @@ class DetailLogmentName extends StatelessWidget {
               ),
               child: Text(
                 residenceModel.typeResidence,
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: AppColors.primary,
@@ -35,21 +35,21 @@ class DetailLogmentName extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // ── Name ──
             Text(
               residenceModel.nom.capitalizeWords(),
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF222222),
+                color: AppColors.immoTextPrimary,
                 // letterSpacing: -0.5,
                 // height: 1.2,
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             // ── Rating + Location row ──
             Row(
@@ -57,24 +57,24 @@ class DetailLogmentName extends StatelessWidget {
                 // Score
                 if (residenceModel.score != null) ...[
                   Icon(Iconsax.star1, size: 16, color: AppColors.primary),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     residenceModel.score!.toStringAsFixed(1),
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF222222),
+                      color: AppColors.immoTextPrimary,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     '•',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 14,
-                      color: Colors.grey.shade400,
+                      color: AppColors.immoTextDisabled,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                 ],
                 // Location
                 Flexible(
@@ -84,16 +84,16 @@ class DetailLogmentName extends StatelessWidget {
                       Icon(
                         Iconsax.location,
                         size: 14,
-                        color: Colors.grey.shade500,
+                        color: AppColors.immoTextSecondary,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Flexible(
                         child: Text(
                           _buildLocation(),
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Colors.grey.shade600,
+                            color: AppColors.immoTextSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

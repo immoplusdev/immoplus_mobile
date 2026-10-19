@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 const _backIconSize = 31.0;
 
@@ -19,14 +19,14 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE9E9E9),
+      backgroundColor: AppColors.immoBorderDefault,
       body: Column(
         children: [
           Gap(100),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(50),
                 ),
@@ -44,7 +44,7 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
                             height: _backIconSize,
                             padding: EdgeInsets.only(left: 5),
                             decoration: BoxDecoration(
-                                color: AppColors.blue65BAF0,
+                                color: AppColors.immoBrandAccent,
                                 shape: BoxShape.circle),
                             child: Center(
                               child: Icon(
@@ -59,7 +59,7 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
                             child: Text(
                           widget.title,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),

@@ -28,7 +28,8 @@ String formatLastMessageRelative(DateTime? date) {
 /// l'appelant ; ceci ne formate que le "vu à/hier/le ...".
 String formatLastSeen(DateTime lastSeenAt) {
   final now = DateTime.now();
-  final time = '${_twoDigits(lastSeenAt.hour)}:${_twoDigits(lastSeenAt.minute)}';
+  final time =
+      '${_twoDigits(lastSeenAt.hour)}:${_twoDigits(lastSeenAt.minute)}';
   if (_isSameDay(lastSeenAt, now)) {
     return 'Vu à $time';
   }

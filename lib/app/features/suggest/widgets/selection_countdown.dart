@@ -39,7 +39,8 @@ class _SelectionCountdownState extends State<SelectionCountdown> {
     // (« setState called during build »). On fixe juste la valeur ici, et on
     // reporte la notification après la frame en cours si déjà expiré.
     _computeRemaining(duringBuildPhase: true);
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _computeRemaining());
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (_) => _computeRemaining());
   }
 
   void _computeRemaining({bool duringBuildPhase = false}) {

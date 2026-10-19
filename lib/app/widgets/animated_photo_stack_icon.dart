@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -118,7 +119,7 @@ class _AnimatedPhotoStackIconState extends State<AnimatedPhotoStackIcon> {
               borderRadius: BorderRadius.circular(6 * (imageSize / 18)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.18),
+                  color: AppColors.black.withValues(alpha: 0.18),
                   blurRadius: 3,
                   offset: const Offset(0, 1.5),
                 ),

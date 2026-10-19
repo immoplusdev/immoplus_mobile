@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class DetailDivider extends StatelessWidget {
@@ -9,7 +10,7 @@ class DetailDivider extends StatelessWidget {
       child: Divider(
         endIndent: 10,
         indent: 10,
-        color: Colors.grey,
+        color: AppColors.immoTextSecondary,
       ),
     );
   }

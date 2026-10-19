@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
@@ -25,8 +26,8 @@ class PendingReverseSearchBanner extends StatelessWidget {
     this.onExpired,
   });
 
-  static const _amber = Color(0xFFB54708);
-  static const _amberBg = Color(0xFFFFFAEB);
+  static const _amber = AppColors.amber800;
+  static const _amberBg = AppColors.orange50;
   static const _amberBorder = Color(0xFFFEC84B);
 
   @override
@@ -39,21 +40,21 @@ class PendingReverseSearchBanner extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(bottom: BorderSide(color: _amberBorder, width: 1)),
           ),
           child: Row(
             children: [
               const Icon(Iconsax.wallet_2, color: _amber, size: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       'Résidence sélectionnée · en attente de paiement',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: _amber,
@@ -69,13 +70,14 @@ class PendingReverseSearchBanner extends StatelessWidget {
                           expired
                               ? 'Expiré'
                               : 'Expire dans ${formatCountdown(remaining)} · touchez pour payer',
-                          style: const TextStyle(fontSize: 11, color: _amber),
+                          style:
+                              AppTypography.font(fontSize: 11, color: _amber),
                         ),
                       ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               TextButton(
                 onPressed: onCancel,
                 style: TextButton.styleFrom(
@@ -85,9 +87,10 @@ class PendingReverseSearchBanner extends StatelessWidget {
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text(
+                child: Text(
                   'Annuler',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+                  style: AppTypography.font(
+                      fontWeight: FontWeight.w700, fontSize: 12),
                 ),
               ),
             ],

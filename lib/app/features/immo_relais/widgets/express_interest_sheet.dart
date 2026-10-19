@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_interest_requests.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 
 /// Bottom sheet "exprimer un intérêt" (`POST /relais/:id/interests`) —
@@ -19,7 +18,7 @@ Future<void> showExpressRelaisInterestSheet(
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.white,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
     builder: (sheetContext) => Padding(
@@ -35,12 +34,14 @@ Future<void> showExpressRelaisInterestSheet(
         children: [
           Text(
             'Exprimer votre intérêt',
-            style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const Gap(4),
           Text(
             "L'occupant sera notifié et pourra vous proposer une visite.",
-            style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade600),
+            style: AppTypography.font(
+                fontSize: 13, color: AppColors.immoTextSecondary),
           ),
           const Gap(16),
           TextField(
@@ -49,10 +50,11 @@ Future<void> showExpressRelaisInterestSheet(
             maxLength: 2000,
             decoration: InputDecoration(
               hintText: 'Un message pour l\'occupant (optionnel)',
-              hintStyle: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade400),
+              hintStyle: AppTypography.font(
+                  fontSize: 13, color: AppColors.immoTextDisabled),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(color: AppColors.immoBorderStrong),
               ),
             ),
           ),
@@ -62,17 +64,20 @@ Future<void> showExpressRelaisInterestSheet(
             child: ElevatedButton(
               onPressed: () async {
                 Navigator.of(sheetContext).pop();
-                await _expressInterest(context, relaisId, messageController.text.trim(), onSuccess);
+                await _expressInterest(context, relaisId,
+                    messageController.text.trim(), onSuccess);
               },
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
               ),
               child: Text(
                 'Envoyer',
-                style: GoogleFonts.dmSans(color: Colors.white, fontWeight: FontWeight.bold),
+                style: AppTypography.font(
+                    color: AppColors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),

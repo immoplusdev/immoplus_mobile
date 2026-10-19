@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 // part of homePage;
 
 // class HomeCarousel extends StatelessWidget {
@@ -34,14 +35,14 @@
 //               : CarouselSlider(
 //                   items: [
 //                     Shimmer.fromColors(
-//                       baseColor: (Colors.grey[300])!,
-//                       highlightColor: Colors.white,
+//                       baseColor: (AppColors.immoBorderStrong)!,
+//                       highlightColor: AppColors.white,
 //                       period: Duration(milliseconds: 600),
 //                       child: Container(
 //                         height: 180,
 //                         margin: const EdgeInsets.only(top: 10, bottom: 10),
 //                         decoration: BoxDecoration(
-//                           color: Colors.red,
+//                           color: AppColors.red,
 //                           borderRadius: BorderRadius.circular(10),
 //                         ),
 //                       ),
@@ -78,7 +79,7 @@
 //           width: double.infinity,
 //           height: 250,
 //           decoration: BoxDecoration(
-//             color: Colors.white,
+//             color: AppColors.white,
 //             borderRadius: BorderRadius.circular(10),
 //             image: DecorationImage(
 //                 image: AssetImage(
@@ -87,7 +88,7 @@
 //                 fit: BoxFit.fill),
 //             boxShadow: [
 //               BoxShadow(
-//                 color: Colors.grey.withOpacity(0.5),
+//                 color: AppColors.immoTextSecondary.withOpacity(0.5),
 //                 spreadRadius: 3,
 //                 blurRadius: 7,
 //                 offset: Offset(0, 0), // changes position of shadow

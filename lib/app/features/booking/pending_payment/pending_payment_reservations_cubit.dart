@@ -4,7 +4,7 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/logic/request_state.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:injectable/injectable.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 @injectable
 class PendingPaymentReservationsCubit extends Cubit<RequestState> {

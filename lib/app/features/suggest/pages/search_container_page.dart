@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/enums/home_tab.dart';
@@ -73,7 +73,7 @@ class _SearchContainerPageState extends State<SearchContainerPage>
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: TabBarView(
           controller: _tabController,
@@ -103,7 +103,7 @@ class _SearchContainerPageState extends State<SearchContainerPage>
       child: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: AppColors.immoBorderDefault,
           borderRadius: BorderRadius.circular(25),
         ),
         child: TabBar(
@@ -112,23 +112,17 @@ class _SearchContainerPageState extends State<SearchContainerPage>
           isScrollable: false,
           indicatorSize: TabBarIndicatorSize.tab,
           indicator: BoxDecoration(
-            color: const Color(0xFF2548E5),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(25),
           ),
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.grey[500],
+          labelColor: AppColors.white,
+          unselectedLabelColor: AppColors.immoTextSecondary,
           // Rule 5: identical fontWeight in both states prevents micro-shift
           // on toggle — the active state is distinguished solely by the
           // indicator pill background, not by text width changes.
-          labelStyle: GoogleFonts.dmSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          unselectedLabelStyle: GoogleFonts.dmSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          dividerColor: Colors.transparent,
+          labelStyle: AppTypography.bodyMediumMedium,
+          unselectedLabelStyle: AppTypography.bodyMediumMedium,
+          dividerColor: AppColors.transparent,
           labelPadding: EdgeInsets.zero, // Rule 3: no extra padding asymmetry
           tabs: const [
             Tab(text: 'On cherche pour toi'),

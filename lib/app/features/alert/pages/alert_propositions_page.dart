@@ -3,14 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/alert/alert_match_model.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
 import 'package:immoplus/app/features/alert/widgets/proposition_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class AlertPropositionsPage extends StatefulWidget {
   final String alertId;
@@ -73,32 +72,33 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
         backgroundColor: AppColors.whiteBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Mes propositions',
-          style: GoogleFonts.dmSans(
-            fontSize: 20,
+          style: AppTypography.h3.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
         centerTitle: true,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _propositions.isEmpty
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.search_off_outlined,
-                          size: 80, color: Colors.grey[200]),
+                          size: 80, color: AppColors.immoBorderDefault),
                       const Gap(16),
                       Text(
                         'Aucune proposition pour le moment',
-                        style: GoogleFonts.dmSans(color: Colors.grey),
+                        style: AppTypography.bodyMedium
+                            .copyWith(color: AppColors.immoTextSecondary),
                       ),
                     ],
                   ),

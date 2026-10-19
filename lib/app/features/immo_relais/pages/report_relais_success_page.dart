@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 /// Écran 4/4 du flux B : confirmation, puis retour à l'accueil.
@@ -13,7 +12,7 @@ class ReportRelaisSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -26,23 +25,24 @@ class ReportRelaisSuccessPage extends StatelessWidget {
               Text(
                 'Votre demande est en ligne',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.black,
                   height: 1.2,
                 ),
               ),
               const Gap(12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: AppColors.primaryLite,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   'Publication active',
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -53,9 +53,9 @@ class ReportRelaisSuccessPage extends StatelessWidget {
               Text(
                 'Nous vous proposerons des biens correspondant à vos critères dans les plus brefs délais.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 14,
-                  color: Colors.grey.shade500,
+                  color: AppColors.immoTextSecondary,
                   height: 1.5,
                 ),
               ),
@@ -81,14 +81,14 @@ class ReportRelaisSuccessPage extends StatelessWidget {
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: Colors.green.shade100.withValues(alpha: 0.5),
+            color: AppColors.green50.withValues(alpha: 0.5),
             shape: BoxShape.circle,
           ),
         ),
         Icon(
           Icons.verified,
           size: 140,
-          color: Colors.green.shade400,
+          color: AppColors.green500,
         ),
       ],
     );

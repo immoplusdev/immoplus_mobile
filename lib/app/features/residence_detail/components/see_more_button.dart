@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class SeeMoreButton extends StatelessWidget {
   const SeeMoreButton({super.key, required this.text});
@@ -19,16 +19,16 @@ class SeeMoreButton extends StatelessWidget {
               isScrollControlled: true,
               useSafeArea: true,
               showDragHandle: true,
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               builder: (BuildContext context) {
                 return Container(
                   padding: EdgeInsets.only(top: 10),
                   height: MediaQuery.of(context).size.height * 0.8,
-                  color: Colors.transparent,
+                  color: AppColors.transparent,
                   child: Scaffold(
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: AppColors.transparent,
                     appBar: AppBar(
                       automaticallyImplyLeading: false,
                       title: Text('À propos du logement'),

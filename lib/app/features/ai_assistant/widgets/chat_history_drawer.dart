@@ -1,6 +1,8 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/main.dart';
 
 import '../models/conversation_summary.dart';
 import '../services/chat_history_service.dart';
@@ -46,7 +48,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
     try {
       final list = await widget.service.getConversations(limit: 50);
       if (mounted) setState(() => _conversations = list);
-    } catch (_) {
+    } catch (e, st) {
+      talker.error('Failed to load chat history: $e', e, st);
       if (mounted)
         setState(() => _error = 'Impossible de charger l\'historique');
     } finally {
@@ -62,7 +65,9 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
       if (sessionId == widget.currentSessionId) {
         widget.onNewConversation();
       }
-    } catch (_) {}
+    } catch (e, st) {
+      talker.error('Failed to delete chat session: $e', e, st);
+    }
   }
 
   Future<void> _deleteAll() async {
@@ -70,28 +75,28 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
+        title: Text(
           'Supprimer tout ?',
-          style: TextStyle(
+          style: AppTypography.font(
             fontSize: 17,
             fontWeight: FontWeight.w600,
             color: ChatTokens.neutral900,
           ),
         ),
-        content: const Text(
+        content: Text(
           'Toutes tes conversations seront supprimées définitivement.',
-          style: TextStyle(fontSize: 14, color: ChatTokens.neutral400),
+          style: AppTypography.font(fontSize: 14, color: ChatTokens.neutral400),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler',
-                style: TextStyle(color: ChatTokens.neutral400)),
+            child: Text('Annuler',
+                style: AppTypography.font(color: ChatTokens.neutral400)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Supprimer',
-                style: TextStyle(color: ChatTokens.danger500)),
+            child: Text('Supprimer',
+                style: AppTypography.font(color: ChatTokens.danger500)),
           ),
         ],
       ),
@@ -145,7 +150,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (showHeader)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(
                   ChatTokens.s16,
                   ChatTokens.s4,
@@ -154,7 +159,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
                 ),
                 child: Text(
                   'Récents',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: ChatTokens.neutral900,
@@ -172,7 +177,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
 
   Widget _buildBody() {
     if (_loading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
           strokeWidth: 2,
           color: ChatTokens.brand500,
@@ -187,15 +192,15 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
           children: [
             const Icon(Iconsax.warning_2,
                 color: ChatTokens.neutral400, size: 32),
-            const SizedBox(height: ChatTokens.s8),
+            SizedBox(height: ChatTokens.s8),
             Text(_error!,
-                style: const TextStyle(
+                style: AppTypography.font(
                     fontSize: 14, color: ChatTokens.neutral400)),
-            const SizedBox(height: ChatTokens.s16),
+            SizedBox(height: ChatTokens.s16),
             TextButton(
               onPressed: _load,
-              child: const Text('Réessayer',
-                  style: TextStyle(color: ChatTokens.brand500)),
+              child: Text('Réessayer',
+                  style: AppTypography.font(color: ChatTokens.brand500)),
             ),
           ],
         ),
@@ -203,7 +208,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
     }
 
     if (_conversations.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -211,7 +216,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
             SizedBox(height: ChatTokens.s12),
             Text(
               'Aucune conversation',
-              style: TextStyle(
+              style: AppTypography.font(
                   fontSize: 15,
                   color: ChatTokens.neutral400,
                   fontWeight: FontWeight.w500),
@@ -220,7 +225,8 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
             Text(
               'Tes échanges avec Immo AI\napparaîtront ici.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: ChatTokens.neutral400),
+              style: AppTypography.font(
+                  fontSize: 13, color: ChatTokens.neutral400),
             ),
           ],
         ),
@@ -267,7 +273,7 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
             vertical: ChatTokens.s4,
           ),
           child: _deleting
-              ? const Padding(
+              ? Padding(
                   padding: EdgeInsets.all(ChatTokens.s12),
                   child: CircularProgressIndicator(
                       strokeWidth: 2, color: ChatTokens.danger500),
@@ -276,9 +282,9 @@ class _ChatHistoryDrawerState extends State<ChatHistoryDrawer> {
                   onPressed: _deleteAll,
                   icon: const Icon(Iconsax.trash,
                       size: 16, color: ChatTokens.danger500),
-                  label: const Text(
+                  label: Text(
                     'Tout supprimer',
-                    style: TextStyle(
+                    style: AppTypography.font(
                         color: ChatTokens.danger500,
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
@@ -307,7 +313,7 @@ class _GroupHeader extends StatelessWidget {
       ),
       child: Text(
         label.toUpperCase(),
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 11,
           fontWeight: FontWeight.w700,
           color: ChatTokens.neutral400,
@@ -351,7 +357,7 @@ class _ConversationTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               horizontal: ChatTokens.s12, vertical: ChatTokens.s10),
           decoration: BoxDecoration(
-            color: isActive ? ChatTokens.brandSurface : Colors.transparent,
+            color: isActive ? ChatTokens.brandSurface : AppColors.transparent,
             borderRadius: BorderRadius.circular(ChatTokens.s12),
             border: isActive
                 ? Border.all(color: ChatTokens.brandBorder15, width: 1)
@@ -367,7 +373,7 @@ class _ConversationTile extends StatelessWidget {
                       conversation.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
                         fontWeight:
                             isActive ? FontWeight.w600 : FontWeight.w400,
@@ -375,17 +381,17 @@ class _ConversationTile extends StatelessWidget {
                         letterSpacing: -0.1,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       _formatDate(conversation.lastMessageAt),
-                      style: const TextStyle(
+                      style: AppTypography.font(
                           fontSize: 12, color: ChatTokens.neutral400),
                     ),
                   ],
                 ),
               ),
               if (isActive)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: ChatTokens.s8),
                   child: Icon(Iconsax.message_text,
                       size: 14, color: ChatTokens.brand500),

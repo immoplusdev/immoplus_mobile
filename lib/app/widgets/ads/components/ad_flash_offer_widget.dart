@@ -1,7 +1,6 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/features/suggest/widgets/selection_countdown.dart';
 import 'package:immoplus/app/widgets/ads/components/ad_tap.dart';
@@ -54,20 +53,20 @@ class AdFlashOfferWidget extends StatelessWidget {
               if (badge?.isNotEmpty == true)
                 Text(
                   badge!,
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: AppColors.white.withValues(alpha: 0.9),
                   ),
                 ),
               if (title?.isNotEmpty == true) ...[
                 const Gap(4),
                 Text(
                   title!,
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.white,
                     height: 1.15,
                   ),
                   maxLines: 1,
@@ -119,15 +118,15 @@ class _CountdownPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: AppColors.black,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         '${value.toString().padLeft(2, '0')}$suffix',
-        style: GoogleFonts.dmSans(
+        style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
     );

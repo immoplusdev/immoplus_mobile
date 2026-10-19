@@ -1,6 +1,6 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/data/models/remote/ads/ad_campaign_model.dart';
 import 'package:immoplus/app/utils/ad_action_handler.dart';
@@ -33,7 +33,8 @@ class AdCarouselWidget extends StatelessWidget {
       // (campagne multi-résidences, ex: `OPEN_RESIDENCE` avec 3 ids) que
       // `AdTap`/`handleAdAction` seul ne sait pas lire.
       behavior: HitTestBehavior.opaque,
-      onTap: () => AdActionHandler.handleCardAction(context, campaign, cardIndex: 0),
+      onTap: () =>
+          AdActionHandler.handleCardAction(context, campaign, cardIndex: 0),
       onLongPress: () => AdActionHandler.handleCardAction(
         context,
         campaign,
@@ -44,47 +45,50 @@ class AdCarouselWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey.shade100, width: 0.5),
+          border: Border.all(color: AppColors.immoBgSurfaceMuted, width: 0.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             _PhotoFan(images: images, showWatchVideos: hasVideos),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             if (campaign.content.title?.isNotEmpty == true)
               Text(
                 campaign.content.title!,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1A1A2E),
+                  color: AppColors.navy900,
                 ),
               ),
             if (campaign.content.subtitle?.isNotEmpty == true) ...[
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 campaign.content.subtitle!,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+                style: AppTypography.font(
+                    fontSize: 12, color: AppColors.immoTextSecondary),
               ),
             ],
-            if ((campaign.location?.isNotEmpty ?? false) || (badge?.isNotEmpty ?? false)) ...[
-              const SizedBox(height: 10),
+            if ((campaign.location?.isNotEmpty ?? false) ||
+                (badge?.isNotEmpty ?? false)) ...[
+              SizedBox(height: 10),
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 8,
                 runSpacing: 8,
                 children: [
                   if (campaign.location?.isNotEmpty ?? false)
-                    _MetaPill(icon: Iconsax.location, label: campaign.location!),
+                    _MetaPill(
+                        icon: Iconsax.location, label: campaign.location!),
                   if (badge?.isNotEmpty ?? false)
                     _MetaPill(icon: Iconsax.tag, label: badge!),
                 ],
@@ -108,20 +112,20 @@ class _MetaPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: Colors.grey.shade600),
-          const SizedBox(width: 5),
+          Icon(icon, size: 13, color: AppColors.immoTextSecondary),
+          SizedBox(width: 5),
           Text(
             label,
-            style: GoogleFonts.dmSans(
+            style: AppTypography.font(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade700,
+              color: AppColors.immoTextLabel,
             ),
           ),
         ],
@@ -189,7 +193,7 @@ class _PhotoFan extends StatelessWidget {
               ),
             ),
             if (showWatchVideos)
-              const Positioned(bottom: 0, child: _WatchVideosPill()),
+              Positioned(bottom: 0, child: _WatchVideosPill()),
           ],
         ),
       ),
@@ -213,11 +217,11 @@ class _PhotoFan extends StatelessWidget {
         height: height,
         padding: const EdgeInsets.all(_borderWidth),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(_radius),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.black.withValues(alpha: 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -231,13 +235,14 @@ class _PhotoFan extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             placeholder: (_, __) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(color: Colors.white),
+              baseColor: AppColors.immoBorderStrong!,
+              highlightColor: AppColors.immoBgSurfaceMuted!,
+              child: Container(color: AppColors.white),
             ),
             errorWidget: (_, __, ___) => Container(
-              color: Colors.grey[200],
-              child: const Icon(Icons.broken_image, color: Colors.grey),
+              color: AppColors.immoBorderDefault,
+              child:
+                  Icon(Icons.broken_image, color: AppColors.immoTextSecondary),
             ),
           ),
         ),
@@ -254,17 +259,20 @@ class _WatchVideosPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
+        color: AppColors.black.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Iconsax.video_play, size: 14, color: Colors.white),
-          const SizedBox(width: 6),
+          Icon(Iconsax.video_play, size: 14, color: AppColors.white),
+          SizedBox(width: 6),
           Text(
             'Voir les vidéos',
-            style: GoogleFonts.dmSans(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.white),
+            style: AppTypography.font(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: AppColors.white),
           ),
         ],
       ),

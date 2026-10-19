@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_authenticate_body.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
 import 'package:immoplus/app/data/models/remote/payment/payments_model_collection.dart';
 import 'package:immoplus/app/data/providers/payment_provider.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import '../models/remote/payment/payment_itent_model.dart';
 
@@ -16,7 +16,6 @@ class PaymentRepository {
 
   Future<PaymentItentModel> intent({required PaymentIntentBody body}) async {
     try {
-
       final response = await PaymentProvider(dioClient).intentPayment(body);
       inspect(response);
       return response;
@@ -25,7 +24,7 @@ class PaymentRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -46,7 +45,7 @@ class PaymentRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
@@ -66,7 +65,7 @@ class PaymentRepository {
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
     } on RequestResponseExeption catch (requestResponseExeption) {
-      EasyLoading.showError(requestResponseExeption.toString());
+      AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {

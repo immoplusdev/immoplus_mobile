@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/local/fovorite_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_chip.dart';
 import 'package:shimmer/shimmer.dart';
 
 // White Luxury — cartes claires, pas de fond noir
-const Color _kSurface = Color(0xFFF9FAFB);
-const Color _kGold = Color(0xFF2744de);
-const Color _kTextPrimary = Color(0xFF0A1128);
-const Color _kTextSecondary = Color(0xFF6B7280);
-const Color _kSeparator = Color(0xFFE5E7EB);
-const Color _kTagBg = Color(0x26C9A84C); // rgba(201, 168, 76, 0.15)
+final Color _kSurface = AppColors.immoBgSurfaceMuted;
+final Color _kGold = AppColors.immoBrandPrimary;
+final Color _kTextPrimary = AppColors.immoTextPrimary;
+final Color _kTextSecondary = AppColors.immoTextSecondary;
+final Color _kSeparator = AppColors.immoBorderDefault;
+final Color _kTagBg = AppColors.alphaViolet10;
 
 class FavoriteCard extends StatefulWidget {
   final bool isSelect;
@@ -50,13 +49,13 @@ class _FavoriteCardState extends State<FavoriteCard> {
         height: 160,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border:
               Border.all(color: AppColors.primary.withOpacity(0.05), width: 1),
           // boxShadow: [
           //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.06),
+          //     color: AppColors.black.withOpacity(0.06),
           //     blurRadius: 24,
           //     offset: const Offset(0, 4),
           //     spreadRadius: 0,
@@ -67,7 +66,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildImageSection(),
-            const SizedBox(width: 14),
+            SizedBox(width: 14),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -76,9 +75,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
                   AutoSizeText(
                     widget.favotiteModel.name?.capitalizeWords() ?? '',
                     maxLines: 3,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.h4.copyWith(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
                       color: _kTextPrimary,
                       height: 1.25,
                     ),
@@ -99,9 +97,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
                           widget.favotiteModel.adress ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.dmSans(
+                          style: AppTypography.bodySmall.copyWith(
                             fontSize: 13,
-                            fontWeight: FontWeight.w400,
                             color: _kTextSecondary,
                           ),
                         ),
@@ -168,8 +165,8 @@ class _FavoriteCardState extends State<FavoriteCard> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.2),
+                      AppColors.transparent,
+                      AppColors.black.withOpacity(0.2),
                     ],
                   ),
                 ),
@@ -181,7 +178,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
               child: CustomChip(
                 label: widget.favotiteModel.type!,
                 labelStyle: Theme.of(context).textTheme.labelMedium,
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.white,
               ),
             ),
           ],
@@ -195,16 +192,16 @@ class _FavoriteCardState extends State<FavoriteCard> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         // border: Border.all(color: _kGold, width: 1),
       ),
       child: Text(
         label,
-        style: GoogleFonts.dmSans(
+        style: AppTypography.microBold.copyWith(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: Colors.black,
+          color: AppColors.black,
         ),
       ),
     );
@@ -217,15 +214,13 @@ class _FavoriteCardState extends State<FavoriteCard> {
       children: [
         Icon(
           FontAwesomeIcons.solidStar.data,
-          color: Colors.orange,
+          color: AppColors.orange,
           size: 14,
         ),
         const Gap(4),
         Text(
           score?.toStringAsFixed(1) ?? '0.0',
-          style: GoogleFonts.dmSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          style: AppTypography.bodyMediumSemiBold.copyWith(
             color: _kTextSecondary,
           ),
         ),

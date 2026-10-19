@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:gap/gap.dart';
@@ -8,10 +9,10 @@ class HotelDetailShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.immoBorderStrong,
+        highlightColor: AppColors.immoBgSurfaceMuted,
         period: const Duration(milliseconds: 1000),
         child: SingleChildScrollView(
           child: Column(
@@ -21,15 +22,15 @@ class HotelDetailShimmer extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 300,
-                color: Colors.white,
+                color: AppColors.white,
               ),
               Transform.translate(
                 offset: const Offset(0, -20),
                 child: Container(
                   width: double.infinity,
                   height: 200,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
                   ),
@@ -41,19 +42,19 @@ class HotelDetailShimmer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(height: 20, width: 120, color: Colors.white),
+                    Container(height: 20, width: 120, color: AppColors.white),
                     const Gap(12),
                     Container(
                         height: 14,
                         width: double.infinity,
-                        color: Colors.white),
+                        color: AppColors.white),
                     const Gap(8),
                     Container(
                         height: 14,
                         width: double.infinity,
-                        color: Colors.white),
+                        color: AppColors.white),
                     const Gap(8),
-                    Container(height: 14, width: 200, color: Colors.white),
+                    Container(height: 14, width: 200, color: AppColors.white),
                   ],
                 ),
               ),

@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
@@ -15,7 +15,6 @@ import 'package:immoplus/app/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
 import 'package:immoplus/app/features/payment_module/stripe_result_route.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 
 class OperatorsSelectorPage extends StatefulWidget {
@@ -87,9 +86,9 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
         slivers: [
           SliverAppBar(
             backgroundColor: AppColors.scafold,
-            title: const Text('Moyen de paiement'),
+            title: Text('Moyen de paiement'),
             titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-            leading: BackButton(color: Colors.black),
+            leading: BackButton(color: AppColors.black),
             actions: const [],
           ),
           SliverToBoxAdapter(
@@ -99,7 +98,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                tileColor: Colors.white,
+                tileColor: AppColors.white,
                 title: Text(
                   '${widget.paymentPageAdapter.amount} FCFA',
                   style: Theme.of(context)
@@ -107,10 +106,10 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       .titleLarge!
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
-                subtitle: const Text('Montant à payer'),
+                subtitle: Text('Montant à payer'),
                 trailing: Icon(
                   FontAwesomeIcons.moneyBill.data,
-                  color: Colors.green,
+                  color: AppColors.green,
                 ),
               ),
             ),
@@ -156,15 +155,13 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     leading: CircleAvatar(
                       foregroundImage: NetworkImage(operator.logo),
                     ),
-                    tileColor: Colors.white,
+                    tileColor: AppColors.white,
                     title: Text(operator.name),
-                    titleTextStyle: GoogleFonts.inter(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      fontSize: 16,
+                    titleTextStyle: AppTypography.titleSmall.copyWith(
+                      color: AppColors.black,
                     ),
                     trailing: _isLoading && isStripe
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),

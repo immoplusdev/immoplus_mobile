@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -15,9 +14,8 @@ import 'package:immoplus/app/features/immo_relais/pages/edit_relais_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_interests_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_matches_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/express_interest_sheet.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 
@@ -44,7 +42,8 @@ class RelaisDetailArgs {
 class RelaisDetailPage extends StatefulWidget {
   final RelaisModel relais;
   final bool isOwner;
-  const RelaisDetailPage({super.key, required this.relais, this.isOwner = true});
+  const RelaisDetailPage(
+      {super.key, required this.relais, this.isOwner = true});
   static const String name = 'RELAIS_DETAIL_PAGE';
 
   @override
@@ -66,7 +65,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
 
   Future<void> _loadDetail() async {
     try {
-      final response = await getIt<RelaisRepository>().getRelaisById(_relais.id);
+      final response =
+          await getIt<RelaisRepository>().getRelaisById(_relais.id);
       if (mounted) setState(() => _relais = response.data);
     } catch (_) {
       // On garde l'item de liste déjà affiché si le rechargement échoue.
@@ -76,14 +76,16 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   }
 
   Future<void> _editRelais() async {
-    final updated = await context.pushNamed(EditRelaisPage.name, extra: _relais);
+    final updated =
+        await context.pushNamed(EditRelaisPage.name, extra: _relais);
     if (updated == true) _loadDetail();
   }
 
   void _confirmCancel() {
     AppDialog.show(
       title: 'Annuler cette demande ?',
-      description: 'Cette action est définitive, vous ne pourrez pas la republier telle quelle.',
+      description:
+          'Cette action est définitive, vous ne pourrez pas la republier telle quelle.',
       primaryButtonText: 'Oui, annuler',
       secondButtonText: 'Non, garder',
       onPrimary: () async {
@@ -91,7 +93,9 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           await getIt<RelaisRepository>().cancelRelais(_relais.id);
           if (mounted) context.pop(true);
         } catch (_) {
-          if (mounted) CustomPopup.showErrorToast(text: "Impossible d'annuler cette demande");
+          if (mounted)
+            CustomPopup.showErrorToast(
+                text: "Impossible d'annuler cette demande");
         }
       },
     );
@@ -101,21 +105,24 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   Widget build(BuildContext context) {
     final status = _relais.statusEnum;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Ma demande',
-          style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          style: AppTypography.font(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black),
         ),
         actions: [
           if (_isLoading)
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(right: 16),
               child: Center(
                 child: SizedBox(
@@ -141,7 +148,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
                     color: AppColors.primaryLite,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(Iconsax.home_2, color: AppColors.primary, size: 28),
+                  child:
+                      Icon(Iconsax.home_2, color: AppColors.primary, size: 28),
                 ),
                 const Gap(14),
                 Expanded(
@@ -150,25 +158,28 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
                     children: [
                       Text(
                         '${relaisPropertyTypeLabel(_relais.propertyType)} · ${_relais.rooms} chambre${_relais.rooms > 1 ? 's' : ''}',
-                        style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: AppTypography.font(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       if (_relais.createdAt != null)
                         Text(
                           'Publié le ${DateFormat('d MMM yyyy', 'fr_FR').format(_relais.createdAt!)}',
-                          style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade500),
+                          style: AppTypography.font(
+                              fontSize: 13, color: AppColors.immoTextSecondary),
                         ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: status.backgroundColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     status.label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: status.textColor,
@@ -191,7 +202,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               const Gap(12),
               _buildInfoCard(
                 Iconsax.calendar,
-                DateFormat('d MMMM yyyy', 'fr_FR').format(_relais.availabilityDate!),
+                DateFormat('d MMMM yyyy', 'fr_FR')
+                    .format(_relais.availabilityDate!),
               ),
             ],
             if (_relais.reporterRelation != null) ...[
@@ -220,7 +232,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               CustomLoadingButtom(
                 text: 'Je suis intéressé',
                 isLoading: false,
-                onClick: () => showExpressRelaisInterestSheet(context, relaisId: _relais.id),
+                onClick: () => showExpressRelaisInterestSheet(context,
+                    relaisId: _relais.id),
               ),
             ],
             const Gap(24),
@@ -240,7 +253,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black),
+      style: AppTypography.font(
+          fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.black),
     );
   }
 
@@ -261,8 +275,9 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             errorWidget: (context, url, error) => Container(
               width: 90,
               height: 90,
-              color: Colors.grey.shade200,
-              child: const Icon(Icons.image_not_supported_outlined, color: Colors.grey),
+              color: AppColors.immoBorderDefault,
+              child: Icon(Icons.image_not_supported_outlined,
+                  color: AppColors.immoTextSecondary),
             ),
           ),
         ),
@@ -289,13 +304,15 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
               children: [
                 Text(
                   _relais.location,
-                  style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.w600),
+                  style: AppTypography.font(
+                      fontSize: 15, fontWeight: FontWeight.w600),
                 ),
                 if (_relais.landmark != null) ...[
                   const Gap(2),
                   Text(
                     _relais.landmark!,
-                    style: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade600),
+                    style: AppTypography.font(
+                        fontSize: 13, color: AppColors.immoTextSecondary),
                   ),
                 ],
               ],
@@ -311,7 +328,7 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.immoBorderDefault),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -321,7 +338,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           Expanded(
             child: Text(
               text,
-              style: GoogleFonts.dmSans(fontSize: 14, color: const Color(0xFF1F2937)),
+              style: AppTypography.font(
+                  fontSize: 14, color: const Color(0xFF1F2937)),
             ),
           ),
         ],
@@ -336,7 +354,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           child: _buildStatCard(
             '${_relais.interestedCount}',
             _relais.interestedCount > 1 ? 'Intéressés' : 'Intéressé',
-            onTap: () => context.pushNamed(RelaisInterestsPage.name, extra: _relais.id),
+            onTap: () =>
+                context.pushNamed(RelaisInterestsPage.name, extra: _relais.id),
           ),
         ),
         const Gap(12),
@@ -344,7 +363,8 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
           child: _buildStatCard(
             '${_relais.potentialMatches}',
             'Correspondances',
-            onTap: () => context.pushNamed(RelaisMatchesPage.name, extra: _relais.id),
+            onTap: () =>
+                context.pushNamed(RelaisMatchesPage.name, extra: _relais.id),
           ),
         ),
       ],
@@ -359,12 +379,16 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             onPressed: _editRelais,
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: BorderSide(color: Colors.grey.shade300),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              side: BorderSide(color: AppColors.immoBorderStrong),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
               'Modifier',
-              style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+              style: AppTypography.font(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.black),
             ),
           ),
         ),
@@ -374,12 +398,16 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
             onPressed: _confirmCancel,
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              side: const BorderSide(color: Colors.red),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              side: BorderSide(color: AppColors.red),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
               'Annuler',
-              style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+              style: AppTypography.font(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.red),
             ),
           ),
         ),
@@ -394,19 +422,21 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
+          color: AppColors.immoBgSurfaceMuted,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           children: [
             Text(
               value,
-              style: GoogleFonts.dmSans(fontSize: 20, fontWeight: FontWeight.bold),
+              style:
+                  AppTypography.font(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const Gap(2),
             Text(
               label,
-              style: GoogleFonts.dmSans(fontSize: 12, color: Colors.grey.shade500),
+              style: AppTypography.font(
+                  fontSize: 12, color: AppColors.immoTextSecondary),
             ),
           ],
         ),

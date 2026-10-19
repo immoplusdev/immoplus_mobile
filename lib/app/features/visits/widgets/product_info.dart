@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -15,22 +15,20 @@ class ProductInfo extends StatelessWidget {
 
     return ListTile(
       visualDensity: const VisualDensity(vertical: -4),
-      tileColor: Colors.white,
+      tileColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Colors.grey.shade200),
+        side: BorderSide(color: AppColors.immoBorderDefault),
       ),
       leading: CircleAvatar(
         radius: 22,
-        backgroundColor: primaryColor.withOpacity(0.08),
+        backgroundColor: primaryColor.withValues(alpha: 0.08),
         backgroundImage: Utils.getImage(id: bienImmobilierModel.images.first),
       ),
       title: Text(
         bienImmobilierModel.nom,
-        style: GoogleFonts.inter(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: Colors.black87,
+        style: AppTypography.labelLarge.copyWith(
+          color: AppColors.black87,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -40,8 +38,7 @@ class ProductInfo extends StatelessWidget {
           children: [
             TextSpan(
               text: '${bienImmobilierModel.prix} F',
-              style: GoogleFonts.inter(
-                fontSize: 13,
+              style: AppTypography.bodySmallSemiBold.copyWith(
                 fontWeight: FontWeight.w700,
                 color: primaryColor,
               ),
@@ -49,9 +46,8 @@ class ProductInfo extends StatelessWidget {
             if (period.isNotEmpty)
               TextSpan(
                 text: period,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  color: Colors.grey.shade500,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
           ],

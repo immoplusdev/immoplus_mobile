@@ -8,7 +8,7 @@ import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/for_me/logic/favories_utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/immo_icons.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/small_button.dart';
@@ -41,7 +41,7 @@ class _EstateCardState extends State<EstateCard> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
-      //color: Colors.grey,
+      //color: AppColors.immoTextSecondary,
       child: Stack(
         children: [
           InkWell(
@@ -90,7 +90,7 @@ class _EstateCardState extends State<EstateCard> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
-                                        .copyWith(color: Colors.grey.shade600),
+                                        .copyWith(color: AppColors.gray500),
                                   ),
                                 ),
                               ],
@@ -109,7 +109,8 @@ class _EstateCardState extends State<EstateCard> {
                               TextSpan(
                                   text:
                                       "/ ${widget.bienImmobilierModel.typeLocation}",
-                                  style: TextStyle(color: Colors.grey.shade600))
+                                  style: AppTypography.font(
+                                      color: AppColors.gray500))
                             ]))
                           ],
                         ),
@@ -149,11 +150,12 @@ class _EstateCardState extends State<EstateCard> {
                 },
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: value ? Colors.red : Colors.grey.shade300,
+                  backgroundColor:
+                      value ? AppColors.immoFeedbackError : AppColors.gray300,
                   child: Icon(
                     FontAwesomeIcons.solidHeart.data,
                     size: 16,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),

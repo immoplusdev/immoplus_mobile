@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class InitialDetailLogmentScreen extends StatelessWidget {
             },
             icon: Icon(Icons.chevron_left)),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -26,7 +27,7 @@ class InitialDetailLogmentScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
-              //color: Colors.red,
+              //color: AppColors.red,
               height: MediaQuery.of(context).size.height + 10,
               width: double.infinity,
               child: Column(
@@ -34,7 +35,8 @@ class InitialDetailLogmentScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Aucun produit',
-                    style: TextStyle(color: CupertinoColors.systemFill),
+                    style:
+                        AppTypography.font(color: CupertinoColors.systemFill),
                   ),
                   SizedBox(
                     height: 10,

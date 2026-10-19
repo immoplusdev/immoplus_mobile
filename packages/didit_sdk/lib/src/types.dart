@@ -109,9 +109,9 @@ sealed class VerificationResult {
       case 'failed':
         return VerificationFailed(
           error: VerificationError(
-            type: VerificationErrorType.fromString(
-                map['errorType'] as String?),
-            message: (map['errorMessage'] as String?) ??
+            type: VerificationErrorType.fromString(map['errorType'] as String?),
+            message:
+                (map['errorMessage'] as String?) ??
                 'An unknown error occurred during verification.',
           ),
           session: session,
@@ -159,9 +159,9 @@ enum CameraLens {
   back;
 
   String toMap() => switch (this) {
-        CameraLens.front => 'front',
-        CameraLens.back => 'back',
-      };
+    CameraLens.front => 'front',
+    CameraLens.back => 'back',
+  };
 }
 
 /// Configuration options for the Didit verification SDK.
@@ -247,4 +247,3 @@ class DiditConfig {
     return map;
   }
 }
-

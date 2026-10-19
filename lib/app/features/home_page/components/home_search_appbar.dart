@@ -25,7 +25,7 @@ import 'package:immoplus/app/features/location_module/location_page.dart';
 import 'package:immoplus/app/features/filter/filter_page.dart';
 import 'package:immoplus/app/widgets/notification_bell.dart';
 import 'package:immoplus/app/services/location_service.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/logic/banners/banners_state.dart';
@@ -108,7 +108,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
       enableDrag: true,
       showDragHandle: false,
       useSafeArea: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => const FractionallySizedBox(
@@ -335,7 +335,7 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
             },
             child: Text(
               'Activer maintenant',
-              style: TextStyle(color: Colors.white),
+              style: AppTypography.font(color: AppColors.white),
             ),
           ),
         ],
@@ -378,15 +378,16 @@ class _HomeSearchAppbarState extends State<HomeSearchAppbar> {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : const Color(0xffEDF1F7),
+                color: isSelected ? AppColors.blue500 : const Color(0xffEDF1F7),
                 borderRadius: BorderRadius.circular(24),
               ),
               alignment: Alignment.center,
               child: Text(
                 item.label,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color:
-                          isSelected ? Colors.white : const Color(0xff333333),
+                      color: isSelected
+                          ? AppColors.white
+                          : const Color(0xff333333),
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.w500,
                       fontSize: 12,

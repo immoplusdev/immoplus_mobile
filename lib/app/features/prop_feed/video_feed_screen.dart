@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,7 @@ import 'package:immoplus/app/features/prop_feed/widgets/video_page_item.dart';
 
 /// Style de la barre d'état : icônes blanches sur fond noir.
 const _statusBarStyle = SystemUiOverlayStyle(
-  statusBarColor: Colors.transparent,
+  statusBarColor: AppColors.transparent,
   statusBarIconBrightness: Brightness.light,
   statusBarBrightness: Brightness.dark,
 );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/otp_login/widgets/login_otp_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
 
@@ -33,6 +34,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Contenu du formulaire qui prend tout l'espace disponible
         Expanded(
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -46,7 +48,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
-                        color: const Color(0xFF1F1F1F),
+                        color: AppColors.immoTextPrimary,
                       ),
                   textAlign: TextAlign.left,
                 ),
@@ -56,7 +58,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFFA3A3A3),
+                        color: AppColors.immoTextDisabled,
                       ),
                   textAlign: TextAlign.left,
                 ),
@@ -65,7 +67,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   height: 80,
                   child: InternationalPhoneInput(
                     key: _phoneFieldKey,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: AppColors.transparent,
                     onValidPhoneNumber: (value) {
                       phoneNumber = value;
                     },
@@ -89,9 +91,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             onClick: _openOtpDialog,
             isLoading: false,
             clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
-            color: isPhoneNumberValid
-                ? const Color(0xFF2744DE)
-                : Colors.blueGrey.shade200,
+            color: isPhoneNumberValid ? AppColors.primary : AppColors.blueGrey,
           ),
         ),
       ],

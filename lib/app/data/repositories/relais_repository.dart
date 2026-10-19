@@ -97,7 +97,8 @@ class RelaisRepository {
     }
   }
 
-  Future<RelaisResponse> updateRelais(String id, RelaisUpdateRequest request) async {
+  Future<RelaisResponse> updateRelais(
+      String id, RelaisUpdateRequest request) async {
     try {
       final body = request.toJson()..removeWhere((_, value) => value == null);
       return await RelaisProvider(dioClient).updateRelais(id, body);
@@ -160,7 +161,8 @@ class RelaisRepository {
     RelaisInterestResponseRequest request,
   ) async {
     try {
-      return await RelaisProvider(dioClient).respondToInterest(id, interestId, request);
+      return await RelaisProvider(dioClient)
+          .respondToInterest(id, interestId, request);
     } on DioException catch (dioError) {
       log('DioError (respondToInterest): ${dioError.message}');
       throw Exception('Failed to respond to interest: ${dioError.message}');
@@ -236,7 +238,8 @@ class RelaisRepository {
       );
     } on DioException catch (dioError) {
       log('DioError (getMyRelaisInterests): ${dioError.message}');
-      throw Exception('Failed to load my relais interests: ${dioError.message}');
+      throw Exception(
+          'Failed to load my relais interests: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
       throw Exception('Failed to load my relais interests: $e');
     } catch (error, s) {
@@ -258,7 +261,8 @@ class RelaisRepository {
       );
     } on DioException catch (dioError) {
       log('DioError (getReceivedRelaisInterests): ${dioError.message}');
-      throw Exception('Failed to load received relais interests: ${dioError.message}');
+      throw Exception(
+          'Failed to load received relais interests: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
       throw Exception('Failed to load received relais interests: $e');
     } catch (error, s) {

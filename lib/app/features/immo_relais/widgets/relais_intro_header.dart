@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Carte d'intro + bandeau d'avertissement, identiques sur les 2 écrans du
 /// flux "Publiez votre ancien logement" (flux B, signalement anonyme).
@@ -18,9 +17,9 @@ class RelaisIntroHeader extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: AppColors.immoBorderDefault),
           ),
           child: Column(
             children: [
@@ -38,19 +37,19 @@ class RelaisIntroHeader extends StatelessWidget {
               Text(
                 'Publiez votre ancien logement',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
               ),
               const Gap(8),
               Text(
                 'Votre bien sera visible immediatement aupres des personnes qui recherchent un logement dans votre quartier.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 13,
-                  color: Colors.grey.shade600,
+                  color: AppColors.immoTextSecondary,
                   height: 1.4,
                 ),
               ),
@@ -62,21 +61,21 @@ class RelaisIntroHeader extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: Colors.orange.shade50,
+            color: AppColors.orange50,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.orange.shade100),
+            border: Border.all(color: AppColors.orange50),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Iconsax.warning_2, color: Colors.orange.shade700, size: 20),
+              Icon(Iconsax.warning_2, color: AppColors.amber800, size: 20),
               const Gap(10),
               Expanded(
                 child: Text(
                   "Ce logement ne vous appartient pas. Précisez votre lien avec le bien pour orienter les personnes intéressées.",
-                  style: GoogleFonts.dmSans(
+                  style: AppTypography.font(
                     fontSize: 13,
-                    color: Colors.orange.shade900,
+                    color: AppColors.amber800,
                     height: 1.4,
                   ),
                 ),

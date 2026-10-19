@@ -4,7 +4,7 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 import 'package:immoplus/app/logic/authentification/delete_account_cubit_state.dart';
 import 'package:immoplus/app/utils/status_code_handler.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable

@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
 import 'package:immoplus/app/data/models/remote/relais/relais_model.dart';
 import 'package:immoplus/app/data/repositories/relais_repository.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/marketplace_relais_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 /// Sous-onglet "Autour de moi" — découverte des relais des autres
@@ -19,7 +18,8 @@ class RelaisMarketplaceSection extends StatefulWidget {
   const RelaisMarketplaceSection({super.key});
 
   @override
-  State<RelaisMarketplaceSection> createState() => _RelaisMarketplaceSectionState();
+  State<RelaisMarketplaceSection> createState() =>
+      _RelaisMarketplaceSectionState();
 }
 
 class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
@@ -35,7 +35,10 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
   int? _priceMinFilter;
   int? _priceMaxFilter;
 
-  bool get _hasAdvancedFilters => _roomsFilter != null || _priceMinFilter != null || _priceMaxFilter != null;
+  bool get _hasAdvancedFilters =>
+      _roomsFilter != null ||
+      _priceMinFilter != null ||
+      _priceMaxFilter != null;
 
   @override
   bool get wantKeepAlive => true;
@@ -57,7 +60,9 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
     setState(() => _isLoading = true);
     try {
       final response = await _relaisRepository.getRelaisMarketplace(
-        location: _searchController.text.trim().isEmpty ? null : _searchController.text.trim(),
+        location: _searchController.text.trim().isEmpty
+            ? null
+            : _searchController.text.trim(),
         propertyType: _propertyTypeFilter?.backendSlug,
         roomsMin: _roomsFilter,
         priceMin: _priceMinFilter,
@@ -77,7 +82,8 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
   }
 
   void _onPropertyTypeTap(RelaisPropertyType type) {
-    setState(() => _propertyTypeFilter = _propertyTypeFilter == type ? null : type);
+    setState(
+        () => _propertyTypeFilter = _propertyTypeFilter == type ? null : type);
     _fetch();
   }
 
@@ -85,7 +91,7 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
     final result = await showModalBottomSheet<_AdvancedFilters>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (_) => _AdvancedFiltersSheet(
         initialRooms: _roomsFilter,
         initialPriceMin: _priceMinFilter,
@@ -115,13 +121,15 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
                 child: TextField(
                   controller: _searchController,
                   onChanged: _onSearchChanged,
-                  style: GoogleFonts.dmSans(fontSize: 14),
+                  style: AppTypography.font(fontSize: 14),
                   decoration: InputDecoration(
                     hintText: 'Quartier (ex: Cocody)',
-                    hintStyle: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade400),
-                    prefixIcon: Icon(Iconsax.search_normal_1, size: 18, color: Colors.grey.shade500),
+                    hintStyle: AppTypography.font(
+                        fontSize: 13, color: AppColors.immoTextDisabled),
+                    prefixIcon: Icon(Iconsax.search_normal_1,
+                        size: 18, color: AppColors.immoTextSecondary),
                     filled: true,
-                    fillColor: Colors.grey.shade100,
+                    fillColor: AppColors.immoBgSurfaceMuted,
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -138,13 +146,17 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
                   height: 42,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: _hasAdvancedFilters ? AppColors.primary : Colors.grey.shade100,
+                    color: _hasAdvancedFilters
+                        ? AppColors.primary
+                        : AppColors.immoBgSurfaceMuted,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Iconsax.setting_4,
                     size: 18,
-                    color: _hasAdvancedFilters ? Colors.white : Colors.grey.shade600,
+                    color: _hasAdvancedFilters
+                        ? AppColors.white
+                        : AppColors.immoTextSecondary,
                   ),
                 ),
               ),
@@ -168,16 +180,21 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.white,
+                    color: isSelected ? AppColors.primary : AppColors.white,
                     borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: isSelected ? AppColors.primary : Colors.grey.shade300),
+                    border: Border.all(
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.immoBorderStrong),
                   ),
                   child: Text(
                     type.label,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : Colors.grey.shade700,
+                      color: isSelected
+                          ? AppColors.white
+                          : AppColors.immoTextLabel,
                     ),
                   ),
                 ),
@@ -202,7 +219,7 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
           child: Text(
             'Aucun logement disponible pour ces critères pour le moment.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.dmSans(color: Colors.grey.shade500),
+            style: AppTypography.font(color: AppColors.immoTextSecondary),
           ),
         ),
       );
@@ -220,7 +237,8 @@ class _RelaisMarketplaceSectionState extends State<RelaisMarketplaceSection>
           childAspectRatio: 0.6,
         ),
         itemCount: _relais.length,
-        itemBuilder: (context, index) => MarketplaceRelaisCard(relais: _relais[index]),
+        itemBuilder: (context, index) =>
+            MarketplaceRelaisCard(relais: _relais[index]),
       ),
     );
   }
@@ -242,7 +260,8 @@ class _AdvancedFiltersSheet extends StatefulWidget {
   final int? initialPriceMin;
   final int? initialPriceMax;
 
-  const _AdvancedFiltersSheet({this.initialRooms, this.initialPriceMin, this.initialPriceMax});
+  const _AdvancedFiltersSheet(
+      {this.initialRooms, this.initialPriceMin, this.initialPriceMax});
 
   @override
   State<_AdvancedFiltersSheet> createState() => _AdvancedFiltersSheetState();
@@ -250,8 +269,10 @@ class _AdvancedFiltersSheet extends StatefulWidget {
 
 class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
   late int? _rooms = widget.initialRooms;
-  late final _minController = TextEditingController(text: widget.initialPriceMin?.toString() ?? '');
-  late final _maxController = TextEditingController(text: widget.initialPriceMax?.toString() ?? '');
+  late final _minController =
+      TextEditingController(text: widget.initialPriceMin?.toString() ?? '');
+  late final _maxController =
+      TextEditingController(text: widget.initialPriceMax?.toString() ?? '');
 
   @override
   void dispose() {
@@ -282,9 +303,10 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      padding: EdgeInsets.fromLTRB(
+          20, 12, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
+      decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -295,32 +317,44 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
             child: Container(
               width: 36,
               height: 4,
-              decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
+              decoration: BoxDecoration(
+                  color: AppColors.immoBorderStrong,
+                  borderRadius: BorderRadius.circular(2)),
             ),
           ),
           const Gap(16),
-          Text('Filtres', style: GoogleFonts.dmSans(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text('Filtres',
+              style: AppTypography.font(
+                  fontSize: 16, fontWeight: FontWeight.bold)),
           const Gap(20),
-          Text('Pièces (min.)', style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text('Pièces (min.)',
+              style: AppTypography.font(
+                  fontSize: 13, fontWeight: FontWeight.w600)),
           const Gap(10),
           Wrap(
             spacing: 8,
             children: [
               for (final rooms in _roomOptions)
                 GestureDetector(
-                  onTap: () => setState(() => _rooms = _rooms == rooms ? null : rooms),
+                  onTap: () =>
+                      setState(() => _rooms = _rooms == rooms ? null : rooms),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: _rooms == rooms ? AppColors.primary : Colors.grey.shade100,
+                      color: _rooms == rooms
+                          ? AppColors.primary
+                          : AppColors.immoBgSurfaceMuted,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
                       rooms == 4 ? '4+' : '$rooms',
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: _rooms == rooms ? Colors.white : Colors.grey.shade700,
+                        color: _rooms == rooms
+                            ? AppColors.white
+                            : AppColors.immoTextLabel,
                       ),
                     ),
                   ),
@@ -328,13 +362,17 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
             ],
           ),
           const Gap(20),
-          Text('Budget (FCFA)', style: GoogleFonts.dmSans(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text('Budget (FCFA)',
+              style: AppTypography.font(
+                  fontSize: 13, fontWeight: FontWeight.w600)),
           const Gap(10),
           Row(
             children: [
-              Expanded(child: _PriceField(controller: _minController, hint: 'Min')),
+              Expanded(
+                  child: _PriceField(controller: _minController, hint: 'Min')),
               const Gap(12),
-              Expanded(child: _PriceField(controller: _maxController, hint: 'Max')),
+              Expanded(
+                  child: _PriceField(controller: _maxController, hint: 'Max')),
             ],
           ),
           const Gap(24),
@@ -344,8 +382,8 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
                 child: CustomButtom(
                   text: 'Réinitialiser',
                   onClick: _reset,
-                  color: Colors.grey.shade100,
-                  textColor: Colors.grey.shade700,
+                  color: AppColors.immoBgSurfaceMuted,
+                  textColor: AppColors.immoTextLabel,
                   elevation: 0,
                 ),
               ),
@@ -355,7 +393,7 @@ class _AdvancedFiltersSheetState extends State<_AdvancedFiltersSheet> {
                   text: 'Appliquer',
                   onClick: _apply,
                   color: AppColors.primary,
-                  textColor: Colors.white,
+                  textColor: AppColors.white,
                   elevation: 0,
                 ),
               ),
@@ -377,13 +415,15 @@ class _PriceField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
-      style: GoogleFonts.dmSans(fontSize: 14),
+      style: AppTypography.font(fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.dmSans(fontSize: 13, color: Colors.grey.shade400),
+        hintStyle:
+            AppTypography.font(fontSize: 13, color: AppColors.immoTextDisabled),
         filled: true,
-        fillColor: Colors.grey.shade100,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        fillColor: AppColors.immoBgSurfaceMuted,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

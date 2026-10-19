@@ -18,7 +18,7 @@ class SimpleAppBar extends StatelessWidget implements PreferredSize {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      //backgroundColor: Colors.red,
+      //backgroundColor: AppColors.red,
       backgroundColor: Theme.of(context).primaryColor,
 
       elevation: 0,
@@ -42,7 +42,7 @@ class SimpleAppBar extends StatelessWidget implements PreferredSize {
       centerTitle: true,
       title: Text(
         title,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontWeight: FontWeight.bold,
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -52,10 +53,10 @@ class ReservationSheetSkeleton extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 border: Border(
                   top: BorderSide(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: AppColors.black.withValues(alpha: 0.1),
                     width: 0.5,
                   ),
                 ),
@@ -69,7 +70,7 @@ class ReservationSheetSkeleton extends StatelessWidget {
                     height: 40,
                     borderRadius: 24,
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
 
                   // BookNowButton skeleton - dimensions réelles
                   Expanded(
@@ -104,7 +105,7 @@ class ReservationSheetSkeleton extends StatelessWidget {
               Row(
                 children: [
                   _buildShimmerBox(width: 13, height: 13, borderRadius: 2),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Expanded(
                     child: _buildShimmerBox(height: 13, borderRadius: 3),
                   ),
@@ -200,13 +201,13 @@ class ReservationSheetSkeleton extends StatelessWidget {
     final adjustedHeight = height * heightFactor;
 
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: AppColors.immoBorderStrong!,
+      highlightColor: AppColors.immoBgSurfaceMuted!,
       child: Container(
         width: width ?? double.infinity,
         height: adjustedHeight,
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: AppColors.immoBorderStrong,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),

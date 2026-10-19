@@ -7,6 +7,7 @@ part 'hotel_room_state.freezed.dart';
 class HotelRoomState with _$HotelRoomState {
   const factory HotelRoomState.initial() = _Initial;
   const factory HotelRoomState.loading() = _Loading;
-  const factory HotelRoomState.loaded({required HotelRoomDetailModel roomDetail}) = _Loaded;
+  const factory HotelRoomState.loaded(
+      {required HotelRoomDetailModel roomDetail}) = _Loaded;
   const factory HotelRoomState.error({required String message}) = _Error;
 }

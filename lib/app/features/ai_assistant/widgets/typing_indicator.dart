@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -90,17 +91,17 @@ class _TypingIndicatorState extends State<TypingIndicator>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const AiAvatar(),
-                const SizedBox(width: ChatTokens.s10),
+                SizedBox(width: ChatTokens.s10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(bottom: 4),
                         child: Text(
                           'Immo AI',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: ChatTokens.neutral400,
@@ -121,11 +122,11 @@ class _TypingIndicatorState extends State<TypingIndicator>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _Dot(controller: _dots, delay: 0.0),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                             _Dot(controller: _dots, delay: 0.2),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                             _Dot(controller: _dots, delay: 0.4),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10),
                             Flexible(
                               child: AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 300),
@@ -134,7 +135,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
                                 child: Text(
                                   label,
                                   key: ValueKey(label),
-                                  style: const TextStyle(
+                                  style: AppTypography.font(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     color: ChatTokens.neutral400,
@@ -178,7 +179,7 @@ class _Dot extends StatelessWidget {
             child: Container(
               width: 6,
               height: 6,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: ChatTokens.brand500,
                 shape: BoxShape.circle,
               ),

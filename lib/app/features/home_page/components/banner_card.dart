@@ -5,7 +5,7 @@ import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:immoplus/app/features/home_page/components/banner_item.dart';
 import 'package:immoplus/app/logic/banners/banners_cubit.dart';
 import 'package:immoplus/app/logic/banners/banners_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:gap/gap.dart';
 
@@ -103,9 +103,9 @@ class _BannerCardState extends State<BannerCard> {
   Color _getBackgroundColor(List<BannerModel> apiBanners) {
     if (_currentIndex >= 0 && _currentIndex < apiBanners.length) {
       return Utils.parseColor(apiBanners[_currentIndex].bgColor) ??
-          AppColors.customBlue;
+          AppColors.immoBrandPrimary;
     }
-    return AppColors.customBlue;
+    return AppColors.immoBrandPrimary;
   }
 
   Widget _buildDots(int count) {
@@ -119,7 +119,7 @@ class _BannerCardState extends State<BannerCard> {
           height: 3,
           margin: const EdgeInsets.symmetric(horizontal: 1.5),
           decoration: BoxDecoration(
-            color: Colors.white
+            color: AppColors.white
                 .withValues(alpha: _currentIndex == index ? 1.0 : 0.4),
             borderRadius: BorderRadius.circular(1.5),
           ),

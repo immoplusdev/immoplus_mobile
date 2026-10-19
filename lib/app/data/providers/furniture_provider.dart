@@ -58,4 +58,3 @@ abstract class FurnitureProvider {
     @Query("_order_dir") String? orderDir,
   });
 }
-

@@ -21,7 +21,7 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/empty_state_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 
 class NearResidencesConstants {
@@ -231,8 +231,8 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: _nearResidences.isNotEmpty
-                    ? Colors.black
-                    : Colors.grey.shade400,
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -312,10 +312,10 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.orange.shade50,
+        color: AppColors.orange50,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.orange.shade200,
+          color: AppColors.orange500,
           width: 1,
         ),
       ),
@@ -323,7 +323,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
         children: [
           Icon(
             Icons.location_off_outlined,
-            color: Colors.orange.shade700,
+            color: AppColors.amber800,
             size: 28,
           ),
           const Gap(12),
@@ -331,7 +331,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             child: Text(
               _errorMessage ?? NearResidencesConstants.locationErrorMessage,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.orange.shade900,
+                    color: AppColors.amber800,
                   ),
             ),
           ),
@@ -339,7 +339,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
           IconButton(
             icon: Icon(
               Icons.close,
-              color: Colors.orange.shade700,
+              color: AppColors.amber800,
               size: 20,
             ),
             onPressed: _dismissLocationError,
@@ -358,10 +358,10 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.immoBgSurfaceMuted,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.grey.shade200,
+          color: AppColors.immoBorderDefault,
           width: 1,
         ),
       ),
@@ -372,21 +372,21 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             Icon(
               Icons.home_outlined,
               size: 48,
-              color: Colors.grey.shade400,
+              color: AppColors.immoTextDisabled,
             ),
             const Gap(12),
             Text(
               'Aucune résidence proche',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade700,
+                    color: AppColors.immoTextLabel,
                   ),
             ),
             const Gap(6),
             Text(
               'Aucune résidence trouvée dans un rayon de ${widget.radius.toInt()} km',
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.grey.shade600,
+                    color: AppColors.immoTextSecondary,
                   ),
               textAlign: TextAlign.center,
             ),
@@ -405,14 +405,14 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             'Erreur de chargement',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Colors.red.shade700,
+                  color: AppColors.red600,
                 ),
           ),
           const Gap(6),
           Text(
             _errorMessage ?? 'Une erreur est survenue',
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.red.shade600,
+                  color: AppColors.red600,
                 ),
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -423,7 +423,7 @@ class _ResidencesNearListState extends State<ResidencesNearList> {
             onPressed: _loadNearResidences,
             child: Text(
               'Réessayer',
-              style: TextStyle(color: Colors.red.shade700),
+              style: AppTypography.font(color: AppColors.red600),
             ),
           ),
         ],

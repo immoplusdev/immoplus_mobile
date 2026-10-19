@@ -25,14 +25,12 @@ class HomeIcon extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.surface,
         ),
-        const SizedBox(
+        SizedBox(
           height: 4,
         ),
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
+          style: AppTypography.bodySmallSemiBold.copyWith(
             color: (currentState == expetedState)
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.surface,

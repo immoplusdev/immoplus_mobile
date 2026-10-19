@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Définition d'un onglet pour [PropertyTabBar].
 class PropertyTabItem {
@@ -84,19 +84,20 @@ class _PropertyTabBarState extends State<PropertyTabBar>
           controller: _controller,
           tabs: widget.tabs
               .map((t) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: widget.tabSpacing / 2),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: widget.tabSpacing / 2),
                     child: Tab(text: t.label),
                   ))
               .toList(),
           // Onglet actif
           labelColor: AppColors.primary,
-          labelStyle: const TextStyle(
+          labelStyle: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
           // Onglets inactifs
-          unselectedLabelColor: const Color(0xFFAAAAAA),
-          unselectedLabelStyle: const TextStyle(
+          unselectedLabelColor: AppColors.immoIconInactive,
+          unselectedLabelStyle: AppTypography.font(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -108,15 +109,15 @@ class _PropertyTabBarState extends State<PropertyTabBar>
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           // Pas de ligne grise sous tout le TabBar
-          dividerColor: Colors.transparent,
+          dividerColor: AppColors.transparent,
           splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          overlayColor: WidgetStateProperty.all(AppColors.transparent),
           padding: EdgeInsets.zero,
           tabAlignment: TabAlignment.start,
           isScrollable: true,
         ),
-        const Divider(height: 1, thickness: 1, color: Color(0xFFF0F0F0)),
-        const SizedBox(height: 12),
+        Divider(height: 1, thickness: 1, color: AppColors.immoBorderDefault),
+        SizedBox(height: 12),
         // Contenu de l'onglet actif
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),

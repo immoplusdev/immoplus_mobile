@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -42,9 +43,9 @@ class FirebaseUtils {
                 top: -10,
                 right: -5,
                 child: IconButton(
-                    color: Colors.white,
+                    color: AppColors.white,
                     style: IconButton.styleFrom(
-                        elevation: 3, shadowColor: Colors.black),
+                        elevation: 3, shadowColor: AppColors.black),
                     onPressed: () {
                       Navigator.pop(context);
                     },

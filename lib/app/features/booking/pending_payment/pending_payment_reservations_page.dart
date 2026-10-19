@@ -9,7 +9,7 @@ import 'package:immoplus/app/features/booking/pending_payment/pending_payment_re
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_cubit.dart';
 import 'package:immoplus/app/features/booking_history/components/booking_loading_card.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
@@ -64,7 +64,7 @@ class _PendingPaymentReservationsPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Réservations à payer'),
+        title: Text('Réservations à payer'),
         // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
         //       fontWeight: FontWeight.w700,
         //     ),
@@ -80,7 +80,7 @@ class _PendingPaymentReservationsPageState
           },
         ),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         centerTitle: true,
       ),
       backgroundColor: AppColors.whiteBackground,
@@ -139,7 +139,7 @@ class _PendingPaymentReservationsPageState
                           textAlign: TextAlign.center,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: const Color(0xFF667085),
+                                    color: AppColors.immoTextSecondary,
                                     height: 1.5,
                                   ),
                         ),

@@ -37,5 +37,6 @@ class ReceivedRelaisInterestModel with _$ReceivedRelaisInterestModel {
   factory ReceivedRelaisInterestModel.fromJson(Map<String, dynamic> json) =>
       _$ReceivedRelaisInterestModelFromJson(json);
 
-  RelaisInterestStatus get statusEnum => RelaisInterestStatus.fromString(status);
+  RelaisInterestStatus get statusEnum =>
+      RelaisInterestStatus.fromString(status);
 }

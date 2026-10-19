@@ -7,7 +7,7 @@ import 'package:immoplus/app/features/registration/customer_registration.dart';
 import 'package:immoplus/app/features/registration/widgets/otp_verification_dialog.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/international_phone_number_input.dart';
@@ -61,9 +61,9 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leadingWidth: 64,
         leading: Padding(
@@ -79,7 +79,7 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
               ),
               child: const Icon(
                 Icons.arrow_back_ios_rounded,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 16,
               ),
             ),
@@ -128,7 +128,7 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                           height: 80,
                           child: InternationalPhoneInput(
                             key: _phoneFieldKey,
-                            backgroundColor: Colors.transparent,
+                            backgroundColor: AppColors.transparent,
                             onValidPhoneNumber: (value) {
                               phoneNumber = value;
                             },
@@ -151,8 +151,8 @@ class _RegisterNumberOtpPageState extends State<RegisterNumberOtpPage> {
                     isLoading: isLoading,
                     clickable: isPhoneNumberValid && phoneNumber.isNotEmpty,
                     color: isPhoneNumberValid
-                        ? const Color(0xFF2744DE)
-                        : Colors.blueGrey.shade200,
+                        ? AppColors.immoBrandPrimary
+                        : AppColors.blueGrey,
                   ),
                 ),
               ],

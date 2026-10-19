@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/unified_property_card.dart';
@@ -174,14 +174,14 @@ class _LocationBiensPageState extends State<LocationBiensPage>
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black87),
           onPressed: () => context.pop(),
         ),
         title: Text(
           widget.title,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.black87,
               ),
         ),
       ),
@@ -226,7 +226,7 @@ class _LocationBiensPageState extends State<LocationBiensPage>
                           Icon(
                             Icons.location_off_outlined,
                             size: 80,
-                            color: Colors.grey.shade300,
+                            color: AppColors.immoBorderStrong,
                           ),
                           const Gap(20),
                           Text(
@@ -248,7 +248,7 @@ class _LocationBiensPageState extends State<LocationBiensPage>
                       child: Text(
                         'Vous avez vu tous les biens',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey.shade600,
+                              color: AppColors.immoTextSecondary,
                             ),
                       ),
                     ),

@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -43,7 +43,7 @@ class _VisaPageState extends State<VisaPage> {
               trailing: IconButton(
                 icon: const Icon(
                   CupertinoIcons.clear_circled_solid,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 onPressed: () {
                   AppDialog.confirm(
@@ -60,9 +60,9 @@ class _VisaPageState extends State<VisaPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Numéro de carte'),
+                Text('Numéro de carte'),
                 CustomTextField(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.white,
                   autofocus: true,
                   controller: _formController.phoneNumber,
                   textInputType: TextInputType.number,
@@ -92,9 +92,9 @@ class _VisaPageState extends State<VisaPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Expiration'),
+                        Text('Expiration'),
                         CustomTextField(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.white,
                           //autofocus: true,
                           //controller: _formController.phoneNumber,
                           textInputType: TextInputType.number,
@@ -115,9 +115,9 @@ class _VisaPageState extends State<VisaPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('CVC'),
+                        Text('CVC'),
                         CustomTextField(
-                          fillColor: Colors.white,
+                          fillColor: AppColors.white,
                           //autofocus: true,
                           //controller: _formController.phoneNumber,
                           textInputType: TextInputType.number,
@@ -135,12 +135,12 @@ class _VisaPageState extends State<VisaPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 5),
                   child: Text('Nom du propriétaire'),
                 ),
                 CustomTextField(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.white,
                   //autofocus: true,
 
                   textInputType: TextInputType.text,

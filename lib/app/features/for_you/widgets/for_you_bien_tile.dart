@@ -1,9 +1,10 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_bien_item.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
@@ -24,7 +25,7 @@ class ForYouBienTile extends StatelessWidget {
       width: neirResidenceCardWidth,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => context.push('/estate_detail/${bien.bienId}'),
+        onTap: () => context.push(EstatePage.route(bien.bienId)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -46,7 +47,8 @@ class ForYouBienTile extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    final imageUrl = bien.imageUrl != null ? Utils.getImagePath(id: bien.imageUrl!) : '';
+    final imageUrl =
+        bien.imageUrl != null ? Utils.getImagePath(id: bien.imageUrl!) : '';
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
@@ -54,15 +56,16 @@ class ForYouBienTile extends StatelessWidget {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholder: (context, url) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
+        baseColor: AppColors.immoBorderStrong,
+        highlightColor: AppColors.immoBgSurfaceMuted,
         period: const Duration(milliseconds: 500),
-        child: Container(color: Colors.white),
+        child: Container(color: AppColors.white),
       ),
       errorWidget: (context, url, error) => Container(
-        color: Colors.grey.shade200,
+        color: AppColors.immoBorderDefault,
         child: Center(
-          child: FaIcon(FontAwesomeIcons.images, size: 60, color: Colors.grey.shade400),
+          child: FaIcon(FontAwesomeIcons.images,
+              size: 60, color: AppColors.immoTextDisabled),
         ),
       ),
     );
@@ -75,10 +78,10 @@ class ForYouBienTile extends StatelessWidget {
       children: [
         Text(
           bien.name,
-          style: GoogleFonts.plusJakartaSans(
+          style: AppTypography.font(
             fontWeight: FontWeight.bold,
             fontSize: 15,
-            color: Colors.black87,
+            color: AppColors.black87,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -87,7 +90,8 @@ class ForYouBienTile extends StatelessWidget {
           const Gap(3),
           Text(
             bien.location!,
-            style: GoogleFonts.plusJakartaSans(color: Colors.grey.shade600, fontSize: 13),
+            style: AppTypography.font(
+                color: AppColors.immoTextSecondary, fontSize: 13),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -98,18 +102,19 @@ class ForYouBienTile extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '${CurrencyFormatter().format(bien.price.toString())} ${bien.currency ?? "Fcfa"}',
-                  style: GoogleFonts.plusJakartaSans(
+                  text:
+                      '${CurrencyFormatter().format(bien.price.toString())} ${bien.currency ?? "Fcfa"}',
+                  style: AppTypography.font(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
                 ),
                 if (bien.aLouer)
                   TextSpan(
                     text: '/mois',
-                    style: GoogleFonts.plusJakartaSans(
-                      color: Colors.grey.shade600,
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontWeight: FontWeight.w200,
                       fontSize: 12,
                     ),

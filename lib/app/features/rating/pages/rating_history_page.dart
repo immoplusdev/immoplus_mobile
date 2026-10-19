@@ -8,13 +8,13 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/rating/rating_model.dart';
 import 'package:immoplus/app/data/repositories/rating_repository.dart';
 import 'package:immoplus/app/features/rating/widgets/rating_history_card.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class RatingHistoryPage extends StatefulWidget {
   const RatingHistoryPage({super.key});
-  
+
   static String name = 'RATING_HISTORY';
   static String routePath() => '/rating-history';
 
@@ -22,13 +22,16 @@ class RatingHistoryPage extends StatefulWidget {
   State<RatingHistoryPage> createState() => _RatingHistoryPageState();
 }
 
-class _RatingHistoryPageState extends State<RatingHistoryPage> with ConnectivityMixin {
-  final PagingController<int, RatingModel> _pagingController = PagingController(firstPageKey: 1);
+class _RatingHistoryPageState extends State<RatingHistoryPage>
+    with ConnectivityMixin {
+  final PagingController<int, RatingModel> _pagingController =
+      PagingController(firstPageKey: 1);
   final RatingRepository ratingRepository = getIt<RatingRepository>();
 
   @override
   void onConnectionRestored() {
-    if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+    if (_pagingController.itemList == null ||
+        _pagingController.itemList!.isEmpty) {
       _pagingController.error = 'temporary_error_to_force_refresh';
       _pagingController.refresh();
     }
@@ -71,13 +74,14 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Historique des notes'),
+        title: Text('Historique des notes'),
         backgroundColor: AppColors.whiteBackground,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left, size: 24),
-          onPressed: () => context.canPop() ? context.pop() : context.go('/account'),
+          onPressed: () =>
+              context.canPop() ? context.pop() : context.go('/account'),
         ),
         centerTitle: true,
       ),
@@ -94,7 +98,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
             PagedSliverList<int, RatingModel>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate(
-                firstPageProgressIndicatorBuilder: (context) => const Padding(
+                firstPageProgressIndicatorBuilder: (context) => Padding(
                   padding: EdgeInsets.all(32),
                   child: Center(child: CircularProgressIndicator()),
                 ),
@@ -116,7 +120,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage> with Connectivity
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const Gap(20),
-                      const Text(
+                      Text(
                         "Vous n'avez pas encore évalué de séjour.",
                         textAlign: TextAlign.center,
                       ),

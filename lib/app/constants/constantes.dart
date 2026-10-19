@@ -4,7 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_model.dart';
 import 'package:immoplus/app/features/account/account_page.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 import 'package:intl/intl.dart';
 
@@ -47,13 +47,13 @@ class Constantes {
   Constantes({required this.context});
   static ColorScheme colorScheme = ColorScheme(
     primary: HexColor("#2072ca"),
-    secondary: const Color(0xFFABABAB),
+    secondary: AppColors.immoTextDisabled,
     surface: const Color.fromARGB(255, 166, 173, 180),
-    error: const Color(0xFFFFFFFF),
-    onPrimary: const Color(0xFFFFFFFF),
+    error: AppColors.white,
+    onPrimary: AppColors.white,
     onSecondary: HexColor("04b4fc"),
     onSurface: const Color(0xFF3E3C3C),
-    onError: const Color(0xFFFFFFFF),
+    onError: AppColors.white,
     brightness: Brightness.light,
   );
   static DateFormat dateFormat = DateFormat('dd/MM/yyyy');
@@ -210,24 +210,24 @@ List<double> listToDouble(dynamic value) {
   return [];
 }
 
-const double compactResidenceCardHeight = 265.0;
+const double compactResidenceCardHeight = 258.0;
 
 /// Espace vertical entre deux sections normales de la page d'accueil
 /// (sans pub entre elles).
-const double kHomeSectionSpacing = 28.0;
+const double kHomeSectionSpacing = 16.0;
 
 /// Espace vertical (au-dessus ET en dessous) autour d'une pub sur la
 /// page d'accueil.
-const double kHomeSectionSpacingPub = 48.0;
+const double kHomeSectionSpacingPub = 28.0;
 
 /// Espace vertical (au-dessus ET en dessous) autour d'une pub de type
 /// carrousel (photos éparpillées) — plus compact que les autres pubs car
 /// le carrousel a déjà son propre padding visuel intégré.
-const double kHomeSectionPubCarrousel = 24.0;
+const double kHomeSectionPubCarrousel = 16.0;
 
 /// Espace vertical (au-dessus ET en dessous) autour d'une pub de type
 /// carrousel vidéo — même logique que kHomeSectionPubCarrousel.
-const double kHomeSectionPubCarrouselVideo = 24.0;
+const double kHomeSectionPubCarrouselVideo = 16.0;
 const maxPriceLimit = 3000000;
 const minPriceLimit = 100;
 
@@ -273,7 +273,7 @@ class FurnitureUIConstants {
   // Elevation & Shadows (pour BoxShadow)
   static List<BoxShadow> get shadowLight => [
         BoxShadow(
-          color: AppColors.blue4227DE.withValues(alpha: 0.08),
+          color: AppColors.immoBrandPrimary.withValues(alpha: 0.08),
           offset: const Offset(0, 2),
           blurRadius: 8,
         ),
@@ -281,7 +281,7 @@ class FurnitureUIConstants {
 
   static List<BoxShadow> get shadowMedium => [
         BoxShadow(
-          color: AppColors.blue4227DE.withValues(alpha: 0.12),
+          color: AppColors.immoBrandPrimary.withValues(alpha: 0.12),
           offset: const Offset(0, 4),
           blurRadius: 16,
         ),
@@ -289,7 +289,7 @@ class FurnitureUIConstants {
 
   static List<BoxShadow> get shadowHeavy => [
         BoxShadow(
-          color: Colors.black.withValues(alpha: 0.15),
+          color: AppColors.black.withValues(alpha: 0.15),
           offset: const Offset(0, 8),
           blurRadius: 24,
         ),

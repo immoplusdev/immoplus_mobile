@@ -11,12 +11,9 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>com.immoplus.ci</key>
-
         <string>ImmoPlus AppStore Profile</string> 
-
-        <key>com.immoplus.ci.OneSignalNotificationServiceExtension</key>
-        <string>ImmoPlus AppStore Profile One Signal</string>
     </dict>
+
     
     <key>signingStyle</key>
     <string>manual</string>

@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:immoplus/app/core/config/injection.dart';
-import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
 import 'package:immoplus/app/data/enums/order_dir.dart';
+import 'package:immoplus/app/data/models/remote/reservations/failure_reasons/motif_echec_reponse_model.dart';
+import 'package:immoplus/app/data/models/remote/reservations/failure_reasons/motifs_echec_response.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservations_collection.dart';
@@ -93,6 +93,55 @@ class ResidenceRepository {
     }
   }
 
+  /// Récupère la liste des motifs d'échec proposés pour la réservation
+  Future<MotifsEchecResponse> getMotifsEchec(String reservationId) async {
+    try {
+      final response =
+          await ReservationProvider(dioClient).getMotifsEchec(reservationId);
+      return response;
+    } on DioException catch (e) {
+      log('DioError getMotifsEchec: ${e.message}');
+      throw Exception('Erreur récupération motifs d\'échec: ${e.message}');
+    }
+  }
+
+  /// Enregistre la réponse au motif d'échec
+  Future<MotifEchecReponseModel> submitMotifEchec({
+    required String reservationId,
+    required String reasonCode,
+    String? comment,
+  }) async {
+    try {
+      final payload = <String, dynamic>{
+        'reasonCode': reasonCode,
+        if (comment != null && comment.trim().isNotEmpty) 'comment': comment.trim(),
+      };
+      final response = await ReservationProvider(dioClient).submitMotifEchec(
+        reservationId,
+        payload,
+      );
+      return response;
+    } on DioException catch (e) {
+      log('DioError submitMotifEchec: ${e.message}');
+      throw Exception('Erreur soumission motif d\'échec: ${e.message}');
+    }
+  }
+
+  /// Consulte la réponse au motif d'échec déjà renseigné pour l'acteur courant
+  Future<MotifEchecReponseModel?> getMotifEchecReponse(String reservationId) async {
+    try {
+      final response = await ReservationProvider(dioClient)
+          .getMotifEchecReponse(reservationId);
+      return response;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+      log('DioError getMotifEchecReponse: ${e.message}');
+      throw Exception('Erreur consultation réponse motif: ${e.message}');
+    }
+  }
+
   /// Récupère les réservations en attente de paiement client
   Future<ReservationsCollection> getReservationsEnAttentePaiement({
     int page = 1,
@@ -172,7 +221,8 @@ class ResidenceRepository {
 
   Future<Map<String, dynamic>> generateQrCheckin({required String id}) async {
     try {
-      final response = await ReservationProvider(dioClient).generateQrCheckin(id);
+      final response =
+          await ReservationProvider(dioClient).generateQrCheckin(id);
       return response.data as Map<String, dynamic>;
     } on DioException catch (dioError) {
       log('DioError (generer-qr-checkin): ${dioError.message}');

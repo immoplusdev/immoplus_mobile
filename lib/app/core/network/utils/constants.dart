@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
 
 import '../../../data/models/remote/files/file_data_model.dart';
-import 'easy_loading_handler.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 Future<String?> uploadFile({required File file}) async {
   try {

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 const _buttonHeight = 50.0;
 
@@ -51,9 +51,9 @@ class CustomButtonSecondary extends StatelessWidget {
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             elevation: elevation ?? 0,
-            backgroundColor: backgroundColor ?? Colors.white,
+            backgroundColor: backgroundColor ?? AppColors.white,
             side: BorderSide(
-              color: clickable ? borderColor : Colors.grey[400]!,
+              color: clickable ? borderColor : AppColors.gray400,
               width: borderWidth ?? 1.5,
             ),
             shape: RoundedRectangleBorder(

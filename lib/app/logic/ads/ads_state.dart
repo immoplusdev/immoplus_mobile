@@ -9,7 +9,8 @@ class AdsState with _$AdsState {
   const factory AdsState.initial() = ADS_INITIAL;
   const factory AdsState.loading() = ADS_LOADING;
   const factory AdsState.error({required String message}) = ADS_ERROR;
-  const factory AdsState.success({required List<AdCampaignModel> campaigns}) = ADS_SUCCESS;
+  const factory AdsState.success({required List<AdCampaignModel> campaigns}) =
+      ADS_SUCCESS;
 
   factory AdsState.fromJson(Map<String, dynamic> json) =>
       _$AdsStateFromJson(json);

@@ -12,7 +12,7 @@ class _CountryPhoneNumberInputState extends State<CountryPhoneNumberInput> {
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
-      fillColor: Colors.white,
+      fillColor: AppColors.white,
       textInputType:
           TextInputType.numberWithOptions(signed: true, decimal: true),
       textInputAction: TextInputAction.done,

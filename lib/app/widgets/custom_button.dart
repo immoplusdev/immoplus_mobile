@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 const _buttonHeight = 50.0;
 
@@ -18,7 +18,8 @@ class CustomButtom extends StatelessWidget {
       this.elevation,
       this.isLoading = false,
       this.borderRadius,
-      this.buttonHeight});
+      this.buttonHeight,
+      this.padding});
   final String? text;
   final Widget? child;
   final void Function()? onClick;
@@ -30,21 +31,22 @@ class CustomButtom extends StatelessWidget {
   final bool isLoading;
   final double? buttonHeight;
   final BorderRadius? borderRadius;
+  final EdgeInsetsGeometry? padding;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
         height: buttonHeight ?? _buttonHeight,
-        //padding: EdgeInsets.only(left: 30, right: 30),
         width: double.infinity,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
+            padding: padding,
             elevation: elevation ?? 0,
             backgroundColor: (clickable)
                 ? (color == null)
                     ? AppColors.primary
                     : color
-                : Colors.grey[400],
+                : AppColors.gray400,
             shape: RoundedRectangleBorder(
                 borderRadius:
                     borderRadius ?? BorderRadius.circular(radiusButton)),
@@ -60,7 +62,7 @@ class CustomButtom extends StatelessWidget {
                   Text(
                     text ?? "",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: textColor ?? Colors.white,
+                          color: textColor ?? AppColors.white,
                           fontWeight: FontWeight.w600,
                         ),
                   ),

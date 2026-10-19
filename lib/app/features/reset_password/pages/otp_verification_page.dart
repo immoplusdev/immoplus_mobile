@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:immoplus/app/features/reset_password/cubit/reset_password_cubit.dart';
 import 'package:immoplus/app/features/reset_password/cubit/reset_password_cubit_state.dart';
 import 'package:immoplus/app/features/reset_password/widgets/header_container.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 
 import 'package:pinput/pinput.dart';
@@ -98,37 +98,39 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   defaultPinTheme: PinTheme(
                     width: 50,
                     height: 50,
-                    textStyle: const TextStyle(
+                    textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300, width: 2),
+                      border: Border.all(
+                          color: AppColors.immoBorderStrong, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   focusedPinTheme: PinTheme(
                     width: 50,
                     height: 50,
-                    textStyle: const TextStyle(
+                    textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightBlue, width: 2),
+                      border: Border.all(
+                          color: AppColors.immoBrandSecondary, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   submittedPinTheme: PinTheme(
                     width: 50,
                     height: 50,
-                    textStyle: const TextStyle(
+                    textStyle: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.lightBlue,
+                      color: AppColors.immoBrandSecondary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -187,10 +189,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         _canResendCode
                             ? "Renvoyer le code"
                             : "Renvoyer le code ($_resendCountdown s)",
-                        style: TextStyle(
+                        style: AppTypography.font(
                           color: _canResendCode && !isLoading
-                              ? AppColors.lightBlue
-                              : Colors.grey,
+                              ? AppColors.immoBrandSecondary
+                              : AppColors.immoTextSecondary,
                           fontSize: 14,
                         ),
                       ),

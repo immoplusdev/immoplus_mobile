@@ -1,6 +1,6 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/data/models/remote/polls/poll_model.dart';
 import 'package:immoplus/app/data/repositories/poll_repository.dart';
@@ -8,11 +8,11 @@ import 'package:immoplus/app/data/repositories/poll_repository.dart';
 /// Palette du sondage — regroupée ici pour pouvoir l'ajuster en un seul
 /// endroit sans chasser des couleurs éparpillées dans le widget.
 class _PollColors {
-  static const Color background = Colors.white;
+  static const Color background = AppColors.white;
   static const Color border = Color(0xFFEFEFEF);
-  static const Color badge = Color(0xFFFF3B30);
+  static const Color badge = AppColors.red500;
   static const Color question = Color(0xFF111111);
-  static const Color optionLabel = Color(0xFF1A1A1A);
+  static const Color optionLabel = AppColors.gray900;
   static const Color percentage = Color(0xFF111111);
   static const Color track = Color(0xFFF5F5F6);
   static const Color fillBase = Color(0xFF8B7CF6);
@@ -59,17 +59,21 @@ class _PollBannerCardState extends State<PollBannerCard> {
     if (_isSubmitting || _isClosed) return;
 
     if (!_poll.userHasVoted) {
-      await _run(optionId: optionId, call: () => getIt<PollRepository>().vote(
-            pollId: _poll.pollId,
-            optionId: optionId,
-          ));
+      await _run(
+          optionId: optionId,
+          call: () => getIt<PollRepository>().vote(
+                pollId: _poll.pollId,
+                optionId: optionId,
+              ));
     } else if (optionId == _myVoteOptionId) {
       await _handleCancel();
     } else {
-      await _run(optionId: optionId, call: () => getIt<PollRepository>().changeVote(
-            pollId: _poll.pollId,
-            optionId: optionId,
-          ));
+      await _run(
+          optionId: optionId,
+          call: () => getIt<PollRepository>().changeVote(
+                pollId: _poll.pollId,
+                optionId: optionId,
+              ));
     }
   }
 
@@ -139,7 +143,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
         children: [
           Text(
             'Sondage',
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w700,
               fontSize: 11,
               color: _PollColors.badge,
@@ -148,7 +152,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
           const Gap(8),
           Text(
             _poll.question,
-            style: GoogleFonts.plusJakartaSans(
+            style: AppTypography.font(
               fontWeight: FontWeight.w700,
               fontSize: 13,
               color: _PollColors.question,
@@ -171,7 +175,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
               onTap: _isSubmitting ? null : _handleCancel,
               child: Text(
                 'Annuler mon vote',
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: _PollColors.meta,
@@ -186,7 +190,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
             children: [
               Text(
                 '${_poll.totalVotes} votes',
-                style: GoogleFonts.plusJakartaSans(
+                style: AppTypography.font(
                   fontSize: 11,
                   color: _PollColors.meta,
                 ),
@@ -194,7 +198,7 @@ class _PollBannerCardState extends State<PollBannerCard> {
               if (_expiryLabel.isNotEmpty)
                 Text(
                   _expiryLabel,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: AppTypography.font(
                     fontSize: 11,
                     color: _PollColors.meta,
                   ),
@@ -231,7 +235,7 @@ class _PollOptionBar extends StatelessWidget {
     final fillAlpha = (0.28 + 0.72 * pct).clamp(0.28, 1.0).toDouble();
 
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: canVote ? onTap : null,
         borderRadius: BorderRadius.circular(_radius),
@@ -255,7 +259,8 @@ class _PollOptionBar extends StatelessWidget {
                       child: Container(
                         height: _height,
                         width: constraints.maxWidth * pct,
-                        color: _PollColors.fillBase.withValues(alpha: fillAlpha),
+                        color:
+                            _PollColors.fillBase.withValues(alpha: fillAlpha),
                       ),
                     );
                   },
@@ -270,7 +275,7 @@ class _PollOptionBar extends StatelessWidget {
                       Expanded(
                         child: Text(
                           option.label,
-                          style: GoogleFonts.plusJakartaSans(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                             color: _PollColors.optionLabel,
@@ -280,7 +285,7 @@ class _PollOptionBar extends StatelessWidget {
                         ),
                       ),
                       if (isPending)
-                        const SizedBox(
+                        SizedBox(
                           width: 14,
                           height: 14,
                           child: CircularProgressIndicator(strokeWidth: 2),
@@ -288,7 +293,7 @@ class _PollOptionBar extends StatelessWidget {
                       else
                         Text(
                           '${option.percentage}%',
-                          style: GoogleFonts.plusJakartaSans(
+                          style: AppTypography.font(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                             color: _PollColors.percentage,

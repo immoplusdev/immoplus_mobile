@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class ProfileAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.3),
+          color: AppColors.white.withValues(alpha: 0.3),
           width: borderWidth,
         ),
       ),

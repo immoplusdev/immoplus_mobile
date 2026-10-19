@@ -86,7 +86,8 @@ abstract class AuthProvider {
       @Body() ResetPasswordBody resetPasswordBody);
 
   @POST('/users/send-otp')
-  Future<HttpResponse> sendRegistrationOTP(@Body() SendEmailOtpBody sendEmailOtpBody);
+  Future<HttpResponse> sendRegistrationOTP(
+      @Body() SendEmailOtpBody sendEmailOtpBody);
 
   @POST('/users/verify-otp')
   Future<VerifyEmailResponse> verifyOtp(

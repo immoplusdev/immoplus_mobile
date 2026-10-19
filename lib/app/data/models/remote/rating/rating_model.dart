@@ -22,5 +22,6 @@ class RatingModel with _$RatingModel {
     @Default(false) bool wouldRecommend,
   }) = _RatingModel;
 
-  factory RatingModel.fromJson(Map<String, dynamic> json) => _$RatingModelFromJson(json);
+  factory RatingModel.fromJson(Map<String, dynamic> json) =>
+      _$RatingModelFromJson(json);
 }

@@ -12,7 +12,8 @@ class HotelRoomCubit extends Cubit<HotelRoomState> {
   Future<void> getRoomDetail(String hotelId, String roomTypeId) async {
     emit(const HotelRoomState.loading());
     try {
-      final response = await _hotelRepository.getRoomDetail(hotelId, roomTypeId);
+      final response =
+          await _hotelRepository.getRoomDetail(hotelId, roomTypeId);
       emit(HotelRoomState.loaded(roomDetail: response));
     } catch (e) {
       emit(HotelRoomState.error(message: e.toString()));

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -41,19 +42,19 @@ class DescriptionFooter extends StatelessWidget {
       children: [
         Text(
           hashtagsText,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.8),
+          style: AppTypography.font(
+            color: AppColors.white.withValues(alpha: 0.8),
             fontSize: _fontSize,
             fontWeight: FontWeight.w600,
             height: 1.35,
           ),
         ),
         if (formattedDate.isNotEmpty) ...[
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
             formattedDate,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.6),
+            style: AppTypography.font(
+              color: AppColors.white.withValues(alpha: 0.6),
               fontSize: _fontSize,
               fontWeight: FontWeight.w400,
               height: 1.35,

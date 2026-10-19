@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'message_model.dart';
 
 part 'conversation_model.freezed.dart';
 part 'conversation_model.g.dart';
@@ -35,6 +36,13 @@ enum ConversationType {
   }
 }
 
+final _actionsByConversationId = <String, List<MessagingAction>>{};
+final _readOnlyConversationIds = <String>{};
+final _contextByConversationId = <String, Map<String, dynamic>>{};
+final _stageByConversationId = <String, String?>{};
+final _pendingActionForByConversationId = <String, String?>{};
+final _pendingActionDueAtByConversationId = <String, DateTime?>{};
+
 @freezed
 class ConversationModel with _$ConversationModel {
   const ConversationModel._();
@@ -65,7 +73,46 @@ class ConversationModel with _$ConversationModel {
   }) = _ConversationModel;
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) =>
-      _$ConversationModelFromJson(json);
+      _$ConversationModelFromJson(_processJson(json));
+
+  static Map<String, dynamic> _processJson(Map<String, dynamic> json) {
+    final id = json['id']?.toString() ?? '';
+    if (json['readOnly'] == true) {
+      _readOnlyConversationIds.add(id);
+    } else {
+      _readOnlyConversationIds.remove(id);
+    }
+    _actionsByConversationId[id] = (json['actions'] as List? ?? const [])
+        .whereType<Map>()
+        .map((action) =>
+            MessagingAction.fromJson(Map<String, dynamic>.from(action)))
+        .toList(growable: false);
+    _contextByConversationId[id] = json['context'] is Map
+        ? Map<String, dynamic>.from(json['context'] as Map)
+        : const {};
+    _stageByConversationId[id] = json['stage']?.toString();
+    _pendingActionForByConversationId[id] =
+        json['pendingActionFor']?.toString();
+    _pendingActionDueAtByConversationId[id] = json['pendingActionDueAt'] == null
+        ? null
+        : DateTime.tryParse(json['pendingActionDueAt'].toString());
+    return json;
+  }
+
+  List<MessagingAction> get actions =>
+      _actionsByConversationId[id] ?? const <MessagingAction>[];
+  Map<String, dynamic> get context =>
+      _contextByConversationId[id] ?? const <String, dynamic>{};
+  String? get stage => _stageByConversationId[id];
+  String? get pendingActionFor => _pendingActionForByConversationId[id];
+  DateTime? get pendingActionDueAt => _pendingActionDueAtByConversationId[id];
+
+  /// Le contrat peut verrouiller un fil sans nécessairement changer son
+  /// statut. Dans les deux cas, l'historique reste visible mais aucune action
+  /// ni aucun envoi ne doit être proposé.
+  bool get isReadOnly =>
+      statusEnum == ConversationStatus.blocked ||
+      _readOnlyConversationIds.contains(id);
 
   ConversationStatus get statusEnum => ConversationStatus.fromString(status);
   ConversationType get typeEnum => ConversationType.fromString(type);

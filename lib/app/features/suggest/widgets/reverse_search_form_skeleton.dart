@@ -27,7 +27,7 @@ class ReverseSearchFormSkeleton extends StatelessWidget {
         ),
         // Même gabarit que le divider + bouton du vrai formulaire, sans le
         // rendre visible.
-        const SizedBox(height: 81),
+        SizedBox(height: 81),
       ],
     );
   }
@@ -42,7 +42,7 @@ class ReverseSearchTabBarSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
       child: SizedBox(height: 40),
     );

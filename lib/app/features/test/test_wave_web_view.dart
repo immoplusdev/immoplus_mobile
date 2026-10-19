@@ -8,7 +8,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       appBar: AppBar(title: const Text("QR Code Wave via WebView")),
+//       appBar: AppBar(title: Text("QR Code Wave via WebView")),
 //       body: WebViewWidget(
 //         controller: WebViewController()
 //           ..setJavaScriptMode(JavaScriptMode.unrestricted)

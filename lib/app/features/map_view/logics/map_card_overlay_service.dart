@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/tokens/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 
@@ -104,7 +105,7 @@ class _AnimatedCardEntryState extends State<_AnimatedCardEntry>
       child: FadeTransition(
         opacity: _fadeAnimation,
         child: Material(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           child: ValueListenableBuilder<Widget?>(
             valueListenable: widget.childNotifier,
             builder: (context, child, _) {

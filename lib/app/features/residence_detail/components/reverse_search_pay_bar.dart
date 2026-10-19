@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 
 /// Barre "prix + Payer" pour une résidence issue d'une recherche inversée —
@@ -32,9 +32,9 @@ class ReverseSearchPayBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         border: Border(
-          top: BorderSide(color: Colors.grey.shade100, width: 1),
+          top: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1),
         ),
       ),
       padding: EdgeInsets.only(
@@ -55,32 +55,32 @@ class ReverseSearchPayBar extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: CurrencyFormatter().format(perNight.toString()),
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: ' F / nuit',
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFF222222),
+                          color: AppColors.immoTextPrimary,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   'Total séjour ($nights nuit${nights > 1 ? 's' : ''}) : '
                   '${CurrencyFormatter().format(totalRounded.toString())} F',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade500,
+                    color: AppColors.immoTextSecondary,
                   ),
                 ),
               ],
@@ -92,28 +92,29 @@ class ReverseSearchPayBar extends StatelessWidget {
               onPressed: isLoading ? null : onTap,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.white,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(60),
                 ),
-                textStyle: const TextStyle(
+                textStyle: AppTypography.font(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
               ),
               child: isLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColors.white),
                       ),
                     )
-                  : const Text('Payer'),
+                  : Text('Payer'),
             ),
           ),
         ],

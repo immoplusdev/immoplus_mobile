@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
@@ -38,16 +39,16 @@ class HotelRoomCard extends StatelessWidget {
                   child: Container(
                     height: 125,
                     width: double.infinity,
-                    color: Colors.grey.shade100,
+                    color: AppColors.immoBgSurfaceMuted,
                     child: room.images.isNotEmpty &&
                             room.images.first.trim().isNotEmpty
                         ? Image.network(
                             Utils.getImagePath(id: room.images.first),
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) =>
-                                Container(color: Colors.grey.shade300),
+                                Container(color: AppColors.immoBorderStrong),
                           )
-                        : Container(color: Colors.grey.shade300),
+                        : Container(color: AppColors.immoBorderStrong),
                   ),
                 ),
                 Positioned(
@@ -55,15 +56,15 @@ class HotelRoomCard extends StatelessWidget {
                   left: 14,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Text(
                       "${room.nombreChambres} chambre${room.nombreChambres > 1 ? 's' : ''}",
-                      style: const TextStyle(
-                        color: Colors.black,
+                      style: AppTypography.font(
+                        color: AppColors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
@@ -75,7 +76,7 @@ class HotelRoomCard extends StatelessWidget {
             const Gap(7),
             Text(
               room.nom,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
                 color: Color(0xFF111111),
@@ -87,8 +88,8 @@ class HotelRoomCard extends StatelessWidget {
             const Gap(2),
             Text(
               "$formattedPrice fcfa /nuits",
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.45),
+              style: AppTypography.font(
+                color: AppColors.black.withOpacity(0.45),
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),

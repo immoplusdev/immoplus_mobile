@@ -17,7 +17,7 @@ import 'package:immoplus/app/features/home_page/logic/location_permission_cubit.
 import 'package:immoplus/app/features/home_page/logic/location_permission_state.dart';
 import 'package:immoplus/app/features/home_page/screens/estates_near_list.dart';
 import 'package:immoplus/app/features/home_page/screens/location_biens_page.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_bien_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
@@ -309,12 +309,12 @@ class _EstatesListState extends State<EstatesList> with ConnectivityMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(15),
-                            const SizedBox(
+                            SizedBox(
                               width: 150,
                               height: 20,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: Colors.black12,
+                                  color: AppColors.black12,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(4)),
                                 ),
@@ -422,8 +422,8 @@ class EstatesHorizontalSectionWidget extends StatelessWidget {
                 Iconsax.arrow_right_1,
                 size: 20,
                 color: section.biens.isNotEmpty
-                    ? Colors.black
-                    : Colors.grey.shade400,
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

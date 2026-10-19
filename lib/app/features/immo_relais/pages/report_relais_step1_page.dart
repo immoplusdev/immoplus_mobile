@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/services/image_picker_service.dart';
 import 'package:immoplus/app/data/enums/relais_property_type.dart';
@@ -14,7 +13,7 @@ import 'package:immoplus/app/features/immo_relais/pages/report_relais_step2_page
 import 'package:immoplus/app/features/immo_relais/widgets/relais_intro_header.dart';
 import 'package:immoplus/app/features/location_module/data/model/address.dart';
 import 'package:immoplus/app/features/location_module/location_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_popup.dart';
 
@@ -72,7 +71,8 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
 
   void _continue() {
     if (_draft.propertyType == null) {
-      CustomPopup.showErrorToast(text: 'Veuillez sélectionner un type de logement');
+      CustomPopup.showErrorToast(
+          text: 'Veuillez sélectionner un type de logement');
       return;
     }
     if (_draft.commune == null || _draft.commune!.isEmpty) {
@@ -85,20 +85,21 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios,
+              color: AppColors.black, size: 20),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Publiez votre ancien logement',
-          style: GoogleFonts.dmSans(
+          style: AppTypography.font(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.black,
           ),
         ),
       ),
@@ -142,10 +143,10 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: GoogleFonts.dmSans(
+      style: AppTypography.font(
         fontSize: 15,
         fontWeight: FontWeight.w600,
-        color: Colors.black,
+        color: AppColors.black,
       ),
     );
   }
@@ -183,10 +184,12 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryLite : Colors.white,
+                  color: isSelected ? AppColors.primaryLite : AppColors.white,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : Colors.grey.shade300,
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.immoBorderStrong,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -194,14 +197,15 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                   children: [
                     type.svgIcon != null
                         ? SvgPicture.asset(type.svgIcon!, width: 26, height: 26)
-                        : Icon(type.fallbackIcon, size: 26, color: Colors.grey.shade700),
+                        : Icon(type.fallbackIcon,
+                            size: 26, color: AppColors.immoTextLabel),
                     const Gap(8),
                     Text(
                       type.label,
-                      style: GoogleFonts.dmSans(
+                      style: AppTypography.font(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade700,
+                        color: AppColors.immoTextLabel,
                       ),
                     ),
                   ],
@@ -222,10 +226,12 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: selected != null ? AppColors.primaryLite : Colors.white,
+          color: selected != null ? AppColors.primaryLite : AppColors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: selected != null ? AppColors.primary : Colors.grey.shade300,
+            color: selected != null
+                ? AppColors.primary
+                : AppColors.immoBorderStrong,
           ),
         ),
         child: Row(
@@ -237,14 +243,17 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
                 selected ?? 'Choisir un quartier',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.dmSans(
+                style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: selected != null ? Colors.black : Colors.grey.shade500,
+                  color: selected != null
+                      ? AppColors.black
+                      : AppColors.immoTextSecondary,
                 ),
               ),
             ),
-            Icon(Icons.chevron_right_rounded, size: 20, color: Colors.grey.shade400),
+            Icon(Icons.chevron_right_rounded,
+                size: 20, color: AppColors.immoTextDisabled),
           ],
         ),
       ),
@@ -256,20 +265,20 @@ class _ReportRelaisStep1PageState extends State<ReportRelaisStep1Page> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.immoBorderStrong),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _stepperButton(
             icon: Icons.remove,
-            onTap: _draft.rooms > 0
-                ? () => setState(() => _draft.rooms--)
-                : null,
+            onTap:
+                _draft.rooms > 0 ? () => setState(() => _draft.rooms--) : null,
           ),
           Text(
             _draft.rooms.toString().padLeft(2, '0'),
-            style: GoogleFonts.dmSans(fontSize: 18, fontWeight: FontWeight.bold),
+            style:
+                AppTypography.font(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           _stepperButton(
             icon: Icons.add,
@@ -312,7 +321,8 @@ class _PhotoSlot extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.file(file!, fit: BoxFit.cover, width: double.infinity, height: 110),
+            child: Image.file(file!,
+                fit: BoxFit.cover, width: double.infinity, height: 110),
           ),
           if (onRemove != null)
             Positioned(
@@ -325,10 +335,11 @@ class _PhotoSlot extends StatelessWidget {
                   height: 22,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
+                    color: AppColors.black.withValues(alpha: 0.55),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.close_rounded, size: 14, color: Colors.white),
+                  child: const Icon(Icons.close_rounded,
+                      size: 14, color: AppColors.white),
                 ),
               ),
             ),
@@ -359,7 +370,8 @@ class _PhotoSlot extends StatelessWidget {
                 Text(
                   'Ajouter des photos',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.dmSans(fontSize: 10, color: AppColors.primary),
+                  style: AppTypography.font(
+                      fontSize: 10, color: AppColors.primary),
                 ),
               ],
             ),

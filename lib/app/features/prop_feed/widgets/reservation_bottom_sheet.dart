@@ -14,9 +14,8 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking/booking_formular_action.dart';
 import 'package:immoplus/app/features/visits/visit_formular_action.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:immoplus/app/widgets/property_card.dart';
 import 'package:immoplus/app/widgets/property_tab_bar.dart';
@@ -218,12 +217,12 @@ class ReservationBottomSheet extends StatelessWidget {
       isScrollControlled: true,
       useRootNavigator: true,
       useSafeArea: false,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black54,
+      backgroundColor: AppColors.transparent,
+      barrierColor: AppColors.black54,
       builder: (context) {
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: AppColors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: FutureBuilder<ReservationSheetResult>(
@@ -260,25 +259,26 @@ class ReservationBottomSheet extends StatelessWidget {
                         size: 48,
                         color: Color(0xFFCCCCCC),
                       ),
-                      const SizedBox(height: 12),
-                      const Text(
+                      SizedBox(height: 12),
+                      Text(
                         'Impossible de charger les données',
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1A1A2E),
+                          color: AppColors.navy900,
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      const Text(
+                      SizedBox(height: 6),
+                      Text(
                         'Vérifiez votre connexion et réessayez.',
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                        style: AppTypography.font(
+                            fontSize: 13, color: AppColors.immoTextSecondary),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Fermer'),
+                        child: Text('Fermer'),
                       ),
                     ],
                   ),
@@ -286,7 +286,7 @@ class ReservationBottomSheet extends StatelessWidget {
               } else {
                 final result = snapshot.data;
                 if (result == null) {
-                  content = const Center(
+                  content = Center(
                     child: Text('Données non trouvées'),
                   );
                 } else {
@@ -340,8 +340,8 @@ class ReservationBottomSheet extends StatelessWidget {
       isScrollControlled: true,
       useRootNavigator: true,
       useSafeArea: false,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black54,
+      backgroundColor: AppColors.transparent,
+      barrierColor: AppColors.black54,
       //showDragHandle: true,
       builder: (context) {
         Widget content = ReservationBottomSheet(
@@ -369,7 +369,7 @@ class ReservationBottomSheet extends StatelessWidget {
         }
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: content,
@@ -460,7 +460,7 @@ class ReservationBottomSheet extends StatelessWidget {
                   title: data.title ?? '',
                   location: data.location,
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 PropertyTabBar(
                   tabs: [
                     PropertyTabItem(
@@ -469,23 +469,23 @@ class ReservationBottomSheet extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14),
                           if (data.description != null &&
                               data.description!.isNotEmpty) ...[
-                            const SizedBox(height: 12),
-                            const Text(
+                            SizedBox(height: 12),
+                            Text(
                               'Description',
-                              style: TextStyle(
-                                color: Colors.black,
+                              style: AppTypography.font(
+                                color: AppColors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             Text(
                               data.description!,
-                              style: TextStyle(
-                                color: Colors.grey.shade700,
+                              style: AppTypography.font(
+                                color: AppColors.immoTextLabel,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -526,7 +526,7 @@ class ReservationBottomSheet extends StatelessWidget {
                                   iconSize: 14,
                                   fontSize: 12,
                                 ),
-                                const SizedBox(height: 14),
+                                SizedBox(height: 14),
                                 PropertyPieces(
                                   pieces: data.pieces.isNotEmpty
                                       ? data.pieces
@@ -555,10 +555,11 @@ class ReservationBottomSheet extends StatelessWidget {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 border: Border(
                   top: BorderSide(
-                      color: Colors.black.withValues(alpha: 0.1), width: 0.5),
+                      color: AppColors.black.withValues(alpha: 0.1),
+                      width: 0.5),
                 ),
               ),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
@@ -569,7 +570,7 @@ class ReservationBottomSheet extends StatelessWidget {
                       price: data.price!.trim(),
                       period: data.pricePeriod,
                     ),
-                  if (hasPrice) const SizedBox(width: 12),
+                  if (hasPrice) SizedBox(width: 12),
                   Expanded(
                     child: BookNowButton(
                       label: data.actionButtonLabel,
@@ -784,7 +785,7 @@ class _FurnitureCaracteristiques extends StatelessWidget {
                 _CaracChip(
                     label: data.furnitureType!, icon: Icons.category_outlined),
               if (data.furnitureType != null && data.furnitureEtat != null)
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
               if (data.furnitureEtat != null && data.furnitureEtat!.isNotEmpty)
                 _CaracChip(
                     label: data.furnitureEtat!, icon: Icons.info_outline),
@@ -793,23 +794,23 @@ class _FurnitureCaracteristiques extends StatelessWidget {
 
           if (data.furnitureCategory != null &&
               data.furnitureCategory!.isNotEmpty) ...[
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             _CaracChip(
                 label: data.furnitureCategory!, icon: Icons.label_outline),
           ],
 
           // Couleurs
           if (data.furnitureColors.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: 16),
+            Text(
               'Couleurs',
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A2E),
+                color: AppColors.navy900,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 6,
@@ -836,11 +837,11 @@ class _CaracChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F4FF),
+        color: AppColors.previewBackground,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -849,14 +850,14 @@ class _CaracChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: AppColors.blue4227DE),
-          const SizedBox(width: 6),
+          Icon(icon, size: 14, color: AppColors.immoBrandPrimary),
+          SizedBox(width: 6),
           Text(
             label,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1A2E),
+              color: AppColors.navy900,
               letterSpacing: 0.2,
             ),
           ),
@@ -877,11 +878,11 @@ class _ColorChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F4FF),
+        color: AppColors.previewBackground,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -889,10 +890,10 @@ class _ColorChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTypography.font(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF1A1A2E),
+          color: AppColors.navy900,
           letterSpacing: 0.2,
         ),
       ),

@@ -9,10 +9,9 @@ import 'package:immoplus/app/data/models/auth/verify_otp_extra.dart';
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/formular_utils.dart';
 import 'package:immoplus/app/utils/phone_number_handler.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:immoplus/app/widgets/custom_page_immo.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
@@ -156,7 +155,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: AppColors.E6F5FF,
+                          color: AppColors.blue100,
                           borderRadius: BorderRadius.circular(22),
                         ),
                         child: Column(
@@ -208,7 +207,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                                   valueListenable: _emailController,
                                   builder: (context, value, _) {
                                     if (value.text.isEmpty) {
-                                      return const SizedBox();
+                                      return SizedBox();
                                     }
                                     return IconButton(
                                       tooltip: "Effacer",
@@ -224,7 +223,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                               SizedBox(
                                 height: 80,
                                 child: InternationalPhoneInput(
-                                  backgroundColor: Colors.transparent,
+                                  backgroundColor: AppColors.transparent,
                                   onValidPhoneNumber: (value) {
                                     phoneNumber = value;
                                   },
@@ -250,7 +249,7 @@ class _SendEmailOrNumberOptPageState extends State<SendEmailOrNumberOptPage> {
                                   ? AppColors.primary
                                   : (isPhoneNumberValid
                                       ? AppColors.primary
-                                      : Colors.blueGrey.shade200),
+                                      : AppColors.blueGrey),
                             ),
                             const Gap(24),
                             Text(

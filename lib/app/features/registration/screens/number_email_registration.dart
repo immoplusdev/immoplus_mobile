@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,11 +93,11 @@ class NumberEmailRegistration extends StatelessWidget {
                       fillColor: value
                           ? WidgetStateProperty.all(
                               Theme.of(context).colorScheme.primary)
-                          : WidgetStateProperty.all(Colors.white),
+                          : WidgetStateProperty.all(AppColors.white),
                       onChanged: (val) {
                         _cguNotifier.value = !_cguNotifier.value;
                       }),
-                  const Text("j'approuve les"),
+                  Text("j'approuve les"),
                   TextButton(
                       onPressed: () {
                         showModalBottomSheet(
@@ -112,7 +113,7 @@ class NumberEmailRegistration extends StatelessWidget {
                       },
                       child: Text(
                         'Termes & conditions',
-                        style: TextStyle(
+                        style: AppTypography.font(
                             color: Theme.of(context).colorScheme.primary),
                       )),
                   const Gap(10),

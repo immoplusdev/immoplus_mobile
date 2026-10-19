@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/features/user_preference/pages/user_preference_page.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class OnboardingData {
   final String title1;
@@ -96,7 +95,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           // Radial Gradient
@@ -107,8 +106,8 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   center: const Alignment(0, 0.4),
                   radius: 0.8,
                   colors: [
-                    AppColors.customBlue.withOpacity(0.4),
-                    Colors.transparent,
+                    AppColors.immoBrandPrimary.withOpacity(0.4),
+                    AppColors.transparent,
                   ],
                 ),
               ),
@@ -126,9 +125,9 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.6),
-                    Colors.black.withOpacity(0.9),
+                    AppColors.transparent,
+                    AppColors.black.withOpacity(0.6),
+                    AppColors.black.withOpacity(0.9),
                   ],
                 ),
               ),
@@ -200,10 +199,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   duration: const Duration(milliseconds: 600),
                   child: Text(
                     data.title1,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.h1.copyWith(
                       fontSize: 55,
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF00122E),
+                      color: AppColors.immoTextPrimary,
                       height: 1.1,
                     ),
                   ),
@@ -221,10 +220,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                       Expanded(
                         child: Text(
                           data.title2,
-                          style: GoogleFonts.dmSans(
+                          style: AppTypography.h1.copyWith(
                             fontSize: 55,
                             fontWeight: FontWeight.w900,
-                            color: const Color(0xFF00122E),
+                            color: AppColors.immoTextPrimary,
                             height: 1.1,
                           ),
                         ),
@@ -236,10 +235,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage>
                   duration: const Duration(milliseconds: 800),
                   child: Text(
                     data.title3,
-                    style: GoogleFonts.dmSans(
+                    style: AppTypography.h1.copyWith(
                       fontSize: 55,
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF00122E),
+                      color: AppColors.immoTextPrimary,
                       height: 1.1,
                     ),
                   ),
@@ -371,7 +370,7 @@ class CurvePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 

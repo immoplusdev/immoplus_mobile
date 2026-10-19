@@ -11,12 +11,11 @@ import 'package:immoplus/app/data/models/remote/hotel/hotel_detail_model.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_estimation_request.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_cubit.dart';
 import 'package:immoplus/app/features/hotel/cubit/hotel_state.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_booking_summary_page.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_booking_room_card.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_booking_card.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
 import 'package:intl/intl.dart';
 
 class HotelBookingSelectionPage extends StatefulWidget {
@@ -190,14 +189,14 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.arrow_back,
-                      color: Colors.black, size: 20),
+                      color: AppColors.black, size: 20),
                   onPressed: () => context.pop(),
                 ),
               ),
@@ -211,8 +210,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 // ── TYPE DE CHAMBRES Section ──
                 Text(
                   "TYPE DE CHAMBRES",
-                  style: TextStyle(
-                      color: AppColors.color8A8A86,
+                  style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5),
@@ -246,8 +245,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                 // ── SÉJOUR Section ──
                 Text(
                   "SÉJOUR",
-                  style: TextStyle(
-                      color: AppColors.color8A8A86,
+                  style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5),
@@ -256,8 +255,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
 
                 // Date Arrivée
                 Text("Date d'arrivée *",
-                    style: TextStyle(
-                      color: AppColors.color8A8A86,
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -269,16 +268,17 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.immoBorderDefault),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       _checkInDate != null
                           ? displayFormat.format(_checkInDate!)
                           : "Sélectionner la date d'arrivée",
-                      style: TextStyle(
-                        color:
-                            _checkInDate != null ? Colors.black : Colors.grey,
+                      style: AppTypography.font(
+                        color: _checkInDate != null
+                            ? AppColors.black
+                            : AppColors.immoTextSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -289,8 +289,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
 
                 // Date Départ
                 Text("Date de départ *",
-                    style: TextStyle(
-                      color: AppColors.color8A8A86,
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -302,16 +302,17 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.immoBorderDefault),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       _checkOutDate != null
                           ? displayFormat.format(_checkOutDate!)
                           : "Sélectionner la date de départ",
-                      style: TextStyle(
-                        color:
-                            _checkOutDate != null ? Colors.black : Colors.grey,
+                      style: AppTypography.font(
+                        color: _checkOutDate != null
+                            ? AppColors.black
+                            : AppColors.immoTextSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -322,8 +323,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
 
                 // Durée
                 Text("Durée",
-                    style: TextStyle(
-                      color: AppColors.color8A8A86,
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -333,8 +334,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
-                    border: Border.all(color: Colors.grey.shade200),
+                    color: AppColors.immoBgSurfaceMuted,
+                    border: Border.all(color: AppColors.immoBorderDefault),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -344,12 +345,13 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                         _nightCount > 0
                             ? "$_nightCount nuit${_nightCount > 1 ? 's' : ''}"
                             : "0 nuit",
-                        style: const TextStyle(
+                        style: AppTypography.font(
                             fontWeight: FontWeight.bold, fontSize: 14),
                       ),
-                      const Text(
+                      Text(
                         "calculé auto.",
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        style: AppTypography.font(
+                            color: AppColors.immoTextSecondary, fontSize: 12),
                       ),
                     ],
                   ),
@@ -359,8 +361,8 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
 
                 // Occupants
                 Text("Occupants",
-                    style: TextStyle(
-                      color: AppColors.color8A8A86,
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     )),
@@ -369,7 +371,7 @@ class _HotelBookingSelectionPageState extends State<HotelBookingSelectionPage> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade200),
+                    border: Border.all(color: AppColors.immoBorderDefault),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: DropdownButtonHideUnderline(

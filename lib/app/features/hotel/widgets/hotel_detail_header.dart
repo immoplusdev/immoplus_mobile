@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class HotelDetailHeader extends StatelessWidget {
   final String title;
@@ -27,8 +27,8 @@ class HotelDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
@@ -39,28 +39,29 @@ class HotelDetailHeader extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: AppTypography.font(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: Colors.black,
+              color: AppColors.black,
               letterSpacing: -0.5,
             ),
           ),
-          
+
           // Location (For Hotel)
           if (location != null && location!.isNotEmpty) ...[
             const Gap(6),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.location_on_outlined, size: 16, color: Colors.red),
+                const Icon(Icons.location_on_outlined,
+                    size: 16, color: AppColors.red),
                 const Gap(4),
                 Flexible(
                   child: Text(
                     location!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
                       fontSize: 13,
                     ),
                   ),
@@ -75,15 +76,15 @@ class HotelDetailHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
+                border: Border.all(color: AppColors.immoBorderStrong),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Text(
+              child: Text(
                 "Annulation gratuite",
-                style: TextStyle(
+                style: AppTypography.font(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: AppColors.black87,
                 ),
               ),
             ),
@@ -95,15 +96,17 @@ class HotelDetailHeader extends StatelessWidget {
           // Let's implement it based on what is available:
           // Room has price, Hotel doesn't.
           // If it has price, we'll put description here, then price.
-          
-          if (price != null && description != null && description!.isNotEmpty) ...[
+
+          if (price != null &&
+              description != null &&
+              description!.isNotEmpty) ...[
             const Gap(16),
             Text(
               description!,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: AppColors.immoTextSecondary,
                 height: 1.4,
               ),
             ),
@@ -115,10 +118,10 @@ class HotelDetailHeader extends StatelessWidget {
             Text(
               price!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: AppTypography.font(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ],
@@ -134,7 +137,7 @@ class HotelDetailHeader extends StatelessWidget {
                 children: [
                   Text(
                     rating.toStringAsFixed(1),
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -145,27 +148,29 @@ class HotelDetailHeader extends StatelessWidget {
                       return Icon(
                         Icons.star,
                         size: 14,
-                        color: index < rating.floor() ? Colors.amber : Colors.grey.shade200,
+                        color: index < rating.floor()
+                            ? AppColors.amber
+                            : AppColors.immoBorderDefault,
                       );
                     }),
                   ),
                 ],
               ),
-              
+
               // Divider
               Container(
                 height: 40,
                 width: 1,
-                color: Colors.grey.shade300,
+                color: AppColors.immoBorderStrong,
                 margin: const EdgeInsets.symmetric(horizontal: 24),
               ),
-              
+
               // Comments column
               Column(
                 children: [
                   Text(
                     commentCount.toString(),
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -173,9 +178,9 @@ class HotelDetailHeader extends StatelessWidget {
                   const Gap(2),
                   Text(
                     "Commentaires",
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 12,
-                      color: Colors.grey.shade600,
+                      color: AppColors.immoTextSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -185,14 +190,16 @@ class HotelDetailHeader extends StatelessWidget {
           ),
 
           // Description (For Hotel - at the bottom)
-          if (price == null && description != null && description!.isNotEmpty) ...[
+          if (price == null &&
+              description != null &&
+              description!.isNotEmpty) ...[
             const Gap(20),
             Text(
               description!,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: AppColors.immoTextSecondary,
                 height: 1.4,
               ),
             ),

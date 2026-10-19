@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:immoplus/app/data/models/remote/home_feed/property_badge_dto.dart';
+
 part 'for_you_bien_item.freezed.dart';
 part 'for_you_bien_item.g.dart';
 
@@ -17,6 +19,9 @@ class ForYouBienItem with _$ForYouBienItem {
     String? typeBienImmobilier,
     @Default(false) bool aLouer,
     String? typeLocation,
+    String? description,
+    @Default(<String>[]) List<String> chips,
+    PropertyBadgeDto? badge,
   }) = _ForYouBienItem;
 
   factory ForYouBienItem.fromJson(Map<String, dynamic> json) =>

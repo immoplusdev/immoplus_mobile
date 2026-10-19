@@ -6,7 +6,7 @@ import 'package:immoplus/app/data/models/remote/hotel/hotel_model.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_detail_page.dart';
 import 'package:immoplus/app/features/hotel/widgets/free_anulation_card.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class HotelCardSponsorise extends StatelessWidget {
   final HotelModel hotel;
@@ -24,11 +24,11 @@ class HotelCardSponsorise extends StatelessWidget {
       width: 373,
       margin: const EdgeInsets.only(right: 16),
       child: Card(
-        color: Colors.white,
+        color: AppColors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.grey.shade200, width: 1),
+          side: BorderSide(color: AppColors.immoBorderDefault, width: 1),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -42,15 +42,15 @@ class HotelCardSponsorise extends StatelessWidget {
               Container(
                 height: 200,
                 width: double.infinity,
-                color: Colors.grey.shade100,
+                color: AppColors.immoBgSurfaceMuted,
                 child: hotel.coverFileId.isNotEmpty
                     ? CachedNetworkImage(
                         imageUrl: imageUrl,
                         fit: BoxFit.cover,
                         errorWidget: (_, __, ___) =>
-                            Container(color: Colors.grey.shade200),
+                            Container(color: AppColors.immoBorderDefault),
                       )
-                    : Container(color: Colors.grey.shade200),
+                    : Container(color: AppColors.immoBorderDefault),
               ),
               // Content Area
               Expanded(
@@ -61,10 +61,10 @@ class HotelCardSponsorise extends StatelessWidget {
                     children: [
                       Text(
                         hotel.name,
-                        style: const TextStyle(
+                        style: AppTypography.font(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -83,9 +83,9 @@ class HotelCardSponsorise extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
-                            child: const Text(
+                            child: Text(
                               "VIP",
-                              style: TextStyle(
+                              style: AppTypography.font(
                                 color: Color(0xffFFC400),
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,
@@ -100,7 +100,7 @@ class HotelCardSponsorise extends StatelessWidget {
                       Expanded(
                         child: Text(
                           hotel.descriptionShort,
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 11,
                             height: 1.4,
                           ),

@@ -12,10 +12,11 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_mo
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
+import 'package:immoplus/app/features/messaging/widgets/host_contact_prompt.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -43,11 +44,11 @@ class VisitPendingPage extends StatefulWidget {
 class _VisitPendingPageState extends State<VisitPendingPage>
     with SingleTickerProviderStateMixin {
   // ── Couleurs ──────────────────────────────────────────────────────────────
-  static const Color _primaryBlue = Color(0xFF2744DE);
-  static const Color _successGreen = Color(0xFF22C55E);
-  static const Color _textPrimary = Color(0xFF1A1A1A);
-  static const Color _textSecondary = Color(0xFF667085);
-  static const Color _bgColor = Color(0xFFFFFFFF);
+  static const Color _primaryBlue = AppColors.blue500;
+  static const Color _successGreen = AppColors.green500;
+  static const Color _textPrimary = AppColors.gray900;
+  static const Color _textSecondary = AppColors.gray500;
+  static const Color _bgColor = AppColors.white;
 
   // ── État de la visite (polling) ───────────────────────────────────────────
   DemandeVisiteModel? _visitData;
@@ -167,11 +168,11 @@ class _VisitPendingPageState extends State<VisitPendingPage>
       appBar: AppBar(
         backgroundColor: _bgColor,
         elevation: 0,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         centerTitle: true,
         title: Text(
           _isConfirmedByOwner ? 'Demande confirmée' : 'Demande envoyée',
-          style: const TextStyle(
+          style: AppTypography.font(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: _textPrimary,
@@ -218,7 +219,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                       const BorderRadius.vertical(top: Radius.circular(24)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
+                      color: AppColors.black.withValues(alpha: 0.08),
                       blurRadius: 24,
                       offset: const Offset(0, -4),
                     ),
@@ -235,19 +236,19 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                             child: Column(
                               children: [
                                 _buildVisitTypeBadge(),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
 
                                 // ── Nom du bien ───────────────────────────────────────
                                 Text(
                                   widget.bienImmo.nom,
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: AppTypography.font(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
                                     color: _textPrimary,
                                   ),
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: 6),
 
                                 // ── Adresse ───────────────────────────────────────────
                                 Padding(
@@ -258,14 +259,14 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                     children: [
                                       const Icon(Iconsax.location,
                                           size: 14, color: _textSecondary),
-                                      const SizedBox(width: 4),
+                                      SizedBox(width: 4),
                                       Flexible(
                                         child: Text(
                                           widget.bienImmo.adresse,
                                           textAlign: TextAlign.center,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
+                                          style: AppTypography.font(
                                             fontSize: 13,
                                             color: _textSecondary,
                                           ),
@@ -274,7 +275,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 24),
+                                SizedBox(height: 24),
 
                                 // ── Status card ───────────────────────────────────────
                                 AnimatedSwitcher(
@@ -283,7 +284,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                       ? _buildConfirmedStatusCard()
                                       : _buildWaitingStatusCard(),
                                 ),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
 
                                 // ── Info contextuelle ─────────────────────────────────
                                 Padding(
@@ -296,7 +297,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         : _buildWaitingInfoCard(),
                                   ),
                                 ),
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20),
 
                                 // ── Jour de visite ──────────────────────────────────
                                 if (_visitData != null)
@@ -305,8 +306,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         horizontal: 24),
                                     child: _buildVisitDateSection(),
                                   ),
-                                if (_visitData != null)
-                                  const SizedBox(height: 12),
+                                if (_visitData != null) SizedBox(height: 12),
 
                                 // ── Actions (itinéraire, propriétaire, service client)
                                 Padding(
@@ -322,8 +322,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         horizontal: 24),
                                     child: _buildStatusSection(),
                                   ),
-                                if (_visitData != null)
-                                  const SizedBox(height: 12),
+                                if (_visitData != null) SizedBox(height: 12),
 
                                 // ── Identifiant de la demande ───────────────────────
                                 if (_visitData != null)
@@ -332,9 +331,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                         horizontal: 24),
                                     child: _buildIdSection(),
                                   ),
-                                if (_visitData != null)
-                                  const SizedBox(height: 12),
-                                const SizedBox(height: 24),
+                                if (_visitData != null) SizedBox(height: 12),
+                                SizedBox(height: 24),
                               ],
                             ),
                           ),
@@ -350,7 +348,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                   width: 36,
                                   height: 4,
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withValues(alpha: 0.12),
+                                    color:
+                                        AppColors.black.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(2),
                                   ),
                                 ),
@@ -360,14 +359,14 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // ── Boutons ───────────────────────────────────────────
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
                       child: _buildActions(),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
                   ],
                 ),
               );
@@ -383,7 +382,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _isExpress ? const Color(0xFFFEF3F2) : const Color(0xFFF4F3FF),
+        color: _isExpress ? AppColors.red50 : const Color(0xFFF4F3FF),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -392,18 +391,19 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           Icon(
             _isExpress ? Iconsax.flash_1 : Iconsax.calendar_1,
             size: 14,
-            color:
-                _isExpress ? const Color(0xFFF04438) : const Color(0xFF7A5AF8),
+            color: _isExpress
+                ? AppColors.immoFeedbackError
+                : AppColors.purple7A5AF8,
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             _isExpress ? 'VISITE EXPRESS' : 'VISITE NORMALE',
-            style: TextStyle(
+            style: AppTypography.font(
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: _isExpress
-                  ? const Color(0xFFF04438)
-                  : const Color(0xFF7A5AF8),
+                  ? AppColors.immoFeedbackError
+                  : AppColors.purple7A5AF8,
             ),
           ),
         ],
@@ -436,13 +436,13 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               child: const Icon(Iconsax.tick_circle,
                   color: _primaryBlue, size: 22),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             FadeTransition(
               opacity: _fadeAnimation,
               child: Text(
                 _activeMessages[_messageIndex % _activeMessages.length],
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: AppTypography.font(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: _textPrimary,
@@ -472,31 +472,31 @@ class _VisitPendingPageState extends State<VisitPendingPage>
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 2),
               child: Icon(Iconsax.tick_circle, color: _successGreen, size: 20),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Demande validée par le propriétaire',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF166534),
+                      color: AppColors.successDark,
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3),
                   Text(
                     _shouldShowPayment
                         ? 'Finalisez votre paiement pour confirmer la visite'
                         : 'Votre visite est confirmée',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 11,
-                      color: const Color(0xFF166534).withValues(alpha: 0.75),
+                      color: AppColors.successDark.withValues(alpha: 0.75),
                       height: 1.4,
                     ),
                   ),
@@ -530,25 +530,25 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             child:
                 const Icon(Iconsax.notification, color: _primaryBlue, size: 18),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   _isExpress ? 'Intervention rapide' : 'Nous vous contacterons',
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: _primaryBlue,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   _isExpress
                       ? 'Vous serez notifié de la date et heure très bientôt'
                       : 'La date et l\'heure vous seront communiquées par notification',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 11,
                     color: _primaryBlue.withValues(alpha: 0.65),
                     height: 1.4,
@@ -584,23 +584,23 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               child: const Icon(Iconsax.wallet_2,
                   color: Color(0xFFF68A3A), size: 18),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Paiement requis : ${Utils.formatCurrency(_visitData!.montantTotalDemandeVisite)}',
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFFF68A3A),
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Text(
                     'Payez pour confirmer définitivement votre visite',
-                    style: TextStyle(
+                    style: AppTypography.font(
                       fontSize: 11,
                       color: const Color(0xFFF68A3A).withValues(alpha: 0.7),
                       height: 1.4,
@@ -634,23 +634,23 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             child: const Icon(Iconsax.calendar_tick,
                 color: _successGreen, size: 18),
           ),
-          const SizedBox(width: 12),
-          const Expanded(
+          SizedBox(width: 12),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Visite planifiée',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF166534),
+                    color: AppColors.successDark,
                   ),
                 ),
                 SizedBox(height: 2),
                 Text(
                   'Vous serez notifié de la date et l\'heure exactes',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 11,
                     color: Color(0xFF3D8B5E),
                     height: 1.4,
@@ -685,7 +685,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _successGreen,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -695,10 +695,10 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Iconsax.wallet_2, size: 18),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       'Payer ${Utils.formatCurrency(_visitData!.montantTotalDemandeVisite)}',
-                      style: const TextStyle(
+                      style: AppTypography.font(
                           fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -706,7 +706,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: SizedBox(
@@ -723,7 +723,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                     padding: const EdgeInsets.symmetric(vertical: 12)),
                 child: Text(
                   widget.fromHistory ? 'Retour' : 'Sauvegarder et Quitter',
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: _textSecondary,
@@ -750,7 +750,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             }
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.white,
             foregroundColor: _primaryBlue,
             padding: const EdgeInsets.symmetric(vertical: 14),
             side: const BorderSide(color: _primaryBlue, width: 1.5),
@@ -763,11 +763,11 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             children: [
               Icon(widget.fromHistory ? Iconsax.arrow_left : Iconsax.save_2,
                   size: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 widget.fromHistory ? 'Retour' : 'Sauvegarder et Quitter',
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                style: AppTypography.font(
+                    fontSize: 15, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -781,9 +781,9 @@ class _VisitPendingPageState extends State<VisitPendingPage>
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
       ),
       child: Row(
         children: [
@@ -797,19 +797,20 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             child:
                 Icon(Iconsax.document_text, size: 18, color: AppColors.primary),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Identifiant',
-                  style: TextStyle(fontSize: 11, color: _textSecondary),
+                  style:
+                      AppTypography.font(fontSize: 11, color: _textSecondary),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   _visitData!.id,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: _textPrimary,
@@ -846,9 +847,9 @@ class _VisitPendingPageState extends State<VisitPendingPage>
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
       ),
       child: Column(
         children: [
@@ -868,20 +869,21 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   color: _getServiceStatusColor(),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Statut du service',
-                      style: TextStyle(fontSize: 11, color: _textSecondary),
+                      style: AppTypography.font(
+                          fontSize: 11, color: _textSecondary),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       Utils.getServiceStatus(
                           _visitData!.statusDemandeVisite ?? ''),
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: _getServiceStatusColor(),
@@ -892,9 +894,10 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               ),
             ],
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: Divider(height: 1, color: Color(0xFFF2F4F7)),
+            child:
+                Divider(height: 1, color: AppColors.immoFeedbackNeutralSubtle),
           ),
           // Statut de paiement
           Row(
@@ -916,19 +919,20 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                       : const Color(0xFFF68A3A),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Statut de paiement',
-                      style: TextStyle(fontSize: 11, color: _textSecondary),
+                      style: AppTypography.font(
+                          fontSize: 11, color: _textSecondary),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       _visitData!.statusFacture?.toString() ?? '',
-                      style: TextStyle(
+                      style: AppTypography.font(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: _hasPaid
@@ -971,9 +975,9 @@ class _VisitPendingPageState extends State<VisitPendingPage>
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFF2F4F7)),
+        border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
       ),
       child: Row(
         children: [
@@ -981,36 +985,37 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: hasDate ? AppColors.primaryLite : const Color(0xFFFFFAEB),
+              color: hasDate ? AppColors.primaryLite : AppColors.orange50,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               Iconsax.calendar_1,
               size: 18,
-              color: hasDate ? AppColors.primary : const Color(0xFFF79009),
+              color:
+                  hasDate ? AppColors.primary : AppColors.immoFeedbackWarning,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Jour de visite',
-                  style: TextStyle(fontSize: 11, color: _textSecondary),
+                  style:
+                      AppTypography.font(fontSize: 11, color: _textSecondary),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   hasDate
                       ? VisitUtils.formatDateTime(_visitData!
                           .datesDemandeVisite.last.date!
                           .toIso8601String())
                       : 'Aucune date programmée',
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color:
-                        hasDate ? AppColors.primary : const Color(0xFFB54708),
+                    color: hasDate ? AppColors.primary : AppColors.amber800,
                   ),
                 ),
               ],
@@ -1032,16 +1037,15 @@ class _VisitPendingPageState extends State<VisitPendingPage>
           subtitle: "Ouvrir dans Maps",
           onTap: _openMaps,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
 
         // Contacter le propriétaire (messagerie in-app, spec §2.2)
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: _buildActionTile(
-            icon: Iconsax.message,
-            title: 'Contacter le propriétaire',
-            subtitle: 'Poser une question sur cette visite',
-            onTap: () => MessageComposerSheet.showForVisite(
+          child: HostContactPrompt(
+            padding: EdgeInsets.zero,
+            label: 'Envoyer un message au propriétaire',
+            onPressed: () => MessageComposerSheet.showForVisite(
               context,
               demandeVisiteId: widget.visitId,
               bienTitle: widget.bienImmo.nom.isNotEmpty
@@ -1102,9 +1106,9 @@ class _VisitPendingPageState extends State<VisitPendingPage>
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFF2F4F7)),
+          border: Border.all(color: AppColors.immoFeedbackNeutralSubtle),
         ),
         child: Row(
           children: [
@@ -1117,14 +1121,14 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               ),
               child: Icon(icon, size: 18, color: AppColors.primary),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: _textPrimary,
@@ -1132,7 +1136,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   ),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: AppTypography.font(
                       fontSize: 11,
                       color: _textSecondary,
                     ),
@@ -1141,8 +1145,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
               ),
             ),
             trailing ??
-                const Icon(Iconsax.arrow_right_3,
-                    size: 18, color: Color(0xFF98A2B3)),
+                Icon(Iconsax.arrow_right_3,
+                    size: 18, color: AppColors.immoTextDisabled),
           ],
         ),
       ),

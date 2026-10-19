@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:pinput/pinput.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 
 /// Dialog 1 : choix du canal d'envoi (WhatsApp ou SMS).
@@ -11,10 +10,10 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
   return showDialog<String>(
     context: context,
     barrierDismissible: true,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (ctx) {
       return Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -27,25 +26,20 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
               Text(
                 'Envoyer le code par',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 18,
+                style: AppTypography.h4.copyWith(
                   fontWeight: FontWeight.w700,
                   color: AppColors.primary,
-                  height: 1.3,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 'Choisissez comment vous souhaitez recevoir votre code de vérification.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFF64748B),
-                  height: 1.5,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.immoTextSecondary,
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Bouton WhatsApp (rempli)
               CustomButtom(
@@ -53,7 +47,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                 borderRadius: BorderRadius.circular(28),
                 onClick: () => Navigator.of(ctx).pop('whatsapp'),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
 
               // Bouton SMS (contour)
               SizedBox(
@@ -68,9 +62,7 @@ Future<String?> showChannelChoiceDialog(BuildContext context) {
                   ),
                   child: Text(
                     'SMS',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.button.copyWith(
                       color: AppColors.primary,
                     ),
                   ),
@@ -102,10 +94,10 @@ Future<String?> showOtpInputDialog(
   return showDialog<String>(
     context: context,
     barrierDismissible: true,
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierColor: AppColors.black.withValues(alpha: 0.5),
     builder: (ctx) {
       return Dialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -122,37 +114,34 @@ Future<String?> showOtpInputDialog(
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () => Navigator.of(ctx).pop(),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close,
                         size: 22,
-                        color: Colors.grey,
+                        color: AppColors.immoTextSecondary,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
 
                   Text(
                     isWhatsapp
                         ? 'Entrez le code reçu par WhatsApp'
                         : 'Entrez le code reçu par SMS',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 18,
+                    style: AppTypography.h4.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     'Un code à 6 chiffres a été envoyé au $phoneNumber',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF64748B),
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.immoTextSecondary,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // Champ OTP (6 cases)
                   Center(
@@ -162,17 +151,15 @@ Future<String?> showOtpInputDialog(
                       defaultPinTheme: PinTheme(
                         width: 45,
                         height: 45,
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                        textStyle: AppTypography.h3.copyWith(
+                          color: AppColors.black,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: currentError != null
-                                ? Colors.red
+                                ? AppColors.red
                                 : AppColors.primary.withValues(alpha: 0.5),
                           ),
                         ),
@@ -180,13 +167,11 @@ Future<String?> showOtpInputDialog(
                       focusedPinTheme: PinTheme(
                         width: 45,
                         height: 45,
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                        textStyle: AppTypography.h3.copyWith(
+                          color: AppColors.black,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           borderRadius: BorderRadius.circular(10),
                           border:
                               Border.all(color: AppColors.primary, width: 2),
@@ -205,15 +190,16 @@ Future<String?> showOtpInputDialog(
                   ),
 
                   if (currentError != null) ...[
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       currentError!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.red, fontSize: 13),
+                      style: AppTypography.bodySmall
+                          .copyWith(color: AppColors.red),
                     ),
                   ],
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
 
                   // Bouton Valider
                   CustomButtom(
@@ -223,7 +209,7 @@ Future<String?> showOtpInputDialog(
                         ? () => Navigator.of(ctx).pop(otpController.text)
                         : null,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   // Bouton Renvoyer
                   Center(
@@ -231,9 +217,7 @@ Future<String?> showOtpInputDialog(
                       onPressed: onResend,
                       child: Text(
                         'Renvoyer le code',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.labelLarge.copyWith(
                           color: AppColors.primary,
                         ),
                       ),

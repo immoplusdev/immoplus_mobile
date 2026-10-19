@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/notification/model/notification_model.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 
 class NotificationTile extends StatelessWidget {
   final NotificationModel notification;
@@ -25,10 +24,11 @@ class NotificationTile extends StatelessWidget {
       key: Key(notification.id),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red.shade400,
+        color: AppColors.red500,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 24),
-        child: const Icon(Icons.delete_outline, color: Colors.white, size: 28),
+        child:
+            const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
       ),
       onDismissed: (_) => onDelete?.call(),
       child: InkWell(
@@ -37,10 +37,10 @@ class NotificationTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
             color: isRead
-                ? Colors.transparent
+                ? AppColors.transparent
                 : AppColors.primary.withOpacity(0.03),
             border: Border(
-              bottom: BorderSide(color: Colors.grey.shade100, width: 1),
+              bottom: BorderSide(color: AppColors.immoBgSurfaceMuted, width: 1),
             ),
           ),
           child: Row(
@@ -65,8 +65,7 @@ class NotificationTile extends StatelessWidget {
                         Expanded(
                           child: Text(
                             notification.subject ?? "Notification",
-                            style: GoogleFonts.dmSans(
-                              fontSize: 15,
+                            style: AppTypography.button.copyWith(
                               fontWeight:
                                   isRead ? FontWeight.w500 : FontWeight.bold,
                               color: isRead
@@ -80,10 +79,8 @@ class NotificationTile extends StatelessWidget {
                         const Gap(8),
                         Text(
                           _formatDate(notification.createdAt ?? DateTime.now()),
-                          style: GoogleFonts.dmSans(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade500,
+                          style: AppTypography.captionMedium.copyWith(
+                            color: AppColors.immoTextSecondary,
                           ),
                         ),
                       ],
@@ -91,10 +88,8 @@ class NotificationTile extends StatelessWidget {
                     const Gap(6),
                     Text(
                       notification.message ?? "",
-                      style: GoogleFonts.dmSans(
-                        fontSize: 14,
+                      style: AppTypography.bodyMedium.copyWith(
                         color: const Color(0xFF6B7280),
-                        height: 1.5,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

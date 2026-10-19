@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -200,7 +201,7 @@ class FilterHandler {
     if (search != null && search!.isNotEmpty) {
       chips.add(
         Chip(
-          backgroundColor: Colors.grey.shade300,
+          backgroundColor: AppColors.immoBorderStrong,
           label: Text('Recherche: "$search"'),
           deleteIcon: const Icon(Icons.close, size: 18),
           onDeleted: () {
@@ -215,7 +216,7 @@ class FilterHandler {
     // if (locationName != null) {
     //   chips.add(
     //     Chip(
-    //       backgroundColor: Colors.grey.shade300,
+    //       backgroundColor: AppColors.immoBorderStrong,
     //       label: Text('Lieu: $locationName'),
     //       deleteIcon: const Icon(Icons.close, size: 18),
     //       onDeleted: () {
@@ -242,7 +243,7 @@ class FilterHandler {
 
       chips.add(
         Chip(
-          backgroundColor: Colors.grey.shade300,
+          backgroundColor: AppColors.immoBorderStrong,
           label: Text(dateText),
           deleteIcon: const Icon(Icons.close, size: 18),
           onDeleted: () {
@@ -258,7 +259,7 @@ class FilterHandler {
     if (minPrice > minPriceLimit || maxPrice < maxPriceLimit) {
       chips.add(
         Chip(
-          backgroundColor: Colors.grey.shade300,
+          backgroundColor: AppColors.immoBorderStrong,
           label: Text('Prix: $minPrice F - $maxPrice F'),
           deleteIcon: const Icon(Icons.close, size: 18),
           onDeleted: () {

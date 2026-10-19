@@ -21,7 +21,7 @@ import 'package:immoplus/app/utils/filter_handler.dart';
 import 'package:immoplus/app/utils/PromoCarrousel/promo_carousel_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/load_product_card.dart';
 import 'package:immoplus/app/widgets/tickets_cards/compact_residence_card.dart';
-import 'package:immoplus/app/configs/theme_config.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/home_page/screens/location_residences_page.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -266,12 +266,12 @@ class _ResidencesListState extends State<ResidencesList>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(15),
-                            const SizedBox(
+                            SizedBox(
                               width: 150,
                               height: 20,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: Colors.black12,
+                                  color: AppColors.black12,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(4)),
                                 ),
@@ -450,8 +450,9 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
               icon: Icon(
                 Iconsax.arrow_right_1,
                 size: 20,
-                color:
-                    residences.isNotEmpty ? Colors.black : Colors.grey.shade400,
+                color: residences.isNotEmpty
+                    ? AppColors.black
+                    : AppColors.immoTextDisabled,
               ),
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -495,7 +496,7 @@ class _LocationSectionData {
 
 class AppPrimaryColors {
   static const Color primary = kPrimaryColor;
-  static const Color primary50 = Color(0xffEEF1FC);
+  static const Color primary50 = AppColors.blue50;
   static const Color primary100 = Color(0xffC5CFF5);
   static const Color primary200 = Color(0xff9BADEF);
   static const Color primary300 = Color(0xff6B85E6);

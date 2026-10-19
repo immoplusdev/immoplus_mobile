@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:immoplus/app/extensions/string_extension.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class ProfileHearder extends StatelessWidget {
   final UserModelSchema? currentUser;
@@ -98,7 +98,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildAvatar(imageUrl: imageUrl, monogramName: monogramName),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,10 +106,10 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                   children: [
                     Text(
                       displayLabel.capitalizeFirst(),
-                      style: const TextStyle(
+                      style: AppTypography.font(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E1E1E),
+                        color: AppColors.immoTextPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -117,9 +117,10 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                     if (email.isNotEmpty)
                       Text(
                         email,
-                        style: TextStyle(
+                        style: AppTypography.font(
                           fontSize: 12,
-                          color: const Color(0xFF1E1E1E).withValues(alpha: 0.5),
+                          color:
+                              AppColors.immoTextPrimary.withValues(alpha: 0.5),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -128,7 +129,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                 ),
               ),
               Material(
-                color: Colors.transparent,
+                color: AppColors.transparent,
                 child: InkWell(
                   onTap: onServiceClientPressed,
                   borderRadius: BorderRadius.circular(24),
@@ -145,10 +146,10 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                           size: 18,
                           color: AppColors.primary,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
                           'Service client',
-                          style: TextStyle(
+                          style: AppTypography.font(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primary,

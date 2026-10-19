@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
 import 'package:immoplus/app/features/immo_relais/widgets/relais_my_section.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 /// Page dédiée "Pour moi" — mes relais publiés, ouverte depuis la carte
 /// bento du hub "Je déménage".
@@ -33,8 +33,8 @@ class _RelaisMyPageState extends State<RelaisMyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Pour moi'), centerTitle: true),
+      backgroundColor: AppColors.white,
+      appBar: AppBar(title: Text('Pour moi'), centerTitle: true),
       body: RelaisMySection(
         refreshNotifier: _refreshNotifier,
         onRequestsLoaded: (hasRequests) {
@@ -47,7 +47,7 @@ class _RelaisMyPageState extends State<RelaisMyPage> {
               backgroundColor: AppColors.primary,
               shape: const CircleBorder(),
               elevation: 0,
-              child: const Icon(Icons.add, color: Colors.white, size: 32),
+              child: const Icon(Icons.add, color: AppColors.white, size: 32),
             )
           : null,
     );

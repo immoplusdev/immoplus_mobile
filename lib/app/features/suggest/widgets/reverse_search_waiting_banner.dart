@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _ReverseSearchWaitingBannerState
       child: Column(
         children: [
           const _SearchingImageFan(),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             transitionBuilder: (child, animation) => FadeTransition(
@@ -64,10 +65,10 @@ class _ReverseSearchWaitingBannerState
               _phrases[_index],
               key: ValueKey(_index),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTypography.font(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87.withValues(alpha: 0.7),
+                color: AppColors.black87.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -181,10 +182,10 @@ class _SearchingImageFanState extends State<_SearchingImageFan> {
               height: _cardSize,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(color: AppColors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
+                    color: AppColors.black.withValues(alpha: 0.12),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),

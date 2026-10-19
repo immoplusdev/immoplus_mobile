@@ -49,6 +49,8 @@ enum MarketingNotificationCode {
 
   static MarketingNotificationCode? fromString(String? code) {
     if (code == null) return null;
-    return MarketingNotificationCode.values.where((e) => e.code == code).firstOrNull;
+    return MarketingNotificationCode.values
+        .where((e) => e.code == code)
+        .firstOrNull;
   }
 }

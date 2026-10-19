@@ -1,3 +1,4 @@
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
@@ -121,36 +122,36 @@ class _HighlightTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: Color(0xff2744de).withOpacity(0.04),
+              color: AppColors.immoBrandPrimary.withOpacity(0.04),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               data.icon,
               size: 22,
-              color: Color(0xff2744de),
+              color: AppColors.immoBrandPrimary,
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data.title,
-                  style: const TextStyle(
+                  style: AppTypography.font(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF222222),
+                    color: AppColors.immoTextPrimary,
                     height: 1.3,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   data.subtitle,
-                  style: TextStyle(
+                  style: AppTypography.font(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade500,
+                    color: AppColors.immoTextSecondary,
                     height: 1.4,
                   ),
                 ),

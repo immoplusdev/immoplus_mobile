@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/login_page/login_page.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/request_path.dart';
@@ -71,12 +71,12 @@ class Utils {
   static Widget getImageWidget({required String id}) => CachedNetworkImage(
         imageUrl: "${RequestPath.baseUrl}/api/file//files/raw/public/$id",
         placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: (Colors.grey[300])!,
-          highlightColor: Colors.white,
+          baseColor: (AppColors.immoBorderStrong)!,
+          highlightColor: AppColors.white,
           period: const Duration(milliseconds: 600),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: AppColors.immoTextSecondary,
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -84,8 +84,8 @@ class Utils {
         errorWidget: (context, url, error) => Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
-              color: Colors.red,
+          decoration: BoxDecoration(
+              color: AppColors.red,
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage('https://via.placeholder.com/500x400'),
@@ -209,7 +209,7 @@ class Utils {
     } else if (status == 'en_cours_recuperation') {
       return CupertinoColors.systemGrey2;
     } else if (status == 'en_cours_livraison') {
-      return Colors.green.shade200;
+      return AppColors.green500;
     } else if (status == 'failed') {
       return CupertinoColors.systemRed;
     } else if (status == 'canceled') {
@@ -277,8 +277,6 @@ class Utils {
 
     var iosUrl = "https://wa.me/$contact?text=${Uri.parse(defaultMessage)}";
 
-    print(iosUrl);
-
     try {
       if (Platform.isIOS) {
         await launchUrl(Uri.parse(iosUrl),
@@ -288,7 +286,7 @@ class Utils {
             mode: LaunchMode.externalApplication);
       }
     } on Exception {
-      EasyLoading.showError('WhatsApp is not installed.');
+      ToastUtils.showError(description: "WhatsApp n'est pas installé.");
     }
   }
 

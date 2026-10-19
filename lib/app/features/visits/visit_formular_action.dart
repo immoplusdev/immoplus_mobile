@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -14,10 +14,7 @@ import 'package:immoplus/app/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus/app/features/visits/widgets/product_info.dart';
 import 'package:immoplus/app/features/visits/widgets/visit_listtile_action.dart';
 import 'package:immoplus/app/modules/country_phone_number/country_phone_number.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
 import 'package:immoplus/app/utils/formuar_controller.dart';
-import 'package:immoplus/app/utils/toast_utils.dart';
-import 'package:immoplus/app/widgets/app_dialog.dart';
 import 'package:immoplus/app/features/visits/visit_pending_page.dart';
 import 'package:immoplus/app/widgets/bottom_immoplus.dart';
 import 'package:immoplus/app/widgets/client_service_chip.dart';
@@ -120,19 +117,18 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
         );
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent,
+          backgroundColor: AppColors.white,
+          surfaceTintColor: AppColors.transparent,
           elevation: 0,
           automaticallyImplyLeading: true,
           centerTitle: true,
           title: Text(
             'Demande de visite',
-            style: GoogleFonts.inter(
+            style: AppTypography.h4.copyWith(
               fontWeight: FontWeight.w700,
-              fontSize: 18,
-              color: Colors.black,
+              color: AppColors.black,
             ),
           ),
           // actions: const [
@@ -168,9 +164,9 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.grey.shade200),
+                      border: Border.all(color: AppColors.immoBorderDefault),
                     ),
                     child: Column(
                       children: [
@@ -200,10 +196,8 @@ class _VisitFormularActionState extends State<VisitFormularAction> {
                               Expanded(
                                 child: Text(
                                   "Numéro sur lequel vous préférez être contacté, de préférence un numéro WhatsApp actif.",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12,
+                                  style: AppTypography.bodySmall.copyWith(
                                     color: primaryColor,
-                                    height: 1.45,
                                   ),
                                 ),
                               ),
@@ -291,10 +285,8 @@ class _SectionLabel extends StatelessWidget {
         // const Gap(6),
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
+          style: AppTypography.button.copyWith(
+            color: AppColors.black87,
           ),
         ),
       ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:immoplus/app/utils/app_colors.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/utils/utils.dart';
 
 class PriceSetterButton extends StatelessWidget {
@@ -52,7 +52,7 @@ class PriceSetterButton extends StatelessWidget {
                     child: const FaIcon(
                       FontAwesomeIcons.minus,
                       size: 20,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
@@ -64,7 +64,7 @@ class PriceSetterButton extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontSize: 10),
+                        style: AppTypography.font(fontSize: 10),
                       ),
                       Text(Utils.formatCurrency(amount)),
                     ],
@@ -83,11 +83,11 @@ class PriceSetterButton extends StatelessWidget {
                         left: BorderSide(),
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: FaIcon(
                         FontAwesomeIcons.plus,
                         size: 20,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus/app/core/config/app_flavor.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 
 class EnvironmentsBadge extends StatelessWidget {
   final Widget child;
@@ -13,7 +14,7 @@ class EnvironmentsBadge extends StatelessWidget {
         : Banner(
             location: BannerLocation.topStart,
             message: flavor,
-            color: Colors.purple,
+            color: AppColors.purple7A5AF8,
             child: child,
           );
   }

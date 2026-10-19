@@ -28,5 +28,4 @@ abstract class ReverseSearchProvider {
     @Path('searchId') String searchId,
     @Body() Map<String, dynamic> body,
   );
-
 }
