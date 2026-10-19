@@ -14,6 +14,7 @@ import 'package:immoplus/app/features/immo_relais/pages/relais_my_interests_page
 import 'package:immoplus/app/features/immo_relais/pages/relais_my_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/relais_received_interests_page.dart';
 import 'package:immoplus/app/features/immo_relais/pages/report_relais_step1_page.dart';
+import 'package:immoplus/app/widgets/above_nav_bar_fab_location.dart';
 
 class MyChoicePage extends StatefulWidget {
   const MyChoicePage({super.key});
@@ -211,6 +212,7 @@ class _MyChoiceContentViewState extends State<_MyChoiceContentView>
         ),
       ),
       floatingActionButton: _buildFloatingActionButton(),
+      floatingActionButtonLocation: AboveNavBarFabLocation.endFloat,
     );
   }
 }

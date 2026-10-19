@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +12,7 @@ import 'package:immoplus/app/data/models/remote/residence/residence_model.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus/app/data/models/remote/furniture/furniture_model.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/utils.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
@@ -209,6 +212,7 @@ class UnifiedPropertyCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         onTap: onTap ??
             () {
+              log(item.toString());
               Constantes.tempPage = Utils.getCurrentLocation();
               if (isResidence) {
                 context.push(ResidencePage.route((item as ResidenceModel).id),
@@ -218,8 +222,10 @@ class UnifiedPropertyCard extends StatelessWidget {
                     FurnitureDetailPage.route((item as FurnitureModel).id),
                     extra: item);
               } else {
-                context
-                    .push('/estate_detail/${(item as BienImmobilierModel).id}');
+                context.push(
+                  EstatePage.route((item as BienImmobilierModel).id),
+                  extra: item,
+                );
               }
             },
         child: Padding(

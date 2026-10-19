@@ -91,6 +91,7 @@ class MessageComposerSheet extends StatefulWidget {
   static Future<void> showForSupport(BuildContext context) {
     return showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       useSafeArea: true,
       backgroundColor: AppColors.whiteBackground,
       elevation: 0,
@@ -104,6 +105,7 @@ class MessageComposerSheet extends StatefulWidget {
   static Future<void> _show(BuildContext context, MessageComposerSheet sheet) {
     return showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: AppColors.whiteBackground,

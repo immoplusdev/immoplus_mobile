@@ -55,10 +55,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
   late final SuggestCubit _cubit;
 
   List<SearchHistoryItem> _allHistory = [];
-  List<SearchHistoryItem> get _searchHistory {
-    final cat = widget.homeTab?.category ?? '';
-    return _allHistory.where((e) => e.category == cat).toList();
-  }
+  List<SearchHistoryItem> get _searchHistory => _allHistory;
 
   bool _isLoadingRecommendations = true;
   List<dynamic> _recommendedItems = [];
@@ -93,7 +90,15 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
     setState(() {
       final list = prefs.getStringList('suggest_history_objects') ?? [];
       try {
-        _allHistory = list.map((e) => SearchHistoryItem.fromJson(e)).toList();
+        final parsed = list.map((e) => SearchHistoryItem.fromJson(e)).toList();
+        final seen = <String>{};
+        _allHistory = [];
+        for (final item in parsed) {
+          final q = item.query.trim();
+          if (q.isNotEmpty && seen.add(q.toLowerCase())) {
+            _allHistory.add(item);
+          }
+        }
       } catch (e) {
         _allHistory = [];
       }
@@ -128,10 +133,8 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
     final text = query.trim();
     if (text.isEmpty) return;
 
-    final cat = widget.homeTab?.category ?? '';
-
-    _allHistory.removeWhere((e) => e.query == text && e.category == cat);
-    _allHistory.insert(0, SearchHistoryItem(query: text, category: cat));
+    _allHistory.removeWhere((e) => e.query.toLowerCase() == text.toLowerCase());
+    _allHistory.insert(0, SearchHistoryItem(query: text, category: ''));
 
     if (_allHistory.length > 50) {
       _allHistory.removeLast();
@@ -148,8 +151,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
   }
 
   void _removeFromHistory(String query) async {
-    final cat = widget.homeTab?.category ?? '';
-    _allHistory.removeWhere((e) => e.query == query && e.category == cat);
+    _allHistory.removeWhere((e) => e.query.toLowerCase() == query.toLowerCase());
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(
@@ -186,7 +188,6 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
             query: query,
             lat: widget.lat,
             lng: widget.lng,
-            category: widget.homeTab?.category,
           );
         },
       );
@@ -515,7 +516,7 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
                 if (item is ResidenceModel) {
                   context.push(ResidencePage.route((item).id), extra: item);
                 } else if (item is BienImmobilierModel) {
-                  context.push('/estate_detail/${(item).id}');
+                  context.push(EstatePage.route((item).id), extra: item);
                 }
               },
             );

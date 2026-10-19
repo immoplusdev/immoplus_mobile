@@ -39,4 +39,16 @@ abstract class NotificationProvider {
 
   @DELETE('/notifications/me/{id}')
   Future<HttpResponse> deleteMyNotification(@Path('id') String id);
+
+  @PUT('/me/push-installations/{installationId}')
+  Future<HttpResponse> registerPushInstallation(
+    @Path('installationId') String installationId,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @DELETE('/me/push-installations/{installationId}')
+  Future<HttpResponse> deletePushInstallation(
+    @Path('installationId') String installationId,
+  );
 }
+

@@ -13,7 +13,6 @@ class SuggestCubit extends Cubit<SuggestState> {
     int? limit,
     double? lat,
     double? lng,
-    String? category,
   }) async {
     if (query.trim().length < 2) {
       emit(const SuggestState.initial());
@@ -26,7 +25,6 @@ class SuggestCubit extends Cubit<SuggestState> {
         limit: limit,
         lat: lat,
         lng: lng,
-        category: category,
       );
       emit(SuggestState.success(res.suggestions));
     } catch (e) {

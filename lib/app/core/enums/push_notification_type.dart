@@ -176,9 +176,12 @@ enum PushNotificationType {
 
   /// 🎯 Convertir une string en enum
   static PushNotificationType? fromString(String? type) {
-    if (type == null) return null;
+    if (type == null || type.trim().isEmpty) return null;
 
-    switch (type.toLowerCase()) {
+    final normalized =
+        type.replaceAll('_', '').replaceAll('-', '').toLowerCase().trim();
+
+    switch (normalized) {
       case 'auth':
         return PushNotificationType.auth;
 
@@ -186,15 +189,16 @@ enum PushNotificationType {
         return PushNotificationType.user;
 
       case 'reservation':
+      case 'newreservationwaiting':
         return PushNotificationType.reservation;
 
       case 'residence':
         return PushNotificationType.residence;
 
-      case 'bien_immobilier':
+      case 'bienimmobilier':
         return PushNotificationType.bienImmobilier;
 
-      case 'demande_visite':
+      case 'demandevisite':
         return PushNotificationType.demandeVisite;
 
       case 'payment':
@@ -203,13 +207,13 @@ enum PushNotificationType {
       case 'wallet':
         return PushNotificationType.wallet;
 
-      case 'reservation_accepted':
+      case 'reservationaccepted':
         return PushNotificationType.reservationAccepted;
 
-      case 'reservation_refused':
+      case 'reservationrefused':
         return PushNotificationType.reservationRefused;
 
-      case 'new_proposal':
+      case 'newproposal':
         return PushNotificationType.newProposal;
 
       case 'alert':
@@ -218,22 +222,23 @@ enum PushNotificationType {
       case 'marketing':
         return PushNotificationType.marketing;
 
-      case 'rating_request':
+      case 'ratingrequest':
         return PushNotificationType.ratingRequest;
 
-      case 'new_message':
+      case 'newmessage':
         return PushNotificationType.newMessage;
 
-      case 'reverse_search_proposition_disponible':
+      case 'reversesearchpropositiondisponible':
+      case 'reversesearchinvitation':
         return PushNotificationType.reverseSearchPropositionDisponible;
 
-      case 'reverse_search_expiree':
+      case 'reversesearchexpiree':
         return PushNotificationType.reverseSearchExpiree;
 
-      case 'reverse_search_selection_expiree':
+      case 'reversesearchselectionexpiree':
         return PushNotificationType.reverseSearchSelectionExpiree;
 
-      case 'reverse_search_expiration_imminente':
+      case 'reversesearchexpirationimminente':
         return PushNotificationType.reverseSearchExpirationImminente;
 
       default:
@@ -241,3 +246,4 @@ enum PushNotificationType {
     }
   }
 }
+
