@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +12,7 @@ import 'package:immoplus/app/appli/my_app.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/push/firebase_push_provider.dart';
+import 'package:immoplus/firebase_options.dart';
 import 'package:talker/talker.dart';
 
 final talker = Talker();
@@ -36,17 +39,31 @@ class _DeepLinkEater extends WidgetsBindingObserver {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e, stack) {
+    talker.error('Firebase.initializeApp() in main failed: $e', e, stack);
+  }
+
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // Gestionnaire global d'erreurs Flutter (layout, rendering, widgets)
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
     talker.handle(details.exception, details.stack);
+    if (Firebase.apps.isNotEmpty) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+    }
   };
 
   // Gestionnaire global d'erreurs asynchrones non interceptées (Dart engine)
   PlatformDispatcher.instance.onError = (error, stack) {
     talker.handle(error, stack);
+    if (Firebase.apps.isNotEmpty) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    }
     return true;
   };
 
