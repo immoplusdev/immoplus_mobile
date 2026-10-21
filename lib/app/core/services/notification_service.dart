@@ -8,6 +8,7 @@ import 'package:immoplus/app/data/enums/account_source.dart';
 import 'package:immoplus/app/core/enums/push_notification_type.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/core/services/push/push_message.dart';
 import 'package:immoplus/app/core/services/push/push_provider.dart';
 import 'package:immoplus/app/data/repositories/alert_repository.dart';
@@ -136,6 +137,7 @@ class NotificationService {
   void handleNotificationData(Map<String, dynamic> data) {
     log("handleNotificationData data: $data");
     final typeString = data['type']?.toString();
+    getIt<CrashlyticsService>().log('Notification tapped: type=$typeString');
     final id = data['id']?.toString() ??
         data['alertId']?.toString() ??
         data['reservationId']?.toString() ??

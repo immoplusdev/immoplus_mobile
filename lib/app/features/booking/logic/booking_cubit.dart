@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
@@ -13,7 +12,9 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
@@ -158,7 +159,17 @@ class BookingCubit extends Cubit<BookingRequestState> {
           }
         },
       );
-    } catch (e) {
+    } catch (e, stack) {
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'BookingFormular',
+        feature: 'booking_creation',
+        errorType: 'OrderBookingFailure',
+        additionalContext: {
+          'residence_id': body.residence,
+        },
+      );
       emit(BookingRequestState.error(e.toString()));
     }
   }

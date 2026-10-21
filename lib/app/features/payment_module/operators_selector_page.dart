@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
@@ -64,14 +65,32 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
         return;
       }
       context.push(StripeResultRoute.path, extra: model.data);
-    } on StripeException catch (e) {
+    } on StripeException catch (e, stack) {
       if (e.error.code != FailureCode.Canceled) {
         EasyLoading.showToast(
           e.error.localizedMessage ?? 'Le paiement a échoué.',
         );
+        getIt<CrashlyticsService>().recordNonFatalError(
+          exception: e,
+          stackTrace: stack,
+          screen: 'OperatorsSelectorPage',
+          feature: 'payment_stripe',
+          errorType: 'StripePaymentSheetException',
+          reason: e.error.localizedMessage,
+          additionalContext: {
+            'failure_code': e.error.code.name,
+          },
+        );
       }
     } catch (e, stack) {
       EasyLoading.showToast("Une erreur s'est produite.");
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'OperatorsSelectorPage',
+        feature: 'payment_stripe',
+        errorType: 'PaymentSheetUnexpectedException',
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

@@ -19,6 +19,7 @@ class CrashlyticsQaTestModal extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (_) => const CrashlyticsQaTestModal(),
     );
@@ -207,6 +208,7 @@ class _CrashlyticsQaTestModalState extends State<CrashlyticsQaTestModal> {
               _crashlyticsService.triggerControlledFatalCrash();
             },
           ),
+          const Gap(30),
         ],
       ),
     );

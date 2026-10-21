@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 /// Contrat abstrait pour le service Crashlytics (Clean Architecture).
 ///
 /// Ce contrat permet d'isoler le reste de l'application (domain, presentation, features)
@@ -54,4 +56,32 @@ abstract class CrashlyticsService {
 
   /// Mécanisme de test DEV / QA : déclenche un crash fatal contrôlé.
   void triggerControlledFatalCrash();
+}
+
+/// Observateur de navigation pour alimenter les breadcrumbs et l'écran courant
+/// dans Crashlytics sans données sensibles.
+class CrashlyticsRouteObserver extends NavigatorObserver {
+  final CrashlyticsService _crashlyticsService;
+
+  CrashlyticsRouteObserver(this._crashlyticsService);
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    final screenName = route.settings.name;
+    if (screenName != null && screenName.isNotEmpty) {
+      _crashlyticsService.log('Screen viewed: $screenName');
+      _crashlyticsService.setCustomKey('current_screen', screenName);
+    }
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    final screenName = previousRoute?.settings.name;
+    if (screenName != null && screenName.isNotEmpty) {
+      _crashlyticsService.log('Screen returned to: $screenName');
+      _crashlyticsService.setCustomKey('current_screen', screenName);
+    }
+  }
 }
