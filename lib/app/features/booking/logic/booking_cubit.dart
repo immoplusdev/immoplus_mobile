@@ -1,3 +1,4 @@
+import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
@@ -118,7 +119,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
           extra: ReservationEngagementFrame(
             ownerName: ownerName,
             reservationId: reservationResponse.data.id,
-            montantTotal: reservationResponse.data.montantTotalReservation,
+            montantTotal: reservationResponse.data.montantAPayer,
             initialState: ReservationBannerState.waitingOwner,
           ),
         );
@@ -152,7 +153,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
               extra: ReservationEngagementFrame(
                 ownerName: existing.data.residence.nom,
                 reservationId: existing.data.id,
-                montantTotal: existing.data.montantTotalReservation,
+                montantTotal: existing.data.montantAPayer,
                 initialState: ReservationBannerState.waitingOwner,
               ),
             );
