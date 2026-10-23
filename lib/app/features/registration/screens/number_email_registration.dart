@@ -164,7 +164,7 @@ class NumberEmailRegistration extends StatelessWidget {
                                 phoneNumber:
                                     PhoneNumberHandler.formatPhoneNumber(
                                         formController.phoneNumber!.text
-                                          ..replaceAll(" ", "")),
+                                            .replaceAll(" ", "")),
                                 password: formController.password!.text,
                               );
 
