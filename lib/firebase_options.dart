@@ -56,13 +56,14 @@ class DefaultFirebaseOptions {
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD4OuOwQMgSTGAqG0zpXnvNVDNqNjh7x7g',
     appId: '1:1003203724496:ios:17e2ae70617c78c0458ad5',
     messagingSenderId: '1003203724496',
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
+    androidClientId: '1003203724496-9jdg14j8e1cokrpie7pil5mh52hofe1j.apps.googleusercontent.com',
+    iosClientId: '1003203724496-0ap650ojm96k6c24vlf8ql7gapje005i.apps.googleusercontent.com',
     iosBundleId: 'com.immoplus.ci',
   );
 }

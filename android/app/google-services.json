@@ -67,6 +67,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1003203724496-9jdg14j8e1cokrpie7pil5mh52hofe1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.immoplus_pro.ci",
+            "certificate_hash": "e6d153870488da941e6839c8beaedfc37be9e510"
+          }
+        },
+        {
+          "client_id": "1003203724496-euhnaq2socp8npbt13j3easou2ll7kls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.immoplus_pro.ci",
+            "certificate_hash": "7556e148fdeec1ca2c96e2a42b3e52bbbacbb7da"
+          }
+        },
+        {
           "client_id": "1003203724496-q2k3aq57i3a3oktgga8bnv5ij1tl9vmd.apps.googleusercontent.com",
           "client_type": 3
         }

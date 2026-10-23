@@ -6,6 +6,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/models/remote/payment/payment_intent_body.dart';
 import 'package:immoplus/app/data/repositories/payment_repository.dart';
 import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dart';
@@ -70,17 +72,35 @@ class _StripeCardPageState extends State<StripeCardPage> {
       // 5. Succès → afficher résultat
       if (!mounted) return;
       widget.controller.goToResult(model.data);
-    } on StripeException catch (e) {
+    } on StripeException catch (e, stack) {
       log('StripeException: ${e.error.localizedMessage}', name: 'STRIPE');
       if (e.error.code != FailureCode.Canceled) {
         EasyLoading.showToast(
           e.error.localizedMessage ?? "Le paiement a échoué.",
         );
+        getIt<CrashlyticsService>().recordNonFatalError(
+          exception: e,
+          stackTrace: stack,
+          screen: 'StripeCardPage',
+          feature: 'payment_stripe',
+          errorType: 'StripeCardException',
+          reason: e.error.localizedMessage,
+          additionalContext: {
+            'failure_code': e.error.code.name,
+          },
+        );
       }
       if (mounted) setState(() => _isLoading = false);
-    } catch (e) {
+    } catch (e, stack) {
       log('Error: $e', name: 'STRIPE');
       EasyLoading.showToast("Une erreur s'est produite.");
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'StripeCardPage',
+        feature: 'payment_stripe',
+        errorType: 'StripeCardUnexpectedError',
+      );
       if (mounted) setState(() => _isLoading = false);
     }
   }

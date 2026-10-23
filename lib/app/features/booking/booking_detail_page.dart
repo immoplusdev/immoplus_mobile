@@ -233,7 +233,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             ],
                           ),
                           Text(
-                            Utils.formatCurrency(res.montantPaye),
+                            Utils.formatCurrency(res.montantAPayer),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
@@ -464,12 +464,13 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           extra: PaymentPageAdapter(
                             itemId: res.id,
                             collection: ProductType.reservations.name,
-                            amount: res.montantPaye.toInt(),
+                            amount: res.montantAPayer.toInt(),
+                            summary: PaymentSummary.fromReservation(res),
                           ),
                         ),
                         icon: const Icon(Iconsax.wallet, size: 18),
                         label: Text(
-                          'Payer maintenant · ${Utils.formatCurrency(res.montantPaye)}',
+                          'Payer maintenant · ${Utils.formatCurrency(res.montantAPayer)}',
                         ),
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.immoFeedbackSuccess,

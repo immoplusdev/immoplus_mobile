@@ -8,6 +8,8 @@ import 'package:immoplus/app/features/payment_module/components/shared/payment_s
 import 'package:immoplus/app/features/payment_module/components/shared/payment_waiting_view.dart';
 import 'package:immoplus/app/features/payment_module/components/wave/wave_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_data.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/main.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -93,8 +95,15 @@ class _WaveValidatorPageState extends State<WaveValidatorPage> {
       if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
         throw Exception('Could not launch $url');
       }
-    } catch (e) {
+    } catch (e, stack) {
       talker.error('Error launching URL: $e');
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'WaveValidatorPage',
+        feature: 'payment_wave',
+        errorType: 'ExternalUrlLaunchFailure',
+      );
     }
   }
 

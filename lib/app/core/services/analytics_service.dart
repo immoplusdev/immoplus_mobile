@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,6 +20,11 @@ class AnalyticsService {
     String? intentPreference,
   }) async {
     await _analytics.setUserId(id: user.userId);
+    if (user.userId != null) {
+      try {
+        await getIt<CrashlyticsService>().setUserId(user.userId!);
+      } catch (_) {}
+    }
 
     final packageInfo = await PackageInfo.fromPlatform();
     final platform = Platform.isIOS ? 'ios' : 'android';
@@ -38,6 +45,9 @@ class AnalyticsService {
 
   Future<void> clearUserIdentity() async {
     await _analytics.setUserId(id: null);
+    try {
+      await getIt<CrashlyticsService>().clearUserId();
+    } catch (_) {}
   }
 
   Future<void> updateKycStatus(String status) async {

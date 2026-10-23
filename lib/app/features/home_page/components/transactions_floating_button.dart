@@ -226,7 +226,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
       extra: ReservationEngagementFrame(
         ownerName: reservation.residence.nom,
         reservationId: reservation.id,
-        montantTotal: reservation.montantTotalReservation,
+        montantTotal: reservation.montantAPayer,
         initialState: ReservationBannerState.waitingOwner,
       ),
     );
@@ -235,13 +235,13 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   void _openPayment(ReservationModel reservation) {
     unawaited(_closeMenu());
     // TODO RESERVATION ID DEBUG
-    log(' montant total ${reservation.montantTotalReservation.toInt()} reservation ${reservation.id}  ');
+    log(' montant total ${reservation.montantAPayer.toInt()} reservation ${reservation.id}  ');
     context.pushNamed(
       OperatorsSelectorPage.name,
       extra: PaymentPageAdapter(
         itemId: reservation.id,
         collection: ProductType.reservations.name,
-        amount: reservation.montantTotalReservation.toInt(),
+        amount: reservation.montantAPayer.toInt(),
       ),
     );
   }
@@ -677,7 +677,7 @@ class _TransactionsMenuPanel extends StatelessWidget {
                         iconBg: AppColors.orange50,
                         title: 'Réservation à payer',
                         subtitle: Utils.formatCurrency(
-                            reservation.montantTotalReservation),
+                            reservation.montantAPayer),
                         onTap: () => onTapPayment(reservation),
                         onCancel: () => onCancel(reservation),
                       ),

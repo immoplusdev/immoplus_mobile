@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/main.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/data/enums/home_feed_scope.dart';
@@ -132,6 +133,7 @@ class AppRouter {
     initialLocation: '/',
     observers: [
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      CrashlyticsRouteObserver(getIt<CrashlyticsService>()),
     ],
     redirect: (context, state) async {
       talker.debug('GoRouter redirect - Location: ${state.uri}');
