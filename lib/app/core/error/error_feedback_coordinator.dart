@@ -88,16 +88,19 @@ class ErrorFeedbackCoordinator {
   /// Variante pour un `catch` : accepte l'objet attrapé, mais ne présente que
   /// les erreurs réseau/API ([AppError], `DioException`). Les autres
   /// (localisation, parsing, plugins…) ne concernent pas ce canal : elles
-  /// ne sont pas affichées ici : retourne alors `false` pour que l'appelant
-  /// applique son propre retour.
+  /// ne sont pas affichées ici. Retourne `false` quand rien n'a été présenté
+  /// (erreur hors API, ou requête silencieuse) pour que l'appelant applique
+  /// son propre retour.
   bool presentThrown(
     Object thrown, {
     required ErrorContext context,
     FutureOr<void> Function()? retry,
   }) {
     if (thrown is! AppError && thrown is! DioException) return false;
-    present(error: AppErrorMapper.from(thrown), context: context, retry: retry);
-    return true;
+    final error = AppErrorMapper.from(thrown);
+    present(error: error, context: context, retry: retry);
+    // Erreur silencieuse : rien n'a été affiché, l'appelant garde son retour.
+    return !error.silent;
   }
 
   /// Les erreurs déjà visibles ailleurs (ex: état d'erreur inline) peuvent

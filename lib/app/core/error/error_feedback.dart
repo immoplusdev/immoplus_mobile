@@ -19,8 +19,9 @@ abstract final class ErrorFeedback {
       getIt<ErrorFeedbackCoordinator>();
 
   /// Présente l'exception attrapée si c'est une erreur d'API ([AppError] ou
-  /// `DioException`) et retourne `true`. Sinon (plugin, parsing…) ne fait
-  /// rien et retourne `false`, pour que l'appelant applique son propre retour.
+  /// `DioException`) et retourne `true`. Retourne `false` quand rien n'a été
+  /// présenté (erreur hors API comme plugin ou parsing, ou requête
+  /// silencieuse), pour que l'appelant applique son propre retour.
   static bool show(
     Object thrown, {
     required ErrorContext context,

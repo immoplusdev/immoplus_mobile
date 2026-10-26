@@ -242,6 +242,27 @@ void main() {
     expect(presenter.toasts, isEmpty);
   });
 
+  test('presentThrown : false pour une erreur silencieuse ou hors API', () {
+    expect(
+      coordinator.presentThrown(const ServerError(silent: true),
+          context: ErrorContext.generic),
+      isFalse,
+    );
+    expect(
+      coordinator.presentThrown(StateError('plugin'),
+          context: ErrorContext.generic),
+      isFalse,
+    );
+    expect(presenter.dialogs, isEmpty);
+
+    expect(
+      coordinator.presentThrown(const ServerError(),
+          context: ErrorContext.generic),
+      isTrue,
+    );
+    expect(presenter.dialogs, hasLength(1));
+  });
+
   test('télémétrie : seules les erreurs inattendues sont remontées', () {
     coordinator.present(
         error: const ServerError(), context: ErrorContext.generic);
