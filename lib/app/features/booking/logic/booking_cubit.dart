@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -123,6 +125,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
             initialState: ReservationBannerState.waitingOwner,
           ),
         );
+        // La réponse du propriétaire arrive par notification.
+        unawaited(NotificationPermissionService.promptIfNeeded(
+          moment: NotificationPromptMoment.bookingRequested,
+          delay: const Duration(seconds: 1),
+        ));
       }
     } on ActiveReservationException catch (e) {
       emit(const BookingRequestState.initial());

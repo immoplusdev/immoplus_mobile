@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -100,7 +101,12 @@ class UserPreferenceIntermediaryPage extends StatelessWidget {
                           buttonHeight: 54,
                           borderRadius: BorderRadius.circular(30),
                           color: AppColors.immoBrandPrimary,
-                          onClick: () {
+                          onClick: () async {
+                            await NotificationPermissionService.promptIfNeeded(
+                              context: context,
+                              moment: NotificationPromptMoment.onboarding,
+                            );
+                            if (!context.mounted) return;
                             context.pushNamed(AuthenticationPage.name);
                           },
                           child: Row(
@@ -123,7 +129,13 @@ class UserPreferenceIntermediaryPage extends StatelessWidget {
                         // Bouton mode invité
                         Center(
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              await NotificationPermissionService
+                                  .promptIfNeeded(
+                                context: context,
+                                moment: NotificationPromptMoment.onboarding,
+                              );
+                              if (!context.mounted) return;
                               context.goNamed(HomePage.name);
                             },
                             child: Padding(

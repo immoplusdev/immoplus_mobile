@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -79,6 +81,10 @@ class LoginCubit extends Cubit<LoginCubitState> {
     } else {
       context.goNamed(HomePage.name);
     }
+    unawaited(NotificationPermissionService.promptIfNeeded(
+      moment: NotificationPromptMoment.login,
+      delay: const Duration(milliseconds: 1500),
+    ));
   }
 
   onSendData({required LoginBodyModel body}) async {

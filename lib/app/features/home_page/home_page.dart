@@ -1,5 +1,7 @@
 library;
 
+import 'dart:async';
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -60,6 +62,13 @@ class _HomePageState extends State<HomePage> {
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
       if (mounted) {
         await context.read<HomePageCubit>().syncUserPreferences();
+      }
+      if (mounted) {
+        unawaited(NotificationPermissionService.promptIfNeeded(
+          context: context,
+          moment: NotificationPromptMoment.home,
+          delay: const Duration(seconds: 3),
+        ));
       }
     });
     super.initState();
