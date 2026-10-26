@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -151,6 +153,7 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
         emit(state.copyWith(markers: _markers.toList()));
       }
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
       emit(state.copyWith(isLoading: false));
     }
   }

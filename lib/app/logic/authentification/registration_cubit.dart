@@ -1,3 +1,7 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/app_error.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -89,7 +93,22 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       log(e.toString(), name: "ERROR BLOC");
 
       emit(const RegistrationCubitState.initial());
+      _presentError(e);
     }
+  }
+
+  /// Pour la vérification du code OTP, les refus métier (code invalide ou
+  /// expiré) sont affichés sous le champ : seules les pannes passent par le
+  /// feedback global.
+  void _presentError(Object error, {bool inlineBusinessErrors = false}) {
+    final appError = AppErrorMapper.from(error);
+    if (inlineBusinessErrors &&
+        (appError is BusinessError ||
+            appError is ValidationError ||
+            appError is UnauthorizedError)) {
+      return;
+    }
+    ErrorFeedback.present(appError, context: ErrorContext.authentication);
   }
 
   Future<bool> sendRegistrationOTP({required SendEmailOtpBody body}) async {
@@ -105,10 +124,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       emit(RegistrationCubitState.initial());
+      _presentError(dioError);
       return false;
     } catch (error) {
       log('Error: $error');
       emit(RegistrationCubitState.initial());
+      _presentError(error);
       return false;
     }
   }
@@ -145,10 +166,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       emit(RegistrationCubitState.initial());
+      _presentError(dioError, inlineBusinessErrors: true);
       return null;
     } catch (error) {
       log('Error: $error');
       emit(RegistrationCubitState.initial());
+      _presentError(error, inlineBusinessErrors: true);
       return null;
     }
   }

@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -56,9 +59,6 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
     super.dispose();
   }
 
-  // Les échecs d'envoi (réseau, utilisateur introuvable, etc.) sont déjà
-  // affichés par l'ErrorInterceptor global (bottom sheet). On ne montre donc
-  // rien ici en cas d'erreur pour éviter un double affichage.
   Future<void> _sendOtp(bool useWhatsapp) async {
     setState(() => _isSendingChannel = true);
     try {
@@ -77,7 +77,10 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         });
       }
     } catch (e) {
-      // Erreur déjà affichée par l'ErrorInterceptor global.
+      // Envoyer un code est sûr à relancer.
+      ErrorFeedback.present(AppErrorMapper.from(e), context: ErrorContext.authentication,
+        retry: () => _sendOtp(useWhatsapp),
+      );
     } finally {
       if (mounted) setState(() => _isSendingChannel = false);
     }
@@ -102,7 +105,9 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         );
       }
     } catch (e) {
-      // Erreur déjà affichée par l'ErrorInterceptor global.
+      ErrorFeedback.present(AppErrorMapper.from(e), context: ErrorContext.authentication,
+        retry: _resend,
+      );
     } finally {
       if (mounted) setState(() => _isSendingChannel = false);
     }
@@ -131,9 +136,16 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
         if (state is LOGIN_SUCCESS) {
           Navigator.of(context).pop();
         } else if (state is LOGIN_INITIAL) {
+          final error = context.read<LoginCubit>().lastOtpError;
+          // Refus lié au code : message sous le champ. Sinon (403, réseau,
+          // serveur) le coordinateur a déjà présenté l'erreur.
+          final inline = error == null || LoginCubit.isInlineOtpError(error);
           setState(() {
             _isSubmittingOtp = false;
-            _otpError = 'Code invalide ou expiré. Veuillez réessayer.';
+            _otpError = inline
+                ? (error?.message ??
+                    'Code invalide ou expiré. Veuillez réessayer.')
+                : null;
             _otpController.clear();
           });
         }

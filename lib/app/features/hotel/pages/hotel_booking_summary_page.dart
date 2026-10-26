@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -343,9 +345,9 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                             context.pop();
                           }
                         } catch (e, stack) {
+                          ErrorFeedback.show(e,
+                              context: ErrorContext.hotelBooking);
                           EasyLoadingHandler.hideLoadingToast();
-                          EasyLoadingHandler.showErrorToast(
-                              text: "Erreur: ${e.toString()}");
                           getIt<CrashlyticsService>().recordNonFatalError(
                             exception: e,
                             stackTrace: stack,

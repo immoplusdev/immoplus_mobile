@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -53,12 +54,12 @@ class BienImmobilierRepository {
       log(dioError.requestOptions.uri.toString(), name: "URI");
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       inspect(error);
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -99,12 +100,12 @@ class BienImmobilierRepository {
       log(dioError.requestOptions.uri.toString(), name: "URI");
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       inspect(error);
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -124,11 +125,11 @@ class BienImmobilierRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -140,11 +141,11 @@ class BienImmobilierRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -157,11 +158,11 @@ class BienImmobilierRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -175,11 +176,11 @@ class BienImmobilierRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -193,11 +194,11 @@ class BienImmobilierRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -250,12 +251,12 @@ class BienImmobilierRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -271,7 +272,7 @@ class BienImmobilierRepository {
   //     );
   //     return response;
   //   } on DioException catch (e) {
-  //     throw Exception('Erreur annulation visite: ${e.message}');
+  //     throw AppErrorMapper.from(e);
   //   }
   // }
 }

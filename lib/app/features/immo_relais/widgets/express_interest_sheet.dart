@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -100,7 +102,9 @@ Future<void> _expressInterest(
     );
     CustomPopup.toast(text: 'Votre intérêt a été envoyé');
     onSuccess?.call();
-  } catch (_) {
-    CustomPopup.showErrorToast(text: "Impossible d'envoyer votre intérêt");
+  } catch (e) {
+    if (!ErrorFeedback.show(e, context: ErrorContext.relais)) {
+      CustomPopup.showErrorToast(text: "Impossible d'envoyer votre intérêt");
+    }
   }
 }

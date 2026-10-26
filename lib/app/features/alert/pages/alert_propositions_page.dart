@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -58,6 +60,7 @@ class _AlertPropositionsPageState extends State<AlertPropositionsPage> {
           await alertRepository.getAlertMatches(id: widget.alertId);
       _propositions = response.matches;
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.alert);
       // Error handled by repo/EasyLoading
     } finally {
       if (mounted) setState(() => _isLoading = false);

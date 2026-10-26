@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -22,7 +23,7 @@ class PaymentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
@@ -30,7 +31,7 @@ class PaymentRepository {
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -43,7 +44,7 @@ class PaymentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
@@ -51,7 +52,7 @@ class PaymentRepository {
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -63,7 +64,7 @@ class PaymentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
@@ -71,7 +72,7 @@ class PaymentRepository {
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -91,11 +92,11 @@ class PaymentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

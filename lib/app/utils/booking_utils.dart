@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -79,8 +81,9 @@ class BookingUtils {
             );
           }
         } catch (e) {
-          ToastUtils.showError(
-            description: 'Erreur lors de l\'annulation',
+          ErrorFeedback.show(
+            e,
+            context: ErrorContext.bookingCancellation,
           );
         }
       },

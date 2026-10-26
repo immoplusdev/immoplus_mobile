@@ -76,7 +76,7 @@ class _LocationResidencesPageState extends State<LocationResidencesPage>
         _pagingController.appendLastPage(result.data ?? []);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(error);
     }
   }
 

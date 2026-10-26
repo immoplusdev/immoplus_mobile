@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
@@ -172,8 +174,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
         ),
       );
     } catch (e) {
-      ToastUtils.showError(
-          description: e.toString().replaceAll('Exception: ', ''));
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
     } finally {
       if (mounted) setState(() => _isLocking = false);
     }
@@ -187,7 +188,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
       ToastUtils.showSuccess(description: 'Recherche annulée');
       if (mounted) setState(() => _activeReverseSearch = null);
     } catch (e) {
-      ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
     }
   }
 
@@ -412,7 +413,7 @@ class StandardBookingBottomBar extends StatelessWidget {
           ToastUtils.showSuccess(description: 'Recherche annulée');
           onLockCancelled?.call();
         } catch (e) {
-          ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+          ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
         }
       },
     );

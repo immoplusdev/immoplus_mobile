@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -67,7 +69,9 @@ class PaymentServices {
       }
     } catch (e) {
       log(e.toString(), name: 'ERROR INIT');
-      EasyLoading.showToast("Une erreur s'est produite");
+      if (!ErrorFeedback.show(e, context: ErrorContext.paymentInitiation)) {
+        EasyLoading.showToast("Une erreur s'est produite");
+      }
       onFailed();
     }
   }
@@ -96,9 +100,11 @@ class PaymentServices {
       EasyLoading.dismiss();
       onSuccess();
     } catch (e) {
-      EasyLoading.showToast(
-        "La tentative d'authentification a échoué. Assurez-vous que le code OTP est correct.",
-      );
+      if (!ErrorFeedback.show(e, context: ErrorContext.paymentInitiation)) {
+        EasyLoading.showToast(
+          "La tentative d'authentification a échoué. Assurez-vous que le code OTP est correct.",
+        );
+      }
       onFailed();
     }
   }

@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -57,6 +59,7 @@ class _ReductionResidencesPageState extends State<ReductionResidencesPage> {
         _pagingController.appendLastPage(reduced);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
       _pagingController.error = error.toString();
     }
   }

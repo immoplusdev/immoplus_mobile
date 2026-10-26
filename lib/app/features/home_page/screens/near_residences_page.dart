@@ -75,7 +75,7 @@ class _NearResidencesPageState extends State<NearResidencesPage>
       }
     } catch (error) {
       // Don't set _pagingController.error to keep the shimmer loading
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(error);
     }
   }
 

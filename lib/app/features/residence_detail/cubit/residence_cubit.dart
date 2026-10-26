@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/models/remote/residence/residence_response.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -17,7 +20,9 @@ class ResidenceCubit extends Cubit<RequestState> {
 
       emit(RequestState.residence(data: residenceResponse.data));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.residenceLoad);
+      emit(RequestState.error(
+          error: ErrorMessages.messageOf(e, ErrorContext.residenceLoad)));
     }
   }
 }

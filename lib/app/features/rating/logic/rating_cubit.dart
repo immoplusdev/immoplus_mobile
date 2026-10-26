@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -19,7 +22,8 @@ class RatingCubit extends Cubit<RatingState> {
       await _repository.createClientRating(request);
       emit(const RatingState.success());
     } catch (e) {
-      emit(RatingState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.rating);
+      emit(RatingState.error(ErrorMessages.messageOf(e, ErrorContext.rating)));
     }
   }
 }

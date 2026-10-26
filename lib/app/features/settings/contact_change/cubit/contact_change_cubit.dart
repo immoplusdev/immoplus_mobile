@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -31,7 +34,9 @@ class ContactChangeCubit extends Cubit<ContactChangeState> {
       await AuthRepository().requestContactChange(body);
       emit(ContactChangeRequestSuccess(type));
     } catch (e) {
-      emit(ContactChangeRequestError(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
+      emit(ContactChangeRequestError(
+          ErrorMessages.messageOf(e, ErrorContext.profileUpdate)));
     }
   }
 
@@ -68,7 +73,9 @@ class ContactChangeCubit extends Cubit<ContactChangeState> {
       emit(ContactChangeConfirmSuccess(
           "Votre contact a été mis à jour avec succès."));
     } catch (e) {
-      emit(ContactChangeConfirmError(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
+      emit(ContactChangeConfirmError(
+          ErrorMessages.messageOf(e, ErrorContext.profileUpdate)));
     }
   }
 }

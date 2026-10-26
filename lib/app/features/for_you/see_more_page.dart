@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +86,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
         _pagingController.appendLastPage(items);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
       _pagingController.error = error;
     }
   }

@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback_listener.dart';
+import 'package:immoplus/app/core/error/app_error.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:developer';
 
@@ -548,189 +550,209 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
               ? MediaQuery.of(context).padding.bottom
               : 16,
         ),
-        child: BlocConsumer<BookingCubit, BookingRequestState>(
-          listener: (context, state) {
-            if (state is RECEIVE_ESTIMATE_COST) {
-              setState(() {
-                estimateCost = state.estimateCost.data;
-              });
-            }
-            // TODO(KYC): Modal KYC Didit désactivée temporairement pour test Stripe
-            // if (state is KYC_REQUIRED) {
-            //   KycVerificationModal.show(
-            //     context,
-            //     initialKycSession: state.kycSession,
-            //     onSuccess: () {
-            //       if (estimateCost != null) {
-            //         context.read<BookingCubit>().orderBooking(
-            //               amount: estimateCost!.total.toInt(),
-            //               force: true,
-            //               body: ReservationRequestBody(
-            //                 residence: widget.residenceModel.id,
-            //                 datesReservation: selectedDates
-            //                     .map((e) => DatesReservationModel(date: e))
-            //                     .toList(),
-            //                 clientPhoneNumber:
-            //                     _formController.phoneNumber!.text,
-            //               ),
-            //             );
-            //       }
-            //     },
-            //   );
-            // }
-          },
-          builder: (context, state) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // GAUCHE : Bloc Estimation
-                Expanded(
-                  flex: 5,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          // Container(
-                          //   padding: const EdgeInsets.all(4),
-                          //   decoration: BoxDecoration(
-                          //     color: const Color(0xFFECFDF3),
-                          //     borderRadius: BorderRadius.circular(6),
-                          //   ),
-                          //   child: const Icon(
-                          //     Iconsax.receipt_item,
-                          //     color: Color(0xFF12B76A),
-                          //     size: 16,
-                          //   ),
-                          // ),
-                          const Gap(6),
-                          Text(
-                            'Total estimé',
+        child: ErrorFeedbackListener<BookingCubit, BookingRequestState>(
+          // Création de réservation : non idempotente, donc pas de
+          // « Réessayer » automatique.
+          errorOf: (state) => state is Error_BOOKINGS
+              ? (state.appError ?? const UnknownError())
+              : null,
+          contextOf: (state) => state is Error_BOOKINGS ? state.context : null,
+          child: BlocConsumer<BookingCubit, BookingRequestState>(
+            listener: (context, state) {
+              if (state is RECEIVE_ESTIMATE_COST) {
+                setState(() {
+                  estimateCost = state.estimateCost.data;
+                });
+              }
+              // TODO(KYC): Modal KYC Didit désactivée temporairement pour test Stripe
+              // if (state is KYC_REQUIRED) {
+              //   KycVerificationModal.show(
+              //     context,
+              //     initialKycSession: state.kycSession,
+              //     onSuccess: () {
+              //       if (estimateCost != null) {
+              //         context.read<BookingCubit>().orderBooking(
+              //               amount: estimateCost!.total.toInt(),
+              //               force: true,
+              //               body: ReservationRequestBody(
+              //                 residence: widget.residenceModel.id,
+              //                 datesReservation: selectedDates
+              //                     .map((e) => DatesReservationModel(date: e))
+              //                     .toList(),
+              //                 clientPhoneNumber:
+              //                     _formController.phoneNumber!.text,
+              //               ),
+              //             );
+              //       }
+              //     },
+              //   );
+              // }
+            },
+            builder: (context, state) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // GAUCHE : Bloc Estimation
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            // Container(
+                            //   padding: const EdgeInsets.all(4),
+                            //   decoration: BoxDecoration(
+                            //     color: const Color(0xFFECFDF3),
+                            //     borderRadius: BorderRadius.circular(6),
+                            //   ),
+                            //   child: const Icon(
+                            //     Iconsax.receipt_item,
+                            //     color: Color(0xFF12B76A),
+                            //     size: 16,
+                            //   ),
+                            // ),
+                            const Gap(6),
+                            Text(
+                              'Total estimé',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.immoTextSecondary,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        const Gap(4),
+                        if (estimateCost != null) ...[
+                          AutoSizeText(
+                            Utils.formatCurrency(estimateCost!.total.toInt()),
+                            maxLines: 1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.primary,
+                                ),
+                          ),
+                          AutoSizeText(
+                            'Dont ${Utils.formatCurrency(estimateCost!.frais.toInt())} de frais',
+                            maxLines: 1,
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.immoTextSecondary,
+                                      color: AppColors.immoTextDisabled,
+                                      fontSize: 10,
+                                    ),
+                          ),
+                        ] else ...[
+                          Text(
+                            '-- FCFA',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.immoBorderStrong,
+                                ),
+                          ),
+                          Text(
+                            'Sélectionnez vos dates',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.immoTextDisabled,
+                                      fontSize: 10,
                                     ),
                           ),
                         ],
-                      ),
-                      const Gap(4),
-                      if (estimateCost != null) ...[
-                        AutoSizeText(
-                          Utils.formatCurrency(estimateCost!.total.toInt()),
-                          maxLines: 1,
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.primary,
-                                  ),
-                        ),
-                        AutoSizeText(
-                          'Dont ${Utils.formatCurrency(estimateCost!.frais.toInt())} de frais',
-                          maxLines: 1,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.immoTextDisabled,
-                                    fontSize: 10,
-                                  ),
-                        ),
-                      ] else ...[
-                        Text(
-                          '-- FCFA',
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.immoBorderStrong,
-                                  ),
-                        ),
-                        Text(
-                          'Sélectionnez vos dates',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.immoTextDisabled,
-                                    fontSize: 10,
-                                  ),
-                        ),
                       ],
-                    ],
-                  ),
-                ),
-                const Gap(12),
-
-                // DROITE : Bouton Réserver
-                Expanded(
-                  flex: 4,
-                  child: SizedBox(
-                    height:
-                        52, // Fixe la hauteur du bouton pour un rendu uniforme
-                    child: CustomLoadingButtom(
-                      textColor: AppColors.white,
-                      text: 'Réserver',
-                      isLoading: state is LOADING_BOOKING,
-                      onClick: (state is INITIAL_BOOKING)
-                          ? null
-                          : () {
-                              if (totalDays <
-                                  widget.residenceModel.dureeMinSejour) {
-                                ToastUtils.showError(
-                                    description:
-                                        "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
-                                return;
-                              }
-                              if (totalDays >
-                                  widget.residenceModel.dureeMaxSejour) {
-                                ToastUtils.showError(
-                                    description:
-                                        "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
-                                return;
-                              }
-                              if (_formKey.currentState!.validate()) {
-                                if (selectedDates.isEmpty) {
-                                  EasyLoading.showToast(
-                                      "Aucun jour de réservation sélectionné",
-                                      toastPosition:
-                                          EasyLoadingToastPosition.bottom);
-                                } else {
-                                  AppDialog.show(
-                                    title: 'Confirmation',
-                                    description:
-                                        'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
-                                    primaryButtonText: 'Confirmer',
-                                    secondButtonText: 'Annuler',
-                                    onPrimary: () {
-                                      if (estimateCost == null) {
-                                        ToastUtils.showSuccess(
-                                            description:
-                                                "Veuillez choisir une date");
-                                        return;
-                                      }
-                                      context.read<BookingCubit>().orderBooking(
-                                          amount: estimateCost!.total.toInt(),
-                                          entryPoint: widget.entryPoint,
-                                          body: ReservationRequestBody(
-                                              residence:
-                                                  widget.residenceModel.id,
-                                              datesReservation: selectedDates
-                                                  .map(
-                                                    (e) =>
-                                                        DatesReservationModel(
-                                                            date: e),
-                                                  )
-                                                  .toList(),
-                                              clientPhoneNumber: _formController
-                                                  .phoneNumber!.text));
-                                    },
-                                  );
-                                }
-                              }
-                            },
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                  const Gap(12),
+
+                  // DROITE : Bouton Réserver
+                  Expanded(
+                    flex: 4,
+                    child: SizedBox(
+                      height:
+                          52, // Fixe la hauteur du bouton pour un rendu uniforme
+                      child: CustomLoadingButtom(
+                        textColor: AppColors.white,
+                        text: 'Réserver',
+                        isLoading: state is LOADING_BOOKING,
+                        onClick: (state is INITIAL_BOOKING)
+                            ? null
+                            : () {
+                                if (totalDays <
+                                    widget.residenceModel.dureeMinSejour) {
+                                  ToastUtils.showError(
+                                      description:
+                                          "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
+                                  return;
+                                }
+                                if (totalDays >
+                                    widget.residenceModel.dureeMaxSejour) {
+                                  ToastUtils.showError(
+                                      description:
+                                          "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
+                                  return;
+                                }
+                                if (_formKey.currentState!.validate()) {
+                                  if (selectedDates.isEmpty) {
+                                    EasyLoading.showToast(
+                                        "Aucun jour de réservation sélectionné",
+                                        toastPosition:
+                                            EasyLoadingToastPosition.bottom);
+                                  } else {
+                                    AppDialog.show(
+                                      title: 'Confirmation',
+                                      description:
+                                          'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
+                                      primaryButtonText: 'Confirmer',
+                                      secondButtonText: 'Annuler',
+                                      onPrimary: () {
+                                        if (estimateCost == null) {
+                                          ToastUtils.showSuccess(
+                                              description:
+                                                  "Veuillez choisir une date");
+                                          return;
+                                        }
+                                        context
+                                            .read<BookingCubit>()
+                                            .orderBooking(
+                                                amount:
+                                                    estimateCost!.total.toInt(),
+                                                entryPoint: widget.entryPoint,
+                                                body: ReservationRequestBody(
+                                                    residence: widget
+                                                        .residenceModel.id,
+                                                    datesReservation:
+                                                        selectedDates
+                                                            .map(
+                                                              (e) =>
+                                                                  DatesReservationModel(
+                                                                      date: e),
+                                                            )
+                                                            .toList(),
+                                                    clientPhoneNumber:
+                                                        _formController
+                                                            .phoneNumber!
+                                                            .text));
+                                      },
+                                    );
+                                  }
+                                }
+                              },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

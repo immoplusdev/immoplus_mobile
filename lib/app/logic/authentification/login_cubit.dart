@@ -1,3 +1,7 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
+import 'package:immoplus/app/core/error/app_error.dart';
 import 'dart:async';
 import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'dart:convert';
@@ -67,6 +71,29 @@ class LoginCubit extends Cubit<LoginCubitState> {
   Dio dio;
   SocialLoginUser? socialLoginUser;
 
+  /// Présente l'erreur via le point d'entrée unique. Pour la vérification
+  /// du code OTP, les refus métier (code invalide/expiré) sont affichés
+  /// sous le champ par le dialogue : seules les pannes (réseau, serveur)
+  /// passent par le feedback global.
+  /// Dernière erreur de vérification OTP (lue par le dialogue pour choisir
+  /// entre message sous le champ et feedback global).
+  AppError? lastOtpError;
+
+  /// Refus liés au code saisi (invalide, expiré) : affichés sous le champ.
+  /// Un 403 (ex: type de compte non autorisé), le réseau et le serveur
+  /// passent par le feedback global.
+  static bool isInlineOtpError(AppError? error) =>
+      error is BusinessError ||
+      error is ValidationError ||
+      error is UnauthorizedError;
+
+  void _presentError(Object error, ErrorContext context,
+      {bool inlineBusinessErrors = false}) {
+    final appError = AppErrorMapper.from(error);
+    if (inlineBusinessErrors && isInlineOtpError(appError)) return;
+    ErrorFeedback.present(appError, context: context);
+  }
+
   void _navigateAfterLogin() {
     final context = NavigationService.navigatorKey.currentContext!;
     final redirectData = authRedirectService.get();
@@ -123,6 +150,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       _navigateAfterLogin();
     } catch (e) {
       emit(const LoginCubitState.initial());
+      _presentError(e, ErrorContext.authentication);
     }
   }
 
@@ -130,21 +158,29 @@ class LoginCubit extends Cubit<LoginCubitState> {
       {required SendOptModel body,
       required PageController pageController}) async {
     emit(const LOGIN_LOADING());
-    final response = await AuthRepository().sendOtp(body: body);
-    if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
+    try {
+      final response = await AuthRepository().sendOtp(body: body);
+      if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
+        emit(const LoginCubitState.initial());
+        pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        emit(const LoginCubitState.initial());
+        _presentError(
+          const UnknownError(),
+          ErrorContext.authentication,
+        );
+      }
+    } catch (e) {
       emit(const LoginCubitState.initial());
-      pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      CustomPopup.showErrorToast(
-          text: 'Envoie du code échoué veuillez ressayer');
-      emit(const LoginCubitState.initial());
+      _presentError(e, ErrorContext.authentication);
     }
   }
 
   onSendOtpData({required LoginOtpBody body}) async {
+    lastOtpError = null;
     emit(const LOGIN_LOADING());
     try {
       AccountCreationResponse response =
@@ -179,7 +215,9 @@ class LoginCubit extends Cubit<LoginCubitState> {
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
     } catch (e) {
+      lastOtpError = AppErrorMapper.from(e);
       emit(const LoginCubitState.initial());
+      _presentError(e, ErrorContext.authentication, inlineBusinessErrors: true);
     }
   }
 
@@ -216,6 +254,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       );
     } catch (e) {
       emit(const LoginCubitState.initial());
+      _presentError(e, ErrorContext.profileUpdate);
     }
   }
 
@@ -237,6 +276,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       }
     } catch (e) {
       emit(const LoginCubitState.initial());
+      _presentError(e, ErrorContext.profileUpdate);
     }
   }
 
@@ -438,6 +478,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
         return;
       }
       log('❌ Erreur social login: $e');
+      _presentError(e, ErrorContext.authentication);
     } catch (e) {
       log('❌ Erreur inattendue: $e');
     } finally {

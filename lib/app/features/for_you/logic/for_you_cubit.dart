@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,8 +28,10 @@ class ForYouCubit extends Cubit<ForYouState> {
         nextCursor: data.nextCursor,
       ));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad, retry: fetch);
       log('ForYouCubit: Error fetching home feed: $e');
-      emit(ForYouState.error(message: e.toString()));
+      emit(ForYouState.error(
+          message: ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 
