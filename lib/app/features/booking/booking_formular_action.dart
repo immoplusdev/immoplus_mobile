@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -30,8 +31,13 @@ import 'package:immoplus/app/widgets/custom_loading_button.dart';
 import 'package:intl/intl.dart';
 
 class BookingFormularAction extends StatefulWidget {
-  const BookingFormularAction({super.key, required this.residenceModel});
+  const BookingFormularAction({
+    super.key,
+    required this.residenceModel,
+    this.entryPoint,
+  });
   final ResidenceModel residenceModel;
+  final ResidenceEntryPoint? entryPoint;
   @override
   State<BookingFormularAction> createState() => _BookingFormularActionState();
 }
@@ -701,6 +707,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                       }
                                       context.read<BookingCubit>().orderBooking(
                                           amount: estimateCost!.total.toInt(),
+                                          entryPoint: widget.entryPoint,
                                           body: ReservationRequestBody(
                                               residence:
                                                   widget.residenceModel.id,

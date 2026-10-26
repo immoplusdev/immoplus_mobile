@@ -201,7 +201,7 @@ class _ClientReservationOverlayWidgetState
                         SizedBox(height: 2),
                         Text(
                           Utils.formatCurrency(
-                              widget.reservation.montantTotalReservation),
+                              widget.reservation.montantAPayer),
                           style: AppTypography.font(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,

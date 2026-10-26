@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -388,7 +389,10 @@ class _ForYouCheapestStackedSectionState
 
   void _handleCardTap(HomeFeedListItem item) {
     if (_isResidence && item.asResidence != null) {
-      context.push(ResidencePage.route(item.asResidence!.residenceId));
+      context.push(ResidencePage.route(
+        item.asResidence!.residenceId,
+        entryPoint: ResidenceEntryPoint.homeFeed,
+      ));
     } else if (!_isResidence && item.asBien != null) {
       context.push(EstatePage.route(item.asBien!.bienId));
     }

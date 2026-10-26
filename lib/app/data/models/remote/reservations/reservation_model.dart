@@ -46,6 +46,11 @@ extension ReservationModelX on ReservationModel {
   StatusReservation? get statusEnum =>
       StatusReservation.fromString(statusReservation);
 
+  /// Montant réellement dû par le client (frais inclus). `montantPaye` porte
+  /// ce montant ; repli sur `montantTotalReservation` s'il est absent.
+  double get montantAPayer =>
+      montantPaye > 0 ? montantPaye.toDouble() : montantTotalReservation;
+
   bool get checkinNotValide => checkinValide != true;
   bool get isCheckinValide => checkinValide == true;
 }

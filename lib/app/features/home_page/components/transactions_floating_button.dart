@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/enums/analytics/transaction_item_type.dart';
 import 'dart:async';
 import 'dart:developer';
 
@@ -210,6 +212,11 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
       return;
     }
 
+    getIt<AnalyticsService>().logTransactionsFabOpened(
+      pendingOwnerCount: _pendingOwnerReservations.length,
+      pendingPaymentCount: _pendingPaymentReservations.length,
+      hasReverseSearch: _activeReverseSearch != null,
+    );
     setState(() => _isOpen = true);
     _overlayEntry = _buildOverlayEntry();
     Overlay.of(context).insert(_overlayEntry!);
@@ -220,33 +227,45 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   }
 
   void _openOwnerReservation(ReservationModel reservation) {
+    getIt<AnalyticsService>().logTransactionItemTapped(
+      TransactionItemType.pendingOwnerReservation,
+      itemId: reservation.id,
+    );
     unawaited(_closeMenu());
     context.pushNamed(
       ReservationEngagementFrame.name,
       extra: ReservationEngagementFrame(
         ownerName: reservation.residence.nom,
         reservationId: reservation.id,
-        montantTotal: reservation.montantTotalReservation,
+        montantTotal: reservation.montantAPayer,
         initialState: ReservationBannerState.waitingOwner,
       ),
     );
   }
 
   void _openPayment(ReservationModel reservation) {
+    getIt<AnalyticsService>().logTransactionItemTapped(
+      TransactionItemType.reservationToPay,
+      itemId: reservation.id,
+    );
     unawaited(_closeMenu());
     // TODO RESERVATION ID DEBUG
-    log(' montant total ${reservation.montantTotalReservation.toInt()} reservation ${reservation.id}  ');
+    log(' montant total ${reservation.montantAPayer.toInt()} reservation ${reservation.id}  ');
     context.pushNamed(
       OperatorsSelectorPage.name,
       extra: PaymentPageAdapter(
         itemId: reservation.id,
         collection: ProductType.reservations.name,
-        amount: reservation.montantTotalReservation.toInt(),
+        amount: reservation.montantAPayer.toInt(),
       ),
     );
   }
 
   void _openReverseSearch(ReverseSearchItem item) {
+    getIt<AnalyticsService>().logTransactionItemTapped(
+      TransactionItemType.reverseSearch,
+      itemId: item.id,
+    );
     unawaited(_closeMenu());
     ReverseSearchNavigation.resume(context, item);
   }
@@ -676,8 +695,8 @@ class _TransactionsMenuPanel extends StatelessWidget {
                         iconColor: AppColors.amber800,
                         iconBg: AppColors.orange50,
                         title: 'Réservation à payer',
-                        subtitle: Utils.formatCurrency(
-                            reservation.montantTotalReservation),
+                        subtitle:
+                            Utils.formatCurrency(reservation.montantAPayer),
                         onTap: () => onTapPayment(reservation),
                         onCancel: () => onCancel(reservation),
                       ),

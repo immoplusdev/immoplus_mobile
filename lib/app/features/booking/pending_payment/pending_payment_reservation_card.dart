@@ -68,7 +68,7 @@ class PendingPaymentReservationCard extends StatelessWidget {
                 AutoSizeText(
                   maxLines: 1,
                   Utils.formatCurrency(
-                      reservationModel.montantTotalReservation),
+                      reservationModel.montantAPayer),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -138,13 +138,14 @@ class PendingPaymentReservationCard extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () {
                   // TODO RESERVATION ID DEBUG
-                  log(' montant total ${reservationModel.montantTotalReservation} reservation ${reservationModel.id}  ');
+                  log(' montant total ${reservationModel.montantAPayer} reservation ${reservationModel.id}  ');
                   context.pushNamed(
                     OperatorsSelectorPage.name,
                     extra: PaymentPageAdapter(
                       itemId: reservationModel.id,
                       collection: ProductType.reservations.name,
-                      amount: reservationModel.montantTotalReservation.toInt(),
+                      amount: reservationModel.montantAPayer.toInt(),
+                      summary: PaymentSummary.fromReservation(reservationModel),
                     ),
                   );
                 },

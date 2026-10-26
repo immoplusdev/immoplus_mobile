@@ -10,9 +10,9 @@ import 'package:immoplus/app/features/hotel/cubit/hotel_state.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/features/hotel/widgets/hotel_booking_card.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus/app/data/models/remote/hotel/hotel_reservation_request.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_payment_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
@@ -342,10 +342,20 @@ class _HotelBookingSummaryPageState extends State<HotelBookingSummaryPage> {
                                 text: "Réservation effectuée avec succès !");
                             context.pop();
                           }
-                        } catch (e) {
+                        } catch (e, stack) {
                           EasyLoadingHandler.hideLoadingToast();
                           EasyLoadingHandler.showErrorToast(
                               text: "Erreur: ${e.toString()}");
+                          getIt<CrashlyticsService>().recordNonFatalError(
+                            exception: e,
+                            stackTrace: stack,
+                            screen: 'HotelBookingSummaryPage',
+                            feature: 'hotel_booking',
+                            errorType: 'HotelReservationCreateFailure',
+                            additionalContext: {
+                              'hotel_id': hotel.hotelId,
+                            },
+                          );
                         }
                       },
                     ),

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/services/onboarding_completion_tracker.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -175,6 +176,7 @@ class UserPreferenceCubit extends Cubit<UserPreferenceCubitState> {
 
           await _sessionManager.saveLocalPreferences(localPrefs);
           await _sessionManager.markOnboardingAsRead();
+          await OnboardingCompletionTracker.markPending();
           emit(const UserPreferenceCubitState.success());
         } catch (e) {
           emit(UserPreferenceCubitState.loaded(

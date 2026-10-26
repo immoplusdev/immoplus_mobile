@@ -1,4 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
+import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
@@ -13,7 +16,9 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
@@ -91,6 +96,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
     required ReservationRequestBody body,
     required int amount,
     bool force = false,
+    ResidenceEntryPoint? entryPoint,
   }) async {
     emit(const LOADING_BOOKING());
     try {
@@ -100,6 +106,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
         itemId: reservationResponse.data.id,
         itemName: reservationResponse.data.residence.nom,
         value: reservationResponse.data.montantTotalReservation,
+        entryPoint: entryPoint,
       );
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
@@ -117,10 +124,15 @@ class BookingCubit extends Cubit<BookingRequestState> {
           extra: ReservationEngagementFrame(
             ownerName: ownerName,
             reservationId: reservationResponse.data.id,
-            montantTotal: reservationResponse.data.montantTotalReservation,
+            montantTotal: reservationResponse.data.montantAPayer,
             initialState: ReservationBannerState.waitingOwner,
           ),
         );
+        // La réponse du propriétaire arrive par notification.
+        unawaited(NotificationPermissionService.promptIfNeeded(
+          moment: NotificationPromptMoment.bookingRequested,
+          delay: const Duration(seconds: 1),
+        ));
       }
     } on ActiveReservationException catch (e) {
       emit(const BookingRequestState.initial());
@@ -151,14 +163,24 @@ class BookingCubit extends Cubit<BookingRequestState> {
               extra: ReservationEngagementFrame(
                 ownerName: existing.data.residence.nom,
                 reservationId: existing.data.id,
-                montantTotal: existing.data.montantTotalReservation,
+                montantTotal: existing.data.montantAPayer,
                 initialState: ReservationBannerState.waitingOwner,
               ),
             );
           }
         },
       );
-    } catch (e) {
+    } catch (e, stack) {
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'BookingFormular',
+        feature: 'booking_creation',
+        errorType: 'OrderBookingFailure',
+        additionalContext: {
+          'residence_id': body.residence,
+        },
+      );
       emit(BookingRequestState.error(e.toString()));
     }
   }

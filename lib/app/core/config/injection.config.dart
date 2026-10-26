@@ -26,6 +26,9 @@ import 'package:immoplus/app/core/services/analytics_service.dart' as _i1058;
 import 'package:immoplus/app/core/services/auth_redirect_service.dart' as _i944;
 import 'package:immoplus/app/core/services/client_reservation_overlay_service.dart'
     as _i99;
+import 'package:immoplus/app/core/services/crashlytics_service.dart' as _i87;
+import 'package:immoplus/app/core/services/firebase_crashlytics_service_impl.dart'
+    as _i390;
 import 'package:immoplus/app/core/services/messaging_socket_service.dart'
     as _i570;
 import 'package:immoplus/app/core/services/notification_service.dart' as _i640;
@@ -161,6 +164,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i39.BannerRepository>(() => _i39.BannerRepository());
     gh.lazySingleton<_i206.AdRepository>(() => _i206.AdRepository());
     gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
+    gh.lazySingleton<_i87.CrashlyticsService>(
+        () => _i390.FirebaseCrashlyticsServiceImpl());
     gh.lazySingleton<_i511.PushProvider>(() => _i693.FirebasePushProvider());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
     gh.singleton<_i22.SessionManager>(

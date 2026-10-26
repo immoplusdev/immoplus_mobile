@@ -1,6 +1,7 @@
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/reservation_socket_service.dart';
@@ -124,6 +125,9 @@ class SessionManager {
         getIt<MessagingSocketService>().connect(user.accessToken);
         // Enregistre / actualise l'appareil auprès de FCM
         getIt<NotificationService>().suscribeCurrentUser();
+        if (user.userId != null) {
+          getIt<CrashlyticsService>().setUserId(user.userId!);
+        }
       }
     }
 

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,11 @@ class LogmentBottomBar extends StatefulWidget {
     this.reverseSearchPrice,
     this.reverseSearchNights,
     this.reverseSearchPrixParNuit,
+    this.entryPoint,
   });
 
   final ResidenceModel residenceModel;
+  final ResidenceEntryPoint? entryPoint;
   final bool isImmediateBooking;
   final String? reverseSearchId;
   final double? reverseSearchPrice;
@@ -131,6 +134,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
       residenceId: widget.residenceModel.id,
       residenceName: widget.residenceModel.nom,
       price: price,
+      entryPoint: widget.entryPoint,
     );
 
     void execute() => unawaited(_lockAndPay(context, reverseSearchId, price));
@@ -229,6 +233,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
         else
           StandardBookingBottomBar(
             residenceModel: widget.residenceModel,
+            entryPoint: widget.entryPoint,
             lockedElsewhere: _isLockedElsewhere ? _activeReverseSearch : null,
             onLockCancelled: () => setState(() => _activeReverseSearch = null),
           ),
@@ -244,11 +249,13 @@ class StandardBookingBottomBar extends StatelessWidget {
   const StandardBookingBottomBar({
     super.key,
     required this.residenceModel,
+    this.entryPoint,
     this.lockedElsewhere,
     this.onLockCancelled,
   });
 
   final ResidenceModel residenceModel;
+  final ResidenceEntryPoint? entryPoint;
 
   /// Recherche inversée verrouillée sur une autre résidence : bloque
   /// "Réserver" tant que l'utilisateur n'a pas annulé ou payé cette
@@ -361,13 +368,17 @@ class StandardBookingBottomBar extends StatelessWidget {
       residenceId: residenceModel.id,
       residenceName: residenceModel.nom,
       price: residenceModel.prixReservation.toDouble(),
+      entryPoint: entryPoint,
     );
 
     void openBookingForm() {
       Navigator.push(
         context,
         CupertinoPageRoute(
-          builder: (_) => BookingFormularAction(residenceModel: residenceModel),
+          builder: (_) => BookingFormularAction(
+            residenceModel: residenceModel,
+            entryPoint: entryPoint,
+          ),
         ),
       );
     }

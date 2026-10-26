@@ -1,7 +1,15 @@
 import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/enums/analytics/analytics_event.dart';
+import 'package:immoplus/app/core/enums/analytics/banner_cta_slot.dart';
+import 'package:immoplus/app/core/enums/analytics/home_grid_tab.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
+import 'package:immoplus/app/core/enums/analytics/transaction_item_type.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/models/local/user_model_schema.dart';
+import 'package:immoplus/app/data/models/remote/banners/banner_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -18,6 +26,11 @@ class AnalyticsService {
     String? intentPreference,
   }) async {
     await _analytics.setUserId(id: user.userId);
+    if (user.userId != null) {
+      try {
+        await getIt<CrashlyticsService>().setUserId(user.userId!);
+      } catch (_) {}
+    }
 
     final packageInfo = await PackageInfo.fromPlatform();
     final platform = Platform.isIOS ? 'ios' : 'android';
@@ -38,6 +51,9 @@ class AnalyticsService {
 
   Future<void> clearUserIdentity() async {
     await _analytics.setUserId(id: null);
+    try {
+      await getIt<CrashlyticsService>().clearUserId();
+    } catch (_) {}
   }
 
   Future<void> updateKycStatus(String status) async {
@@ -122,6 +138,7 @@ class AnalyticsService {
     required String itemCategory,
     required String itemLocation,
     required double price,
+    ResidenceEntryPoint? entryPoint,
   }) async {
     await _analytics.logViewItem(
       currency: 'XOF',
@@ -135,6 +152,7 @@ class AnalyticsService {
           price: price,
         ),
       ],
+      parameters: _entryPointParams(entryPoint),
     );
   }
 
@@ -214,13 +232,15 @@ class AnalyticsService {
     required String residenceId,
     required String residenceName,
     required double price,
+    ResidenceEntryPoint? entryPoint,
   }) async {
     await _analytics.logEvent(
-      name: 'residence_booking_cta_tapped',
+      name: AnalyticsEvent.residenceBookingCtaTapped.value,
       parameters: {
         'residence_id': residenceId,
         'residence_name': residenceName,
         'price': price,
+        ..._entryPointParams(entryPoint),
       },
     );
   }
@@ -232,6 +252,7 @@ class AnalyticsService {
     String currency = 'XOF',
     String? dateStart,
     String? dateEnd,
+    ResidenceEntryPoint? entryPoint,
   }) async {
     await _analytics.logBeginCheckout(
       currency: currency,
@@ -242,6 +263,7 @@ class AnalyticsService {
       parameters: {
         if (dateStart != null) 'date_start': dateStart,
         if (dateEnd != null) 'date_end': dateEnd,
+        ..._entryPointParams(entryPoint),
       },
     );
   }
@@ -303,6 +325,92 @@ class AnalyticsService {
   }
 
   // ── Notifications push ──────────────────────────────────────────────────
+  // ── Accueil ─────────────────────────────────────────────────────────────
+  Future<void> logHomeTabTapped(HomeGridTab tab) =>
+      _logEvent(AnalyticsEvent.homeTabTapped, {'tab': tab.analyticsValue});
+
+  Future<void> logTransactionsFabOpened({
+    required int pendingOwnerCount,
+    required int pendingPaymentCount,
+    required bool hasReverseSearch,
+  }) {
+    final total =
+        pendingOwnerCount + pendingPaymentCount + (hasReverseSearch ? 1 : 0);
+    return _logEvent(AnalyticsEvent.transactionsFabOpened, {
+      'pending_count': total,
+      'pending_owner_count': pendingOwnerCount,
+      'pending_payment_count': pendingPaymentCount,
+      'has_reverse_search': hasReverseSearch ? 1 : 0,
+      'has_pending': total > 0 ? 1 : 0,
+    });
+  }
+
+  Future<void> logTransactionItemTapped(TransactionItemType type,
+          {String? itemId}) =>
+      _logEvent(AnalyticsEvent.transactionItemTapped, {
+        'transaction_type': type.analyticsValue,
+        if (itemId != null) 'item_id': itemId,
+      });
+
+  Future<void> logBannerCtaTapped(
+    BannerModel banner, {
+    required BannerCtaSlot slot,
+    String? ctaUrl,
+  }) =>
+      _logEvent(AnalyticsEvent.bannerCtaTapped, {
+        ..._bannerParams(banner),
+        'cta_slot': slot.analyticsValue,
+        if (ctaUrl != null) 'cta_url': ctaUrl,
+      });
+
+  Future<void> logBannerDismissed(BannerModel banner) =>
+      _logEvent(AnalyticsEvent.bannerDismissed, _bannerParams(banner));
+
+  Future<void> logBannerViewed(BannerModel banner, {required int position}) =>
+      _logEvent(AnalyticsEvent.bannerViewed, {
+        ..._bannerParams(banner),
+        'position': position,
+      });
+
+  /// Intention de recherche : tap initial sur la barre, avant toute frappe.
+  Future<void> logSearchBarFocused() =>
+      _logEvent(AnalyticsEvent.searchBarFocused);
+
+  // ── Onboarding ──────────────────────────────────────────────────────────
+  Future<void> logOnboardingCtaSignupTapped() =>
+      _logEvent(AnalyticsEvent.onboardingCtaSignupTapped);
+
+  Future<void> logOnboardingGuestModeTapped() =>
+      _logEvent(AnalyticsEvent.onboardingGuestModeTapped);
+
+  Future<void> logOnboardingCompleted() =>
+      _logEvent(AnalyticsEvent.onboardingCompleted);
+
+  // ── Navigation principale ───────────────────────────────────────────────
+  Future<void> logTabReelsTapped() => _logEvent(AnalyticsEvent.tabReelsTapped);
+
+  Future<void> logTabImatchTapped() =>
+      _logEvent(AnalyticsEvent.tabImatchTapped);
+
+  // ── Helpers ─────────────────────────────────────────────────────────────
+  Future<void> _logEvent(
+    AnalyticsEvent event, [
+    Map<String, Object>? parameters,
+  ]) {
+    return _analytics.logEvent(name: event.value, parameters: parameters);
+  }
+
+  Map<String, Object> _entryPointParams(ResidenceEntryPoint? entryPoint) => {
+        if (entryPoint != null)
+          ResidenceEntryPoint.queryKey: entryPoint.analyticsValue,
+      };
+
+  Map<String, Object> _bannerParams(BannerModel banner) => {
+        if (banner.id != null) 'banner_id': banner.id!.toString(),
+        if (banner.type != null) 'banner_type': banner.type!,
+        if (banner.title != null) 'banner_title': banner.title!,
+      };
+
   Future<void> logNotificationReceived({
     required String notificationType,
     String? notificationId,

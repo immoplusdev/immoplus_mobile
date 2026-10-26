@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -151,7 +152,8 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
   }
 
   void _removeFromHistory(String query) async {
-    _allHistory.removeWhere((e) => e.query.toLowerCase() == query.toLowerCase());
+    _allHistory
+        .removeWhere((e) => e.query.toLowerCase() == query.toLowerCase());
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(
@@ -245,6 +247,10 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
       context.pushNamed(
         ResidencePage.name,
         pathParameters: {'idProduct': suggestion.id ?? ''},
+        queryParameters: {
+          ResidenceEntryPoint.queryKey:
+              ResidenceEntryPoint.search.analyticsValue,
+        },
       );
       return;
     }
@@ -514,7 +520,13 @@ class _SuggestPageState extends State<SuggestPage> with ConnectivityMixin {
               onTap: () {
                 Constantes.tempPage = Utils.getCurrentLocation();
                 if (item is ResidenceModel) {
-                  context.push(ResidencePage.route((item).id), extra: item);
+                  context.push(
+                    ResidencePage.route(
+                      (item).id,
+                      entryPoint: ResidenceEntryPoint.search,
+                    ),
+                    extra: item,
+                  );
                 } else if (item is BienImmobilierModel) {
                   context.push(EstatePage.route((item).id), extra: item);
                 }

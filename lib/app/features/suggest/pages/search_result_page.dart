@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -322,7 +323,8 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
               itemBuilder: (context, item, index) => Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: UnifiedPropertyCard(item: item),
+                child: UnifiedPropertyCard(
+                    entryPoint: ResidenceEntryPoint.search, item: item),
               ),
             ),
           )
@@ -342,7 +344,8 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
               itemBuilder: (context, item, index) => Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: UnifiedPropertyCard(item: item),
+                child: UnifiedPropertyCard(
+                    entryPoint: ResidenceEntryPoint.search, item: item),
               ),
             ),
           );

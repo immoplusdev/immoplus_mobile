@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/enums/analytics/banner_cta_slot.dart';
 import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
@@ -230,7 +233,14 @@ class BannerItem extends StatelessWidget {
                 if (banner.ctaLabel != null) ...[
                   const Gap(8),
                   GestureDetector(
-                    onTap: () => _handleAction(context, banner.ctaUrl),
+                    onTap: () {
+                      getIt<AnalyticsService>().logBannerCtaTapped(
+                        banner,
+                        slot: BannerCtaSlot.primary,
+                        ctaUrl: banner.ctaUrl,
+                      );
+                      _handleAction(context, banner.ctaUrl);
+                    },
                     child: Text(
                       banner.ctaLabel!,
                       style: ctaStyle,
@@ -240,7 +250,14 @@ class BannerItem extends StatelessWidget {
                 if (banner.cta2Label != null) ...[
                   const Gap(8),
                   GestureDetector(
-                    onTap: () => _handleAction(context, banner.cta2Url),
+                    onTap: () {
+                      getIt<AnalyticsService>().logBannerCtaTapped(
+                        banner,
+                        slot: BannerCtaSlot.secondary,
+                        ctaUrl: banner.cta2Url,
+                      );
+                      _handleAction(context, banner.cta2Url);
+                    },
                     child: Text(
                       banner.cta2Label!,
                       style: ctaStyle,
@@ -253,7 +270,10 @@ class BannerItem extends StatelessWidget {
           const Gap(6),
           if (onDismiss != null)
             GestureDetector(
-              onTap: onDismiss,
+              onTap: () {
+                getIt<AnalyticsService>().logBannerDismissed(banner);
+                onDismiss!();
+              },
               child: Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(

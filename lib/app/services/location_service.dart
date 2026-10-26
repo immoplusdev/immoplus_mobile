@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/services/permission_request_queue.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geojson_vi/geojson_vi.dart';
@@ -14,7 +15,9 @@ class LocationService {
     LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+      permission = await PermissionRequestQueue.run(
+        Geolocator.requestPermission,
+      );
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -58,7 +61,7 @@ class LocationService {
 
   /// Demande la permission de localisation
   static Future<LocationPermission> requestPermission() async {
-    return await Geolocator.requestPermission();
+    return PermissionRequestQueue.run(Geolocator.requestPermission);
   }
 
   /// Vérifie si la permission est accordée (whileInUse ou always)
