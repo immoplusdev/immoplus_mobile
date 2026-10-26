@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -594,6 +595,9 @@ class AppRouter {
             reverseSearchPrice: reverseSearchPrice,
             reverseSearchNights: reverseSearchNights,
             reverseSearchPrixParNuit: reverseSearchPrixParNuit,
+            entryPoint: ResidenceEntryPoint.fromValue(
+              state.uri.queryParameters[ResidenceEntryPoint.queryKey],
+            ),
           );
         },
       ),

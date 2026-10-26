@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -102,6 +104,8 @@ class UserPreferenceIntermediaryPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                           color: AppColors.immoBrandPrimary,
                           onClick: () async {
+                            getIt<AnalyticsService>()
+                                .logOnboardingCtaSignupTapped();
                             await NotificationPermissionService.promptIfNeeded(
                               context: context,
                               moment: NotificationPromptMoment.onboarding,
@@ -130,6 +134,8 @@ class UserPreferenceIntermediaryPage extends StatelessWidget {
                         Center(
                           child: GestureDetector(
                             onTap: () async {
+                              getIt<AnalyticsService>()
+                                  .logOnboardingGuestModeTapped();
                               await NotificationPermissionService
                                   .promptIfNeeded(
                                 context: context,

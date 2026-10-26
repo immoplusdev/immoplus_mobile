@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:immoplus/app/core/services/notification_permission_service.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -95,6 +96,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
     required ReservationRequestBody body,
     required int amount,
     bool force = false,
+    ResidenceEntryPoint? entryPoint,
   }) async {
     emit(const LOADING_BOOKING());
     try {
@@ -104,6 +106,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
         itemId: reservationResponse.data.id,
         itemName: reservationResponse.data.residence.nom,
         value: reservationResponse.data.montantTotalReservation,
+        entryPoint: entryPoint,
       );
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();

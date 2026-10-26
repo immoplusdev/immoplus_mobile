@@ -1,5 +1,6 @@
 library;
 
+import 'package:immoplus/app/core/services/onboarding_completion_tracker.dart';
 import 'dart:async';
 import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     }();
     _scrollController = ScrollController()..addListener(_handleScrollChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      unawaited(OnboardingCompletionTracker.logIfPending());
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
       if (mounted) {

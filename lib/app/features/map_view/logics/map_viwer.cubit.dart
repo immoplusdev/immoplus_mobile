@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -208,7 +209,10 @@ class MapViwerCubit extends Cubit<MapViwerCubitState> {
                   clearRoute();
                   MapCardOverlayService.hide();
                   NavigationService.navigatorKey.currentContext?.push(
-                      ResidencePage.route(residence.id),
+                      ResidencePage.route(
+                        residence.id,
+                        entryPoint: ResidenceEntryPoint.map,
+                      ),
                       extra: residence);
                 },
                 onShareTap: (origin) {

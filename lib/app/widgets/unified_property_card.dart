@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -38,6 +39,9 @@ class UnifiedPropertyCard extends StatelessWidget {
   /// Frais de paiement inclus dans le prix total, affichés en détail sous le prix.
   final int? fraisAmount;
 
+  /// Zone d'origine, transmise à la fiche résidence (analytics funnel).
+  final ResidenceEntryPoint? entryPoint;
+
   const UnifiedPropertyCard({
     super.key,
     required this.item,
@@ -49,6 +53,7 @@ class UnifiedPropertyCard extends StatelessWidget {
     this.nights,
     this.perNightPrice,
     this.fraisAmount,
+    this.entryPoint,
   }) : assert(item is ResidenceModel ||
             item is BienImmobilierModel ||
             item is FurnitureModel);
@@ -215,7 +220,11 @@ class UnifiedPropertyCard extends StatelessWidget {
               log(item.toString());
               Constantes.tempPage = Utils.getCurrentLocation();
               if (isResidence) {
-                context.push(ResidencePage.route((item as ResidenceModel).id),
+                context.push(
+                    ResidencePage.route(
+                      (item as ResidenceModel).id,
+                      entryPoint: entryPoint,
+                    ),
                     extra: item);
               } else if (isFurniture) {
                 context.push(

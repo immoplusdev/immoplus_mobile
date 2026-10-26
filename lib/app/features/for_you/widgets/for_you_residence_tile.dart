@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,10 @@ class ForYouResidenceTile extends StatelessWidget {
       width: neirResidenceCardWidth,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => context.push(ResidencePage.route(residence.residenceId)),
+        onTap: () => context.push(ResidencePage.route(
+          residence.residenceId,
+          entryPoint: ResidenceEntryPoint.homeFeed,
+        )),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -193,6 +194,7 @@ class _NearResidencesPageState extends State<NearResidencesPage>
                     padding: const EdgeInsets.symmetric(horizontal: 1)
                         .copyWith(bottom: 13),
                     child: UnifiedPropertyCard(
+                      entryPoint: ResidenceEntryPoint.nearMe,
                       item: item,
                     ),
                   ),

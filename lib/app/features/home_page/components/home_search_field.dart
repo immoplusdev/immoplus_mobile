@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -242,6 +244,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
       width: double.infinity,
       child: GestureDetector(
         onTap: () {
+          getIt<AnalyticsService>().logSearchBarFocused();
           if (widget.isFurnitureTab) {
             setState(() {
               _isSearching = true;
