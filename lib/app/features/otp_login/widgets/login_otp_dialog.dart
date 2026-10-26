@@ -140,13 +140,15 @@ class _LoginOtpFlowDialogState extends State<_LoginOtpFlowDialog> {
           // Refus lié au code : message sous le champ. Sinon (403, réseau,
           // serveur) le coordinateur a déjà présenté l'erreur.
           final inline = error == null || LoginCubit.isInlineOtpError(error);
+          // Vider le champ déclenche `onChanged`, qui efface l'erreur : on le
+          // fait avant de poser le message.
+          _otpController.clear();
           setState(() {
             _isSubmittingOtp = false;
             _otpError = inline
                 ? (error?.message ??
                     'Code invalide ou expiré. Veuillez réessayer.')
                 : null;
-            _otpController.clear();
           });
         }
       },

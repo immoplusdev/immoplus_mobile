@@ -114,9 +114,11 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
     if (resp is VerifyEmailResponse) {
       widget.onVerified(resp);
     } else {
+      // Vider le champ déclenche `onChanged`, qui efface l'erreur : on le
+      // fait avant de poser le message.
+      _otpController.clear();
       setState(() {
         _otpError = 'Code invalide ou expiré. Veuillez réessayer.';
-        _otpController.clear();
       });
     }
   }
