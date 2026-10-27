@@ -13,6 +13,10 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:immoplus/app/appli/utils/navigation_handler.dart' as _i983;
 import 'package:immoplus/app/core/config/isar_config.dart' as _i847;
+import 'package:immoplus/app/core/error/error_feedback_coordinator.dart'
+    as _i1015;
+import 'package:immoplus/app/core/error/error_presenter.dart' as _i1041;
+import 'package:immoplus/app/core/error/ui_error_presenter.dart' as _i462;
 import 'package:immoplus/app/core/network/dio_config.dart' as _i947;
 import 'package:immoplus/app/core/network/interceptors/auth_interceptor.dart'
     as _i180;
@@ -166,8 +170,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i639.DeviceIdService>(() => _i639.DeviceIdService());
     gh.lazySingleton<_i87.CrashlyticsService>(
         () => _i390.FirebaseCrashlyticsServiceImpl());
+    gh.lazySingleton<_i1041.ErrorPresenter>(() => _i462.UiErrorPresenter());
     gh.lazySingleton<_i511.PushProvider>(() => _i693.FirebasePushProvider());
     gh.factory<_i448.AdsCubit>(() => _i448.AdsCubit(gh<_i206.AdRepository>()));
+    gh.lazySingleton<_i1015.ErrorFeedbackCoordinator>(
+        () => _i1015.ErrorFeedbackCoordinator(
+              gh<_i1041.ErrorPresenter>(),
+              gh<_i87.CrashlyticsService>(),
+            ));
     gh.singleton<_i22.SessionManager>(
         () => _i22.SessionManager(gh<_i847.IsarConfig>()));
     gh.factory<_i974.BannersCubit>(

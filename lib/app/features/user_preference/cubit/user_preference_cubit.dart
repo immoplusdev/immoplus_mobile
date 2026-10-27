@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/services/onboarding_completion_tracker.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +64,8 @@ class UserPreferenceCubit extends Cubit<UserPreferenceCubitState> {
         budgetMax: budgetMax,
       ));
     } catch (e) {
-      emit(UserPreferenceCubitState.error(e.toString()));
+      emit(UserPreferenceCubitState.error(
+          ErrorMessages.messageOf(e, ErrorContext.userPreferences)));
     }
   }
 

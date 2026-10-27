@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/app_error.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_response.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservations_collection.dart';
@@ -22,5 +24,10 @@ class BookingRequestState with _$BookingRequestState {
       ReservationResponse reservationResponse) = RECEIVE_BOOKING;
   const factory BookingRequestState.kycRequired({KycSessionModel? kycSession}) =
       KYC_REQUIRED;
-  const factory BookingRequestState.error(String message) = Error_BOOKINGS;
+  const factory BookingRequestState.error(
+    String message, {
+    /// Erreur typée à présenter via `ErrorFeedbackCoordinator`.
+    AppError? appError,
+    ErrorContext? context,
+  }) = Error_BOOKINGS;
 }

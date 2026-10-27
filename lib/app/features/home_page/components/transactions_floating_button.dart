@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:immoplus/app/core/enums/analytics/transaction_item_type.dart';
 import 'dart:async';
@@ -285,7 +287,7 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
             setState(() => _activeReverseSearch = null);
           }
         } catch (e) {
-          ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+          ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
         }
       },
     );

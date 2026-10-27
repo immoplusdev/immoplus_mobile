@@ -57,9 +57,8 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
     super.dispose();
   }
 
-  // Les échecs d'envoi (réseau, utilisateur introuvable, etc.) sont déjà
-  // affichés par l'ErrorInterceptor global (bottom sheet). On ne montre donc
-  // rien ici en cas d'erreur pour éviter un double affichage.
+  // Les échecs d'envoi sont présentés par RegistrationCubit via
+  // ErrorFeedbackCoordinator.
   Future<void> _sendOtp(bool useWhatsapp) async {
     setState(() => _isLoading = true);
     final cubit = context.read<RgistrationCubitCubit>();
@@ -115,9 +114,11 @@ class _OtpFlowDialogState extends State<_OtpFlowDialog> {
     if (resp is VerifyEmailResponse) {
       widget.onVerified(resp);
     } else {
+      // Vider le champ déclenche `onChanged`, qui efface l'erreur : on le
+      // fait avant de poser le message.
+      _otpController.clear();
       setState(() {
         _otpError = 'Code invalide ou expiré. Veuillez réessayer.';
-        _otpController.clear();
       });
     }
   }

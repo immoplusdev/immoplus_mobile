@@ -1,13 +1,12 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'package:immoplus/app/core/logger/immo_logger.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/auth_service.dart';
 import 'package:immoplus/app/data/enums/api_error_code.dart';
 import 'package:immoplus/app/data/error/api_error_response.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
-import 'package:immoplus/app/routes/app_router.dart';
 import 'package:injectable/injectable.dart';
 
 const _silentErrorCodes = {
@@ -15,7 +14,10 @@ const _silentErrorCodes = {
   ApiErrorCode.socialAccountNotFound,
 };
 
-const _silentRequestPaths = [
+/// Lectures de fond (polling, préchargement) : leurs échecs ne regardent pas
+/// l'utilisateur. Seules les requêtes GET sont concernées, pour ne pas
+/// masquer les erreurs d'une action (création, annulation…) sur la même URL.
+const _silentBackgroundPaths = [
   '/user-preferences/me',
   '/banners',
   '/alerts/badge-count',
@@ -41,24 +43,27 @@ class ErrorInterceptor extends Interceptor {
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
 
-    final isSilentPath = _silentRequestPaths
-        .any((path) => err.requestOptions.path.contains(path));
+    // L'intercepteur n'affiche aucune UI : il convertit l'erreur technique en
+    // AppError (portée par `err.error`) que la feature présente via
+    // ErrorFeedbackCoordinator. Les requêtes de fond sont marquées silencieuses
+    // (par défaut ici, ou via `Options(extra: {AppErrorMapper.silentKey: true})`).
+    final requiresLogout = apiErrorResponse?.requiresLogout == true;
+    final isSilent = requiresLogout ||
+        _silentErrorCodes.contains(apiErrorResponse?.errorCode) ||
+        _isBackgroundRead(err.requestOptions);
+    final appError = AppErrorMapper.fromDio(err, forceSilent: isSilent);
 
-    // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh, social account not found et requêtes silencieuses)
-    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode) &&
-        !_isActiveReservationBlock(err.response) &&
-        !isSilentPath) {
-      _showErrorToast(apiErrorResponse, err.response);
-    }
+    // Session invalide : déconnexion (et redirection) déjà gérées, donc aucun
+    // retour supplémentaire. L'erreur est tout de même propagée pour que les
+    // appelants ne restent pas bloqués sur un chargement infini.
+    if (requiresLogout) await sessionManager.logout();
 
-    // Gérer la déconnexion si nécessaire
-    if (apiErrorResponse?.requiresLogout == true) {
-      await sessionManager.logout();
-      return; // Pas besoin d'appeler super.onError après déconnexion
-    }
-
-    super.onError(err, handler);
+    handler.next(err.copyWith(error: appError));
   }
+
+  bool _isBackgroundRead(RequestOptions options) =>
+      options.method.toUpperCase() == 'GET' &&
+      _silentBackgroundPaths.any(options.path.contains);
 
   /// Parse la réponse d'erreur de façon sécurisée
   ApiErrorResponse? _parseErrorResponse(Response? response) {
@@ -100,65 +105,5 @@ class ErrorInterceptor extends Interceptor {
     }
 
     return false; // Indique que l'erreur n'a pas pu être traitée
-  }
-
-  /// Retourne true si c'est un blocage "réservation active" — géré par le modal dédié
-  bool _isActiveReservationBlock(Response? response) {
-    if (response?.statusCode != 400) return false;
-    final data = response?.data;
-    if (data is! Map) return false;
-    final inner = data['data'];
-    return inner is Map && inner['reservationId'] != null;
-  }
-
-  /// Affiche le toast d'erreur approprié
-  void _showErrorToast(ApiErrorResponse? apiErrorResponse, Response? response) {
-    final context = AppRouter.context;
-    final message = apiErrorResponse?.message ?? _manageResponse(response);
-    if (context == null) {
-      return;
-    }
-
-    ToastUtils.showError(
-      title: "Oops, quelque chose s'est mal passé.",
-      description: message,
-    );
-  }
-
-  _manageResponse(Response? response) {
-    try {
-      if (response?.data != null) {
-        if (response?.data['message'] != null) {
-          return response?.data['message'];
-        }
-      }
-      return _getMessageFromStatusCode(response?.statusCode);
-    } catch (e) {
-      ImmoLogger.e("manageResponse", e);
-      return _getMessageFromStatusCode(response?.statusCode);
-    }
-  }
-
-  String _getMessageFromStatusCode(int? statusCode) {
-    switch (statusCode) {
-      case 400:
-        return 'Nous avons rencontré une erreur lors du traitement de votre requête.';
-      case 401:
-        return "Non autorisé : Vous n'avez pas les permissions nécessaires.";
-      case 403:
-        return "Accès interdit : Vous n'êtes pas autorisé à accéder à cette ressource.";
-      case 404:
-        return "Ressource introuvable : La page que vous recherchez n'existe pas.";
-      case 405:
-        return "Méthode non autorisée : La méthode HTTP utilisée n'est pas supportée pour cette ressource.";
-      case 500:
-        return "Erreur interne du serveur : Une erreur inattendue s'est produite.";
-      case 502:
-        return "Bad Gateway : Le serveur a reçu une réponse invalide d'un serveur en amont.";
-      case 503:
-        return "Service indisponible : Le serveur est temporairement indisponible.";
-      default:
-        return "Une erreur inconnue ${statusCode != null ? "($statusCode)" : ""}) s'est produite. ";
-    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -41,10 +42,10 @@ class HomeFeedRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError when loading /me/home: ${dioError.message}');
-      throw Exception('Failed to load home feed: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when loading /me/home: $error');
-      throw Exception('Failed to load home feed: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -71,10 +72,10 @@ class HomeFeedRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError when loading /me/rent: ${dioError.message}');
-      throw Exception('Failed to load rent feed: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when loading /me/rent: $error');
-      throw Exception('Failed to load rent feed: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -101,10 +102,10 @@ class HomeFeedRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError when loading /me/buy: ${dioError.message}');
-      throw Exception('Failed to load buy feed: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when loading /me/buy: $error');
-      throw Exception('Failed to load buy feed: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -131,10 +132,10 @@ class HomeFeedRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError when loading /me/stay: ${dioError.message}');
-      throw Exception('Failed to load stay feed: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when loading /me/stay: $error');
-      throw Exception('Failed to load stay feed: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -146,10 +147,10 @@ class HomeFeedRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError when loading /me/search/filters ($scope): ${dioError.message}');
-      throw Exception('Failed to load search filters: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when loading /me/search/filters ($scope): $error');
-      throw Exception('Failed to load search filters: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -220,10 +221,10 @@ class HomeFeedRepository {
       );
     } on DioException catch (dioError) {
       log('DioError when searching /me/${scope.value}: ${dioError.message}');
-      throw Exception('Failed to search ${scope.value}: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when searching /me/${scope.value}: $error');
-      throw Exception('Failed to search ${scope.value}: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 

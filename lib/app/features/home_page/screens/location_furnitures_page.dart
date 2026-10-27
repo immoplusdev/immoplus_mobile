@@ -78,7 +78,7 @@ class _LocationFurnituresPageState extends State<LocationFurnituresPage>
         _pagingController.appendLastPage(result.data ?? []);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(error);
     }
   }
 

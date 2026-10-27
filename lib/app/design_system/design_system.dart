@@ -15,3 +15,5 @@ export 'feedback/toast_utils.dart';
 export 'feedback/easy_loading_handler.dart';
 export 'feedback/widgets/figma_toast.dart';
 export 'feedback/widgets/app_dialog.dart';
+export 'feedback/widgets/app_error_dialog.dart';
+export 'feedback/widgets/app_error_state.dart';

@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,7 +50,7 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
         classicResidences: [],
       ));
     } catch (e) {
-      String msg = e.toString().replaceAll('Exception: ', '');
+      String msg = ErrorMessages.messageOf(e, ErrorContext.reverseSearch);
       // TODO : TO DEBUG
       // emit(ReverseSearchState.searching(
       //   searchId: "searchId",
@@ -222,7 +225,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
         orElse: () {},
       );
     } catch (e) {
-      String msg = e.toString().replaceAll('Exception: ', '');
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
+      String msg = ErrorMessages.messageOf(e, ErrorContext.reverseSearch);
       emit(ReverseSearchState.error(msg));
       emit(prevState); // Revenir à l'état précédent (searching)
     }
@@ -234,7 +238,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
       emit(const ReverseSearchState.initial());
       _socketService.disconnect(searchId: searchId);
     } catch (e) {
-      String msg = e.toString().replaceAll('Exception: ', '');
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
+      String msg = ErrorMessages.messageOf(e, ErrorContext.reverseSearch);
       emit(ReverseSearchState.error(msg));
     }
   }
@@ -247,7 +252,8 @@ class ReverseSearchCubit extends Cubit<ReverseSearchState> {
       _socketService.disconnect();
       return cancelled;
     } catch (e) {
-      String msg = e.toString().replaceAll('Exception: ', '');
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
+      String msg = ErrorMessages.messageOf(e, ErrorContext.reverseSearch);
       emit(ReverseSearchState.error(msg));
       return false;
     }

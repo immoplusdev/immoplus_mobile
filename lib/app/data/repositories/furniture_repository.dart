@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -43,11 +44,11 @@ class FurnitureRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load furniture: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       log('Error: $error');
-      throw Exception('Failed to load furniture: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -60,7 +61,7 @@ class FurnitureRepository {
       rethrow;
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load furniture: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

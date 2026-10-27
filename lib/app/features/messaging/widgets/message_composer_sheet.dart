@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -279,11 +282,13 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
       ToastUtils.showError(
         description: "Le message n'a pas pu être envoyé. Réessayer.",
       );
-    } catch (_) {
+    } catch (e) {
       setState(() => _isSending = false);
-      ToastUtils.showError(
-        description: "Le message n'a pas pu être envoyé. Réessayer.",
-      );
+      if (!ErrorFeedback.show(e, context: ErrorContext.messaging)) {
+        ToastUtils.showError(
+          description: "Le message n'a pas pu être envoyé. Réessayer.",
+        );
+      }
     }
   }
 

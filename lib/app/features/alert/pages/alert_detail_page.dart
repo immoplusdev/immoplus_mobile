@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -38,6 +40,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
         _isLoading = false;
       });
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.alert);
       setState(() => _isLoading = false);
     }
   }
@@ -545,7 +548,7 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
             }
           }
         } catch (e) {
-          ToastUtils.error('Erreur lors de l\'annulation');
+          ErrorFeedback.show(e, context: ErrorContext.alert);
         }
       },
     );

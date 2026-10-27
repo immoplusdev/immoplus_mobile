@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,8 +70,9 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
         unawaited(_markRead());
       }
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.messaging);
       emit(ConversationThreadState.error(
-          e.toString().replaceAll('Exception: ', '')));
+          ErrorMessages.messageOf(e, ErrorContext.messaging)));
     }
   }
 

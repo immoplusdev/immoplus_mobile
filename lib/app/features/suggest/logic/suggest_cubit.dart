@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:immoplus/app/data/repositories/suggest_repository.dart';
@@ -28,7 +30,8 @@ class SuggestCubit extends Cubit<SuggestState> {
       );
       emit(SuggestState.success(res.suggestions));
     } catch (e) {
-      emit(SuggestState.error(e.toString()));
+      emit(SuggestState.error(
+          ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 

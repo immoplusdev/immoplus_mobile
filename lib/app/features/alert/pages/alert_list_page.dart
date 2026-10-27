@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -465,6 +467,7 @@ class _AlertListContentState extends State<_AlertListContent> {
       _alerts = response.data;
       widget.onAlertsLoaded?.call(_alerts);
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.alert);
       // Handle error
     } finally {
       if (mounted) setState(() => _isLoading = false);

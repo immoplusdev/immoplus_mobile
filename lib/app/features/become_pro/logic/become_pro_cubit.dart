@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/models/auth/demande_pro_particulier_body.dart';
 import 'package:immoplus/app/data/repositories/auth_repository.dart';
@@ -23,7 +26,9 @@ class BecomeProCubit extends Cubit<BecomeProState> {
 
       emit(BecomeProSuccess());
     } catch (e) {
-      emit(BecomeProFailure(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.proUpgrade);
+      emit(BecomeProFailure(
+          ErrorMessages.messageOf(e, ErrorContext.proUpgrade)));
     }
   }
 }

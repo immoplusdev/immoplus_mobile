@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/data/repositories/residence_repository.dart';
@@ -34,12 +36,7 @@ class PendingPaymentReservationsCubit extends Cubit<RequestState> {
           ? pagingController.appendPage(result.data, page + 1)
           : pagingController.appendLastPage(result.data);
     } catch (e) {
-      AppDialog.show(
-        title: "Erreur de chargement",
-        description: "Veuillez vérifier votre connexion internet et réessayer.",
-        primaryButtonText: "Fermer",
-        onPrimary: () {},
-      );
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
     }
   }
 

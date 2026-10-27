@@ -63,7 +63,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
         _pagingController.appendLastPage(value.data);
       }
     } catch (e) {
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(e);
     }
   }
 

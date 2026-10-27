@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
@@ -37,7 +38,7 @@ class MessagingRepository {
       rethrow;
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to create conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -58,7 +59,7 @@ class MessagingRepository {
       rethrow;
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to create visite conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -75,7 +76,7 @@ class MessagingRepository {
       rethrow;
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to create support conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -127,7 +128,7 @@ class MessagingRepository {
       rethrow;
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to create relais conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -140,10 +141,10 @@ class MessagingRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load conversations: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load conversations: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -160,7 +161,7 @@ class MessagingRepository {
           'Failed to load conversation counts: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load conversation counts: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -171,10 +172,10 @@ class MessagingRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load conversation: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -204,10 +205,10 @@ class MessagingRepository {
           .toList(growable: false);
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load messages: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load messages: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -239,7 +240,7 @@ class MessagingRepository {
       rethrow;
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to send message: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -259,7 +260,7 @@ class MessagingRepository {
           'Failed to mark conversation as read: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to mark conversation as read: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -268,10 +269,10 @@ class MessagingRepository {
       await MessagingProvider(dioClient).blockConversation(conversationId);
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to block conversation: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to block conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -290,10 +291,10 @@ class MessagingRepository {
       );
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to report conversation: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to report conversation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
