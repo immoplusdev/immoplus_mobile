@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:async';
 import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
@@ -54,7 +56,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
           await residenceRepository.getReservation(id: id);
       emit(BookingRequestState.receiveBooking(reservationModel));
     } catch (e) {
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.bookingLoad,
+      ));
     }
   }
 
@@ -67,7 +73,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
       emit(BookingRequestState.receiveEstimation(reservationModel));
     } catch (e) {
       emit(INITIAL_BOOKING());
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.priceEstimation,
+      ));
     }
   }
 
@@ -88,7 +98,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
       emit(BookingRequestState.receiveEstimateCost(estimation));
     } catch (e) {
       emit(const INITIAL_BOOKING());
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.priceEstimation,
+      ));
     }
   }
 
@@ -181,7 +195,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
           'residence_id': body.residence,
         },
       );
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.bookingSubmission,
+      ));
     }
   }
 

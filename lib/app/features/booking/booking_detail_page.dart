@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_is_empty
 
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/error/app_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -569,34 +571,11 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               ),
             ),
             backgroundColor: AppColors.scafold,
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Iconsax.info_circle,
-                        size: 72, color: AppColors.immoTextDisabled),
-                    const Gap(16),
-                    Text(
-                      "Impossible de charger cette réservation.",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: AppColors.immoTextSecondary),
-                    ),
-                    const Gap(24),
-                    FilledButton.icon(
-                      onPressed: () => context
-                          .read<BookingCubit>()
-                          .getBooking(id: widget.id),
-                      icon: const Icon(Iconsax.refresh, size: 16),
-                      label: Text('Réessayer'),
-                    ),
-                  ],
-                ),
-              ),
+            body: AppErrorState(
+              error: state.appError ?? const UnknownError(),
+              context: ErrorContext.bookingLoad,
+              onRetry: () =>
+                  context.read<BookingCubit>().getBooking(id: widget.id),
             ),
           );
         }

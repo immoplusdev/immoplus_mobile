@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +159,9 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
         );
       }
     } catch (e, stack) {
-      EasyLoading.showToast("Une erreur s'est produite.");
+      if (!ErrorFeedback.show(e, context: ErrorContext.paymentInitiation)) {
+        EasyLoading.showToast("Une erreur s'est produite.");
+      }
       getIt<CrashlyticsService>().recordNonFatalError(
         exception: e,
         stackTrace: stack,

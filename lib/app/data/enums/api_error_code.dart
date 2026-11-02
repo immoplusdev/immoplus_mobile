@@ -18,6 +18,9 @@ enum ApiErrorCode {
 
   // Erreurs de validation
   invalidOtp('INVALID_OTP'),
+  profileRequired('PROFILE_REQUIRED'),
+  accountTypeMismatch('ACCOUNT_TYPE_MISMATCH'),
+  otpChannelUnavailable('OTP_CHANNEL_UNAVAILABLE'),
 
   // UserNotFoundException (404) : aucun compte pour cet email/téléphone —
   // proposer de s'inscrire.

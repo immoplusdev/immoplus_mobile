@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,9 +32,11 @@ class ResetPasswordCubit extends Cubit<ResetPasswordCubitState> {
       log('Email OTP sent successfully for: $email',
           name: 'RESET_PASSWORD_CUBIT');
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.passwordReset);
       log(e.toString(), name: "SEND_EMAIL_OTP_ERROR");
 
-      String errorMessage = e.toString().replaceFirst('Exception: ', '');
+      String errorMessage =
+          ErrorMessages.messageOf(e, ErrorContext.passwordReset);
       emit(ResetPasswordCubitState.error(errorMessage: errorMessage));
     }
   }
@@ -103,9 +108,11 @@ class ResetPasswordCubit extends Cubit<ResetPasswordCubitState> {
 
       log('Password reset successfully', name: 'RESET_PASSWORD_CUBIT');
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.passwordReset);
       log(e.toString(), name: "RESET_PASSWORD_ERROR");
 
-      String errorMessage = e.toString().replaceFirst('Exception: ', '');
+      String errorMessage =
+          ErrorMessages.messageOf(e, ErrorContext.passwordReset);
       emit(ResetPasswordCubitState.error(errorMessage: errorMessage));
     }
   }

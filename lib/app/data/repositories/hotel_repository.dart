@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
@@ -30,10 +31,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load room detail: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load room detail: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -50,7 +51,7 @@ class HotelRepository {
           'Failed to load hotel module status: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load hotel module status: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -60,10 +61,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load hotel detail: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load hotel detail: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -95,10 +96,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load hotels list: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load hotels list: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -108,10 +109,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load hotel villes: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load hotel villes: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -129,7 +130,7 @@ class HotelRepository {
           'Failed to get hotel reservation estimation: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to get hotel reservation estimation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -143,10 +144,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to create reservation: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to create reservation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -157,10 +158,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to get payment methods: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to get payment methods: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -175,10 +176,10 @@ class HotelRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to init payment: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to init payment: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

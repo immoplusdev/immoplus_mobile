@@ -1,3 +1,7 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/app_error.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -9,6 +13,8 @@ import 'package:immoplus/app/core/network/utils/session_manager.dart';
 import 'package:immoplus/app/core/services/auth_redirect_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/data/models/auth/account_creation_response.dart';
+import 'package:immoplus/app/data/models/auth/data_model.dart';
+import 'package:immoplus/app/data/models/auth/phone_challenge_models.dart';
 import 'package:immoplus/app/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_otp.dart';
 import 'package:immoplus/app/data/models/auth/verify_email_response.dart';
@@ -37,9 +43,11 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     final context = NavigationService.navigatorKey.currentContext!;
     final redirectData = authRedirectService.get();
     if (redirectData != null) {
-      Navigator.of(context).popUntil(
-        (route) => route.settings.name == redirectData.popUntilRouteName,
-      );
+      if (redirectData.popUntilRouteName != null) {
+        Navigator.of(context).popUntil(
+          (route) => route.settings.name == redirectData.popUntilRouteName,
+        );
+      }
       redirectData.callback();
       authRedirectService.clear();
     } else {
@@ -89,7 +97,82 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       log(e.toString(), name: "ERROR BLOC");
 
       emit(const RegistrationCubitState.initial());
+      _presentError(e);
     }
+  }
+
+  Future<void> completePhoneChallengeRegistration({
+    required String challengeId,
+    required String otp,
+    required PhoneChallengeProfileDto profile,
+  }) async {
+    emit(const RegistrationCubitState.loading());
+    try {
+      final response = await AuthRepository().verifyPhoneChallenge(
+        challengeId: challengeId,
+        body: VerifyPhoneChallengeBody(
+          otp: otp,
+          profile: profile,
+        ),
+      );
+
+      final user = response.data.user;
+      await sessionManager.saveUser(
+        UserModelSchema()
+          ..id = 1
+          ..userId = user.id
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
+          ..avatar = user.avatar
+          ..accessToken = response.data.accessToken
+          ..refreshToken = response.data.refreshToken
+          ..roleName = user.role.name
+          ..activite = user.additionalData.activite
+          ..nomEntreprise = user.additionalData.nomEntreprise
+          ..photoIdentite = user.additionalData.photoIdentiteId
+          ..pieceIdentite = user.additionalData.pieceIdentiteId
+          ..emailEntreprise = user.additionalData.emailEntreprise,
+      );
+      await sessionManager.getCurrentUser();
+      notificationService.suscribeCurrentUser();
+      analyticsService.logSignUp(method: 'otp');
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
+
+      final legacyAccountResponse = AccountCreationResponse(
+        data: DataModel(
+          user: user,
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+        ),
+      );
+      emit(RegistrationCubitState.success(
+          accountCreationResponse: legacyAccountResponse));
+      _navigateAfterRegistration();
+    } catch (e) {
+      log(e.toString(), name: "ERROR BLOC");
+      emit(const RegistrationCubitState.initial());
+      _presentError(e);
+    }
+  }
+
+  /// Pour la vérification du code OTP, les refus métier (code invalide ou
+  /// expiré) sont affichés sous le champ : seules les pannes passent par le
+  /// feedback global.
+  void _presentError(Object error, {bool inlineBusinessErrors = false}) {
+    final appError = AppErrorMapper.from(error);
+    if (inlineBusinessErrors &&
+        (appError is BusinessError ||
+            appError is ValidationError ||
+            appError is UnauthorizedError)) {
+      return;
+    }
+    ErrorFeedback.present(appError, context: ErrorContext.authentication);
   }
 
   Future<bool> sendRegistrationOTP({required SendEmailOtpBody body}) async {
@@ -105,10 +188,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       emit(RegistrationCubitState.initial());
+      _presentError(dioError);
       return false;
     } catch (error) {
       log('Error: $error');
       emit(RegistrationCubitState.initial());
+      _presentError(error);
       return false;
     }
   }
@@ -145,10 +230,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       emit(RegistrationCubitState.initial());
+      _presentError(dioError, inlineBusinessErrors: true);
       return null;
     } catch (error) {
       log('Error: $error');
       emit(RegistrationCubitState.initial());
+      _presentError(error, inlineBusinessErrors: true);
       return null;
     }
   }

@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
@@ -63,7 +65,7 @@ class _HotelPaymentSelectorPageState extends State<HotelPaymentSelectorPage> {
       });
     } catch (e) {
       setState(() {
-        _errorMsg = e.toString();
+        _errorMsg = ErrorMessages.messageOf(e, ErrorContext.hotelBooking);
         _isLoading = false;
       });
     }

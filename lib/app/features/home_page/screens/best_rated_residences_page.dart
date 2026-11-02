@@ -62,7 +62,7 @@ class _BestRatedResidencesPageState extends State<BestRatedResidencesPage>
         _pagingController.appendLastPage(result.data ?? []);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(error);
     }
   }
 
