@@ -12,6 +12,7 @@ import 'package:injectable/injectable.dart';
 const _silentErrorCodes = {
   ApiErrorCode.jwtTokenExpired,
   ApiErrorCode.socialAccountNotFound,
+  ApiErrorCode.profileRequired,
 };
 
 /// Lectures de fond (polling, préchargement) : leurs échecs ne regardent pas
