@@ -15,6 +15,7 @@ import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class PendingPaymentReservationsPage extends StatefulWidget {
   final String? reservationId;
+  final PendingPaymentReservationsCubit? cubit;
   static const String name = 'PENDING_PAYMENT_RESERVATIONS';
 
   static String routePath() => '/pending-payment-reservations';
@@ -25,7 +26,11 @@ class PendingPaymentReservationsPage extends StatefulWidget {
         : '/pending-payment-reservations';
   }
 
-  const PendingPaymentReservationsPage({super.key, this.reservationId});
+  const PendingPaymentReservationsPage({
+    super.key,
+    this.reservationId,
+    this.cubit,
+  });
 
   @override
   State<PendingPaymentReservationsPage> createState() =>
@@ -48,7 +53,7 @@ class _PendingPaymentReservationsPageState
   @override
   void initState() {
     super.initState();
-    _cubit = getIt<PendingPaymentReservationsCubit>();
+    _cubit = widget.cubit ?? getIt<PendingPaymentReservationsCubit>();
     _cubit.init();
     setupConnectivityListener();
   }
@@ -56,7 +61,9 @@ class _PendingPaymentReservationsPageState
   @override
   void dispose() {
     disposeConnectivityListener();
-    _cubit.close();
+    if (widget.cubit == null) {
+      _cubit.close();
+    }
     super.dispose();
   }
 
