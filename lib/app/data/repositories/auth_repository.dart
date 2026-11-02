@@ -27,7 +27,9 @@ import '../models/remote/files/file_data_model.dart';
 import '../providers/auth_provider.dart';
 import '../models/auth/demande_pro_particulier_body.dart';
 import '../models/auth/demande_pro_particulier_me_response.dart';
+import '../models/auth/phone_challenge_models.dart';
 import '../models/remote/user/contact_change_models.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthRepository {
   final dioClient = getIt<Dio>();
@@ -414,6 +416,73 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       rethrow;
+    }
+  }
+
+  Future<PhoneChallengeResponse> createPhoneChallenge({
+    required CreatePhoneChallengeBody body,
+    String? idempotencyKey,
+  }) async {
+    try {
+      final key = idempotencyKey ?? const Uuid().v4();
+      final response = await AuthProvider(dioClient).createPhoneChallenge(
+        key,
+        body,
+      );
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError createPhoneChallenge: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
+    } catch (error) {
+      log('Error createPhoneChallenge: $error');
+      throw AppErrorMapper.from(error);
+    }
+  }
+
+  Future<VerifyPhoneChallengeResponse> verifyPhoneChallenge({
+    required String challengeId,
+    required VerifyPhoneChallengeBody body,
+    String? idempotencyKey,
+  }) async {
+    try {
+      final key = idempotencyKey ?? const Uuid().v4();
+      final response = await AuthProvider(dioClient).verifyPhoneChallenge(
+        challengeId,
+        key,
+        body,
+      );
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError verifyPhoneChallenge: ${dioError.message}');
+      final statusCode = dioError.response?.statusCode;
+      final rawData = dioError.response?.data;
+      if (statusCode == 422 &&
+          rawData is Map &&
+          rawData['code']?.toString() == 'PROFILE_REQUIRED') {
+        final innerData = rawData['data'];
+        final resolvedChallengeId = (innerData is Map &&
+                innerData['challengeId'] != null)
+            ? innerData['challengeId'].toString()
+            : challengeId;
+        final fields = (innerData is Map &&
+                innerData['profileFieldsRequired'] is List)
+            ? (innerData['profileFieldsRequired'] as List)
+                .map((e) => e.toString())
+                .toList()
+            : const ['firstName', 'lastName', 'birthDate'];
+        throw ProfileRequiredException(
+          challengeId: resolvedChallengeId,
+          profileFieldsRequired: fields,
+          message: rawData['message']?.toString(),
+        );
+      }
+      throw AppErrorMapper.from(dioError);
+    } catch (error) {
+      if (error is ProfileRequiredException) rethrow;
+      log('Error verifyPhoneChallenge: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

@@ -21,6 +21,7 @@ import 'package:immoplus/app/data/error/api_error_response.dart';
 import 'package:immoplus/app/data/models/auth/account_creation_response.dart';
 import 'package:immoplus/app/data/models/auth/login_body_model.dart';
 import 'package:immoplus/app/data/models/auth/login_otp_body.dart';
+import 'package:immoplus/app/data/models/auth/phone_challenge_models.dart';
 import 'package:immoplus/app/data/models/auth/send_opt_model.dart';
 import 'package:immoplus/app/data/models/auth/social_body_enum.dart';
 import 'package:immoplus/app/data/models/auth/social_login_body.dart';
@@ -79,13 +80,22 @@ class LoginCubit extends Cubit<LoginCubitState> {
   /// entre message sous le champ et feedback global).
   AppError? lastOtpError;
 
+  /// Renseigné lorsque `/auth/phone/challenges/:id/verify` répond `422 PROFILE_REQUIRED`.
+  ProfileRequiredException? lastProfileRequired;
+
   /// Refus liés au code saisi (invalide, expiré) : affichés sous le champ.
-  /// Un 403 (ex: type de compte non autorisé), le réseau et le serveur
-  /// passent par le feedback global.
-  static bool isInlineOtpError(AppError? error) =>
-      error is BusinessError ||
-      error is ValidationError ||
-      error is UnauthorizedError;
+  /// Un 403/409 (ex: type de compte non autorisé `ACCOUNT_TYPE_MISMATCH`),
+  /// le réseau et le serveur passent par le feedback global.
+  static bool isInlineOtpError(AppError? error) {
+    if (error == null) return false;
+    if (error.statusCode == 409 ||
+        error.code == ApiErrorCode.accountTypeMismatch.value) {
+      return false;
+    }
+    return error is BusinessError ||
+        error is ValidationError ||
+        error is UnauthorizedError;
+  }
 
   void _presentError(Object error, ErrorContext context,
       {bool inlineBusinessErrors = false}) {
@@ -214,6 +224,78 @@ class LoginCubit extends Cubit<LoginCubitState> {
       );
       emit(const LoginCubitState.success());
       _navigateAfterLogin();
+    } catch (e) {
+      lastOtpError = AppErrorMapper.from(e);
+      emit(const LoginCubitState.initial());
+      _presentError(e, ErrorContext.authentication, inlineBusinessErrors: true);
+    }
+  }
+
+  Future<PhoneChallengeData> createPhoneChallenge({
+    required String phoneNumber,
+    OtpChannelPreference channelPreference = OtpChannelPreference.auto,
+  }) async {
+    final response = await AuthRepository().createPhoneChallenge(
+      body: CreatePhoneChallengeBody(
+        phoneNumber: phoneNumber,
+        audience: PhoneAuthAudience.customer.value,
+        channelPreference: channelPreference.value,
+        locale: 'fr-CI',
+        purpose: PhoneChallengePurpose.signInOrSignUp.value,
+      ),
+    );
+    return response.data;
+  }
+
+  Future<void> onVerifyPhoneChallenge({
+    required String challengeId,
+    required String otp,
+  }) async {
+    lastOtpError = null;
+    lastProfileRequired = null;
+    emit(const LOGIN_LOADING());
+    try {
+      final response = await AuthRepository().verifyPhoneChallenge(
+        challengeId: challengeId,
+        body: VerifyPhoneChallengeBody(otp: otp),
+      );
+
+      final user = response.data.user;
+      await sessionManager.saveUser(
+        UserModelSchema()
+          ..id = 1
+          ..userId = user.id
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
+          ..avatar = user.avatar
+          ..accessToken = response.data.accessToken
+          ..refreshToken = response.data.refreshToken
+          ..roleName = user.role.name
+          ..activite = user.additionalData.activite
+          ..nomEntreprise = user.additionalData.nomEntreprise
+          ..photoIdentite = user.additionalData.photoIdentiteId
+          ..pieceIdentite = user.additionalData.pieceIdentiteId
+          ..emailEntreprise = user.additionalData.emailEntreprise,
+      );
+      await sessionManager.getCurrentUser();
+      notificationService.suscribeCurrentUser();
+      if (response.data.isSignedUp) {
+        analyticsService.logSignUp(method: 'otp');
+      } else {
+        analyticsService.logLogin(method: 'otp');
+      }
+      analyticsService.setUserIdentity(
+        user: sessionManager.currentUser!,
+        city: user.city,
+        accountType: sessionManager.currentUser!.roleName,
+      );
+      emit(const LoginCubitState.success());
+      _navigateAfterLogin();
+    } on ProfileRequiredException catch (profileReq) {
+      lastProfileRequired = profileReq;
+      emit(const LoginCubitState.initial());
     } catch (e) {
       lastOtpError = AppErrorMapper.from(e);
       emit(const LoginCubitState.initial());
