@@ -1,3 +1,6 @@
+import 'package:immoplus/app/features/wallet/data/wallet_models.dart';
+import 'package:immoplus/app/features/wallet/pages/withdrawal_request_page.dart';
+import 'package:immoplus/app/features/wallet/pages/wallet_page.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -183,6 +186,17 @@ class AppRouter {
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
         builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      GoRoute(
+        path: WalletPage.routePath(),
+        name: WalletPage.name,
+        builder: (context, state) => const WalletPage(),
+      ),
+      GoRoute(
+        path: WithdrawalRequestPage.routePath(),
+        name: WithdrawalRequestPage.name,
+        builder: (context, state) =>
+            WithdrawalRequestPage(wallet: state.extra as WalletModel),
       ),
       // ShellRoute auth — sans navigatorKey, sans UI wrapper
       ShellRoute(

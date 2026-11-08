@@ -15,6 +15,10 @@ enum ErrorContext {
     action: 'charger votre réservation',
     blocksContent: true,
   ),
+  paymentRequirement(
+    title: 'Paiement indisponible',
+    action: 'calculer le paiement de votre séjour',
+  ),
   priceEstimation(
     title: 'Estimation indisponible',
     action: 'calculer le prix de votre séjour',
@@ -46,6 +50,15 @@ enum ErrorContext {
   appStartup(
     title: 'Démarrage impossible',
     action: "charger l'application",
+  ),
+  walletLoad(
+    title: 'Coffre indisponible',
+    action: 'charger votre coffre',
+    blocksContent: true,
+  ),
+  withdrawalRequest(
+    title: 'Retrait impossible',
+    action: 'enregistrer votre demande de retrait',
   ),
   visitRequest(
     title: 'Demande de visite impossible',
