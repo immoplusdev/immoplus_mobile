@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
@@ -99,6 +100,7 @@ class SessionManager {
         print('Error unsubscribing push installation on logout: $e');
       }
       await clearSession();
+      getIt<BookingModeCubit>().reset();
       try {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('recent_hotel_searches');

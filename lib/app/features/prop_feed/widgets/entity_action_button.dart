@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -72,10 +73,14 @@ class EntityActionButton extends StatelessWidget {
     }
 
     final config = EntityActionConfig.fromEntity(relatedTo?.entity);
-    return BounceSideActionButton(
-      label: config.label,
-      icon: config.icon,
-      onTap: onTap,
+    final isResidence = relatedTo?.entity?.toLowerCase() == 'residence';
+    return BookingModeBuilder(
+      builder: (context, mode) => BounceSideActionButton(
+        // Résidence : « Payer » ou « Réserver » selon le mode du client.
+        label: isResidence ? mode.ctaLabel : config.label,
+        icon: config.icon,
+        onTap: onTap,
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -1815,7 +1816,9 @@ class _ResidenceContextCardState extends State<_ResidenceContextCard> {
     final residence = widget.residence;
     final coverImageId =
         residence.images.isNotEmpty ? residence.images.first : null;
-    final bookingLabel = _isThisLocked ? 'Terminer la réservation' : 'Réserver';
+    final bookingLabel = _isThisLocked
+        ? 'Terminer la réservation'
+        : getIt<BookingModeCubit>().state.ctaLabel;
 
     // Dates/voyageurs uniquement quand une sélection reverse-search réelle
     // existe pour cette résidence — jamais de valeur inventée.

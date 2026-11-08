@@ -24,6 +24,7 @@ const _silentBackgroundPaths = [
   '/alerts/badge-count',
   '/me/push-installations',
   '/reverse-searches',
+  '/clients/me/booking-mode',
 ];
 
 @lazySingleton
