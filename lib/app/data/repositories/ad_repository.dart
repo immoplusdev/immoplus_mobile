@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -15,10 +16,10 @@ class AdRepository {
       return await AdProvider(dioClient).getActiveCampaigns();
     } on DioException catch (dioError) {
       log('DioError when loading campaigns: ${dioError.message}');
-      throw Exception('Failed to load active campaigns: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error when loading campaigns: $error');
-      throw Exception('Failed to load active campaigns: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 

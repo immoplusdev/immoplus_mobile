@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -146,8 +148,9 @@ class _EditRelaisPageState extends State<EditRelaisPage> {
       );
 
       if (mounted) context.pop(true);
-    } catch (_) {
-      if (mounted) {
+    } catch (e) {
+      if (mounted &&
+          !ErrorFeedback.show(e, context: ErrorContext.relais)) {
         CustomPopup.showErrorToast(
             text: "Impossible d'enregistrer les modifications");
       }

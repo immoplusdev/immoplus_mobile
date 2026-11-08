@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -50,12 +51,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).createRelais(request);
     } on DioException catch (dioError) {
       log('DioError (createRelais): ${dioError.message}');
-      throw Exception('Failed to create relais: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to create relais: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to create relais: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -74,12 +75,12 @@ class RelaisRepository {
       );
     } on DioException catch (dioError) {
       log('DioError (getRelais): ${dioError.message}');
-      throw Exception('Failed to load relais: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load relais: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load relais: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -88,12 +89,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).getRelaisById(id);
     } on DioException catch (dioError) {
       log('DioError (getRelaisById): ${dioError.message}');
-      throw Exception('Failed to load relais detail: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load relais detail: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load relais detail: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -104,12 +105,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).updateRelais(id, body);
     } on DioException catch (dioError) {
       log('DioError (updateRelais): ${dioError.message}');
-      throw Exception('Failed to update relais: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to update relais: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to update relais: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -118,12 +119,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).cancelRelais(id);
     } on DioException catch (dioError) {
       log('DioError (cancelRelais): ${dioError.message}');
-      throw Exception('Failed to cancel relais: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to cancel relais: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to cancel relais: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -132,12 +133,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).getRelaisMatches(id);
     } on DioException catch (dioError) {
       log('DioError (getRelaisMatches): ${dioError.message}');
-      throw Exception('Failed to load relais matches: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load relais matches: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load relais matches: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -146,12 +147,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).getRelaisInterests(id);
     } on DioException catch (dioError) {
       log('DioError (getRelaisInterests): ${dioError.message}');
-      throw Exception('Failed to load relais interests: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load relais interests: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load relais interests: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -165,12 +166,12 @@ class RelaisRepository {
           .respondToInterest(id, interestId, request);
     } on DioException catch (dioError) {
       log('DioError (respondToInterest): ${dioError.message}');
-      throw Exception('Failed to respond to interest: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to respond to interest: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to respond to interest: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -182,12 +183,12 @@ class RelaisRepository {
       return await RelaisProvider(dioClient).expressInterest(id, request);
     } on DioException catch (dioError) {
       log('DioError (expressInterest): ${dioError.message}');
-      throw Exception('Failed to express interest: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to express interest: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to express interest: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -216,12 +217,12 @@ class RelaisRepository {
       );
     } on DioException catch (dioError) {
       log('DioError (getRelaisMarketplace): ${dioError.message}');
-      throw Exception('Failed to load relais marketplace: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load relais marketplace: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load relais marketplace: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -241,10 +242,10 @@ class RelaisRepository {
       throw Exception(
           'Failed to load my relais interests: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load my relais interests: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load my relais interests: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -264,10 +265,10 @@ class RelaisRepository {
       throw Exception(
           'Failed to load received relais interests: ${dioError.message}');
     } on RequestResponseExeption catch (e) {
-      throw Exception('Failed to load received relais interests: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load received relais interests: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

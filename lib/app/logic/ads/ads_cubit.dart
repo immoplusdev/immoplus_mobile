@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -111,7 +113,8 @@ class AdsCubit extends Cubit<AdsState> {
       // emit(AdsState.success(campaigns: mockData));
     } catch (e) {
       log('AdsCubit: Error fetching active campaigns: $e');
-      emit(AdsState.error(message: e.toString()));
+      emit(AdsState.error(
+          message: ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 

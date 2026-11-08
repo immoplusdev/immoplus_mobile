@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'dart:io';
 
@@ -26,7 +27,9 @@ import '../models/remote/files/file_data_model.dart';
 import '../providers/auth_provider.dart';
 import '../models/auth/demande_pro_particulier_body.dart';
 import '../models/auth/demande_pro_particulier_me_response.dart';
+import '../models/auth/phone_challenge_models.dart';
 import '../models/remote/user/contact_change_models.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthRepository {
   final dioClient = getIt<Dio>();
@@ -38,11 +41,11 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error, s) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error $s');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -56,7 +59,7 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
@@ -64,7 +67,7 @@ class AuthRepository {
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -77,11 +80,11 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -93,12 +96,12 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -110,12 +113,12 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -126,11 +129,11 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to send WhatsApp OTP: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       log('Error: $error');
-      throw Exception('Failed to send WhatsApp OTP: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -142,12 +145,12 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -160,12 +163,12 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -178,7 +181,7 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
@@ -186,7 +189,7 @@ class AuthRepository {
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -197,14 +200,14 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load user: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load user: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -216,7 +219,7 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
@@ -224,7 +227,7 @@ class AuthRepository {
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -236,14 +239,14 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to send email OTP: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to send email OTP: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -255,14 +258,14 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to send registration OTP: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to send registration OTP: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -274,14 +277,14 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to reset password: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to reset password: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -292,14 +295,14 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to send email OTP: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to send email OTP: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -310,14 +313,14 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to delete account: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to delete account: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -335,7 +338,7 @@ class AuthRepository {
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to social login: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -353,14 +356,14 @@ class AuthRepository {
         final message = data['message'].toString();
         throw Exception(message);
       }
-      throw Exception('Failed to create demande pro: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       log("RequestResponseExeption");
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to create demande pro: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -375,10 +378,10 @@ class AuthRepository {
       if (data is Map && data['message'] != null) {
         throw Exception(data['message'].toString());
       }
-      throw Exception('Failed to get demande pro: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to get demande pro: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -413,6 +416,73 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       rethrow;
+    }
+  }
+
+  Future<PhoneChallengeResponse> createPhoneChallenge({
+    required CreatePhoneChallengeBody body,
+    String? idempotencyKey,
+  }) async {
+    try {
+      final key = idempotencyKey ?? const Uuid().v4();
+      final response = await AuthProvider(dioClient).createPhoneChallenge(
+        key,
+        body,
+      );
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError createPhoneChallenge: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
+    } catch (error) {
+      log('Error createPhoneChallenge: $error');
+      throw AppErrorMapper.from(error);
+    }
+  }
+
+  Future<VerifyPhoneChallengeResponse> verifyPhoneChallenge({
+    required String challengeId,
+    required VerifyPhoneChallengeBody body,
+    String? idempotencyKey,
+  }) async {
+    try {
+      final key = idempotencyKey ?? const Uuid().v4();
+      final response = await AuthProvider(dioClient).verifyPhoneChallenge(
+        challengeId,
+        key,
+        body,
+      );
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError verifyPhoneChallenge: ${dioError.message}');
+      final statusCode = dioError.response?.statusCode;
+      final rawData = dioError.response?.data;
+      if (statusCode == 422 &&
+          rawData is Map &&
+          rawData['code']?.toString() == 'PROFILE_REQUIRED') {
+        final innerData = rawData['data'];
+        final resolvedChallengeId = (innerData is Map &&
+                innerData['challengeId'] != null)
+            ? innerData['challengeId'].toString()
+            : challengeId;
+        final fields = (innerData is Map &&
+                innerData['profileFieldsRequired'] is List)
+            ? (innerData['profileFieldsRequired'] as List)
+                .map((e) => e.toString())
+                .toList()
+            : const ['firstName', 'lastName', 'birthDate'];
+        throw ProfileRequiredException(
+          challengeId: resolvedChallengeId,
+          profileFieldsRequired: fields,
+          message: rawData['message']?.toString(),
+        );
+      }
+      throw AppErrorMapper.from(dioError);
+    } catch (error) {
+      if (error is ProfileRequiredException) rethrow;
+      log('Error verifyPhoneChallenge: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

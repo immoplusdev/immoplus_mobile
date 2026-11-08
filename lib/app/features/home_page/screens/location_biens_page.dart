@@ -77,7 +77,7 @@ class _LocationBiensPageState extends State<LocationBiensPage>
         await _loadFilteredBiens(pageKey);
       }
     } catch (error) {
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(error);
     }
   }
 

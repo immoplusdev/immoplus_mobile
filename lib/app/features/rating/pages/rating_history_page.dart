@@ -49,7 +49,7 @@ class _RatingHistoryPageState extends State<RatingHistoryPage>
         _pagingController.appendLastPage(value.data);
       }
     } catch (e) {
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(e);
     }
   }
 

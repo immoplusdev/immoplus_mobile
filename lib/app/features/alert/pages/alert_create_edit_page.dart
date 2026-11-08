@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -138,6 +140,7 @@ class _AlertCreateEditPageState extends State<AlertCreateEditPage> {
         }
       }
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.alert);
       // Handle error via EasyLoading usually handled in repo
     } finally {
       if (mounted) setState(() => _isLoading = false);

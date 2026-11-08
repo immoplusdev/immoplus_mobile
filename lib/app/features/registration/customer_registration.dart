@@ -8,6 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/auth/customer_registration_body.dart';
+import 'package:immoplus/app/data/models/auth/phone_challenge_models.dart';
 import 'package:immoplus/app/data/models/remote/files/file_data_model.dart';
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
 import 'package:immoplus/app/logic/authentification/registration_cubit.dart';
@@ -28,14 +29,19 @@ class DataRouterRegistration {
   final String? lastName;
   final String? phoneNumber;
   final String? provider;
+  final String? challengeId;
+  final String? otp;
 
-  DataRouterRegistration(
-      {required this.email,
-      required this.token,
-      this.firstName,
-      this.lastName,
-      this.phoneNumber,
-      this.provider});
+  DataRouterRegistration({
+    required this.email,
+    required this.token,
+    this.firstName,
+    this.lastName,
+    this.phoneNumber,
+    this.provider,
+    this.challengeId,
+    this.otp,
+  });
 }
 
 class CustomerRegistration extends StatefulWidget {
@@ -108,7 +114,11 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
   }
 
   Future<void> _pickBirthDate() async {
-    DateTime tempDate = _birthDate ?? DateTime(1995, 6, 1);
+    final now = DateTime.now();
+    DateTime tempDate = _birthDate ?? DateTime(1995, 6, 12);
+    if (tempDate.isAfter(now)) {
+      tempDate = now;
+    }
     await showCupertinoModalPopup<void>(
       context: context,
       builder: (ctx) {
@@ -134,10 +144,10 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
               ),
               Expanded(
                 child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.monthYear,
+                  mode: CupertinoDatePickerMode.date,
                   initialDateTime: tempDate,
                   minimumYear: 1930,
-                  maximumYear: DateTime.now().year,
+                  maximumDate: now,
                   onDateTimeChanged: (value) {
                     tempDate = value;
                   },
@@ -172,7 +182,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
             const Gap(12),
             Text(
               hasValue
-                  ? DateFormat('MMMM yyyy', 'fr_FR').format(_birthDate!)
+                  ? DateFormat('dd/MM/yyyy').format(_birthDate!)
                   : 'Date de naissance',
               style: AppTypography.font(
                 fontSize: 15,
@@ -498,6 +508,33 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                                       EasyLoading.dismiss();
                                     }
 
+                                    final formattedBirthDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(_birthDate!);
+
+                                    if (widget.data.challengeId != null &&
+                                        widget.data.otp != null) {
+                                      if (!context.mounted) return;
+                                      context
+                                          .read<RgistrationCubitCubit>()
+                                          .completePhoneChallengeRegistration(
+                                            challengeId:
+                                                widget.data.challengeId!,
+                                            otp: widget.data.otp!,
+                                            profile: PhoneChallengeProfileDto(
+                                              firstName: _formController
+                                                  .firstName!.text
+                                                  .trim(),
+                                              lastName: _formController
+                                                  .lastName!.text
+                                                  .trim(),
+                                              birthDate: formattedBirthDate,
+                                              proKind: null,
+                                            ),
+                                          );
+                                      return;
+                                    }
+
                                     final email =
                                         _formController.email!.text.trim();
                                     final password =
@@ -518,9 +555,7 @@ class _CustomerRegistrationState extends State<CustomerRegistration> {
                                         password:
                                             password.isEmpty ? null : password,
                                         provider: widget.data.provider,
-                                        birthDate: DateFormat('yyyy-MM-dd')
-                                            .format(DateTime(_birthDate!.year,
-                                                _birthDate!.month, 1)));
+                                        birthDate: formattedBirthDate);
 
                                     if (!context.mounted) return;
                                     context

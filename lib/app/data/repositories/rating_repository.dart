@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import '../models/remote/rating/rating_request.dart';
@@ -17,7 +18,7 @@ class RatingRepository {
       await RatingProvider(_dio).createClientRating(request);
     } on DioException catch (e) {
       log('DioError (createClientRating): ${e.message}');
-      throw Exception('Failed to create client rating: ${e.message}');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -28,7 +29,7 @@ class RatingRepository {
           .getRatingHistory(page: page, perPage: perPage);
     } on DioException catch (e) {
       log('DioError (getRatingHistory): ${e.message}');
-      throw Exception('Failed to get rating history: ${e.message}');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -42,7 +43,7 @@ class RatingRepository {
           .getResidenceReviews(residenceId, page: page, perPage: perPage);
     } on DioException catch (e) {
       log('DioError (getResidenceReviews): ${e.message}');
-      throw Exception('Failed to get residence reviews: ${e.message}');
+      throw AppErrorMapper.from(e);
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
@@ -30,13 +31,13 @@ class AlertRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError (getAlerts): ${dioError.message}');
-      throw Exception('Failed to load alerts: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to load alerts: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to load alerts: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -46,13 +47,13 @@ class AlertRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError (getAlertById): ${dioError.message}');
-      throw Exception('Failed to load alert detail: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to load alert detail: $e');
+      throw AppErrorMapper.from(e);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load alert detail: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -62,13 +63,13 @@ class AlertRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError (createAlert): ${dioError.message}');
-      throw Exception('Failed to create alert: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to create alert: $e');
+      throw AppErrorMapper.from(e);
     } catch (error, s) {
       log('Error: $error $s');
-      throw Exception('Failed to create alert: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -78,13 +79,13 @@ class AlertRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError (updateAlert): ${dioError.message}');
-      throw Exception('Failed to update alert: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to update alert: $e');
+      throw AppErrorMapper.from(e);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to update alert: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -94,13 +95,13 @@ class AlertRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError (deleteAlert): ${dioError.message}');
-      throw Exception('Failed to delete alert: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to delete alert: $e');
+      throw AppErrorMapper.from(e);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to delete alert: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -110,13 +111,13 @@ class AlertRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError (markAsViewed): ${dioError.message}');
-      throw Exception('Failed to mark alert as viewed: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to mark alert as viewed: $e');
+      throw AppErrorMapper.from(e);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to mark alert as viewed: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -143,13 +144,13 @@ class AlertRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError (getAlertMatches): ${dioError.message}');
-      throw Exception('Failed to load alert matches: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (e) {
       AppFeedback.showError(e.toString());
-      throw Exception('Failed to load alert matches: $e');
+      throw AppErrorMapper.from(e);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load alert matches: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

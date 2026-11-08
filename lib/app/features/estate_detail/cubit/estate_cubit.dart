@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/models/remote/bienimmobilier/bien_immobilier_single.dart';
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
@@ -22,7 +25,9 @@ class EstateCubit extends Cubit<RequestState> {
         emit(const REQUEST_INITIAL());
       }
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(
+          error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 }
