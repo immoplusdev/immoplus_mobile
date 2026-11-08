@@ -1,3 +1,5 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
+import 'package:immoplus/app/data/enums/booking_mode.dart';
 import 'package:immoplus/app/core/error/error_feedback_listener.dart';
 import 'package:immoplus/app/core/error/app_error.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
@@ -52,6 +54,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   EstimateCostData? estimateCost;
+
+  BookingMode get _mode => getIt<BookingModeCubit>().state;
+  bool get _isPayNow => _mode == BookingMode.payNow;
 
   String time = '';
   List<DateTime?> markedDates = [];
@@ -681,7 +686,7 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                           52, // Fixe la hauteur du bouton pour un rendu uniforme
                       child: CustomLoadingButtom(
                         textColor: AppColors.white,
-                        text: 'Réserver',
+                        text: _mode.ctaLabel,
                         isLoading: state is LOADING_BOOKING,
                         onClick: (state is INITIAL_BOOKING)
                             ? null
@@ -709,8 +714,9 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                                   } else {
                                     AppDialog.show(
                                       title: 'Confirmation',
-                                      description:
-                                          'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
+                                      description: _isPayNow
+                                          ? 'Confirmez-vous cette réservation pour $totalDays jours ? Vous serez redirigé vers le paiement.'
+                                          : 'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
                                       primaryButtonText: 'Confirmer',
                                       secondButtonText: 'Annuler',
                                       onPrimary: () {

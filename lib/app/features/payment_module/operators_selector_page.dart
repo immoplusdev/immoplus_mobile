@@ -1,3 +1,4 @@
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement.dart';
 import 'package:immoplus/app/core/error/error_feedback.dart';
 import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
@@ -217,7 +218,15 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     ],
                     _buildTotalCard(summary, amount),
                     const SizedBox(height: 16),
-                    _buildSecureNotice(),
+                    if (summary?.requirement?.isDeposit == true) ...[
+                      _buildRequirementBreakdown(summary!.requirement!),
+                      const SizedBox(height: 16),
+                    ],
+                    // Message du serveur (protection du client), affiché tel
+                    // quel ; à défaut, la mention générique de sécurité.
+                    _buildNotice(
+                      _protectionMessage(summary) ?? _secureNoticeText,
+                    ),
                     const SizedBox(height: 24),
                     Text(
                       'Payer avec',
@@ -229,6 +238,10 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     ),
                     const SizedBox(height: 14),
                     _buildOperatorGrid(),
+                    if (_protectionMessage(summary) != null) ...[
+                      const SizedBox(height: 16),
+                      _buildNotice(_secureNoticeText),
+                    ],
                   ],
                 ),
               ),
@@ -330,6 +343,12 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
   Widget _buildTotalCard(PaymentSummary? summary, int amount) {
     final dates = summary?.dateRange;
     final reference = summary?.reference;
+    // Acompte : la carte rappelle le total du séjour ; le montant dû
+    // maintenant est détaillé juste dessous et sur le bouton.
+    final requirement = summary?.requirement;
+    final isDeposit = requirement?.isDeposit == true;
+    final label = isDeposit ? 'TOTAL DU SÉJOUR' : 'TOTAL À PAYER';
+    final shownAmount = isDeposit ? requirement!.totalAmount.toInt() : amount;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
@@ -369,7 +388,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'TOTAL À PAYER',
+                label,
                 style: AppTypography.font(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -378,7 +397,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
               ),
               const SizedBox(height: 2),
               Text(
-                '${_group(amount, ' ')} FCFA',
+                '${_group(shownAmount, ' ')} FCFA',
                 style: AppTypography.font(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
@@ -392,7 +411,74 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
     );
   }
 
-  Widget _buildSecureNotice() {
+  static const _secureNoticeText =
+      'Paiement sécurisé. Un problème ? Notre équipe vous '
+      'accompagne pour votre demande de remboursement.';
+
+  String? _protectionMessage(PaymentSummary? summary) {
+    final message = summary?.requirement?.protectionMessage.trim() ?? '';
+    return message.isEmpty ? null : message;
+  }
+
+  /// Détail de l'acompte : total du séjour, dû maintenant, reste à régler.
+  Widget _buildRequirementBreakdown(PaymentRequirement requirement) {
+    final percent = requirement.requirement.depositPercent;
+    Widget row(String label, int value, {bool strong = false}) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTypography.font(
+                    fontSize: 14,
+                    fontWeight: strong ? FontWeight.w700 : FontWeight.w400,
+                    color: strong ? AppColors.slate900 : AppColors.slate500,
+                  ),
+                ),
+              ),
+              Text(
+                '${_group(value, ' ')} FCFA',
+                style: AppTypography.font(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.slate900,
+                ),
+              ),
+            ],
+          ),
+        );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        row('Montant total du séjour', requirement.totalAmount.toInt()),
+        row('À payer maintenant', requirement.amountDueNow.toInt(),
+            strong: true),
+        row('Reste à régler', requirement.remainingAmount.toInt()),
+        if (percent != null) ...[
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'Acompte de $percent %',
+              style: AppTypography.font(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primary,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildNotice(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
@@ -417,8 +503,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
           const SizedBox(width: 14),
           Expanded(
             child: Text(
-              'Paiement sécurisé. Un problème ? Notre équipe vous '
-              'accompagne pour votre demande de remboursement.',
+              text,
               style: AppTypography.font(
                 fontSize: 13,
                 height: 1.4,

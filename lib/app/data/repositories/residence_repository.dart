@@ -1,3 +1,5 @@
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement_body.dart';
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement.dart';
 import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
@@ -232,6 +234,22 @@ class ResidenceRepository {
       throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error (generer-qr-checkin): $error');
+      throw AppErrorMapper.from(error);
+    }
+  }
+
+  /// Aperçu du paiement demandé pour ces dates (estimation du serveur).
+  Future<PaymentRequirement> getPaymentRequirement(
+      {required PaymentRequirementBody body}) async {
+    try {
+      final response =
+          await ReservationProvider(dioClient).getPaymentRequirement(body);
+      return response.data;
+    } on DioException catch (dioError) {
+      log('DioError (payment-requirement): ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
+    } catch (error) {
+      log('Error (payment-requirement): $error');
       throw AppErrorMapper.from(error);
     }
   }

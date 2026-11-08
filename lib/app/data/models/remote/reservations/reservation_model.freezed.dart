@@ -47,6 +47,10 @@ mixin _$ReservationModel {
   ClientModel get client => throw _privateConstructorUsedError;
   ProprietaireModel get proprietaire => throw _privateConstructorUsedError;
 
+  /// Exigence de paiement calculée par le serveur (réponse de création).
+  PaymentRequirement? get paymentRequirement =>
+      throw _privateConstructorUsedError;
+
   /// Serializes this ReservationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -87,11 +91,13 @@ abstract class $ReservationModelCopyWith<$Res> {
       String? checkinValideAt,
       ResidenceModel residence,
       ClientModel client,
-      ProprietaireModel proprietaire});
+      ProprietaireModel proprietaire,
+      PaymentRequirement? paymentRequirement});
 
   $ResidenceModelCopyWith<$Res> get residence;
   $ClientModelCopyWith<$Res> get client;
   $ProprietaireModelCopyWith<$Res> get proprietaire;
+  $PaymentRequirementCopyWith<$Res>? get paymentRequirement;
 }
 
 /// @nodoc
@@ -133,6 +139,7 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
+    Object? paymentRequirement = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -231,6 +238,10 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
           ? _value.proprietaire
           : proprietaire // ignore: cast_nullable_to_non_nullable
               as ProprietaireModel,
+      paymentRequirement: freezed == paymentRequirement
+          ? _value.paymentRequirement
+          : paymentRequirement // ignore: cast_nullable_to_non_nullable
+              as PaymentRequirement?,
     ) as $Val);
   }
 
@@ -261,6 +272,21 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
   $ProprietaireModelCopyWith<$Res> get proprietaire {
     return $ProprietaireModelCopyWith<$Res>(_value.proprietaire, (value) {
       return _then(_value.copyWith(proprietaire: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PaymentRequirementCopyWith<$Res>? get paymentRequirement {
+    if (_value.paymentRequirement == null) {
+      return null;
+    }
+
+    return $PaymentRequirementCopyWith<$Res>(_value.paymentRequirement!,
+        (value) {
+      return _then(_value.copyWith(paymentRequirement: value) as $Val);
     });
   }
 }
@@ -297,7 +323,8 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
       String? checkinValideAt,
       ResidenceModel residence,
       ClientModel client,
-      ProprietaireModel proprietaire});
+      ProprietaireModel proprietaire,
+      PaymentRequirement? paymentRequirement});
 
   @override
   $ResidenceModelCopyWith<$Res> get residence;
@@ -305,6 +332,8 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
   $ClientModelCopyWith<$Res> get client;
   @override
   $ProprietaireModelCopyWith<$Res> get proprietaire;
+  @override
+  $PaymentRequirementCopyWith<$Res>? get paymentRequirement;
 }
 
 /// @nodoc
@@ -344,6 +373,7 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
+    Object? paymentRequirement = freezed,
   }) {
     return _then(_$ReservationModelImpl(
       id: null == id
@@ -442,6 +472,10 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
           ? _value.proprietaire
           : proprietaire // ignore: cast_nullable_to_non_nullable
               as ProprietaireModel,
+      paymentRequirement: freezed == paymentRequirement
+          ? _value.paymentRequirement
+          : paymentRequirement // ignore: cast_nullable_to_non_nullable
+              as PaymentRequirement?,
     ));
   }
 }
@@ -473,7 +507,8 @@ class _$ReservationModelImpl implements _ReservationModel {
       this.checkinValideAt = null,
       this.residence = const ResidenceModel(),
       this.client = const ClientModel(),
-      this.proprietaire = const ProprietaireModel()})
+      this.proprietaire = const ProprietaireModel(),
+      this.paymentRequirement})
       : _datesReservation = datesReservation;
 
   factory _$ReservationModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -559,9 +594,13 @@ class _$ReservationModelImpl implements _ReservationModel {
   @JsonKey()
   final ProprietaireModel proprietaire;
 
+  /// Exigence de paiement calculée par le serveur (réponse de création).
+  @override
+  final PaymentRequirement? paymentRequirement;
+
   @override
   String toString() {
-    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, ratingsNotified: $ratingsNotified, ratingStatus: $ratingStatus, checkinValide: $checkinValide, checkinValideAt: $checkinValideAt, residence: $residence, client: $client, proprietaire: $proprietaire)';
+    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, dateDebut: $dateDebut, dateFin: $dateFin, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, ratingsNotified: $ratingsNotified, ratingStatus: $ratingStatus, checkinValide: $checkinValide, checkinValideAt: $checkinValideAt, residence: $residence, client: $client, proprietaire: $proprietaire, paymentRequirement: $paymentRequirement)';
   }
 
   @override
@@ -581,7 +620,8 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.statusFacture == statusFacture) &&
             (identical(other.retraitProEffectue, retraitProEffectue) ||
                 other.retraitProEffectue == retraitProEffectue) &&
-            (identical(other.montantTotalReservation, montantTotalReservation) ||
+            (identical(
+                    other.montantTotalReservation, montantTotalReservation) ||
                 other.montantTotalReservation == montantTotalReservation) &&
             (identical(other.montantReservationSansCommission,
                     montantReservationSansCommission) ||
@@ -598,8 +638,7 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            (identical(other.delaisProprietaireReponse,
-                    delaisProprietaireReponse) ||
+            (identical(other.delaisProprietaireReponse, delaisProprietaireReponse) ||
                 other.delaisProprietaireReponse == delaisProprietaireReponse) &&
             (identical(other.delaisPaiementClient, delaisPaiementClient) ||
                 other.delaisPaiementClient == delaisPaiementClient) &&
@@ -615,7 +654,9 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.residence == residence) &&
             (identical(other.client, client) || other.client == client) &&
             (identical(other.proprietaire, proprietaire) ||
-                other.proprietaire == proprietaire));
+                other.proprietaire == proprietaire) &&
+            (identical(other.paymentRequirement, paymentRequirement) ||
+                other.paymentRequirement == paymentRequirement));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -645,7 +686,8 @@ class _$ReservationModelImpl implements _ReservationModel {
         checkinValideAt,
         residence,
         client,
-        proprietaire
+        proprietaire,
+        paymentRequirement
       ]);
 
   /// Create a copy of ReservationModel
@@ -690,7 +732,8 @@ abstract class _ReservationModel implements ReservationModel {
       final String? checkinValideAt,
       final ResidenceModel residence,
       final ClientModel client,
-      final ProprietaireModel proprietaire}) = _$ReservationModelImpl;
+      final ProprietaireModel proprietaire,
+      final PaymentRequirement? paymentRequirement}) = _$ReservationModelImpl;
 
   factory _ReservationModel.fromJson(Map<String, dynamic> json) =
       _$ReservationModelImpl.fromJson;
@@ -743,6 +786,10 @@ abstract class _ReservationModel implements ReservationModel {
   ClientModel get client;
   @override
   ProprietaireModel get proprietaire;
+
+  /// Exigence de paiement calculée par le serveur (réponse de création).
+  @override
+  PaymentRequirement? get paymentRequirement;
 
   /// Create a copy of ReservationModel
   /// with the given fields replaced by the non-null parameter values.

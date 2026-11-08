@@ -1,3 +1,4 @@
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -12,6 +13,7 @@ class PaymentSummary {
     this.dateRange,
     this.reference,
     this.imageIds = const [],
+    this.requirement,
   });
 
   final String title;
@@ -26,6 +28,10 @@ class PaymentSummary {
 
   /// Identifiants d'images, résolus avec [Utils.getImagePath].
   final List<String> imageIds;
+
+  /// Exigence de paiement du serveur (acompte, montant dû maintenant).
+  /// Absente quand la page n'a que l'identifiant de la réservation.
+  final PaymentRequirement? requirement;
 
   factory PaymentSummary.fromReservation(ReservationModel reservation) {
     final residence = reservation.residence;
@@ -47,6 +53,7 @@ class PaymentSummary {
           ? null
           : reservation.codeReservation,
       imageIds: images,
+      requirement: reservation.paymentRequirement,
     );
   }
 
