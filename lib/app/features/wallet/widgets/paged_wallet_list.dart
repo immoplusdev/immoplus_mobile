@@ -14,12 +14,14 @@ class PagedWalletList<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.emptyMessage,
     this.pageSize = 20,
+    this.showDividers = true,
   });
 
   final Future<PagedResult<T>> Function(int page) fetchPage;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final String emptyMessage;
   final int pageSize;
+  final bool showDividers;
 
   @override
   State<PagedWalletList<T>> createState() => _PagedWalletListState<T>();
@@ -60,10 +62,7 @@ class _PagedWalletListState<T> extends State<PagedWalletList<T>> {
       child: PagedListView<int, T>.separated(
         pagingController: _controller,
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-        separatorBuilder: (_, __) => Divider(
-          height: 1,
-          color: AppColors.gray200,
-        ),
+        separatorBuilder: (_, __) => showDividersSeparator(widget.showDividers),
         builderDelegate: PagedChildBuilderDelegate<T>(
           itemBuilder: (context, item, _) => widget.itemBuilder(context, item),
           noItemsFoundIndicatorBuilder: (_) => Padding(
@@ -97,3 +96,7 @@ class _PagedWalletListState<T> extends State<PagedWalletList<T>> {
     );
   }
 }
+
+Widget showDividersSeparator(bool show) => show
+    ? Divider(height: 1, color: AppColors.gray200)
+    : const SizedBox.shrink();

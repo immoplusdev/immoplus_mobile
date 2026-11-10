@@ -11,6 +11,9 @@ import 'package:immoplus/app/data/models/remote/payment/operator_model.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/wallet/data/wallet_models.dart';
 import 'package:immoplus/app/features/wallet/logic/withdrawal_cubit.dart';
+import 'package:immoplus/app/features/wallet/pages/withdrawal_success_page.dart';
+import 'package:immoplus/app/features/wallet/widgets/wallet_notice.dart';
+import 'package:immoplus/app/features/wallet/widgets/wallet_style.dart';
 import 'package:immoplus/app/features/wallet/widgets/wallet_formatters.dart';
 import 'package:immoplus/app/widgets/custom_button.dart';
 import 'package:immoplus/app/widgets/custom_text_field.dart';
@@ -61,6 +64,17 @@ class _WithdrawalFormState extends State<_WithdrawalForm> {
     if (phone.isEmpty) return '';
     return phone.startsWith('+') ? phone : '+$phone';
   }
+
+  TextStyle get _headingStyle => AppTypography.font(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: WalletColors.textPrimary,
+      );
+
+  OutlineInputBorder _fieldBorder(Color color) => OutlineInputBorder(
+        borderRadius: BorderRadius.circular(28),
+        borderSide: BorderSide(color: color),
+      );
 
   @override
   void dispose() {
@@ -120,13 +134,17 @@ class _WithdrawalFormState extends State<_WithdrawalForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<WithdrawalCubit, WithdrawalState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is WithdrawalSuccess) {
-          ToastUtils.showSuccess(
-            title: 'Demande enregistrée',
-            description: 'Votre retrait sera traité prochainement.',
+          await context.pushNamed(
+            WithdrawalSuccessPage.name,
+            extra: WithdrawalSummary(
+              request: state.request,
+              operatorName: _operator?.name ?? '',
+              phoneNumber: _phoneNumber,
+            ),
           );
-          context.pop(true);
+          if (context.mounted) context.pop(true);
         } else if (state is WithdrawalFailure) {
           _onFailure(state.error);
         }
@@ -152,23 +170,54 @@ class _WithdrawalFormState extends State<_WithdrawalForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Disponible : ${formatAmount(widget.wallet.availableBalance, currency: widget.wallet.currency)}',
-                          style: AppTypography.font(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.slate900,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Montant à retirer',
+                                style: _headingStyle,
+                              ),
+                            ),
+                            Text(
+                              'Disponible : ${formatAmount(widget.wallet.availableBalance, currency: widget.wallet.currency)}',
+                              style: AppTypography.font(
+                                fontSize: 12,
+                                color: WalletColors.textSecondary,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         CustomTextField(
                           controller: _amountController,
-                          labelText: 'Montant à retirer (FCFA)',
+                          labelText: '0',
+                          fontSize: 15,
+                          fillColor: Colors.white,
                           textInputType: TextInputType.number,
                           textInputAction: TextInputAction.done,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
+                          sufixIcon: Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: Center(
+                              widthFactor: 1,
+                              child: Text(
+                                'FCFA',
+                                style: AppTypography.font(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: WalletColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          enabledBorder: _fieldBorder(WalletColors.border),
+                          focusedBorder: _fieldBorder(WalletColors.brand),
+                          errorBorder:
+                              _fieldBorder(AppColors.immoFeedbackError),
                           validator: _validateAmount,
                           onChanged: (_) {
                             if (_serverErrors.containsKey('amount')) {
@@ -177,14 +226,7 @@ class _WithdrawalFormState extends State<_WithdrawalForm> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        Text(
-                          'Opérateur',
-                          style: AppTypography.font(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.slate900,
-                          ),
-                        ),
+                        Text('Opérateur', style: _headingStyle),
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 10,
@@ -211,14 +253,7 @@ class _WithdrawalFormState extends State<_WithdrawalForm> {
                             ),
                           ),
                         const SizedBox(height: 20),
-                        Text(
-                          'Numéro de réception',
-                          style: AppTypography.font(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.slate900,
-                          ),
-                        ),
+                        Text('Numéro de réception', style: _headingStyle),
                         const SizedBox(height: 8),
                         InternationalPhoneInput(
                           initialPhoneNumber: _initialPhone,
@@ -233,16 +268,11 @@ class _WithdrawalFormState extends State<_WithdrawalForm> {
                               color: AppColors.immoFeedbackError,
                             ),
                           ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Votre coffre n\'est débité qu\'une fois le retrait '
-                          'traité. Vous pouvez suivre la demande dans l\'onglet '
-                          '« Retraits ».',
-                          style: AppTypography.font(
-                            fontSize: 12,
-                            height: 1.5,
-                            color: AppColors.slate500,
-                          ),
+                        const SizedBox(height: 24),
+                        const WalletNotice(
+                          'Votre demande sera créée avec le statut « En '
+                          'attente de validation ». Le délai de réception '
+                          'dépend du traitement et de l\'opérateur choisi.',
                         ),
                       ],
                     ),

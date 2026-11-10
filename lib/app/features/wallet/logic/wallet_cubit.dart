@@ -14,9 +14,21 @@ final class WalletLoading extends WalletState {
 }
 
 final class WalletLoaded extends WalletState {
-  const WalletLoaded(this.wallet);
+  const WalletLoaded(
+    this.wallet, {
+    this.recentTransactions = const [],
+    this.recentWithdrawals = const [],
+  });
 
   final WalletModel wallet;
+
+  /// Dernières opérations (aperçu de l'écran ; la liste complète est paginée).
+  final List<WalletTransactionModel> recentTransactions;
+  final List<WithdrawalRequestModel> recentWithdrawals;
+
+  int get pendingWithdrawalsCount => recentWithdrawals
+      .where((r) => r.status == WithdrawalStatus.pending)
+      .length;
 }
 
 final class WalletFailure extends WalletState {
@@ -38,7 +50,22 @@ class WalletCubit extends Cubit<WalletState> {
     if (state is! WalletLoaded) emit(const WalletLoading());
     try {
       final wallet = await _repository.getMyWallet();
-      if (!isClosed) emit(WalletLoaded(wallet));
+      // Les aperçus sont facultatifs : leur échec ne masque pas le solde.
+      final transactions = await _repository
+          .getMyTransactions(page: 1, perPage: 5)
+          .then((r) => r.items)
+          .catchError((_) => <WalletTransactionModel>[]);
+      final withdrawals = await _repository
+          .getMyWithdrawalRequests(page: 1, perPage: 5)
+          .then((r) => r.items)
+          .catchError((_) => <WithdrawalRequestModel>[]);
+      if (!isClosed) {
+        emit(WalletLoaded(
+          wallet,
+          recentTransactions: transactions,
+          recentWithdrawals: withdrawals,
+        ));
+      }
     } catch (e) {
       if (!isClosed && state is! WalletLoaded) {
         emit(WalletFailure(AppErrorMapper.from(e)));

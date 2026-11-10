@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/wallet/data/wallet_models.dart';
 import 'package:immoplus/app/features/wallet/widgets/wallet_formatters.dart';
+import 'package:immoplus/app/features/wallet/widgets/wallet_style.dart';
 
-/// Solde du coffre : montant disponible, montant en cours de libération et
-/// accès au retrait.
+/// Crédit du coffre : montant disponible et accès à la demande de
+/// remboursement.
 class WalletBalanceCard extends StatelessWidget {
   const WalletBalanceCard({
     super.key,
@@ -20,67 +20,66 @@ class WalletBalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
       decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [WalletColors.brand, WalletColors.gradientEnd],
+        ),
+        borderRadius: BorderRadius.circular(22),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(Iconsax.wallet_3, size: 18, color: AppColors.white),
-              const SizedBox(width: 8),
-              Text(
-                'Solde disponible',
-                style: AppTypography.font(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.white.withValues(alpha: 0.85),
-                ),
-              ),
-            ],
+          Text(
+            'Crédit disponible',
+            style: AppTypography.font(fontSize: 16, color: Colors.white),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Text(
             formatAmount(wallet.availableBalance, currency: wallet.currency),
             style: AppTypography.font(
               fontSize: 30,
-              fontWeight: FontWeight.w800,
-              color: AppColors.white,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
             ),
           ),
+          const SizedBox(height: 4),
+          Text(
+            'Crédit utilisable pour vos prochaines réservations',
+            style: AppTypography.font(fontSize: 12, color: Colors.white),
+          ),
           if (wallet.pendingBalance > 0) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               '${formatAmount(wallet.pendingBalance, currency: wallet.currency)} en cours de libération',
               style: AppTypography.font(
-                fontSize: 12,
-                color: AppColors.white.withValues(alpha: 0.8),
+                fontSize: 11,
+                color: Colors.white.withValues(alpha: 0.85),
               ),
             ),
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
               onPressed: wallet.canWithdraw ? onWithdraw : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.white,
-                foregroundColor: AppColors.primary,
-                disabledBackgroundColor: AppColors.white.withValues(alpha: 0.4),
+                backgroundColor: WalletColors.brand,
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.white.withValues(alpha: 0.3),
+                disabledForegroundColor: Colors.white70,
                 elevation: 0,
                 shape: const StadiumBorder(),
               ),
               child: Text(
-                'Retirer mon solde',
+                'Demander un remboursement',
                 style: AppTypography.font(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color:
-                      wallet.canWithdraw ? AppColors.primary : AppColors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
             ),

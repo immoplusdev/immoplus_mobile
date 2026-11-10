@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/error/error_context.dart';
-import 'package:immoplus/app/data/repositories/wallet_repository.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/wallet/data/wallet_models.dart';
 import 'package:immoplus/app/features/wallet/logic/wallet_cubit.dart';
+import 'package:immoplus/app/features/wallet/pages/wallet_transactions_page.dart';
 import 'package:immoplus/app/features/wallet/pages/withdrawal_request_page.dart';
-import 'package:immoplus/app/features/wallet/widgets/paged_wallet_list.dart';
 import 'package:immoplus/app/features/wallet/widgets/wallet_balance_card.dart';
 import 'package:immoplus/app/features/wallet/widgets/wallet_formatters.dart';
+import 'package:immoplus/app/features/wallet/widgets/wallet_style.dart';
+import 'package:immoplus/app/features/wallet/widgets/wallet_tiles.dart';
 
-/// Coffre du client : solde, mouvements et demandes de retrait.
+/// Coffre du client : crédit disponible, dernières opérations et demandes de
+/// remboursement.
 class WalletPage extends StatelessWidget {
   const WalletPage({super.key});
 
@@ -29,166 +30,227 @@ class WalletPage extends StatelessWidget {
   }
 }
 
-class _WalletView extends StatefulWidget {
+class _WalletView extends StatelessWidget {
   const _WalletView();
 
-  @override
-  State<_WalletView> createState() => _WalletViewState();
-}
-
-class _WalletViewState extends State<_WalletView> {
-  final _repository = getIt<WalletRepository>();
-
-  /// Change après un retrait pour recharger les listes.
-  int _refreshToken = 0;
-
-  Future<void> _openWithdrawal(WalletModel wallet) async {
+  Future<void> _openWithdrawal(BuildContext context, WalletModel wallet) async {
     final created = await context.pushNamed<bool>(
       WithdrawalRequestPage.name,
       extra: wallet,
     );
-    if (created == true && mounted) {
-      setState(() => _refreshToken++);
+    if (created == true && context.mounted) {
       context.read<WalletCubit>().load();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      appBar: AppBar(
         backgroundColor: AppColors.white,
-        appBar: AppBar(
-          backgroundColor: AppColors.white,
-          surfaceTintColor: AppColors.white,
-          elevation: 0,
-          title: const Text('Mon coffre'),
-          titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-          leading: BackButton(color: AppColors.black),
+        surfaceTintColor: AppColors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text('ESPACE CLIENT'),
+        titleTextStyle: AppTypography.font(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: WalletColors.textSecondary,
         ),
-        body: BlocBuilder<WalletCubit, WalletState>(
-          builder: (context, state) => switch (state) {
-            WalletLoading() =>
-              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-            WalletFailure(:final error) => AppErrorState(
-                error: error,
-                context: ErrorContext.walletLoad,
-                onRetry: () => context.read<WalletCubit>().load(),
-              ),
-            WalletLoaded(:final wallet) => _buildContent(wallet),
-          },
-        ),
+        leading: BackButton(color: AppColors.black),
+      ),
+      body: BlocBuilder<WalletCubit, WalletState>(
+        builder: (context, state) => switch (state) {
+          WalletLoading() =>
+            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          WalletFailure(:final error) => AppErrorState(
+              error: error,
+              context: ErrorContext.walletLoad,
+              onRetry: () => context.read<WalletCubit>().load(),
+            ),
+          WalletLoaded() => _buildContent(context, state),
+        },
       ),
     );
   }
 
-  Widget _buildContent(WalletModel wallet) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-          child: WalletBalanceCard(
-            wallet: wallet,
-            onWithdraw: () => _openWithdrawal(wallet),
+  Widget _buildContent(BuildContext context, WalletLoaded state) {
+    final wallet = state.wallet;
+    return RefreshIndicator(
+      onRefresh: () => context.read<WalletCubit>().load(),
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(
+          14,
+          8,
+          14,
+          48 + MediaQuery.of(context).padding.bottom,
+        ),
+        children: [
+          Text(
+            'Coffre client',
+            style: AppTypography.font(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: WalletColors.textPrimary,
+            ),
           ),
-        ),
-        TabBar(
-          labelColor: AppColors.primary,
-          unselectedLabelColor: AppColors.immoTextSecondary,
-          indicatorColor: AppColors.primary,
-          labelStyle:
-              AppTypography.font(fontSize: 14, fontWeight: FontWeight.w700),
-          tabs: const [Tab(text: 'Mouvements'), Tab(text: 'Retraits')],
-        ),
-        Expanded(
-          child: TabBarView(
+          const SizedBox(height: 2),
+          Text(
+            'Retrouvez vos crédits et suivez chaque opération.',
+            style: AppTypography.font(
+              fontSize: 13,
+              color: WalletColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const _ExplainerCard(
+            title: 'Pourquoi le bouton « Réserver » peut devenir « Payer » ?',
+            message:
+                'Après plusieurs annulations récentes, un acompte peut être '
+                'demandé avant de confirmer une nouvelle réservation. Le '
+                'montant et les conditions sont affichés avant le paiement.',
+          ),
+          const SizedBox(height: 16),
+          WalletBalanceCard(
+            wallet: wallet,
+            onWithdraw: () => _openWithdrawal(context, wallet),
+          ),
+          const SizedBox(height: 16),
+          Row(
             children: [
-              PagedWalletList<WalletTransactionModel>(
-                key: ValueKey('transactions_$_refreshToken'),
-                fetchPage: (page) => _repository.getMyTransactions(page: page),
-                emptyMessage:
-                    'Aucun mouvement pour le moment. Les montants conservés '
-                    'ou crédités sur votre coffre apparaîtront ici.',
-                itemBuilder: (context, item) =>
-                    _TransactionTile(transaction: item),
+              Expanded(
+                child: _StatCard(
+                  label: 'Crédité dans le coffre',
+                  value: formatAmountDotted(
+                    wallet.availableBalance + wallet.pendingBalance,
+                    currency: wallet.currency,
+                  ),
+                ),
               ),
-              PagedWalletList<WithdrawalRequestModel>(
-                key: ValueKey('withdrawals_$_refreshToken'),
-                fetchPage: (page) =>
-                    _repository.getMyWithdrawalRequests(page: page),
-                emptyMessage: 'Vous n\'avez fait aucune demande de retrait.',
-                itemBuilder: (context, item) => _WithdrawalTile(request: item),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _StatCard(
+                  label: 'Demandes en attente',
+                  value: '${state.pendingWithdrawalsCount}',
+                ),
               ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          const _ExplainerCard(
+            message: 'Si un séjour payé ne peut pas aboutir à cause du '
+                'propriétaire ou d\'une indisponibilité confirmée, le montant '
+                'encaissé est crédité dans votre coffre. Le remboursement vers '
+                'votre portefeuille mobile est ensuite traité séparément.',
+          ),
+          const SizedBox(height: 26),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Dernières opérations',
+                  style: AppTypography.font(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: WalletColors.textPrimary,
+                  ),
+                ),
+              ),
+              if (state.recentTransactions.isNotEmpty)
+                GestureDetector(
+                  onTap: () => context.pushNamed(WalletTransactionsPage.name),
+                  child: Text(
+                    'Tout voir',
+                    style: AppTypography.font(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: WalletColors.brand,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (state.recentTransactions.isEmpty)
+            const _EmptyText('Aucune opération pour le moment.')
+          else
+            for (final transaction in state.recentTransactions)
+              WalletTransactionTile(transaction: transaction),
+          const SizedBox(height: 22),
+          Text(
+            'Mes demandes de remboursement',
+            style: AppTypography.font(
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: WalletColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 6),
+          if (state.recentWithdrawals.isEmpty)
+            const _EmptyText('Aucune demande pour le moment.')
+          else
+            for (final request in state.recentWithdrawals)
+              WithdrawalRequestTile(request: request),
+        ],
+      ),
     );
   }
 }
 
-class _TransactionTile extends StatelessWidget {
-  const _TransactionTile({required this.transaction});
+/// Encadré vert d'explication (titre facultatif + texte).
+class _ExplainerCard extends StatelessWidget {
+  const _ExplainerCard({this.title, required this.message});
 
-  final WalletTransactionModel transaction;
+  final String? title;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
-    final incoming = transaction.type.isIncoming;
-    final color = incoming ? AppColors.immoFeedbackSuccess : AppColors.slate900;
-    final title = (transaction.note?.trim().isNotEmpty ?? false)
-        ? transaction.note!.trim()
-        : transaction.type.label;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        color: WalletColors.mintBackground,
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Row(
         children: [
           Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
+            width: 24,
+            height: 24,
+            decoration: const BoxDecoration(
+              color: WalletColors.mintIconBackground,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              incoming ? Iconsax.arrow_down_2 : Iconsax.arrow_up_3,
-              size: 18,
-              color: color,
-            ),
+            child:
+                const Icon(Icons.check, size: 13, color: WalletColors.mintIcon),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (title != null) ...[
+                  Text(
+                    title!,
+                    style: AppTypography.font(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: WalletColors.mintTitle,
+                    ),
+                  ),
+                  const SizedBox(height: 1),
+                ],
                 Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                  message,
                   style: AppTypography.font(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.slate900,
+                    fontSize: 12,
+                    height: 1.3,
+                    color: WalletColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  formatMovementDate(transaction.createdAt),
-                  style: AppTypography.font(
-                      fontSize: 12, color: AppColors.slate500),
-                ),
               ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            '${incoming ? '+' : '-'}${formatAmount(transaction.amount, currency: transaction.currency)}',
-            style: AppTypography.font(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: color,
             ),
           ),
         ],
@@ -197,65 +259,57 @@ class _TransactionTile extends StatelessWidget {
   }
 }
 
-class _WithdrawalTile extends StatelessWidget {
-  const _WithdrawalTile({required this.request});
+class _StatCard extends StatelessWidget {
+  const _StatCard({required this.label, required this.value});
 
-  final WithdrawalRequestModel request;
-
-  Color get _statusColor => switch (request.status) {
-        WithdrawalStatus.completed ||
-        WithdrawalStatus.approved =>
-          AppColors.immoFeedbackSuccess,
-        WithdrawalStatus.rejected ||
-        WithdrawalStatus.failed =>
-          AppColors.immoFeedbackError,
-        _ => AppColors.amber800,
-      };
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Row(
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: WalletColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  formatAmount(request.amount, currency: request.currency),
-                  style: AppTypography.font(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.slate900,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  formatMovementDate(request.createdAt),
-                  style: AppTypography.font(
-                      fontSize: 12, color: AppColors.slate500),
-                ),
-              ],
+          Text(
+            label,
+            style: AppTypography.font(
+              fontSize: 12,
+              color: WalletColors.textSecondary,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: _statusColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              request.status.label,
-              style: AppTypography.font(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: _statusColor,
-              ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: AppTypography.font(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: WalletColors.textPrimary,
             ),
           ),
         ],
       ),
     );
   }
+}
+
+class _EmptyText extends StatelessWidget {
+  const _EmptyText(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        style: AppTypography.font(
+          fontSize: 13,
+          color: WalletColors.textSecondary,
+        ),
+      );
 }
