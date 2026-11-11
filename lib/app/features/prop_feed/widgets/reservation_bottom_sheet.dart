@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -572,10 +573,14 @@ class ReservationBottomSheet extends StatelessWidget {
                     ),
                   if (hasPrice) SizedBox(width: 12),
                   Expanded(
-                    child: BookNowButton(
-                      label: data.actionButtonLabel,
-                      compact: false,
-                      onPressed: () => _handleActionButtonTap(context),
+                    child: BookingModeBuilder(
+                      builder: (context, mode) => BookNowButton(
+                        label: data.isResidence
+                            ? mode.ctaLabel
+                            : data.actionButtonLabel,
+                        compact: false,
+                        onPressed: () => _handleActionButtonTap(context),
+                      ),
                     ),
                   ),
                 ],

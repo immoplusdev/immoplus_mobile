@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/config/injection.dart';
+import 'dart:async';
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
 import 'package:immoplus/app/core/error/error_feedback.dart';
 import 'package:immoplus/app/core/error/app_error.dart';
 import 'package:immoplus/app/core/error/error_context.dart';
@@ -40,6 +43,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   final AnalyticsService analyticsService;
 
   void _navigateAfterRegistration() {
+    unawaited(getIt<BookingModeCubit>().refresh());
     final context = NavigationService.navigatorKey.currentContext!;
     final redirectData = authRedirectService.get();
     if (redirectData != null) {

@@ -50,6 +50,8 @@ import 'package:immoplus/app/data/repositories/alert_repository.dart' as _i443;
 import 'package:immoplus/app/data/repositories/banner_repository.dart' as _i39;
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart'
     as _i398;
+import 'package:immoplus/app/data/repositories/booking_mode_repository.dart'
+    as _i139;
 import 'package:immoplus/app/data/repositories/furniture_repository.dart'
     as _i976;
 import 'package:immoplus/app/data/repositories/home_feed_repository.dart'
@@ -72,6 +74,7 @@ import 'package:immoplus/app/data/repositories/suggest_repository.dart'
     as _i743;
 import 'package:immoplus/app/data/repositories/user_preference_repository.dart'
     as _i715;
+import 'package:immoplus/app/data/repositories/wallet_repository.dart' as _i206;
 import 'package:immoplus/app/design_system/feedback/easy_loading_handler.dart'
     as _i725;
 import 'package:immoplus/app/features/ai_assistant/services/chat_history_service.dart'
@@ -82,6 +85,8 @@ import 'package:immoplus/app/features/booking/logic/booking_services.dart'
     as _i946;
 import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_cubit.dart'
     as _i527;
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart'
+    as _i437;
 import 'package:immoplus/app/features/estate_detail/cubit/estate_cubit.dart'
     as _i488;
 import 'package:immoplus/app/features/filter/logic/filter_cubit.dart' as _i79;
@@ -119,6 +124,9 @@ import 'package:immoplus/app/features/suggest/logic/suggest_cubit.dart'
 import 'package:immoplus/app/features/user_preference/cubit/user_preference_cubit.dart'
     as _i57;
 import 'package:immoplus/app/features/visits/logic/visit_cubit.dart' as _i745;
+import 'package:immoplus/app/features/wallet/logic/wallet_cubit.dart' as _i198;
+import 'package:immoplus/app/features/wallet/logic/withdrawal_cubit.dart'
+    as _i869;
 import 'package:immoplus/app/logic/ads/ads_cubit.dart' as _i448;
 import 'package:immoplus/app/logic/authentification/delete_account_cubit.dart'
     as _i636;
@@ -237,8 +245,12 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i568.RatingRepository>(
         () => _i568.RatingRepository(gh<_i361.Dio>()));
+    gh.factory<_i139.BookingModeRepository>(
+        () => _i139.BookingModeRepository(gh<_i361.Dio>()));
     gh.factory<_i715.UserPreferenceRepository>(
         () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
+    gh.factory<_i206.WalletRepository>(
+        () => _i206.WalletRepository(gh<_i361.Dio>()));
     gh.lazySingleton<_i342.ChatHistoryService>(
         () => _i342.ChatHistoryService(gh<_i361.Dio>()));
     gh.factory<_i880.ReverseSearchRepository>(
@@ -249,6 +261,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i184.KycRepository>(),
           gh<_i1058.AnalyticsService>(),
         ));
+    gh.factory<_i198.WalletCubit>(
+        () => _i198.WalletCubit(gh<_i206.WalletRepository>()));
+    gh.factory<_i869.WithdrawalCubit>(
+        () => _i869.WithdrawalCubit(gh<_i206.WalletRepository>()));
     gh.factory<_i610.PollRepository>(() => _i610.PollRepository(
           gh<_i361.Dio>(),
           gh<_i639.DeviceIdService>(),
@@ -280,6 +296,8 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i143.ResidenceRepository>(),
               gh<_i22.SessionManager>(),
             ));
+    gh.lazySingleton<_i437.BookingModeCubit>(
+        () => _i437.BookingModeCubit(gh<_i139.BookingModeRepository>()));
     gh.lazySingleton<_i640.NotificationService>(() => _i640.NotificationService(
           gh<_i511.PushProvider>(),
           gh<_i22.SessionManager>(),

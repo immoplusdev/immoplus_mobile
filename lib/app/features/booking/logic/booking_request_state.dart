@@ -1,3 +1,4 @@
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement.dart';
 import 'package:immoplus/app/core/error/app_error.dart';
 import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -22,6 +23,8 @@ class BookingRequestState with _$BookingRequestState {
       EstimateCostModel estimateCost) = RECEIVE_ESTIMATE_COST;
   const factory BookingRequestState.receiveBooking(
       ReservationResponse reservationResponse) = RECEIVE_BOOKING;
+  const factory BookingRequestState.receivePaymentRequirement(
+      PaymentRequirement requirement) = RECEIVE_PAYMENT_REQUIREMENT;
   const factory BookingRequestState.kycRequired({KycSessionModel? kycSession}) =
       KYC_REQUIRED;
   const factory BookingRequestState.error(

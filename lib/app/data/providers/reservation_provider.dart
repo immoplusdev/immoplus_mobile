@@ -3,6 +3,8 @@ import 'package:retrofit/retrofit.dart';
 
 import '../models/remote/reservations/failure_reasons/motif_echec_reponse_model.dart';
 import '../models/remote/reservations/failure_reasons/motifs_echec_response.dart';
+import '../models/remote/reservations/payment_requirement.dart';
+import '../models/remote/reservations/payment_requirement_body.dart';
 import '../models/remote/reservations/reservation_request_body.dart';
 import '../models/remote/reservations/reservation_response.dart';
 import '../models/remote/reservations/reservations_collection.dart';
@@ -32,6 +34,11 @@ abstract class ReservationProvider {
   @POST("/v2/reservations")
   Future<ReservationResponse> createBookings(
       @Body() ReservationRequestBody body);
+
+  /// Aperçu du paiement demandé pour un séjour (estimation serveur).
+  @POST("/reservations/action/payment-requirement")
+  Future<PaymentRequirementResponse> getPaymentRequirement(
+      @Body() PaymentRequirementBody body);
 
   @GET("/reservations/data/residence/owner/{id}")
   Future<ReservationsCollection> getBookingsOwner(

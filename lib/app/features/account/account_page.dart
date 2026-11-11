@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/wallet/pages/wallet_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -347,6 +348,20 @@ class _AccountPageState extends State<AccountPage> {
       delegate: SliverChildListDelegate([
         SettingsTile(
           shape: SettingsTile.shapeFirst,
+          leading: _iconLeading(
+              Icon(Iconsax.wallet_3, size: 20, color: _kIconColor)),
+          title: 'Mon coffre',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: AppTypography.bodyLarge.copyWith(
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(WalletPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(
               Icon(CupertinoIcons.person, size: 20, color: _kIconColor)),
           title: 'Informations personnelles',

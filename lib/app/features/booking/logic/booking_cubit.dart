@@ -1,3 +1,9 @@
+import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
+import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
+import 'package:immoplus/app/data/models/remote/reservations/dates_reservation_model.dart';
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement_body.dart';
 import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:async';
@@ -106,6 +112,33 @@ class BookingCubit extends Cubit<BookingRequestState> {
     }
   }
 
+  /// Mode `PAY_NOW` : montant dû maintenant (acompte ou total) calculé par le
+  /// serveur pour ces dates. Estimation seulement : tout est recalculé à la
+  /// création de la réservation.
+  previewPaymentRequirement({
+    required String residenceId,
+    required List<DateTime> dates,
+  }) async {
+    emit(const LOADING_BOOKING());
+    try {
+      final requirement = await residenceRepository.getPaymentRequirement(
+        body: PaymentRequirementBody(
+          residence: residenceId,
+          datesReservation:
+              dates.map((date) => DatesReservationModel(date: date)).toList(),
+        ),
+      );
+      emit(BookingRequestState.receivePaymentRequirement(requirement));
+    } catch (e) {
+      emit(const INITIAL_BOOKING());
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.paymentRequirement,
+      ));
+    }
+  }
+
   orderBooking({
     required ReservationRequestBody body,
     required int amount,
@@ -124,13 +157,37 @@ class BookingCubit extends Cubit<BookingRequestState> {
       );
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
+
+      // Client en paiement direct : le serveur crée la réservation en attente
+      // de paiement, sans demande au propriétaire. On décide d'après sa
+      // réponse (et non d'après le mode local) pour ne jamais diverger.
+      final reservation = reservationResponse.data;
+      final isDirectPayment =
+          reservation.statusEnum == StatusReservation.enAttentePaiementClient &&
+              reservation.paymentRequirement?.isPaymentDue == true;
+
+      final context = NavigationService.navigatorKey.currentContext;
+      if (isDirectPayment) {
+        if (context != null) {
+          context.pushNamed(
+            OperatorsSelectorPage.name,
+            extra: PaymentPageAdapter(
+              itemId: reservation.id,
+              collection: ProductType.reservations.name,
+              amount: reservation.paymentRequirement!.amountDueNow.toInt(),
+              summary: PaymentSummary.fromReservation(reservation),
+            ),
+          );
+        }
+        return;
+      }
+
       ToastUtils.showSuccess(
         description:
             "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
       );
 
       // Navigue vers ReservationEngagementFrame
-      final context = NavigationService.navigatorKey.currentContext;
       if (context != null) {
         final ownerName = reservationResponse.data.residence.nom;
         context.pushNamed(

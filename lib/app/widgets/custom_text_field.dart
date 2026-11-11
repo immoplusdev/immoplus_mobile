@@ -29,6 +29,7 @@ class CustomTextField extends StatefulWidget {
     this.onChanged,
     this.enabledBorder,
     this.focusedBorder,
+    this.errorBorder,
     this.contentPadding,
     this.readOnly = false,
     this.bottomPadding,
@@ -58,6 +59,7 @@ class CustomTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
+  final InputBorder? errorBorder;
   final EdgeInsets? contentPadding;
   final bool readOnly;
   final double? bottomPadding;
@@ -160,6 +162,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 borderRadius: BorderRadius.circular(radiusButton),
                 borderSide: BorderSide.none,
               ),
+          errorBorder: widget.errorBorder,
+          focusedErrorBorder: widget.errorBorder,
           enabledBorder: widget.enabledBorder ??
               OutlineInputBorder(
                 borderRadius: BorderRadius.circular(radiusButton),
