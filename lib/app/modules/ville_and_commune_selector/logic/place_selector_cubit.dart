@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus/app/data/models/remote/configs/commune_collection.dart';
 import 'package:immoplus/app/data/models/remote/configs/ville_collection.dart';
@@ -14,6 +16,7 @@ class PlaceSelectorCubit extends Cubit<RequestState> {
           await ConfigRepository().getVilles(page: page, perPage: perPage);
       emit(RequestState.villes(data: villeCollection.data ?? []));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
       emit(const REQUEST_INITIAL());
     }
   }
@@ -26,6 +29,7 @@ class PlaceSelectorCubit extends Cubit<RequestState> {
 
       emit(RequestState.communes(data: communeCollection.data));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
       emit(const REQUEST_INITIAL());
     }
   }

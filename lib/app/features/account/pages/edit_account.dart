@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:immoplus/app/utils/phone_number_handler.dart';
 import 'dart:developer';
 import 'dart:io';
 
@@ -319,7 +320,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
                                       : null,
                               avatar:
                                   avatar ?? sessionManager.currentUser!.avatar,
-                              phoneNumber: phoneNumber,
+                              phoneNumber: PhoneNumberHandler
+                                  .formatPhoneNumber(phoneNumber),
                             );
 
                             context.read<LoginCubit>().updateUserData(

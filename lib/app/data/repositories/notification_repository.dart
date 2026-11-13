@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus/app/core/network/exceptions/request_response_exeption.dart';
@@ -27,13 +28,13 @@ class NotificationRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load notifications: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } on RequestResponseExeption catch (requestResponseExeption) {
       AppFeedback.showError(requestResponseExeption.toString());
       throw Exception('Failed : ${requestResponseExeption.toString()}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load notifications: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -48,7 +49,7 @@ class NotificationRepository {
           'Failed to load notification detail: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load notification detail: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -63,7 +64,7 @@ class NotificationRepository {
           'Failed to mark notification as read: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to mark notification as read: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -77,7 +78,7 @@ class NotificationRepository {
           'Failed to mark all notifications as read: ${dioError.message}');
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to mark all notifications as read: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -88,10 +89,10 @@ class NotificationRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to delete notification: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to delete notification: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -105,10 +106,10 @@ class NotificationRepository {
       return 0;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to get unread count: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to get unread count: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 

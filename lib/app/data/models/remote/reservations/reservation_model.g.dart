@@ -49,6 +49,10 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
           ? const ProprietaireModel()
           : ProprietaireModel.fromJson(
               json['proprietaire'] as Map<String, dynamic>),
+      paymentRequirement: json['paymentRequirement'] == null
+          ? null
+          : PaymentRequirement.fromJson(
+              json['paymentRequirement'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ReservationModelImplToJson(
@@ -79,6 +83,7 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
       'residence': instance.residence,
       'client': instance.client,
       'proprietaire': instance.proprietaire,
+      'paymentRequirement': instance.paymentRequirement,
     };
 
 const _$RatingStatusEnumMap = {

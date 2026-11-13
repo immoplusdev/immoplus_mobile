@@ -1,4 +1,15 @@
-import 'package:flutter/foundation.dart';
+import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
+import 'package:immoplus/app/data/models/remote/reservations/status_reservation.dart';
+import 'package:immoplus/app/data/models/remote/reservations/dates_reservation_model.dart';
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement_body.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'dart:async';
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
+import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/core/exceptions/active_reservation_exception.dart';
@@ -13,7 +24,9 @@ import 'package:immoplus/app/features/fast-track-book/reservation_engagement.dar
 import 'package:immoplus/app/features/fast-track-book/reservation_pending_smart.dart';
 import 'package:immoplus/app/services/navigation_service.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/data/repositories/kyc_repository.dart';
 import 'package:immoplus/main.dart';
 import 'package:injectable/injectable.dart';
@@ -49,7 +62,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
           await residenceRepository.getReservation(id: id);
       emit(BookingRequestState.receiveBooking(reservationModel));
     } catch (e) {
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.bookingLoad,
+      ));
     }
   }
 
@@ -62,7 +79,11 @@ class BookingCubit extends Cubit<BookingRequestState> {
       emit(BookingRequestState.receiveEstimation(reservationModel));
     } catch (e) {
       emit(INITIAL_BOOKING());
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.priceEstimation,
+      ));
     }
   }
 
@@ -83,7 +104,38 @@ class BookingCubit extends Cubit<BookingRequestState> {
       emit(BookingRequestState.receiveEstimateCost(estimation));
     } catch (e) {
       emit(const INITIAL_BOOKING());
-      emit(BookingRequestState.error(e.toString()));
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.priceEstimation,
+      ));
+    }
+  }
+
+  /// Mode `PAY_NOW` : montant dû maintenant (acompte ou total) calculé par le
+  /// serveur pour ces dates. Estimation seulement : tout est recalculé à la
+  /// création de la réservation.
+  previewPaymentRequirement({
+    required String residenceId,
+    required List<DateTime> dates,
+  }) async {
+    emit(const LOADING_BOOKING());
+    try {
+      final requirement = await residenceRepository.getPaymentRequirement(
+        body: PaymentRequirementBody(
+          residence: residenceId,
+          datesReservation:
+              dates.map((date) => DatesReservationModel(date: date)).toList(),
+        ),
+      );
+      emit(BookingRequestState.receivePaymentRequirement(requirement));
+    } catch (e) {
+      emit(const INITIAL_BOOKING());
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.paymentRequirement,
+      ));
     }
   }
 
@@ -91,6 +143,7 @@ class BookingCubit extends Cubit<BookingRequestState> {
     required ReservationRequestBody body,
     required int amount,
     bool force = false,
+    ResidenceEntryPoint? entryPoint,
   }) async {
     emit(const LOADING_BOOKING());
     try {
@@ -100,16 +153,41 @@ class BookingCubit extends Cubit<BookingRequestState> {
         itemId: reservationResponse.data.id,
         itemName: reservationResponse.data.residence.nom,
         value: reservationResponse.data.montantTotalReservation,
+        entryPoint: entryPoint,
       );
       emit(BookingRequestState.receiveBooking(reservationResponse));
       ReservationPendingBanner.refresh();
+
+      // Client en paiement direct : le serveur crée la réservation en attente
+      // de paiement, sans demande au propriétaire. On décide d'après sa
+      // réponse (et non d'après le mode local) pour ne jamais diverger.
+      final reservation = reservationResponse.data;
+      final isDirectPayment =
+          reservation.statusEnum == StatusReservation.enAttentePaiementClient &&
+              reservation.paymentRequirement?.isPaymentDue == true;
+
+      final context = NavigationService.navigatorKey.currentContext;
+      if (isDirectPayment) {
+        if (context != null) {
+          context.pushNamed(
+            OperatorsSelectorPage.name,
+            extra: PaymentPageAdapter(
+              itemId: reservation.id,
+              collection: ProductType.reservations.name,
+              amount: reservation.paymentRequirement!.amountDueNow.toInt(),
+              summary: PaymentSummary.fromReservation(reservation),
+            ),
+          );
+        }
+        return;
+      }
+
       ToastUtils.showSuccess(
         description:
             "Votre demande de réservation a été envoyée. Vous recevrez une confirmation pour le paiement.",
       );
 
       // Navigue vers ReservationEngagementFrame
-      final context = NavigationService.navigatorKey.currentContext;
       if (context != null) {
         final ownerName = reservationResponse.data.residence.nom;
         context.pushNamed(
@@ -117,10 +195,15 @@ class BookingCubit extends Cubit<BookingRequestState> {
           extra: ReservationEngagementFrame(
             ownerName: ownerName,
             reservationId: reservationResponse.data.id,
-            montantTotal: reservationResponse.data.montantTotalReservation,
+            montantTotal: reservationResponse.data.montantAPayer,
             initialState: ReservationBannerState.waitingOwner,
           ),
         );
+        // La réponse du propriétaire arrive par notification.
+        unawaited(NotificationPermissionService.promptIfNeeded(
+          moment: NotificationPromptMoment.bookingRequested,
+          delay: const Duration(seconds: 1),
+        ));
       }
     } on ActiveReservationException catch (e) {
       emit(const BookingRequestState.initial());
@@ -151,15 +234,29 @@ class BookingCubit extends Cubit<BookingRequestState> {
               extra: ReservationEngagementFrame(
                 ownerName: existing.data.residence.nom,
                 reservationId: existing.data.id,
-                montantTotal: existing.data.montantTotalReservation,
+                montantTotal: existing.data.montantAPayer,
                 initialState: ReservationBannerState.waitingOwner,
               ),
             );
           }
         },
       );
-    } catch (e) {
-      emit(BookingRequestState.error(e.toString()));
+    } catch (e, stack) {
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'BookingFormular',
+        feature: 'booking_creation',
+        errorType: 'OrderBookingFailure',
+        additionalContext: {
+          'residence_id': body.residence,
+        },
+      );
+      emit(BookingRequestState.error(
+        e.toString(),
+        appError: AppErrorMapper.from(e),
+        context: ErrorContext.bookingSubmission,
+      ));
     }
   }
 

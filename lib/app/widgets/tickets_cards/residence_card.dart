@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
@@ -132,7 +133,10 @@ class _ResidenceCardState extends State<ResidenceCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Gap(10),
-                          SmallButton(text: "Réserver"),
+                          BookingModeBuilder(
+                            builder: (context, mode) =>
+                                SmallButton(text: mode.ctaLabel),
+                          ),
                         ],
                       ),
                     ),

@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,10 +75,11 @@ class ScopeFeedCubit extends Cubit<ScopeFeedState> {
         filtersData: filtersData,
       ));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad, retry: fetch);
       log('ScopeFeedCubit (${state.scope.value}): Error fetching feed: $e');
       emit(state.copyWith(
         status: ScopeFeedStatus.error,
-        errorMessage: e.toString(),
+        errorMessage: ErrorMessages.messageOf(e, ErrorContext.feedLoad),
       ));
     }
   }
@@ -113,10 +117,11 @@ class ScopeFeedCubit extends Cubit<ScopeFeedState> {
         totalCount: response.totalCount,
       ));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad, retry: search);
       log('ScopeFeedCubit (${state.scope.value}): Error searching: $e');
       emit(state.copyWith(
         status: ScopeFeedStatus.error,
-        errorMessage: e.toString(),
+        errorMessage: ErrorMessages.messageOf(e, ErrorContext.feedLoad),
       ));
     }
   }

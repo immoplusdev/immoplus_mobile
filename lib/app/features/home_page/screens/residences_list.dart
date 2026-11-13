@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -469,6 +470,7 @@ class ResidencesHorizontalListByLocation extends StatelessWidget {
             separatorBuilder: (context, index) => const Gap(12),
             itemBuilder: (context, index) {
               return CompactResidenceCard(
+                entryPoint: ResidenceEntryPoint.homeFeed,
                 residence: residences[index],
                 showRating: false,
               );

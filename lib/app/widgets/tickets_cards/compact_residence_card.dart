@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,12 +24,14 @@ class CompactResidenceCard extends StatefulWidget {
     this.showRating = true,
     this.showName = true,
     this.showLocation = true,
+    this.entryPoint,
   });
 
   final ResidenceModel residence;
   final bool showRating;
   final bool showName;
   final bool showLocation;
+  final ResidenceEntryPoint? entryPoint;
 
   @override
   State<CompactResidenceCard> createState() => _CompactResidenceCardState();
@@ -61,7 +64,10 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         onTap: () {
           Constantes.tempPage = Utils.getCurrentLocation();
           context.push(
-            ResidencePage.route(widget.residence.id),
+            ResidencePage.route(
+              widget.residence.id,
+              entryPoint: widget.entryPoint,
+            ),
             extra: widget.residence,
           );
         },

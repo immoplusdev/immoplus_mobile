@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart'; // ← AJOUTER
@@ -27,7 +29,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _getData({required BuildContext context}) async {
     // ✅ Initialiser les services (toujours nécessaire)
-    ConfigModel configModel = await AuthRepository().getConfig();
+    final ConfigModel configModel;
+    try {
+      configModel = await AuthRepository().getConfig();
+    } catch (e) {
+      // Lecture seule : sûr à relancer.
+      ErrorFeedback.show(
+        e,
+        context: ErrorContext.appStartup,
+        retry: () => _getData(context: context),
+      );
+      return;
+    }
     sessionManager.configModel = configModel;
     await sessionManager.getCurrentUser();
 

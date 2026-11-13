@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:immoplus/app/core/network/interceptors/phone_number_interceptor.dart';
 import 'package:immoplus/app/core/network/interceptors/request_interceptor.dart';
 import 'package:immoplus/app/core/network/interceptors/retry_interceptor.dart';
 import 'package:immoplus/app/utils/request_path.dart';
@@ -23,6 +24,7 @@ abstract class DioConfig {
         }));
     dio.interceptors.addAll([
       authInterceptor,
+      PhoneNumberInterceptor(),
       requestInterceptor,
       RetryInterceptor(dio: dio),
       errorInterceptor,

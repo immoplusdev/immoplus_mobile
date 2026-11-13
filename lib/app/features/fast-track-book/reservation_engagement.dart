@@ -1,3 +1,4 @@
+import 'package:immoplus/app/data/models/remote/reservations/reservation_model.dart';
 import 'dart:developer';
 
 import 'package:immoplus/app/design_system/design_system.dart';
@@ -206,7 +207,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
       }
 
       // Met à jour le montant frais
-      _montantTotal = reservation.montantTotalReservation;
+      _montantTotal = reservation.montantAPayer;
 
       // Met à jour le notifier (pour cohérence) + état local
       ReservationPendingBanner.bannerStateNotifier.value = newState;

@@ -1,5 +1,9 @@
 library;
 
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
+import 'package:immoplus/app/core/services/onboarding_completion_tracker.dart';
+import 'dart:async';
+import 'package:immoplus/app/core/services/notification_permission_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -56,10 +60,21 @@ class _HomePageState extends State<HomePage> {
     }();
     _scrollController = ScrollController()..addListener(_handleScrollChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      unawaited(OnboardingCompletionTracker.logIfPending());
+      if (getIt<SessionManager>().currentUser != null) {
+        unawaited(getIt<BookingModeCubit>().refresh());
+      }
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
       if (mounted) {
         await context.read<HomePageCubit>().syncUserPreferences();
+      }
+      if (mounted) {
+        unawaited(NotificationPermissionService.promptIfNeeded(
+          context: context,
+          moment: NotificationPromptMoment.home,
+          delay: const Duration(seconds: 3),
+        ));
       }
     });
     super.initState();

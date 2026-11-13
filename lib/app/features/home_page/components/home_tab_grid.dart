@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/enums/analytics/home_grid_tab.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'dart:math' as math;
 
@@ -79,6 +81,7 @@ class HomeTabGridRowTwo extends StatelessWidget {
 List<Widget> _buildCards(BuildContext context) {
   return [
     _HomeTabCard(
+      tab: HomeGridTab.stay,
       imagePath: 'assets/img/onglets/sejour.png',
       labelLine1: 'Trouver un',
       labelLine2: 'Séjour',
@@ -94,6 +97,7 @@ List<Widget> _buildCards(BuildContext context) {
       ),
     ),
     _HomeTabCard(
+      tab: HomeGridTab.rent,
       imagePath: 'assets/img/onglets/logement.png',
       labelLine1: 'Trouver un',
       labelLine2: 'Logement',
@@ -109,6 +113,7 @@ List<Widget> _buildCards(BuildContext context) {
       ),
     ),
     _HomeTabCard(
+      tab: HomeGridTab.hotel,
       imagePath: 'assets/img/onglets/hotel.png',
       labelLine1: 'Trouver un',
       labelLine2: 'Hôtel',
@@ -118,6 +123,7 @@ List<Widget> _buildCards(BuildContext context) {
       onTap: () => context.push(HotelSearchPage.routePath),
     ),
     _HomeTabCard(
+      tab: HomeGridTab.buy,
       imagePath: 'assets/img/onglets/bien.png',
       labelLine1: 'Acheter un',
       labelLine2: 'Bien',
@@ -133,6 +139,7 @@ List<Widget> _buildCards(BuildContext context) {
       ),
     ),
     _HomeTabCard(
+      tab: HomeGridTab.map,
       imagePath: 'assets/img/onglets/carte.png',
       labelLine1: 'Explorer la',
       labelLine2: 'Carte',
@@ -142,6 +149,7 @@ List<Widget> _buildCards(BuildContext context) {
       onTap: () => context.push('/map'),
     ),
     _HomeTabCard(
+      tab: HomeGridTab.move,
       imagePath: 'assets/img/onglets/demenager.png',
       labelLine1: 'Je veux',
       labelLine2: 'Déménager',
@@ -168,6 +176,7 @@ List<Widget> _buildCards(BuildContext context) {
 
 class _HomeTabCard extends StatelessWidget {
   const _HomeTabCard({
+    required this.tab,
     required this.imagePath,
     required this.labelLine1,
     required this.labelLine2,
@@ -177,6 +186,7 @@ class _HomeTabCard extends StatelessWidget {
     required this.onTap,
   });
 
+  final HomeGridTab tab;
   final String imagePath;
   final String labelLine1;
   final String labelLine2;
@@ -192,7 +202,10 @@ class _HomeTabCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        getIt<AnalyticsService>().logHomeTabTapped(tab);
+        onTap?.call();
+      },
       borderRadius: BorderRadius.circular(13),
       child: Container(
         width: _width,

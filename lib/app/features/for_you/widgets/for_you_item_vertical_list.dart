@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -134,8 +135,10 @@ class _ForYouItemVerticalListState extends State<ForYouItemVerticalList> {
               final residence = entry.asResidence!;
               return ForYouVerticalCard.fromResidence(
                 residence: residence,
-                onTap: () =>
-                    context.push(ResidencePage.route(residence.residenceId)),
+                onTap: () => context.push(ResidencePage.route(
+                  residence.residenceId,
+                  entryPoint: ResidenceEntryPoint.homeFeed,
+                )),
               );
             },
           ),

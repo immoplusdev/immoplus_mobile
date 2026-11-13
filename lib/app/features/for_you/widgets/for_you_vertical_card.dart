@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -125,7 +126,12 @@ class ForYouVerticalCard extends StatelessWidget {
           onTap: onTap ??
               () {
                 context.push(
-                  isResidence ? ResidencePage.route(id) : EstatePage.route(id),
+                  isResidence
+                      ? ResidencePage.route(
+                          id,
+                          entryPoint: ResidenceEntryPoint.homeFeed,
+                        )
+                      : EstatePage.route(id),
                 );
               },
           child: Column(

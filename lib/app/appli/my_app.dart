@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/utils/list_bloc.dart';
 import 'package:immoplus/supported_locales.dart';
@@ -36,6 +37,7 @@ class _MyAppState extends State<MyApp> {
 
   void _trackDeepLinkOnColdStart() {
     final uri = AppRouter.router.routeInformationProvider.value.uri;
+    getIt<CrashlyticsService>().log('Cold start link: ${uri.path}');
     if (uri.queryParameters.containsKey('utm_source')) {
       getIt<AnalyticsService>().logDeepLinkOpened(
         linkUrl: uri.toString(),
@@ -48,6 +50,7 @@ class _MyAppState extends State<MyApp> {
 
   void _onRouteChanged() {
     final uri = AppRouter.router.routeInformationProvider.value.uri;
+    getIt<CrashlyticsService>().log('Route changed link: ${uri.path}');
     if (uri.queryParameters.containsKey('utm_source')) {
       getIt<AnalyticsService>().logDeepLinkOpened(
         linkUrl: uri.toString(),

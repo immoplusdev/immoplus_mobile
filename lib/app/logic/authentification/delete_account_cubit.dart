@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:bloc/bloc.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/network/utils/session_manager.dart';
@@ -48,11 +51,10 @@ class DeleteAccountCubit extends Cubit<DeleteAccountState> {
         );
       }
     } catch (e) {
-      emit(DeleteAccountState.error(e.toString()));
-      ToastUtils.showError(
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la suppression du compte",
-      );
+      ErrorFeedback.show(e, context: ErrorContext.accountDeletion);
+      emit(DeleteAccountState.error(
+        ErrorMessages.messageOf(e, ErrorContext.accountDeletion),
+      ));
     }
   }
 }

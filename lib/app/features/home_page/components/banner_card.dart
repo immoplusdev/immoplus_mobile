@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -24,6 +26,7 @@ class BannerCard extends StatefulWidget {
 class _BannerCardState extends State<BannerCard> {
   int _currentIndex = 0;
   bool _isDismissed = false;
+  String? _lastViewedKey;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
 
@@ -42,6 +45,8 @@ class _BannerCardState extends State<BannerCard> {
         if (activeBanners.isEmpty || _isDismissed) {
           return const SizedBox.shrink(key: ValueKey('banner_hidden'));
         }
+
+        _trackView(activeBanners);
 
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 400),
@@ -98,6 +103,21 @@ class _BannerCardState extends State<BannerCard> {
         );
       },
     );
+  }
+
+  /// Une impression par bannière affichée (y compris à chaque changement de
+  /// slide) ; les reconstructions du widget ne la répètent pas.
+  void _trackView(List<BannerModel> banners) {
+    if (_currentIndex < 0 || _currentIndex >= banners.length) return;
+    final banner = banners[_currentIndex];
+    final key = '${banner.id}_$_currentIndex';
+    if (key == _lastViewedKey) return;
+    _lastViewedKey = key;
+    final position = _currentIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      getIt<AnalyticsService>().logBannerViewed(banner, position: position);
+    });
   }
 
   Color _getBackgroundColor(List<BannerModel> apiBanners) {

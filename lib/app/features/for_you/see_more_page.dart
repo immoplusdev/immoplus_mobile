@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -83,6 +86,7 @@ class _SeeMorePageState extends State<SeeMorePage> {
         _pagingController.appendLastPage(items);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
       _pagingController.error = error;
     }
   }
@@ -143,7 +147,8 @@ class _SeeMorePageState extends State<SeeMorePage> {
                   ),
                   itemBuilder: (context, item, index) => Padding(
                     padding: const EdgeInsets.only(bottom: 16),
-                    child: UnifiedPropertyCard(item: item),
+                    child: UnifiedPropertyCard(
+                        entryPoint: ResidenceEntryPoint.homeFeed, item: item),
                   ),
                 ),
               ),

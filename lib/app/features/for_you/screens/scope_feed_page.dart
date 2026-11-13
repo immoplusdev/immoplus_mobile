@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -225,8 +226,10 @@ class _ScopeFeedPageState extends State<ScopeFeedPage> {
                                   'Les moins chères',
                               onTap: (item) {
                                 if (widget.scope.isStay) {
-                                  context
-                                      .push(ResidencePage.route(item.bienId));
+                                  context.push(ResidencePage.route(
+                                    item.bienId,
+                                    entryPoint: ResidenceEntryPoint.homeFeed,
+                                  ));
                                 } else {
                                   context.push(EstatePage.route(item.bienId));
                                 }
@@ -400,7 +403,10 @@ class _ScopeFeedPageState extends State<ScopeFeedPage> {
       badge: item.badge,
       onTap: () {
         if (isResidence) {
-          context.push(ResidencePage.route(item.bienId));
+          context.push(ResidencePage.route(
+            item.bienId,
+            entryPoint: ResidenceEntryPoint.homeFeed,
+          ));
         } else {
           context.push(EstatePage.route(item.bienId));
         }

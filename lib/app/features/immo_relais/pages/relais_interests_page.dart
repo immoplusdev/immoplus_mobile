@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -63,9 +65,11 @@ class _RelaisInterestsPageState extends State<RelaisInterestsPage> {
         ),
       );
       _fetch();
-    } catch (_) {
-      if (mounted)
+    } catch (e) {
+      if (mounted &&
+          !ErrorFeedback.show(e, context: ErrorContext.relais)) {
         CustomPopup.showErrorToast(text: 'Impossible d\'envoyer votre réponse');
+      }
     }
   }
 

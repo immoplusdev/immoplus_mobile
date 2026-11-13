@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
@@ -133,14 +134,19 @@ class _ReverseSearchMapPageState extends State<ReverseSearchMapPage> {
   void _handleResidenceTap(String searchId, ResidenceModel residence,
       double? reverseSearchPrice, bool isImmediateBooking) {
     Constantes.tempPage = Utils.getCurrentLocation();
-    context.push(ResidencePage.route(residence.id), extra: {
-      'isImmediateBooking': isImmediateBooking,
-      'reverseSearchId': searchId,
-      'reverseSearchPrice': reverseSearchPrice,
-      'reverseSearchNights':
-          residence.reverseSearchNombreNuits ?? widget.request.nights,
-      'reverseSearchPrixParNuit': residence.reverseSearchPrixParNuit,
-    }).then((_) => _refreshLockStateFromServer(searchId));
+    context.push(
+        ResidencePage.route(
+          residence.id,
+          entryPoint: ResidenceEntryPoint.alert,
+        ),
+        extra: {
+          'isImmediateBooking': isImmediateBooking,
+          'reverseSearchId': searchId,
+          'reverseSearchPrice': reverseSearchPrice,
+          'reverseSearchNights':
+              residence.reverseSearchNombreNuits ?? widget.request.nights,
+          'reverseSearchPrixParNuit': residence.reverseSearchPrixParNuit,
+        }).then((_) => _refreshLockStateFromServer(searchId));
   }
 
   /// Revérifie l'état réel de la sélection au retour (verrou pas géré par ce cubit).

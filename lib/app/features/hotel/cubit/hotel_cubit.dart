@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../../../data/models/remote/hotel/hotel_reservation_request.dart';
@@ -41,7 +44,9 @@ class HotelCubit extends Cubit<HotelState> {
       );
       emit(HotelState.hotelsLoaded(hotels: response.data ?? []));
     } catch (e) {
-      emit(HotelState.error(message: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      emit(HotelState.error(
+          message: ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 
@@ -51,7 +56,9 @@ class HotelCubit extends Cubit<HotelState> {
       final response = await _hotelRepository.getHotel(id);
       emit(HotelState.hotelDetailLoaded(hotel: response));
     } catch (e) {
-      emit(HotelState.error(message: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      emit(HotelState.error(
+          message: ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 
@@ -61,7 +68,9 @@ class HotelCubit extends Cubit<HotelState> {
       final response = await _hotelRepository.getVilles();
       emit(HotelState.villesLoaded(villes: response));
     } catch (e) {
-      emit(HotelState.error(message: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      emit(HotelState.error(
+          message: ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 
@@ -77,7 +86,9 @@ class HotelCubit extends Cubit<HotelState> {
       );
       emit(HotelState.estimationLoaded(estimation: response));
     } catch (e) {
-      emit(HotelState.error(message: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.hotelBooking);
+      emit(HotelState.error(
+          message: ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 

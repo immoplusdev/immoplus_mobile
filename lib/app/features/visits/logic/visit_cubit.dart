@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +45,9 @@ class VisitCubit extends Cubit<VisitRequestState> {
           await bienImmobilierRepository.getVisit(id: id);
       emit(VisitRequestState.receiveId(reservationModel));
     } catch (e) {
-      emit(VisitRequestState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.visitRequest);
+      emit(VisitRequestState.error(
+          ErrorMessages.messageOf(e, ErrorContext.visitRequest)));
     }
   }
 
@@ -58,8 +63,10 @@ class VisitCubit extends Cubit<VisitRequestState> {
       );
       emit(VisitRequestState.receive(demandeVisitResponse.data));
     } catch (e, s) {
+      ErrorFeedback.show(e, context: ErrorContext.visitRequest);
       log(s.toString());
-      emit(VisitRequestState.error(e.toString()));
+      emit(VisitRequestState.error(
+          ErrorMessages.messageOf(e, ErrorContext.visitRequest)));
     } finally {
       CustomPopup.hideLoadingToast();
     }

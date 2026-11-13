@@ -1,6 +1,8 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
 import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/services/analytics_service.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/core/services/messaging_socket_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/reservation_socket_service.dart';
@@ -98,6 +100,7 @@ class SessionManager {
         print('Error unsubscribing push installation on logout: $e');
       }
       await clearSession();
+      getIt<BookingModeCubit>().reset();
       try {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('recent_hotel_searches');
@@ -124,6 +127,9 @@ class SessionManager {
         getIt<MessagingSocketService>().connect(user.accessToken);
         // Enregistre / actualise l'appareil auprès de FCM
         getIt<NotificationService>().suscribeCurrentUser();
+        if (user.userId != null) {
+          getIt<CrashlyticsService>().setUserId(user.userId!);
+        }
       }
     }
 

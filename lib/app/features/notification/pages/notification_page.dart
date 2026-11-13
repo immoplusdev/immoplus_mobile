@@ -61,7 +61,7 @@ class _NotificationsPageState extends State<NotificationsPage>
       }
     } catch (e) {
       log(e.toString(), name: 'NOTIFICATION_PAGING_ERROR');
-      showConnectionErrorDialog();
+      showConnectionErrorDialog(e);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class ResidencePage extends StatefulWidget {
     this.reverseSearchPrice,
     this.reverseSearchNights,
     this.reverseSearchPrixParNuit,
+    this.entryPoint,
   });
 
   final String idProduct;
@@ -51,11 +53,23 @@ class ResidencePage extends StatefulWidget {
   final double? reverseSearchPrice;
   final int? reverseSearchNights;
   final int? reverseSearchPrixParNuit;
+
+  /// Zone d'où la fiche a été ouverte (funnel de réservation).
+  final ResidenceEntryPoint? entryPoint;
   static String name = 'logment_page';
 
   static String routePath() => '/residence_detail/:idProduct';
 
-  static String route(String idProduct) => '/residence_detail/$idProduct';
+  static String route(String idProduct, {ResidenceEntryPoint? entryPoint}) {
+    final path = '/residence_detail/$idProduct';
+    if (entryPoint == null) return path;
+    return Uri(
+      path: path,
+      queryParameters: {
+        ResidenceEntryPoint.queryKey: entryPoint.analyticsValue
+      },
+    ).toString();
+  }
 
   @override
   State<ResidencePage> createState() => _ResidencePageState();
@@ -134,6 +148,7 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
                 itemLocation: data.adresse,
                 // itemLocation: '${data.ville} ${data.commune}'.trim(),
                 price: data.prixReservation.toDouble(),
+                entryPoint: widget.entryPoint,
               );
             });
           }
@@ -258,6 +273,7 @@ class _ResidencePageState extends State<ResidencePage> with ConnectivityMixin {
               reverseSearchPrice: widget.reverseSearchPrice,
               reverseSearchNights: widget.reverseSearchNights,
               reverseSearchPrixParNuit: widget.reverseSearchPrixParNuit,
+              entryPoint: widget.entryPoint,
             ),
           );
         }

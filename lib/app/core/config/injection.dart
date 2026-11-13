@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:immoplus/app/core/config/isar_config.dart';
 import 'package:immoplus/app/core/network/utils/env_handler.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
 import 'package:immoplus/app/core/services/remote_config_service.dart';
 import 'package:immoplus/main.dart';
@@ -35,17 +36,19 @@ Future<void> configureDependencies() async {
     rethrow;
   }
 
-  // 3. Initialize Firebase BEFORE GetIt.init() — AnalyticsService depends on it
+  // 3. Initialize Firebase BEFORE GetIt.init() — AnalyticsService and CrashlyticsService depend on it
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    ).timeout(const Duration(seconds: 10));
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ).timeout(const Duration(seconds: 10));
+    }
     talker.info('Firebase.initializeApp() done');
   } catch (e, stack) {
     talker.error('Firebase.initializeApp() failed: $e', e, stack);
   }
 
-  // 4. Now initialize GetIt (AnalyticsService will find Firebase available)
+  // 4. Now initialize GetIt (Services will find Firebase available)
   try {
     getIt.init();
     talker.info('getIt.init() done');
@@ -54,7 +57,15 @@ Future<void> configureDependencies() async {
     rethrow;
   }
 
-  // 5. Initialize EasyLoading
+  // 5. Initialize CrashlyticsService (consent & default non-sensitive context)
+  try {
+    await getIt<CrashlyticsService>().init();
+    talker.info('CrashlyticsService.init() done');
+  } catch (e, stack) {
+    talker.error('CrashlyticsService.init() failed: $e', e, stack);
+  }
+
+  // 6. Initialize EasyLoading
   try {
     await getIt<EasyLoadingHandler>()
         .init()
@@ -64,7 +75,7 @@ Future<void> configureDependencies() async {
     talker.error('EasyLoadingHandler.init() failed: $e', e, stack);
   }
 
-  // 6. Initialize Firebase Messaging in background (after Firebase)
+  // 7. Initialize Firebase Messaging in background (after Firebase)
   Future(() async {
     try {
       await getIt<NotificationService>()
@@ -77,7 +88,7 @@ Future<void> configureDependencies() async {
     }
   });
 
-  // 7. Initialize RemoteConfig in background
+  // 8. Initialize RemoteConfig in background
   Future(() async {
     try {
       await getIt<RemoteConfigService>()

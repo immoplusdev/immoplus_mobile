@@ -1,3 +1,9 @@
+import 'package:immoplus/app/features/wallet/data/wallet_models.dart';
+import 'package:immoplus/app/features/wallet/pages/withdrawal_request_page.dart';
+import 'package:immoplus/app/features/wallet/pages/wallet_page.dart';
+import 'package:immoplus/app/features/wallet/pages/wallet_transactions_page.dart';
+import 'package:immoplus/app/features/wallet/pages/withdrawal_success_page.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus/app/appli/home_page_wrapper.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
+import 'package:immoplus/app/core/services/crashlytics_service.dart';
 import 'package:immoplus/main.dart';
 import 'package:immoplus/app/core/type/auth_redirect_data.dart';
 import 'package:immoplus/app/data/enums/home_feed_scope.dart';
@@ -132,6 +139,7 @@ class AppRouter {
     initialLocation: '/',
     observers: [
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      CrashlyticsRouteObserver(getIt<CrashlyticsService>()),
     ],
     redirect: (context, state) async {
       talker.debug('GoRouter redirect - Location: ${state.uri}');
@@ -180,6 +188,28 @@ class AppRouter {
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,
         builder: (context, state) => const PaymentHistoryPage(),
+      ),
+      GoRoute(
+        path: WalletPage.routePath(),
+        name: WalletPage.name,
+        builder: (context, state) => const WalletPage(),
+      ),
+      GoRoute(
+        path: WithdrawalRequestPage.routePath(),
+        name: WithdrawalRequestPage.name,
+        builder: (context, state) =>
+            WithdrawalRequestPage(wallet: state.extra as WalletModel),
+      ),
+      GoRoute(
+        path: WithdrawalSuccessPage.routePath(),
+        name: WithdrawalSuccessPage.name,
+        builder: (context, state) =>
+            WithdrawalSuccessPage(summary: state.extra as WithdrawalSummary),
+      ),
+      GoRoute(
+        path: WalletTransactionsPage.routePath(),
+        name: WalletTransactionsPage.name,
+        builder: (context, state) => const WalletTransactionsPage(),
       ),
       // ShellRoute auth — sans navigatorKey, sans UI wrapper
       ShellRoute(
@@ -592,6 +622,9 @@ class AppRouter {
             reverseSearchPrice: reverseSearchPrice,
             reverseSearchNights: reverseSearchNights,
             reverseSearchPrixParNuit: reverseSearchPrixParNuit,
+            entryPoint: ResidenceEntryPoint.fromValue(
+              state.uri.queryParameters[ResidenceEntryPoint.queryKey],
+            ),
           );
         },
       ),

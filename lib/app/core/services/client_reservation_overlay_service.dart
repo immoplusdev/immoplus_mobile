@@ -95,7 +95,8 @@ class ClientReservationOverlayService {
             extra: PaymentPageAdapter(
               itemId: reservation.id,
               collection: ProductType.reservations.name,
-              amount: reservation.montantTotalReservation.toInt(),
+              amount: reservation.montantAPayer.toInt(),
+              summary: PaymentSummary.fromReservation(reservation),
             ),
           );
         },

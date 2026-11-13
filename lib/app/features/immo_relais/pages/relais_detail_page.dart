@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -92,10 +94,12 @@ class _RelaisDetailPageState extends State<RelaisDetailPage> {
         try {
           await getIt<RelaisRepository>().cancelRelais(_relais.id);
           if (mounted) context.pop(true);
-        } catch (_) {
-          if (mounted)
+        } catch (e) {
+          if (mounted &&
+              !ErrorFeedback.show(e, context: ErrorContext.relais)) {
             CustomPopup.showErrorToast(
                 text: "Impossible d'annuler cette demande");
+          }
         }
       },
     );

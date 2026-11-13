@@ -1,3 +1,4 @@
+import 'package:immoplus/app/core/services/analytics_service.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -80,7 +81,19 @@ class _HomePageWrapperState extends State<HomePageWrapper>
     }
   }
 
+  static const int _imatchTabIndex = 1;
   static const int _vivreTabIndex = 2;
+
+  /// Reels (« vivre ») et Imatch : mesure chaque tap, même sur l'onglet actif.
+  void _logTabTapped(int index) {
+    final analytics = getIt<AnalyticsService>();
+    switch (index) {
+      case _imatchTabIndex:
+        analytics.logTabImatchTapped();
+      case _vivreTabIndex:
+        analytics.logTabReelsTapped();
+    }
+  }
 
   void _fetchImatchBadge() {
     if (sessionManager.currentUser == null) return;
@@ -147,6 +160,7 @@ class _HomePageWrapperState extends State<HomePageWrapper>
   }
 
   void _onItemTapped({required int index, required PageState pageState}) {
+    _logTabTapped(index);
     if (_indexForState(pageState) == index) {
       return;
     }

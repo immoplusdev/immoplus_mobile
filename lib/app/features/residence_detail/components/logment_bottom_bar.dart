@@ -1,3 +1,7 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +40,11 @@ class LogmentBottomBar extends StatefulWidget {
     this.reverseSearchPrice,
     this.reverseSearchNights,
     this.reverseSearchPrixParNuit,
+    this.entryPoint,
   });
 
   final ResidenceModel residenceModel;
+  final ResidenceEntryPoint? entryPoint;
   final bool isImmediateBooking;
   final String? reverseSearchId;
   final double? reverseSearchPrice;
@@ -131,6 +137,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
       residenceId: widget.residenceModel.id,
       residenceName: widget.residenceModel.nom,
       price: price,
+      entryPoint: widget.entryPoint,
     );
 
     void execute() => unawaited(_lockAndPay(context, reverseSearchId, price));
@@ -168,8 +175,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
         ),
       );
     } catch (e) {
-      ToastUtils.showError(
-          description: e.toString().replaceAll('Exception: ', ''));
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
     } finally {
       if (mounted) setState(() => _isLocking = false);
     }
@@ -183,7 +189,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
       ToastUtils.showSuccess(description: 'Recherche annulée');
       if (mounted) setState(() => _activeReverseSearch = null);
     } catch (e) {
-      ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+      ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
     }
   }
 
@@ -229,6 +235,7 @@ class _LogmentBottomBarState extends State<LogmentBottomBar> {
         else
           StandardBookingBottomBar(
             residenceModel: widget.residenceModel,
+            entryPoint: widget.entryPoint,
             lockedElsewhere: _isLockedElsewhere ? _activeReverseSearch : null,
             onLockCancelled: () => setState(() => _activeReverseSearch = null),
           ),
@@ -244,11 +251,13 @@ class StandardBookingBottomBar extends StatelessWidget {
   const StandardBookingBottomBar({
     super.key,
     required this.residenceModel,
+    this.entryPoint,
     this.lockedElsewhere,
     this.onLockCancelled,
   });
 
   final ResidenceModel residenceModel;
+  final ResidenceEntryPoint? entryPoint;
 
   /// Recherche inversée verrouillée sur une autre résidence : bloque
   /// "Réserver" tant que l'utilisateur n'a pas annulé ou payé cette
@@ -340,7 +349,9 @@ class StandardBookingBottomBar extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
-              child: Text('Réserver'),
+              child: BookingModeBuilder(
+                builder: (context, mode) => Text(mode.ctaLabel),
+              ),
             ),
           ),
         ],
@@ -361,13 +372,17 @@ class StandardBookingBottomBar extends StatelessWidget {
       residenceId: residenceModel.id,
       residenceName: residenceModel.nom,
       price: residenceModel.prixReservation.toDouble(),
+      entryPoint: entryPoint,
     );
 
     void openBookingForm() {
       Navigator.push(
         context,
         CupertinoPageRoute(
-          builder: (_) => BookingFormularAction(residenceModel: residenceModel),
+          builder: (_) => BookingFormularAction(
+            residenceModel: residenceModel,
+            entryPoint: entryPoint,
+          ),
         ),
       );
     }
@@ -401,7 +416,7 @@ class StandardBookingBottomBar extends StatelessWidget {
           ToastUtils.showSuccess(description: 'Recherche annulée');
           onLockCancelled?.call();
         } catch (e) {
-          ToastUtils.showError(description: 'Erreur lors de l\'annulation');
+          ErrorFeedback.show(e, context: ErrorContext.reverseSearch);
         }
       },
     );

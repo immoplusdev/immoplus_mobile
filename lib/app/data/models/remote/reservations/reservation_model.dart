@@ -1,3 +1,4 @@
+import 'payment_requirement.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../residence/residence_model.dart';
 import 'client_model.dart';
@@ -36,6 +37,9 @@ class ReservationModel with _$ReservationModel {
     @Default(ResidenceModel()) ResidenceModel residence,
     @Default(ClientModel()) ClientModel client,
     @Default(ProprietaireModel()) ProprietaireModel proprietaire,
+
+    /// Exigence de paiement calculée par le serveur (réponse de création).
+    PaymentRequirement? paymentRequirement,
   }) = _ReservationModel;
 
   factory ReservationModel.fromJson(Map<String, dynamic> json) =>
@@ -45,6 +49,11 @@ class ReservationModel with _$ReservationModel {
 extension ReservationModelX on ReservationModel {
   StatusReservation? get statusEnum =>
       StatusReservation.fromString(statusReservation);
+
+  /// Montant réellement dû par le client (frais inclus). `montantPaye` porte
+  /// ce montant ; repli sur `montantTotalReservation` s'il est absent.
+  double get montantAPayer =>
+      montantPaye > 0 ? montantPaye.toDouble() : montantTotalReservation;
 
   bool get checkinNotValide => checkinValide != true;
   bool get isCheckinValide => checkinValide == true;

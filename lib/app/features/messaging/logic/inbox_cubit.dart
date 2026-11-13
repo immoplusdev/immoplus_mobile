@@ -1,3 +1,6 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_messages.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -41,7 +44,9 @@ class InboxCubit extends Cubit<InboxState> {
       _emitLoaded(conversations, counts, _rememberedType);
       _startListening();
     } catch (e) {
-      emit(InboxState.error(e.toString().replaceAll('Exception: ', '')));
+      ErrorFeedback.show(e, context: ErrorContext.messaging);
+      emit(
+          InboxState.error(ErrorMessages.messageOf(e, ErrorContext.messaging)));
     }
   }
 
@@ -88,7 +93,8 @@ class InboxCubit extends Cubit<InboxState> {
       if (stillCurrent is InboxLoaded) {
         emit(stillCurrent.copyWith(isRefreshing: false));
       } else {
-        emit(InboxState.error(e.toString().replaceAll('Exception: ', '')));
+        emit(InboxState.error(
+            ErrorMessages.messageOf(e, ErrorContext.messaging)));
       }
     }
   }

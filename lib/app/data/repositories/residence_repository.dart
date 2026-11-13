@@ -1,3 +1,6 @@
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement_body.dart';
+import 'package:immoplus/app/data/models/remote/reservations/payment_requirement.dart';
+import 'package:immoplus/app/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -39,11 +42,11 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -89,7 +92,7 @@ class ResidenceRepository {
       );
       return response.data;
     } on DioException catch (e) {
-      throw Exception('Erreur annulation: ${e.message}');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -114,7 +117,8 @@ class ResidenceRepository {
     try {
       final payload = <String, dynamic>{
         'reasonCode': reasonCode,
-        if (comment != null && comment.trim().isNotEmpty) 'comment': comment.trim(),
+        if (comment != null && comment.trim().isNotEmpty)
+          'comment': comment.trim(),
       };
       final response = await ReservationProvider(dioClient).submitMotifEchec(
         reservationId,
@@ -128,7 +132,8 @@ class ResidenceRepository {
   }
 
   /// Consulte la réponse au motif d'échec déjà renseigné pour l'acteur courant
-  Future<MotifEchecReponseModel?> getMotifEchecReponse(String reservationId) async {
+  Future<MotifEchecReponseModel?> getMotifEchecReponse(
+      String reservationId) async {
     try {
       final response = await ReservationProvider(dioClient)
           .getMotifEchecReponse(reservationId);
@@ -138,7 +143,7 @@ class ResidenceRepository {
         return null;
       }
       log('DioError getMotifEchecReponse: ${e.message}');
-      throw Exception('Erreur consultation réponse motif: ${e.message}');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -177,11 +182,11 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -194,11 +199,11 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -211,11 +216,11 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -226,10 +231,26 @@ class ResidenceRepository {
       return response.data as Map<String, dynamic>;
     } on DioException catch (dioError) {
       log('DioError (generer-qr-checkin): ${dioError.message}');
-      throw Exception('Failed to generate check-in QR: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error (generer-qr-checkin): $error');
-      throw Exception('Failed to generate check-in QR: $error');
+      throw AppErrorMapper.from(error);
+    }
+  }
+
+  /// Aperçu du paiement demandé pour ces dates (estimation du serveur).
+  Future<PaymentRequirement> getPaymentRequirement(
+      {required PaymentRequirementBody body}) async {
+    try {
+      final response =
+          await ReservationProvider(dioClient).getPaymentRequirement(body);
+      return response.data;
+    } on DioException catch (dioError) {
+      log('DioError (payment-requirement): ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
+    } catch (error) {
+      log('Error (payment-requirement): $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -253,10 +274,10 @@ class ResidenceRepository {
       //   }
       // }
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -293,12 +314,12 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -328,11 +349,11 @@ class ResidenceRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to search residences: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       log('Error: $error');
-      throw Exception('Failed to search residences: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -372,12 +393,12 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -411,12 +432,12 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -429,11 +450,11 @@ class ResidenceRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

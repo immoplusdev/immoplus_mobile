@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/wallet/pages/wallet_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -30,6 +31,8 @@ import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
 import 'package:immoplus/app/widgets/ads/ad_widget.dart';
 import 'package:immoplus/app/utils/contact_utils.dart';
+import 'package:flutter/foundation.dart';
+import 'package:immoplus/app/features/test/crashlytics_qa_test_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Design tokens — minimalist luxury, 2026
@@ -191,6 +194,8 @@ class _AccountPageState extends State<AccountPage> {
                     },
                   ),
                   _buildTermsTile(SettingsTile.shapeMiddle),
+                  if (!kReleaseMode)
+                    _buildCrashlyticsTestTile(SettingsTile.shapeMiddle),
                   _buildProBadgeTile(shape: SettingsTile.shapeLast),
                 ]),
               ),
@@ -344,6 +349,20 @@ class _AccountPageState extends State<AccountPage> {
         SettingsTile(
           shape: SettingsTile.shapeFirst,
           leading: _iconLeading(
+              Icon(Iconsax.wallet_3, size: 20, color: _kIconColor)),
+          title: 'Mon coffre',
+          titleColor: _kLabelColor,
+          trailingColor: _kTrailingColor,
+          titleStyle: AppTypography.bodyLarge.copyWith(
+            fontWeight: FontWeight.w500,
+            color: _kLabelColor,
+            height: 1.25,
+          ),
+          onTap: () => context.pushNamed(WalletPage.name),
+        ),
+        SettingsTile(
+          shape: SettingsTile.shapeMiddle,
+          leading: _iconLeading(
               Icon(CupertinoIcons.person, size: 20, color: _kIconColor)),
           title: 'Informations personnelles',
           titleColor: _kLabelColor,
@@ -360,6 +379,8 @@ class _AccountPageState extends State<AccountPage> {
         ),
         _buildCredentialsTile(),
         _buildTermsTile(SettingsTile.shapeMiddle),
+        if (!kReleaseMode)
+          _buildCrashlyticsTestTile(SettingsTile.shapeMiddle),
         SettingsTile(
           shape: SettingsTile.shapeLast,
           leading: _iconLeading(
@@ -577,6 +598,25 @@ class _AccountPageState extends State<AccountPage> {
         height: 1.25,
       ),
       onTap: _showTermsBottomSheet,
+    );
+  }
+
+  Widget _buildCrashlyticsTestTile(dynamic shape) {
+    if (kReleaseMode) return const SizedBox.shrink();
+    return SettingsTile(
+      shape: shape,
+      leading: _iconLeading(
+        const Icon(Iconsax.danger, size: 20, color: AppColors.red600),
+      ),
+      title: 'Crashlytics Test (DEV/QA)',
+      titleColor: AppColors.red600,
+      trailingColor: _kTrailingColor,
+      titleStyle: AppTypography.bodyLarge.copyWith(
+        fontWeight: FontWeight.w500,
+        color: AppColors.red600,
+        height: 1.25,
+      ),
+      onTap: () => CrashlyticsQaTestModal.show(context),
     );
   }
 

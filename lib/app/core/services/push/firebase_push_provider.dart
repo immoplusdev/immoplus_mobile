@@ -97,8 +97,8 @@ class FirebasePushProvider implements PushProvider {
       await androidPlugin?.createNotificationChannel(_androidChannel);
     }
 
-    // 3. Demander les permissions système
-    await requestPermission();
+    // 3. La permission système n'est plus demandée ici : elle l'est via le
+    // sheet d'activation (NotificationPermissionService) à des moments clés.
 
     // 4. Configurer la présentation au premier plan pour iOS
     await FirebaseMessaging.instance

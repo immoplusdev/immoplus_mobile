@@ -1,3 +1,5 @@
+import 'package:immoplus/app/core/error/error_feedback.dart';
+import 'package:immoplus/app/core/error/error_context.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -283,12 +285,18 @@ class _BecomeProFormPageState extends State<BecomeProFormPage> {
                             }
                           }
                         } catch (e) {
-                          AppDialog.info(
-                            barrierDismissible: true,
-                            content: "Erreur lors de l'envoi des fichiers.",
-                            icon: Text("Erreur"),
-                            textButton: "Compris",
-                          );
+                          // Erreur API présentée par le coordinateur ; sinon
+                          // (fichier illisible…) message local.
+                          if (!ErrorFeedback.show(
+                              e,
+                              context: ErrorContext.proUpgrade)) {
+                            AppDialog.info(
+                              barrierDismissible: true,
+                              content: "Erreur lors de l'envoi des fichiers.",
+                              icon: Text("Erreur"),
+                              textButton: "Compris",
+                            );
+                          }
                         } finally {
                           if (mounted) {
                             setState(() => _isLoading = false);
