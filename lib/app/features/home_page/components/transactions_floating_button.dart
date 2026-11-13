@@ -121,6 +121,11 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
     unawaited(
         _refreshPendingReservations().then((_) => _maybeAutoOpenEmptyHint()));
     ReservationPendingBanner.pushNotifier.addListener(_onNewOperation);
+    // Création / annulation / reload déclenchés ailleurs dans l'app
+    // (booking_cubit, BookingUtils, page d'attente) : sans ces écoutes le
+    // bouton restait figé jusqu'à la prochaine push ou réouverture du menu.
+    ReservationPendingBanner.refreshNotifier.addListener(_onNewOperation);
+    ReservationPendingBanner.softRefreshNotifier.addListener(_onNewOperation);
     widget.scrollController?.addListener(_onScroll);
   }
 
@@ -145,6 +150,9 @@ class _TransactionsFloatingButtonState extends State<TransactionsFloatingButton>
   @override
   void dispose() {
     ReservationPendingBanner.pushNotifier.removeListener(_onNewOperation);
+    ReservationPendingBanner.refreshNotifier.removeListener(_onNewOperation);
+    ReservationPendingBanner.softRefreshNotifier
+        .removeListener(_onNewOperation);
     widget.scrollController?.removeListener(_onScroll);
     _reverseSearchStatusSub?.cancel();
     _overlayEntry?.remove();
@@ -633,7 +641,7 @@ class _TransactionsMenuPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 280,
-      constraints: const BoxConstraints(maxHeight: 320),
+      constraints: const BoxConstraints(maxHeight: 380),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -687,6 +695,7 @@ class _TransactionsMenuPanel extends StatelessWidget {
                         subtitle: reservation.residence.nom.isNotEmpty
                             ? reservation.residence.nom
                             : 'En attente de réponse du propriétaire',
+                        primaryLabel: 'Suivre',
                         onTap: () => onTapOwnerReservation(reservation),
                         onCancel: () => onCancel(reservation),
                       ),
@@ -699,6 +708,7 @@ class _TransactionsMenuPanel extends StatelessWidget {
                         title: 'Réservation à payer',
                         subtitle:
                             Utils.formatCurrency(reservation.montantAPayer),
+                        primaryLabel: 'Payer',
                         onTap: () => onTapPayment(reservation),
                         onCancel: () => onCancel(reservation),
                       ),
@@ -730,6 +740,10 @@ class _TransactionsMenuPanel extends StatelessWidget {
                             : (activeReverseSearch!.zones.isNotEmpty
                                 ? activeReverseSearch!.zones.first.adresse
                                 : 'Recherche de résidence en cours'),
+                        primaryLabel: activeReverseSearch!
+                                .statusEnum.isSelectionEnAttentePaiement
+                            ? 'Payer'
+                            : 'Suivre',
                         onTap: () => onTapReverseSearch(activeReverseSearch!),
                         onCancel: () =>
                             onCancelReverseSearch(activeReverseSearch!),
@@ -819,6 +833,7 @@ class _TransactionCard extends StatelessWidget {
     required this.iconBg,
     required this.title,
     required this.subtitle,
+    required this.primaryLabel,
     required this.onTap,
     required this.onCancel,
   });
@@ -828,68 +843,80 @@ class _TransactionCard extends StatelessWidget {
   final Color iconBg;
   final String title;
   final String subtitle;
+
+  /// Libellé de l'action principale ("Payer", "Suivre").
+  final String primaryLabel;
   final VoidCallback onTap;
   final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
+    // La carte n'est plus cliquable : les actions passent par deux boutons
+    // texte explicites (Payer / Annuler), plus clairs qu'un tap implicite sur
+    // la carte et une croix.
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-      child: Stack(
-        clipBehavior: Clip.none,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(14),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 4, 18, 4),
-              child: Row(
-                children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: iconBg,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(icon, color: iconColor, size: 18),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: AppTypography.font(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.immoTextPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          subtitle,
-                          style: AppTypography.font(
-                            fontSize: 11,
-                            color: AppColors.immoTextSecondary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: iconColor, size: 18),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTypography.font(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.immoTextPrimary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: AppTypography.font(
+                        fontSize: 11,
+                        color: AppColors.immoTextSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Positioned(
-            top: -4,
-            right: -4,
-            child: _CloseCircleButton(onPressed: onCancel),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _CardTextButton(
+                  label: 'Annuler',
+                  color: AppColors.immoTextSecondary,
+                  onPressed: onCancel,
+                ),
+                _CardTextButton(
+                  label: primaryLabel,
+                  color: iconColor,
+                  onPressed: onTap,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -897,30 +924,33 @@ class _TransactionCard extends StatelessWidget {
   }
 }
 
-class _CloseCircleButton extends StatelessWidget {
-  const _CloseCircleButton({required this.onPressed});
+class _CardTextButton extends StatelessWidget {
+  const _CardTextButton({
+    required this.label,
+    required this.color,
+    required this.onPressed,
+  });
 
+  final String label;
+  final Color color;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        customBorder: const CircleBorder(),
-        child: Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            color: AppColors.immoFeedbackNeutralSubtle,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            Icons.close_rounded,
-            size: 13,
-            color: AppColors.immoTextSecondary,
-          ),
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        foregroundColor: color,
+        minimumSize: const Size(0, 32),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        label,
+        style: AppTypography.font(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: color,
         ),
       ),
     );
