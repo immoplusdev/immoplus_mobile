@@ -12,7 +12,6 @@ import 'package:immoplus/app/data/models/remote/bienimmobilier/demande_visite_mo
 import 'package:immoplus/app/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus/app/features/home_page/home_page.dart';
 import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.dart';
-import 'package:immoplus/app/features/messaging/widgets/host_contact_prompt.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/features/payment_module/utils/visit_utils.dart';
@@ -83,7 +82,11 @@ class _VisitPendingPageState extends State<VisitPendingPage>
   bool get _hasNotPaid =>
       _visitData?.statusFacture?.toString() == PaymentStatus.non_paye.name;
 
-  bool get _isConfirmedByOwner => _hasDateVisite;
+  bool get _isConfirmedByOwner =>
+      const {'valide', 'successful', 'termine'}
+          .contains(_visitData?.statusDemandeVisite) ||
+      _hasDateVisite ||
+      _hasPaid;
 
   bool get _hasPaid =>
       _visitData?.statusFacture?.toString() == PaymentStatus.paye.name;
@@ -196,7 +199,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
             top: -60,
             left: 0,
             right: 0,
-            height: 450,
+            height: 270,
             child: Lottie.asset(
               _isConfirmedByOwner
                   ? 'assets/lotties/success.json'
@@ -208,8 +211,8 @@ class _VisitPendingPageState extends State<VisitPendingPage>
 
           // ── Sheet ─────────────────────────────────────────────────────────
           DraggableScrollableSheet(
-            initialChildSize: 0.58,
-            minChildSize: 0.50,
+            initialChildSize: 0.68,
+            minChildSize: 0.58,
             maxChildSize: 0.92,
             builder: (context, scrollController) {
               return Container(
@@ -235,9 +238,6 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                             padding: const EdgeInsets.only(top: 40),
                             child: Column(
                               children: [
-                                _buildVisitTypeBadge(),
-                                SizedBox(height: 16),
-
                                 // ── Nom du bien ───────────────────────────────────────
                                 Text(
                                   widget.bienImmo.nom,
@@ -275,8 +275,6 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 24),
-
                                 // ── Status card ───────────────────────────────────────
                                 AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 400),
@@ -284,6 +282,9 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                       ? _buildConfirmedStatusCard()
                                       : _buildWaitingStatusCard(),
                                 ),
+                                SizedBox(height: 16),
+
+                                _buildVisitTypeBadge(),
                                 SizedBox(height: 16),
 
                                 // ── Info contextuelle ─────────────────────────────────
@@ -300,13 +301,14 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                 SizedBox(height: 20),
 
                                 // ── Jour de visite ──────────────────────────────────
-                                if (_visitData != null)
+                                if (_visitData != null && _hasDateVisite)
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 24),
                                     child: _buildVisitDateSection(),
                                   ),
-                                if (_visitData != null) SizedBox(height: 12),
+                                if (_visitData != null && _hasDateVisite)
+                                  SizedBox(height: 12),
 
                                 // ── Actions (itinéraire, propriétaire, service client)
                                 Padding(
@@ -315,23 +317,6 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                                   child: _buildDetailActions(),
                                 ),
 
-                                // ── Statuts (service + paiement) ────────────────────
-                                if (_visitData != null)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24),
-                                    child: _buildStatusSection(),
-                                  ),
-                                if (_visitData != null) SizedBox(height: 12),
-
-                                // ── Identifiant de la demande ───────────────────────
-                                if (_visitData != null)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24),
-                                    child: _buildIdSection(),
-                                  ),
-                                if (_visitData != null) SizedBox(height: 12),
                                 SizedBox(height: 24),
                               ],
                             ),
@@ -366,7 +351,7 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                       duration: const Duration(milliseconds: 350),
                       child: _buildActions(),
                     ),
-                    SizedBox(height: 32),
+                    SizedBox(height: 16),
                   ],
                 ),
               );
@@ -1030,21 +1015,11 @@ class _VisitPendingPageState extends State<VisitPendingPage>
   Widget _buildDetailActions() {
     return Column(
       children: [
-        // Itinéraire
-        _buildActionTile(
-          icon: Iconsax.location,
-          title: "Voir l'itinéraire",
-          subtitle: "Ouvrir dans Maps",
-          onTap: _openMaps,
-        ),
-        SizedBox(height: 8),
-
-        // Contacter le propriétaire (messagerie in-app, spec §2.2)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: HostContactPrompt(
-            padding: EdgeInsets.zero,
-            label: 'Envoyer un message au propriétaire',
+        // Action principale de communication, visible dans tous les états.
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: FilledButton.icon(
             onPressed: () => MessageComposerSheet.showForVisite(
               context,
               demandeVisiteId: widget.visitId,
@@ -1055,8 +1030,38 @@ class _VisitPendingPageState extends State<VisitPendingPage>
                   ? Utils.getImagePath(id: widget.bienImmo.images.first)
                   : null,
             ),
+            icon: const Icon(Iconsax.message, size: 19),
+            label: Text(
+              'Envoyer un message au propriétaire',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.font(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.primary,
+              ),
+            ),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primaryLite,
+              foregroundColor: AppColors.primary,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+            ),
           ),
         ),
+        SizedBox(height: 8),
+
+        if (_hasDateVisite) ...[
+          _buildActionTile(
+            icon: Iconsax.location,
+            title: "Voir l'itinéraire",
+            subtitle: "Ouvrir dans Maps",
+            onTap: _openMaps,
+          ),
+          SizedBox(height: 8),
+        ],
 
         // Propriétaire (conditionnel)
         if (_shouldShowOwnerPhone && _visitData?.proprietaire != null)

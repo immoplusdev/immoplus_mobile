@@ -222,11 +222,13 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                       _buildRequirementBreakdown(summary!.requirement!),
                       const SizedBox(height: 16),
                     ],
-                    // Message du serveur (protection du client), affiché tel
-                    // quel ; à défaut, la mention générique de sécurité.
-                    _buildNotice(
-                      _protectionMessage(summary) ?? _secureNoticeText,
-                    ),
+                    // Affichage temporairement désactivé : le message
+                    // `protectionMessage` renvoyé par le serveur sera
+                    // réactivé lorsque son contenu sera finalisé.
+                    // _buildNotice(
+                    //   _protectionMessage(summary) ?? _secureNoticeText,
+                    // ),
+                    _buildNotice(_secureNoticeText),
                     const SizedBox(height: 24),
                     Text(
                       'Payer avec',
@@ -238,10 +240,10 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     ),
                     const SizedBox(height: 14),
                     _buildOperatorGrid(),
-                    if (_protectionMessage(summary) != null) ...[
-                      const SizedBox(height: 16),
-                      _buildNotice(_secureNoticeText),
-                    ],
+                    // if (_protectionMessage(summary) != null) ...[
+                    //   const SizedBox(height: 16),
+                    //   _buildNotice(_secureNoticeText),
+                    // ],
                   ],
                 ),
               ),
@@ -415,10 +417,10 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
       'Paiement sécurisé. Un problème ? Notre équipe vous '
       'accompagne pour votre demande de remboursement.';
 
-  String? _protectionMessage(PaymentSummary? summary) {
-    final message = summary?.requirement?.protectionMessage.trim() ?? '';
-    return message.isEmpty ? null : message;
-  }
+  // String? _protectionMessage(PaymentSummary? summary) {
+  //   final message = summary?.requirement?.protectionMessage.trim() ?? '';
+  //   return message.isEmpty ? null : message;
+  // }
 
   /// Détail de l'acompte : total du séjour, dû maintenant, reste à régler.
   Widget _buildRequirementBreakdown(PaymentRequirement requirement) {
