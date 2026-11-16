@@ -42,6 +42,10 @@ class ResidenceModel with _$ResidenceModel {
     //ClientModel? proprietaire,
     @Default(true) bool residenceDisponible,
     @Default(0) num reduction,
+    int? weekendNightlyPrice,
+    String? bookingMode,
+    int? advanceNoticeDays,
+    // int? bookingHorizonDays,
 
     /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
     @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/constants/constantes.dart';
 import 'package:immoplus/app/core/config/injection.dart';
@@ -86,8 +87,56 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
                     // Image de fond
                     _buildBackgroundImage(),
 
+                    if (widget.residence.advanceNoticeDays != null &&
+                        widget.residence.advanceNoticeDays! > 0)
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        right: 10,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Iconsax.calendar_1,
+                                  size: 11,
+                                  color: AppColors.black,
+                                ),
+                                const Gap(4),
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      widget.residence.advanceNoticeDays == 1
+                                          ? 'Réserver au moins 1 jour en avance.'
+                                          : 'Réserver au moins ${widget.residence.advanceNoticeDays} jours en avance.',
+                                      maxLines: 1,
+                                      style: AppTypography.font(
+                                        fontSize: 8.5,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                     // Rating en haut à gauche (optionnel)
-                    if (widget.showRating) ...[
+                    else if (widget.showRating) ...[
                       _buildGradientOverlay(),
                       Positioned(
                         top: 12,
@@ -192,39 +241,77 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
           ),
         ],
 
-        const Gap(12),
+        const Gap(8),
 
         // Prix
-        if (widget.residence.hasReduction)
+        if (widget.residence.weekendNightlyPrice != null &&
+            widget.residence.weekendNightlyPrice! > 0) ...[
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        'Week-end · ${CurrencyFormatter().format(widget.residence.weekendNightlyPrice.toString())} XOF',
+                    style: AppTypography.button.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.gray500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Gap(2),
           Text(
-            '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
+            '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} XOF / nuit',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.gray1000,
+              color: AppColors.gray500,
               decoration: TextDecoration.lineThrough,
             ),
           ),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text:
-                    '${CurrencyFormatter().format((widget.residence.hasReduction ? widget.residence.prixReduit : widget.residence.prixReservation).toString())} Fcfa',
-                style: AppTypography.button.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: widget.residence.hasReduction
-                      ? AppColors.red600
-                      : AppColors.black,
-                ),
+        ] else ...[
+          if (widget.residence.hasReduction)
+            Text(
+              '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} Fcfa',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.gray1000,
+                decoration: TextDecoration.lineThrough,
               ),
-              TextSpan(
-                text: '/nuit',
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.gray500,
+            ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      '${CurrencyFormatter().format((widget.residence.hasReduction ? widget.residence.prixReduit : widget.residence.prixReservation).toString())} Fcfa',
+                  style: AppTypography.button.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: widget.residence.hasReduction
+                        ? AppColors.red600
+                        : AppColors.black,
+                  ),
                 ),
-              ),
-            ],
+                TextSpan(
+                  text: '/nuit',
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.gray500,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

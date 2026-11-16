@@ -210,7 +210,7 @@ List<double> listToDouble(dynamic value) {
   return [];
 }
 
-const double compactResidenceCardHeight = 258.0;
+const double compactResidenceCardHeight = 274.0;
 
 /// Espace vertical entre deux sections normales de la page d'accueil
 /// (sans pub entre elles).

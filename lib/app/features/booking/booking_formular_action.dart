@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
 import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
 import 'package:immoplus/app/data/enums/booking_mode.dart';
 import 'package:immoplus/app/core/error/error_feedback_listener.dart';
@@ -681,8 +682,8 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                     child: SizedBox(
                       height:
                           52, // Fixe la hauteur du bouton pour un rendu uniforme
-                      child: BlocBuilder<BookingModeCubit, BookingMode>(
-                        bloc: getIt<BookingModeCubit>(),
+                      child: BookingModeBuilder(
+                        residenceBookingMode: widget.residenceModel.bookingMode,
                         builder: (context, mode) => CustomLoadingButtom(
                           textColor: AppColors.white,
                           text: mode.ctaLabel,

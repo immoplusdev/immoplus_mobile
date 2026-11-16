@@ -396,6 +396,8 @@ class _ScopeFeedPageState extends State<ScopeFeedPage> {
       location: item.location,
       price: item.price,
       currency: item.currency ?? 'FCFA',
+      weekendNightlyPrice: item.weekendNightlyPrice,
+      advanceNoticeDays: item.advanceNoticeDays,
       isRent: isRent,
       isResidence: isResidence,
       description: item.description,

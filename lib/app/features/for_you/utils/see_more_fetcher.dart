@@ -131,6 +131,10 @@ class SeeMoreFetcher {
               'pricePerNight':
                   raw['pricePerNight'] ?? raw['prixReservation'] ?? raw['prix'],
               'currency': raw['currency'] ?? 'XOF',
+              'weekendNightlyPrice': raw['weekendNightlyPrice'],
+              'bookingMode': raw['bookingMode'],
+              'advanceNoticeDays': raw['advanceNoticeDays'],
+              // 'bookingHorizonDays': raw['bookingHorizonDays'],
               'description': raw['description'],
               if (raw['chips'] != null) 'chips': raw['chips'],
               if (raw['badge'] != null) 'badge': raw['badge'],
