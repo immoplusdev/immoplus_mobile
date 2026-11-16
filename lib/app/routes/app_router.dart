@@ -59,6 +59,7 @@ import 'package:immoplus/app/features/user_preference/pages/user_preference_page
 import 'package:immoplus/app/features/user_preference/pages/user_preference_intermediary_page.dart';
 import 'package:immoplus/app/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus/app/features/otp_login/pages/otp_page.dart';
+import 'package:immoplus/app/features/paymebt_history/my_payments_page.dart';
 import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
 import 'package:immoplus/app/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus/app/features/payment_module/paiement_status_page.dart';
@@ -184,6 +185,17 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
+      GoRoute(
+        path: MyPaymentsPage.routePath(),
+        name: MyPaymentsPage.name,
+        builder: (context, state) {
+          final tab = int.tryParse(state.uri.queryParameters['tab'] ?? '') ?? 0;
+          return MyPaymentsPage(
+            initialTabIndex: tab,
+            reservationId: state.uri.queryParameters['reservationId'],
+          );
+        },
+      ),
       GoRoute(
         path: PaymentHistoryPage.routePath(),
         name: PaymentHistoryPage.name,

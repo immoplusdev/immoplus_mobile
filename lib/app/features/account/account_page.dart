@@ -22,10 +22,9 @@ import 'package:immoplus/app/features/account/widgets/general_condition_page.dar
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
-import 'package:immoplus/app/features/booking/pending_payment/pending_payment_reservations_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
-import 'package:immoplus/app/features/paymebt_history/payment_history_page.dart';
+import 'package:immoplus/app/features/paymebt_history/my_payments_page.dart';
 import 'package:immoplus/app/features/visit_history/visit_history_page.dart';
 import 'package:immoplus/app/features/rating/pages/rating_history_page.dart';
 import 'package:immoplus/app/data/enums/ad_placement.dart';
@@ -449,7 +448,7 @@ class _AccountPageState extends State<AccountPage> {
           shape: SettingsTile.shapeMiddle,
           leading: _iconLeading(FaIcon(FontAwesomeIcons.creditCard,
               size: 18, color: _kIconColor)),
-          title: 'Réservations à payer',
+          title: 'Mes paiements',
           titleColor: _kLabelColor,
           trailingColor: _kTrailingColor,
           titleStyle: AppTypography.bodyLarge.copyWith(
@@ -457,7 +456,7 @@ class _AccountPageState extends State<AccountPage> {
             color: _kLabelColor,
             height: 1.25,
           ),
-          onTap: () => context.push(PendingPaymentReservationsPage.route()),
+          onTap: () => context.pushNamed(MyPaymentsPage.name),
         ),
         SettingsTile(
           shape: SettingsTile.shapeMiddle,
@@ -486,20 +485,6 @@ class _AccountPageState extends State<AccountPage> {
             height: 1.25,
           ),
           onTap: () => context.pushNamed(RatingHistoryPage.name),
-        ),
-        SettingsTile(
-          shape: SettingsTile.shapeMiddle,
-          leading: _iconLeading(FaIcon(FontAwesomeIcons.moneyBills,
-              size: 18, color: _kIconColor)),
-          title: 'Paiements',
-          titleColor: _kLabelColor,
-          trailingColor: _kTrailingColor,
-          titleStyle: AppTypography.bodyLarge.copyWith(
-            fontWeight: FontWeight.w500,
-            color: _kLabelColor,
-            height: 1.25,
-          ),
-          onTap: () => context.pushNamed(PaymentHistoryPage.name),
         ),
         SettingsTile(
           shape: SettingsTile.shapeLast,

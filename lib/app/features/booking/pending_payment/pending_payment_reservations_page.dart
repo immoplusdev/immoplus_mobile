@@ -16,6 +16,7 @@ import 'package:immoplus/app/utils/connectivity_mixin.dart';
 class PendingPaymentReservationsPage extends StatefulWidget {
   final String? reservationId;
   final PendingPaymentReservationsCubit? cubit;
+  final bool embedded;
   static const String name = 'PENDING_PAYMENT_RESERVATIONS';
 
   static String routePath() => '/pending-payment-reservations';
@@ -30,6 +31,7 @@ class PendingPaymentReservationsPage extends StatefulWidget {
     super.key,
     this.reservationId,
     this.cubit,
+    this.embedded = false,
   });
 
   @override
@@ -38,8 +40,12 @@ class PendingPaymentReservationsPage extends StatefulWidget {
 }
 
 class _PendingPaymentReservationsPageState
-    extends State<PendingPaymentReservationsPage> with ConnectivityMixin {
+    extends State<PendingPaymentReservationsPage>
+    with ConnectivityMixin, AutomaticKeepAliveClientMixin {
   late final PendingPaymentReservationsCubit _cubit;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void onConnectionRestored() {
@@ -69,6 +75,80 @@ class _PendingPaymentReservationsPageState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final scrollView = CustomScrollView(
+      slivers: [
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            _cubit.pagingController.refresh();
+          },
+        ),
+        const SliverGap(8),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          sliver: PagedSliverList<int, ReservationModel>(
+            pagingController: _cubit.pagingController,
+            builderDelegate: PagedChildBuilderDelegate(
+              firstPageProgressIndicatorBuilder: (context) => Column(
+                children: List.generate(
+                  5,
+                  (index) => const BookingLoadingCard(),
+                ),
+              ),
+              noItemsFoundIndicatorBuilder: (context) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Gap(80),
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECFDF3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Icon(
+                        Iconsax.tick_circle,
+                        size: 36,
+                        color: Color(0xFF12B76A),
+                      ),
+                    ),
+                    const Gap(24),
+                    Text(
+                      "Tout est à jour !",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    const Gap(8),
+                    Text(
+                      "Aucune réservation en attente de paiement. Toutes vos réservations sont réglées.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.immoTextSecondary,
+                            height: 1.5,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              itemBuilder: (context, item, index) =>
+                  PendingPaymentReservationCard(
+                reservationModel: item,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    if (widget.embedded) {
+      return scrollView;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Réservations à payer'),
@@ -92,76 +172,7 @@ class _PendingPaymentReservationsPageState
       ),
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            CupertinoSliverRefreshControl(
-              onRefresh: () async {
-                _cubit.pagingController.refresh();
-              },
-            ),
-            const SliverGap(8),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: PagedSliverList<int, ReservationModel>(
-                pagingController: _cubit.pagingController,
-                builderDelegate: PagedChildBuilderDelegate(
-                  firstPageProgressIndicatorBuilder: (context) => Column(
-                    children: List.generate(
-                      5,
-                      (index) => const BookingLoadingCard(),
-                    ),
-                  ),
-                  noItemsFoundIndicatorBuilder: (context) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Gap(80),
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFECFDF3),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Icon(
-                            Iconsax.tick_circle,
-                            size: 36,
-                            color: Color(0xFF12B76A),
-                          ),
-                        ),
-                        const Gap(24),
-                        Text(
-                          "Tout est à jour !",
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                        ),
-                        const Gap(8),
-                        Text(
-                          "Aucune réservation en attente de paiement. Toutes vos réservations sont réglées.",
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.immoTextSecondary,
-                                    height: 1.5,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  itemBuilder: (context, item, index) =>
-                      PendingPaymentReservationCard(
-                    reservationModel: item,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: scrollView,
       ),
     );
   }

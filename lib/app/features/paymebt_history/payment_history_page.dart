@@ -20,7 +20,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:immoplus/app/utils/connectivity_mixin.dart';
 
 class PaymentHistoryPage extends StatefulWidget {
-  const PaymentHistoryPage({super.key});
+  final bool embedded;
+  const PaymentHistoryPage({super.key, this.embedded = false});
   static String name = 'PAYMENTHISTORYPAGE';
 
   static String routePath() => '/payment_history';
@@ -114,8 +115,11 @@ Color getColorStatus({required String status}) {
 }
 
 class _PaymentHistoryPageState extends State<PaymentHistoryPage>
-    with ConnectivityMixin {
+    with ConnectivityMixin, AutomaticKeepAliveClientMixin {
   late PagingController<int, PaymentItentData> _pagingController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void onConnectionRestored() {
@@ -165,10 +169,10 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.whiteBackground,
-      body: CustomScrollView(
-        slivers: [
+    super.build(context);
+    final scrollView = CustomScrollView(
+      slivers: [
+        if (!widget.embedded)
           SliverAppBar(
             title: Text('Historique des paiements'),
             // titleTextStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -190,30 +194,38 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage>
             surfaceTintColor: AppColors.transparent,
             pinned: true,
           ),
-          CupertinoSliverRefreshControl(
-            onRefresh: () async {
-              _pagingController.refresh();
-            },
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            sliver: PagedSliverList<int, PaymentItentData>(
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate(
-                  firstPageProgressIndicatorBuilder: (context) => Column(
-                    children: List.generate(
-                      6,
-                      (index) => _buildShimmerCard(context),
-                    ),
+        CupertinoSliverRefreshControl(
+          onRefresh: () async {
+            _pagingController.refresh();
+          },
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          sliver: PagedSliverList<int, PaymentItentData>(
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate(
+                firstPageProgressIndicatorBuilder: (context) => Column(
+                  children: List.generate(
+                    6,
+                    (index) => _buildShimmerCard(context),
                   ),
-                  noItemsFoundIndicatorBuilder: (context) =>
-                      _buildEmptyState(context),
-                  itemBuilder: (context, item, index) =>
-                      _buildPaymentCard(context, item),
-                )),
-          ),
-        ],
-      ),
+                ),
+                noItemsFoundIndicatorBuilder: (context) =>
+                    _buildEmptyState(context),
+                itemBuilder: (context, item, index) =>
+                    _buildPaymentCard(context, item),
+              )),
+        ),
+      ],
+    );
+
+    if (widget.embedded) {
+      return scrollView;
+    }
+
+    return Scaffold(
+      backgroundColor: AppColors.whiteBackground,
+      body: scrollView,
     );
   }
 
