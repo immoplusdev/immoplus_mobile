@@ -293,39 +293,129 @@ class StandardBookingBottomBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: CurrencyFormatter()
-                            .format(residenceModel.prixReservation.toString()),
-                        style: AppTypography.font(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.immoTextPrimary,
-                          letterSpacing: -0.5,
+                if (residenceModel.weekendNightlyPrice != null &&
+                    residenceModel.weekendNightlyPrice! > 0) ...[
+                  if (residenceModel.isWeekend) ...[
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  'Week-end · ${CurrencyFormatter().format(residenceModel.weekendNightlyPrice.toString())} F',
+                              style: AppTypography.font(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.immoTextPrimary,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' / nuit',
+                              style: AppTypography.font(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.immoTextSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text: ' F',
-                        style: AppTypography.font(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.immoTextPrimary,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F / nuit',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.font(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.immoTextSecondary,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  ] else ...[
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  '${CurrencyFormatter().format(residenceModel.prixReservation.toString())} F',
+                              style: AppTypography.font(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.immoTextPrimary,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' / nuit',
+                              style: AppTypography.font(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.immoTextSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
+                    const SizedBox(height: 2),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Week-end · ${CurrencyFormatter().format(residenceModel.weekendNightlyPrice.toString())} F / nuit',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.font(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.immoTextSecondary,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ),
+                  ],
+                ] else ...[
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: CurrencyFormatter()
+                              .format(residenceModel.prixReservation.toString()),
+                          style: AppTypography.font(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.immoTextPrimary,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' F',
+                          style: AppTypography.font(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.immoTextPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  'par nuitée',
-                  style: AppTypography.font(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.immoTextSecondary,
+                  const SizedBox(height: 2),
+                  Text(
+                    'par nuitée',
+                    style: AppTypography.font(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.immoTextSecondary,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),

@@ -43,6 +43,7 @@ class ResidenceModel with _$ResidenceModel {
     @Default(true) bool residenceDisponible,
     @Default(0) num reduction,
     int? weekendNightlyPrice,
+    @Default(false) bool isWeekend,
     String? bookingMode,
     int? advanceNoticeDays,
     // int? bookingHorizonDays,

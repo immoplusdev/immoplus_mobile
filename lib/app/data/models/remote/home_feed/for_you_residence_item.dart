@@ -18,6 +18,7 @@ class ForYouResidenceItem with _$ForYouResidenceItem {
     int? pricePerNight,
     String? currency,
     int? weekendNightlyPrice,
+    @Default(false) bool isWeekend,
     String? bookingMode,
     int? advanceNoticeDays,
     // int? bookingHorizonDays,

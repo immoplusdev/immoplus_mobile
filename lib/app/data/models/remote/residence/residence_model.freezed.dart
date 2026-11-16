@@ -52,6 +52,7 @@ mixin _$ResidenceModel {
   bool get residenceDisponible => throw _privateConstructorUsedError;
   num get reduction => throw _privateConstructorUsedError;
   int? get weekendNightlyPrice => throw _privateConstructorUsedError;
+  bool get isWeekend => throw _privateConstructorUsedError;
   String? get bookingMode => throw _privateConstructorUsedError;
   int? get advanceNoticeDays => throw _privateConstructorUsedError;
 
@@ -121,6 +122,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
       bool residenceDisponible,
       num reduction,
       int? weekendNightlyPrice,
+      bool isWeekend,
       String? bookingMode,
       int? advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
@@ -181,6 +183,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? residenceDisponible = null,
     Object? reduction = null,
     Object? weekendNightlyPrice = freezed,
+    Object? isWeekend = null,
     Object? bookingMode = freezed,
     Object? advanceNoticeDays = freezed,
     Object? reverseSearchMontant = freezed,
@@ -306,6 +309,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.weekendNightlyPrice
           : weekendNightlyPrice // ignore: cast_nullable_to_non_nullable
               as int?,
+      isWeekend: null == isWeekend
+          ? _value.isWeekend
+          : isWeekend // ignore: cast_nullable_to_non_nullable
+              as bool,
       bookingMode: freezed == bookingMode
           ? _value.bookingMode
           : bookingMode // ignore: cast_nullable_to_non_nullable
@@ -414,6 +421,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       bool residenceDisponible,
       num reduction,
       int? weekendNightlyPrice,
+      bool isWeekend,
       String? bookingMode,
       int? advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
@@ -475,6 +483,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? residenceDisponible = null,
     Object? reduction = null,
     Object? weekendNightlyPrice = freezed,
+    Object? isWeekend = null,
     Object? bookingMode = freezed,
     Object? advanceNoticeDays = freezed,
     Object? reverseSearchMontant = freezed,
@@ -600,6 +609,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.weekendNightlyPrice
           : weekendNightlyPrice // ignore: cast_nullable_to_non_nullable
               as int?,
+      isWeekend: null == isWeekend
+          ? _value.isWeekend
+          : isWeekend // ignore: cast_nullable_to_non_nullable
+              as bool,
       bookingMode: freezed == bookingMode
           ? _value.bookingMode
           : bookingMode // ignore: cast_nullable_to_non_nullable
@@ -665,6 +678,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.residenceDisponible = true,
       this.reduction = 0,
       this.weekendNightlyPrice,
+      this.isWeekend = false,
       this.bookingMode,
       this.advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant') this.reverseSearchMontant,
@@ -787,6 +801,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   final int? weekendNightlyPrice;
   @override
+  @JsonKey()
+  final bool isWeekend;
+  @override
   final String? bookingMode;
   @override
   final int? advanceNoticeDays;
@@ -875,6 +892,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
                 other.reduction == reduction) &&
             (identical(other.weekendNightlyPrice, weekendNightlyPrice) ||
                 other.weekendNightlyPrice == weekendNightlyPrice) &&
+            (identical(other.isWeekend, isWeekend) ||
+                other.isWeekend == isWeekend) &&
             (identical(other.bookingMode, bookingMode) ||
                 other.bookingMode == bookingMode) &&
             (identical(other.advanceNoticeDays, advanceNoticeDays) ||
@@ -927,6 +946,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         residenceDisponible,
         reduction,
         weekendNightlyPrice,
+        isWeekend,
         bookingMode,
         advanceNoticeDays,
         reverseSearchMontant,
@@ -984,6 +1004,7 @@ abstract class _ResidenceModel implements ResidenceModel {
       final bool residenceDisponible,
       final num reduction,
       final int? weekendNightlyPrice,
+      final bool isWeekend,
       final String? bookingMode,
       final int? advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant')
@@ -1059,6 +1080,8 @@ abstract class _ResidenceModel implements ResidenceModel {
   num get reduction;
   @override
   int? get weekendNightlyPrice;
+  @override
+  bool get isWeekend;
   @override
   String? get bookingMode;
   @override

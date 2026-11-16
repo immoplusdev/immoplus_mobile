@@ -246,15 +246,48 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
         // Prix
         if (widget.residence.weekendNightlyPrice != null &&
             widget.residence.weekendNightlyPrice! > 0) ...[
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: RichText(
+          if (widget.residence.isWeekend) ...[
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                          'Week-end · ${CurrencyFormatter().format(widget.residence.weekendNightlyPrice.toString())} XOF',
+                      style: AppTypography.button.copyWith(
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' / nuit',
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.gray500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Gap(2),
+            Text(
+              '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} XOF / nuit',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.gray500,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ] else ...[
+            RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
                     text:
-                        'Week-end · ${CurrencyFormatter().format(widget.residence.weekendNightlyPrice.toString())} XOF',
+                        '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} XOF',
                     style: AppTypography.button.copyWith(
                       fontWeight: FontWeight.w900,
                       color: AppColors.black,
@@ -269,17 +302,21 @@ class _CompactResidenceCardState extends State<CompactResidenceCard> {
                 ],
               ),
             ),
-          ),
-          const Gap(2),
-          Text(
-            '${CurrencyFormatter().format(widget.residence.prixReservation.toString())} XOF / nuit',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTypography.bodySmall.copyWith(
-              color: AppColors.gray500,
-              decoration: TextDecoration.lineThrough,
+            const Gap(2),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Week-end · ${CurrencyFormatter().format(widget.residence.weekendNightlyPrice.toString())} XOF / nuit',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.gray500,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
             ),
-          ),
+          ],
         ] else ...[
           if (widget.residence.hasReduction)
             Text(

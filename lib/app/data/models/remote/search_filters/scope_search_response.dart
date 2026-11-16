@@ -77,6 +77,7 @@ class ScopeSearchItem {
     this.price,
     this.currency,
     this.weekendNightlyPrice,
+    this.isWeekend = false,
     this.bookingMode,
     this.advanceNoticeDays,
     // this.bookingHorizonDays,
@@ -100,6 +101,7 @@ class ScopeSearchItem {
   final int? price;
   final String? currency;
   final int? weekendNightlyPrice;
+  final bool isWeekend;
   final String? bookingMode;
   final int? advanceNoticeDays;
   // final int? bookingHorizonDays;
@@ -198,6 +200,7 @@ class ScopeSearchItem {
         source['weekendNightlyPrice'],
         source['weekend_nightly_price'],
       ]),
+      isWeekend: source['isWeekend'] == true || source['is_weekend'] == true,
       bookingMode: _firstValue([
         source['bookingMode'],
         source['booking_mode'],

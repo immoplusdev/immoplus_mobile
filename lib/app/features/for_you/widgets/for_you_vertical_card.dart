@@ -26,6 +26,7 @@ class ForYouVerticalCard extends StatelessWidget {
   final int? price;
   final String? currency;
   final int? weekendNightlyPrice;
+  final bool isWeekend;
   final int? advanceNoticeDays;
   final bool isRent;
   final bool isResidence;
@@ -43,6 +44,7 @@ class ForYouVerticalCard extends StatelessWidget {
     this.price,
     this.currency,
     this.weekendNightlyPrice,
+    this.isWeekend = false,
     this.advanceNoticeDays,
     this.isRent = false,
     this.isResidence = false,
@@ -122,6 +124,7 @@ class ForYouVerticalCard extends StatelessWidget {
       price: residence.pricePerNight,
       currency: residence.currency ?? 'FCFA',
       weekendNightlyPrice: residence.weekendNightlyPrice,
+      isWeekend: residence.isWeekend,
       advanceNoticeDays: residence.advanceNoticeDays,
       isRent: true,
       isResidence: true,
@@ -355,44 +358,87 @@ class ForYouVerticalCard extends StatelessWidget {
     if (_hasWeekendPrice) {
       final formattedWeekend =
           CurrencyFormatter().format(weekendNightlyPrice.toString());
+      if (isWeekend) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Week-end · $formattedWeekend $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 17,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (price != null) ...[
+              const Gap(3),
+              Text(
+                '${CurrencyFormatter().format(price.toString())} $displayCurrency / nuit',
+                style: AppTypography.font(
+                  color: AppColors.immoTextSecondary,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+            ],
+          ],
+        );
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Week-end · $formattedWeekend $displayCurrency',
-                  style: AppTypography.font(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 17,
-                    color: AppColors.black,
+          if (price != null)
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        '${CurrencyFormatter().format(price.toString())} $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 17,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: ' / nuit',
-                  style: AppTypography.font(
-                    color: AppColors.immoTextSecondary,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          if (price != null) ...[
-            const Gap(3),
-            Text(
-              '${CurrencyFormatter().format(price.toString())} $displayCurrency / nuit',
-              style: AppTypography.font(
-                color: AppColors.immoTextSecondary,
-                fontWeight: FontWeight.w400,
-                fontSize: 13,
-                decoration: TextDecoration.lineThrough,
+                ],
               ),
             ),
-          ],
+          const Gap(3),
+          Text(
+            'Week-end · $formattedWeekend $displayCurrency / nuit',
+            style: AppTypography.font(
+              color: AppColors.immoTextSecondary,
+              fontWeight: FontWeight.w400,
+              fontSize: 13,
+              decoration: TextDecoration.lineThrough,
+            ),
+          ),
         ],
       );
     }

@@ -171,7 +171,7 @@ class ForYouResidenceTile extends StatelessWidget {
           ),
         ],
         const Gap(8),
-        if (_hasWeekendPrice) ...[
+        if (_hasWeekendPrice && residence.isWeekend) ...[
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
@@ -213,6 +213,47 @@ class ForYouResidenceTile extends StatelessWidget {
               ),
             ),
           ],
+        ] else if (_hasWeekendPrice && !residence.isWeekend) ...[
+          if (residence.pricePerNight != null)
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        '${CurrencyFormatter().format(residence.pricePerNight.toString())} $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 15,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const Gap(2),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Week-end · ${CurrencyFormatter().format(residence.weekendNightlyPrice.toString())} $displayCurrency / nuit',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.font(
+                color: AppColors.immoTextSecondary,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ),
         ] else if (residence.pricePerNight != null)
           RichText(
             text: TextSpan(
