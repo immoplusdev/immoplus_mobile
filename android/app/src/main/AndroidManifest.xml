@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.immoplus.ci">
+    <!-- Le SDK Didit force l'orientation portrait, ce qui impose implicitement
+         cette fonctionnalité matérielle : on la déclare facultative pour ne pas
+         exclure les appareils qui ne la déclarent pas (tablettes, desktop, XR). -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false"/>
+
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
