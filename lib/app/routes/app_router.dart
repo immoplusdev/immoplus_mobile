@@ -73,6 +73,7 @@ import 'package:immoplus/app/features/registration/screens/send_email_or_number_
 import 'package:immoplus/app/features/registration/screens/verify_email_otp_page.dart';
 import 'package:immoplus/app/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:immoplus/app/data/repositories/share_link_repository.dart';
 import 'package:immoplus/app/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus/app/features/residence_detail/residences_user_page.dart';
 import 'package:immoplus/app/features/hotel/pages/hotel_search_page.dart';
@@ -156,6 +157,12 @@ class AppRouter {
       if (!context.mounted) return null;
 
       final path = state.uri.path;
+
+      // Lien partagé https://app.immoplus.ci/rt{token}
+      final shareToken = ShareLinkRepository.tokenFromPath(path);
+      if (shareToken != null) {
+        return '/share-link/${Uri.encodeComponent(shareToken)}';
+      }
 
       if (path == PendingPaymentReservationsPage.routePath()) {
         if (sessionManager.currentUser == null) {
@@ -587,6 +594,26 @@ class AppRouter {
             ),
           ),
         ],
+      ),
+
+      // Lien partagé : enregistre l'ouverture puis affiche la résidence.
+      // Sans résidence résolue (lien inconnu, hors-ligne), retour à l'accueil.
+      GoRoute(
+        path: '/share-link/:token',
+        redirect: (context, state) async {
+          final token = state.pathParameters['token']!;
+          final opened = await getIt<ShareLinkRepository>().open(token);
+          if (opened == null) return state.namedLocation(HomePage.name);
+          return Uri(
+            path: '/residence_detail/${opened.residenceId}',
+            queryParameters: {
+              ResidenceEntryPoint.queryKey:
+                  ResidenceEntryPoint.sharedLink.analyticsValue,
+              'ref': token,
+              if (opened.sessionId != null) 'sid': opened.sessionId!,
+            },
+          ).toString();
+        },
       ),
 
       // Short URL redirect: /v/:code → API /short/:code → /vivre/:videoId

@@ -70,6 +70,8 @@ import 'package:immoplus/app/data/repositories/residence_repository.dart'
     as _i143;
 import 'package:immoplus/app/data/repositories/reverse_search_repository.dart'
     as _i880;
+import 'package:immoplus/app/data/repositories/share_link_repository.dart'
+    as _i568;
 import 'package:immoplus/app/data/repositories/suggest_repository.dart'
     as _i743;
 import 'package:immoplus/app/data/repositories/user_preference_repository.dart'
@@ -205,6 +207,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i1023.ErrorInterceptor>(),
           gh<_i358.RequestInterceptor>(),
         ));
+    gh.factory<_i568.ShareLinkRepository>(() => _i568.ShareLinkRepository(
+          gh<_i361.Dio>(),
+          gh<_i639.DeviceIdService>(),
+        ));
     gh.factory<_i371.NotificationRepository>(
         () => _i371.NotificationRepository(gh<_i361.Dio>()));
     gh.factory<_i976.FurnitureRepository>(
@@ -247,10 +253,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i568.RatingRepository(gh<_i361.Dio>()));
     gh.factory<_i139.BookingModeRepository>(
         () => _i139.BookingModeRepository(gh<_i361.Dio>()));
-    gh.factory<_i715.UserPreferenceRepository>(
-        () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
     gh.factory<_i206.WalletRepository>(
         () => _i206.WalletRepository(gh<_i361.Dio>()));
+    gh.factory<_i715.UserPreferenceRepository>(
+        () => _i715.UserPreferenceRepository(gh<_i361.Dio>()));
     gh.lazySingleton<_i342.ChatHistoryService>(
         () => _i342.ChatHistoryService(gh<_i361.Dio>()));
     gh.factory<_i880.ReverseSearchRepository>(
@@ -296,8 +302,6 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i143.ResidenceRepository>(),
               gh<_i22.SessionManager>(),
             ));
-    gh.lazySingleton<_i437.BookingModeCubit>(
-        () => _i437.BookingModeCubit(gh<_i139.BookingModeRepository>()));
     gh.lazySingleton<_i640.NotificationService>(() => _i640.NotificationService(
           gh<_i511.PushProvider>(),
           gh<_i22.SessionManager>(),
@@ -328,6 +332,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i944.AuthRedirectService>(),
           gh<_i1058.AnalyticsService>(),
         ));
+    gh.lazySingleton<_i437.BookingModeCubit>(
+        () => _i437.BookingModeCubit(gh<_i139.BookingModeRepository>()));
     gh.factory<_i1024.ReverseSearchCubit>(() => _i1024.ReverseSearchCubit(
           gh<_i880.ReverseSearchRepository>(),
           gh<_i997.ReverseSearchSocketService>(),
