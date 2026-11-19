@@ -6,7 +6,8 @@ enum ResidenceEntryPoint {
   homeFeed('home_feed'),
   nearMe('near_me'),
   map('map'),
-  alert('alert');
+  alert('alert'),
+  sharedLink('shared_link');
 
   const ResidenceEntryPoint(this.analyticsValue);
 
