@@ -52,6 +52,11 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       score: json['score'] as num?,
       residenceDisponible: json['residenceDisponible'] as bool? ?? true,
       reduction: json['reduction'] as num? ?? 0,
+      weekendNightlyPrice: (json['weekendNightlyPrice'] as num?)?.toInt(),
+      isWeekend: json['isWeekend'] as bool? ?? false,
+      bookingMode: json['bookingMode'] as String?,
+      advanceNoticeDays: (json['advanceNoticeDays'] as num?)?.toInt(),
+      // bookingHorizonDays: (json['bookingHorizonDays'] as num?)?.toInt(),
       reverseSearchMontant:
           (json['reverse_search_montant'] as num?)?.toDouble(),
       reverseSearchPrixParNuit:
@@ -94,6 +99,11 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'score': instance.score,
       'residenceDisponible': instance.residenceDisponible,
       'reduction': instance.reduction,
+      'weekendNightlyPrice': instance.weekendNightlyPrice,
+      'isWeekend': instance.isWeekend,
+      'bookingMode': instance.bookingMode,
+      'advanceNoticeDays': instance.advanceNoticeDays,
+      // 'bookingHorizonDays': instance.bookingHorizonDays,
       'reverse_search_montant': instance.reverseSearchMontant,
       'reverse_search_prix_par_nuit': instance.reverseSearchPrixParNuit,
       'reverse_search_nombre_nuits': instance.reverseSearchNombreNuits,

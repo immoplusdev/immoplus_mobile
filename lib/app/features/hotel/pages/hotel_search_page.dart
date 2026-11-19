@@ -780,7 +780,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                       opacity: _hideAnimation,
                       child: SizeTransition(
                         sizeFactor: _hideAnimation,
-                        alignment: Alignment.topCenter,
+                        axisAlignment: -1.0,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -816,7 +816,7 @@ class _HotelSearchPageState extends State<HotelSearchPage>
                     opacity: _hideAnimation,
                     child: SizeTransition(
                       sizeFactor: _hideAnimation,
-                      alignment: Alignment.topCenter,
+                      axisAlignment: -1.0,
                       child: SizedBox(
                         height: 100,
                         child: ListView.builder(

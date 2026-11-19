@@ -76,6 +76,11 @@ class ScopeSearchItem {
     this.imageUrl,
     this.price,
     this.currency,
+    this.weekendNightlyPrice,
+    this.isWeekend = false,
+    this.bookingMode,
+    this.advanceNoticeDays,
+    // this.bookingHorizonDays,
     this.typeBienImmobilier,
     this.aLouer = false,
     this.typeLocation,
@@ -95,6 +100,11 @@ class ScopeSearchItem {
   final String? imageUrl;
   final int? price;
   final String? currency;
+  final int? weekendNightlyPrice;
+  final bool isWeekend;
+  final String? bookingMode;
+  final int? advanceNoticeDays;
+  // final int? bookingHorizonDays;
   final String? typeBienImmobilier;
   final bool aLouer;
   final String? typeLocation;
@@ -186,6 +196,23 @@ class ScopeSearchItem {
       imageUrl: imageUrl,
       price: price,
       currency: _firstValue([source['currency'], source['devise']]),
+      weekendNightlyPrice: _firstInt([
+        source['weekendNightlyPrice'],
+        source['weekend_nightly_price'],
+      ]),
+      isWeekend: source['isWeekend'] == true || source['is_weekend'] == true,
+      bookingMode: _firstValue([
+        source['bookingMode'],
+        source['booking_mode'],
+      ]),
+      advanceNoticeDays: _firstInt([
+        source['advanceNoticeDays'],
+        source['advance_notice_days'],
+      ]),
+      // bookingHorizonDays: _firstInt([
+      //   source['bookingHorizonDays'],
+      //   source['booking_horizon_days'],
+      // ]),
       typeBienImmobilier: _firstValue([
         source['typeBienImmobilier'],
         source['type_bien_immobilier'],

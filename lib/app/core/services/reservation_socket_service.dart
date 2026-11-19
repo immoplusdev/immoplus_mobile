@@ -27,6 +27,9 @@ class ReservationSocketService {
     'en_attente_paiement_client',
     'proprietaire_annule_reservation',
     'valide',
+    'rejete',
+    'proprietaire_sans_reponse',
+    'client_sans_reponse',
   };
 
   static bool get isConnected => _socket?.connected ?? false;

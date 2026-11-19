@@ -51,6 +51,10 @@ mixin _$ResidenceModel {
       throw _privateConstructorUsedError; //ClientModel? proprietaire,
   bool get residenceDisponible => throw _privateConstructorUsedError;
   num get reduction => throw _privateConstructorUsedError;
+  int? get weekendNightlyPrice => throw _privateConstructorUsedError;
+  bool get isWeekend => throw _privateConstructorUsedError;
+  String? get bookingMode => throw _privateConstructorUsedError;
+  int? get advanceNoticeDays => throw _privateConstructorUsedError;
 
   /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
   @JsonKey(name: 'reverse_search_montant')
@@ -117,6 +121,10 @@ abstract class $ResidenceModelCopyWith<$Res> {
       num? score,
       bool residenceDisponible,
       num reduction,
+      int? weekendNightlyPrice,
+      bool isWeekend,
+      String? bookingMode,
+      int? advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
       @JsonKey(name: 'reverse_search_prix_par_nuit')
       int? reverseSearchPrixParNuit,
@@ -174,6 +182,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? score = freezed,
     Object? residenceDisponible = null,
     Object? reduction = null,
+    Object? weekendNightlyPrice = freezed,
+    Object? isWeekend = null,
+    Object? bookingMode = freezed,
+    Object? advanceNoticeDays = freezed,
     Object? reverseSearchMontant = freezed,
     Object? reverseSearchPrixParNuit = freezed,
     Object? reverseSearchNombreNuits = freezed,
@@ -293,6 +305,22 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.reduction
           : reduction // ignore: cast_nullable_to_non_nullable
               as num,
+      weekendNightlyPrice: freezed == weekendNightlyPrice
+          ? _value.weekendNightlyPrice
+          : weekendNightlyPrice // ignore: cast_nullable_to_non_nullable
+              as int?,
+      isWeekend: null == isWeekend
+          ? _value.isWeekend
+          : isWeekend // ignore: cast_nullable_to_non_nullable
+              as bool,
+      bookingMode: freezed == bookingMode
+          ? _value.bookingMode
+          : bookingMode // ignore: cast_nullable_to_non_nullable
+              as String?,
+      advanceNoticeDays: freezed == advanceNoticeDays
+          ? _value.advanceNoticeDays
+          : advanceNoticeDays // ignore: cast_nullable_to_non_nullable
+              as int?,
       reverseSearchMontant: freezed == reverseSearchMontant
           ? _value.reverseSearchMontant
           : reverseSearchMontant // ignore: cast_nullable_to_non_nullable
@@ -392,6 +420,10 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       num? score,
       bool residenceDisponible,
       num reduction,
+      int? weekendNightlyPrice,
+      bool isWeekend,
+      String? bookingMode,
+      int? advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant') double? reverseSearchMontant,
       @JsonKey(name: 'reverse_search_prix_par_nuit')
       int? reverseSearchPrixParNuit,
@@ -450,6 +482,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? score = freezed,
     Object? residenceDisponible = null,
     Object? reduction = null,
+    Object? weekendNightlyPrice = freezed,
+    Object? isWeekend = null,
+    Object? bookingMode = freezed,
+    Object? advanceNoticeDays = freezed,
     Object? reverseSearchMontant = freezed,
     Object? reverseSearchPrixParNuit = freezed,
     Object? reverseSearchNombreNuits = freezed,
@@ -569,6 +605,22 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.reduction
           : reduction // ignore: cast_nullable_to_non_nullable
               as num,
+      weekendNightlyPrice: freezed == weekendNightlyPrice
+          ? _value.weekendNightlyPrice
+          : weekendNightlyPrice // ignore: cast_nullable_to_non_nullable
+              as int?,
+      isWeekend: null == isWeekend
+          ? _value.isWeekend
+          : isWeekend // ignore: cast_nullable_to_non_nullable
+              as bool,
+      bookingMode: freezed == bookingMode
+          ? _value.bookingMode
+          : bookingMode // ignore: cast_nullable_to_non_nullable
+              as String?,
+      advanceNoticeDays: freezed == advanceNoticeDays
+          ? _value.advanceNoticeDays
+          : advanceNoticeDays // ignore: cast_nullable_to_non_nullable
+              as int?,
       reverseSearchMontant: freezed == reverseSearchMontant
           ? _value.reverseSearchMontant
           : reverseSearchMontant // ignore: cast_nullable_to_non_nullable
@@ -625,6 +677,10 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.score,
       this.residenceDisponible = true,
       this.reduction = 0,
+      this.weekendNightlyPrice,
+      this.isWeekend = false,
+      this.bookingMode,
+      this.advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant') this.reverseSearchMontant,
       @JsonKey(name: 'reverse_search_prix_par_nuit')
       this.reverseSearchPrixParNuit,
@@ -742,6 +798,15 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final num reduction;
+  @override
+  final int? weekendNightlyPrice;
+  @override
+  @JsonKey()
+  final bool isWeekend;
+  @override
+  final String? bookingMode;
+  @override
+  final int? advanceNoticeDays;
 
   /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
   @override
@@ -825,6 +890,14 @@ class _$ResidenceModelImpl implements _ResidenceModel {
                 other.residenceDisponible == residenceDisponible) &&
             (identical(other.reduction, reduction) ||
                 other.reduction == reduction) &&
+            (identical(other.weekendNightlyPrice, weekendNightlyPrice) ||
+                other.weekendNightlyPrice == weekendNightlyPrice) &&
+            (identical(other.isWeekend, isWeekend) ||
+                other.isWeekend == isWeekend) &&
+            (identical(other.bookingMode, bookingMode) ||
+                other.bookingMode == bookingMode) &&
+            (identical(other.advanceNoticeDays, advanceNoticeDays) ||
+                other.advanceNoticeDays == advanceNoticeDays) &&
             (identical(other.reverseSearchMontant, reverseSearchMontant) ||
                 other.reverseSearchMontant == reverseSearchMontant) &&
             (identical(
@@ -872,6 +945,10 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         score,
         residenceDisponible,
         reduction,
+        weekendNightlyPrice,
+        isWeekend,
+        bookingMode,
+        advanceNoticeDays,
         reverseSearchMontant,
         reverseSearchPrixParNuit,
         reverseSearchNombreNuits,
@@ -926,6 +1003,10 @@ abstract class _ResidenceModel implements ResidenceModel {
       final num? score,
       final bool residenceDisponible,
       final num reduction,
+      final int? weekendNightlyPrice,
+      final bool isWeekend,
+      final String? bookingMode,
+      final int? advanceNoticeDays,
       @JsonKey(name: 'reverse_search_montant')
       final double? reverseSearchMontant,
       @JsonKey(name: 'reverse_search_prix_par_nuit')
@@ -997,6 +1078,14 @@ abstract class _ResidenceModel implements ResidenceModel {
   bool get residenceDisponible;
   @override
   num get reduction;
+  @override
+  int? get weekendNightlyPrice;
+  @override
+  bool get isWeekend;
+  @override
+  String? get bookingMode;
+  @override
+  int? get advanceNoticeDays;
 
   /// Montant du séjour pour cette recherche inversée, SANS les frais — présent uniquement dans les payloads reverse-search.
   @override

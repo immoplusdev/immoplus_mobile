@@ -1,20 +1,21 @@
-import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus/app/features/estate_detail/estate_page.dart';
-import 'package:immoplus/app/features/residence_detail/residence_page.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_bien_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_residence_item.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/property_badge_dto.dart';
 import 'package:immoplus/app/design_system/design_system.dart';
+import 'package:immoplus/app/features/estate_detail/estate_page.dart';
+import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
-/// Carte verticale pour l'affichage en liste (ex: "Trouver un logement", "Acheter un bien")
+/// Carte verticale pour l'affichage en liste (ex: "Trouver un logement", "Acheter un bien", "Trouver un Séjour")
 /// Affiche la grande image avec coins arrondis, titre, chips, badge VIP/Nouveau,
 /// prix en gras et description.
 class ForYouVerticalCard extends StatelessWidget {
@@ -24,6 +25,9 @@ class ForYouVerticalCard extends StatelessWidget {
   final String? location;
   final int? price;
   final String? currency;
+  final int? weekendNightlyPrice;
+  final bool isWeekend;
+  final int? advanceNoticeDays;
   final bool isRent;
   final bool isResidence;
   final String? description;
@@ -39,6 +43,9 @@ class ForYouVerticalCard extends StatelessWidget {
     this.location,
     this.price,
     this.currency,
+    this.weekendNightlyPrice,
+    this.isWeekend = false,
+    this.advanceNoticeDays,
     this.isRent = false,
     this.isResidence = false,
     this.description,
@@ -46,6 +53,19 @@ class ForYouVerticalCard extends StatelessWidget {
     this.badge,
     this.onTap,
   });
+
+  bool get _hasAdvanceNotice =>
+      isResidence && advanceNoticeDays != null && advanceNoticeDays! > 0;
+
+  bool get _hasWeekendPrice =>
+      isResidence && weekendNightlyPrice != null && weekendNightlyPrice! > 0;
+
+  String get _advanceNoticeLabel {
+    final days = advanceNoticeDays ?? 0;
+    return days == 1
+        ? 'Réserver au moins 1 jour en avance.'
+        : 'Réserver au moins $days jours en avance.';
+  }
 
   factory ForYouVerticalCard.fromBien({
     Key? key,
@@ -103,6 +123,9 @@ class ForYouVerticalCard extends StatelessWidget {
       location: residence.location,
       price: residence.pricePerNight,
       currency: residence.currency ?? 'FCFA',
+      weekendNightlyPrice: residence.weekendNightlyPrice,
+      isWeekend: residence.isWeekend,
+      advanceNoticeDays: residence.advanceNoticeDays,
       isRent: true,
       isResidence: true,
       description: residence.description,
@@ -148,7 +171,7 @@ class ForYouVerticalCard extends StatelessWidget {
                     _buildTitle(),
                     const Gap(8),
                     _buildChipsAndBadge(),
-                    if (price != null) ...[
+                    if (price != null || _hasWeekendPrice) ...[
                       const Gap(8),
                       _buildPrice(),
                     ],
@@ -183,28 +206,76 @@ class ForYouVerticalCard extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: 220,
-        child: CachedNetworkImage(
-          imageUrl: formattedUrl,
-          fit: BoxFit.cover,
-          memCacheWidth: 800,
-          fadeInDuration: Duration.zero,
-          fadeOutDuration: Duration.zero,
-          placeholder: (context, url) => Shimmer.fromColors(
-            baseColor: AppColors.immoBorderStrong,
-            highlightColor: AppColors.immoBgSurfaceMuted,
-            period: const Duration(milliseconds: 500),
-            child: Container(color: AppColors.white),
-          ),
-          errorWidget: (context, url, error) => Container(
-            color: AppColors.immoBorderDefault,
-            child: Center(
-              child: FaIcon(
-                FontAwesomeIcons.images,
-                size: 50,
-                color: AppColors.immoTextDisabled,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            CachedNetworkImage(
+              imageUrl: formattedUrl,
+              fit: BoxFit.cover,
+              memCacheWidth: 800,
+              fadeInDuration: Duration.zero,
+              fadeOutDuration: Duration.zero,
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: AppColors.immoBorderStrong,
+                highlightColor: AppColors.immoBgSurfaceMuted,
+                period: const Duration(milliseconds: 500),
+                child: Container(color: AppColors.white),
+              ),
+              errorWidget: (context, url, error) => Container(
+                color: AppColors.immoBorderDefault,
+                child: Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.images,
+                    size: 50,
+                    color: AppColors.immoTextDisabled,
+                  ),
+                ),
               ),
             ),
-          ),
+            if (_hasAdvanceNotice)
+              Positioned(
+                top: 12,
+                left: 12,
+                right: 12,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Iconsax.calendar_1,
+                          size: 13,
+                          color: AppColors.black,
+                        ),
+                        const Gap(5),
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              _advanceNoticeLabel,
+                              maxLines: 1,
+                              style: AppTypography.font(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -282,8 +353,97 @@ class ForYouVerticalCard extends StatelessWidget {
   }
 
   Widget _buildPrice() {
-    final formattedPrice = CurrencyFormatter().format(price.toString());
     final displayCurrency = currency ?? 'FCFA';
+
+    if (_hasWeekendPrice) {
+      final formattedWeekend =
+          CurrencyFormatter().format(weekendNightlyPrice.toString());
+      if (isWeekend) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Week-end · $formattedWeekend $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 17,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (price != null) ...[
+              const Gap(3),
+              Text(
+                '${CurrencyFormatter().format(price.toString())} $displayCurrency / nuit',
+                style: AppTypography.font(
+                  color: AppColors.immoTextSecondary,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+            ],
+          ],
+        );
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (price != null)
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        '${CurrencyFormatter().format(price.toString())} $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 17,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const Gap(3),
+          Text(
+            'Week-end · $formattedWeekend $displayCurrency / nuit',
+            style: AppTypography.font(
+              color: AppColors.immoTextSecondary,
+              fontWeight: FontWeight.w400,
+              fontSize: 13,
+              decoration: TextDecoration.lineThrough,
+            ),
+          ),
+        ],
+      );
+    }
+
+    final formattedPrice = CurrencyFormatter().format(price.toString());
 
     return RichText(
       text: TextSpan(
@@ -296,7 +456,16 @@ class ForYouVerticalCard extends StatelessWidget {
               color: AppColors.black,
             ),
           ),
-          if (isRent)
+          if (isResidence)
+            TextSpan(
+              text: ' / nuit',
+              style: AppTypography.font(
+                color: AppColors.immoTextSecondary,
+                fontWeight: FontWeight.w400,
+                fontSize: 13,
+              ),
+            )
+          else if (isRent)
             TextSpan(
               text: ' /mois',
               style: AppTypography.font(
