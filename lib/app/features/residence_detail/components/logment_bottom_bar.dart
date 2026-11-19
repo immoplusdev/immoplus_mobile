@@ -1,4 +1,3 @@
-import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
 import 'package:immoplus/app/core/error/error_feedback.dart';
 import 'package:immoplus/app/core/error/error_context.dart';
 import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
@@ -439,10 +438,7 @@ class StandardBookingBottomBar extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
-              child: BookingModeBuilder(
-                residenceBookingMode: residenceModel.bookingMode,
-                builder: (context, mode) => Text(mode.ctaLabel),
-              ),
+              child: const Text('Réserver'),
             ),
           ),
         ],

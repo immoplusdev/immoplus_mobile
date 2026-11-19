@@ -64,7 +64,7 @@ class HostContactPrompt extends StatelessWidget {
               const SizedBox(width: 14),
               Expanded(
                 child: Text(
-                  'Pour protéger votre paiement, échangez toujours avec l’hôte et effectuez vos paiements sur ImmoPlus.',
+                  'Protégez votre réservation: échangez et payez uniquement sur immo plus',
                   style: AppTypography.font(
                     fontSize: 14,
                     height: 1.4,
