@@ -21,6 +21,7 @@ import 'package:immoplus/app/features/messaging/widgets/message_composer_sheet.d
 import 'package:immoplus/app/features/account/widgets/general_condition_page.dart';
 import 'package:immoplus/app/features/account/widgets/profile_hearder.dart';
 import 'package:immoplus/app/features/account/widgets/settings_tile.dart';
+import 'package:immoplus/app/features/account/widgets/notification_toggle_tile.dart';
 import 'package:immoplus/app/features/authentification/authentification_page.dart';
 import 'package:immoplus/app/features/booking_history/booking_history_page.dart';
 import 'package:immoplus/app/features/notification/pages/notification_page.dart';
@@ -378,21 +379,16 @@ class _AccountPageState extends State<AccountPage> {
         ),
         _buildCredentialsTile(),
         _buildTermsTile(SettingsTile.shapeMiddle),
-        if (!kReleaseMode)
-          _buildCrashlyticsTestTile(SettingsTile.shapeMiddle),
-        SettingsTile(
+        if (!kReleaseMode) _buildCrashlyticsTestTile(SettingsTile.shapeMiddle),
+        NotificationToggleTile(
           shape: SettingsTile.shapeLast,
           leading: _iconLeading(
-              FaIcon(FontAwesomeIcons.gears, size: 18, color: _kIconColor)),
-          title: 'Permissions',
-          titleColor: _kLabelColor,
-          trailingColor: _kTrailingColor,
+              Icon(notificationToggleIcon, size: 20, color: _kIconColor)),
           titleStyle: AppTypography.bodyLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: _kLabelColor,
             height: 1.25,
           ),
-          onTap: () => AppDialog.showOpenSettingsDialog(context),
         ),
         _buildProBadgeTile(shape: SettingsTile.shapeMiddle),
       ]),
