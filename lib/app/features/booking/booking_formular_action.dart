@@ -1,3 +1,4 @@
+import 'package:immoplus/app/features/booking_mode/booking_mode_builder.dart';
 import 'package:immoplus/app/features/booking_mode/booking_mode_cubit.dart';
 import 'package:immoplus/app/data/enums/booking_mode.dart';
 import 'package:immoplus/app/core/error/error_feedback_listener.dart';
@@ -54,9 +55,6 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   EstimateCostData? estimateCost;
-
-  BookingMode get _mode => getIt<BookingModeCubit>().state;
-  bool get _isPayNow => _mode == BookingMode.payNow;
 
   String time = '';
   List<DateTime?> markedDates = [];
@@ -684,74 +682,78 @@ class _BookingFormularActionState extends State<BookingFormularAction> {
                     child: SizedBox(
                       height:
                           52, // Fixe la hauteur du bouton pour un rendu uniforme
-                      child: CustomLoadingButtom(
-                        textColor: AppColors.white,
-                        text: _mode.ctaLabel,
-                        isLoading: state is LOADING_BOOKING,
-                        onClick: (state is INITIAL_BOOKING)
-                            ? null
-                            : () {
-                                if (totalDays <
-                                    widget.residenceModel.dureeMinSejour) {
-                                  ToastUtils.showError(
-                                      description:
-                                          "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
-                                  return;
-                                }
-                                if (totalDays >
-                                    widget.residenceModel.dureeMaxSejour) {
-                                  ToastUtils.showError(
-                                      description:
-                                          "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
-                                  return;
-                                }
-                                if (_formKey.currentState!.validate()) {
-                                  if (selectedDates.isEmpty) {
-                                    EasyLoading.showToast(
-                                        "Aucun jour de réservation sélectionné",
-                                        toastPosition:
-                                            EasyLoadingToastPosition.bottom);
-                                  } else {
-                                    AppDialog.show(
-                                      title: 'Confirmation',
-                                      description: _isPayNow
-                                          ? 'Confirmez-vous cette réservation pour $totalDays jours ? Vous serez redirigé vers le paiement.'
-                                          : 'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
-                                      primaryButtonText: 'Confirmer',
-                                      secondButtonText: 'Annuler',
-                                      onPrimary: () {
-                                        if (estimateCost == null) {
-                                          ToastUtils.showSuccess(
-                                              description:
-                                                  "Veuillez choisir une date");
-                                          return;
-                                        }
-                                        context
-                                            .read<BookingCubit>()
-                                            .orderBooking(
-                                                amount:
-                                                    estimateCost!.total.toInt(),
-                                                entryPoint: widget.entryPoint,
-                                                body: ReservationRequestBody(
-                                                    residence: widget
-                                                        .residenceModel.id,
-                                                    datesReservation:
-                                                        selectedDates
-                                                            .map(
-                                                              (e) =>
-                                                                  DatesReservationModel(
-                                                                      date: e),
-                                                            )
-                                                            .toList(),
-                                                    clientPhoneNumber:
-                                                        _formController
-                                                            .phoneNumber!
-                                                            .text));
-                                      },
-                                    );
+                      child: BookingModeBuilder(
+                        residenceBookingMode: widget.residenceModel.bookingMode,
+                        builder: (context, mode) => CustomLoadingButtom(
+                          textColor: AppColors.white,
+                          text: mode.ctaLabel,
+                          isLoading: state is LOADING_BOOKING,
+                          onClick: (state is INITIAL_BOOKING)
+                              ? null
+                              : () {
+                                  if (totalDays <
+                                      widget.residenceModel.dureeMinSejour) {
+                                    ToastUtils.showError(
+                                        description:
+                                            "La durée minimale de séjour pour cette résidence est de ${widget.residenceModel.dureeMinSejour} jours");
+                                    return;
                                   }
-                                }
-                              },
+                                  if (totalDays >
+                                      widget.residenceModel.dureeMaxSejour) {
+                                    ToastUtils.showError(
+                                        description:
+                                            "La durée maximale de séjour pour cette résidence est de ${widget.residenceModel.dureeMaxSejour} jours");
+                                    return;
+                                  }
+                                  if (_formKey.currentState!.validate()) {
+                                    if (selectedDates.isEmpty) {
+                                      EasyLoading.showToast(
+                                          "Aucun jour de réservation sélectionné",
+                                          toastPosition:
+                                              EasyLoadingToastPosition.bottom);
+                                    } else {
+                                      AppDialog.show(
+                                        title: 'Confirmation',
+                                        description: mode == BookingMode.payNow
+                                            ? 'Confirmez-vous cette réservation pour $totalDays jours ? Vous serez redirigé vers le paiement.'
+                                            : 'Confirmez-vous cette demande de réservation pour $totalDays jours ?',
+                                        primaryButtonText: 'Confirmer',
+                                        secondButtonText: 'Annuler',
+                                        onPrimary: () {
+                                          if (estimateCost == null) {
+                                            ToastUtils.showSuccess(
+                                                description:
+                                                    "Veuillez choisir une date");
+                                            return;
+                                          }
+                                          context
+                                              .read<BookingCubit>()
+                                              .orderBooking(
+                                                  amount: estimateCost!.total
+                                                      .toInt(),
+                                                  entryPoint: widget.entryPoint,
+                                                  body: ReservationRequestBody(
+                                                      residence: widget
+                                                          .residenceModel.id,
+                                                      datesReservation:
+                                                          selectedDates
+                                                              .map(
+                                                                (e) =>
+                                                                    DatesReservationModel(
+                                                                        date:
+                                                                            e),
+                                                              )
+                                                              .toList(),
+                                                      clientPhoneNumber:
+                                                          _formController
+                                                              .phoneNumber!
+                                                              .text));
+                                        },
+                                      );
+                                    }
+                                  }
+                                },
+                        ),
                       ),
                     ),
                   ),

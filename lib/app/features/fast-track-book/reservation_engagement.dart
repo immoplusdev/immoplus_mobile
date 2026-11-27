@@ -17,6 +17,7 @@ import 'package:immoplus/app/features/payment_module/operators_selector_page.dar
 import 'package:immoplus/app/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus/app/widgets/operator_payment.dart';
 import 'package:immoplus/app/constants/constantes.dart';
+import 'package:immoplus/app/utils/booking_utils.dart';
 
 /// Frame C3 — L'Engagement Humain (L'Attente)
 ///
@@ -662,11 +663,17 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
   Widget _buildActions() {
     switch (_currentState) {
       case ReservationBannerState.waitingOwner:
-        return _outlineButton(
+        return Column(
           key: const ValueKey('btn_waiting_owner'),
-          icon: Iconsax.save_2,
-          label: 'Sauvegarder et Quitter',
-          onPressed: _navigateBackToHome,
+          children: [
+            _outlineButton(
+              icon: Iconsax.save_2,
+              label: 'Sauvegarder et Quitter',
+              onPressed: _navigateBackToHome,
+            ),
+            const SizedBox(height: 4),
+            _cancelButton(),
+          ],
         );
 
       case ReservationBannerState.waitingPayment:
@@ -698,6 +705,7 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
               label: 'Sauvegarder et Quitter',
               onPressed: _navigateBackToHome,
             ),
+            _cancelButton(),
           ],
         );
 
@@ -715,6 +723,22 @@ class _ReservationEngagementFrameState extends State<ReservationEngagementFrame>
       case ReservationBannerState.idle:
         return const SizedBox.shrink(key: ValueKey('btn_idle'));
     }
+  }
+
+  Widget _cancelButton() {
+    return _textBtn(
+      label: 'Annuler la réservation',
+      onPressed: () => BookingUtils.showCancelReservationDialog(
+        context: context,
+        reservationId: widget.reservationId,
+        notes: 'Annulé depuis la page d\'attente',
+        onCancelled: () {
+          _aggressiveRefreshTimer?.cancel();
+          _messageRotationTimer?.cancel();
+          if (mounted) _navigateBackToHome();
+        },
+      ),
+    );
   }
 
   Widget _primaryButton({

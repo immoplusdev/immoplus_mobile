@@ -1,12 +1,13 @@
-import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
-import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:immoplus/app/core/enums/analytics/residence_entry_point.dart';
 import 'package:immoplus/app/core/network/utils/constants.dart';
 import 'package:immoplus/app/data/models/remote/home_feed/for_you_residence_item.dart';
+import 'package:immoplus/app/design_system/design_system.dart';
 import 'package:immoplus/app/features/residence_detail/residence_page.dart';
 import 'package:immoplus/app/utils/currency_formatter.dart';
 import 'package:immoplus/app/utils/utils.dart';
@@ -20,6 +21,20 @@ class ForYouResidenceTile extends StatelessWidget {
   final ForYouResidenceItem residence;
 
   const ForYouResidenceTile({super.key, required this.residence});
+
+  bool get _hasAdvanceNotice =>
+      residence.advanceNoticeDays != null && residence.advanceNoticeDays! > 0;
+
+  bool get _hasWeekendPrice =>
+      residence.weekendNightlyPrice != null &&
+      residence.weekendNightlyPrice! > 0;
+
+  String get _advanceNoticeLabel {
+    final days = residence.advanceNoticeDays;
+    return days == 1
+        ? 'Réserver au moins 1 jour en avance.'
+        : 'Réserver au moins $days jours en avance.';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +55,64 @@ class ForYouResidenceTile extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 height: 170,
-                child: _buildImage(),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    _buildImage(),
+                    if (_hasAdvanceNotice)
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        right: 10,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: _buildAdvanceNoticeBadge(),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
             const Gap(8),
             _buildInfo(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAdvanceNoticeBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Iconsax.calendar_1,
+            size: 11,
+            color: AppColors.black,
+          ),
+          const Gap(4),
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _advanceNoticeLabel,
+                maxLines: 1,
+                style: AppTypography.font(
+                  fontSize: 8.5,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -78,6 +144,8 @@ class ForYouResidenceTile extends StatelessWidget {
   }
 
   Widget _buildInfo() {
+    final displayCurrency = residence.currency ?? 'XOF';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -102,14 +170,97 @@ class ForYouResidenceTile extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ],
-        const Gap(12),
-        if (residence.pricePerNight != null)
+        const Gap(8),
+        if (_hasWeekendPrice && residence.isWeekend) ...[
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        'Week-end · ${CurrencyFormatter().format(residence.weekendNightlyPrice.toString())} $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (residence.pricePerNight != null) ...[
+            const Gap(2),
+            Text(
+              '${CurrencyFormatter().format(residence.pricePerNight.toString())} $displayCurrency / nuit',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.font(
+                color: AppColors.immoTextSecondary,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ],
+        ] else if (_hasWeekendPrice && !residence.isWeekend) ...[
+          if (residence.pricePerNight != null)
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        '${CurrencyFormatter().format(residence.pricePerNight.toString())} $displayCurrency',
+                    style: AppTypography.font(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 15,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' / nuit',
+                    style: AppTypography.font(
+                      color: AppColors.immoTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const Gap(2),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Week-end · ${CurrencyFormatter().format(residence.weekendNightlyPrice.toString())} $displayCurrency / nuit',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.font(
+                color: AppColors.immoTextSecondary,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ),
+        ] else if (residence.pricePerNight != null)
           RichText(
             text: TextSpan(
               children: [
                 TextSpan(
                   text:
-                      '${CurrencyFormatter().format(residence.pricePerNight.toString())} ${residence.currency ?? "Fcfa"}',
+                      '${CurrencyFormatter().format(residence.pricePerNight.toString())} $displayCurrency',
                   style: AppTypography.font(
                     fontWeight: FontWeight.w900,
                     fontSize: 15,

@@ -104,14 +104,6 @@ class _WalletView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const _ExplainerCard(
-            title: 'Pourquoi le bouton « Réserver » peut devenir « Payer » ?',
-            message:
-                'Après plusieurs annulations récentes, un acompte peut être '
-                'demandé avant de confirmer une nouvelle réservation. Le '
-                'montant et les conditions sont affichés avant le paiement.',
-          ),
-          const SizedBox(height: 16),
           WalletBalanceCard(
             wallet: wallet,
             onWithdraw: () => _openWithdrawal(context, wallet),

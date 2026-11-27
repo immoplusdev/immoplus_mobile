@@ -164,17 +164,22 @@ class BookingCubit extends Cubit<BookingRequestState> {
       final reservation = reservationResponse.data;
       final isDirectPayment =
           reservation.statusEnum == StatusReservation.enAttentePaiementClient &&
-              reservation.paymentRequirement?.isPaymentDue == true;
+              (reservation.paymentRequirement == null ||
+                  reservation.paymentRequirement?.isPaymentDue == true);
 
       final context = NavigationService.navigatorKey.currentContext;
       if (isDirectPayment) {
         if (context != null) {
+          final amountToPay =
+              (reservation.paymentRequirement?.amountDueNow ??
+                      reservation.montantAPayer)
+                  .toInt();
           context.pushNamed(
             OperatorsSelectorPage.name,
             extra: PaymentPageAdapter(
               itemId: reservation.id,
               collection: ProductType.reservations.name,
-              amount: reservation.paymentRequirement!.amountDueNow.toInt(),
+              amount: amountToPay > 0 ? amountToPay : amount,
               summary: PaymentSummary.fromReservation(reservation),
             ),
           );

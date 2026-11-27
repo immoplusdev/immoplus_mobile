@@ -134,6 +134,7 @@ class _ResidenceCardState extends State<ResidenceCard> {
                         children: [
                           Gap(10),
                           BookingModeBuilder(
+                            residenceBookingMode: widget.residence.bookingMode,
                             builder: (context, mode) =>
                                 SmallButton(text: mode.ctaLabel),
                           ),

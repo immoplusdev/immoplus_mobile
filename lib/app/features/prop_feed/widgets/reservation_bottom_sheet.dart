@@ -574,6 +574,7 @@ class ReservationBottomSheet extends StatelessWidget {
                   if (hasPrice) SizedBox(width: 12),
                   Expanded(
                     child: BookingModeBuilder(
+                      residenceBookingMode: result?.rawResidence?.bookingMode,
                       builder: (context, mode) => BookNowButton(
                         label: data.isResidence
                             ? mode.ctaLabel
