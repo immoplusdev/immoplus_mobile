@@ -6,6 +6,7 @@ import 'package:immoplus/app/core/config/injection.dart';
 import 'package:immoplus/app/core/services/permission_request_queue.dart';
 import 'package:immoplus/app/core/services/navigation_service.dart';
 import 'package:immoplus/app/core/services/notification_service.dart';
+import 'package:immoplus/app/core/services/push/push_opt_out_store.dart';
 import 'package:immoplus/app/features/notification/widgets/notification_actif_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +48,8 @@ class NotificationPermissionService {
 
   static Future<bool> _shouldShow(NotificationPromptMoment moment) async {
     final prefs = await SharedPreferences.getInstance();
+    // Notifications coupées volontairement depuis le profil : on ne relance pas.
+    if (await PushOptOutStore.isOptedOut()) return false;
     if (await isEnabled()) {
       await prefs.setString(_statusKey, _accepted);
       return false;
@@ -95,7 +98,7 @@ class NotificationPermissionService {
         builder: (sheetCtx) => NotificationActifSheet(
           onAccept: () {
             Navigator.of(sheetCtx).pop();
-            unawaited(_enable());
+            unawaited(enable());
           },
           onMaybeLater: () async {
             Navigator.of(sheetCtx).pop();
@@ -110,14 +113,23 @@ class NotificationPermissionService {
     }
   }
 
-  static Future<void> _enable() async {
+  /// Notifications actives sur cet appareil : autorisation système accordée
+  /// et pas de désactivation depuis le profil.
+  static Future<bool> isActive() async =>
+      await isEnabled() && !await PushOptOutStore.isOptedOut();
+
+  /// Active les notifications : demande l'autorisation système si besoin
+  /// (ou ouvre les réglages si elle a été refusée définitivement), puis
+  /// enregistre l'appareil. Retourne l'état obtenu.
+  static Future<bool> enable() async {
     final prefs = await SharedPreferences.getInstance();
+    await PushOptOutStore.setOptedOut(false);
     var status = await Permission.notification.status;
 
     // Refusé définitivement : seul l'écran de réglages permet de l'activer.
     if (status.isPermanentlyDenied) {
       await openAppSettings();
-      return;
+      return false;
     }
 
     if (!status.isGranted) {
@@ -130,6 +142,16 @@ class NotificationPermissionService {
     if (status.isGranted) {
       await prefs.setString(_statusKey, _accepted);
       await getIt<NotificationService>().suscribeCurrentUser();
+      return true;
     }
+    return false;
+  }
+
+  /// Coupe les notifications sur cet appareil : il est détaché du compte et
+  /// ne sera plus réenregistré tant que l'utilisateur ne les réactive pas.
+  /// L'autorisation système, elle, ne peut pas être retirée par l'app.
+  static Future<void> disable() async {
+    await PushOptOutStore.setOptedOut(true);
+    await getIt<NotificationService>().unsubcribeCurrentUser();
   }
 }

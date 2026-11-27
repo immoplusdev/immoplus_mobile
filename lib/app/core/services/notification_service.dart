@@ -22,6 +22,7 @@ import 'package:immoplus/app/core/services/app_version_service.dart';
 import 'package:immoplus/app/routes/app_router.dart';
 import 'package:immoplus/app/core/services/navigation_service.dart';
 import 'package:immoplus/app/core/services/push/push_installation_service.dart';
+import 'package:immoplus/app/core/services/push/push_opt_out_store.dart';
 import 'package:injectable/injectable.dart';
 
 /// Service d'orchestration métier des notifications de haut niveau.
@@ -224,6 +225,12 @@ class NotificationService {
         return;
       }
 
+      if (await PushOptOutStore.isOptedOut()) {
+        log('🔔 Push registration skipped: notifications disabled by user',
+            name: 'NOTIFICATION_SERVICE');
+        return;
+      }
+
       final pushToken = token ?? await pushProvider.getToken();
       if (pushToken == null || pushToken.isEmpty) {
         log('⚠️ Push token is null or empty', name: 'NOTIFICATION_SERVICE');
@@ -231,7 +238,8 @@ class NotificationService {
       }
 
       final userId = user.userId;
-      if (_lastRegisteredToken == pushToken && _lastRegisteredUserId == userId) {
+      if (_lastRegisteredToken == pushToken &&
+          _lastRegisteredUserId == userId) {
         log('🔔 Push registration skipped: token and user already registered',
             name: 'NOTIFICATION_SERVICE');
         return;
